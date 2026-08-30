@@ -59,7 +59,8 @@ condition holds. It is not repeated in the entries below.
 - **children** — anything
 - **subject** — the named thing
 - **infers** — the `<title>` and the top heading from the name; the doctype,
-  `<html>`, `<head>` and `<body>` entirely. Override the title with content
+  `<html>`, `<head>` and `<body>` entirely; and any pending flash message,
+  rendered in a conventional place. Override the title with content
 - **renders** — the whole document
 
 ```
@@ -112,6 +113,25 @@ stylesheet "/css/base.css"
 ```
 script "/js/app.js"
 ```
+
+### `nav`
+
+- **name** — the variant
+- **content** — none
+- **modifiers** — none
+- **children** — `link`
+- **subject** — unchanged
+- **infers** — which link is the current page, and marks it; the accessible
+  label. This is the part hand-written navigation always gets wrong
+- **renders** — `<nav aria-label="Main">` wrapping a list of links
+
+```
+nav
+nav secondary
+```
+
+Found by writing the portfolio page. It was named as under-tested in draft 1
+and bit immediately, because every real page has navigation.
 
 ### `footer`
 

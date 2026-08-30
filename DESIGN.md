@@ -59,7 +59,13 @@ and it never appears at the head of a word, so the two can never be confused.
 ### Resolution — two lookups, one rule each
 
 - `.foo` → the **innermost subject's** `foo`.
-- `foo` → a **local**, else a **helper**.
+- `foo` → the **subject's** `foo`, else a **local**, else a **helper**.
+
+A name resolves against the subject first. This is what makes a collection
+nested inside another mean the obvious thing: inside `each account`, both
+`each holding` and `table holdings` find *that account's* holdings rather
+than a page-level collection of the same name. At the top level there is no
+subject, so the rule costs nothing.
 
 ### The subject
 

@@ -4,8 +4,8 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: idea
 kind: project
-last_touched: '2026-08-29'
-next_step: Write the retirement portfolio page in full as the vocabulary's first real test
+last_touched: '2026-08-30'
+next_step: Test the vocabulary against a content-heavy page — text, image, icon and list are still unexercised
 docs: README.md
 related:
 - slim-pickins
