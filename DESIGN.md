@@ -1,8 +1,8 @@
-# Draft grammar — v0
+# Draft grammar — v0.2
 
-Status: **first draft.** Nothing is implemented. This document is the wish
-and the grammar it implies, written down so that every later extension can be
-reviewed against it.
+Status: **draft.** Nothing is implemented. This document is the wish and the
+grammar it implies, written down so that every later extension can be reviewed
+against it.
 
 ## The idea
 
@@ -11,7 +11,8 @@ reviewed against it.
 > language adds vocabulary, never syntax.**
 
 slim-pickins owns the vocabulary of web presentation. Each app's domain model
-arrives through conventions rather than being wired up by hand.
+arrives through conventions rather than being wired up by hand, and reaches
+the page through **locals and helpers**.
 
 The division of labour that makes this work: **the word carries the
 presentation, the argument carries the domain.** `price .price` means
@@ -21,7 +22,7 @@ word's business, not the template's.
 ## The sentence
 
 ```
-word :qualifiers, content, modifiers:
+word names, content, modifiers:
   children
 ```
 
@@ -29,70 +30,91 @@ Every part is optional. The order never varies.
 
 | Argument | Means | Example |
 |---|---|---|
-| `:symbol` | qualifier — what kind, or what it is about | `button :primary` |
+| `word` | a name — what it is about, or which kind | `section products`, `button primary` |
 | `"string"` | literal text | `note "Saved."` |
-| `.property` | the current subject's property | `title .name` |
-| `name`, `name.prop` | a local or a helper | `greeting current_user.name` |
+| `.property` | the current subject's data | `title .name` |
+| `binding.property` | a local's or helper's data | `note order.number` |
 | `key: value` | modifier | `image .url, alt: .name` |
 | *indented block* | children | |
+
+### Morphology: a dot means data, a bare word is language
+
+This is the rule that makes the grammar guessable without a phrasebook.
+
+```
+section products      # no dot — a name the language interprets
+button primary        # no dot — a name
+title .name           # dot — the subject's data
+note order.number     # dot — a binding's data
+```
+
+Every value carries a dot. Every word that is not a value does not. One
+visual cue, one job. Note that names are not decorated — `each product` and
+`section products` look alike because they *are* alike: both name a domain
+thing and let the language work out what to do with it.
+
+The only colon in the language is the trailing one in a modifier (`alt:`),
+and it never appears at the head of a word, so the two can never be confused.
 
 ### Resolution — two lookups, one rule each
 
 - `.foo` → the **innermost subject's** `foo`.
 - `foo` → a **local**, else a **helper**.
 
-Nothing else is consulted, and nothing is ambiguous between them.
-
 ### The subject
 
 - `each product` iterates `products`, binds `product`, and makes each element
   the subject.
-- `section :products` makes `products` the subject.
+- `section products` makes `products` the subject.
 - `.foo` always means the innermost subject.
 
 Because `each product` also binds the name `product`, an inner loop reaches
 back out by name. The escape hatch is already in the grammar; it needs no
 syntax of its own.
 
-### Qualifiers
+### Names qualify; the word decides what that means
 
-`:symbol` always occupies the same grammatical role — it qualifies the word.
-What a qualifier *does* belongs to the word: `:products` on a `section` says
-what the section is about; `:primary` on a `button` says which kind of button.
-The meaning is always set by the word immediately to its left, so a reader
-never carries state to parse a sentence.
+A name always occupies the same grammatical role. What it *does* belongs to
+the word: `products` on a `section` says what the section is about;
+`primary` on a `button` says which kind of button. The meaning is always set
+by the word immediately to its left, so a reader never carries state to parse
+a sentence.
 
 ### Conventions carry the common case
 
-A qualifier is expected to supply what can be inferred. The heading of
-`section :products` is conventional; content overrides it:
+A name is expected to supply what can be inferred. The heading of
+`section products` is conventional; content overrides it:
 
 ```
-section :products                  # heading: "Products"
-section :products, "Merchandise"   # heading: "Merchandise"
+section products                  # heading: "Products"
+section products, "Merchandise"   # heading: "Merchandise"
 ```
 
 This is the shape of every convention in the language: **the common case
 costs zero words, and every convention is overridable by saying the thing.**
+
+The corollary is that a line which states the inferable should not exist.
+A `card` whose subject is a product already knows the product has an id, so
+`id .id` is the template doing the machine's job.
 
 ## Wishes
 
 ### 1. An index — the core characteristics
 
 ```
-page :products
-  section :products
+page products
+  section products
     empty "Nothing here yet."
 
-    grid :cards
+    grid cards
       each product
         card
           image .image_url, alt: .name
           title .name
           price .price
           actions
-            link :show, "View"
-            button :primary, "Add to cart", if: .in_stock?
+            link show, "View"
+            button primary, "Add to cart", if: .in_stock?
 ```
 
 Note `empty`. It is not `if products.empty?` — it is a word meaning *what
@@ -102,28 +124,28 @@ vocabulary:** do not write the branch, name the situation.
 ### 2. A form — conventions doing the work
 
 ```
-page :account
-  form :account
-    field :name
-    field :email, type: :email
-    field :bio, :long
-    check :newsletter, "Send me updates"
+page account
+  form account
+    field name
+    field email, type: email
+    field bio, long
+    check newsletter, "Send me updates"
     actions
-      button :primary, "Save"
-      link :cancel, "Never mind"
+      button primary, "Save"
+      link cancel, "Never mind"
 ```
 
-`field :name` derives its label ("Name"), its input name, and its value from
-`.name` — three inferences from one word. `:long` is a qualifier, so it means
-what a `field` decides it means: a textarea.
+`field name` derives its label ("Name"), its input name, and its value from
+`.name` — three inferences from one word. `long` is a name, so it means what
+a `field` decides it means: a textarea.
 
 ### 3. A table — floating above the interpreter
 
 ```
-table :products
-  column :name
-  column :price
-  column :stock, "In stock"
+table products
+  column name
+  column price
+  column stock, "In stock"
 ```
 
 No `each`, no `row`, no `cell`. A table declares its columns; the rows come
@@ -150,14 +172,17 @@ order's. Two scopes, no new syntax.
 ```
 choose
   when signed_in?
-    link :account, "Your account"
+    link account, "Your account"
   otherwise
-    link :sign_in, "Sign in"
+    link sign_in, "Sign in"
 ```
 
 `when` and `otherwise` are ordinary words that are valid inside `choose`.
 `else` is never a bare keyword, so nothing needs special parsing. Most
 branching should not reach for this — prefer `empty`, or the `if:` modifier.
+
+`signed_in?` is the unresolved case described under Open questions: a helper
+used as a value, with no dot to mark it as data.
 
 ## Guessability proof
 
@@ -166,22 +191,22 @@ table alone, appearing in none of the wishes above. A fluent speaker should
 be able to write these having only read the table.
 
 ```
-section :orders, "Recent orders"
+section orders, "Recent orders"
   empty "No orders yet."
   each order
-    card :compact
+    card compact
       title .number
       price .total, if: .paid?
 
-table :invoices
-  column :number
-  column :due_on, "Due"
+table invoices
+  column number
+  column due_on, "Due"
 
-form :password
-  field :current, type: :password
-  field :replacement, :long, type: :password
+form password
+  field current, type: password
+  field replacement, long, type: password
   actions
-    button :primary, "Change it"
+    button primary, "Change it"
 ```
 
 If a sentence here needs the implementation to explain it, the grammar has an
@@ -189,6 +214,12 @@ irregularity and the grammar is what gets fixed.
 
 ## Open questions
 
+- **A bare local used as a value.** The dot rule does not close. `greeting
+  current_user` reads as the *name* `current_user`, not its value; dotted
+  paths (`current_user.name`) are fine, and so are subject properties, but a
+  bare binding passed as data has nowhere to live. It shows up in wish 5 as
+  `when signed_in?`. Either locals are always reached through a dot, or `?`
+  earns a meaning of its own — undecided, and deliberately not papered over.
 - **The vocabulary itself.** The grammar is one sentence and cannot really be
   wrong now; the vocabulary can be *incomplete*, and in a language where words
   are the only construct, every gap is a wall. Enumerating the words of web
