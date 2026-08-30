@@ -30,7 +30,7 @@ Every part is optional. The order never varies.
 
 | Argument | Means | Example |
 |---|---|---|
-| `word` | a name — interpreted by the word to its left, never evaluated | `section products`, `button primary` |
+| `name` | a name — interpreted by the word to its left, never evaluated | `section products`, `button primary` |
 | `"string"` | literal text | `note "Saved."` |
 | `.property` | the current subject's data | `title .name` |
 | `binding.property` | a local's or helper's data | `note order.number` |
@@ -88,12 +88,27 @@ field email         # the attribute — which property of the subject
 ```
 
 This delegation is the design bet, not a gap in it: the grammar stays one
-sentence precisely because the vocabulary carries the meaning. It costs a
-reader nothing, because the meaning is always fixed by the word immediately
-to the left — visible on the same line, never state carried from earlier.
+sentence precisely because the vocabulary carries the meaning.
 
-The practical rule for reading an unfamiliar sentence: **the leading word
-tells you how to read the rest of it.**
+### What governs the leading word
+
+A name is governed by the word to its left — but the leading word has nothing
+to its left. It is governed by **the word it is nested under**: `column` means
+what it means inside `table`, `when` inside `choose`, `field` inside `form`.
+A word at the top level is governed by the document.
+
+So there is one rule of government, running along both axes of the tree:
+
+> **A name is interpreted by the word to its left. A word is interpreted by
+> the word it is nested under.**
+
+Nothing is ever interpreted by anything further away than that. Both governors
+are visible without scrolling — one on the same line, one on the line above —
+so a reader never carries state to parse a sentence.
+
+The practical rule for reading an unfamiliar sentence: **the enclosing word
+tells you how to read the leading word, and the leading word tells you how to
+read the rest of the line.**
 
 ### Conventions carry the common case
 
