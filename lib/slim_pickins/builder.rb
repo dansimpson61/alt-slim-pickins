@@ -79,7 +79,7 @@ module SlimPickins
       name, heading = name_and_content(args)
       open(:section, class: name && "section section--#{name}")
       text_tag(:"h#{@level}", label_for(name, heading))
-      deeper { about(name, required: false) { nest(&block) } }
+      deeper { about(name) { nest(&block) } }
       close(:section)
     end
 
@@ -385,13 +385,8 @@ module SlimPickins
     # A word that names a subject shifts the chain for its children. A word
     # that names nothing leaves the chain alone, which is what makes
     # `page scenario` followed by a bare `form` mean the obvious thing.
-    def about(name, required: true, &block)
+    def about(name, &block)
       return yield if name.nil?
-
-      # A topic is a label, not a claim that the subject has it. `section
-      # summary` heads a section without asserting a `summary` attribute —
-      # six of ten sections across the drafted pages are topics like this.
-      return yield if !required && !subject.respond_to?(name)
 
       # A word that names no subject leaves the chain alone. A word that names
       # one that is not there is an error — skipping quietly would report the

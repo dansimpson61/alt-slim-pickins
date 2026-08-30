@@ -111,6 +111,34 @@ field email         # the attribute — which property of the subject
 This delegation is the design bet, not a gap in it: the grammar stays one
 sentence precisely because the vocabulary carries the meaning.
 
+### A name is a subject; content is a label
+
+Several words can either present something or merely head something. A
+`section` may be *about the accounts*, or it may just be titled *"Where you
+stand"*. The grammar already tells these apart, so nothing new is needed:
+
+```
+section accounts          # a name — the subject shifts to the accounts
+section "Where you stand" # content — a heading, and nothing shifts
+```
+
+**Which job a word is doing is therefore visible in the page**, never decided
+by what the data happens to hold. That distinction is load-bearing. An earlier
+draft let `section` shift the subject *if* the subject happened to have that
+attribute, and the cost was hidden: adding an `allocation` attribute to a
+model would silently make `section allocation` start shifting, so every `.foo`
+beneath it would resolve somewhere new, in a page nobody had edited.
+
+So the rule is fixed per word and never runtime-dependent:
+
+> **A word's name slot either takes a subject or it does not. When it does,
+> the named thing must be there, and its absence fails on the line that named
+> it.**
+
+`page`, `section`, `form`, `table` and `each` take subjects. Words like
+`button` and `badge` take variants instead, and words like `title` and `note`
+take no name at all. Each entry in [VOCABULARY.md](VOCABULARY.md) says which.
+
 ### What governs the leading word
 
 A name is governed by the word to its left — but the leading word has nothing

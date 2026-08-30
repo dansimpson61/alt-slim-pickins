@@ -49,7 +49,7 @@ page review, "Dashboard UI review"
         actions
           link open, "Open the live page"
 
-  section legend, "Reading the severities"
+  section "Reading the severities"
     list plain
       item
         icon blocker

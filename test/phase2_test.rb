@@ -190,9 +190,35 @@ class Phase2Test < Minitest::Test
   # --- title infers its level from depth --------------------------------
 
   def test_a_title_knows_how_deep_it_is
-    html = render("page book\n  title \"Top\"\n  section part\n    title \"Inner\"\n", book: {})
+    html = render(%(page book\n  title "Top"\n  section "Part"\n    title "Inner"\n), book: {})
     assert_includes html, '<h2>Top</h2>'
     assert_includes html, '<h3>Inner</h3>'
+  end
+
+  # --- a name is a subject; content is a label --------------------------
+
+  # The two jobs have two spellings, so which one a section is doing is
+  # visible in the page rather than dependent on what the data happens to
+  # hold. `section "Allocation"` cannot start shifting the subject because
+  # someone later adds an `allocation` attribute.
+  def test_a_section_named_with_content_is_a_label_and_shifts_nothing
+    html = render(%(page portfolio\n  section "Where you stand"\n    title .heading\n),
+                  portfolio: { heading: 'Still the portfolio' })
+    assert_includes html, '<h2>Where you stand</h2>'
+    assert_includes html, '<h3>Still the portfolio</h3>'
+  end
+
+  def test_a_section_named_with_a_name_shifts_the_subject
+    html = render("page portfolio\n  section accounts\n    each account\n      title .name\n",
+                  portfolio: two_accounts)
+    assert_includes html, '<h3>Traditional</h3>'
+  end
+
+  def test_a_section_naming_a_subject_that_is_absent_fails_on_its_own_line
+    error = assert_raises(SlimPickins::UnknownAttribute) do
+      render("page portfolio\n  section summary\n    title .x\n", portfolio: { x: 1 })
+    end
+    assert_equal 'this portfolio has no summary', error.message
   end
 
   # --- unknown words ----------------------------------------------------

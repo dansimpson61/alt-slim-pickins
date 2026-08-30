@@ -25,7 +25,7 @@ page pattern, .title
   fact origin, .origin_project
   fact source, .origin_file
 
-  section specification, "Conceptual specification and thinking"
+  section "Conceptual specification and thinking"
     prose .content
 
   aside
@@ -37,7 +37,7 @@ page pattern, .title
             link show, .path
             note quiet, .purpose
 
-    section lore, "Agent lore snippet"
+    section "Agent lore snippet"
       note quiet, "Feed this to any agent before beginning development."
       snippet .lore
 

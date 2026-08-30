@@ -21,7 +21,7 @@ page portfolio, "Your retirement"
     link projections
     link settings
 
-  section summary, "Where you stand"
+  section "Where you stand"
     time .as_of
     grid metrics, columns: 4
       metric total_value, "Total value"
@@ -29,7 +29,7 @@ page portfolio, "Your retirement"
       metric annual_income, "Projected income"
       metric years_to_rmd, "Years to RMD"
 
-  section allocation
+  section "Allocation"
     chart pie, .allocation, label: "By asset class"
 
     choose
@@ -68,7 +68,7 @@ page portfolio, "Your retirement"
           link show, "Details"
           link rebalance
 
-  section projections
+  section "Projections"
     chart line, .balances, over: .years
 
     disclosure "Show advanced assumptions"

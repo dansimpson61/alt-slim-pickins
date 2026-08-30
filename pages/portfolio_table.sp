@@ -1,5 +1,5 @@
 page portfolio, "Your retirement"
-  section summary, "Where you stand"
+  section "Where you stand"
     money .total_value
     percent .ytd_return
   section accounts, "Your accounts"

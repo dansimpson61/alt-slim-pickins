@@ -36,20 +36,32 @@ and suppresses the whole table; with accounts it renders nothing.
 
 ## Two corrections the vocabulary needed
 
-### `section` names a topic, not a subject
+### A name is a subject; content is a label
 
-Draft 3 said the name was "the subject: the collection or record this section
-presents". The first render disproved it — `section summary` asked a portfolio
-for a `summary` it does not have.
+The first render disproved draft 3's `section` entry — `section summary` asked
+a portfolio for a `summary` it does not have. Counted across the three drafted
+pages, **six of ten sections** were headings rather than subjects.
 
-Counted across the three drafted pages: **six of ten sections name a topic**
-with no such attribute anywhere — `summary`, `allocation`, `projections`,
-`legend`, `lore`, `specification`. The entry was wrong about the common case.
+The first fix was to shift the subject *only when the subject has it*. dan
+rejected it with a better question — *what if a word can take a subject but it
+can also just take a label?* — and the answer is that the grammar already
+distinguishes those, by argument kind:
 
-`section` now heads and classes itself from the name, and shifts the subject
-only when the subject actually has it. Words that need the object — `page`,
-`form`, `table`, `each` — still require it and still fail on their own line.
-A topic is a label, not a claim.
+```
+section accounts          # a name — the subject shifts
+section "Where you stand" # content — a heading, nothing shifts
+```
+
+The opportunistic version was worse than it looked. It made a page's meaning
+depend on data no reader could see, and adding an `allocation` attribute to a
+model later would have silently made `section allocation` start shifting the
+subject — every `.foo` beneath it resolving somewhere new, in a page nobody
+had edited. That is the failure Phase 1 taught us to refuse, wearing different
+clothes.
+
+So the rule is now fixed per word and stated in DESIGN.md: a word's name slot
+either takes a subject or it does not, and when it does, the named thing must
+be there. The six heading-sections are written as content, and read the same.
 
 ### `each` iterates the subject when the subject is the collection
 

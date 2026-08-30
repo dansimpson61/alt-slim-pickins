@@ -153,12 +153,11 @@ footer "Approximate directional estimates. Not tax advice."
 
 ### `section`
 
-- **name** — the topic: what this section is about
+- **name** — the subject this section presents; it must be there
 - **content** — the heading text
 - **modifiers** — none
 - **children** — any presentation word; `empty` is governed here
-- **subject** — the named thing, *when the subject has it*; otherwise
-  unchanged. A topic is a label, not a claim
+- **subject** — the named thing. With no name, unchanged
 - **infers** — the heading from the name (`holdings` → "Holdings"); the class
   from the name. Override the heading with content
 - **renders** — `<section class="holdings"><h2>Holdings</h2>…</section>`
@@ -169,13 +168,17 @@ section holdings, "What you own"
 section summary, "Where you stand"
 ```
 
-Draft 3 called the name a subject. Phase 2 found that wrong: across the three
-drafted pages, six of ten sections name a topic with no such attribute
-anywhere — `summary`, `allocation`, `projections`, `legend`, `lore`,
-`specification`. So `section` heads and classes itself from the name and
-shifts the subject only when the subject actually has it. Words that need the
-object — `page`, `form`, `table`, `each` — still require it, and still fail on
-their own line.
+Six of ten sections across the drafted pages were headings rather than
+subjects — `summary`, `allocation`, `projections`, `legend`, `lore`,
+`specification`. They are now written as content, which is what content is
+for, and they read the same.
+
+Phase 2 first tried making the name shift the subject only when the subject
+had it. dan's question — *what if a word can take a subject but it can also
+just take a label?* — found the better answer, because the grammar already
+distinguishes the two. The opportunistic version made a page's meaning depend
+on data no reader could see, and would have let a new model attribute silently
+change an untouched page. See the rule in [DESIGN.md](DESIGN.md).
 
 ### `group`
 
