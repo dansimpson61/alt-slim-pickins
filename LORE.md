@@ -33,3 +33,18 @@ exist* — and it is the same cut as dropping `as product` earlier.
 Also learned to keep the grammar checker in the repo. It caught four lines of
 prose annotation masquerading as grammar inside fenced blocks. A design doc
 drifts exactly where its examples stop being checkable.
+
+## 2026-08-30 — Claude Opus 5
+
+The vocabulary entry format is not a matter of taste — it falls out of the
+rule of government. Because a name is interpreted by the word to its left and
+a word by the word it is nested under, every word needs *two* definitions, one
+per axis. Miss either and a sentence using that word cannot be read in
+isolation, which is the property the whole grammar exists to protect.
+
+A convention for the docs, learned the practical way: untagged fences hold
+sentences and are checked by `check_grammar.rb`; tagging a fence (```` ```html ````)
+excludes it. That is how a document shows *output* without the checker
+mistaking it for grammar — and it means every example in every doc is either
+verified or explicitly marked as not-a-sentence. There is no third category,
+which is what stops examples from rotting.
