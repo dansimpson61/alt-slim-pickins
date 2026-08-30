@@ -1,4 +1,4 @@
-# Draft grammar — v0.2
+# Draft grammar — v0.3
 
 Status: **draft.** Nothing is implemented. This document is the wish and the
 grammar it implies, written down so that every later extension can be reviewed
@@ -56,16 +56,31 @@ thing and let the language work out what to do with it.
 The only colon in the language is the trailing one in a modifier (`alt:`),
 and it never appears at the head of a word, so the two can never be confused.
 
-### Resolution — two lookups, one rule each
+### Resolution — one rule
 
 - `.foo` → the **innermost subject's** `foo`.
-- `foo` → the **subject's** `foo`, else a **local**, else a **helper**.
 
-A name resolves against the subject first. This is what makes a collection
-nested inside another mean the obvious thing: inside `each account`, both
-`each holding` and `table holdings` find *that account's* holdings rather
-than a page-level collection of the same name. At the top level there is no
-subject, so the rule costs nothing.
+**There is always a subject.** The outermost one is the page itself, whose
+attributes are the locals and helpers the app provides. So `.signed_in?` at
+the top level asks the page, and `.balance` inside `each account` asks the
+account, by the same rule rather than two.
+
+A bare `foo` is a name and is never evaluated. The words that take a subject
+— `section`, `table`, `each`, `form` — resolve the name against this same
+chain, which is what makes a collection nested inside another mean the
+obvious thing: inside `each account`, both `each holding` and `table
+holdings` find *that account's* holdings rather than a page-level collection
+of the same name.
+
+The ambient outermost object is borrowed from VBA, where `Application` sits
+implied at the top of every scope. It is never written, so it costs no syntax
+and needs no word — it exists only to keep the chain from running out.
+
+The cost, stated plainly: at the top level `.foo` has an invisible referent,
+and a reader has to know the page is there. That is the price of not having a
+second lookup rule, and it is paid once, in this paragraph. Unknown
+attributes raise rather than resolving to nothing, so a typo fails loudly
+instead of rendering blank.
 
 ### The subject
 
@@ -207,7 +222,7 @@ order's. Two scopes, no new syntax.
 
 ```
 choose
-  when signed_in?
+  when .signed_in?
     link account, "Your account"
   otherwise
     link sign_in, "Sign in"
@@ -217,8 +232,9 @@ choose
 `else` is never a bare keyword, so nothing needs special parsing. Most
 branching should not reach for this — prefer `empty`, or the `if:` modifier.
 
-`signed_in?` is the unresolved case described under Open questions: a helper
-used as a value, with no dot to mark it as data.
+`.signed_in?` asks the page, which is the outermost subject. Nothing here is
+a special case: the same dot that reads an account's balance reads the page's
+session.
 
 ## Guessability proof
 
@@ -250,12 +266,6 @@ irregularity and the grammar is what gets fixed.
 
 ## Open questions
 
-- **A bare local used as a value.** The dot rule does not close. `greeting
-  current_user` reads as the *name* `current_user`, not its value; dotted
-  paths (`current_user.name`) are fine, and so are subject properties, but a
-  bare binding passed as data has nowhere to live. It shows up in wish 5 as
-  `when signed_in?`. Either locals are always reached through a dot, or `?`
-  earns a meaning of its own — undecided, and deliberately not papered over.
 - **The vocabulary itself.** The grammar is one sentence and cannot really be
   wrong now; the vocabulary can be *incomplete*, and in a language where words
   are the only construct, every gap is a wall. Enumerating the words of web

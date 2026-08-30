@@ -1,6 +1,6 @@
-# Vocabulary — draft 1
+# Vocabulary — draft 3
 
-Status: **draft.** Thirty-eight words. Nothing is implemented.
+Status: **draft.** Forty-six words. Nothing is implemented.
 
 The grammar is settled and is one sentence ([DESIGN.md](DESIGN.md)). It cannot
 really be wrong any more. The vocabulary *can* be incomplete, and in a language
@@ -871,9 +871,11 @@ Predictions from the spec, and what actually happened.
 
 ## Still open
 
-- **The `?` case.** `when .in_stock?` is fine — it has a dot. `when
-  signed_in?`, a bare helper used as a value, still has nowhere to live. This
-  is the one unclosed hole in the morphology, and `choose` is where it bites.
+- **The `?` case is closed.** A bare helper used as a value has nowhere to
+  live *because it should not*: the page is the outermost subject, so it is
+  `.signed_in?` like everything else. Three real pages never reached the hole,
+  which was the clue that it was not a hole in the language but a missing
+  object at the bottom of the chain.
 - **`chart` is a guess.** It has more irreducible configuration than any other
   word, and the entry above draws the inference/instruction line without
   evidence.

@@ -5,7 +5,7 @@ require 'set'
 WORD = /\A[a-z][a-z_]*\z/
 KINDS = {
   0 => /\A[a-z][a-z_]*\z/,                        # bare name
-  1 => /\A(".*"|\.[a-z_]+\??|[a-z_]+(\.[a-z_]+)+\??|[a-z_]+\?)\z/, # data
+  1 => /\A(".*"|\.[a-z_]+\??|[a-z_]+(\.[a-z_]+)+\??)\z/, # data — always dotted
   2 => /\A[a-z_]+:\s*.+\z/                        # modifier:
 }
 
