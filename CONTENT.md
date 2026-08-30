@@ -22,8 +22,8 @@ page pattern, .title
   badge .category
   badge .status
 
-  detail origin, .origin_project
-  detail source, .origin_file
+  fact origin, .origin_project
+  fact source, .origin_file
 
   section specification, "Conceptual specification and thinking"
     prose .content
@@ -67,7 +67,7 @@ and there is no `==` because there is no sigil for "trust me."
 
 `Origin: roth / controls.slim` is a label and a value, inline and small.
 `metric` is the same information as a stat tile, which is the wrong size.
-**Added `detail`.** Two words for one *kind of information* is correct here
+**Added `fact`.** Two words for one *kind of information* is correct here
 and not an alias, because the word carries the presentation and these are two
 presentations.
 
@@ -82,7 +82,7 @@ text*.
 prose is `prose`. Adding an inline-fragment construct would put a second
 composition mechanism next to indentation, which is the mistake this whole
 language was designed to avoid — it is Slim's `:` all over again. The
-labelled-fact case that motivated it is `detail`, and richer inline text is
+labelled-fact case that motivated it is `fact`, and richer inline text is
 markdown's job.
 
 This is the first wall answered with "no" rather than a word, and the

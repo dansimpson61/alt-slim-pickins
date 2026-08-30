@@ -29,7 +29,7 @@ end
 # Untagged fences hold sentences and are checked. Tag a fence (```html) to
 # exclude it — that is how a document shows output rather than grammar.
 here = File.expand_path(__dir__)
-docs = ARGV.empty? ? %w[DESIGN.md VOCABULARY.md PORTFOLIO.md CONTENT.md].map { |f| File.join(here, f) } : ARGV
+docs = ARGV.empty? ? %w[DESIGN.md VOCABULARY.md PORTFOLIO.md CONTENT.md FIGURES.md].map { |f| File.join(here, f) } : ARGV
 problems = 0; checked = 0
 
 # Every word used in a sentence must be defined in VOCABULARY.md, so the two

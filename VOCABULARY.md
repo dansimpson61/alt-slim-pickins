@@ -403,17 +403,18 @@ note warning, "Conversions above this bracket raise your IRMAA."
 
 ### `prose`
 
-- **name** — none
-- **content** — the markup, as markdown
+- **name** — the notation: `markdown`, `asciidoc`, `plain`
+- **content** — the document
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — that the content is markdown, and sanitises it. There is no
-  way to ask for it to be trusted instead
+- **infers** — markdown when no notation is named; sanitises in every case.
+  There is no way to ask for the content to be trusted instead
 - **renders** — a `<div class="prose">` of rendered HTML
 
 ```
 prose .content
+prose plain, .raw_notes
 ```
 
 The one word that renders markup, which is what lets the language have no
@@ -421,6 +422,16 @@ escaping sigil at all. Slim spends `=` versus `==` on this distinction;
 here the safe thing is the only thing, and rich inline text — links inside
 sentences, emphasis, lists inside paragraphs — is markdown's job rather than
 the grammar's.
+
+**The notation is a variant, but only across notations that share this
+presentation.** Markdown, asciidoc and plain text all produce a block of
+prose, so they are variants of one word. MathML, MusicXML and source code do
+not: an equation, a score and a highlighted listing are three different
+presentations, and the word carries the presentation. Grouping them under one
+word would organise the vocabulary by *mechanism* — "things we pass through a
+renderer" — which is the one axis this vocabulary deliberately does not use.
+The immediate evidence is that `prose code, …` would alias `snippet`, which
+already exists and renders something else.
 
 ### `badge`
 
@@ -438,7 +449,7 @@ badge ok, "canonical"
 badge .status
 ```
 
-### `detail`
+### `fact`
 
 - **name** — the attribute
 - **content** — the value
@@ -447,16 +458,21 @@ badge .status
 - **subject** — unchanged
 - **infers** — the label from the name (`origin_project` → "Origin project");
   the value from that attribute when content is omitted
-- **renders** — a `<div class="detail">` of label and value
+- **renders** — a `<dt>`/`<dd>` pair
 
 ```
-detail origin, .origin_project
-detail updated_at
+fact origin, .origin_project
+fact updated_at
 ```
 
 The same information as `metric` at a different size — a labelled fact inline,
 rather than a tile. Two presentations, so two words; the word carries the
 presentation.
+
+Called `detail` in draft 2, which was a misnomer: HTML's `<details>` is the
+disclosure element, and this vocabulary already has `disclosure` for exactly
+that. A reader who knows HTML would have read `detail` as the singular of
+`<details>` and been wrong. `fact` collides with nothing and reads as prose.
 
 ### `snippet`
 
@@ -554,6 +570,24 @@ time relative, .updated_at
 ```
 image .image_url, alt: .name
 ```
+
+### `figure`
+
+- **name** — none
+- **content** — the caption
+- **modifiers** — none
+- **children** — the thing being figured: an `image`, a `chart`, a `snippet`
+- **subject** — unchanged
+- **infers** — that the caption belongs to the child, and associates them for
+  screen readers
+- **renders** — `<figure>` with a `<figcaption>`
+
+```
+figure "The studio index, as it stands"
+```
+
+Content is the caption and the child is the subject of it, which is the way
+round that lets a figure hold a chart or a listing rather than only an image.
 
 ### `icon`
 
