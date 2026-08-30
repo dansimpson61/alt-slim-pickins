@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: idea
 kind: project
 last_touched: '2026-08-30'
-next_step: Test the vocabulary against a content-heavy page — text, image, icon and list are still unexercised
+next_step: Test image and icon against a page with figures — the last unexercised corner
 docs: README.md
 related:
 - slim-pickins

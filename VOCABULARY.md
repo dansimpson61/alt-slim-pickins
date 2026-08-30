@@ -203,13 +203,32 @@ grid metrics, columns: 3
 - **name** — the variant
 - **content** — none
 - **modifiers** — none
-- **children** — the items
+- **children** — `item`
 - **subject** — unchanged
-- **infers** — an unordered list; each child becomes an item without saying so
-- **renders** — `<ul><li>…</li></ul>`
+- **infers** — an unordered list
+- **renders** — `<ul>`
 
 ```
 list plain
+```
+
+Draft 1 said each child became an item without saying so. That was cute and
+false: it breaks the moment an item holds more than one thing, which is the
+ordinary case. `list` governs `item` instead.
+
+### `item`
+
+- **name** — the variant
+- **content** — the text, when it is a single line
+- **modifiers** — none
+- **children** — anything, when it is not
+- **subject** — unchanged
+- **infers** — nothing
+- **renders** — `<li>`
+
+```
+item
+item "Ruby logic before CSS before Stimulus."
 ```
 
 ### `table`
@@ -293,6 +312,24 @@ card compact
 actions
 ```
 
+### `aside`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
+- **infers** — that everything *not* in an `aside` is the main column, so no
+  `main` word is needed; the column split and its collapse on small screens
+- **renders** — `<aside>`
+
+```
+aside
+```
+
+Replaces the CSS arithmetic — a three-column grid whose body spans two — that
+`dashboard/views/pattern.slim` uses to mean "sidebar".
+
 ### `disclosure`
 
 - **name** — none
@@ -362,6 +399,79 @@ text .summary
 ```
 note "Coarse assumptions; not tax advice."
 note warning, "Conversions above this bracket raise your IRMAA."
+```
+
+### `prose`
+
+- **name** — none
+- **content** — the markup, as markdown
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — that the content is markdown, and sanitises it. There is no
+  way to ask for it to be trusted instead
+- **renders** — a `<div class="prose">` of rendered HTML
+
+```
+prose .content
+```
+
+The one word that renders markup, which is what lets the language have no
+escaping sigil at all. Slim spends `=` versus `==` on this distinction;
+here the safe thing is the only thing, and rich inline text — links inside
+sentences, emphasis, lists inside paragraphs — is markdown's job rather than
+the grammar's.
+
+### `badge`
+
+- **name** — the variant: `ok`, `pending`, `neutral`, `warning`
+- **content** — the label
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the label from the value when content is omitted; the variant
+  from the value when it is a known status
+- **renders** — `<span class="badge badge--ok">`
+
+```
+badge ok, "canonical"
+badge .status
+```
+
+### `detail`
+
+- **name** — the attribute
+- **content** — the value
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the label from the name (`origin_project` → "Origin project");
+  the value from that attribute when content is omitted
+- **renders** — a `<div class="detail">` of label and value
+
+```
+detail origin, .origin_project
+detail updated_at
+```
+
+The same information as `metric` at a different size — a labelled fact inline,
+rather than a tile. Two presentations, so two words; the word carries the
+presentation.
+
+### `snippet`
+
+- **name** — the variant: the language, when it is code
+- **content** — the text
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — that it is for copying: monospaced, selectable whole, not
+  editable, with a copy control
+- **renders** — `<pre>` with a copy button
+
+```
+snippet .lore
+snippet ruby, .example
 ```
 
 ### `money`
