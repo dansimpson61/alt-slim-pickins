@@ -30,7 +30,7 @@ Every part is optional. The order never varies.
 
 | Argument | Means | Example |
 |---|---|---|
-| `word` | a name — what it is about, or which kind | `section products`, `button primary` |
+| `word` | a name — interpreted by the word to its left, never evaluated | `section products`, `button primary` |
 | `"string"` | literal text | `note "Saved."` |
 | `.property` | the current subject's data | `title .name` |
 | `binding.property` | a local's or helper's data | `note order.number` |
@@ -72,13 +72,28 @@ Because `each product` also binds the name `product`, an inner loop reaches
 back out by name. The escape hatch is already in the grammar; it needs no
 syntax of its own.
 
-### Names qualify; the word decides what that means
+### What a name means is the word's business
 
-A name always occupies the same grammatical role. What it *does* belongs to
-the word: `products` on a `section` says what the section is about;
-`primary` on a `button` says which kind of button. The meaning is always set
-by the word immediately to its left, so a reader never carries state to parse
-a sentence.
+The grammar says only one thing about a bare word: **it is a name, so it is
+never evaluated.** That is the whole grammatical rule, and it is the exact
+complement of the dot — a dot fetches data, a bare word does not.
+
+What the name is *for* belongs to the vocabulary, and differs by word:
+
+```
+section products    # the subject — what this section presents
+button primary      # the variant — which kind of button
+link show           # the destination — where this link goes
+field email         # the attribute — which property of the subject
+```
+
+This delegation is the design bet, not a gap in it: the grammar stays one
+sentence precisely because the vocabulary carries the meaning. It costs a
+reader nothing, because the meaning is always fixed by the word immediately
+to the left — visible on the same line, never state carried from earlier.
+
+The practical rule for reading an unfamiliar sentence: **the leading word
+tells you how to read the rest of it.**
 
 ### Conventions carry the common case
 
