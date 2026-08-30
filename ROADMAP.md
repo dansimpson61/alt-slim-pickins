@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v1
+# alt-slim-pickins — roadmap v2
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -31,14 +31,28 @@ This is what the phase order is for. Highest risk first.
 |---|---|---|
 | Inference works at all | **High** | Phase 0 |
 | What an app must promise to be renderable | **High** | Phase 0 → named in Phase 1 |
-| `chart` is right | **High**, narrow | Phase 7, deliberately last |
-| The design system the words assume | Medium | Phase 4 |
-| Runtime emits correct HTML | Low | Phases 0, 2, 3 |
+| **Reuse is at least as good as Slim's** | **High** | Phase 3 |
+| `chart` is right | **High**, narrow | Phase 8, deliberately last |
+| The design system the words assume | Medium | Phase 5 |
+| Runtime emits correct HTML | Low | Phases 0, 2, 4 |
 | Transform is feasible | Low | Phase 0 |
-| Grammar parses unambiguously | Low | already evidenced — 267 checked sentences |
+| Grammar parses unambiguously | Low | already evidenced — 273 checked sentences |
 
-The two High rows are both retired by one small slice. That is the argument
-for the phase order and the whole of it.
+The first two High rows are both retired by one small slice. That is the
+argument for the phase order.
+
+The third is dan's (2026-08-30), and it is a risk the first draft of this file
+missed:
+
+> A gift from Ruby and OOP that I treasure is the value derived from small
+> reusable abstractions that empower us to write very clean, DRY code. DRY is
+> its own reward, a parent and a child of joy.
+
+Sinatra and Slim already have layouts and partials. A language that cannot
+match them is a **regression**, however good its grammar is — and unlike the
+other risks, this one would not show up as a wall. It would show up as pages
+that work and are tedious, which is the failure mode hardest to notice from
+inside.
 
 ## How this stays accountable
 
@@ -103,7 +117,7 @@ renderable. This phase writes it down.
   *Done looks like:* `CONTRACT.md` states it, and says what happens when an
   app does not satisfy it.
 - **Judge the cost** `dan` — if the contract is onerous, the language is
-  unusable and we say so here rather than discovering it at Phase 6.
+  unusable and we say so here rather than discovering it at Phase 7.
   *Done looks like:* a decision, recorded.
 
 ## Phase 2 — The second slice: the table
@@ -122,7 +136,47 @@ Words added: `section`, `table`, `column`, `total`, `money`, `percent`,
   percent multiplied, both chosen from the value's type rather than said.
   *Done looks like:* no `as:` modifier is needed for the ordinary cases.
 
-## Phase 3 — The rest of the vocabulary
+## Phase 3 — Reuse: layout and partials
+
+Before forty-six words are built, find out how they compose. If reuse changes
+how words nest or how the subject is passed, it is far cheaper to learn it
+now than after Phase 4.
+
+**The evidence this phase is built on**, measured across the three drafted
+pages:
+
+- `stylesheet`, `nav` and `footer` appear at page level in **all three**
+  pages; `meta` and `script` in some. Identical in shape, different in
+  content — a template with holes, which is the definition of a layout.
+- `list plain` → `each` → `item` → contents recurs **three times across two
+  pages**. `grid metrics` followed by several `metric` lines recurs twice, and
+  `metric` is used ten times overall.
+
+So both abstractions are earned by real repetition rather than anticipated.
+
+- **Layout** `agent` — the chrome every page shares, defined once, with the
+  page's own content filling the hole.
+  *Done looks like:* the three drafted pages lose their `stylesheet`, `nav`
+  and `footer` lines to a layout, and still render identically.
+- **Partials as app-defined words** `dan` `agent` — the design question, and
+  it has a candidate answer that keeps the founding principle literally true.
+  *Extending the language adds vocabulary, never syntax* — so a partial is
+  simply **a word an app defines**, invoked exactly like a built-in, taking
+  the current subject as its own. slim-pickins owns the vocabulary of
+  presentation; an app owns the vocabulary of its own components.
+  *Done looks like:* the repeated `list`/`item` shape collapses into one
+  app-defined word used in both pages, and a reader cannot tell from the call
+  site whether a word is built-in or app-defined.
+- **Shadowing** `conv` — an app-defined word that collides with a
+  slim-pickins word is an error, not an override. Two meanings for one word is
+  the alias problem wearing a new hat.
+  *Done looks like:* the collision raises, naming both definitions.
+- **Judge it against Slim** `dan` — is a layout plus a partial in this
+  language better to read and write than `layout.slim` plus a `render`
+  call?
+  *Done looks like:* the answer, recorded, including if it is no.
+
+## Phase 4 — The rest of the vocabulary
 
 The remaining words. Low risk, real work, and the only phase that is mostly
 typing.
@@ -132,7 +186,7 @@ typing.
   [CONTENT.md](CONTENT.md), [FIGURES.md](FIGURES.md) — and
   `check_grammar.rb` is green.
 
-## Phase 4 — The design system
+## Phase 5 — The design system
 
 The vocabulary renders classes; something must define them.
 
@@ -144,7 +198,7 @@ The vocabulary renders classes; something must define them.
   *Done looks like:* a decision, recorded, with the class-naming convention
   written into VOCABULARY.md's `renders` slots.
 
-## Phase 5 — Integration
+## Phase 6 — Integration
 
 - **A Sinatra template handler** `agent` — so a view file in this language is
   rendered the way `.slim` is today.
@@ -155,7 +209,7 @@ The vocabulary renders classes; something must define them.
   *Done looks like:* a documented way through, and evidence it is rarely
   needed.
 
-## Phase 6 — Port a real app
+## Phase 7 — Port a real app
 
 - **Port roth entirely** `agent` — every view, not the one page.
   *Done looks like:* roth runs on this language, and the diff against its old
@@ -164,7 +218,7 @@ The vocabulary renders classes; something must define them.
   replaced?
   *Done looks like:* the answer, recorded, including if it is no.
 
-## Phase 7 — `chart`
+## Phase 8 — `chart`
 
 Deliberately last. It is the one entry written without evidence, it has more
 irreducible configuration than any other word, and three pages have failed to
@@ -178,8 +232,9 @@ test it.
 
 ## What "how far along" means
 
-Phases 0 and 1 are small and retire both High risks. Phase 3 is the largest
-by effort and the smallest by risk. If Phase 0 fails, phases 2 through 7 do
-not exist in their current form, which is exactly why it is first.
+Phases 0 and 1 are small and retire two of the three High risks. Phase 3
+retires the third. Phase 4 is the largest by effort and the smallest by risk.
+If Phase 0 fails, everything after it changes shape, which is exactly why it
+is first.
 
 A thin transform on its own would have completed part of one item in Phase 0.
