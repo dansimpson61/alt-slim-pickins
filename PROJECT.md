@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: idea
 kind: project
 last_touched: '2026-08-30'
-next_step: Grammar and vocabulary are settled — decide whether to build the thin transform or keep testing on paper
+next_step: ROADMAP.md Phase 0 — the vertical slice: does inference actually work?
 docs: README.md
 related:
 - slim-pickins

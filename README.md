@@ -68,14 +68,55 @@ leader.
 **4. Escaping is encoded by doubling.** `=` escapes, `==` does not. Doubling
 a character to mean "and trust me" is memorised, not derived.
 
-## The open question
+## Where it went
 
-Two paths, and picking one is the next step:
+The question was settled by answering it differently. Constraining Slim's tag
+line turned out to be the wrong frame: once we stopped defending inherited
+syntax, every sigil we were carrying — `=`, `-`, `|`, required parens — proved
+to exist only to disambiguate Ruby we had left undelimited. Remove that and
+the whole punctuation layer evaporates.
 
-- **On top of Slim** — keep the parser, constrain the surface. Cheap, proven,
-  and inherits all four seams wherever a user reaches past the constraint.
-- **Independent** — own the grammar, keep the skeleton, redesign the tag
-  line. Expensive, and the payoff is that the one-sentence description stays
-  true at every level.
+What is left is one sentence:
 
-Nothing here is decided.
+> **`word arguments`. Indentation nests it. Everything — elements, components,
+> control flow, text — is a word. Extending the language adds vocabulary,
+> never syntax.**
+
+```
+section holdings
+  empty "No holdings yet."
+  each holding
+    card
+      title .name
+      money .market_value
+```
+
+A dot means data; a bare word is language. The word carries the presentation
+and the argument carries the domain, so `money .market_value` means *present
+this as money* and the formatting belongs to the word.
+
+## The documents
+
+- **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
+  no open questions.
+- **[VOCABULARY.md](VOCABULARY.md)** — forty-six words, seven slots each.
+  slim-pickins owns the vocabulary of web presentation; the app's domain model
+  arrives through conventions.
+- **[ROADMAP.md](ROADMAP.md)** — the phases and the risk register. Start here
+  to know what happens next.
+- **[PORTFOLIO.md](PORTFOLIO.md)**, **[CONTENT.md](CONTENT.md)**,
+  **[FIGURES.md](FIGURES.md)** — three real pages written in the language,
+  each modelled on a view that already exists in this workspace. They are the
+  tests: wall counts across them went 3, 6, 1.
+- **`check_grammar.rb`** — keeps every document accountable to the others.
+  Every sentence must obey the grammar table; every word used must be defined;
+  every word defined must have a sentence.
+
+## Status
+
+No code yet, deliberately. The grammar and vocabulary are settled on paper,
+and paper has given nearly all it can. What remains unproven is **inference**
+— forty-four of the forty-six words infer something, and thirteen infer from
+the app's own domain model. Whether `field base_income` can really derive a
+label, an input name, a value and an input type from one word is the whole
+bet, and Phase 0 of the roadmap exists to settle it.
