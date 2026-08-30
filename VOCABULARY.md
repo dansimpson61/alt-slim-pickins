@@ -1,12 +1,15 @@
-# Vocabulary — the spec for drafting it
+# Vocabulary — draft 1
 
-Status: **spec only.** Four entries are worked below to prove the format.
-The rest of the words are not written yet.
+Status: **draft.** Thirty-eight words. Nothing is implemented.
 
 The grammar is settled and is one sentence ([DESIGN.md](DESIGN.md)). It cannot
 really be wrong any more. The vocabulary *can* be incomplete, and in a language
 where words are the only construct, every gap is a wall. So the vocabulary is
 the risk, and this is the discipline for writing it.
+
+Drafted against a real page — `roth/views/controls.slim`, a retirement
+conversion tool — rather than invented examples, because invented examples are
+the condition under which a vocabulary looks more complete than it is.
 
 ## What an entry must declare
 
@@ -19,15 +22,8 @@ So every word needs **two** definitions, not one — what it governs in its
 arguments, and what it governs in its children. Seven slots, each answered or
 explicitly `none`:
 
-| Slot | Answers |
-|---|---|
-| **name** | what a bare name means to this word — *one* job, not a disjunction |
-| **content** | what a `"string"` or `.data` argument means |
-| **modifiers** | which `key:` options are accepted |
-| **children** | which words are valid inside, and what this word means by them |
-| **subject** | what the subject is inside this word, if it changes |
-| **infers** | what it works out when not told, and how to override |
-| **renders** | the HTML |
+**name** · **content** · **modifiers** · **children** · **subject** ·
+**infers** · **renders**
 
 ## Rules for entries
 
@@ -35,120 +31,694 @@ explicitly `none`:
    default. Write `none`.
 2. **A name slot names one job** — the subject, a variant, a destination, an
    attribute. If it takes two, the word is doing two things and wants
-   splitting. ("What it is about, or which kind" was this mistake in the
-   grammar itself.)
+   splitting.
 3. **Every inference is overridable by saying the thing**, and the entry says
    how. A convention you cannot override is a trap.
 4. **No word accepts the same information two ways.** Not as a name and a
-   modifier, not as a child and a modifier. This is the alias problem, and it
-   is what makes grammars rot.
+   modifier, not as a child and a modifier. This is the alias problem.
 5. **A word governs only its own children.** No word reaches past its parent
    or into a grandchild.
 6. **Every word appears in at least one sentence that passes
-   `check_grammar.rb`.** An entry with no exemplary sentence is untested.
+   `check_grammar.rb`**, which also checks that every word used in a sentence
+   is defined here.
 
-## Worked entries
+## Universal modifier
+
+`if:` guards any sentence in the language — the word renders only when the
+condition holds. It is not repeated in the entries below.
+
+---
+
+# Document
+
+### `page`
+
+- **name** — the subject: what this page is about
+- **content** — the page title
+- **modifiers** — none
+- **children** — anything
+- **subject** — the named thing
+- **infers** — the `<title>` and the top heading from the name; the doctype,
+  `<html>`, `<head>` and `<body>` entirely. Override the title with content
+- **renders** — the whole document
+
+```
+page portfolio
+page portfolio, "Your retirement"
+```
+
+This absorbs `doctype`, which was the last thing in the grammar fitting no
+rule. It is not a keyword; it is something `page` knows.
+
+### `meta`
+
+- **name** — which metadatum (`description`, `viewport`, `charset`)
+- **content** — its value
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — `charset` and `viewport` are emitted by `page` without being
+  asked; naming them overrides the default
+- **renders** — `<meta>` in the head
+
+```
+meta description, "A directional Roth conversion sketch."
+```
+
+### `stylesheet`
+
+- **name** — none
+- **content** — the path
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the app's base stylesheet is included by `page` without asking
+- **renders** — `<link rel="stylesheet">` in the head
+
+```
+stylesheet "/css/base.css"
+```
+
+### `script`
+
+- **name** — none
+- **content** — the path
+- **modifiers** — `defer:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — placement at the end of the body
+- **renders** — `<script src>`
+
+```
+script "/js/app.js"
+```
+
+### `footer`
+
+- **name** — none
+- **content** — the text, when it is a single line
+- **modifiers** — none
+- **children** — anything, when it is not
+- **subject** — unchanged
+- **infers** — its position as the last thing in the page
+- **renders** — `<footer>`
+
+```
+footer "Approximate directional estimates. Not tax advice."
+```
+
+---
+
+# Structure
 
 ### `section`
 
-| Slot | |
-|---|---|
-| **name** | the subject — the collection or record this section presents |
-| **content** | the heading text |
-| **modifiers** | `if:` |
-| **children** | any presentation word; `empty` is governed here |
-| **subject** | the named thing |
-| **infers** | the heading from the name (`products` → "Products"); the class from the name. Override the heading by giving content |
-| **renders** | `<section class="products"><h2>…</h2>…</section>` |
+- **name** — the subject: the collection or record this section presents
+- **content** — the heading text
+- **modifiers** — none
+- **children** — any presentation word; `empty` is governed here
+- **subject** — the named thing
+- **infers** — the heading from the name (`holdings` → "Holdings"); the class
+  from the name. Override the heading with content
+- **renders** — `<section class="holdings"><h2>Holdings</h2>…</section>`
 
 ```
-section products
-section products, "Merchandise"
+section holdings
+section holdings, "What you own"
 ```
 
-### `each`
+### `group`
 
-| Slot | |
-|---|---|
-| **name** | the singular of the collection to iterate; also binds that name |
-| **content** | none |
-| **modifiers** | `from:` — an explicit collection when pluralising is wrong |
-| **children** | repeated once per element |
-| **subject** | each element in turn |
-| **infers** | the collection by pluralising the name (`product` → `products`). Override with `from:` |
-| **renders** | nothing of its own; the children repeat |
+- **name** — the topic of the cluster
+- **content** — the label
+- **modifiers** — none
+- **children** — anything; inside a `form`, fields
+- **subject** — unchanged
+- **infers** — the label from the name; renders as a `fieldset` with a
+  `legend` inside a form, and a labelled `div` outside one
+- **renders** — `<fieldset><legend>…</legend>…</fieldset>`
 
 ```
-each product
-each product, from: .featured
+group assumptions
+group assumptions, "Advanced assumptions"
+```
+
+### `grid`
+
+- **name** — the variant: what the cells are
+- **content** — none
+- **modifiers** — `columns:`
+- **children** — the cells, repeated as given
+- **subject** — unchanged
+- **infers** — the column count from the viewport
+- **renders** — `<div class="grid grid--cards">`
+
+```
+grid cards
+grid metrics, columns: 3
+```
+
+### `list`
+
+- **name** — the variant
+- **content** — none
+- **modifiers** — none
+- **children** — the items
+- **subject** — unchanged
+- **infers** — an unordered list; each child becomes an item without saying so
+- **renders** — `<ul><li>…</li></ul>`
+
+```
+list plain
+```
+
+### `table`
+
+- **name** — the subject: the collection whose rows these are
+- **content** — the caption
+- **modifiers** — none
+- **children** — `column`, `total`
+- **subject** — the named collection; each row in turn for its columns
+- **infers** — one row per element, in the collection's order. The loop is
+  never written
+- **renders** — `<table>` with head and body
+
+```
+table holdings
+table holdings, "As of today"
 ```
 
 ### `column`
 
-Governed by `table`. Demonstrates a word whose meaning comes from its parent,
-and which renders in two places.
-
-| Slot | |
-|---|---|
-| **name** | the attribute of each row to show |
-| **content** | the header text |
-| **modifiers** | `if:` |
-| **children** | none |
-| **subject** | unchanged — `table` supplies each row in turn |
-| **infers** | the header from the name (`due_on` → "Due on"); each cell's value from that attribute of the row. Override the header by giving content |
-| **renders** | one `<th>` in the head, and one `<td>` per row |
+- **name** — the attribute of each row to show
+- **content** — the header text
+- **modifiers** — `as:` — the presentation word to use for each cell
+- **children** — none
+- **subject** — unchanged; `table` supplies each row in turn
+- **infers** — the header from the name (`due_on` → "Due on"); each cell's
+  value from that attribute; the cell's presentation and alignment from the
+  value's type, so money is formatted and right-aligned without being asked.
+  Override the header with content, the presentation with `as:`
+- **renders** — one `<th>` in the head, one `<td>` per row
 
 ```
-column name
-column due_on, "Due"
+column symbol
+column market_value, "Value"
+column weight, as: percent
+```
+
+### `total`
+
+- **name** — the column to total
+- **content** — the label
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the sum over the table's collection; the same presentation the
+  column uses. Override the label with content
+- **renders** — a `<tfoot>` row
+
+```
+total market_value
+total market_value, "Portfolio"
+```
+
+### `card`
+
+- **name** — the variant
+- **content** — none
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged; usually the element of an enclosing `each`
+- **infers** — its DOM id from the subject, so `id` is never written
+- **renders** — `<article class="card">`
+
+```
+card
+card compact
+```
+
+### `actions`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — `link`, `button`
+- **subject** — unchanged
+- **infers** — that its children are the operations on the enclosing thing;
+  their layout and spacing
+- **renders** — `<div class="actions">`
+
+```
+actions
+```
+
+### `disclosure`
+
+- **name** — none
+- **content** — the toggle label
+- **modifiers** — `open:`
+- **children** — the content that is revealed
+- **subject** — unchanged
+- **infers** — closed until opened; the toggle control and its state, so no
+  script is written. Override with `open:`
+- **renders** — `<details><summary>…</summary>…</details>`
+
+```
+disclosure "Show advanced assumptions"
+disclosure "Show raw JSON", open: true
+```
+
+The whole point of this word is that `roth/views/controls.slim` spends a
+button, an id, a data attribute, a CSS class and a JavaScript handler on it.
+
+---
+
+# Content
+
+### `title`
+
+- **name** — none
+- **content** — the text
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — its heading level from how deep it sits, so `h2` versus `h3` is
+  never chosen by hand
+- **renders** — `<h2>`, `<h3>` …
+
+```
+title .name
+title "Lifetime taxes"
+```
+
+`heading` was a second word for this and has been cut. One job, one word.
+
+### `text`
+
+- **name** — none
+- **content** — the prose
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — a paragraph
+- **renders** — `<p>`
+
+```
+text .summary
+```
+
+### `note`
+
+- **name** — the variant
+- **content** — the prose
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — a subdued paragraph; `quiet`, `warning` and `error` are the
+  variants
+- **renders** — `<p class="note note--warning">`
+
+```
+note "Coarse assumptions; not tax advice."
+note warning, "Conversions above this bracket raise your IRMAA."
+```
+
+### `money`
+
+- **name** — none
+- **content** — the amount
+- **modifiers** — `precision:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — the currency and locale from the app; whole dollars unless
+  cents matter; a class on negatives so red is CSS's job, not the template's
+- **renders** — `<span class="money money--negative">−$1,234</span>`
+
+```
+money .balance
+money .tax_delta, precision: 2
+```
+
+Renamed from `price`. The word carries the presentation and the argument
+carries the domain, so the word has to be the presentation — "format this as
+currency" — not a domain noun. A portfolio has balances, not prices, and
+`price .balance` would have read as a category error.
+
+### `percent`
+
+- **name** — none
+- **content** — the fraction
+- **modifiers** — `precision:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — that the value is a fraction and multiplies it; one decimal
+  place
+- **renders** — `<span class="percent">4.5%</span>`
+
+```
+percent .growth_rate
+percent .weight, precision: 2
+```
+
+### `number`
+
+- **name** — none
+- **content** — the value
+- **modifiers** — `precision:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — thousands separators from the locale
+- **renders** — `<span class="number">750,000</span>`
+
+```
+number .shares
+```
+
+### `time`
+
+- **name** — the variant: `date`, `datetime`, `relative`
+- **content** — the moment
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the date format from the app's locale; a machine-readable
+  attribute alongside the human text
+- **renders** — `<time datetime="2026-08-30">30 August 2026</time>`
+
+```
+time .as_of
+time relative, .updated_at
+```
+
+### `image`
+
+- **name** — none
+- **content** — the source
+- **modifiers** — `alt:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — lazy loading; dimensions when the app can supply them
+- **renders** — `<img>`
+
+```
+image .image_url, alt: .name
+```
+
+### `icon`
+
+- **name** — which icon
+- **content** — none
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — that it is decorative and hidden from screen readers unless it
+  is the only content of a control
+- **renders** — inline `<svg>`
+
+```
+icon warning
+```
+
+### `metric`
+
+- **name** — the attribute
+- **content** — the label
+- **modifiers** — `as:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — the label from the name; the value from that attribute of the
+  subject; the presentation from the value's type. Override the label with
+  content, the presentation with `as:`
+- **renders** — a stat tile: `<div class="metric"><h3>…</h3><div
+  class="metric-value">…</div></div>`
+
+```
+metric lifetime_taxes, "Lifetime taxes"
+metric roth_share, as: percent
+```
+
+Found by reading a real page, not by imagining one. `#metrics` in
+`roth/views/controls.slim` is six hand-built tiles of identical shape.
+
+### `chart`
+
+- **name** — the kind: `line`, `bar`, `area`, `pie`
+- **content** — the series
+- **modifiers** — `over:`, `label:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — axes, scale and legend from the data; the x axis from `over:`
+- **renders** — inline `<svg>`
+
+```
+chart line, .balances, over: .years
+chart pie, .allocation, label: "Allocation"
+```
+
+**Least settled word here.** A chart has more irreducible configuration than
+anything else in the vocabulary, and this entry is a guess at where the line
+falls between inference and instruction.
+
+---
+
+# Interaction
+
+### `link`
+
+- **name** — the destination
+- **content** — the label
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the path from the name and the subject (`show` on a holding
+  gives that holding's page); the label from the name when content is omitted
+- **renders** — `<a href>`
+
+```
+link show
+link show, "View holding"
 ```
 
 ### `button`
 
-| Slot | |
-|---|---|
-| **name** | the variant |
-| **content** | the label |
-| **modifiers** | `to:`, `type:`, `if:` |
-| **children** | none |
-| **subject** | unchanged |
-| **infers** | `type="submit"` when inside a `form`. Override with `type:` |
-| **renders** | `<button class="button button--primary">…</button>` |
+- **name** — the variant
+- **content** — the label
+- **modifiers** — `to:`, `type:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — `type="submit"` inside a `form`, `type="button"` outside one.
+  Override with `type:`
+- **renders** — `<button class="button button--primary">`
 
 ```
-button primary, "Save"
-button primary, "Add to cart", if: .in_stock?
+button primary, "Run"
+button "Show baseline", to: baseline
 ```
 
-## The shape of the vocabulary
+### `form`
 
-Five groups. The counts are estimates and the point of drafting is to find out
-where they are wrong.
+- **name** — the subject the form edits
+- **content** — none
+- **modifiers** — `to:`, `method:`
+- **children** — `group`, `field`, `check`, `select`, `actions`
+- **subject** — the named thing, so fields read their values from it
+- **infers** — the action from the subject and the method from whether it
+  exists yet. Override with `to:` and `method:`
+- **renders** — `<form>`
 
-| Group | Words |
-|---|---|
-| **Document** | `page`, `layout`, `head`, `meta` |
-| **Structure** | `section`, `group`, `grid`, `list`, `table`, `column`, `card`, `actions` |
-| **Content** | `heading`, `title`, `text`, `note`, `price`, `time`, `image`, `icon` |
-| **Interaction** | `link`, `button`, `form`, `field`, `check`, `select`, `option` |
-| **Situation** | `each`, `empty`, `choose`, `when`, `otherwise` |
+```
+form scenario
+form scenario, to: run, method: post
+```
 
-Roughly thirty named so far against an estimate of forty, which is the first
-thing the drafting will test.
+### `field`
 
-## What drafting will surface
+- **name** — the attribute
+- **content** — the label
+- **modifiers** — `type:`, `step:`, `required:`
+- **children** — none
+- **subject** — unchanged; reads from the form's subject
+- **infers** — the label from the name (`base_income` → "Base income"); the
+  input name from the attribute; the current value from the subject; the
+  input type from the attribute's type, so a number is a number without being
+  told. Override any of them
+- **renders** — `<label>` plus `<input>`
 
-These are predictions, recorded now so they can be checked later rather than
-rationalised.
+```
+field base_income
+field age_primary, "Age (primary)"
+field growth_rate, step: 0.01
+```
 
-- **Words that are really one word with a variant.** `heading` and `title`
-  probably collapse. So might `grid` and `list`.
-- **The `?` case.** `when signed_in?` — a helper used as a value with no dot
-  to mark it as data. Still open in DESIGN.md, and `choose` is where it bites.
-- **`doctype`.** Still fits no rule. `page` may absorb it, which would be the
-  cheapest honest answer.
-- **Where inference gets its knowledge.** `field name` deriving a label, an
-  input name and a value from one word assumes something about the subject's
-  shape. `section products` inferring a heading assumes a humanising rule.
-  These are conventions the *app* must satisfy, and the vocabulary is where
-  that contract becomes visible.
+Nine of these replace the eighteen hand-paired `label`/`input` lines in
+`roth/views/controls.slim`, and none of them repeats the field's name three
+times.
+
+### `check`
+
+- **name** — the attribute
+- **content** — the label
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged; reads from the form's subject
+- **infers** — the label from the name; checked state from the subject
+- **renders** — `<label>` plus `<input type="checkbox">`
+
+```
+check show_baseline, "Show baseline"
+```
+
+### `select`
+
+- **name** — the attribute
+- **content** — the label
+- **modifiers** — none
+- **children** — `option`
+- **subject** — unchanged; reads from the form's subject
+- **infers** — the label from the name; the selected option from the subject.
+  When it has no `option` children, the choices come from the attribute's own
+  domain
+- **renders** — `<label>` plus `<select>`
+
+```
+select conversion_strategy, "Strategy"
+```
+
+### `option`
+
+- **name** — the value
+- **content** — the label
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the label from the name. Override with content
+- **renders** — `<option>`
+
+```
+option fixed, "Fixed amount"
+option fill_bracket, "Fill bracket"
+```
+
+---
+
+# Situation
+
+### `each`
+
+- **name** — the singular of the collection; also binds that name
+- **content** — none
+- **modifiers** — `from:`
+- **children** — repeated once per element
+- **subject** — each element in turn
+- **infers** — the collection by pluralising the name (`holding` →
+  `holdings`). Override with `from:`
+- **renders** — nothing of its own; the children repeat
+
+```
+each holding
+each holding, from: .taxable
+```
+
+### `empty`
+
+- **name** — none
+- **content** — what to say instead
+- **modifiers** — none
+- **children** — anything, when a sentence is not enough
+- **subject** — unchanged
+- **infers** — the condition: it renders when the enclosing subject has
+  nothing in it, and suppresses its siblings when it does
+- **renders** — `<p class="empty">`
+
+```
+empty "No holdings yet."
+```
+
+The word that proves the thesis. It is not `if holdings.empty?` — it names the
+situation instead of writing the branch, and the enclosing `section` or
+`table` already knows what "empty" refers to.
+
+### `choose`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — `when`, `otherwise`
+- **subject** — unchanged
+- **infers** — that the first `when` whose condition holds wins, and that
+  `otherwise` is last
+- **renders** — nothing of its own
+
+```
+choose
+```
+
+### `when`
+
+- **name** — none
+- **content** — the condition
+- **modifiers** — none
+- **children** — what to render
+- **subject** — unchanged
+- **infers** — nothing
+- **renders** — nothing of its own
+
+```
+when .in_stock?
+```
+
+### `otherwise`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — what to render
+- **subject** — unchanged
+- **infers** — that it is the last branch
+- **renders** — nothing of its own
+
+```
+otherwise
+```
+
+---
+
+## What drafting surfaced
+
+Predictions from the spec, and what actually happened.
+
+- **`heading` and `title` collapse.** Predicted, and confirmed — cut to
+  `title`, which infers its level from depth.
+- **`grid` and `list` collapse.** Predicted, and **wrong.** `grid` lays out
+  cells that are already blocks; `list` makes its children into items. They
+  govern their children differently, so they are two words.
+- **`doctype`.** Absorbed by `page`. It was never a keyword, it was something
+  `page` knows.
+- **`price` was a domain noun, not a presentation word.** Renamed to `money`.
+  Caught only by drafting against a portfolio, where "price" would have been
+  a category error against a balance.
+- **Three words the estimate missed entirely** — `metric`, `chart` and
+  `disclosure` — all found by reading `roth/views/controls.slim`. Every one of
+  them is hand-built there out of markup, classes and JavaScript.
+- **Thirty-eight words**, against an estimate of forty. The estimate was
+  close, but three of the additions were invisible until a real page was read,
+  which is the argument against ever drafting this from imagination.
+
+## Still open
+
+- **The `?` case.** `when .in_stock?` is fine — it has a dot. `when
+  signed_in?`, a bare helper used as a value, still has nowhere to live. This
+  is the one unclosed hole in the morphology, and `choose` is where it bites.
+- **`chart` is a guess.** It has more irreducible configuration than any other
+  word, and the entry above draws the inference/instruction line without
+  evidence.
+- **What the app must promise.** `field base_income` deriving a label, an
+  input name, a value and an input type assumes the subject can be asked about
+  its attributes. `section holdings` assumes a humanising rule. `column`
+  choosing an alignment assumes types are knowable. These are a contract the
+  *app* has to satisfy, and it is now visible in one place rather than
+  scattered.
+- **Under-tested by this page.** Prose and media (`text`, `image`, `icon`),
+  navigation chrome, and collections nested more than one deep. A portfolio
+  page stresses money, tables and forms; it says almost nothing about the rest.

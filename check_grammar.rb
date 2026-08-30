@@ -1,3 +1,4 @@
+require 'set'
 # Checks every sentence in DESIGN.md's fenced blocks against the grammar table.
 # Rank: name(0) < content(1) < modifier(2). Ranks must never decrease.
 # Morphology under test: a dot means data, a bare word is language.
@@ -31,11 +32,17 @@ here = File.expand_path(__dir__)
 docs = ARGV.empty? ? %w[DESIGN.md VOCABULARY.md].map { |f| File.join(here, f) } : ARGV
 problems = 0; checked = 0
 
+# Every word used in a sentence must be defined in VOCABULARY.md, so the two
+# documents cannot drift apart silently.
+vocab = File.read(File.join(here, "VOCABULARY.md")).scan(/^### `([a-z_]+)`/).flatten.to_set
+used = Hash.new { |h, k| h[k] = [] }
+
 docs.each do |doc|
   File.read(doc).scan(/^```\n(.*?)^```/m).flatten.each do |block|
+    next if block.include?("names, content")   # the schema itself, not a sentence
     block.lines.each do |raw|
       line = raw.chomp.sub(/\s+#.*\z/, "").rstrip
-      next if line.strip.empty? || line.include?("names, content")
+      next if line.strip.empty?
       body = line.strip
       where = File.basename(doc)
       word, _, rest = body.partition(" ")
@@ -43,6 +50,7 @@ docs.each do |doc|
         puts "  BAD WORD  #{where}: #{body.inspect}"; problems += 1; next
       end
       checked += 1
+      used[word] << where
       ranks = split_args(rest).map { |a| [a, kind_of(a)] }
       ranks.each { |a, r| (puts "  UNKNOWN ARG  #{where}: #{a.inspect} in #{body.inspect}"; problems += 1) if r.nil? }
       seq = ranks.map(&:last).compact
@@ -52,4 +60,12 @@ docs.each do |doc|
     end
   end
 end
-puts "\n#{checked} sentences checked, #{problems} problems"
+(used.keys.to_set - vocab).sort.each do |w|
+  puts "  UNDEFINED WORD  #{w.inspect} used in #{used[w].uniq.join(', ')} but not in VOCABULARY.md"
+  problems += 1
+end
+(vocab - used.keys.to_set).sort.each do |w|
+  puts "  UNEXEMPLIFIED  #{w.inspect} defined but has no sentence"
+  problems += 1
+end
+puts "\n#{checked} sentences checked, #{vocab.size} words defined, #{problems} problems"

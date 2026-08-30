@@ -141,7 +141,7 @@ page products
         card
           image .image_url, alt: .name
           title .name
-          price .price
+          money .price
           actions
             link show, "View"
             button primary, "Add to cart", if: .in_stock?
@@ -188,9 +188,9 @@ each order
   card
     title .number
     each line_item
-      line
+      card compact
         text .description
-        price .amount
+        money .amount
         note order.number
 ```
 
@@ -226,7 +226,7 @@ section orders, "Recent orders"
   each order
     card compact
       title .number
-      price .total, if: .paid?
+      money .total, if: .paid?
 
 table invoices
   column number
