@@ -5,14 +5,16 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: idea
 kind: project
 last_touched: '2026-08-29'
-next_step: Decide the foundation — build on Slim's parser, or an independent grammar
+next_step: Enumerate the vocabulary of web presentation (~40 words) against DESIGN.md's grammar
 docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
-notes: Greenfield. No code yet, deliberately. The open question is whether this
-  sits on top of Slim (inheriting its tag-line irregularities) or replaces the
-  grammar outright.
+notes: Still no code, deliberately. The foundation question is settled — we own
+  the grammar, we are not subclassing Slim's parser. DESIGN.md v0 holds the
+  one-sentence grammar, the wishes, and the guessability proof. The grammar can
+  no longer really be wrong; the vocabulary can be incomplete, and that is now
+  where the risk lives.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---
