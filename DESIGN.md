@@ -21,7 +21,7 @@ word's business, not the template's.
 
 ## The sentence
 
-```
+```text
 word names, content, modifiers:
   children
 ```

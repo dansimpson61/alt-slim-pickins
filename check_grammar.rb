@@ -1,21 +1,46 @@
-require 'set'
-# Checks every sentence in DESIGN.md's fenced blocks against the grammar table.
-# Rank: name(0) < content(1) < modifier(2). Ranks must never decrease.
-# Morphology under test: a dot means data, a bare word is language.
-WORD = /\A[a-z][a-z_]*\z/
-KINDS = {
-  0 => /\A[a-z][a-z_]*\z/,                        # bare name
-  1 => /\A(".*"|\.[a-z_]+\??|[a-z_]+(\.[a-z_]+)+\??)\z/, # data — always dotted
-  2 => /\A[a-z_]+:\s*.+\z/                        # modifier:
-}
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Keeps the design documents accountable to each other.
+#
+#   - every sentence obeys the grammar table in DESIGN.md
+#   - every word used in a sentence is defined in VOCABULARY.md
+#   - every word defined in VOCABULARY.md has at least one sentence
+#
+# An untagged fence holds sentences and is checked. Tag a fence (```slim,
+# ```html) to exclude it — that is how a document shows something that is not
+# this language. There is no third category, which is what stops examples
+# from rotting.
+#
+# Exits non-zero when anything is wrong, so it can gate a commit.
 
-def split_args(s)
-  parts, buf, depth, q = [], +"", 0, false
-  s.each_char do |c|
-    if c == '"' then q = !q; buf << c
-    elsif q then buf << c
-    elsif c == ',' && depth.zero? then parts << buf.strip; buf = +""
-    else depth += 1 if c == '('; depth -= 1 if c == ')'; buf << c end
+require 'set'
+
+DOCS = %w[DESIGN.md VOCABULARY.md ROADMAP.md README.md
+          PORTFOLIO.md CONTENT.md FIGURES.md].freeze
+
+WORD = /\A[a-z][a-z_]*\z/
+
+# A name is never evaluated; all data is dotted. Ranks must never decrease
+# across a sentence: names, then content, then modifiers.
+KINDS = {
+  0 => /\A[a-z][a-z_]*\z/,                                # a name
+  1 => /\A(".*"|\.[a-z_]+\??|[a-z_]+(\.[a-z_]+)+\??)\z/,  # data — always dotted
+  2 => /\A[a-z_]+:\s*.+\z/                                # a modifier
+}.freeze
+
+# Split on commas that are not inside quotes or parentheses.
+def split_args(str)
+  parts, buf, depth, quoted = [], +'', 0, false
+  str.each_char do |c|
+    if c == '"'                   then quoted = !quoted; buf << c
+    elsif quoted                  then buf << c
+    elsif c == ',' && depth.zero? then parts << buf.strip; buf = +''
+    else
+      depth += 1 if c == '('
+      depth -= 1 if c == ')'
+      buf << c
+    end
   end
   parts << buf.strip unless buf.strip.empty?
   parts
@@ -26,46 +51,79 @@ def kind_of(arg)
   nil
 end
 
-# Untagged fences hold sentences and are checked. Tag a fence (```html) to
-# exclude it — that is how a document shows output rather than grammar.
-here = File.expand_path(__dir__)
-docs = ARGV.empty? ? %w[DESIGN.md VOCABULARY.md PORTFOLIO.md CONTENT.md FIGURES.md ROADMAP.md README.md].map { |f| File.join(here, f) } : ARGV
-problems = 0; checked = 0
-
-# Every word used in a sentence must be defined in VOCABULARY.md, so the two
-# documents cannot drift apart silently.
-vocab = File.read(File.join(here, "VOCABULARY.md")).scan(/^### `([a-z_]+)`/).flatten.to_set
-used = Hash.new { |h, k| h[k] = [] }
-
-docs.each do |doc|
-  File.read(doc).scan(/^```\n(.*?)^```/m).flatten.each do |block|
-    next if block.include?("names, content")   # the schema itself, not a sentence
-    block.lines.each do |raw|
-      line = raw.chomp.sub(/\s+#.*\z/, "").rstrip
-      next if line.strip.empty?
-      body = line.strip
-      where = File.basename(doc)
-      word, _, rest = body.partition(" ")
-      unless word =~ WORD
-        puts "  BAD WORD  #{where}: #{body.inspect}"; problems += 1; next
+# Walk a document and yield each line of every *untagged* fenced block.
+# A regex cannot do this: a closing fence is indistinguishable from an opening
+# one, so the pairing has to be tracked. Getting this wrong made the checker
+# read prose as grammar.
+def each_sentence_line(path)
+  open = false
+  checking = false
+  File.readlines(path).each_with_index do |raw, i|
+    if raw.start_with?('```')
+      if open
+        open = false
+      else
+        open = true
+        checking = raw.chomp == '```'
       end
-      checked += 1
-      used[word] << where
-      ranks = split_args(rest).map { |a| [a, kind_of(a)] }
-      ranks.each { |a, r| (puts "  UNKNOWN ARG  #{where}: #{a.inspect} in #{body.inspect}"; problems += 1) if r.nil? }
-      seq = ranks.map(&:last).compact
-      unless seq == seq.sort
-        puts "  ORDER  #{where}: #{body.inspect} ranks=#{seq.inspect}"; problems += 1
-      end
+      next
     end
+    yield raw, i + 1 if open && checking
   end
 end
+
+here = File.expand_path(__dir__)
+docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
+
+vocab = File.read(File.join(here, 'VOCABULARY.md'))
+            .scan(/^### `([a-z_]+)`/).flatten.to_set
+used = Hash.new { |h, k| h[k] = [] }
+problems = 0
+checked = 0
+
+docs.each do |doc|
+  where = File.basename(doc)
+  each_sentence_line(doc) do |raw, lineno|
+    line = raw.chomp.sub(/\s+#.*\z/, '').rstrip
+    next if line.strip.empty?
+
+    body = line.strip
+    at = "#{where}:#{lineno}"
+    word, _, rest = body.partition(' ')
+
+    unless word =~ WORD
+      puts "  BAD WORD      #{at}: #{body.inspect}"
+      problems += 1
+      next
+    end
+
+    checked += 1
+    used[word] << where
+    ranks = split_args(rest).map { |a| [a, kind_of(a)] }
+    ranks.each do |arg, rank|
+      next unless rank.nil?
+
+      puts "  UNKNOWN ARG   #{at}: #{arg.inspect} in #{body.inspect}"
+      problems += 1
+    end
+
+    seq = ranks.map(&:last).compact
+    next if seq == seq.sort
+
+    puts "  ORDER         #{at}: #{body.inspect} ranks=#{seq.inspect}"
+    problems += 1
+  end
+end
+
 (used.keys.to_set - vocab).sort.each do |w|
-  puts "  UNDEFINED WORD  #{w.inspect} used in #{used[w].uniq.join(', ')} but not in VOCABULARY.md"
+  puts "  UNDEFINED     #{w.inspect} used in #{used[w].uniq.join(', ')} but not in VOCABULARY.md"
   problems += 1
 end
+
 (vocab - used.keys.to_set).sort.each do |w|
-  puts "  UNEXEMPLIFIED  #{w.inspect} defined but has no sentence"
+  puts "  UNEXEMPLIFIED #{w.inspect} defined but has no sentence"
   problems += 1
 end
+
 puts "\n#{checked} sentences checked, #{vocab.size} words defined, #{problems} problems"
+exit(problems.zero? ? 0 : 1)
