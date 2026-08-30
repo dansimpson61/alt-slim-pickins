@@ -32,17 +32,31 @@ module SlimPickins
       @object.label_for(attribute)
     end
 
+    # The same shape as label_for, for the same reason: a number's shape
+    # cannot say whether it is money.
+    def format_for(attribute)
+      return nil unless @object.respond_to?(:format_for)
+
+      @object.format_for(attribute)
+    end
+
+    # One definition of "has", used by both fetch and respond_to?. They
+    # disagreed once — fetch understood hash keys and respond_to? did not — and
+    # a hash-backed subject behaved differently from a struct-backed one.
+    def has?(attribute)
+      return false if @object.nil?
+      return @object.key?(attribute) || @object.key?(attribute.to_s) if @object.is_a?(Hash)
+
+      @object.respond_to?(attribute)
+    end
+
     def fetch(attribute)
       raise Nothing.new(attribute, self) if @object.nil?
+      raise UnknownAttribute.new(attribute, self) unless has?(attribute)
 
-      if @object.respond_to?(:[]) && @object.is_a?(Hash)
-        return @object[attribute] if @object.key?(attribute)
-        return @object[attribute.to_s] if @object.key?(attribute.to_s)
-
-        raise UnknownAttribute.new(attribute, self)
+      if @object.is_a?(Hash)
+        return @object.key?(attribute) ? @object[attribute] : @object[attribute.to_s]
       end
-
-      raise UnknownAttribute.new(attribute, self) unless @object.respond_to?(attribute)
 
       @object.public_send(attribute)
     end
@@ -54,7 +68,7 @@ module SlimPickins
     end
 
     def respond_to_missing?(name, include_private = false)
-      @object.respond_to?(name) || super
+      has?(name) || super
     end
   end
 

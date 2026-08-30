@@ -62,6 +62,37 @@ Each level overrides the one below it, which keeps
 [VOCABULARY.md](VOCABULARY.md) rule 3 intact: every inference is overridable
 by saying the thing.
 
+## The same shape again: answer for your own formats
+
+**verified**
+
+> A subject *may* respond to `format_for(attribute)` and return `:money`,
+> `:percent`, `:number` or `nil` to fall back.
+
+Phase 2 found the identical problem one level along. A value's shape says it
+is a `Numeric`; it cannot say whether it is money, a count or a rate. The
+portfolio table needed `as:` on four of five columns without this, and none
+with it.
+
+```ruby
+Holding = Struct.new(:shares, :market_value, :gain, :weight, keyword_init: true) do
+  FORMATS = { shares: :number, market_value: :money, gain: :money, weight: :percent }.freeze
+  def format_for(attribute) = FORMATS[attribute]
+end
+```
+
+Same three levels, same owners: the page's `as:`, then the app's
+`format_for`, then the value's shape.
+
+### The rule both of these are instances of
+
+> **Mechanical facts derivable from a value's shape are free. Facts that
+> encode a human judgement about the domain belong to the app, and the
+> language should ask rather than guess.**
+
+A number is right-aligned unasked, because alignment follows from being a
+number. Whether it is money does not follow from anything the value knows.
+
 ## What happens when the contract is not satisfied
 
 **verified.** Errors speak the language, never the implementation, and each
@@ -97,14 +128,15 @@ SlimPickins.render(source, locals: { scenario: inputs }, helpers: app)
 
 ## Collections
 
-**projected** — Phase 2 builds this; it is written here so the contract is
-stated in one place rather than discovered twice.
+**verified** — Phase 2.
 
 > A collection answers `each`. `each holding` finds `holdings` on the subject
-> by pluralising, and `from:` overrides that when pluralising is wrong.
+> by pluralising; when the subject *is* the collection it iterates that; and
+> `from:` overrides both.
 
-Any `Enumerable` should satisfy this — an `Array`, a lazy relation, anything
-that answers `each`. That expectation is untested until Phase 2.
+Any `Enumerable` satisfies this. Pluralising is deliberately two rules — `y`
+to `ies`, otherwise `s` — and `from:` is the escape rather than a dictionary
+of English irregulars.
 
 ## The cost, for judging
 
@@ -114,6 +146,11 @@ that answers `each`. That expectation is untested until Phase 2.
 `Hash` and ordinary PORO all worked untouched.
 
 **Optional, and only if you want good labels:** one method, `label_for`.
+
+dan's judgement (2026-08-30): **not onerous** — *"even that hash is just the
+price a dev has to pay for lazy field names."* Read `label_for` as a
+diagnostic rather than a workaround: an app that needs it is telling you its
+attribute names do not read as English.
 
 **The honest catch:** without `label_for`, a form over attributes with
 abbreviated or acronymic names needs its labels written in the page — and

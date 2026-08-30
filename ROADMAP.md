@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v4
+# alt-slim-pickins — roadmap v5
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -112,7 +112,7 @@ The contract turned out to be close to free: `Engine::Inputs` is a bare
 `Struct` with `keyword_init: true` and needed no changes, because the input
 type is inferred from the *value's class* rather than from a schema.
 
-## Phase 1 — The app contract  ✅ complete (2026-08-30) — one item awaits dan
+## Phase 1 — The app contract  ✅ complete (2026-08-30)
 
 Phase 0 will have discovered, by force, what an object must answer to be
 renderable. This phase writes it down.
@@ -127,12 +127,13 @@ renderable. This phase writes it down.
   never declared, because they are read from the value. Labels get an optional
   `label_for`, which took the roth form from eleven labels written in the page
   to none.
-- **Judge the cost** `dan` — **awaiting you.** The measured cost is: nothing
-  required that an app does not already do, and one optional method if you
-  want good labels. [CONTRACT.md](CONTRACT.md) ends with the numbers.
-  *Done looks like:* a decision, recorded.
+- **Judge the cost** `dan` — **judged: not onerous** (2026-08-30). And a
+  sharper reading than the one this file offered: *"even that hash is just the
+  price a dev has to pay for lazy field names."* `label_for` is therefore not
+  a limitation of the language but a diagnostic about the schema. A codebase
+  that never needs it has attribute names that already read as English.
 
-## Phase 2 — The second slice: the table
+## Phase 2 — The second slice: the table  ✅ complete (2026-08-30)
 
 `column` is the other four-inference word: header, value, presentation, and
 alignment, all from one name.
@@ -147,8 +148,12 @@ Words added: `section`, `table`, `column`, `total`, `money`, `percent`,
 - **Formatting inference** `agent` — money right-aligned and negative-classed,
   percent multiplied, both chosen from the value's type rather than said.
   *Done looks like:* no `as:` modifier is needed for the ordinary cases.
+  **Done, but not the way this item assumed.** A value's shape cannot say
+  whether a number is money, so type inference alone needed `as:` on four of
+  five columns. `format_for` on the app — `label_for`'s twin — took it to
+  zero. Results in [PHASE2.md](PHASE2.md).
 
-## Phase 3 — Reuse: layout and partials
+## Phase 3 — Reuse: layout and partials  ← next
 
 Before forty-six words are built, find out how they compose. If reuse changes
 how words nest or how the subject is passed, it is far cheaper to learn it

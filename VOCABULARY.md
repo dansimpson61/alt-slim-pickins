@@ -153,11 +153,12 @@ footer "Approximate directional estimates. Not tax advice."
 
 ### `section`
 
-- **name** — the subject: the collection or record this section presents
+- **name** — the topic: what this section is about
 - **content** — the heading text
 - **modifiers** — none
 - **children** — any presentation word; `empty` is governed here
-- **subject** — the named thing
+- **subject** — the named thing, *when the subject has it*; otherwise
+  unchanged. A topic is a label, not a claim
 - **infers** — the heading from the name (`holdings` → "Holdings"); the class
   from the name. Override the heading with content
 - **renders** — `<section class="holdings"><h2>Holdings</h2>…</section>`
@@ -165,7 +166,16 @@ footer "Approximate directional estimates. Not tax advice."
 ```
 section holdings
 section holdings, "What you own"
+section summary, "Where you stand"
 ```
+
+Draft 3 called the name a subject. Phase 2 found that wrong: across the three
+drafted pages, six of ten sections name a topic with no such attribute
+anywhere — `summary`, `allocation`, `projections`, `legend`, `lore`,
+`specification`. So `section` heads and classes itself from the name and
+shifts the subject only when the subject actually has it. Words that need the
+object — `page`, `form`, `table`, `each` — still require it, and still fail on
+their own line.
 
 ### `group`
 

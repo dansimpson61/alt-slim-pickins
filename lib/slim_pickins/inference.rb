@@ -40,5 +40,57 @@ module SlimPickins
     end
 
     def boolean?(value) = value == true || value == false
+
+    # --- Collections ----------------------------------------------------
+
+    # `each holding` looks for `holdings`. Deliberately the two rules English
+    # actually needs here; anything else is what `from:` is for.
+    def plural(name)
+      s = name.to_s
+      return "#{s[0..-2]}ies" if s.end_with?('y') && !%w[a e i o u].include?(s[-2])
+
+      "#{s}s"
+    end
+
+    def collection?(value) = value.is_a?(Enumerable) && !value.is_a?(Hash)
+
+    def nothing_in?(value)
+      return true if value.nil?
+      return value.none? if collection?(value)
+
+      false
+    end
+
+    # --- Presentation ---------------------------------------------------
+
+    # What the *shape* of a value can tell us, and no more. A number is a
+    # number; whether it is money is a domain fact and must be said.
+    def presentation(value)
+      return :number if value.is_a?(Numeric)
+
+      :text
+    end
+
+    def separated(number)
+      whole, fraction = format('%.10f', number.abs).split('.')
+      grouped = whole.reverse.scan(/\d{1,3}/).join(',').reverse
+      [grouped, fraction]
+    end
+
+    def money(value, precision: 0)
+      grouped, fraction = separated(value)
+      body = precision.zero? ? grouped : "#{grouped}.#{fraction[0, precision]}"
+      "#{value.negative? ? '−' : ''}$#{body}"
+    end
+
+    def percent(value, precision: 1)
+      format("%.#{precision}f%%", value * 100)
+    end
+
+    def number(value, precision: 0)
+      grouped, fraction = separated(value)
+      body = precision.zero? ? grouped : "#{grouped}.#{fraction[0, precision]}"
+      "#{value.negative? ? '−' : ''}#{body}"
+    end
   end
 end

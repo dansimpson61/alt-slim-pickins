@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-30'
-next_step: ROADMAP.md Phase 2 — the table slice; Phase 1's cost judgement awaits dan
+next_step: ROADMAP.md Phase 3 — reuse: layout and partials, the third High risk
 docs: README.md
 related:
 - slim-pickins
