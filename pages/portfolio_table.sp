@@ -5,11 +5,4 @@ page portfolio, "Your retirement"
   section accounts, "Your accounts"
     empty "No accounts linked yet."
     each account
-      title .name
-      table holdings
-        column symbol
-        column shares
-        column market_value, "Value"
-        column gain
-        column weight
-        total market_value, "Account total"
+      account_card

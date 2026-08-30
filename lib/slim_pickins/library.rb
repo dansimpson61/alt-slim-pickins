@@ -1,0 +1,48 @@
+# frozen_string_literal: true
+
+require_relative 'errors'
+
+module SlimPickins
+  # An app's own vocabulary. A partial is not a new construct — it is a word
+  # the app defines, written in the language, invoked exactly like a built-in.
+  # slim-pickins owns the vocabulary of presentation; an app owns the
+  # vocabulary of its own components.
+  #
+  # A layout is the same idea one level up: the chrome every page shares,
+  # written once, with `contents` marking where the page goes.
+  class Library
+    attr_reader :layout, :partials
+
+    def self.from(dir)
+      dir = File.expand_path(dir)
+      layout_path = File.join(dir, 'layout.sp')
+      partials = Dir[File.join(dir, 'partials', '*.sp')].to_h do |path|
+        [File.basename(path, '.sp').to_sym, File.read(path)]
+      end
+      new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials)
+    end
+
+    def initialize(layout: nil, partials: {})
+      @layout = layout
+      @partials = partials.transform_keys(&:to_sym)
+      refuse_shadowing!
+    end
+
+    def word?(name) = @partials.key?(name)
+
+    def source_for(name) = @partials.fetch(name)
+
+    private
+
+    # Two meanings for one word is the alias problem wearing a new hat, so a
+    # collision is an error rather than an override.
+    def refuse_shadowing!
+      require_relative 'builder'
+      @partials.each_key do |name|
+        next unless Builder::WORDS.include?(name)
+
+        raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it"
+      end
+    end
+  end
+end

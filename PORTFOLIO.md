@@ -12,15 +12,6 @@ done about each.
 
 ```
 page portfolio, "Your retirement"
-  meta description, "Balances, allocation and projections across your accounts."
-  stylesheet "/css/portfolio.css"
-
-  nav
-    link home, "Overview"
-    link accounts
-    link projections
-    link settings
-
   section "Where you stand"
     time .as_of
     grid metrics, columns: 4
@@ -90,8 +81,6 @@ page portfolio, "Your retirement"
         button primary, "Contribute"
         link cancel, "Never mind"
 
-  footer "This tool provides approximate directional estimates. It omits many tax nuances."
-  script "/js/portfolio.js"
 ```
 
 Sixty-six sentences, against ninety-one lines for `roth/views/controls.slim`

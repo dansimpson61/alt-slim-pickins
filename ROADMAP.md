@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v5
+# alt-slim-pickins — roadmap v6
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -153,7 +153,7 @@ Words added: `section`, `table`, `column`, `total`, `money`, `percent`,
   five columns. `format_for` on the app — `label_for`'s twin — took it to
   zero. Results in [PHASE2.md](PHASE2.md).
 
-## Phase 3 — Reuse: layout and partials  ← next
+## Phase 3 — Reuse: layout and partials  ✅ complete (2026-08-30) — one item awaits dan
 
 Before forty-six words are built, find out how they compose. If reuse changes
 how words nest or how the subject is passed, it is far cheaper to learn it
@@ -174,7 +174,8 @@ So both abstractions are earned by real repetition rather than anticipated.
 - **Layout** `agent` — the chrome every page shares, defined once, with the
   page's own content filling the hole.
   *Done looks like:* the three drafted pages lose their `stylesheet`, `nav`
-  and `footer` lines to a layout, and still render identically.
+  and `footer` lines to a layout, and still render identically. **Done** — 18
+  chrome lines removed, one 7-line layout added, and no page mentions it.
 - **Partials as app-defined words** `dan` `agent` — the design question, and
   it has a candidate answer that keeps the founding principle literally true.
   *Extending the language adds vocabulary, never syntax* — so a partial is
@@ -183,17 +184,22 @@ So both abstractions are earned by real repetition rather than anticipated.
   presentation; an app owns the vocabulary of its own components.
   *Done looks like:* the repeated `list`/`item` shape collapses into one
   app-defined word used in both pages, and a reader cannot tell from the call
-  site whether a word is built-in or app-defined.
+  site whether a word is built-in or app-defined. **Done** — the collapsed
+  shape is `account_card` rather than `list`/`item`, because that is where the
+  real repetition was once pages ran.
 - **Shadowing** `conv` — an app-defined word that collides with a
   slim-pickins word is an error, not an override. Two meanings for one word is
   the alias problem wearing a new hat.
-  *Done looks like:* the collision raises, naming both definitions.
-- **Judge it against Slim** `dan` — is a layout plus a partial in this
-  language better to read and write than `layout.slim` plus a `render`
-  call?
+  *Done looks like:* the collision raises, naming both definitions. **Done**,
+  refused at load rather than at use.
+- **Judge it against Slim** `dan` — **awaiting you.** The comparison is at the
+  end of [PHASE3.md](PHASE3.md). Short version: better at the call site
+  (`account_card` against `== slim :_card, locals: {...}`), equal for layouts,
+  and untested for the one thing Slim does that we do not — passing values
+  other than the subject.
   *Done looks like:* the answer, recorded, including if it is no.
 
-## Phase 4 — The rest of the vocabulary
+## Phase 4 — The rest of the vocabulary  ← next
 
 The remaining words. Low risk, real work, and the only phase that is mostly
 typing.

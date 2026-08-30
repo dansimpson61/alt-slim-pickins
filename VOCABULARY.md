@@ -71,6 +71,24 @@ page portfolio, "Your retirement"
 This absorbs `doctype`, which was the last thing in the grammar fitting no
 rule. It is not a keyword; it is something `page` knows.
 
+### `contents`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — nothing; it marks a place rather than presenting anything
+- **renders** — the page's own sentences
+
+```
+contents
+```
+
+Only a layout has one, and a layout must have exactly one. It is the single
+word that reuse needed: the chrome is written once, `contents` says where the
+page goes, and no page mentions the layout at all.
+
 ### `meta`
 
 - **name** — which metadatum (`description`, `viewport`, `charset`)

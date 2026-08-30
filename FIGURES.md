@@ -13,11 +13,6 @@ wrong for exactly that reason and nobody noticed until it appeared.
 
 ```
 page review, "Dashboard UI review"
-  stylesheet "/css/review.css"
-
-  nav breadcrumb
-    link home, "Studio"
-
   fact reviewed_on, .reviewed_on
   fact reviewer
 
@@ -61,7 +56,6 @@ page review, "Dashboard UI review"
         icon polish
         text "Cosmetic."
 
-  footer "Screenshots are captured during review passes and are regenerable."
 ```
 
 Thirty-nine sentences.

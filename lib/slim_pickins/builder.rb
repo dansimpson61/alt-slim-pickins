@@ -16,12 +16,14 @@ module SlimPickins
   # type rather than by counting positions, and `button primary, "Run"`,
   # `button primary` and `button "Run"` all mean the obvious thing.
   class Builder
-    WORDS = %i[page section title each empty table column total
+    WORDS = %i[page contents stylesheet meta script nav link footer
+               section title each empty table column total
                money percent number text
                form group field check select option button actions
                disclosure].freeze
 
-    def initialize(page)
+    def initialize(page, library = nil)
+      @library = library
       @out = +''
       @chain = Chain.new(page)
       @in_form = false
@@ -30,6 +32,22 @@ module SlimPickins
       @suppressed = false  # set when a subject is an empty collection
       @bindings = {}       # `each holding` binds `holding` for reaching out
       @columns = nil       # non-nil only while a table is collecting columns
+      @contents = nil      # the page's own children, while a layout renders
+      @head = +''          # words that belong in <head>, wherever they are said
+      define_app_words
+    end
+
+    # An app's words become real singleton methods, for the same reason the
+    # built-ins are real methods: a call site should not be able to tell them
+    # apart, and an unknown word should still fail with its own name.
+    def define_app_words
+      return unless @library
+
+      @library.partials.each_key do |word|
+        define_singleton_method(word) do |*args, &block|
+          render_partial(word, args, &block)
+        end
+      end
     end
 
     # Words are real methods, so an unknown word fails with its own name.
@@ -59,18 +77,68 @@ module SlimPickins
       name, title = name_and_content(args)
       heading = title || Inference.label(name)
 
+      body = capture { about(name) { wrapped_in_layout(&block) } }
+
       @out << '<!DOCTYPE html>'
       open(:html, lang: 'en')
       open(:head)
       void(:meta, charset: 'utf-8')
       void(:meta, name: 'viewport', content: 'width=device-width, initial-scale=1')
       text_tag(:title, heading)
+      @out << @head
       close(:head)
       open(:body)
       text_tag(:h1, heading)
-      about(name) { nest(&block) }
+      @out << body
       close(:body)
       close(:html)
+    end
+
+    # These three say where they belong, not where they are written, which is
+    # what lets a layout mention a stylesheet from inside the body.
+    def stylesheet(*args)
+      _, path = name_and_content(args)
+      @head << %(<link rel="stylesheet" href="#{CGI.escapeHTML(path)}">)
+    end
+
+    def meta(*args)
+      name, value = name_and_content(args)
+      @head << %(<meta name="#{name}" content="#{CGI.escapeHTML(value.to_s)}">)
+    end
+
+    def script(*args, defer: false)
+      _, path = name_and_content(args)
+      @deferred = +'' unless defined?(@deferred)
+      emit(%(<script src="#{CGI.escapeHTML(path)}"#{defer ? ' defer' : ''}></script>))
+    end
+
+    def nav(*args, &block)
+      variant, = name_and_content(args)
+      open(:nav, class: ['nav', variant && "nav--#{variant}"].compact.join(' '),
+                 'aria-label': variant ? variant.to_s.capitalize : 'Main')
+      nest(&block)
+      close(:nav)
+    end
+
+    def link(*args, to: nil)
+      name, label = name_and_content(args)
+      text_tag(:a, label_for(name, label), href: to&.to_s || "/#{name}")
+    end
+
+    def footer(*args, &block)
+      _, body = name_and_content(args)
+      open(:footer)
+      body ? (@out << CGI.escapeHTML(body.to_s)) : nest(&block)
+      close(:footer)
+    end
+
+    # Marks where the page's own sentences go. Only a layout has one.
+    def contents
+      raise Error, '`contents` belongs in a layout' unless @contents
+
+      block = @contents
+      @contents = nil
+      nest(&block)
     end
 
     # --- Structure ------------------------------------------------------
@@ -409,6 +477,39 @@ module SlimPickins
 
     def nest(&block)
       instance_eval(&block) if block
+    end
+
+    def capture
+      was = @out
+      @out = +''
+      yield
+      @out
+    ensure
+      @out = was
+    end
+
+    # The layout is chrome inside the page, so `page` still owns the document
+    # and the layout never repeats it.
+    def wrapped_in_layout(&block)
+      return nest(&block) unless @library&.layout
+
+      @contents = block
+      instance_eval(Transform.call(@library.layout, path: 'layout.sp'), 'layout.sp', 1)
+      raise Error, 'this layout never says `contents`' if @contents
+    end
+
+    # A partial takes the current subject, like any word that names none, and
+    # shifts it when it names one — the same rule as `section`.
+    def render_partial(word, args, &block)
+      name, = name_and_content(args)
+      source = @library.source_for(word)
+      ruby = Transform.call(source, path: "partials/#{word}.sp")
+      about(name) do
+        was = @contents
+        @contents = block
+        instance_eval(ruby, "partials/#{word}.sp", 1)
+        @contents = was
+      end
     end
 
     # --- HTML -----------------------------------------------------------

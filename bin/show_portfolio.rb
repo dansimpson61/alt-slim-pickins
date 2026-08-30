@@ -29,14 +29,23 @@ portfolio = Portfolio.new(
   ]
 )
 
+library = SlimPickins::Library.from('pages')
+
 html = SlimPickins.render(File.read('pages/portfolio_table.sp'),
                           path: 'pages/portfolio_table.sp',
-                          locals: { portfolio: portfolio })
+                          locals: { portfolio: portfolio }, library: library)
 puts html.gsub('><', ">\n<")
+
+puts
+puts '--- the same partial, a different page ---'
+detail = SlimPickins.render(File.read('pages/account_detail.sp'),
+                            path: 'pages/account_detail.sp',
+                            locals: { account: portfolio.accounts.last }, library: library)
+puts detail[%r{<h2>.*?</table>}m].gsub('><', ">\n<")
 
 puts
 puts '--- the same page with no accounts ---'
 bare = SlimPickins.render(File.read('pages/portfolio_table.sp'),
-                          path: 'pages/portfolio_table.sp',
+                          path: 'pages/portfolio_table.sp', library: library,
                           locals: { portfolio: Portfolio.new(accounts: [], total_value: 0, ytd_return: 0.0) })
 puts bare[%r{<section class="section section--accounts">.*?</section>}m].gsub('><', ">\n<")

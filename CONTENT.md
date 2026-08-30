@@ -13,12 +13,6 @@ exactly here.
 
 ```
 page pattern, .title
-  stylesheet "/css/library.css"
-
-  nav breadcrumb
-    link library, "Library"
-    link home, "Studio"
-
   badge .category
   badge .status
 
@@ -41,7 +35,6 @@ page pattern, .title
       note quiet, "Feed this to any agent before beginning development."
       snippet .lore
 
-  footer "Patterns are recombinant. Origin is provenance, not ownership."
 ```
 
 Twenty-three sentences against forty-nine lines of `pattern.slim`.

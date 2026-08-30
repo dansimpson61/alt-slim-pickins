@@ -17,9 +17,9 @@
 require 'set'
 
 DOCS = (%w[DESIGN.md VOCABULARY.md ROADMAP.md README.md
-            PORTFOLIO.md CONTENT.md FIGURES.md] +
-         Dir[File.join(__dir__, 'pages', '*.sp')].map { |f| File.basename(f) }
-           .map { |f| File.join('pages', f) }).freeze
+            PORTFOLIO.md CONTENT.md FIGURES.md PHASE0.md PHASE2.md] +
+         Dir[File.join(__dir__, 'pages', '**', '*.sp')]
+           .map { |f| f.sub("#{__dir__}/", '') }).freeze
 
 WORD = /\A[a-z][a-z_]*\z/
 
@@ -83,8 +83,13 @@ end
 here = File.expand_path(__dir__)
 docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 
+# slim-pickins' vocabulary, plus the app's own — a partial file defines a
+# word, and a call site cannot tell the two apart, so neither can this.
 vocab = File.read(File.join(here, 'VOCABULARY.md'))
             .scan(/^### `([a-z_]+)`/).flatten.to_set
+app_words = Dir[File.join(here, 'pages', 'partials', '*.sp')]
+            .map { |f| File.basename(f, '.sp') }.to_set
+vocab |= app_words
 used = Hash.new { |h, k| h[k] = [] }
 problems = 0
 checked = 0
@@ -128,7 +133,7 @@ end
   problems += 1
 end
 
-(vocab - used.keys.to_set).sort.each do |w|
+((vocab - app_words) - used.keys.to_set).sort.each do |w|
   puts "  UNEXEMPLIFIED #{w.inspect} defined but has no sentence"
   problems += 1
 end
