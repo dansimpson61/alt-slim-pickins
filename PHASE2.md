@@ -136,5 +136,5 @@ tests found this precisely because they used the cheaper fixture.
 | Percent multiplied | done |
 | No `as:` needed for the ordinary cases | done **via `format_for`**, not via type inference |
 
-Suite: 40 tests, 120 assertions, 0 failures. 314 sentences, 46 words, 0
+Suite: 43 tests, 128 assertions, 0 failures. 316 sentences, 46 words, 0
 problems.
