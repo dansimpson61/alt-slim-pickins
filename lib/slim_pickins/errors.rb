@@ -23,4 +23,13 @@ module SlimPickins
       super("#{subject.describe} has no #{attribute}")
     end
   end
+
+  # A subject that is nil is a different failure from an attribute that is
+  # missing, and saying so is the difference between a useful error and a
+  # misleading one.
+  class Nothing < Error
+    def initialize(attribute, subject)
+      super("#{subject.describe} to ask for #{attribute} — the subject is empty")
+    end
+  end
 end

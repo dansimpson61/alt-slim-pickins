@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v3
+# alt-slim-pickins — roadmap v4
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -112,7 +112,7 @@ The contract turned out to be close to free: `Engine::Inputs` is a bare
 `Struct` with `keyword_init: true` and needed no changes, because the input
 type is inferred from the *value's class* rather than from a schema.
 
-## Phase 1 — The app contract
+## Phase 1 — The app contract  ✅ complete (2026-08-30) — one item awaits dan
 
 Phase 0 will have discovered, by force, what an object must answer to be
 renderable. This phase writes it down.
@@ -122,9 +122,14 @@ renderable. This phase writes it down.
   types are free; **labels are the open question** — `ss_primary_amount`
   means something specific to roth, and only roth knows it.
   *Done looks like:* `CONTRACT.md` states it, and says what happens when an
-  app does not satisfy it.
-- **Judge the cost** `dan` — if the contract is onerous, the language is
-  unusable and we say so here rather than discovering it at Phase 7.
+  app does not satisfy it. **Done** — and it is one sentence: a subject
+  answers the attributes it is asked for, by ordinary method call. Types are
+  never declared, because they are read from the value. Labels get an optional
+  `label_for`, which took the roth form from eleven labels written in the page
+  to none.
+- **Judge the cost** `dan` — **awaiting you.** The measured cost is: nothing
+  required that an app does not already do, and one optional method if you
+  want good labels. [CONTRACT.md](CONTRACT.md) ends with the numbers.
   *Done looks like:* a decision, recorded.
 
 ## Phase 2 — The second slice: the table

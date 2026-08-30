@@ -15,18 +15,26 @@ module SlimPickins
     attr_reader :object
 
     def describe
+      return 'nothing' if @object.nil?
+
       @described_as || "this #{@object.class.name.split('::').last.downcase}"
     end
 
-    # What an app must promise: a subject answers its own attributes.
-    def attributes
-      if @object.respond_to?(:members) then @object.members
-      elsif @object.respond_to?(:keys) then @object.keys.map(&:to_sym)
-      else []
-      end
+    def nothing? = @object.nil?
+
+    # The one optional half of the contract. An app that knows its own
+    # vocabulary can say so; one that does not gets a humanised name.
+    # `ss_primary_amount` means something specific to roth, and roth is the
+    # only thing that knows it.
+    def label_for(attribute)
+      return nil unless @object.respond_to?(:label_for)
+
+      @object.label_for(attribute)
     end
 
     def fetch(attribute)
+      raise Nothing.new(attribute, self) if @object.nil?
+
       if @object.respond_to?(:[]) && @object.is_a?(Hash)
         return @object[attribute] if @object.key?(attribute)
         return @object[attribute.to_s] if @object.key?(attribute.to_s)

@@ -16,6 +16,8 @@ module SlimPickins
     # base_income -> "Base income". Trailing ? is a predicate, not part of the
     # label; a trailing _at or _on is noise once the label reads as English.
     def label(name)
+      return nil if name.nil?
+
       words = name.to_s.sub(/\?\z/, '').sub(/_(at|on)\z/, '').split('_')
       words[0] = words[0].capitalize
       words.join(' ')

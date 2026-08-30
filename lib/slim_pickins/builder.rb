@@ -67,7 +67,7 @@ module SlimPickins
 
     def group(*args, &block)
       name, legend = name_and_content(args)
-      label = legend || Inference.label(name)
+      label = label_for(name, legend)
       if @in_form
         open(:fieldset, class: name && "group group--#{name}")
         text_tag(:legend, label)
@@ -88,7 +88,7 @@ module SlimPickins
       kind = type || Inference.input_type(value)
 
       open(:div, class: 'field')
-      text_tag(:label, label || Inference.label(name), for: name.to_s)
+      text_tag(:label, label_for(name, label), for: name.to_s)
       empty(:input,
             id: name.to_s,
             name: name.to_s,
@@ -106,7 +106,7 @@ module SlimPickins
       open(:label, for: name.to_s)
       empty(:input, id: name.to_s, name: name.to_s, type: 'checkbox',
                     checked: value ? 'checked' : nil)
-      @out << CGI.escapeHTML(label || Inference.label(name))
+      @out << CGI.escapeHTML(label_for(name, label))
       close(:label)
       close(:div)
     end
@@ -115,7 +115,7 @@ module SlimPickins
       name, label = name_and_content(args)
       @selected = subject.fetch(name)
       open(:div, class: 'field field--select')
-      text_tag(:label, label || Inference.label(name), for: name.to_s)
+      text_tag(:label, label_for(name, label), for: name.to_s)
       open(:select, id: name.to_s, name: name.to_s)
       nest(&block)
       close(:select)
@@ -133,7 +133,7 @@ module SlimPickins
     def button(*args, to: nil, type: nil)
       variant, label = name_and_content(args)
       text_tag(:button,
-               label || Inference.label(variant),
+               label || (variant && Inference.label(variant)),
                type: (type || (@in_form ? :submit : :button)).to_s,
                formaction: to&.to_s,
                class: ['button', variant && "button--#{variant}"].compact.join(' '))
@@ -165,9 +165,18 @@ module SlimPickins
     # that names nothing leaves the chain alone, which is what makes
     # `page scenario` followed by a bare `form` mean the obvious thing.
     def about(name, &block)
-      return yield if name.nil? || !subject.respond_to?(name)
+      return yield if name.nil?
 
+      # A word that names no subject leaves the chain alone. A word that names
+      # one that is not there is an error — skipping quietly would report the
+      # missing attribute later, on a line that is not the cause.
       @chain.with(subject.fetch(name), described_as: "this #{name}", &block)
+    end
+
+    # Precedence, each level owned by whoever knows most: the page knows this
+    # instance, the app knows its domain, the language knows only English.
+    def label_for(name, given)
+      given || subject.label_for(name) || Inference.label(name)
     end
 
     def nest(&block)

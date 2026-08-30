@@ -6,6 +6,7 @@
 # facts a form is made of, which is what a reader would actually check.
 
 require 'slim'
+require 'delegate'
 require_relative '../lib/slim_pickins'
 require '/home/dan/dev/roth/lib/engine/inputs'
 
@@ -24,6 +25,24 @@ def facts(html)
   { inputs: inputs, labels: labels, options: options }
 end
 
+# The optional half of the contract, exercised. roth is the only thing that
+# knows `ss_primary_amount` means "SS annual amount", so roth is where it is
+# said — once, rather than on every page that shows the field.
+class Scenario < SimpleDelegator
+  LABELS = {
+    age_primary: 'Age (primary)', age_spouse: 'Age (spouse)',
+    trad_balance: 'Traditional balance', roth_balance: 'Roth balance',
+    ss_primary_start_year: 'SS start (years from now)',
+    ss_primary_amount: 'SS annual amount',
+    ss_spouse_start_year: 'Spouse SS start (years from now)',
+    ss_spouse_amount: 'Spouse SS annual amount',
+    inflation_rate: 'Inflation', horizon_years: 'Horizon (years)',
+    conversion_value: 'Strategy value', conversion_strategy: 'Strategy'
+  }.freeze
+
+  def label_for(attribute) = LABELS[attribute]
+end
+
 scenario = Engine::Inputs.from_hash(
   'age_primary' => 60, 'age_spouse' => 58,
   'trad_balance' => 750_000, 'roth_balance' => 150_000, 'base_income' => 80_000,
@@ -33,7 +52,7 @@ scenario = Engine::Inputs.from_hash(
 
 ours = facts(SlimPickins.render(File.read('pages/roth_form.sp'),
                                 path: 'pages/roth_form.sp',
-                                locals: { scenario: scenario }))
+                                locals: { scenario: Scenario.new(scenario) }))
 theirs = facts(Slim::Template.new(ROTH).render(Object.new))
 
 puts "hand-written Slim : #{theirs[:inputs].size} inputs, #{theirs[:labels].size} labels, #{theirs[:options].size} options"
