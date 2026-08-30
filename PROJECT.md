@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: idea
 kind: project
 last_touched: '2026-08-29'
-next_step: Enumerate the vocabulary of web presentation (~40 words) against DESIGN.md's grammar
+next_step: Draft the ~30 named words as entries against VOCABULARY.md's seven slots
 docs: README.md
 related:
 - slim-pickins

@@ -25,23 +25,30 @@ def kind_of(arg)
   nil
 end
 
-src = File.read("/home/dan/dev/alt-slim-pickins/DESIGN.md")
+# Untagged fences hold sentences and are checked. Tag a fence (```html) to
+# exclude it — that is how a document shows output rather than grammar.
+here = File.expand_path(__dir__)
+docs = ARGV.empty? ? %w[DESIGN.md VOCABULARY.md].map { |f| File.join(here, f) } : ARGV
 problems = 0; checked = 0
-src.scan(/^```\n(.*?)^```/m).flatten.each do |block|
-  block.lines.each do |raw|
-    line = raw.chomp.sub(/\s+#.*\z/, "").rstrip
-    next if line.strip.empty? || line.include?("names, content")
-    body = line.strip
-    word, _, rest = body.partition(" ")
-    unless word =~ WORD
-      puts "  BAD WORD  #{body.inspect}"; problems += 1; next
-    end
-    checked += 1
-    ranks = split_args(rest).map { |a| [a, kind_of(a)] }
-    ranks.each { |a, r| (puts "  UNKNOWN ARG  #{a.inspect} in #{body.inspect}"; problems += 1) if r.nil? }
-    seq = ranks.map(&:last).compact
-    unless seq == seq.sort
-      puts "  ORDER  #{body.inspect} ranks=#{seq.inspect}"; problems += 1
+
+docs.each do |doc|
+  File.read(doc).scan(/^```\n(.*?)^```/m).flatten.each do |block|
+    block.lines.each do |raw|
+      line = raw.chomp.sub(/\s+#.*\z/, "").rstrip
+      next if line.strip.empty? || line.include?("names, content")
+      body = line.strip
+      where = File.basename(doc)
+      word, _, rest = body.partition(" ")
+      unless word =~ WORD
+        puts "  BAD WORD  #{where}: #{body.inspect}"; problems += 1; next
+      end
+      checked += 1
+      ranks = split_args(rest).map { |a| [a, kind_of(a)] }
+      ranks.each { |a, r| (puts "  UNKNOWN ARG  #{where}: #{a.inspect} in #{body.inspect}"; problems += 1) if r.nil? }
+      seq = ranks.map(&:last).compact
+      unless seq == seq.sort
+        puts "  ORDER  #{where}: #{body.inspect} ranks=#{seq.inspect}"; problems += 1
+      end
     end
   end
 end
