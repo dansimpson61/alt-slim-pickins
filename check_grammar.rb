@@ -16,8 +16,10 @@
 
 require 'set'
 
-DOCS = %w[DESIGN.md VOCABULARY.md ROADMAP.md README.md
-          PORTFOLIO.md CONTENT.md FIGURES.md].freeze
+DOCS = (%w[DESIGN.md VOCABULARY.md ROADMAP.md README.md
+            PORTFOLIO.md CONTENT.md FIGURES.md] +
+         Dir[File.join(__dir__, 'pages', '*.sp')].map { |f| File.basename(f) }
+           .map { |f| File.join('pages', f) }).freeze
 
 WORD = /\A[a-z][a-z_]*\z/
 
@@ -56,6 +58,12 @@ end
 # one, so the pairing has to be tracked. Getting this wrong made the checker
 # read prose as grammar.
 def each_sentence_line(path)
+  # A .sp file is a page: all of it is sentences, no fences involved.
+  unless path.end_with?('.md')
+    File.readlines(path).each_with_index { |raw, i| yield raw, i + 1 }
+    return
+  end
+
   open = false
   checking = false
   File.readlines(path).each_with_index do |raw, i|

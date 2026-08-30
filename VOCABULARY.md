@@ -682,7 +682,7 @@ button "Show baseline", to: baseline
 
 ### `form`
 
-- **name** — the subject the form edits
+- **name** — the subject the form edits; omitted, it keeps the current one
 - **content** — none
 - **modifiers** — `to:`, `method:`
 - **children** — `group`, `field`, `check`, `select`, `actions`
@@ -693,8 +693,12 @@ button "Show baseline", to: baseline
 
 ```
 form scenario
-form scenario, to: run, method: post
+form to: run, method: post
 ```
+
+Under `page scenario` the form's subject is already the scenario, so naming it
+again states the inferable. A word that names no subject leaves the chain
+alone.
 
 ### `field`
 
@@ -703,10 +707,11 @@ form scenario, to: run, method: post
 - **modifiers** — `type:`, `step:`, `required:`
 - **children** — none
 - **subject** — unchanged; reads from the form's subject
-- **infers** — the label from the name (`base_income` → "Base income"); the
-  input name from the attribute; the current value from the subject; the
-  input type from the attribute's type, so a number is a number without being
-  told. Override any of them
+- **infers** — the input name from the attribute; the current value from the
+  subject; the input type from the *value's class*, so a number is a number
+  without being told. The label is inferred from the name only when that name
+  already reads as English — acronyms, abbreviations and domain phrasing are
+  not derivable and must be said. Override any of them
 - **renders** — `<label>` plus `<input>`
 
 ```
@@ -718,6 +723,11 @@ field growth_rate, step: 0.01
 Nine of these replace the eighteen hand-paired `label`/`input` lines in
 `roth/views/controls.slim`, and none of them repeats the field's name three
 times.
+
+Phase 0 built this word and measured it. The name, value and type were right
+every time; the label was right about three times in ten, which is why the
+`infers` slot above no longer promises it unconditionally. See
+[PHASE0.md](PHASE0.md).
 
 ### `check`
 

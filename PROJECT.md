@@ -2,10 +2,10 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: idea
+status: active
 kind: project
 last_touched: '2026-08-30'
-next_step: ROADMAP.md Phase 0 — the vertical slice: does inference actually work?
+next_step: ROADMAP.md Phase 1 — the app contract; labels are the open question Phase 0 left
 docs: README.md
 related:
 - slim-pickins

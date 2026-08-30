@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v2
+# alt-slim-pickins — roadmap v3
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -73,7 +73,7 @@ convention followed going forward).
 
 ---
 
-## Phase 0 — The vertical slice
+## Phase 0 — The vertical slice  ✅ complete (2026-08-30)
 
 Transform, runtime and inference together, about ten words deep, rendering one
 real page. This phase exists to answer one question: **does inference work?**
@@ -103,9 +103,14 @@ Words in scope: `page`, `form`, `group`, `field`, `check`, `select`, `option`,
   `roth/views/controls.slim`'s output and the differences are all deliberate,
   each one named.
 
-**Exit criterion:** we know whether `field` can do what its entry claims. If
-it cannot, the vocabulary changes here, before forty-six words are built on a
-false premise.
+**Exit criterion: met.** `field` delivers three of its four claimed
+derivations reliably — input name, value and type — and the fourth, the
+label, only when the attribute name already reads as English. VOCABULARY.md's
+entry is corrected to say so. Results in [PHASE0.md](PHASE0.md).
+
+The contract turned out to be close to free: `Engine::Inputs` is a bare
+`Struct` with `keyword_init: true` and needed no changes, because the input
+type is inferred from the *value's class* rather than from a schema.
 
 ## Phase 1 — The app contract
 
@@ -113,7 +118,9 @@ Phase 0 will have discovered, by force, what an object must answer to be
 renderable. This phase writes it down.
 
 - **Name the contract** `agent` — what a subject must respond to for labels,
-  values, types and collections to be inferable.
+  values, types and collections to be inferable. Phase 0 showed values and
+  types are free; **labels are the open question** — `ss_primary_amount`
+  means something specific to roth, and only roth knows it.
   *Done looks like:* `CONTRACT.md` states it, and says what happens when an
   app does not satisfy it.
 - **Judge the cost** `dan` — if the contract is onerous, the language is
