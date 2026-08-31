@@ -409,4 +409,8 @@ account, or a survivor transition, or a rate-regime change, is a question about
 what the tool is for.
 
 The honest recommendation is to do the first and put the second in front of dan
-as a list, which is what this document is.
+as a list. That list is now
+[ROTH_DOMAIN_BACKLOG.md](ROTH_DOMAIN_BACKLOG.md), which separates the eight
+defects that are simply wrong from the eleven questions about what the tool is
+for — and puts one missing `require` ahead of both, because nothing in it can be
+verified until the suite runs.
