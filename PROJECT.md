@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-30'
-next_step: ROADMAP.md Phase 4 — the rest of the vocabulary; Phase 3's Slim comparison awaits dan
+next_step: ROADMAP.md Phase 5 — the design system (dan: reuse slim-pickins.css or own one?)
 docs: README.md
 related:
 - slim-pickins

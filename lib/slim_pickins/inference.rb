@@ -61,6 +61,28 @@ module SlimPickins
       false
     end
 
+    # --- Moments --------------------------------------------------------
+
+    def moment(value, variant)
+      return relative(value) if variant == :relative
+      return value.strftime('%-d %B %Y, %H:%M') if variant == :datetime && value.respond_to?(:strftime)
+      return value.strftime('%-d %B %Y') if value.respond_to?(:strftime)
+
+      value.to_s
+    end
+
+    def relative(value)
+      return value.to_s unless value.respond_to?(:to_time)
+
+      days = ((Time.now - value.to_time) / 86_400).round
+      case days
+      when 0 then 'today'
+      when 1 then 'yesterday'
+      when 2..30 then "#{days} days ago"
+      else moment(value, nil)
+      end
+    end
+
     # --- Presentation ---------------------------------------------------
 
     # What the *shape* of a value can tell us, and no more. A number is a

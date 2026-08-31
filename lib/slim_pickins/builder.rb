@@ -3,6 +3,8 @@
 require 'cgi'
 require_relative 'subject'
 require_relative 'inference'
+require_relative 'markdown'
+require_relative 'charting'
 
 module SlimPickins
   # The runtime. Every word is a real defined method — never method_missing —
@@ -16,11 +18,14 @@ module SlimPickins
   # type rather than by counting positions, and `button primary, "Run"`,
   # `button primary` and `button "Run"` all mean the obvious thing.
   class Builder
-    WORDS = %i[page contents stylesheet meta script nav link footer
+    WORDS = %i[page contents stylesheet meta script nav link footer aside
                section title each empty table column total
-               money percent number text
-               form group field check select option button actions
-               disclosure].freeze
+               grid list item card actions figure disclosure
+               money percent number text note prose badge fact snippet
+               time image icon metric chart
+               choose when otherwise
+               form group field check select option button
+               ].freeze
 
     def initialize(page, library = nil)
       @library = library
@@ -32,6 +37,7 @@ module SlimPickins
       @suppressed = false  # set when a subject is an empty collection
       @bindings = {}       # `each holding` binds `holding` for reaching out
       @columns = nil       # non-nil only while a table is collecting columns
+      @branches = nil      # non-nil only while a `choose` is collecting branches
       @contents = nil      # the page's own children, while a layout renders
       @head = +''          # words that belong in <head>, wherever they are said
       define_app_words
@@ -53,14 +59,23 @@ module SlimPickins
     # Words are real methods, so an unknown word fails with its own name.
     # The only thing method_missing serves is a binding introduced by `each`,
     # which is dynamic by nature and cannot be a defined method.
+    # Reaching out by name: `order.number` inside a nested loop, or
+    # `pattern.title` at the top of a page. A binding from `each` wins, then
+    # the subject chain — whose floor is the page, so locals and helpers are
+    # reachable here for the same reason `.foo` reaches them.
     def method_missing(name, *args)
-      return @bindings[name] if args.empty? && @bindings.key?(name)
+      if args.empty?
+        # Wrapped, so `order.number` and `pattern.title` read the same whether
+        # the thing behind them is a struct, a hash or a plain object.
+        return Subject.new(@bindings[name], described_as: "this #{name}") if @bindings.key?(name)
+        return Subject.new(subject.fetch(name), described_as: "this #{name}") if subject.has?(name)
+      end
 
       raise Error, "there is no word `#{name}`"
     end
 
     def respond_to_missing?(name, include_private = false)
-      @bindings.key?(name) || super
+      @bindings.key?(name) || subject.has?(name) || super
     end
 
     def render(ruby, path)
@@ -230,7 +245,148 @@ module SlimPickins
       @columns << { name: name, header: label, as: nil, total: true }
     end
 
+    def aside(&block)
+      open(:aside)
+      nest(&block)
+      close(:aside)
+    end
+
+    def grid(*args, columns: nil, &block)
+      variant, = name_and_content(args)
+      open(:div, class: ['grid', variant && "grid--#{variant}"].compact.join(' '),
+                 style: columns && "--columns: #{columns}")
+      nest(&block)
+      close(:div)
+    end
+
+    def list(*args, &block)
+      variant, = name_and_content(args)
+      open(:ul, class: ['list', variant && "list--#{variant}"].compact.join(' '))
+      nest(&block)
+      close(:ul)
+    end
+
+    def item(*args, &block)
+      variant, body = name_and_content(args)
+      open(:li, class: variant && "item item--#{variant}")
+      body ? emit(CGI.escapeHTML(body.to_s)) : nest(&block)
+      close(:li)
+    end
+
+    def card(*args, &block)
+      variant, = name_and_content(args)
+      open(:article, class: ['card', variant && "card--#{variant}"].compact.join(' '),
+                     id: card_id)
+      deeper { nest(&block) }
+      close(:article)
+    end
+
+    def figure(*args, &block)
+      _, caption = name_and_content(args)
+      open(:figure)
+      nest(&block)
+      text_tag(:figcaption, caption) if caption
+      close(:figure)
+    end
+
     # --- Content --------------------------------------------------------
+
+    def note(*args)
+      variant, body = name_and_content(args)
+      text_tag(:p, body, class: ['note', variant && "note--#{variant}"].compact.join(' '))
+    end
+
+    def prose(*args)
+      notation, body = name_and_content(args)
+      html = notation == :plain ? Markdown.plain(body) : Markdown.render(body)
+      emit(%(<div class="prose">#{html}</div>))
+    end
+
+    def badge(*args)
+      variant, body = name_and_content(args)
+      label = body || variant
+      kind = variant || (KNOWN_STATUSES.include?(body.to_s.to_sym) ? body.to_s.to_sym : nil)
+      text_tag(:span, label, class: ['badge', kind && "badge--#{kind}"].compact.join(' '))
+    end
+
+    KNOWN_STATUSES = %i[ok pending neutral warning error blocker polish].freeze
+
+    def fact(*args)
+      name, value = name_and_content(args)
+      shown = value.nil? ? subject.fetch(name) : value
+      open(:dl, class: 'fact')
+      text_tag(:dt, label_for(name, nil))
+      text_tag(:dd, present(shown, format_of({ name: name, as: nil })))
+      close(:dl)
+    end
+
+    def snippet(*args)
+      language, body = name_and_content(args)
+      open(:pre, class: ['snippet', language && "snippet--#{language}"].compact.join(' '))
+      text_tag(:code, body)
+      close(:pre)
+      text_tag(:button, 'Copy', type: 'button', class: 'snippet-copy')
+    end
+
+    def time(*args)
+      variant, moment = name_and_content(args)
+      machine = moment.respond_to?(:iso8601) ? moment.iso8601 : moment.to_s
+      text_tag(:time, Inference.moment(moment, variant), datetime: machine)
+    end
+
+    def image(*args, alt: nil)
+      _, src = name_and_content(args)
+      void(:img, src: src.to_s, alt: alt.to_s, loading: 'lazy')
+    end
+
+    # Which icon may be said as a name (`icon warning`) or arrive as data
+    # (`icon .severity`). Both name the same thing.
+    def icon(*args)
+      name, data = name_and_content(args)
+      name ||= data
+      emit(%(<svg class="icon icon--#{name}" aria-hidden="true">) +
+           %(<use href="#icon-#{name}"></use></svg>))
+    end
+
+    def metric(*args, as: nil)
+      name, label = name_and_content(args)
+      value = subject.fetch(name)
+      open(:div, class: 'metric')
+      text_tag(:h3, label_for(name, label), class: 'metric-label')
+      text_tag(:div, present(value, as || subject.format_for(name)), class: 'metric-value')
+      close(:div)
+    end
+
+    def chart(*args, over: nil, label: nil)
+      kind, series = name_and_content(args)
+      emit(Charting.render(kind || :line, series, over: over, label: label))
+    end
+
+    # --- Situation --------------------------------------------------------
+
+    # The branches register, then the first true one renders. `otherwise` is
+    # an ordinary word valid inside `choose`, so `else` is never a keyword and
+    # nothing needs special parsing.
+    def choose(&block)
+      was = @branches
+      @branches = []
+      nest(&block)
+      chosen = @branches.find { |c, _| c } || @branches.find { |c, _| c.nil? }
+      @branches = was
+      nest(&chosen.last) if chosen
+    end
+
+    def when(*args, &block)
+      branching!(:when)
+      _, condition = name_and_content(args)
+      @branches << [!!condition, block]
+    end
+
+    def otherwise(&block)
+      branching!(:otherwise)
+      @branches << [nil, block]
+    end
+
 
     def money(*args, precision: 0)
       _, value = name_and_content(args)
@@ -421,6 +577,19 @@ module SlimPickins
       return subject.object if Inference.collection?(subject.object)
 
       raise Error, "#{subject.describe} has no #{plural} to go through"
+    end
+
+    def branching!(word)
+      return if @branches
+
+      raise Error, "#{word} belongs inside a choose"
+    end
+
+    # `card` infers its DOM id from the subject, so no page writes `id .id`.
+    def card_id
+      return nil unless subject.has?(:id)
+
+      "#{subject.noun}-#{subject.fetch(:id)}"
     end
 
     def registering!(word)

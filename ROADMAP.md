@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v6
+# alt-slim-pickins — roadmap v7
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -199,7 +199,7 @@ So both abstractions are earned by real repetition rather than anticipated.
   other than the subject.
   *Done looks like:* the answer, recorded, including if it is no.
 
-## Phase 4 — The rest of the vocabulary  ← next
+## Phase 4 — The rest of the vocabulary  ✅ complete (2026-08-30)
 
 The remaining words. Low risk, real work, and the only phase that is mostly
 typing.
@@ -207,9 +207,11 @@ typing.
 - **Every word implemented** `agent`, in the five groups.
   *Done looks like:* all three test pages render — [PORTFOLIO.md](PORTFOLIO.md),
   [CONTENT.md](CONTENT.md), [FIGURES.md](FIGURES.md) — and
-  `check_grammar.rb` is green.
+  `check_grammar.rb` is green. **Done** — 47 of 47 words, all three pages
+  render from `bin/render_pages.rb`, 431 sentences and 0 problems. Results in
+  [PHASE4.md](PHASE4.md).
 
-## Phase 5 — The design system
+## Phase 5 — The design system  ← next
 
 The vocabulary renders classes; something must define them.
 

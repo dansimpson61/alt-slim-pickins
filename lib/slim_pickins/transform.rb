@@ -19,6 +19,13 @@ module SlimPickins
     BINDING = /\A[a-z_]+(\.[a-z_]+\??)+\z/
     MODIFIER = /\A([a-z_]+):\s*(.+)\z/m
 
+    # Words the host language reserves. A page may still use them — `when` is
+    # part of the vocabulary — so the transform routes them past Ruby's parser
+    # rather than the language giving up its own word.
+    RESERVED = %w[when in if unless else end do then case while until for next
+                  break return class module def begin rescue ensure yield self
+                  nil true false and or not redo retry super alias undef].freeze
+
     Sentence = Struct.new(:indent, :body, :lineno)
 
     def self.call(source, path: '(page)')
@@ -78,7 +85,12 @@ module SlimPickins
       end
 
       args = split_args(rest).map { |a| argument(a, sentence) }
-      args.empty? ? word : "#{word}(#{args.join(', ')})"
+      if RESERVED.include?(word)
+        parts = [":#{word}", *args]
+        "send(#{parts.join(', ')})"
+      else
+        args.empty? ? word : "#{word}(#{args.join(', ')})"
+      end
     end
 
     # An argument is one of five things, and each has exactly one spelling.

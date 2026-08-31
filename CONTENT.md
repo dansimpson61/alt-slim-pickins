@@ -12,7 +12,7 @@ exactly here.
 ## The page
 
 ```
-page pattern, .title
+page pattern, pattern.title
   badge .category
   badge .status
 
@@ -23,7 +23,7 @@ page pattern, .title
     prose .content
 
   aside
-    section applied, "Applied in projects"
+    section "Applied in projects"
       empty "No other projects declare this pattern yet."
       list plain
         each project

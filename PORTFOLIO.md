@@ -70,7 +70,7 @@ page portfolio, "Your retirement"
     note "Coarse assumptions. Directional estimates only. Not tax advice."
 
   section contribution, "Make a contribution"
-    form contribution, to: contribute, method: post
+    form to: contribute, method: post
       group amounts
         field amount
         select account_id, "Account"

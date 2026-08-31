@@ -22,6 +22,14 @@ module SlimPickins
 
     def nothing? = @object.nil?
 
+    # What to call this subject in an id or a class. Anonymous structs have no
+    # class name, so the name the chain gave it wins when there is one.
+    def noun
+      return @described_as.sub(/\Athis /, '') if @described_as
+
+      @object.class.name&.split('::')&.last&.downcase || 'item'
+    end
+
     # The one optional half of the contract. An app that knows its own
     # vocabulary can say so; one that does not gets a humanised name.
     # `ss_primary_amount` means something specific to roth, and roth is the
