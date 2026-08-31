@@ -103,7 +103,7 @@ this as money* and the formatting belongs to the word.
 - **[VOCABULARY.md](VOCABULARY.md)** — fifty words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
-- **[ROADMAP.md](ROADMAP.md)** — the phases and the risk register. Start here
+- **[ROADMAP-0.1.md](ROADMAP-0.1.md)** — the phases and the risk register. Start here
   to know what happens next.
 - **[PORTFOLIO.md](PORTFOLIO.md)**, **[CONTENT.md](CONTENT.md)**,
   **[FIGURES.md](FIGURES.md)** — three real pages written in the language,
@@ -115,16 +115,24 @@ this as money* and the formatting belongs to the word.
 
 ## Status
 
-**Phases 0–7 done.** The bet the paper could not settle was **inference** —
-whether `field base_income` can really derive a label, an input name, a value
-and an input type from one word. Phase 0 measured it and it holds: on roth's
-form of fourteen labelled controls, humanising alone got eleven labels right,
-and with `label_for` on the app the page states none of them.
+**Roadmap 0.1 is finished** — all eight phases, closed in
+[ROADMAP-0.1.md](ROADMAP-0.1.md). The next one is not written;
+[BLUESKY-0.2.md](BLUESKY-0.2.md) is where it should start.
 
-Phase 7 ported a real app — `~/dev/roth` — including its results, which now
-render on the server. Its 88-line page and 249-line script became 58 sentences
-and 47 lines. See [PHASE7.md](PHASE7.md) for the line-by-line review and every
-limit found, and [ROADMAP.md](ROADMAP.md) for what is next.
+The bet the paper could not settle was **inference** — whether `field
+base_income` can really derive a label, an input name, a value and an input
+type from one word. Phase 0 measured it and it holds: on roth's form of
+fourteen labelled controls, humanising alone got eleven labels right, and with
+`label_for` on the app the page states none of them.
+
+Phases 7 and 8 ported a real app — `~/dev/roth` — including its results, which
+render on the server. Its 88-line page and 249-line script became 71 sentences
+and 25 lines, and it uses **no Ruby-defined words at all**. Across every `.sp`
+file here the escape hatch stands at **1 use in 356 sentences**.
+
+- [PHASE7.md](PHASE7.md) — the port, and its architecture
+- [PHASE8.md](PHASE8.md) — `chart`, redrafted as the same shape as `table`
+- [ROTH_STUDY.md](ROTH_STUDY.md) — what reading a real app closely found
 
 Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
 Everything green: `ruby check_grammar.rb && ruby check_styles.rb &&

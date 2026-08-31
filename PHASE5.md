@@ -171,7 +171,7 @@ checkable in one direction: nothing a theme *should* reach is left outside
 
 ## Done-conditions
 
-| From ROADMAP.md | Status |
+| From ROADMAP-0.1.md | Status |
 |---|---|
 | Decide the relationship to slim-pickins' CSS | **decided: own it** (dan, 2026-08-30) |
 | The class-naming convention written into VOCABULARY's `renders` slots | done — stated once at the head of the stylesheet, which is where it belongs |

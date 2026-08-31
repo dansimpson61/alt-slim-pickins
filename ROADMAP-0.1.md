@@ -1,4 +1,18 @@
-# alt-slim-pickins — roadmap v9
+# alt-slim-pickins — roadmap v9  ·  **CLOSED 2026-08-31**
+
+> **All eight phases are complete.** This document is kept as the record of
+> what 0.1 set out to do and what it found; the numbers in the sections below
+> are what was true when each phase closed, not what is true now. For the
+> current state read [README.md](README.md); for where the next roadmap should
+> start, [BLUESKY-0.2.md](BLUESKY-0.2.md).
+>
+> At close: **fifty words**, 133 tests, 632 sentences, 65 style rules, zero
+> problems. Two Sinatra apps speak the language, and the deeper of the two —
+> a port of `~/dev/roth` — uses no Ruby-defined words at all.
+>
+> **What 0.1 never tested**, and 0.2 should: conditional and bespoke UI, a page
+> that navigates (the `link` routing question is still open), and a page
+> written by somebody who did not write the vocabulary.
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 

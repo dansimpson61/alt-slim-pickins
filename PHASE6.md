@@ -118,7 +118,7 @@ is that.
 
 ## Done-conditions
 
-| From ROADMAP.md | Status |
+| From ROADMAP-0.1.md | Status |
 |---|---|
 | A Sinatra app renders a page from a file on disk | done — three routes |
 | A documented way through when the vocabulary has no word | done — a Ruby word, five-method surface |

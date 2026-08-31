@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: Phases 0-8 complete and green (PHASE8.md) — the language is done as scoped. Next real work is a second port aimed at conditional/bespoke UI, the flank roth never exercised; the `link` routing question is still open for want of a page that navigates
+next_step: Roadmap 0.1 is CLOSED (ROADMAP-0.1.md) — all 8 phases done, 133 tests / 632 sentences / 65 rules green. Next roadmap is unwritten; BLUESKY-0.2.md argues it should start with a page nobody here designed, then conditional/bespoke UI, then checking the app contract at boot
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -35,4 +35,4 @@ conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
 
 A working view language: one-sentence grammar, 50 words, its own stylesheet,
 and a Sinatra app that speaks it. See [README.md](README.md), then
-[ROADMAP.md](ROADMAP.md).
+[ROADMAP-0.1.md](ROADMAP-0.1.md).

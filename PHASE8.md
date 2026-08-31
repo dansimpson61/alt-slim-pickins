@@ -207,7 +207,7 @@ page keeps the say, and roth writes its deduction before its brackets.
 
 ## Done-conditions
 
-| From ROADMAP.md | Status |
+| From ROADMAP-0.1.md | Status |
 |---|---|
 | Find a real charting need | done — roth's two charts, and 130 lines of Ruby |
 | `chart` redrafted against something real, or cut | **redrafted** — and `pie` cut |

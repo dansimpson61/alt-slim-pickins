@@ -114,7 +114,7 @@ wrapped now, so a struct, a hash and a plain object read alike.
 
 ## Done-conditions
 
-| From ROADMAP.md | Status |
+| From ROADMAP-0.1.md | Status |
 |---|---|
 | Every word implemented, in the five groups | done — 47 of 47 |
 | PORTFOLIO.md renders | done |

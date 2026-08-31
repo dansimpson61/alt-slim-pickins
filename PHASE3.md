@@ -144,7 +144,7 @@ one thing Slim does that we do not. Yours to judge.
 
 ## Done-conditions
 
-| From ROADMAP.md | Status |
+| From ROADMAP-0.1.md | Status |
 |---|---|
 | Pages lose `stylesheet`, `nav`, `footer` to a layout and render identically | done — 18 lines to 7 |
 | Repeated shape collapses into one app-defined word used in two pages | done — `account_card` |

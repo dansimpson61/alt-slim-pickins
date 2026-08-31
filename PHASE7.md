@@ -86,6 +86,11 @@ views/*.sp         the language
 app.rb             parse, project, render
 ```
 
+> **Since superseded.** [PHASE8.md](PHASE8.md) redrafted `chart` against those
+> 130 lines of `lib/chart.rb`, which no longer exists — roth's charts are
+> sentences now, and its last app word went with them. Every figure in this
+> document is what was true at the end of Phase 7.
+
 There is deliberately **no model layer in the persistence sense**. roth has no
 persistent state; each request is a pure function from a scenario to a
 projection. `Scenario` is a validated value object and the engine is a pure
@@ -296,7 +301,7 @@ undefined word.
 
 ## Done-conditions
 
-| From ROADMAP.md | Status |
+| From ROADMAP-0.1.md | Status |
 |---|---|
 | Port roth entirely — every view | done — roth has one view, and it is ported |
 | The diff against its old views reviewed line by line | done — this document |
