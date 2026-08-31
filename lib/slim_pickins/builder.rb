@@ -51,6 +51,7 @@ module SlimPickins
     def define_app_words
       return unless @library
 
+      extend @library.words if @library.words
       @library.partials.each_key do |word|
         define_singleton_method(word) do |*args, &block|
           render_partial(word, args, &block)
@@ -87,6 +88,7 @@ module SlimPickins
 
     # `.foo` compiles to this.
     def subject = @chain.current
+
 
     # --- Document -------------------------------------------------------
 
@@ -713,5 +715,23 @@ module SlimPickins
       @out << html unless @suppressed
       @out
     end
+
+    # --- the escape hatch -------------------------------------------------
+    #
+    # The language has no `div`, deliberately. When an app needs something the
+    # vocabulary has no word for — a `<video>`, a third-party embed — it adds
+    # a *word*, in Ruby, through `Library.new(words: SomeModule)`. That keeps
+    # the founding claim intact: extending the language adds vocabulary, never
+    # syntax, and a call site still cannot tell where a word came from.
+    #
+    # These five are the whole surface such a word may use. Everything else
+    # stays private, so the hatch cannot quietly become an API.
+    public
+
+    public :token                            # class names, in the four shapes
+    def html(string) = emit(string)          # trusted markup — you escape it
+    def children(&block) = nest(&block)      # render this word's children
+    def escape(text) = CGI.escapeHTML(text.to_s)
+    def arguments(args) = name_and_content(args)
   end
 end

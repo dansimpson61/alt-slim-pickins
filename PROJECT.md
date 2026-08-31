@@ -5,7 +5,8 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-30'
-next_step: ROADMAP.md Phase 6 — a Sinatra template handler, and the escape hatch
+next_step: ROADMAP.md Phase 7 — port roth entirely, then dan judges it against the Slim it replaced
+run: ruby examples/portfolio/app.rb
 docs: README.md
 related:
 - slim-pickins

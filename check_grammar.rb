@@ -18,7 +18,7 @@ require 'set'
 
 DOCS = (%w[DESIGN.md VOCABULARY.md ROADMAP.md README.md
             PORTFOLIO.md CONTENT.md FIGURES.md PHASE0.md PHASE2.md] +
-         Dir[File.join(__dir__, 'pages', '**', '*.sp')]
+         Dir[File.join(__dir__, '{pages,examples}', '**', '*.sp')]
            .map { |f| f.sub("#{__dir__}/", '') }).freeze
 
 WORD = /\A[a-z][a-z_]*\z/
@@ -87,8 +87,15 @@ docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 # word, and a call site cannot tell the two apart, so neither can this.
 vocab = File.read(File.join(here, 'VOCABULARY.md'))
             .scan(/^### `([a-z_]+)`/).flatten.to_set
-app_words = Dir[File.join(here, 'pages', 'partials', '*.sp')]
+# An app's vocabulary: partials anywhere in the repo, plus words defined in
+# Ruby through the escape hatch, which live in a module named *Words.
+app_words = Dir[File.join(here, '**', 'partials', '*.sp')]
             .map { |f| File.basename(f, '.sp') }.to_set
+Dir[File.join(here, 'examples', '**', '*.rb')].each do |f|
+  File.read(f).scan(/module \w*Words\b(.*?)^end/m).flatten.each do |body|
+    app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
+  end
+end
 vocab |= app_words
 used = Hash.new { |h, k| h[k] = [] }
 problems = 0

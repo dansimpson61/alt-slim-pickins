@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v8
+# alt-slim-pickins — roadmap v9
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -222,18 +222,23 @@ The vocabulary renders classes; something must define them.
   `check_styles.rb` proves the stylesheet and the runtime cannot drift.
   Results in [PHASE5.md](PHASE5.md).
 
-## Phase 6 — Integration  ← next
+## Phase 6 — Integration  ✅ complete (2026-08-30)
 
 - **A Sinatra template handler** `agent` — so a view file in this language is
   rendered the way `.slim` is today.
   *Done looks like:* a Sinatra app renders a page from a file on disk.
+  **Done** — `examples/portfolio/app.rb`, three routes, rendered through Tilt.
+  The layout is ours rather than Sinatra's, and a Sinatra helper is reachable
+  as `.foo` because the page is the outermost subject.
 - **The escape hatch** `agent` — what an app does when the vocabulary has no
   word for what it needs. The language has no `div`, which is deliberate, so
   this needs an answer that is not "add a word to slim-pickins".
   *Done looks like:* a documented way through, and evidence it is rarely
-  needed.
+  needed. **Done** — an app adds a *word*, in Ruby, through a five-method
+  surface; everything else on the builder stays private and a test asserts it.
+  Used once in 284 sentences. Results in [PHASE6.md](PHASE6.md).
 
-## Phase 7 — Port a real app
+## Phase 7 — Port a real app  ← next
 
 - **Port roth entirely** `agent` — every view, not the one page.
   *Done looks like:* roth runs on this language, and the diff against its old

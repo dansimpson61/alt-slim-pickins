@@ -11,7 +11,7 @@ module SlimPickins
   # A layout is the same idea one level up: the chrome every page shares,
   # written once, with `contents` marking where the page goes.
   class Library
-    attr_reader :layout, :partials
+    attr_reader :layout, :partials, :words
 
     def self.from(dir)
       dir = File.expand_path(dir)
@@ -22,9 +22,13 @@ module SlimPickins
       new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials)
     end
 
-    def initialize(layout: nil, partials: {})
+    # `words:` is the escape hatch: a module whose methods become words,
+    # written in Ruby because the thing they render has no word yet. See
+    # Builder's "escape hatch" section for the surface they may use.
+    def initialize(layout: nil, partials: {}, words: nil)
       @layout = layout
       @partials = partials.transform_keys(&:to_sym)
+      @words = words
       refuse_shadowing!
     end
 
@@ -38,11 +42,16 @@ module SlimPickins
     # collision is an error rather than an override.
     def refuse_shadowing!
       require_relative 'builder'
-      @partials.each_key do |name|
+      app_words = @partials.keys + (@words ? @words.instance_methods : [])
+      app_words.each do |name|
         next unless Builder::WORDS.include?(name)
 
         raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it"
       end
+      duplicated = app_words.tally.select { |_, n| n > 1 }.keys
+      return if duplicated.empty?
+
+      raise Error, "`#{duplicated.first}` is defined twice — as a partial and in Ruby"
     end
   end
 end

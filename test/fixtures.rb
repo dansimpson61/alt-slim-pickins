@@ -17,7 +17,7 @@ module Fixtures
 
   Holding = Struct.new(:symbol, :shares, :market_value, :gain, :weight, keyword_init: true)
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
-                       keyword_init: true)
+                       :tour_url, keyword_init: true)
   Target = Struct.new(:asset_class, :target, :actual, :drift, keyword_init: true)
   Contribution = Struct.new(:amount, :account_id, :frequency, :auto_invest, keyword_init: true)
   Portfolio = Struct.new(:as_of, :total_value, :ytd_return, :annual_income, :years_to_rmd,
@@ -44,7 +44,8 @@ module Fixtures
 
   def account(name, id, balance, room, treatment, holdings)
     labelled(Account.new(name: name, id: id, balance: balance, contribution_room: room,
-                         tax_treatment: treatment, holdings: holdings),
+                         tax_treatment: treatment, holdings: holdings,
+                         tour_url: "/tours/#{id}.mp4"),
              formats: { balance: :money, contribution_room: :money })
   end
 

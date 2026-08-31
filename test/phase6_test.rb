@@ -1,0 +1,99 @@
+# frozen_string_literal: true
+
+require 'minitest/autorun'
+require 'rack/test'
+require_relative '../lib/slim_pickins/template'
+require_relative '../examples/portfolio/app'
+
+# Phase 6: a `.sp` file renders the way a `.slim` one does, and an app that
+# needs something the vocabulary has no word for adds a word rather than a
+# construct.
+class Phase6Test < Minitest::Test
+  include Rack::Test::Methods
+
+  Portfolio.set :host_authorization, { permitted_hosts: [] }
+
+  def app = Portfolio
+
+  # --- integration -------------------------------------------------------
+
+  def test_sinatra_renders_a_page_from_a_file_on_disk
+    get '/'
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, '<!DOCTYPE html>'
+    assert_includes last_response.body, 'Your retirement'
+  end
+
+  # The layout is ours, not Sinatra's — it says `contents`, not `yield`.
+  def test_the_layout_beside_the_views_is_applied_without_the_page_asking
+    get '/'
+    refute_includes File.read(File.expand_path('../examples/portfolio/views/index.sp', __dir__)),
+                    'layout'
+    assert_includes last_response.body, '<nav class="nav"'
+    assert_includes last_response.body, '<footer class="footer">'
+  end
+
+  def test_a_partial_beside_the_views_becomes_a_word
+    get '/'
+    assert_includes last_response.body, 'table--holdings'
+  end
+
+  def test_locals_reach_the_page
+    get '/'
+    assert_includes last_response.body, 'Traditional IRA'
+    assert_includes last_response.body, '$1,284,506'
+  end
+
+  def test_a_second_route_renders_a_different_page
+    get '/accounts/2'
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Roth IRA'
+  end
+
+  def test_the_app_still_controls_its_own_routing
+    get '/accounts/99'
+    assert_equal 404, last_response.status
+  end
+
+  # --- the escape hatch --------------------------------------------------
+
+  # The vocabulary has no word for an embedded video and should not gain one.
+  # The app adds a word of its own, in Ruby, and the page says `video .tour_url`.
+  def test_an_app_may_add_a_word_in_ruby
+    get '/accounts/2'
+    assert_includes last_response.body, '<video class="video" src="/tours/2.mp4"'
+  end
+
+  def test_the_call_site_does_not_reveal_where_a_word_came_from
+    page = File.read(File.expand_path('../examples/portfolio/views/account.sp', __dir__))
+    assert_includes page, 'video .tour_url'   # reads exactly like `image .url`
+    refute_includes page, 'raw'
+    refute_includes page, '<'
+  end
+
+  def test_a_ruby_word_may_not_shadow_a_slim_pickins_word
+    shadow = Module.new { def table; end }
+    error = assert_raises(SlimPickins::Error) do
+      SlimPickins::Library.new(words: shadow)
+    end
+    assert_equal '`table` is already a slim-pickins word — an app cannot redefine it', error.message
+  end
+
+  def test_a_word_defined_twice_is_refused
+    both = Module.new { def account_card; end }
+    error = assert_raises(SlimPickins::Error) do
+      SlimPickins::Library.new(partials: { account_card: 'title .name' }, words: both)
+    end
+    assert_equal '`account_card` is defined twice — as a partial and in Ruby', error.message
+  end
+
+  # The hatch is five methods. Everything else stays private, so it cannot
+  # quietly become an API.
+  def test_the_escape_hatch_surface_is_exactly_five_methods
+    builder = SlimPickins::Builder.new(SlimPickins::Page.new(locals: {}))
+    %i[token html children escape arguments].each { |m| assert_respond_to builder, m }
+    %i[emit nest about label_for present collection_for].each do |m|
+      refute_respond_to builder, m, "#{m} should not be part of the escape hatch"
+    end
+  end
+end
