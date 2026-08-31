@@ -17,6 +17,7 @@ notes: Working language. Grammar settled (DESIGN.md v0.3) — one sentence, one
   (bin/render_pages.rb). App contract is one sentence plus two optional
   methods (CONTRACT.md). Phases 0-4 done; 5 is the design system, 8 is chart.
   check_grammar.rb holds every document and every page to the same grammar.
+  HANDOFF.md is the prompt that resumes this work in a fresh conversation.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---
