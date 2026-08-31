@@ -42,6 +42,7 @@
   --gap-loose: calc(var(--step) * 6);
   --radius: calc(var(--step) * 2);
   --rule-width: 1px;
+  --focus-width: 2px;
   --measure: 68ch;
   --lift: 0 1px 2px rgb(0 0 0 / 0.05);
 
@@ -50,7 +51,24 @@
   --size: 1rem;
   --size-small: 0.875rem;
   --size-large: 1.25rem;
+  --size-page: 1.75rem;
+  --size-code: 0.9em;
+  --weight-strong: 600;
+  --weight-plain: 400;
   --lead: 1.6;
+  --lead-tight: 1.25;
+
+  --measure-input: 24rem;
+  --measure-chart: 32rem;
+  --track: 14rem;
+  --indent: 1.25em;
+  --stroke: 2;
+  --fade: 0.7;
+  --fade-more: 0.45;
+  --fade-most: 0.3;
+  --wash: 0.2;
+  --icon-size: 1em;
+  --icon-shift: -0.125em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -83,8 +101,8 @@ body {
   line-height: var(--lead);
 }
 
-h1, h2, h3, h4, h5, h6 { line-height: 1.25; margin: var(--gap-loose) 0 var(--gap); }
-h1 { font-size: 1.75rem; margin-top: 0; }
+h1, h2, h3, h4, h5, h6 { line-height: var(--lead-tight); margin: var(--gap-loose) 0 var(--gap); }
+h1 { font-size: var(--size-page); margin-top: 0; }
 h2 { font-size: var(--size-large); }
 h3 { font-size: var(--size); }
 p { margin: 0 0 var(--gap); max-width: var(--measure); }
@@ -123,10 +141,10 @@ a { color: var(--accent); }
 .grid {
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat(auto-fit, minmax(min(var(--track, 14rem), 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--track), 100%), 1fr));
 }
 
-.list { margin: 0 0 var(--gap); padding-left: 1.25em; }
+.list { margin: 0 0 var(--gap); padding-left: var(--indent); }
 .list--plain { list-style: none; padding-left: 0; }
 .item { margin-bottom: var(--step); }
 .item p { margin-bottom: 0; }
@@ -159,8 +177,8 @@ summary { cursor: pointer; color: var(--accent); }
   padding: var(--step) var(--gap) var(--step) 0;
   border-bottom: var(--rule-width) solid var(--rule);
 }
-.table th { color: var(--ink-soft); font-size: var(--size-small); font-weight: 600; }
-.table tfoot td { font-weight: 600; border-bottom: none; }
+.table th { color: var(--ink-soft); font-size: var(--size-small); font-weight: var(--weight-strong); }
+.table tfoot td { font-weight: var(--weight-strong); border-bottom: none; }
 .column--numeric { text-align: right; font-variant-numeric: tabular-nums; }
 
 /* -------------------------------------------------------------- content -- */
@@ -175,11 +193,11 @@ summary { cursor: pointer; color: var(--accent); }
 
 .prose { max-width: var(--measure); }
 .prose > :first-child { margin-top: 0; }
-.prose code { font-family: var(--face-mono); font-size: 0.9em; background: var(--surface-soft); }
+.prose code { font-family: var(--face-mono); font-size: var(--size-code); background: var(--surface-soft); }
 .prose blockquote {
   margin: 0 0 var(--gap);
   padding-left: var(--gap);
-  border-left: calc(var(--step) * 0.5) solid var(--rule);
+  border-left: var(--rule-width) solid var(--rule);
   color: var(--ink-soft);
 }
 
@@ -206,7 +224,7 @@ summary { cursor: pointer; color: var(--accent); }
 .fact dd { margin: 0; }
 
 .metric { padding: var(--gap); background: var(--surface); border-radius: var(--radius); }
-.metric-label { margin: 0; color: var(--ink-faint); font-size: var(--size-small); font-weight: 400; }
+.metric-label { margin: 0; color: var(--ink-faint); font-size: var(--size-small); font-weight: var(--weight-plain); }
 .metric-value { font-size: var(--size-large); font-variant-numeric: tabular-nums; }
 
 .snippet {
@@ -228,29 +246,29 @@ summary { cursor: pointer; color: var(--accent); }
   cursor: pointer;
 }
 
-.icon { width: 1em; height: 1em; vertical-align: -0.125em; fill: currentColor; }
+.icon { width: var(--icon-size); height: var(--icon-size); vertical-align: var(--icon-shift); fill: currentColor; }
 .icon--warning, .icon--polish { color: var(--caution); }
 .icon--blocker { color: var(--negative); }
 
 time { color: var(--ink-soft); }
 
 /* ---------------------------------------------------------------- chart -- */
-.chart { width: 100%; height: auto; max-width: 32rem; }
-.chart polyline { stroke: var(--accent); stroke-width: 2; }
-.chart polygon { fill: var(--accent); opacity: 0.2; }
+.chart { width: 100%; height: auto; max-width: var(--measure-chart); }
+.chart polyline { stroke: var(--accent); stroke-width: var(--stroke); }
+.chart polygon { fill: var(--accent); opacity: var(--wash); }
 .chart rect { fill: var(--accent); }
-.chart-slice { stroke: var(--surface); stroke-width: 1; fill: var(--accent); }
+.chart-slice { stroke: var(--surface); stroke-width: var(--stroke); fill: var(--accent); }
 .chart-slice--0 { opacity: 1; }
-.chart-slice--1 { opacity: 0.7; }
-.chart-slice--2 { opacity: 0.45; }
-.chart-slice--3 { opacity: 0.3; }
+.chart-slice--1 { opacity: var(--fade); }
+.chart-slice--2 { opacity: var(--fade-more); }
+.chart-slice--3 { opacity: var(--fade-most); }
 
 /* ---------------------------------------------------------- interaction -- */
 .field { margin-bottom: var(--gap); }
 .field label { display: block; color: var(--ink-soft); font-size: var(--size-small); }
 .field input, .field select, .field textarea {
   width: 100%;
-  max-width: 24rem;
+  max-width: var(--measure-input);
   padding: var(--step) calc(var(--step) * 2);
   background: var(--surface);
   color: var(--ink);
@@ -258,7 +276,10 @@ time { color: var(--ink-soft); }
   border-radius: var(--radius);
   font: inherit;
 }
-.field input:focus, .field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.field input:focus, .field select:focus {
+  outline: var(--focus-width) solid var(--accent);
+  outline-offset: var(--rule-width);
+}
 .field--check label { display: flex; align-items: center; gap: var(--step); }
 .field--check input { width: auto; }
 

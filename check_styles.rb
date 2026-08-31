@@ -64,6 +64,20 @@ rescue StandardError => e
   problems += 1
 end
 
+# --- 0. every presentational value lives in the theme ----------------------
+# The claim is that a theme is one :root and can miss nothing. That is only
+# true if no rule below :root carries a value a theme might want to change.
+# Structural constants — zero, a full width, a grid fraction — stay literal.
+STRUCTURAL = %w[0 1 2 3 100%].freeze
+body = css.split('document --').last.to_s
+literals = body.scan(/:\s*([^;{}]*)/).flatten.join(' ')
+              .scan(/(?<![\w-])(\d*\.?\d+(?:rem|em|px|ch|%)?)(?![\w-])/).flatten
+              .reject { |v| STRUCTURAL.include?(v) }
+literals.tally.sort.each do |value, count|
+  fail!("UNTHEMED    #{value} appears #{count}x outside :root — a theme cannot reach it")
+  problems += 1
+end
+
 # --- 1a. every class the code can emit has a rule --------------------------
 (can_emit - defined).sort.each do |klass|
   fail!("UNSTYLED    #{klass.inspect} can be emitted but no rule defines it")

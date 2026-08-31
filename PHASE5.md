@@ -62,10 +62,24 @@ and our words already say layout: `grid`, `list`, `actions`, `aside`.
 
 ## Themeable by construction
 
-Every value below the theme block is a `var()` or a structural constant.
-Measured: **zero hardcoded colours outside `:root`**, against fifteen. A theme
-is one `:root`, and because classes derive from words it cannot silently miss
-one. Dark mode is the same twelve variables under
+**A correction.** The first version of this claimed "zero hardcoded values
+outside the theme block". That was measured on *colours only*, and dan's
+question — are these tweaks reachable by the theme surface? — is what exposed
+it. There were sixty-one literal values outside `:root`: the h1 size, the font
+weights, the grid track, the input and chart widths, the code size, the list
+indent, the stroke widths, the chart opacities.
+
+The claim is now true, and enforced rather than asserted. Forty-two variables,
+and `check_styles.rb` fails on any literal outside `:root` that is not a
+structural constant — zero, one, a full width, a grid fraction:
+
+```text
+UNTHEMED    2.5rem appears 1x outside :root — a theme cannot reach it
+```
+
+`/tmp/spdemo/themed.html` is the proof: the same markup and the same rules,
+with fourteen variables overridden, becomes a serif, square-cornered, warm
+paper skin. Dark mode is the same mechanism — twelve variables under
 `prefers-color-scheme: dark`.
 
 ## `check_styles.rb`
@@ -132,6 +146,14 @@ The first three are the interesting ones, because all three passed every
 check. A checker can prove a class has a rule; it cannot prove the rule is any
 good, that the sprite the rule styles exists, or that anything emits the class
 at all.
+
+**None of the five was reachable from the theme surface**, and that is the
+right answer rather than a failing. Three were Ruby, not CSS at all. The other
+two needed rules that did not exist. A theme changes the *values* of rules;
+it cannot create a rule, and it cannot change behaviour. Knowing which
+category a complaint falls into is the useful thing, and the boundary is now
+checkable in one direction: nothing a theme *should* reach is left outside
+`:root`.
 
 ## Honest limits
 
