@@ -157,8 +157,12 @@ checkable in one direction: nothing a theme *should* reach is left outside
 
 ## Honest limits
 
-- **An icon sits above its text in a list item**, because `text` is a block.
-  It reads acceptably and a flex row would break items with several children.
+- **An item's layout is read from what it holds.** `.item:has(> .icon)` is a
+  row; anything else is a stack. Both shapes are the same HTML — an inline
+  thing followed by a `<p>` — and the block forces a break that is right for
+  a link with its description and wrong for an icon with its label. The page
+  says `item` in both cases, and which layout that means follows from the
+  content, which is where it belongs.
 - **Variants are open-ended.** An app may name `note anything`, and the
   checker only requires the *base* to be styled. That is deliberate — the
   alternative is a closed list of variants, which the language does not have.

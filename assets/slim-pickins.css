@@ -148,6 +148,10 @@ a { color: var(--accent); }
 .list--plain { list-style: none; padding-left: 0; }
 .item { margin-bottom: var(--step); }
 .item p { margin-bottom: 0; }
+/* An item that leads with an icon is a row; one that does not is a stack.
+ * Both are `item` in the language — which of the two it is follows from what
+ * it holds, so the stylesheet reads that rather than the page saying it. */
+.item:has(> .icon) { display: flex; gap: var(--step); align-items: baseline; }
 
 .card {
   padding: var(--gap);
