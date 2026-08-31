@@ -96,9 +96,9 @@ class Phase2Test < Minitest::Test
           column market_value, "Value"
     PAGE
     assert_includes html, '<th>Symbol</th>'
-    assert_includes html, '<th class="numeric">Value</th>'
+    assert_includes html, '<th class="column--numeric">Value</th>'
     assert_includes html, '<td>VTI</td>'
-    assert_includes html, '<td class="numeric">$117,760</td>'
+    assert_includes html, '<td class="column--numeric">$117,760</td>'
   end
 
   def test_total_sums_the_column_over_the_collection
@@ -155,7 +155,7 @@ class Phase2Test < Minitest::Test
 
   def test_a_negative_amount_is_classed_so_red_is_css_s_job
     html = render("page book\n  money .loss\n", book: { loss: -12 })
-    assert_includes html, 'class="money negative"'
+    assert_includes html, 'class="money money--negative"'
   end
 
   # The whole point: shape says number, the app says money.
@@ -175,7 +175,7 @@ class Phase2Test < Minitest::Test
         table holdings
           column market_value
     PAGE
-    assert_includes html, '<td class="numeric">5</td>'
+    assert_includes html, '<td class="column--numeric">5</td>'
   end
 
   def test_the_page_still_overrides_the_app
@@ -184,7 +184,7 @@ class Phase2Test < Minitest::Test
         table holdings
           column market_value, as: number
     PAGE
-    assert_includes html, '<td class="numeric">117,760</td>'
+    assert_includes html, '<td class="column--numeric">117,760</td>'
   end
 
   # --- title infers its level from depth --------------------------------

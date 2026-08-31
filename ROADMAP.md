@@ -1,4 +1,4 @@
-# alt-slim-pickins — roadmap v7
+# alt-slim-pickins — roadmap v8
 
 **Retire the risk we have no evidence for, before building the parts we do.**
 
@@ -27,7 +27,7 @@ This is what the phase order is for. Highest risk first.
 | What an app must promise to be renderable | **High** | Phase 0 → named in Phase 1 |
 | **Reuse is at least as good as Slim's** | **High** | Phase 3 |
 | `chart` is right | **High**, narrow | Phase 8, deliberately last |
-| The design system the words assume | Medium | Phase 5 |
+| ~~The design system the words assume~~ | ~~Medium~~ | retired — Phase 5 |
 | Runtime emits correct HTML | Low | Phases 0, 2, 4 |
 | Transform is feasible | Low | Phase 0 |
 | Grammar parses unambiguously | Low | already evidenced — 273 checked sentences |
@@ -54,8 +54,8 @@ inside.
   always points at the current phase. Commit after each item.
 - **Every item has a "done looks like".** If you cannot verify it, it is not
   done.
-- **`check_grammar.rb` must stay green** across every document, and every new
-  word must arrive with a sentence.
+- **`check_grammar.rb` and `check_styles.rb` must stay green.** Every new word
+  arrives with a sentence and a rule.
 - **Verification is by diff against a real page**, not by tests that restate
   the implementation. `roth/views/controls.slim` and
   `dashboard/views/pattern.slim` are the fixtures, because they already exist
@@ -205,7 +205,7 @@ typing.
   render from `bin/render_pages.rb`, 431 sentences and 0 problems. Results in
   [PHASE4.md](PHASE4.md).
 
-## Phase 5 — The design system  ← next
+## Phase 5 — The design system  ✅ complete (2026-08-30)
 
 The vocabulary renders classes; something must define them.
 
@@ -215,9 +215,14 @@ The vocabulary renders classes; something must define them.
   phase is nearly free and the two projects share a design system. If not, we
   own a second one.
   *Done looks like:* a decision, recorded, with the class-naming convention
-  written into VOCABULARY.md's `renders` slots.
+  written into VOCABULARY.md's `renders` slots. **Decided: own it** (dan,
+  2026-08-30) — the existing file is built for a language where humans write
+  classes, and ours is not. 280 lines in one file against 967 across sixteen,
+  no prefix, no utility layer, zero hardcoded values outside the theme block.
+  `check_styles.rb` proves the stylesheet and the runtime cannot drift.
+  Results in [PHASE5.md](PHASE5.md).
 
-## Phase 6 — Integration
+## Phase 6 — Integration  ← next
 
 - **A Sinatra template handler** `agent` — so a view file in this language is
   rendered the way `.slim` is today.

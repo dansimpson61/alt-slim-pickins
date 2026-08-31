@@ -129,7 +129,7 @@ module SlimPickins
 
     def nav(*args, &block)
       variant, = name_and_content(args)
-      open(:nav, class: ['nav', variant && "nav--#{variant}"].compact.join(' '),
+      open(:nav, class: token(:nav, variant),
                  'aria-label': variant ? variant.to_s.capitalize : 'Main')
       nest(&block)
       close(:nav)
@@ -142,7 +142,7 @@ module SlimPickins
 
     def footer(*args, &block)
       _, body = name_and_content(args)
-      open(:footer)
+      open(:footer, class: token(:footer))
       body ? (@out << CGI.escapeHTML(body.to_s)) : nest(&block)
       close(:footer)
     end
@@ -160,7 +160,7 @@ module SlimPickins
 
     def section(*args, &block)
       name, heading = name_and_content(args)
-      open(:section, class: name && "section section--#{name}")
+      open(:section, class: token(:section, name))
       text_tag(:"h#{@level}", label_for(name, heading))
       deeper { about(name) { nest(&block) } }
       close(:section)
@@ -188,7 +188,7 @@ module SlimPickins
       _, message = name_and_content(args)
       return unless @suppressed
 
-      unsuppressed { text_tag(:p, message, class: 'empty') }
+      unsuppressed { text_tag(:p, message, class: token(:empty)) }
     end
 
     # A table declares its columns; the rows come from the subject. `column`
@@ -202,7 +202,7 @@ module SlimPickins
       columns = @columns
       @columns = nil
 
-      open(:table, class: name && "table table--#{name}")
+      open(:table, class: token(:table, name))
       text_tag(:caption, caption) if caption
       sample = rows.first
       columns.each { |c| c[:sample] = sample && Subject.new(sample).fetch(c[:name]) }
@@ -246,14 +246,14 @@ module SlimPickins
     end
 
     def aside(&block)
-      open(:aside)
+      open(:aside, class: token(:aside))
       nest(&block)
       close(:aside)
     end
 
     def grid(*args, columns: nil, &block)
       variant, = name_and_content(args)
-      open(:div, class: ['grid', variant && "grid--#{variant}"].compact.join(' '),
+      open(:div, class: token(:grid, variant),
                  style: columns && "--columns: #{columns}")
       nest(&block)
       close(:div)
@@ -261,21 +261,21 @@ module SlimPickins
 
     def list(*args, &block)
       variant, = name_and_content(args)
-      open(:ul, class: ['list', variant && "list--#{variant}"].compact.join(' '))
+      open(:ul, class: token(:list, variant))
       nest(&block)
       close(:ul)
     end
 
     def item(*args, &block)
       variant, body = name_and_content(args)
-      open(:li, class: variant && "item item--#{variant}")
+      open(:li, class: token(:item, variant))
       body ? emit(CGI.escapeHTML(body.to_s)) : nest(&block)
       close(:li)
     end
 
     def card(*args, &block)
       variant, = name_and_content(args)
-      open(:article, class: ['card', variant && "card--#{variant}"].compact.join(' '),
+      open(:article, class: token(:card, variant),
                      id: card_id)
       deeper { nest(&block) }
       close(:article)
@@ -283,7 +283,7 @@ module SlimPickins
 
     def figure(*args, &block)
       _, caption = name_and_content(args)
-      open(:figure)
+      open(:figure, class: token(:figure))
       nest(&block)
       text_tag(:figcaption, caption) if caption
       close(:figure)
@@ -293,20 +293,20 @@ module SlimPickins
 
     def note(*args)
       variant, body = name_and_content(args)
-      text_tag(:p, body, class: ['note', variant && "note--#{variant}"].compact.join(' '))
+      text_tag(:p, body, class: token(:note, variant))
     end
 
     def prose(*args)
       notation, body = name_and_content(args)
       html = notation == :plain ? Markdown.plain(body) : Markdown.render(body)
-      emit(%(<div class="prose">#{html}</div>))
+      emit(%(<div class="#{token(:prose)}">#{html}</div>))
     end
 
     def badge(*args)
       variant, body = name_and_content(args)
       label = body || variant
       kind = variant || (KNOWN_STATUSES.include?(body.to_s.to_sym) ? body.to_s.to_sym : nil)
-      text_tag(:span, label, class: ['badge', kind && "badge--#{kind}"].compact.join(' '))
+      text_tag(:span, label, class: token(:badge, kind))
     end
 
     KNOWN_STATUSES = %i[ok pending neutral warning error blocker polish].freeze
@@ -314,7 +314,7 @@ module SlimPickins
     def fact(*args)
       name, value = name_and_content(args)
       shown = value.nil? ? subject.fetch(name) : value
-      open(:dl, class: 'fact')
+      open(:dl, class: token(:fact))
       text_tag(:dt, label_for(name, nil))
       text_tag(:dd, present(shown, format_of({ name: name, as: nil })))
       close(:dl)
@@ -322,7 +322,7 @@ module SlimPickins
 
     def snippet(*args)
       language, body = name_and_content(args)
-      open(:pre, class: ['snippet', language && "snippet--#{language}"].compact.join(' '))
+      open(:pre, class: token(:snippet, language))
       text_tag(:code, body)
       close(:pre)
       text_tag(:button, 'Copy', type: 'button', class: 'snippet-copy')
@@ -351,7 +351,7 @@ module SlimPickins
     def metric(*args, as: nil)
       name, label = name_and_content(args)
       value = subject.fetch(name)
-      open(:div, class: 'metric')
+      open(:div, class: token(:metric))
       text_tag(:h3, label_for(name, label), class: 'metric-label')
       text_tag(:div, present(value, as || subject.format_for(name)), class: 'metric-value')
       close(:div)
@@ -423,12 +423,12 @@ module SlimPickins
       name, legend = name_and_content(args)
       label = label_for(name, legend)
       if @in_form
-        open(:fieldset, class: name && "group group--#{name}")
+        open(:fieldset, class: token(:group, name))
         text_tag(:legend, label)
         nest(&block)
         close(:fieldset)
       else
-        open(:div, class: 'group')
+        open(:div, class: token(:group))
         text_tag(:h2, label)
         nest(&block)
         close(:div)
@@ -441,7 +441,7 @@ module SlimPickins
       value = subject.fetch(name)
       kind = type || Inference.input_type(value)
 
-      open(:div, class: 'field')
+      open(:div, class: token(:field))
       text_tag(:label, label_for(name, label), for: name.to_s)
       void(:input,
             id: name.to_s,
@@ -456,7 +456,7 @@ module SlimPickins
     def check(*args)
       name, label = name_and_content(args)
       value = subject.fetch(name)
-      open(:div, class: 'field field--check')
+      open(:div, class: token(:field, :check))
       open(:label, for: name.to_s)
       void(:input, id: name.to_s, name: name.to_s, type: 'checkbox',
                     checked: value ? 'checked' : nil)
@@ -468,7 +468,7 @@ module SlimPickins
     def select(*args, &block)
       name, label = name_and_content(args)
       @selected = subject.fetch(name)
-      open(:div, class: 'field field--select')
+      open(:div, class: token(:field, :select))
       text_tag(:label, label_for(name, label), for: name.to_s)
       open(:select, id: name.to_s, name: name.to_s)
       nest(&block)
@@ -490,11 +490,11 @@ module SlimPickins
                label || (variant && Inference.label(variant)),
                type: (type || (@in_form ? :submit : :button)).to_s,
                formaction: to&.to_s,
-               class: ['button', variant && "button--#{variant}"].compact.join(' '))
+               class: token(:button, variant))
     end
 
     def actions(&block)
-      open(:div, class: 'actions')
+      open(:div, class: token(:actions))
       nest(&block)
       close(:div)
     end
@@ -533,7 +533,7 @@ module SlimPickins
 
     def alignment_of(column, sample)
       kind = format_of(column, sample) || Inference.presentation(column[:sample])
-      %i[money percent number].include?(kind) ? 'numeric' : nil
+      %i[money percent number].include?(kind) ? 'column--numeric' : nil
     end
 
     def amount(value, kind, precision)
@@ -542,7 +542,7 @@ module SlimPickins
              when :percent then Inference.percent(value, precision: precision)
              else               Inference.number(value, precision: precision)
              end
-      classes = [kind.to_s, ('negative' if value.negative?)].compact.join(' ')
+      classes = token(kind, ('negative' if value.negative?))
       text_tag(:span, body, class: classes)
     end
 
@@ -611,6 +611,13 @@ module SlimPickins
       yield
     ensure
       @suppressed = was
+    end
+
+    # The three shapes of a class name, and the only place they are built.
+    # `.word`, `.word--variant`, `.word-part` — derived from the grammar, so a
+    # reader who knows the language already knows the stylesheet.
+    def token(word, variant = nil)
+      [word.to_s, variant && "#{word}--#{variant}"].compact.join(' ')
     end
 
     # Names are Symbols, content is anything else. This is why argument order

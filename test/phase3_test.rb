@@ -31,9 +31,9 @@ class Phase3Test < Minitest::Test
                   library: library, account: Account.new(name: 'Roth', balance: 1))
     assert_includes html, '<nav class="nav" aria-label="Main">'
     assert_includes html, '<h2>Roth</h2>'
-    assert_includes html, '<footer>Made here.</footer>'
+    assert_includes html, '<footer class="footer">Made here.</footer>'
     assert_operator html.index('<nav'), :<, html.index('<h2>Roth')
-    assert_operator html.index('<h2>Roth'), :<, html.index('<footer>')
+    assert_operator html.index('<h2>Roth'), :<, html.index('<footer')
   end
 
   # The layout renders inside the body, but a stylesheet belongs in the head.
@@ -49,7 +49,7 @@ class Phase3Test < Minitest::Test
     page = "page account\n  title .name\n"
     refute_includes page, 'layout'
     assert_includes render(page, library: library, account: Account.new(name: 'x', balance: 1)),
-                    '<footer>Made here.</footer>'
+                    '<footer class="footer">Made here.</footer>'
   end
 
   def test_a_layout_that_never_says_contents_is_an_error

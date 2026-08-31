@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-30'
-next_step: ROADMAP.md Phase 5 — the design system (dan: reuse slim-pickins.css or own one?)
+next_step: ROADMAP.md Phase 6 — a Sinatra template handler, and the escape hatch
 docs: README.md
 related:
 - slim-pickins

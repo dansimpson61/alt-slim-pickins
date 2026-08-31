@@ -1,4 +1,4 @@
-stylesheet "/css/portfolio.css"
+stylesheet "/assets/slim-pickins.css"
 nav
   link home, "Overview"
   link accounts

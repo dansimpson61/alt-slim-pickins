@@ -72,7 +72,7 @@ module SlimPickins
         x2 = cx + radius * Math.cos(angle)
         y2 = cy + radius * Math.sin(angle)
         large = sweep > Math::PI ? 1 : 0
-        format('<path class="slice slice--%d" d="M%.1f,%.1f L%.1f,%.1f A%.1f,%.1f 0 %d,1 %.1f,%.1f Z" />',
+        format('<path class="chart-slice chart-slice--%d" d="M%.1f,%.1f L%.1f,%.1f A%.1f,%.1f 0 %d,1 %.1f,%.1f Z" />',
                i, cx, cy, x1, y1, radius, radius, large, x2, y2)
       end.join
     end
