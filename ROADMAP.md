@@ -238,18 +238,26 @@ The vocabulary renders classes; something must define them.
   surface; everything else on the builder stays private and a test asserts it.
   Used once in 284 sentences. Results in [PHASE6.md](PHASE6.md).
 
-## Phase 7 — Port a real app  ← next
+## Phase 7 — Port a real app  ← dan's judgement outstanding
 
-**Do this first.** `link show, "Details"` derives `/show`, not
-`/accounts/2`. The language has no opinion about routing, and roth will hit
-it on its first page. Decide whether `link` asks the app — a `path_for(name,
-subject)` on the contract, the same shape as `label_for` and `format_for` —
-or whether routes are simply said with `to:`. The precedent from Phases 0 and
-2 says ask the app.
+The prerequisite this phase opened with — settle whether `link` asks the app
+for a path or takes `to:` — **turned out not to arise.** roth's page has no
+links in it at all; its only `link` is the stylesheet. Deciding it here would
+have been the one word drafted without a real page asking for it, which is the
+mistake Phase 8 exists to avoid. **Still open, and still the largest gap before
+a second port.**
 
-- **Port roth entirely** `agent` — every view, not the one page.
-  *Done looks like:* roth runs on this language, and the diff against its old
-  views is reviewed line by line.
+The wall roth actually hit was that a fifth of its page is a JavaScript mount
+surface — empty holes and id handles, holding no data. dan's call: each becomes
+a word in roth's own module, not an `id:` modifier.
+
+- **Port roth entirely** `agent` — **Done.** roth has one view, and it is
+  ported: 88 non-blank lines of Slim become 40 sentences, and 35 lines of its
+  script go with them. Three app words (`pending`, `balance_chart`,
+  `raw_output`). The escape hatch now stands at **9 uses in 324 sentences —
+  1 in 36**, against Phase 6's once-in-284, which is that claim taking its
+  first honest hit. Line-by-line review and every limit in
+  [PHASE7.md](PHASE7.md).
 - **Judge it** `dan` — is this better to read and write than the Slim it
   replaced?
   *Done looks like:* the answer, recorded, including if it is no.

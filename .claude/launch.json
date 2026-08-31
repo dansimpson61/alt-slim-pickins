@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "roth",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["examples/roth/app.rb", "-p", "4577"],
+      "port": 4577
+    },
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["examples/portfolio/app.rb", "-p", "4576"],
+      "port": 4576
+    }
+  ]
+}

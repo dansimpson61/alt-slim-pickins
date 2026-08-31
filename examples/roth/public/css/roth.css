@@ -1,0 +1,89 @@
+/* roth's own styles.
+ *
+ * slim-pickins.css dresses every word of the language — the form, the fields,
+ * the metrics grid, the buttons, the disclosure, the footer. Nothing of that
+ * is repeated here.
+ *
+ * What is left is what roth owns: the chart its script draws, and the classes
+ * that script creates at runtime. An app that adds a word owns its styling,
+ * which is exactly the boundary Phase 6 named.
+ */
+
+/* --- the chart frame ----------------------------------------------------
+ * Emitted by the `balance_chart` word. The frame exists so the tooltip has
+ * something to position against.
+ */
+.chart-frame { position: relative; margin: var(--gap) 0; }
+
+/* Full width on purpose. The language's own `.chart` is capped at
+ * `--measure-chart`, which is right for a figure it draws and wrong for this. */
+.chart-canvas {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+}
+
+/* --- the legend --------------------------------------------------------- */
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.4rem 0 0.2rem 0.25rem;
+}
+
+/* `key`, not `item` — `item` is a word of the language, and its rules would
+ * reach these divs too. An app's runtime-generated classes share a namespace
+ * with the vocabulary's. */
+.chart-legend .key { display: flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; }
+.chart-legend .swatch { width: 12px; height: 10px; border: 1px solid var(--rule); }
+.chart-legend .stack-base { background: #b9d8ef; }
+.chart-legend .stack-ss   { background: #8fc0e3; }
+.chart-legend .stack-rmd  { background: #63a6d6; }
+.chart-legend .stack-conv { background: #327fbf; }
+.chart-legend .tax-line   { background: repeating-linear-gradient(90deg, #333 0 2px, #fff 2px 4px); }
+
+/* --- the tooltip -------------------------------------------------------- */
+
+.chart-tooltip {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+  max-width: 180px;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  font-size: 0.7rem;
+  line-height: 1.15;
+}
+
+.chart-tooltip h4 { margin: 0 0 0.15rem; font-size: 0.75rem; font-weight: 600; }
+.chart-tooltip table { border-collapse: collapse; }
+.chart-tooltip td { padding: 0 0.25rem 0.15rem 0; white-space: nowrap; }
+.chart-tooltip td.val { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* --- what the script draws inside the SVG -------------------------------
+ * These never appear in the page. app.js creates them, so no word can emit
+ * them and check_styles.rb could not know about them either.
+ */
+.series-label { font-size: 0.6rem; fill: var(--ink); }
+.area-trad { fill: #c7d8e6; }
+.area-roth { fill: #89b3d8; }
+.area-income { fill: #b4d4ef; }
+.tax-line { stroke: #444; stroke-width: 1; fill: none; stroke-dasharray: 2 3; }
+.axis { stroke: var(--rule); stroke-width: 0.5; }
+.band-deduction { fill: #f2f8fd; fill-opacity: 0.85; stroke: #b9d7ea; stroke-width: 0.6; }
+.band-bracket { fill: #e8f1f7; stroke: #d3e3ec; stroke-width: 0.45; }
+.hover-line { stroke: #222; stroke-width: 0.7; stroke-dasharray: 3 3; opacity: 0.55; }
+
+.stack-base { fill: #b9d8ef; }
+.stack-ss   { fill: #8fc0e3; }
+.stack-rmd  { fill: #63a6d6; }
+.stack-conv { fill: #327fbf; }
+
+/* The raw-JSON pane grows without pushing the page around. */
+#output { max-height: 20rem; overflow: auto; }
