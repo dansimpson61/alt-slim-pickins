@@ -26,8 +26,78 @@ get around one, and the language is small because of it.
 
 It removes an ability the language currently has — **the ability to fail
 late** — and like the others it looks like a restriction and pays like a tool.
-Phase 4 builds it; Phases 0 to 3 are what make the case for it, repeatedly, by
+Phase 5 builds it; Phases 0 to 4 are what make the case for it, repeatedly, by
 being the kind of work where late failure hurts.
+
+## Two constraints that run through every phase
+
+0.2 is a porting roadmap, and porting generates the exact pressure that makes
+languages ugly: a wall, a deadline, and a word added to get past it. Every
+language that got krufty got that way one reasonable-looking exception at a
+time. These two constraints are not phases; they are conditions on all of them.
+
+### 1. It must stay lovely to read
+
+Simplicity, readability and guessability on one side; expressiveness, richness
+and extensibility on the other. The tension is real and permanent, and the only
+defence that has ever worked here is making an abstract property **checkable**
+— which is what `check_grammar.rb` and `check_styles.rb` already do for two
+others.
+
+Measured today, as the baseline to hold:
+
+| vital | now | what a rise would mean |
+|---|---|---|
+| distinct modifiers used in real pages | **10** | configuration creeping in where words should be |
+| mean arguments per sentence | **0.37** | sentences being configured rather than said |
+| longest sentence | 4 arguments | a word doing more than one job |
+| mean nesting depth | 2.59 (max 7) | structure the vocabulary is not carrying |
+| words used at least once | **49 of 50** | dead vocabulary, which is kruft |
+| structural shapes covering the vocabulary | **7** | irregularity |
+
+`check_shape.rb` is the third checker and Phase 1 builds it. **A vital that
+moves is not a failure — it is a conversation.** The check prints them and
+fails only on the last row.
+
+The part that cannot be automated stays dan's: `pages/specimen.sp` puts every
+word on one page and has never once been read as an aesthetic object. **Read it
+aloud.** If it does not read like prose, the vocabulary has drifted and no
+metric will say so.
+
+### 2. Adding a word must be easy, and easy to do *well*
+
+Extensibility is what lets richness emerge. If adding a word is arduous, words
+get added badly or not at all — and both make the language worse.
+
+It is currently arduous, and 0.1 left the evidence:
+
+- **22 of 50 words reach directly into `Builder`'s instance variables.** There
+  are twelve of them, and `builder.rb` is 842 lines — 49% of the library.
+- **Three words gather registering children — `table`, `chart`, `choose` — and
+  each re-implements the mechanism**, with its own collection ivar and its own
+  near-identical guard: `registering!`, `charting!`, `branching!`. One idea,
+  three copies.
+
+That third copy is mine. I wrote `charting!` in 0.1's Phase 8 by pattern-matching on
+`registering!` without noticing I was duplicating it, which is exactly how kruft
+arrives: not by bad judgement but by a reasonable local decision made twice.
+
+**So a word should be built from named shapes, not from Builder's insides.** The
+fifty existing words already fall into seven:
+
+| shape | what it does | words |
+|---|---|---|
+| **encloses** | opens, nests children, closes | 13 |
+| **presents** | an attribute → a value, with label and format precedence | 12 |
+| **says** | content only, no subject | 9 |
+| **registers** | contributes to a gatherer | 7 |
+| **document** | places itself in head or body, wherever written | 5 |
+| **gathers** | collects registering children, then renders | 3 |
+| **iterates** | `each` | 1 |
+
+If a new word fits a shape, adding it is a declaration. **If it fits none, that
+is the thing to argue about in writing** — which turns irregularity from
+something that accumulates silently into something that has to be defended.
 
 ## The subject: `~/dev/dashboard`
 
@@ -74,7 +144,7 @@ vocabulary. That is the best evidence yet for *name the situation, do not write
 the branch*, and it comes from a page written without knowledge of the rule.
 
 **It is static analysis of what the branches test, not a port.** It says the
-odds are good. Phase 3 is where it is either confirmed or embarrassed.
+odds are good. Phase 4 is where it is either confirmed or embarrassed.
 
 ## The risk register
 
@@ -83,16 +153,22 @@ Highest first. This is what the phase order is for.
 | Unknown | Risk | Retired by |
 |---|---|---|
 | A page someone else designed can be said at all | **High** | Phase 0 |
-| Conditionals dissolve into vocabulary *at scale* | **High** | Phase 0, confirmed in Phase 3 |
-| Navigation has an answer that is not a guess | **High** | Phase 1 |
-| A form can carry what it must without a hole | **High**, narrow | Phase 2 |
-| What a page cannot say about arrangement | **Medium** | Phase 3 |
-| Demands are computable without rendering | Medium | Phase 4 |
-| The vocabulary has words with no page behind them | Low, unexamined | Phase 6 |
+| Conditionals dissolve into vocabulary *at scale* | **High** | Phase 0, confirmed in Phase 4 |
+| **Adding a word is cheap enough to do well** | **High** | Phase 1 |
+| Navigation has an answer that is not a guess | **High** | Phase 2 |
+| A form can carry what it must without a hole | **High**, narrow | Phase 3 |
+| **The language stays lovely as it grows** | **High**, permanent | never — it is a standing constraint |
+| What a page cannot say about arrangement | **Medium** | Phase 4 |
+| Demands are computable without rendering | Medium | Phase 5 |
+| The vocabulary has words with no page behind them | Low, unexamined | Phase 7 |
 | The grammar needs changing | Low | eight phases said no |
 
 The first two are retired by one 42-line view, which is the argument for
 starting there rather than with the largest page or the newest idea.
+
+The row with no phase against it is the one to watch. **Nothing retires it** —
+it is checked every run and judged by eye at every phase boundary, because a
+language does not become ugly on a date.
 
 ## The one rule that is not negotiable
 
@@ -112,13 +188,18 @@ than editing it would have.
   points at the current phase. Commit after each item.
 - **Every item has a "done looks like".** If you cannot verify it, it is not
   done.
-- **`check_grammar.rb` and `check_styles.rb` stay green.** Every new word
-  arrives with a sentence and a rule.
+- **`check_grammar.rb`, `check_styles.rb` and `check_shape.rb` stay green.**
+  Every new word arrives with a sentence, a rule and a shape.
+- **A word is added by declaring a shape, or by arguing in writing for a new
+  one.** No word reaches into `Builder`'s insides that a shape could reach for
+  it. This is the second standing constraint, enforced per commit.
+- **The aesthetic vitals are printed every run and read at every phase
+  boundary.** A number that moved is a conversation, not a failure.
 - **Verify before asserting.** No count, ratio or claim without measuring it,
   and say what the measurement covered.
-- **Checkers are not enough — look at the rendered output.** Five defects in
-  Phase 5 of 0.1, two in Phase 7 and four in Phase 8 passed every checker and
-  were found only by loading the page.
+- **Checkers are not enough — look at the rendered output.** In 0.1: five
+  defects in its Phase 5, two in its Phase 7 and four in its Phase 8 passed
+  every checker and were found only by loading the page.
 - **Resume:** `curl http://127.0.0.1:4000/brief/alt-slim-pickins`.
 
 Legend: `dan` (a decision only you can make) · `agent` (me) · `conv` (a
@@ -157,7 +238,45 @@ where routing belongs.
 **If this phase fails, the rest of the roadmap changes shape**, which is
 exactly why it is first and why it is one small file.
 
-## Phase 1 — Navigation, settled
+## Phase 1 — The shapes a word comes in
+
+**Before any word is added.** Phase 0 will have found walls; Phases 2 and 3
+will want to fill them. Adding words into an 842-line class with twelve shared
+ivars is how the next three phases would make the language worse, and it is the
+one thing on this roadmap that is cheaper to do early than late.
+
+This phase is about the second standing constraint, and it is prep, not
+progress. It should be small.
+
+- **Extract gathering** `agent` — one mechanism for `table`/`column`,
+  `chart`/`band`/`line`/`level` and `choose`/`when`/`otherwise`, in place of
+  three. The guard message writes itself from the declaration, so *"`band`
+  belongs inside a chart"* stops being a hand-written string in three places.
+  *Done looks like:* the three collection ivars and the three `…!` guards are
+  one thing, every test still passes, and no page changed.
+- **Name the seven shapes, in the vocabulary** `agent` — `VOCABULARY.md`
+  already declares seven slots per word; the shape is the eighth thing every
+  entry implicitly has and never states.
+  *Done looks like:* every entry names its shape, and the shapes are defined
+  once at the top.
+- **`check_shape.rb`** `agent` — the third checker, in the family of the other
+  two. Every word fits a declared shape; the aesthetic vitals are printed every
+  run.
+  *Done looks like:* it is green, it prints the six numbers from the table
+  above, and it fails only when a word fits no shape.
+- **Adding a word is a declaration** `agent` — demonstrate by rewriting two
+  existing words against the shapes, chosen from different families.
+  *Done looks like:* the diff is smaller than the word was, and a reader can
+  see what kind of word it is without reading its body.
+- **Judge the surface** `dan` — is adding a word now something you would
+  cheerfully do at 11pm?
+  *Done looks like:* the answer. If it is no, this phase is not finished.
+
+**The trap to avoid:** shapes are a description of what the vocabulary already
+is, not a framework it must now fit. If naming them requires bending three
+words to match, the taxonomy is wrong and the words are right.
+
+## Phase 2 — Navigation, settled
 
 Forced by Phase 0 rather than chosen. `link show, "Details"` derives `/show`;
 the dashboard has **65 interpolated hrefs** and is nothing but navigation.
@@ -176,7 +295,7 @@ Deferred twice in 0.1 for want of evidence — there is now enough.
 - **The `to:` escape survives** `conv` — an external URL is not a route.
   `http://127.0.0.1:4577` must stay sayable.
 
-## Phase 2 — The word for what a form carries
+## Phase 3 — The word for what a form carries
 
 **91 hidden inputs.** Every dashboard action carries `path` and `return_to`,
 some carry `cmd`. There is no word for *a value a form carries but does not
@@ -196,7 +315,7 @@ drafted the way the good ones were: **after the pages have hurt.**
   return path may not be the same idea.
   *Done looks like:* one word, or two, decided on the evidence.
 
-## Phase 3 — The rest of it, in anger
+## Phase 4 — The rest of it, in anger
 
 Conditional and bespoke UI at 1,555 lines. The 81% is a prediction; this is the
 test.
@@ -220,7 +339,7 @@ test.
   *Done looks like:* the judgement, recorded, including what the sibling does
   better.
 
-## Phase 4 — The contract, checked at boot
+## Phase 5 — The contract, checked at boot
 
 The proscription, built. By now the port will have made the case for it several
 times over, which is the right order — 0.1's mistake with `chart` was drafting
@@ -242,7 +361,7 @@ before the evidence.
   *Done looks like:* one command answers it across every `.sp` file in a
   project.
 
-## Phase 5 — Errors that teach
+## Phase 6 — Errors that teach
 
 Cheap, and it compounds with everything above. 0.1's best-kept secret is that
 its errors already speak the language rather than the implementation; almost
@@ -254,7 +373,7 @@ nothing has been done with that.
 - **A wall names its nearest word** `conv` — an unknown word is a typo more
   often than a gap, and the vocabulary is fifty entries long.
 
-## Phase 6 — Subtraction
+## Phase 7 — Subtraction
 
 A language that only grows is not being designed. Applied to files, using the
 project's own rule: **a word with no page behind it goes.**
@@ -293,13 +412,23 @@ language is small.
 
 ## What "how far along" means
 
-Phases 0 to 2 are small and retire three of the four High risks — they are one
-view, one decision and one word. Phase 3 is the largest by effort and confirms
-or destroys the central prediction. Phase 4 is the point of the roadmap, and it
-is deliberately after the work that argues for it.
+Phases 0 to 3 are small and retire four of the five High risks that a phase can
+retire — one view, one extraction, one decision and one word. Phase 4 is the
+largest by effort and confirms or destroys the central prediction. Phase 5 is
+the point of the roadmap, and it is deliberately after the work that argues for
+it.
+
+**Phase 1 buys nothing a user could see, and it is second on purpose.** Phases
+3 and 4 will want to add words, and adding them into an 842-line class with
+twelve shared ivars is how the next three phases would quietly make the
+language worse. It is the only item here that is cheaper early than late.
 
 If Phase 0 fails, everything after it changes shape. That is why it is first,
 and why it is forty-two lines.
+
+The sixth High risk — that the language stays lovely — has no phase, because
+nothing retires it. It is the one that will be lost slowly if it is lost at
+all.
 
 **The one thing I would most like to be true at the end of 0.2:** that someone
 who did not build it wrote a page, got it wrong, and the language told them —

@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: ROADMAP-0.2.md is written and nothing in it is started. Phase 0 is one dashboard view — views/ports.slim, 42 lines — ported until the first thing that cannot be said, and the wall recorded. ~/dev/dashboard must keep working untouched throughout
+next_step: ROADMAP-0.2.md written, nothing started. Phase 0 is one dashboard view (views/ports.slim, 42 lines) ported until the first wall. Phase 1 lands before any new word: extract the triplicated gathering mechanism, name the 7 shapes a word comes in, add check_shape.rb. ~/dev/dashboard keeps working untouched
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
