@@ -1,12 +1,13 @@
 # Vocabulary — draft 3
 
-Status: **implemented.** Forty-seven words, every one of them a real method on
+Status: **implemented.** Fifty words, every one of them a real method on
 `Builder` and every one exercised by a sentence somewhere in the repo —
 `check_grammar.rb` fails if either stops being true.
 
-Only `chart` is still the entry it was drafted as: written without evidence,
-carrying more irreducible configuration than any other word, and ROADMAP
-Phase 8 exists to redraft it against a real need or cut it.
+Every entry has now been drafted against a real page. `chart` was the last
+holdout — written on paper, unevidenced, and claiming inferences it did not
+make — and Phase 8 redrafted it against roth's two charts, adding `band`,
+`line` and `level` and cutting `pie`, `bar` and `area` for want of a page.
 
 The grammar is settled and is one sentence ([DESIGN.md](DESIGN.md)). It cannot
 really be wrong any more. The vocabulary *can* be incomplete, and in a language
@@ -664,22 +665,96 @@ Found by reading a real page, not by imagining one. `#metrics` in
 
 ### `chart`
 
-- **name** — the kind: `line`, `bar`, `area`, `pie`
-- **content** — the series
-- **modifiers** — `over:`, `label:`
-- **children** — none
-- **subject** — unchanged
-- **infers** — axes, scale and legend from the data; the x axis from `over:`
+- **name** — the collection to chart
+- **content** — a caption
+- **modifiers** — `over:` — which attribute the x axis reads
+- **children** — `band`, `line`, `level`
+- **subject** — becomes the collection, for its children
+- **infers** — the scale, the axes and their ticks, the x labels from the
+  singular of the name, every series label from the row's `label_for`, every
+  value's formatting from the row's `format_for`, and the key from the series
 - **renders** — inline `<svg>`
 
 ```
-chart line, .balances, over: .years
-chart pie, .allocation, label: "Allocation"
+chart balances, "Projected balance"
+  band total
 ```
 
-**Least settled word here.** A chart has more irreducible configuration than
-anything else in the vocabulary, and this entry is a guess at where the line
-falls between inference and instruction.
+**The same shape as `table`, and for the same reason.** A table declares its
+columns and the rows come from the subject; a chart declares its series and the
+points come from the subject. It was redrafted this way in Phase 8 against the
+two real charts in `~/dev/roth` — before that it took parallel flat arrays, the
+one data shape nothing else in the language uses, and claimed inferences it did
+not make.
+
+`chart years` reads each row's `year`. `over:` says it where the collection's
+name does not singularise to an attribute the rows have; failing both, the axis
+counts.
+
+---
+
+### `band`
+
+- **name** — the attribute to draw
+- **content** — a label, overriding the row's own
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — its label and its number formatting from the row
+- **renders** — a filled `<path>`, stacked on the bands before it
+
+```
+band base_income
+band social_security
+```
+
+Valid only inside `chart`. Bands accumulate: the second sits on the first, so a
+chart of four bands is a stacked area and the top of the stack is the total.
+
+---
+
+### `line`
+
+- **name** — the attribute to draw
+- **content** — a label, overriding the row's own
+- **modifiers** — `from:` — take the points from another collection
+- **children** — none
+- **subject** — unchanged
+- **infers** — as `band`
+- **renders** — a stroked `<path>`, over the bands rather than added to them
+
+```
+line federal_tax
+line gross_income, "Do nothing", from: .baseline_years
+```
+
+Valid only inside `chart`. `from:` is the same modifier `each` takes and means
+the same thing — this line is about something else. It is how a comparison is
+laid over a chart without a second chart.
+
+---
+
+### `level`
+
+- **name** — none
+- **content** — the value, then a label
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — nothing; both its parts are said
+- **renders** — a horizontal rule across the plot, labelled where it sits
+
+```
+level .standard_deduction, "Standard deduction"
+```
+
+Valid only inside `chart`. A threshold, a target, a deduction — read against
+the data rather than looked up in the key, which is why it is labelled in place
+and does not appear there.
+
+A level does not stretch the scale. The data sets the scale and a reference
+that falls outside it is not drawn, because a threshold far above the data
+tells a reader nothing and flattens everything that would have.
 
 ---
 

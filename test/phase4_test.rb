@@ -156,15 +156,6 @@ class Phase4Test < Minitest::Test
 
   # --- chart, the entry still marked a guess -----------------------------
 
-  def test_chart_renders_something_honest_for_each_kind
-    %i[line bar pie area].each do |kind|
-      svg = SlimPickins::Charting.render(kind, [1, 2, 3], label: 'k')
-      assert_includes svg, %(class="chart chart--#{kind}")
-      assert_includes svg, '<title>k</title>'
-    end
-  end
-
-  def test_a_chart_of_nothing_renders_nothing
-    assert_equal '', SlimPickins::Charting.render(:line, [])
-  end
+  # `chart` was redrafted in Phase 8 against roth's two real charts, and its
+  # tests moved with it — see test/phase8_test.rb.
 end

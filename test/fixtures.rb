@@ -19,9 +19,10 @@ module Fixtures
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
                        :tour_url, keyword_init: true)
   Target = Struct.new(:asset_class, :target, :actual, :drift, keyword_init: true)
+  Balance = Struct.new(:year, :total, keyword_init: true)
   Contribution = Struct.new(:amount, :account_id, :frequency, :auto_invest, keyword_init: true)
   Portfolio = Struct.new(:as_of, :total_value, :ytd_return, :annual_income, :years_to_rmd,
-                         :allocation, :balances, :years, :drifted?, :targets, :growth_rate,
+                         :balances, :drifted?, :targets, :growth_rate,
                          :inflation_rate, :horizon_years, :contribution, :accounts,
                          keyword_init: true)
 
@@ -54,8 +55,7 @@ module Fixtures
       Portfolio.new(
         as_of: Date.new(2026, 8, 30), total_value: 1_284_506, ytd_return: 0.0742,
         annual_income: 48_200, years_to_rmd: 13,
-        allocation: [0.63, 0.21, 0.16], balances: [900_000, 1_020_000, 1_284_506],
-        years: [2024, 2025, 2026], drifted?: true,
+        balances: balances, drifted?: true,
         targets: targets, growth_rate: 0.05, inflation_rate: 0.02, horizon_years: 30,
         contribution: Contribution.new(amount: 500, account_id: 'roth',
                                        frequency: 'monthly', auto_invest: true),
@@ -70,6 +70,15 @@ module Fixtures
       formats: { total_value: :money, ytd_return: :percent,
                  annual_income: :money, years_to_rmd: :number }
     )
+  end
+
+  # A chart's subject is a collection of rows, exactly like a table's. The
+  # first draft of `chart` took parallel flat arrays — `balances` beside
+  # `years` — which is the one data shape nothing else in the language uses.
+  def balances
+    [[2024, 900_000], [2025, 1_020_000], [2026, 1_284_506]].map do |year, total|
+      labelled(Balance.new(year: year, total: total), formats: { total: :money })
+    end
   end
 
   def targets
@@ -130,7 +139,7 @@ module Fixtures
 
   Specimen = Struct.new(:blurb, :markdown, :origin, :reviewed_on, :total_value, :ytd_return,
                         :holdings_count, :worst_day, :holdings, :drifted?, :nothing,
-                        :balances, :years, :allocation, :example, :amount, :rate,
+                        :balances, :example, :amount, :rate,
                         :frequency, :auto_invest, :growth_rate, :horizon_years,
                         keyword_init: true)
 
@@ -146,9 +155,10 @@ module Fixtures
                    holding('VXUS', 890, 61_410, -3_180, 0.07),
                    holding('BND', 410, 117_760, 21_050, 0.14)],
         drifted?: true, nothing: [],
-        balances: [900_000, 980_000, 1_020_000, 1_180_000, 1_284_506],
-        years: [2022, 2023, 2024, 2025, 2026],
-        allocation: [0.63, 0.21, 0.16],
+        balances: [[2022, 900_000], [2023, 980_000], [2024, 1_020_000],
+                   [2025, 1_180_000], [2026, 1_284_506]].map do |year, total|
+                     labelled(Balance.new(year: year, total: total), formats: { total: :money })
+                   end,
         example: "section holdings\n  each holding\n    money .market_value",
         amount: 500, rate: 0.05, frequency: 'monthly', auto_invest: true,
         growth_rate: 0.05, horizon_years: 30

@@ -3,7 +3,7 @@
 Status: **settled and implemented.** This was written as a wish, before any
 code existed, so that every later extension could be reviewed against it. It
 has not needed to change: the grammar below is the grammar the transform
-implements, and Phases 0–7 added forty-seven words without adding a rule.
+implements, and Phases 0–8 added fifty words without adding a rule.
 
 Everything here is exercised — `check_grammar.rb` holds every sentence in this
 document and every `.sp` file in the repo to the table in it.
@@ -296,14 +296,24 @@ form password
 If a sentence here needs the implementation to explain it, the grammar has an
 irregularity and the grammar is what gets fixed.
 
-## Open questions
+## What the open questions turned out to be
 
-- **The vocabulary itself.** The grammar is one sentence and cannot really be
-  wrong now; the vocabulary can be *incomplete*, and in a language where words
-  are the only construct, every gap is a wall. Enumerating the words of web
-  presentation is the next real work. First estimate is roughly forty.
-- **`doctype`.** One keyword that fits no rule. Unsolved rather than faked.
-- **Backend.** `.foo` is not valid Ruby, so we own the grammar — this is not
-  Slim with a different tag line. The transform stays thin (indentation to
-  blocks, `.foo` to `subject.foo`, every line a Ruby method call). Whether we
-  keep Temple for escaping and generation is a separate and later question.
+- **The vocabulary itself.** The estimate was "roughly forty". It settled at
+  **fifty**, across eight phases, and every entry was drafted against a real
+  page — `chart` last and most reluctantly, in Phase 8. The bet held: the
+  grammar never changed to accommodate a word.
+- **`doctype`.** Solved by absorption rather than by a keyword: it is something
+  `page` knows. See its entry in [VOCABULARY.md](VOCABULARY.md).
+- **Backend.** Settled as drafted. The transform is thin — indentation to
+  blocks, `.foo` to `subject.foo`, every line a Ruby method call — and Temple
+  was never needed. `Builder` escapes and generates directly, and every word is
+  a real method, so an unknown word fails with its own name.
+
+### And one rule nobody had written down
+
+**There is no numeric literal.** Content is a quoted string or a dotted value;
+a bare number is neither, so `level 1000000.0` is not a sentence. It was found
+in Phase 8 by trying to write one, and the checker refused it before any code
+did. A figure in a page has nowhere to stand — it belongs to the app, which is
+the same division of labour as everywhere else: the word carries the
+presentation, the argument carries the domain.

@@ -11,10 +11,21 @@ section projection, "Your projection"
     metric roth_delta
 
   figure "Where each year's income comes from, and the tax it attracts"
-    drawing .income
+    chart years
+      level .standard_deduction, "Standard deduction"
+      each bracket
+        level .ceiling, .label
+      band base_income
+      band social_security
+      band rmd
+      band conversion
+      line federal_tax
+      line gross_income, "Do nothing", from: .baseline_years
 
   figure "Traditional against Roth, over the whole horizon"
-    drawing .balances
+    chart years
+      band trad_end
+      band roth_end
 
   table years, "Year by year"
     column year

@@ -2,7 +2,6 @@
 
 require 'delegate'
 require_relative 'engine'
-require_relative 'chart'
 
 module Roth
   # A presenter over the engine's result.
@@ -78,16 +77,27 @@ module Roth
 
     def years = @years ||= primary.years.map { |y| Year.new(y) }
 
-    # --- the two drawings -------------------------------------------------
+    # --- what the two charts are drawn from -------------------------------
+    #
+    # Phase 8 redrafted `chart` against the 130 lines of Ruby that used to live
+    # here. All of it is vocabulary now — bands, an overlay line, reference
+    # levels, the key, the axes and the hover — so this is reduced to naming
+    # the three things the page cannot infer.
 
-    def income = chart.income
-    def balances = chart.balances
+    def baseline_years = compared? ? baseline.years.map { |y| Year.new(y) } : []
 
-    def chart
-      @chart ||= Chart.new(years,
-                           standard_deduction: primary.standard_deduction,
-                           brackets: primary.brackets,
-                           baseline: compared? ? baseline.years.map { |y| Year.new(y) } : nil)
+    def standard_deduction = primary.standard_deduction
+
+    Bracket = Struct.new(:ceiling, :label)
+
+    # The engine's thresholds are on *taxable* income and this chart's axis is
+    # gross, so each sits one standard deduction higher than its own number.
+    # The first is dropped: a 10% bracket starting at the deduction is the
+    # deduction line, already drawn.
+    def brackets
+      primary.brackets.drop(1).map do |threshold, rate|
+        Bracket.new(threshold + standard_deduction, "#{(rate * 100).round}%")
+      end
     end
 
     # What the scenario had to say about its own inputs. Empty on a sound one,
@@ -150,14 +160,15 @@ module Roth
       year: 'Year', age_primary: 'Age', base_income: 'Base income',
       social_security: 'Social Security', rmd: 'Distribution',
       conversion: 'Converted', federal_tax: 'Federal tax',
-      irmaa_applied_cost: 'Medicare surcharge',
+      irmaa_applied_cost: 'Medicare surcharge', gross_income: 'Do nothing',
       trad_end: 'Traditional', roth_end: 'Roth'
     }.freeze
 
     FORMATS = {
       base_income: :money, social_security: :money, rmd: :money,
       conversion: :money, taxable_income: :money, federal_tax: :money,
-      irmaa_applied_cost: :money, trad_end: :money, roth_end: :money
+      irmaa_applied_cost: :money, gross_income: :money,
+      trad_end: :money, roth_end: :money
     }.freeze
 
     # A year is a label, not a quantity — 2025, never 2,025. Returning it as

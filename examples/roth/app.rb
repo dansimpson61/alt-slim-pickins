@@ -25,23 +25,17 @@ require_relative 'lib/scenario'
 require_relative 'lib/projection'
 
 module Roth
-  # The escape hatch, and by this round it is down to one word.
+  # roth has no words of its own.
   #
-  # Round one needed three — `pending` for each figure the server did not know,
-  # plus mounts for the chart and the raw JSON. Rendering on the server removed
-  # all of them: the figures are real now, so `metric` presents them, and the
-  # JSON dump is replaced by the table the specification asked for. What is
-  # left is genuinely roth's: a picture roth drew.
-  module Words
-    # The tip ships `hidden`. Leaving it to the script meant an empty bordered
-    # box sat under every chart until a pointer first moved — invisible to
-    # every checker, obvious the moment anyone looked at the page.
-    def drawing(*args)
-      _, svg = arguments(args)
-      html(%(<div class="#{token(:drawing)}">#{svg}<div class="drawing-tip" hidden></div></div>))
-    end
-  end
-
+  # Round one of the port needed three: `pending` for each figure the server
+  # did not know, plus mounts for the chart and the raw JSON pane. Rendering on
+  # the server removed all but one — `drawing`, which carried the 130 lines of
+  # Ruby that drew roth's charts. Phase 8 redrafted `chart` against exactly
+  # those 130 lines, and the last word went with them.
+  #
+  # An app that speaks only the vocabulary is the strongest form of the claim
+  # this project set out to test, and it took a real app's real charts to get
+  # there.
   class App < Sinatra::Base
     helpers SlimPickins::Helpers
 
@@ -56,10 +50,7 @@ module Roth
     # ignored and `run!` takes 4567 — which roth itself is usually holding.
     set :port, ENV.fetch('PORT', 4577).to_i
 
-    SlimPickins::Template.libraries[settings.views] =
-      SlimPickins::Library.from(settings.views).tap do |lib|
-        lib.instance_variable_set(:@words, Words)
-      end
+    SlimPickins::Template.libraries[settings.views] = SlimPickins::Library.from(settings.views)
 
     REPORT = File.join(settings.views, 'partials', 'report.sp')
 

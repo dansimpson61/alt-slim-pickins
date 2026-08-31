@@ -238,7 +238,7 @@ The vocabulary renders classes; something must define them.
   surface; everything else on the builder stays private and a test asserts it.
   Used once in 284 sentences. Results in [PHASE6.md](PHASE6.md).
 
-## Phase 7 — Port a real app  ← dan's judgement outstanding
+## Phase 7 — Port a real app  ✔ complete
 
 The prerequisite this phase opened with — settle whether `link` asks the app
 for a path or takes `to:` — **turned out not to arise.** roth's page has no
@@ -267,19 +267,39 @@ a word in roth's own module, not an `id:` modifier.
   grid permanently non-responsive, and `column` asked the enclosing subject for
   its header where `format_of` eight lines away asked the row. Line-by-line
   review and every limit in [PHASE7.md](PHASE7.md).
-- **Judge it** `dan` — is this better to read and write than the Slim it
-  replaced?
-  *Done looks like:* the answer, recorded, including if it is no.
+- **Judge it** `dan` — **Done, 2026-08-31: clearly worth it.** "We are exactly
+  where we had hoped we would be at this phase of the project. We have strong
+  foundations and we are learning as we build."
 
-## Phase 8 — `chart`
+  An outside review read the finished port and found four seams, all real and
+  all worked: the validation seam was only half wired, a control and a legend
+  went missing unlogged, the port pinned itself to roth's uncommitted tree
+  without saying so, and `-p` was silently ignored. Its sharpest point stands
+  as the next port's brief — roth exercised forms and tables, this language's
+  home turf, and never touched **conditional or bespoke UI**.
 
-Deliberately last. It is the one entry written without evidence, it has more
-irreducible configuration than any other word, and three pages have failed to
+## Phase 8 — `chart`  ✔ complete
+
+Deliberately last. It was the one entry written without evidence, it had more
+irreducible configuration than any other word, and three pages had failed to
 test it.
 
-- **Find a real charting need** `dan` — roth has an SVG balance chart already.
-  *Done looks like:* `chart` is redrafted against something real, the way
-  every other word was, or it is cut.
+- **Find a real charting need** — **Done.** Phase 7's port left 130 lines of
+  Ruby drawing roth's two charts through the escape hatch. That was the
+  evidence.
+- **Redraft or cut** — **Redrafted, as the same shape as `table`.** A table
+  declares its columns and the rows come from the subject; a chart declares its
+  series and the points come from the subject. `band`, `line` and `level`
+  added; `pie`, `bar` and `area` cut, having no page behind them.
+
+  roth's 130 lines became **thirteen sentences**, and its last app word went
+  with them — so the escape hatch across the whole repo is now **1 use in 356
+  sentences**, the `video` in the portfolio example.
+
+  Four defects found only by looking, and one grammar rule nobody had written
+  down: **there is no numeric literal.** A bare number in a page is neither a
+  dot nor a word, so a figure belongs to the app. Results in
+  [PHASE8.md](PHASE8.md).
 
 ---
 

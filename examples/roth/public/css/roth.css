@@ -1,70 +1,16 @@
 /* roth's own styles.
  *
- * slim-pickins.css dresses every word of the language — the form, the fields,
- * the metrics grid, the table, the figures, the disclosure, the footer. None
- * of that is repeated here.
+ * There are almost none left, and that is the result of Phase 8.
  *
- * What is left is what roth owns: the `drawing` word, and the classes its two
- * server-drawn charts put inside the SVG. An app that adds a word owns its
- * styling, which is the boundary Phase 6 named.
+ * Until the redraft this file carried a whole chart: bands, a tax line, a
+ * baseline overlay, axes, tick text, bracket shading, a legend and a tooltip —
+ * because roth's charts were drawn by an app word, and an app that adds a word
+ * owns its styling. `chart` draws all of that now, so slim-pickins.css dresses
+ * it, and what remains here is the two things that are still roth's.
  */
-
-/* --- the `drawing` word ------------------------------------------------- */
-
-.drawing { position: relative; margin: var(--gap) 0; }
-
-.chart-canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--rule);
-  background: var(--surface);
-}
-
-/* Deliberately not the vocabulary's `.chart`, which carries
- * `max-width: var(--measure-chart)` — right for a figure the language draws,
- * wrong for a full-bleed one. An app word that borrows a vocabulary class
- * inherits styling written for something else. */
-
-.drawing-tip {
-  position: absolute;
-  pointer-events: none;
-  max-width: 22rem;
-  padding: 0.4rem 0.55rem;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: var(--lift);
-  font-size: var(--size-small);
-  line-height: 1.3;
-}
-
-.drawing-tip[hidden] { display: none; }
-
-/* --- inside the SVG ----------------------------------------------------- */
-
-.stack-base { fill: #b9d8ef; }
-.stack-ss { fill: #8fc0e3; }
-.stack-rmd { fill: #63a6d6; }
-.stack-conv { fill: #327fbf; }
-
-.stack-trad { fill: #c7d8e6; }
-.stack-roth { fill: #327fbf; }
-
-.tax-line { fill: none; stroke: #333; stroke-width: 1.5; stroke-dasharray: 3 3; }
-.baseline-line { fill: none; stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 6 3; }
-.axis { stroke: var(--ink-faint); stroke-width: 1; }
-.series-label { fill: var(--ink-soft); font-size: 11px; }
-.band-label { fill: var(--ink-faint); font-size: 10px; }
-.band-deduction { fill: #f2f8fd; stroke: #b9d7ea; stroke-width: 0.6; }
-.band-bracket { fill: #e8f1f7; fill-opacity: 0.5; stroke: #d3e3ec; stroke-width: 0.5; }
-
-.chart-hit { fill: transparent; }
-.chart-hit:hover { fill: var(--ink); fill-opacity: 0.05; }
-
-/* --- the results region ------------------------------------------------- */
-
-.section--projection[aria-busy="true"] { opacity: 0.55; transition: opacity 0.15s; }
 
 /* The year-by-year table is wide on purpose; it scrolls rather than the page. */
 .table { display: block; overflow-x: auto; white-space: nowrap; }
+
+/* While a fresh projection is on its way. */
+.section--projection[aria-busy="true"] { opacity: 0.55; transition: opacity 0.15s; }

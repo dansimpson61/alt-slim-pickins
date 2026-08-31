@@ -10,7 +10,7 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `ROADMAP.md` — the single source of truth; Phases 0–7 are complete, **Phase 8 is next**
-3. `DESIGN.md`, `VOCABULARY.md`, `CONTRACT.md` — grammar, 47 words, what an app must promise
+3. `DESIGN.md`, `VOCABULARY.md`, `CONTRACT.md` — grammar, 50 words, what an app must promise
 4. `PHASE7.md` — the last phase, and the two language defects it found
 5. `LORE.md` — what previous sessions *learned*, which is not what they did
 

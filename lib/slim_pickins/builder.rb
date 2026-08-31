@@ -23,7 +23,7 @@ module SlimPickins
                section title each empty table column total
                grid list item card actions figure disclosure
                money percent number text note prose badge fact snippet
-               time image icon metric chart
+               time image icon metric chart band line level
                choose when otherwise
                form group field check select option button
                ].freeze
@@ -38,6 +38,8 @@ module SlimPickins
       @suppressed = false  # set when a subject is an empty collection
       @bindings = {}       # `each holding` binds `holding` for reaching out
       @columns = nil       # non-nil only while a table is collecting columns
+      @series = nil        # non-nil only while a chart is collecting series
+      @levels = nil
       @branches = nil      # non-nil only while a `choose` is collecting branches
       @contents = nil      # the page's own children, while a layout renders
       @head = +''          # words that belong in <head>, wherever they are said
@@ -374,9 +376,53 @@ module SlimPickins
       close(:div)
     end
 
-    def chart(*args, over: nil, label: nil)
-      kind, series = name_and_content(args)
-      emit(Charting.render(kind || :line, series, over: over, label: label))
+    # The same shape as `table`, and for the same reason. A table declares its
+    # columns and the rows come from the subject; a chart declares its series
+    # and the points come from the subject. `band`, `line` and `level` register
+    # rather than render, so the scale can be worked out before anything is
+    # drawn — exactly how `column` waits for the first row.
+    #
+    # The x axis is the collection's name in the singular: `chart years` reads
+    # each row's `year`. `over:` says it when that is not so.
+    def chart(*args, over: nil, &block)
+      name, caption = name_and_content(args)
+      rows = name ? subject.fetch(name) : subject.object
+      rows = rows.to_a
+
+      @series = []
+      @levels = []
+      nest(&block)
+      series = @series
+      levels = @levels
+      @series = @levels = nil
+
+      # A series with nothing in it is not a series. roth's do-nothing line
+      # takes `from:` a baseline that does not exist until something is
+      # converted, and an empty one still drew an empty path and claimed a
+      # place in the key.
+      drawn = series.map { |s| resolve(s, rows) }.reject { |s| s[:points].empty? }
+
+      emit(Charting.render(series: drawn,
+                           levels: levels,
+                           across: across(rows, over || Inference.singular(name)),
+                           caption: caption))
+    end
+
+    # A filled series, stacked on the ones before it.
+    def band(*args) = register_series(:band, args)
+
+    # A series drawn over the bands rather than added to them. `from:` takes
+    # its points from a different collection — the same modifier `each` uses,
+    # for the same reason: this line is about something else.
+    def line(*args, from: nil) = register_series(:line, args, from)
+
+    # A horizontal reference — a threshold, a target, a deduction. It carries
+    # a value rather than an attribute, and it is labelled where it sits
+    # instead of in the key, because a threshold is read against the data.
+    def level(*args)
+      charting!(:level)
+      @levels << { value: args.find { |a| a.is_a?(Numeric)}.to_f,
+                   label: args.find { |a| a.is_a?(String) } }
     end
 
     # --- Situation --------------------------------------------------------
@@ -626,6 +672,42 @@ module SlimPickins
       return if @columns
 
       raise Error, "#{word} belongs inside a table"
+    end
+
+    def charting!(word)
+      return if @series
+
+      raise Error, "#{word} belongs inside a chart"
+    end
+
+    def register_series(kind, args, from = nil)
+      charting!(kind)
+      name, label = name_and_content(args)
+      @series << { kind: kind, name: name, label: label, from: from }
+    end
+
+    # A series becomes points to draw, a name to call it, and the same values
+    # written the way the rest of the page would write them — so a tooltip says
+    # `$412,800` because `format_for` said money, not because a chart guessed.
+    def resolve(series, rows)
+      source = series[:from] ? series[:from].to_a : rows
+      sample = source.first
+      kind = Subject.new(sample).format_for(series[:name])
+      values = source.map { |row| Subject.new(row).fetch(series[:name]) }
+
+      { kind: series[:kind],
+        label: label_of({ name: series[:name], header: series[:label] }, sample),
+        points: values.map(&:to_f),
+        shown: values.map { |v| present(v, kind) } }
+    end
+
+    # `chart years` reads each row's `year`. Where the rows cannot answer that,
+    # the axis counts instead of inventing.
+    def across(rows, attribute)
+      return (1..rows.size).map(&:to_s) unless attribute && rows.first
+      return (1..rows.size).map(&:to_s) unless Subject.new(rows.first).has?(attribute)
+
+      rows.map { |row| Subject.new(row).fetch(attribute).to_s }
     end
 
     def deeper

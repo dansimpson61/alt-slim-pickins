@@ -52,6 +52,18 @@ module SlimPickins
       "#{s}s"
     end
 
+    # The inverse, for `chart years` finding each row's `year`. Deliberately
+    # the same two rules `plural` runs backwards, and nil when the name is not
+    # a plural at all — a chart that cannot name its axis counts instead.
+    def singular(name)
+      return nil if name.nil?
+
+      s = name.to_s
+      return :"#{s[0..-4]}y" if s.end_with?('ies')
+
+      s.end_with?('s') ? s[0..-2].to_sym : nil
+    end
+
     def collection?(value) = value.is_a?(Enumerable) && !value.is_a?(Hash)
 
     def nothing_in?(value)

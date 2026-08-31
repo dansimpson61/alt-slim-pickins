@@ -76,8 +76,9 @@ page specimen, "slim-pickins — every word"
 
   section "Figures and code"
     figure "A chart, captioned as a figure"
-      chart line, .balances, over: .years
-    chart pie, .allocation, label: "Allocation"
+      chart balances, over: year
+        band total
+        level .total_value, "Today"
     snippet ruby, .example
 
   section "A form"

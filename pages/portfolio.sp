@@ -8,8 +8,6 @@ page portfolio, "Your retirement"
       metric years_to_rmd, "Years to RMD"
 
   section "Allocation"
-    chart pie, .allocation, label: "By asset class"
-
     choose
       when .drifted?
         note warning, "Your allocation has drifted more than five percent."
@@ -47,7 +45,8 @@ page portfolio, "Your retirement"
           link rebalance
 
   section "Projections"
-    chart line, .balances, over: .years
+    chart balances, "Projected balance", over: year
+      band total
 
     disclosure "Show advanced assumptions"
       field growth_rate, step: 0.01

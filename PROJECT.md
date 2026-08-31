@@ -5,20 +5,21 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: Phase 7 closed — dan judged the port worth it (PHASE7.md), and the review triage is done. Phase 8 is next — redraft `chart` against examples/roth/lib/chart.rb, the real charting need it was waiting for, or cut the word
+next_step: Phases 0-8 complete and green (PHASE8.md) — the language is done as scoped. Next real work is a second port aimed at conditional/bespoke UI, the flank roth never exercised; the `link` routing question is still open for want of a page that navigates
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
 notes: Working language. Grammar settled (DESIGN.md v0.3) — one sentence, one
-  resolution rule, no open questions. All 47 words implemented, and the three
+  resolution rule, no open questions. All 50 words implemented, and the three
   pages drafted on paper before any code existed now render
   (bin/render_pages.rb). App contract is one sentence plus two optional
-  methods (CONTRACT.md). Phases 0-7 done — its own stylesheet, a working
-  Sinatra integration, and roth ported deeply (examples/roth, PHASE7.md): its
-  results render on the server now, so 249 lines of script became 47, and the
-  escape hatch fell to 1 word in 342 sentences. Scenario owns the input names,
+  methods (CONTRACT.md). Phases 0-8 done — its own stylesheet, a working
+  Sinatra integration, roth ported deeply (examples/roth, PHASE7.md), and
+  `chart` redrafted against roth's two charts (PHASE8.md): 130 lines of Ruby
+  became 13 sentences, roth lost its last app word, and the escape hatch across
+  the repo is 1 use in 356 sentences. Scenario owns the input names,
   Projection presents the results. roth's own domain defects are a separate
   project (ROTH_STUDY.md, ROTH_DOMAIN_BACKLOG.md) and ~/dev/roth is untouched.
   Only dan's judgement of the port is outstanding; 8 is chart, deliberately
@@ -32,6 +33,6 @@ conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
 
 # alt-slim-pickins
 
-A working view language: one-sentence grammar, 47 words, its own stylesheet,
+A working view language: one-sentence grammar, 50 words, its own stylesheet,
 and a Sinatra app that speaks it. See [README.md](README.md), then
 [ROADMAP.md](ROADMAP.md).

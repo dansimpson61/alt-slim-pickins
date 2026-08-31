@@ -173,62 +173,29 @@ class Phase7Test < Minitest::Test
     assert_includes last_response.body, 'Medicare surcharge'
   end
 
+  # Both charts were drawn by an app word until Phase 8 redrafted `chart`
+  # against them. They are vocabulary now — see test/phase8_test.rb for what
+  # the word does; this only asserts roth still has two of them.
   def test_both_charts_are_server_rendered_svg
     get '/'
-    body = last_response.body
-    assert_includes body, 'class="chart-canvas chart-canvas--income"'
-    assert_includes body, 'class="chart-canvas chart-canvas--balances"'
-    assert_includes body, 'viewBox="0 0 800 320"'
-    %w[stack-base stack-ss stack-rmd stack-conv tax-line band-deduction].each do |css|
-      assert_includes body, css
-    end
+    assert_equal 2, last_response.body.scan('<svg class="chart"').size
+    assert_includes last_response.body, 'viewBox="0 0 800 320"'
   end
 
   # The chart the specification asked for and nobody built. Its data was on
   # the wire the whole time; `extractSeries` threw both series away.
   def test_the_balance_chart_the_spec_asked_for_exists
     get '/'
-    balances = last_response.body[/chart-canvas--balances.*?<\/svg>/m]
-    assert_includes balances, 'stack-trad'
-    assert_includes balances, 'stack-roth'
-  end
-
-  # An outside review caught this one: roth's page had three interactive
-  # controls and the port logged only two. The "Show Baseline" checkbox
-  # overlaid the do-nothing series, and the ported charts had no such series
-  # at all — the comparison survived only as headline numbers. Drawn on the
-  # server there is nothing to defer, so it needs no control.
-  def test_the_do_nothing_series_is_drawn_whenever_there_is_one
-    get '/'
-    refute_includes last_response.body, 'baseline-line', 'nothing to compare against yet'
-
-    post '/projection', { 'conversion_value' => '50000' }
-    income = last_response.body[/chart-canvas--income.*?<\/svg>/m]
-    assert_includes income, 'baseline-line'
-  end
-
-  # roth built its legend in the browser out of divs. It is part of the
-  # picture now, and it describes only what the caller actually drew —
-  # inferring it put a "Do nothing" swatch on a chart with no such line.
-  def test_each_key_describes_only_what_its_chart_draws
-    labels = lambda do |kind|
-      last_response.body[/chart-canvas--#{kind}.*?<\/svg>/m].scan(/y="17.0">([^<]+)/).flatten
-    end
-
-    post '/projection', { 'conversion_value' => '50000' }
-    assert_equal ['Base income', 'Social Security', 'Distribution', 'Converted',
-                  'Federal tax', 'Do nothing'], labels['income']
-    assert_equal %w[Traditional Roth], labels['balances']
-
-    get '/'
-    refute_includes labels['income'], 'Do nothing'
+    balances = last_response.body.scan(/<svg class="chart".*?<\/svg>/m).last
+    assert_includes balances, 'Traditional'
+    assert_includes balances, 'Roth'
   end
 
   # A viewBox is responsive with no script at all. roth's chart measured
   # clientWidth once at load and never redrew.
   def test_the_charts_carry_no_pixel_width
     get '/'
-    svg = last_response.body[/<svg class="chart-canvas[^>]*>/]
+    svg = last_response.body[/<svg class="chart"[^>]*>/]
     refute_includes svg, 'width='
     assert_includes svg, 'viewBox='
   end
@@ -279,32 +246,22 @@ class Phase7Test < Minitest::Test
 
   # --- the escape hatch --------------------------------------------------
 
-  # Round one needed three words; server-rendering removed all of them. What
-  # is left is one, for the one thing that is genuinely roth's own.
-  def test_the_escape_hatch_is_down_to_one_word
-    assert_equal %i[drawing], Roth::Words.instance_methods.sort
+  # Round one of the port needed three app words, server-rendering removed two,
+  # and Phase 8 removed the last — `drawing`, which carried roth's charts.
+  # roth now speaks nothing but the vocabulary.
+  def test_roth_has_no_words_of_its_own
+    refute Roth.const_defined?(:Words), 'roth should need no Ruby-defined words'
+    assert_nil SlimPickins::Template.libraries[VIEWS].words
   end
 
-  def test_an_app_word_reads_like_a_built_in
-    report = File.read(REPORT)
-    assert_includes report, 'drawing .income'
-    refute_includes report, '<'
-    refute_includes report, 'div'
+  # Nothing in either page reaches for markup.
+  def test_no_page_contains_a_tag
+    [PAGE, REPORT].each do |path|
+      source = File.read(path)
+      refute_includes source, '<', "#{File.basename(path)} should hold no markup"
+      refute_includes source, 'div'
+    end
   end
-
-  # `.chart` carries `max-width: var(--measure-chart)`, right for a figure the
-  # language draws and wrong for a full-bleed one.
-  def test_the_chart_mount_does_not_borrow_the_vocabulary_class
-    get '/'
-    refute_includes last_response.body, 'class="chart"'
-  end
-
-# Found by looking, not by checking: without `hidden` an empty bordered box
-# sat under every chart until a pointer first moved.
-def test_the_tooltip_starts_hidden
-  get "/"
-  assert_equal 2, last_response.body.scan(%q(<div class="drawing-tip" hidden></div>)).size
-end
 
   # --- the engine, untouched ---------------------------------------------
 

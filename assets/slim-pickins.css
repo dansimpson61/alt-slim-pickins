@@ -8,7 +8,7 @@
  *   .word              the word            .card
  *   .word--variant     its variant         .note--warning
  *   .word-part         an internal part    .metric-label
- *   .word-part--n      a numbered part     .chart-slice--0
+ *   .word-part--n      a numbered part     .chart-band--0
  *
  * So a reader who knows the language already knows the stylesheet, and
  * `check_styles.rb` proves the two cannot drift apart.
@@ -53,17 +53,20 @@
   --size-large: 1.25rem;
   --size-page: 1.75rem;
   --size-code: 0.9em;
+  --size-tick: 11px;
   --weight-strong: 600;
   --weight-plain: 400;
   --lead: 1.6;
   --lead-tight: 1.25;
 
   --measure-input: 24rem;
-  --measure-chart: 32rem;
+  --wash-faint: 0.05;
   --track: 14rem;
   --track-min: 12rem;
   --indent: 1.25em;
   --stroke: 2;
+  --dash: 6 3;
+  --dash-fine: 4 3;
   --fade: 0.7;
   --fade-more: 0.45;
   --fade-most: 0.3;
@@ -258,15 +261,20 @@ summary { cursor: pointer; color: var(--accent); }
 time { color: var(--ink-soft); }
 
 /* ---------------------------------------------------------------- chart -- */
-.chart { width: 100%; height: auto; max-width: var(--measure-chart); }
-.chart polyline { stroke: var(--accent); stroke-width: var(--stroke); }
-.chart polygon { fill: var(--accent); opacity: var(--wash); }
-.chart rect { fill: var(--accent); }
-.chart-slice { stroke: var(--surface); stroke-width: var(--stroke); fill: var(--accent); }
-.chart-slice--0 { opacity: 1; }
-.chart-slice--1 { opacity: var(--fade); }
-.chart-slice--2 { opacity: var(--fade-more); }
-.chart-slice--3 { opacity: var(--fade-most); }
+.chart { display: block; width: 100%; height: auto; }
+.chart-band { fill: var(--accent); }
+.chart-band--0 { opacity: var(--wash); }
+.chart-band--1 { opacity: var(--fade-most); }
+.chart-band--2 { opacity: var(--fade-more); }
+.chart-band--3 { opacity: var(--fade); }
+.chart-line { fill: none; stroke: var(--ink); stroke-width: var(--stroke); }
+.chart-line--1 { stroke: var(--ink-faint); stroke-dasharray: var(--dash); }
+.chart-level { stroke: var(--caution); stroke-width: var(--rule-width); stroke-dasharray: var(--dash-fine); }
+.chart-axis { stroke: var(--ink-faint); stroke-width: var(--rule-width); }
+.chart-tick { fill: var(--ink-soft); font-size: var(--size-tick); }
+.chart-note { fill: var(--caution); font-size: var(--size-tick); }
+.chart-hit { fill: var(--ink); fill-opacity: 0; }
+.chart-hit:hover { fill-opacity: var(--wash-faint); }
 
 /* ---------------------------------------------------------- interaction -- */
 .field { margin-bottom: var(--gap); }

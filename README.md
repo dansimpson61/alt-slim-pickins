@@ -2,7 +2,7 @@
 
 A view language whose grammar stays describable all the way down. It began as
 paper — the first question was what we were building *on* — and it now runs:
-one sentence, forty-seven words, its own stylesheet, and two Sinatra apps that
+one sentence, fifty words, its own stylesheet, and two Sinatra apps that
 speak it.
 
 `slim-pickins` is a helper vocabulary layered on Slim. This is the other
@@ -100,7 +100,7 @@ this as money* and the formatting belongs to the word.
 
 - **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
   no open questions.
-- **[VOCABULARY.md](VOCABULARY.md)** — forty-seven words, seven slots each.
+- **[VOCABULARY.md](VOCABULARY.md)** — fifty words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
 - **[ROADMAP.md](ROADMAP.md)** — the phases and the risk register. Start here

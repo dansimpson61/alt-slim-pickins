@@ -21,8 +21,6 @@ page portfolio, "Your retirement"
       metric years_to_rmd, "Years to RMD"
 
   section "Allocation"
-    chart pie, .allocation, label: "By asset class"
-
     choose
       when .drifted?
         note warning, "Your allocation has drifted more than five percent."
@@ -60,7 +58,8 @@ page portfolio, "Your retirement"
           link rebalance
 
   section "Projections"
-    chart line, .balances, over: .years
+    chart balances, "Projected balance", over: year
+      band total
 
     disclosure "Show advanced assumptions"
       field growth_rate, step: 0.01
@@ -155,10 +154,11 @@ rather than a word.
   because the condition was about the subject. It survives as a hole in the
   morphology, but a page this size failing to reach it is weak evidence that
   it is rare.
-- **`chart` remains a guess.** `chart pie, .allocation, label: "…"` and `chart
-  line, .balances, over: .years` are the two shapes, and they look plausible.
-  Nothing here tested axis labels, legends, scales, or a second series, so the
-  entry is no better evidenced than it was.
+- **`chart` was a guess, and this page is why it stayed one.** It drew a pie
+  of an allocation the table beneath it already showed, and a line of parallel
+  flat arrays. Nothing here tested axis labels, legends, scales or a second
+  series, so the entry stayed unevidenced until Phase 8 redrafted it against
+  roth — where the pie turned out to be redundant and was cut.
 - **Still under-tested:** prose and media. `text`, `image` and `icon` do not
   appear on this page at all, and `list` appears nowhere in it either. A
   content-heavy page would be the honest next test, not another dashboard.
