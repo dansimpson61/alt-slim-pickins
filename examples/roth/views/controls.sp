@@ -1,7 +1,7 @@
 page "Directional Roth Conversion Sketch"
   note "Approximate multi-year impact; coarse assumptions; not tax advice."
 
-  form controls, to: "/run"
+  form scenario, to: "/projection"
     group ages
       field age_primary
       field age_spouse
@@ -24,20 +24,7 @@ page "Directional Roth Conversion Sketch"
     actions
       button primary, "Run"
 
-  grid metrics, columns: 3
-    pending lifetime_taxes_primary, "Lifetime taxes (primary)"
-    pending lifetime_taxes_baseline, "Lifetime taxes (baseline)"
-    pending tax_delta, "Tax delta"
-    pending final_roth_primary, "Final Roth % (primary)"
-    pending final_roth_baseline, "Final Roth % (baseline)"
-    pending roth_delta, "Roth % delta"
-
-  section "Income & taxes"
-    check show_baseline
-    balance_chart
-
-  disclosure "Show raw JSON"
-    raw_output
+  report
 
   footer "This tool provides approximate directional estimates. It omits many tax nuances (credits, deductions, capital gains, phaseouts, state tax). Use for planning ranges only."
 

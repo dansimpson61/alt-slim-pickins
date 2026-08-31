@@ -251,13 +251,22 @@ The wall roth actually hit was that a fifth of its page is a JavaScript mount
 surface — empty holes and id handles, holding no data. dan's call: each becomes
 a word in roth's own module, not an `id:` modifier.
 
-- **Port roth entirely** `agent` — **Done.** roth has one view, and it is
-  ported: 88 non-blank lines of Slim become 40 sentences, and 35 lines of its
-  script go with them. Three app words (`pending`, `balance_chart`,
-  `raw_output`). The escape hatch now stands at **9 uses in 324 sentences —
-  1 in 36**, against Phase 6's once-in-284, which is that claim taking its
-  first honest hit. Line-by-line review and every limit in
-  [PHASE7.md](PHASE7.md).
+- **Port roth entirely** `agent` — **Done, in two rounds.** Round one replaced
+  the markup and needed three app words, putting the escape hatch at 9 uses in
+  324 sentences — 1 in 36, against Phase 6's once-in-284. Round two moved the
+  results to the server and took it to **1 word, 3 uses in 342 sentences —
+  1 in 114**. The hatch was never measuring the vocabulary's coverage; it was
+  measuring where rendering happened.
+
+  roth's 88-line page and 249-line script are now 58 sentences and 47 lines,
+  plus 370 lines of Ruby — **not smaller in total**, and that trade is part of
+  what dan is judging. It buys input validation, the year-by-year table, and
+  the balance chart the specification asked for and nobody built.
+
+  Two defects in the language fell out of it, both fixed: `columns:` made a
+  grid permanently non-responsive, and `column` asked the enclosing subject for
+  its header where `format_of` eight lines away asked the row. Line-by-line
+  review and every limit in [PHASE7.md](PHASE7.md).
 - **Judge it** `dan` — is this better to read and write than the Slim it
   replaced?
   *Done looks like:* the answer, recorded, including if it is no.

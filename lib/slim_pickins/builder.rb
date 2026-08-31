@@ -210,7 +210,10 @@ module SlimPickins
       open(:table, class: token(:table, name))
       text_tag(:caption, caption) if caption
       sample = rows.first
-      columns.each { |c| c[:sample] = sample && Subject.new(sample).fetch(c[:name]) }
+      columns.each do |c|
+        c[:sample] = sample && Subject.new(sample).fetch(c[:name])
+        c[:header] = label_of(c, sample)
+      end
 
       open(:thead)
       open(:tr)
@@ -238,10 +241,14 @@ module SlimPickins
       close(:table)
     end
 
+    # The header is not resolved here. A column registers before any row
+    # exists, so the only subject in scope is the one holding the collection —
+    # and it is the *row* that knows what its own columns are called. `table`
+    # resolves it once the first row is in hand.
     def column(*args, as: nil)
       name, header = name_and_content(args)
       registering!(:column)
-      @columns << { name: name, header: label_for(name, header), as: as }
+      @columns << { name: name, header: header, as: as }
     end
 
     def total(*args)
@@ -256,10 +263,14 @@ module SlimPickins
       close(:aside)
     end
 
+    # `columns:` is a wish, not a decree. An exact fractional track — a plain
+    # `calc(100% / n)` — scales with its container and so can never reflow,
+    # which quietly made every `columns:` grid non-responsive. Flooring it at
+    # `--track-min` gives n columns where they fit and fewer where they do not.
     def grid(*args, columns: nil, &block)
       variant, = name_and_content(args)
-      open(:div, class: token(:grid, variant),
-                 style: columns && "--track: calc((100% - #{columns - 1} * var(--gap)) / #{columns})")
+      track = columns && "max(var(--track-min), calc((100% - #{columns - 1} * var(--gap)) / #{columns}))"
+      open(:div, class: token(:grid, variant), style: track && "--track: #{track}")
       nest(&block)
       close(:div)
     end
@@ -536,6 +547,18 @@ module SlimPickins
     # three people.
     def format_of(column, row = nil)
       column[:as] || Subject.new(row || subject.object).format_for(column[:name])
+    end
+
+    # The same three levels as everywhere else — the page said it, or the app
+    # said it, or English — except that here "the app" is the row rather than
+    # whatever holds the collection. `format_of` had always asked the row;
+    # labels asked the enclosing subject, and a table of Years read its headers
+    # off the Projection that merely held them: "Irmaa applied cost".
+    def label_of(column, row = nil)
+      column[:header] ||
+        (row && Subject.new(row).label_for(column[:name])) ||
+        subject.label_for(column[:name]) ||
+        Inference.label(column[:name])
     end
 
     def alignment_of(column, sample)

@@ -1,160 +1,115 @@
 # frozen_string_literal: true
 
-# Phase 7 — roth, ported to this language.
+# Phase 7, second round — roth ported deeply.
 #
-# The engine is roth's, untouched. Only the view changes: 91 lines of
-# hand-written Slim become 46 sentences plus the five words below.
+# The first round replaced the markup. This one replaces the architecture, and
+# moves the results to the server:
 #
-# roth is a single-page app, so the honest comparison is one file to one file
-# and there is no layout here. The chrome a layout would hold — the stylesheet,
-# the script, the footer — is said in the page, because `stylesheet` and
-# `script` say where they belong rather than where they are written.
+#   Scenario    owns the input names, their defaults, labels, formats and
+#               bounds — the single source that roth's rename went round.
+#   Projector   roth's engine, untouched. See ROTH_DOMAIN_BACKLOG.md.
+#   Projection  a presenter: the six figures, the table, the two charts.
+#   views/*.sp  the language.
+#   this file   parse, project, render. Nothing else.
+#
+# There is no model layer in the persistence sense because roth has no
+# persistent state — each request is a pure function from a scenario to a
+# projection. Scenario is a validated value object and the engine is a pure
+# calculation; between them they are the "M", and inventing a record to sit
+# behind them would be ceremony.
 
 require 'json'
-require 'delegate'
-require 'ostruct' # roth's projector builds OpenStructs and never requires it
 require 'sinatra/base'
 require_relative '../../lib/slim_pickins/template'
+require_relative 'lib/scenario'
+require_relative 'lib/projection'
 
-ROTH = File.expand_path('~/dev/roth')
-require File.join(ROTH, 'lib/engine/inputs')
-require File.join(ROTH, 'lib/engine/projector')
-require File.join(ROTH, 'lib/engine/strategy/fixed_amount')
-require File.join(ROTH, 'lib/engine/strategy/fill_bracket')
-require File.join(ROTH, 'lib/engine/tax_tables')
-
-# The escape hatch, used as designed: these are words roth needs and the
-# vocabulary of web presentation should not have.
-#
-# Every one of them exists because roth draws its results in the browser. The
-# language renders on the server, so where a result belongs there is a hole,
-# and a hole that a script fills is exactly the kind of app peculiarity that
-# must not leak into a shared vocabulary. Each is named for the thing it holds,
-# so the page still says what is there rather than emitting an anonymous div.
-module RothWords
-  # `metric` presents a value. This presents the absence of one — a number
-  # that arrives from /run after the page has been served. The distinction is
-  # worth a word: a reader can see which figures the server knows and which it
-  # does not, which the hand-written page left implicit in a `--`.
-  def pending(*args)
-    name, label = arguments(args)
-    html(%(<div class="#{token(:metric)}">) +
-         %(<h3 class="metric-label">#{escape(label)}</h3>) +
-         %(<div class="metric-value" data-metric="#{escape(name)}">--</div></div>))
-  end
-
-  # roth's SVG chart, drawn in the browser from the projection. `chart` exists
-  # in the vocabulary and draws a series the server already holds, so this is a
-  # mount rather than a chart; Phase 8 is where `chart` gets redrafted against
-  # it.
+module Roth
+  # The escape hatch, and by this round it is down to one word.
   #
-  # The legend and the tooltip are parts of the chart, not things a page should
-  # have to name, so they live inside the word — the same way `metric` emits
-  # its own label and value. The frame is what the tooltip positions against.
-  # The parts take the `.word-part` shape the stylesheet already uses for
-  # `.metric-label` and `.chart-slice`.
-  #
-  # Deliberately not `token(:chart)`. Borrowing the vocabulary's class looked
-  # tidy and was wrong: `.chart` carries `max-width: var(--measure-chart)`,
-  # which is right for a figure the language draws and capped roth's
-  # full-bleed chart at 512px. An app word that reuses a vocabulary class
-  # inherits styling written for a different thing.
-  def balance_chart(*_args)
-    html('<div class="chart-frame">' \
-         '<svg id="balance-chart" class="chart-canvas"></svg>' \
-         '<div id="chart-legend" class="chart-legend"></div>' \
-         '<div id="chart-tooltip" class="chart-tooltip"></div>' \
-         '</div>')
-  end
-
-  # The raw projection JSON, for looking under the bonnet.
-  def raw_output(*_args) = html(%(<pre id="output" class="#{token(:snippet)}"></pre>))
-end
-
-# The optional half of the contract. roth is the only thing that knows
-# `ss_primary_amount` means "SS annual amount", so roth is where it is said —
-# once, rather than on every page that shows the field.
-class Scenario < SimpleDelegator
-  LABELS = {
-    age_primary: 'Age (primary)', age_spouse: 'Age (spouse)',
-    trad_balance: 'Traditional balance', roth_balance: 'Roth balance',
-    ss_primary_start_year: 'SS start (years from now)',
-    ss_primary_amount: 'SS annual amount',
-    ss_spouse_start_year: 'Spouse SS start (years from now)',
-    ss_spouse_amount: 'Spouse SS annual amount',
-    inflation_rate: 'Inflation', horizon_years: 'Horizon (years)',
-    conversion_value: 'Strategy value', conversion_strategy: 'Strategy'
-  }.freeze
-
-  def label_for(attribute) = LABELS[attribute]
-end
-
-class Roth < Sinatra::Base
-  helpers SlimPickins::Helpers
-
-  set :views, File.join(__dir__, 'views')
-  set :public_folder, File.join(__dir__, 'public')
-  set :static, true
-
-  # One place says what this app's vocabulary is.
-  SlimPickins::Template.libraries[settings.views] =
-    SlimPickins::Library.from(settings.views).tap do |lib|
-      lib.instance_variable_set(:@words, RothWords)
+  # Round one needed three — `pending` for each figure the server did not know,
+  # plus mounts for the chart and the raw JSON. Rendering on the server removed
+  # all of them: the figures are real now, so `metric` presents them, and the
+  # JSON dump is replaced by the table the specification asked for. What is
+  # left is genuinely roth's: a picture roth drew.
+  module Words
+    # The tip ships `hidden`. Leaving it to the script meant an empty bordered
+    # box sat under every chart until a pointer first moved — invisible to
+    # every checker, obvious the moment anyone looked at the page.
+    def drawing(*args)
+      _, svg = arguments(args)
+      html(%(<div class="#{token(:drawing)}">#{svg}<div class="drawing-tip" hidden></div></div>))
     end
+  end
 
-  # The values the hand-written page carried as `value="…"` attributes. Here
-  # they are the subject's own data, which is why the page never states one.
-  DEFAULTS = {
-    'age_primary' => 60, 'age_spouse' => 58,
-    'trad_balance' => 750_000, 'roth_balance' => 150_000, 'base_income' => 80_000,
-    'ss_primary_start_year' => 7, 'ss_primary_amount' => 45_000,
-    'conversion_value' => 0.0
-  }.freeze
+  class App < Sinatra::Base
+    helpers SlimPickins::Helpers
 
-  helpers do
-    # `form controls` is about these, and every `field` beneath it reads one.
-    def controls = Scenario.new(Engine::Inputs.from_hash(DEFAULTS))
+    set :views, File.join(__dir__, 'views')
+    set :public_folder, File.join(__dir__, 'public')
+    set :static, true
+    # A demo whose stylesheet is being edited. Heuristic caching served a
+    # stale sheet once and cost a confusing half hour; nothing here is worth
+    # caching.
+    set :static_cache_control, [:no_store]
 
-    # The chart's baseline toggle. Unchecked when the page is served; the
-    # script owns it from there.
-    def show_baseline = false
+    SlimPickins::Template.libraries[settings.views] =
+      SlimPickins::Library.from(settings.views).tap do |lib|
+        lib.instance_variable_set(:@words, Words)
+      end
 
-    def strategy_from(inputs)
-      case inputs.conversion_strategy
-      when 'fill_bracket' then Engine::Strategy::FillBracket.new(target_bracket: inputs.conversion_value)
-      else Engine::Strategy::FixedAmount.new(amount: inputs.conversion_value || 0)
+    REPORT = File.join(settings.views, 'partials', 'report.sp')
+
+    helpers do
+      def project(params)
+        scenario = Scenario.new(params)
+        [scenario, Projection.of(scenario)]
       end
     end
-  end
 
-  get('/') { sp :controls }
-
-  # The language's own stylesheet lives in the repo, not in this app's public
-  # folder. Named exactly, rather than mounted as a directory.
-  get('/assets/slim-pickins.css') do
-    send_file File.expand_path('../../assets/slim-pickins.css', __dir__)
-  end
-
-  # roth's own endpoint, unchanged in substance — the port is of the view.
-  post '/run' do
-    content_type :json
-    inputs = Engine::Inputs.from_hash(JSON.parse(request.body.read))
-    result = Engine::Projector.new(inputs: inputs, strategy: strategy_from(inputs)).run
-    seniors = [inputs.age_primary.to_i >= 65 ? 1 : 0,
-               inputs.age_spouse.to_i >= 65 ? 1 : 0].sum
-    std_ded = Engine::TaxTables.standard_deduction(inputs.current_year, inputs.inflation_rate, seniors)
-
-    output = { primary: scenario_hash(result.primary, std_ded) }
-    output[:baseline] = scenario_hash(result.baseline, std_ded) if result.baseline
-    JSON.pretty_generate(output)
-  end
-
-  helpers do
-    def scenario_hash(run, std_ded)
-      { scenario: run.scenario, totals: run.totals, years: run.years.map(&:to_h),
-        brackets: run.brackets, standard_deduction: std_ded }
+    # The whole page: form and results together, both rendered here.
+    get '/' do
+      scenario, projection = project(params)
+      sp :controls, locals: { scenario: scenario, projection: projection }
     end
-  end
 
-  run! if app_file == $PROGRAM_NAME
+    # The results region on its own, for the swap. It renders the *same file*
+    # the full page includes as a partial, so the two cannot drift.
+    post '/projection' do
+      scenario, projection = project(request_params)
+      SlimPickins.render(File.read(REPORT), path: REPORT,
+                                            locals: { scenario: scenario, projection: projection },
+                                            library: SlimPickins::Template.libraries[settings.views])
+    end
+
+    # roth's own JSON endpoint, kept so the engine stays callable on its own.
+    post '/run' do
+      content_type :json
+      scenario = Scenario.new(request_params)
+      halt 422, JSON.generate(complaints: scenario.complaints) unless scenario.sound?
+
+      JSON.pretty_generate(Projection.of(scenario).to_h)
+    end
+
+    get '/assets/slim-pickins.css' do
+      cache_control :no_store
+      send_file File.expand_path('../../assets/slim-pickins.css', __dir__)
+    end
+
+    private
+
+    # A form post or a JSON body, whichever arrived. Scenario copes with
+    # missing, blank and unparseable on its own, so this only has to decide
+    # which envelope it is looking at.
+    def request_params
+      return params unless request.media_type == 'application/json'
+
+      body = request.body.read
+      body.empty? ? {} : JSON.parse(body)
+    rescue JSON::ParserError
+      {}
+    end
+
+    run! if app_file == $PROGRAM_NAME
+  end
 end

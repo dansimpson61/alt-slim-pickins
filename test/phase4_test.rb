@@ -31,7 +31,12 @@ class Phase4Test < Minitest::Test
           figure "A caption"
             image "/a.png", alt: "A"
     PAGE
-    assert_includes html, '<div class="grid grid--cards" style="--track: calc((100% - 2 * var(--gap)) / 3)">'
+    # `columns:` is floored at `--track-min`. A bare `calc(100% / n)` scales
+    # with its container, so it yields n columns at every width and the grid
+    # can never reflow — found by roth's metrics on a phone in Phase 7.
+    assert_includes html,
+                    '<div class="grid grid--cards" ' \
+                    'style="--track: max(var(--track-min), calc((100% - 2 * var(--gap)) / 3))">'
     assert_includes html, '<article class="card card--compact" id="thing-7">'
     assert_includes html, '<ul class="list list--plain"><li class="item">One</li></ul>'
     assert_includes html, '<figcaption>A caption</figcaption>'

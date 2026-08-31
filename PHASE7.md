@@ -1,186 +1,253 @@
 # Phase 7 — roth, ported
 
-**Result: roth runs on this language. 88 lines of hand-written Slim become 40
-sentences, and 35 lines of its script go with them.**
+**Result: roth runs on this language, results and all. Its 88-line page and
+249-line script become 58 sentences and 47 lines of script, and the six
+figures, the two charts and the year-by-year table are rendered on the
+server.**
 
 Run it: `ruby examples/roth/app.rb` · `ruby test/phase7_test.rb`
 
-The engine is roth's, untouched, required straight off disk. Only the view
-changed.
+The engine is roth's, required off disk and otherwise untouched. `~/dev/roth`
+was not modified. What it gets wrong is measured in
+[ROTH_STUDY.md](ROTH_STUDY.md) and scheduled in
+[ROTH_DOMAIN_BACKLOG.md](ROTH_DOMAIN_BACKLOG.md).
+
+This happened in two rounds, and the difference between them is the finding.
 
 ---
 
 ## What Phase 7 turned out to be
 
 The roadmap said "every view, not the one page". roth has **one view** —
-`views/controls.slim`, 91 lines — and 276 lines of `public/js/app.js`. It is a
-single-page app, so porting it entirely means porting that one page entirely.
+`views/controls.slim`, 91 lines — and 276 lines of `public/js/app.js`.
 
 The roadmap also named a prerequisite: settle whether `link` asks the app for a
-path or takes `to:`. **roth's page contains no links at all** — the only `link`
-in it is the stylesheet. Drafting `path_for` here would have been the one word
-in the vocabulary designed without a real page asking for it, which is exactly
-the mistake Phase 8 exists to avoid for `chart`. It stays open, and it is still
-the largest gap before a second port.
+path or takes `to:`. **roth's page contains no links at all.** Drafting
+`path_for` here would have been the one word designed without a real page
+asking for it, which is the mistake Phase 8 exists to avoid. It stays open, and
+it is still the largest gap before a second port.
 
-The wall roth actually hit is a different one.
+The wall roth actually hit was that a fifth of its page held no data: ten empty
+holes a script filled, nine more lines carrying an id purely as a JS handle.
 
-## roth is a JavaScript mount surface
+---
 
-Measured on the 88 non-blank lines of `controls.slim`:
+## Round one — replacing the markup
 
-| | lines |
-|---|---|
-| empty holes a script fills — six `div.value --`, the SVG, the legend, the tooltip, the `<pre>` | **10** |
-| lines carrying an id purely as a JS handle | **9** |
-| plus two class hooks: `.advanced`, `.metric .value` | |
+The page became 40 sentences, and every hole became a word in roth's own
+module: `pending` for each figure the server did not know, plus mounts for the
+chart and the raw JSON pane. Three words, nine uses.
 
-About a fifth of the page holds no data at all. The language has no `div` and
-no `id`, deliberately, so this — not routing — is what a real app walls into on
-its first page.
+That produced the number Phase 6 asked for. Phase 6 had measured the escape
+hatch at **once in 284 sentences** and said plainly that it proved little,
+because every page so far had been written by whoever wrote the vocabulary.
+With roth's page written to someone else's design it became **9 uses in 324
+sentences — 1 in 36**.
 
-**dan's call: each hole becomes a word in roth's own module.** Not an `id:`
-modifier — that is markup returning through the modifier slot, and it would
-become the thing every later irregularity leaks through.
+Which was the right measurement of the wrong thing. Every one of those nine
+uses existed because roth computes its results in the browser. The escape hatch
+was not measuring the vocabulary's coverage; it was measuring where rendering
+happened.
 
-## The words roth needed
+## Round two — moving the results to the server
 
-Three, in `RothWords`:
+dan's call, and it changes the answer:
 
+| | round one | round two |
+|---|---|---|
+| escape-hatch words | 3 | **1** |
+| escape-hatch uses | 9 | **3** |
+| across sentences | 324 | 342 |
+| ratio | 1 in 36 | **1 in 114** |
+
+`pending` is gone because the figures are real, so `metric` presents them. The
+JSON mount is gone because the table replaced it. What is left is `drawing`,
+for the one thing that is genuinely roth's own — a picture roth drew.
+
+**The escape hatch was never the measurement it looked like.** It counts the
+distance between what a page needs and where its data is, and moving the data
+closed most of it.
+
+---
+
+## The architecture
+
+roth already had the separation MVC is usually brought in to create:
+`lib/engine` knows nothing about HTTP, `app.rb` knows nothing about tax. The
+failures were not a missing layer, they were **unenforced seams** — so this
+round adds the two objects that enforce them, and no more.
+
+```text
+lib/engine.rb      roth's engine, required off disk (plus the `ostruct` it forgot)
+lib/scenario.rb    the inputs: names, defaults, labels, formats, bounds
+lib/projection.rb  the results: six figures, the table, the two drawings
+lib/chart.rb       the SVG
+views/*.sp         the language
+app.rb             parse, project, render
 ```
-pending tax_delta, "Tax delta"
-balance_chart
-raw_output
+
+There is deliberately **no model layer in the persistence sense**. roth has no
+persistent state; each request is a pure function from a scenario to a
+projection. `Scenario` is a validated value object and the engine is a pure
+calculation — between them they are the "M", and inventing a record to sit
+behind them would have been ceremony.
+
+### One object owns the names
+
+This is the fault the round exists to fix. roth's field names lived in the
+struct, the form and the specs with nothing binding them; a rename in September
+2025 reached the first and stopped, and the app has silently dropped Social
+Security ever since.
+
+`Scenario::FIELDS` declares each input once. The form derives from it, the
+parameters derive from it, and `to_engine_inputs` is the only method that knows
+the engine's spelling.
+
+**And the language enforces it.** A page naming an attribute its subject does
+not have raises on the line that named it:
+
+```text
+SlimPickins::Error: this scenario has no no_such_input
 ```
 
-`pending` is the interesting one. `metric` presents a value; this presents the
-*absence* of one, and says so. The hand-written page left that implicit in a
-`--`, so a reader could not tell which figures the server knows and which it
-does not. Six of the nine escape-hatch uses in the repo are this word, all for
-one reason: roth computes its results in the browser.
+That is the drift roth went eleven months without noticing, made loud by the
+same rule that resolves every other `.foo`.
 
-`balance_chart` swallowed two more mounts. The legend and the tooltip are parts
-of the chart, not things a page should have to name — the same way `metric`
-emits its own label and value. That took the count from five words to three,
-and the page from 42 sentences to 40.
+### Validation, which roth had none of
 
-### The honest number
+`horizon_years: 0` raised `NoMethodError` from inside `aggregate`. Negative
+balances, a 500% growth rate and `age_primary: 200` were all accepted silently.
 
-Phase 6 measured the escape hatch at **once in 284 sentences** and said plainly
-that it did not prove much, because every page had been written by whoever wrote
-the vocabulary. Phase 7 is the first page whose subject matter someone else
-chose. Measured across every `.sp` file in the repo:
+```json
+{"complaints":["Age (primary) must be between 0 and 120",
+               "Horizon (years) must be between 1 and 60"]}
+```
 
-| | |
-|---|---|
-| sentences | **324** |
-| escape-hatch words used | **9** |
-| ratio | **1 in 36** |
+Blank and unparseable input falls back to the field's default rather than
+reaching the engine as `nil`.
 
-That is the claim taking its first real hit, and it should be read as one. It is
-still a small number — 40 sentences needed 3 new words and 9 uses — but "once in
-284" was an artefact of who was writing.
+### The full page and the fragment cannot drift
 
-## What the language took away
+`views/partials/report.sp` is a word. The page says `report`; `POST /projection`
+renders **the same file** for the swap. A test asserts the fragment is a
+substring of the whole page.
 
-Not everything moved one-for-one. Three things in roth dissolved:
+---
 
-- **Two JS toggles became `disclosure`.** `#toggle-adv` with its `.advanced.hidden`
-  section, and `#toggle-json` with its `pre#output.hidden`, were both
-  hand-rolled show/hide. `disclosure` is a `<details>`; the browser does it.
-  Two of the ten JS hooks and their handlers are gone.
+## What moved off the client
+
+`app.js` went from **249 code lines to 47** — the two jobs a server genuinely
+cannot do: ask for a fresh projection without a reload, and follow the pointer.
+
+- **Two hand-rolled toggles.** One became `disclosure`, a `<details>` the
+  browser drives. The other, the raw JSON pane, has no reason to exist now the
+  table does its job.
 - **One handler was dead.** `#strategy-value-wrapper` was shown when the
   strategy is `fixed` *or* `fill_bracket`, over a select with exactly those two
   options. It never once hid anything.
-- **Every `value="…"` attribute became data.** The page states no defaults, and
-  no field labels — fourteen labelled controls, none of them written in the
-  page, which is CONTRACT.md's optional half doing the whole of its job.
+- **All formatting.** `formatMoney` rounded to thousands; the language's
+  `:money` gives `$412,800`, and `format_for` says which columns are money.
+- **Both charts**, drawn in Ruby with a `viewBox` — so they are responsive with
+  no script at all. roth's measured `clientWidth` once at load and never redrew
+  on resize.
 
-`examples/roth/public/js/app.js` is roth's script with those removals and three
-selector renames, listed below. **267 non-blank lines become 232.**
+### The chart the specification asked for
 
-### The selectors that had to change
+The spec asked for a stacked area of **account balances**, Traditional against
+Roth. `app.js` drew annual **income components**. Both are reasonable; they are
+not the same chart, and the specified one was never built — while its data sat
+on the wire and `extractSeries` threw it away.
 
-The port did not get to keep every name, and each change is the language
-asserting something:
+It exists now. So does the year-by-year table, and with it the IRMAA
+subsystem — table, thresholds, inflation, two-year lag — which ran on every
+request in roth and reached no screen at all. It has a column.
 
-| roth | ported | why |
+### The honest cost
+
+The port is **not smaller in total**.
+
+| | roth | ported |
 |---|---|---|
-| `#metrics .metric .value` | `.metric .metric-value` | the class shapes are the vocabulary's |
-| `#strategy` | `#conversion_strategy` | a control's id is its attribute name |
-| `#show-baseline` | `#show_baseline` | same |
-| `div.className='item'` | `'key'` | `item` is a word; its rules reached the legend |
+| view | 88 lines of Slim | 58 sentences |
+| script | 249 lines | 47 lines |
+| Ruby | — | 370 lines |
+| **total** | **337** | **475** |
 
-`#controls`, `#balance-chart`, `#chart-legend`, `#chart-tooltip` and `#output`
-are unchanged — the words emit exactly what roth's script already looked for.
+It trades ~200 lines of untested browser code for 370 lines of testable Ruby,
+and buys three things roth did not have: input validation, a data table, and
+the balance chart. Whether that is a good trade is dan's judgement, and it is
+the one this phase is still waiting on.
 
-## A bug the port fixed on the way past
+---
 
-`Engine::Inputs` was renamed to `ss_primary_*` / `ss_spouse_*`. The view and the
-specs still say `social_security_*`:
+## Two defects in the language, found by a real page
 
-```text
-spec-style keywords: ArgumentError — unknown keywords: social_security_start_year
-view posts social_security_amount=45000 -> inputs.ss_primary_amount = nil
-```
+Both are the kind Phase 7 exists to surface: neither was visible until someone
+else's page asked for something.
 
-So **Social Security is silently dropped in the running app** — on the default
-inputs, lifetime taxes come out at 274,100 instead of 412,800, a difference of
-138,700, and the page reports it with no sign anything was ignored. The ported
-page uses the engine's own names, so it fixes this by construction;
-`test_the_ported_field_names_reach_the_engine` pins it.
+**1. `columns:` made a grid permanently non-responsive.** `grid metrics,
+columns: 3` emitted `--track: calc((100% - 2 * var(--gap)) / 3)`. A track that
+is a percentage of its container scales *with* the container, so `auto-fit`
+never has cause to reflow — three columns at 1280px and three at 375px, 101px
+each. Now floored at a new `--track-min`, so it gives three where they fit and
+one where they do not.
 
-This is roth's bug, in roth's repo, and **nothing there has been touched.**
-`~/dev/roth` is exactly as it was. Fixing it is dan's call.
+**2. `column` asked the wrong object for its label.** `format_of` had always
+asked the *row* for its format; labels asked whatever subject held the
+collection. A table of `Year`s therefore read its headers off the `Projection`
+that merely contained them, and rendered "Irmaa applied cost", "Rmd", "Trad
+end". `column` now defers the header until the first row is in hand, and
+resolves it by the same three levels as everything else — the page said it, or
+the row said it, or English.
 
-Two smaller ones, also roth's and also untouched: `lib/engine/projector.rb`
-builds `OpenStruct`s without requiring `ostruct` (it worked on a transitive
-require), and `spec/projector_spec.rb` cannot construct an `Inputs` at all.
+The second is the more interesting: two methods eight lines apart implemented
+the same precedence rule against different objects, and every page written so
+far had a table whose rows and whose container agreed.
 
-## What looking at it found
+### And one in the port, found the same way
 
-`check_grammar.rb` and `check_styles.rb` both passed the port before it was ever
-served. Loading it found one real defect they could not have seen:
+Every checker passed the page before it was ever served. Loading it showed an
+empty bordered box under both charts: the tooltip div shipped without `hidden`,
+so it was visible until a pointer first moved. It ships hidden now, and a test
+pins it — but nothing except looking would have caught it, which is the lesson
+Phase 5 already wrote down and this round confirmed again.
 
-**The chart was capped at 512px inside a 1217px frame.** `balance_chart`
-originally emitted `class="chart"` via `token(:chart)`, which looked tidy and was
-wrong — the vocabulary's `.chart` carries `max-width: var(--measure-chart)`,
-right for a figure the language draws and wrong for roth's full-bleed one. It
-emits `.chart-canvas` now.
+### And one in the checker
 
-The general lesson is worth keeping: **an app word that borrows a vocabulary
-class inherits styling written for a different thing.** `check_styles.rb` cannot
-catch it — it only renders `pages/`, and Phase 6 already named that limit.
+`check_grammar.rb` finds app words by scanning for `module *Words`, anchored on
+`^end`. Nesting the module inside `module Roth` — ordinary Ruby — made it read
+straight past its own `end` and count `project` and `request_params` as
+vocabulary. It now matches the `end` at the module's own indentation. A
+convention that punishes correct nesting was hiding, in principle, a genuinely
+undefined word.
 
-One thing that looked like a defect was not: four of the six metrics show `--`
-on a served page, because the projector only produces a baseline when a
-conversion is actually made. Correct, and now pinned by a test.
+---
 
 ## Honest limits
 
-- **The page adds structure roth did not have.** Three `group` fieldsets (Ages,
-  Balances, Social security) where roth had flat `.form-group` divs. That
-  follows `pages/roth_form.sp` from Phase 0, but it is a presentational change,
-  not a pure port, and it flatters the line count a little.
-- **roth's two spouse Social Security fields are still unreachable.** The engine
-  has `ss_spouse_start_year` and `ss_spouse_amount`; roth's page never showed
-  them, so neither does the port. Adding them is a product change.
-- **`conversion_value` renders as `0.0`, not `0`.** The default is a Float so
-  that `step_for` infers `0.01`, as roth's page hardcoded.
-- **`section` cannot take a variant.** roth wanted "the chart section" as a
-  presentational variant; `section`'s name slot is a subject, so it must exist.
-  The `chart-frame` wrapper inside `balance_chart` sidesteps it. Worth a look
-  before the next port.
-- **An app word cannot ask for a label.** The hatch's five methods do not
-  include `label_for`, so `pending` cannot reach the page → app → humanising
-  chain that `metric` gets for free, and every `pending` states its label.
-  That is six labels written in the page that a built-in would not have needed.
+- **The numbers on the page are wrong**, because roth's engine is wrong. The
+  page says so: an `aside` lists the six defects. Fixing them is
+  [ROTH_DOMAIN_BACKLOG.md](ROTH_DOMAIN_BACKLOG.md), deliberately a separate
+  project.
+- **The page adds structure roth did not have** — three `group` fieldsets where
+  roth had flat divs. It flatters the sentence count slightly.
+- **roth's two spouse Social Security fields are still unreachable.** The
+  engine has them; roth's page never showed them, so neither does this.
 - **`check_styles.rb` still does not cover an app's own words**, so
-  `.chart-canvas`, `.chart-legend`, `.chart-tooltip` and everything `app.js`
-  draws into the SVG are unchecked. Same limit Phase 6 named, now with more
-  behind it.
-- **The chart does not redraw on resize.** roth's script draws once at load
-  width. Pre-existing, carried over unchanged.
+  `.drawing`, `.chart-canvas` and everything inside the SVG are unchecked. The
+  limit Phase 6 named, now with a chart engine behind it.
+- **The library is cached per views directory**, so editing a partial needs a
+  restart. Phase 6 named this too; it cost real time this round.
+- **A stale stylesheet cost half an hour.** `send_file` with no `Cache-Control`
+  let a browser hold an old sheet while the served file was correct. The
+  example now sets `no_store`.
+- **`conversion_value` renders as `0.0`**, because the default is a Float so
+  that `step_for` infers `0.01`.
+- **An app word still cannot ask for a label.** The hatch's five methods do not
+  include `label_for`. It did not bite this round — `drawing` takes no label —
+  but it is why round one's `pending` had to state all six.
+
+---
 
 ## Done-conditions
 
@@ -190,5 +257,5 @@ conversion is actually made. Correct, and now pinned by a test.
 | The diff against its old views reviewed line by line | done — this document |
 | Judge it: better to read and write than the Slim it replaced? | **dan** — open |
 
-Suite: 95 tests, 356 assertions, 0 failures. 598 sentences, 0 problems.
+Suite: 112 tests, 459 assertions, 0 failures. 613 sentences, 0 problems.
 58 rules, 0 problems.

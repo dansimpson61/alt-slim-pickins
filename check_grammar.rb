@@ -91,8 +91,12 @@ vocab = File.read(File.join(here, 'VOCABULARY.md'))
 # Ruby through the escape hatch, which live in a module named *Words.
 app_words = Dir[File.join(here, '**', 'partials', '*.sp')]
             .map { |f| File.basename(f, '.sp') }.to_set
+# The `end` that closes the module is the one at the module's own indentation.
+# Anchoring on `^end` instead read straight past a nested module and counted
+# every later method as a word — which would quietly hide a genuinely undefined
+# one.
 Dir[File.join(here, 'examples', '**', '*.rb')].each do |f|
-  File.read(f).scan(/module \w*Words\b(.*?)^end/m).flatten.each do |body|
+  File.read(f).scan(/^([ \t]*)module \w*Words\b(.*?)^\1end/m).each do |_indent, body|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end
