@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: Roadmap 0.1 is CLOSED (ROADMAP-0.1.md) — all 8 phases done, 133 tests / 632 sentences / 65 rules green. Next roadmap is unwritten; BLUESKY-0.2.md argues it should start with a page nobody here designed, then conditional/bespoke UI, then checking the app contract at boot
+next_step: Roadmap 0.1 CLOSED. BLUESKY-0.2.md now names ~/dev/dashboard as the Phase 0 candidate — 23 views, 1555 lines, 233 branches, 65 routed hrefs, 91 hidden inputs, and it is the sibling slim-pickins gem reference consumer. 81% of its branches are already `empty`/`if:` cases. Start with ports.slim (42 lines, the whole problem in miniature); dashboard must keep working untouched
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

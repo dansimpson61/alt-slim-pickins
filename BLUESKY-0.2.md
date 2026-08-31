@@ -191,30 +191,118 @@ Stated plainly, because the pressure will come:
 
 ---
 
+## The candidate: `~/dev/dashboard`
+
+Added after reading it. It is a better Phase 0 than anything invented, and it
+changes the roadmap below.
+
+**It is twenty times roth.** 23 views, **1,555 lines** of Slim against roth's
+91. The largest single view is 305 lines; the largest page written here is 42
+sentences.
+
+**It is the sibling project's reference consumer.** The dashboard is built on
+`~/dev/slim-pickins` — 1,495 lines, eighteen `ui_*` helpers — and it has
+**already invented app words**: `words/attention.rb`, `words/ports.rb`,
+`words/projects.rb` and four more, each a Ruby class, each said as a bare word
+in a page. Two experiments converged on the same idea independently. A port
+would be the only head-to-head comparison of them on the same app that will
+ever be available.
+
+**And it is the missing evidence, exactly.** Measured across all 23 views:
+
+| | count |
+|---|---|
+| branch lines (`if` / `unless` / `else`) | **233** |
+| `each` loops | 71 |
+| interpolated `href` — routing | **65** |
+| hidden form inputs | **91** |
+| forms, over 24 distinct POST endpoints | 41 |
+| inline `style=` attributes | **180** |
+| `ui_*` helper calls | 107 |
+
+roth had **zero** branches, one form and no links. Everything 0.1 could not
+test is here in quantity.
+
+### The encouraging half
+
+Classifying all 176 `if`s by what they actually test:
+
+| what it branches on | count | already dissolved by |
+|---|---|---|
+| a collection being empty or not | **73** | `empty` |
+| the presence of one thing | **69** | the `if:` modifier |
+| comparison to a value | 17 | `choose` / `when`, or an app predicate |
+| compound and other | 17 | the same |
+
+**142 of 176 — 81% — are the two cases the language already turns into
+vocabulary.** That is the strongest evidence yet for "conditionals dissolve
+into vocabulary; do not write the branch, name the situation", and it comes
+from a page nobody here designed.
+
+Stated honestly: this is static analysis of what the branches *test*, not a
+port. It says the odds are good, not that it works.
+
+### The three real blockers
+
+**1. Routing — 65 interpolated hrefs.** `href="/projects/#{p[:path]}"`. The
+question deferred twice for want of evidence. The dashboard is nothing but
+navigation, and it settles it.
+
+**2. Hidden form values — 91 of them.** Every action carries `path`,
+`return_to`, sometimes `cmd`. There is **no word for a value a form carries but
+does not show**, and this is a genuine gap rather than a thing to route around.
+
+**3. 180 inline styles.** `style="justify-content: space-between; align-items:
+baseline; gap: 1rem;"`, over 41 distinct `sp-` classes. Most of these should
+*not* port — they are what `grid`, `actions`, `card` and `section` exist to
+replace. But some will not map, and the honest outcome is a list of what a page
+still cannot say about arrangement.
+
+Softer, and all previously solved: views calling `Scan.port_open?` and
+`Arrival.greeting` directly, `.first(5)` slicing in the page, and headings built
+by interpolation. Every one is the roth `Projection` pattern again — move it to
+a presenter and let the page name an attribute.
+
+### The caveat that matters
+
+**The dashboard is the tool dan runs everything else with.** A port must be a
+parallel set of views that can be thrown away, never a replacement, and the
+existing app must keep working untouched throughout — the same discipline that
+kept `~/dev/roth` clean through two phases.
+
+---
+
 ## The shape of the roadmap I would write
 
 Same discipline as 0.1 — retire the risk you have no evidence for first — with
 the risks reordered by what 0.1 learned.
 
-**Phase 0 · A page nobody here designed.** Someone else writes a page, or an
-existing app is ported without its vocabulary being adjusted to suit. Every
-wall gets recorded. This is the top risk and 0.1 never touched it.
+**Phase 0 · One dashboard view, chosen for difficulty.** Not the easiest —
+`ports.slim` at 42 lines, which has a form, a hidden field, an interpolated
+href, a conditional list and an app word, in miniature. It is the whole problem
+at a size that can be thrown away. Done looks like: it renders, or a list of
+exactly what stopped it.
 
-**Phase 1 · Conditional and bespoke UI.** The named gap. Find an app whose
-pages are genuinely irregular — a wizard, a permissions screen, something with
-real branching — and see whether `choose` survives contact or whether
-conditionals need a better answer than "name the situation".
+**Phase 1 · Navigation, settled.** Forced by Phase 0 rather than chosen. Does
+`link` ask the app for a path — `path_for(name, subject)`, the same shape as
+`label_for` and `format_for` — or are routes said with `to:`? 65 hrefs is
+enough evidence to decide, and the precedent from Phases 0 and 2 says ask.
 
-**Phase 2 · The contract, checked at boot.** §1. Small, and it retires the
-class of failure that motivated the whole roth study.
+**Phase 2 · The word for what a form carries.** 91 hidden inputs say this is
+real vocabulary, not an escape. It is the first genuinely new word since the
+chart redraft, and it should be drafted the way every good one was — against
+the pages that need it, after they have hurt.
 
-**Phase 3 · Navigation.** `link`, `path_for`, and a page that actually moves
-between things. Deferred twice for want of evidence; a multi-page app supplies
-it.
+**Phase 3 · The rest of the dashboard, in anger.** Conditional and bespoke UI
+at 1,555 lines. Does `choose` survive contact? Do the 81% really dissolve? What
+does a page still fail to say about arrangement?
 
-**Phase 4 · Errors that teach.** §5. Cheap, and it compounds with everything.
+**Phase 4 · The contract, checked at boot.** §1. Small, and by now the port
+will have made the case for it several times over.
 
-**Phase 5 · Subtraction.** §6. Cut the words and files with no page behind
+**Phase 5 · Errors that teach.** §5. Cheap, and it compounds with everything.
+
+**Phase 6 · Subtraction.** §6. Cut the words and files with no page behind
 them. A language that only grows is not being designed.
 
 `chart` should be left alone. It was redrafted against real evidence last and
@@ -223,10 +311,58 @@ should be resisted until a page asks.
 
 ---
 
+## The question for 0.2
+
+0.1's proscriptions were liberating because each one removed an escape and
+forced a discovery. No `div`, so components had to be words. No syntax, so
+extension had to be vocabulary. No numeric literal, so figures had to belong to
+the app. Nothing was ever added to get around them, and the language is small
+because of it.
+
+0.1 asked a question about **expression**:
+
+> *Can a view language keep one sentence all the way down?*
+
+It can. Fifty words, two apps, no grammar changes. Asking it again of a third
+app produces a third number and no new knowledge.
+
+The asset 0.1 built and never spent is that **a page is now a described thing**
+— a parsed tree in fifty known words, every subject resolvable, every attribute
+traceable to an app object. So 0.2's question should be about **knowledge**:
+
+> ### *What can a language do for you, once it knows what every page means?*
+
+And the proscription that would force the answer, in the same family as the
+others:
+
+> ### **A page may not render until the app has been proved able to answer it.**
+
+No lazy failure. No rendering thirty lines and raising on the thirty-first. A
+page declares what it demands, the app is checked against it once, and a
+mismatch is a boot error with a name.
+
+It is a proscription because it removes an ability the language currently has —
+**the ability to fail late** — and like the others it looks like a restriction
+and pays like a tool:
+
+- roth's eleven-month silent rename becomes an error the first time anyone
+  starts the app.
+- The attribute-to-page index falls out of the same walk, so *what presents this
+  field* becomes answerable.
+- Did-you-mean becomes possible, because the demand and the offer are both in
+  hand at the same moment.
+- `CONTRACT.md` stops being prose describing a promise and becomes a thing that
+  is checked.
+- And a tree that can be walked without rendering is a tree that can be
+  rendered as something other than HTML.
+
+Every item in §1 through §5 of this document is a consequence of that one
+proscription. That is the test of a good one.
+
 ## The one thing I would most like to be true at the end of 0.2
 
-That someone who did not build it wrote a page, hit a wall, and the error
-message told them what to do.
+That someone who did not build it wrote a page, got it wrong, and the language
+told them — before it served anything — exactly which word was lying.
 
-Everything else in this document is an optimisation of a thing that already
-works. That is the thing that has never been tried.
+Everything else here is an optimisation of a thing that already works. That is
+the thing that has never been tried.
