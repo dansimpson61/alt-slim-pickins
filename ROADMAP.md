@@ -240,6 +240,13 @@ The vocabulary renders classes; something must define them.
 
 ## Phase 7 — Port a real app  ← next
 
+**Do this first.** `link show, "Details"` derives `/show`, not
+`/accounts/2`. The language has no opinion about routing, and roth will hit
+it on its first page. Decide whether `link` asks the app — a `path_for(name,
+subject)` on the contract, the same shape as `label_for` and `format_for` —
+or whether routes are simply said with `to:`. The precedent from Phases 0 and
+2 says ask the app.
+
 - **Port roth entirely** `agent` — every view, not the one page.
   *Done looks like:* roth runs on this language, and the diff against its old
   views is reviewed line by line.

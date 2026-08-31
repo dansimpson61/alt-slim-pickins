@@ -24,7 +24,10 @@ class Portfolio < Sinatra::Base
   helpers SlimPickins::Helpers
 
   set :views, File.join(__dir__, 'views')
-  set :public_folder, File.join(__dir__, '..', '..', 'assets')
+  # The layout asks for /assets/slim-pickins.css, so the repo root is the
+  # public folder — not the assets directory, which would serve it at /.
+  set :public_folder, File.expand_path('../..', __dir__)
+  set :static, true
 
   # One place says what this app's vocabulary is.
   SlimPickins::Template.libraries[settings.views] =
