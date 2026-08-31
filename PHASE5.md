@@ -140,8 +140,8 @@ at all.
 - **Variants are open-ended.** An app may name `note anything`, and the
   checker only requires the *base* to be styled. That is deliberate — the
   alternative is a closed list of variants, which the language does not have.
-- **`icon` still assumes a sprite sheet** the app must ship. Ours styles the
-  `<svg>`, not the symbols.
+- **The default sprite is seven symbols** — the status variants the vocabulary
+  names. An app wanting others still ships its own.
 
 ## Done-conditions
 
@@ -150,5 +150,5 @@ at all.
 | Decide the relationship to slim-pickins' CSS | **decided: own it** (dan, 2026-08-30) |
 | The class-naming convention written into VOCABULARY's `renders` slots | done — stated once at the head of the stylesheet, which is where it belongs |
 
-Suite: 71 tests, 236 assertions, 0 failures. 431 sentences, 0 problems.
-58 classes emitted, 57 rules, 0 problems.
+Suite: 71 tests, 236 assertions, 0 failures. 524 sentences, 0 problems.
+68 classes emitted, 58 rules, 0 problems.
