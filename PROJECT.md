@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: Roadmap 0.1 CLOSED. BLUESKY-0.2.md now names ~/dev/dashboard as the Phase 0 candidate — 23 views, 1555 lines, 233 branches, 65 routed hrefs, 91 hidden inputs, and it is the sibling slim-pickins gem reference consumer. 81% of its branches are already `empty`/`if:` cases. Start with ports.slim (42 lines, the whole problem in miniature); dashboard must keep working untouched
+next_step: ROADMAP-0.2.md is written and nothing in it is started. Phase 0 is one dashboard view — views/ports.slim, 42 lines — ported until the first thing that cannot be said, and the wall recorded. ~/dev/dashboard must keep working untouched throughout
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

@@ -103,8 +103,10 @@ this as money* and the formatting belongs to the word.
 - **[VOCABULARY.md](VOCABULARY.md)** — fifty words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
-- **[ROADMAP-0.1.md](ROADMAP-0.1.md)** — the phases and the risk register. Start here
-  to know what happens next.
+- **[ROADMAP-0.2.md](ROADMAP-0.2.md)** — the live roadmap: the question, the
+  proscription, the risk register. Start here to know what happens next.
+  [ROADMAP-0.1.md](ROADMAP-0.1.md) is closed, and kept as the record of what
+  0.1 set out to do and what it found.
 - **[PORTFOLIO.md](PORTFOLIO.md)**, **[CONTENT.md](CONTENT.md)**,
   **[FIGURES.md](FIGURES.md)** — three real pages written in the language,
   each modelled on a view that already exists in this workspace. They are the
@@ -116,8 +118,8 @@ this as money* and the formatting belongs to the word.
 ## Status
 
 **Roadmap 0.1 is finished** — all eight phases, closed in
-[ROADMAP-0.1.md](ROADMAP-0.1.md). The next one is not written;
-[BLUESKY-0.2.md](BLUESKY-0.2.md) is where it should start.
+[ROADMAP-0.1.md](ROADMAP-0.1.md). [ROADMAP-0.2.md](ROADMAP-0.2.md) is the live
+one, argued for in [BLUESKY-0.2.md](BLUESKY-0.2.md).
 
 The bet the paper could not settle was **inference** — whether `field
 base_income` can really derive a label, an input name, a value and an input

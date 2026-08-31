@@ -9,7 +9,7 @@ Resume work on `~/dev/alt-slim-pickins`.
 **Start by reading**, in this order:
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
-2. `ROADMAP-0.1.md` — the roadmap that is now finished; Phases 0–8 are all complete
+2. `ROADMAP-0.2.md` — the live roadmap. `ROADMAP-0.1.md` is closed; its eight phases are all complete
 3. `DESIGN.md`, `VOCABULARY.md`, `CONTRACT.md` — grammar, 50 words, what an app must promise
 4. `PHASE8.md`, then `PHASE7.md` — the last two phases, and the language defects they found
 5. `LORE.md` — what previous sessions *learned*, which is not what they did
@@ -18,9 +18,9 @@ Don't re-derive any of that in conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is finished.** All eight phases are complete and
-[ROADMAP-0.1.md](ROADMAP-0.1.md) is closed; the next one is not written yet.
-[BLUESKY-0.2.md](BLUESKY-0.2.md) is where it should start from.
+**Roadmap 0.1 is finished and 0.2 is written.** All eight phases of
+[ROADMAP-0.1.md](ROADMAP-0.1.md) are complete; [ROADMAP-0.2.md](ROADMAP-0.2.md)
+is the live one and nothing in it is started.
 
 The language runs: one sentence, fifty words, its own stylesheet, and two
 Sinatra apps that speak it. `examples/roth` is a deep port of `~/dev/roth`
