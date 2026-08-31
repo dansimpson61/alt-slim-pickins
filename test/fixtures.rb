@@ -127,6 +127,36 @@ module Fixtures
     inputs
   end
 
+  Specimen = Struct.new(:blurb, :markdown, :origin, :reviewed_on, :total_value, :ytd_return,
+                        :holdings_count, :worst_day, :holdings, :drifted?, :nothing,
+                        :balances, :years, :allocation, :example, :amount, :rate,
+                        :frequency, :auto_invest, :growth_rate, :horizon_years,
+                        keyword_init: true)
+
+  def specimen
+    labelled(
+      Specimen.new(
+        blurb: 'Every word in the vocabulary, on one page, so the design system can be looked at.',
+        markdown: "Prose is **markdown**, rendered *safely* — there is no trust-me spelling.\n\n" \
+                  "- escaped first\n- then a fixed set of patterns\n\nSee [the design](/design).",
+        origin: 'dashboard', reviewed_on: Date.new(2026, 8, 30),
+        total_value: 1_284_506, ytd_return: 0.0742, holdings_count: 3, worst_day: -3_180,
+        holdings: [holding('VTI', 1240, 356_120, 48_900, 0.42),
+                   holding('VXUS', 890, 61_410, -3_180, 0.07),
+                   holding('BND', 410, 117_760, 21_050, 0.14)],
+        drifted?: true, nothing: [],
+        balances: [900_000, 980_000, 1_020_000, 1_180_000, 1_284_506],
+        years: [2022, 2023, 2024, 2025, 2026],
+        allocation: [0.63, 0.21, 0.16],
+        example: "section holdings\n  each holding\n    money .market_value",
+        amount: 500, rate: 0.05, frequency: 'monthly', auto_invest: true,
+        growth_rate: 0.05, horizon_years: 30
+      ),
+      formats: { total_value: :money, ytd_return: :percent, holdings_count: :number,
+                 worst_day: :money }
+    )
+  end
+
   # Which locals each page in pages/ needs. A page with no entry is not a page
   # — `layout.sp` is chrome, not something that renders alone.
   def for(name)
@@ -136,6 +166,7 @@ module Fixtures
     when 'content' then { pattern: pattern }
     when 'figures' then { review: review }
     when 'roth_form' then { scenario: scenario }
+    when 'specimen' then { specimen: specimen }
     end
   end
 end
