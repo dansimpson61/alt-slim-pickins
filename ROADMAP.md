@@ -3,25 +3,19 @@
 **Retire the risk we have no evidence for, before building the parts we do.**
 
 The grammar is settled: one sentence, one resolution rule, no open questions
-([DESIGN.md](DESIGN.md) v0.3). The vocabulary is forty-six words tested
-against three real pages from this workspace ([VOCABULARY.md](VOCABULARY.md)
-draft 3), and its wall counts across those pages went 3, 6, 1 — converging
-rather than growing.
+([DESIGN.md](DESIGN.md) v0.3). All forty-seven words are implemented
+([VOCABULARY.md](VOCABULARY.md)), and the three pages drafted on paper before
+any code existed now render — see `bin/render_pages.rb`.
 
-All of that is on paper, and paper has given nearly everything it can.
+**The three High risks are retired.** Inference works, and where it cannot
+(labels, formats) the app answers through two optional methods rather than the
+language guessing. Reuse cost exactly one word. What the phases below still
+hold is the medium and narrow risk: the design system, integration, a real
+port, and `chart`.
 
-What remains unproven is not the grammar and not the transform. It is
-**inference**. Forty-four of the forty-six words infer something, and thirteen
-infer from the app's own domain model — deriving a label, a value, a type or
-an attribute from an object. `field base_income` producing a label, an input
-name, a current value *and* an input type from one word is either the whole
-point of this language or a fantasy, and no amount of writing pages can
-settle which.
-
-So the build does not start with the transform. The transform is the part we
-are most confident about, it is a hundred and fifty lines, and it touches none
-of the risk. Starting there would feel like progress while leaving every real
-question open.
+The original argument for this order is kept because it decided the shape of
+the work: the build did not start with the transform, which was the part we
+were most confident about and touched none of the risk.
 
 ## The risk register
 

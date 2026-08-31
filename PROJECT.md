@@ -10,11 +10,12 @@ docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
-notes: Still no code, deliberately. Grammar settled (DESIGN.md v0.3) — one
-  sentence, one resolution rule, no open questions. Vocabulary at 46 words
-  (VOCABULARY.md draft 3), tested against three real pages drawn from this
-  workspace; wall counts 3, 6, 1 say it is converging. check_grammar.rb keeps
-  all five documents accountable to each other.
+notes: Working language. Grammar settled (DESIGN.md v0.3) — one sentence, one
+  resolution rule, no open questions. All 47 words implemented, and the three
+  pages drafted on paper before any code existed now render
+  (bin/render_pages.rb). App contract is one sentence plus two optional
+  methods (CONTRACT.md). Phases 0-4 done; 5 is the design system, 8 is chart.
+  check_grammar.rb holds every document and every page to the same grammar.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---
