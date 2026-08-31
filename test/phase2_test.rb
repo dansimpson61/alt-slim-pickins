@@ -34,8 +34,8 @@ class Phase2Test < Minitest::Test
   def test_each_finds_the_collection_by_pluralising_the_name
     html = render("page book\n  each entry\n    title .name\n",
                   book: Book.new(entries: [{ name: 'One' }, { name: 'Two' }]))
-    assert_includes html, '<h2>One</h2>'
-    assert_includes html, '<h2>Two</h2>'
+    assert_includes html, '<h2 class="title">One</h2>'
+    assert_includes html, '<h2 class="title">Two</h2>'
   end
 
   def test_pluralising_handles_the_y_case
@@ -50,14 +50,14 @@ class Phase2Test < Minitest::Test
   def test_each_iterates_the_subject_when_the_subject_is_the_collection
     html = render("page portfolio\n  section accounts\n    each account\n      title .name\n",
                   portfolio: two_accounts)
-    assert_includes html, '<h3>Traditional</h3>'
-    assert_includes html, '<h3>Roth</h3>'
+    assert_includes html, '<h3 class="title">Traditional</h3>'
+    assert_includes html, '<h3 class="title">Roth</h3>'
   end
 
   def test_from_overrides_pluralising
     html = render("page book\n  each entry, from: .recent\n    title .name\n",
                   book: { recent: [{ name: 'Only' }] })
-    assert_includes html, '<h2>Only</h2>'
+    assert_includes html, '<h2 class="title">Only</h2>'
   end
 
   def test_a_collection_that_is_not_there_says_so
@@ -78,9 +78,9 @@ class Phase2Test < Minitest::Test
               title account.name
               title .symbol
     PAGE
-    assert_includes html, '<h3>Traditional</h3>'
-    assert_includes html, '<h3>VTI</h3>'
-    assert_includes html, '<h3>VXUS</h3>'
+    assert_includes html, '<h3 class="title">Traditional</h3>'
+    assert_includes html, '<h3 class="title">VTI</h3>'
+    assert_includes html, '<h3 class="title">VXUS</h3>'
   end
 
   # --- the table writes no loop ----------------------------------------
@@ -141,7 +141,7 @@ class Phase2Test < Minitest::Test
             title .name
     PAGE
     refute_includes html, 'No accounts linked yet.'
-    assert_includes html, '<h3>Traditional</h3>'
+    assert_includes html, '<h3 class="title">Traditional</h3>'
   end
 
   # --- formatting -------------------------------------------------------
@@ -191,8 +191,8 @@ class Phase2Test < Minitest::Test
 
   def test_a_title_knows_how_deep_it_is
     html = render(%(page book\n  title "Top"\n  section "Part"\n    title "Inner"\n), book: {})
-    assert_includes html, '<h2>Top</h2>'
-    assert_includes html, '<h3>Inner</h3>'
+    assert_includes html, '<h2 class="title">Top</h2>'
+    assert_includes html, '<h3 class="title">Inner</h3>'
   end
 
   # --- a name is a subject; content is a label --------------------------
@@ -204,14 +204,14 @@ class Phase2Test < Minitest::Test
   def test_a_section_named_with_content_is_a_label_and_shifts_nothing
     html = render(%(page portfolio\n  section "Where you stand"\n    title .heading\n),
                   portfolio: { heading: 'Still the portfolio' })
-    assert_includes html, '<h2>Where you stand</h2>'
-    assert_includes html, '<h3>Still the portfolio</h3>'
+    assert_includes html, '<h2 class="section-title">Where you stand</h2>'
+    assert_includes html, '<h3 class="title">Still the portfolio</h3>'
   end
 
   def test_a_section_named_with_a_name_shifts_the_subject
     html = render("page portfolio\n  section accounts\n    each account\n      title .name\n",
                   portfolio: two_accounts)
-    assert_includes html, '<h3>Traditional</h3>'
+    assert_includes html, '<h3 class="title">Traditional</h3>'
   end
 
   def test_a_section_naming_a_subject_that_is_absent_fails_on_its_own_line

@@ -13,6 +13,7 @@ page specimen, "slim-pickins — every word"
     badge ok, "canonical"
     badge warning, "emerging"
     badge blocker, "broken"
+    text "Rendered on:"
     time .reviewed_on
 
   section "Numbers"
@@ -21,11 +22,16 @@ page specimen, "slim-pickins — every word"
       metric ytd_return, "YTD return"
       metric holdings_count, "Holdings"
       metric worst_day, "Worst day"
-    text "The same values as bare words, not tiles:"
-    money .total_value
-    percent .ytd_return
-    number .holdings_count
-    money .worst_day
+    text "The same values as bare words rather than tiles:"
+    list plain
+      item
+        money .total_value
+      item
+        percent .ytd_return
+      item
+        number .holdings_count
+      item
+        money .worst_day
 
   section "A table that writes no loop"
     table holdings

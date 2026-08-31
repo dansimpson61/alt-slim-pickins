@@ -31,7 +31,7 @@ class Phase4Test < Minitest::Test
           figure "A caption"
             image "/a.png", alt: "A"
     PAGE
-    assert_includes html, '<div class="grid grid--cards" style="--columns: 3">'
+    assert_includes html, '<div class="grid grid--cards" style="--track: calc((100% - 2 * var(--gap)) / 3)">'
     assert_includes html, '<article class="card card--compact" id="thing-7">'
     assert_includes html, '<ul class="list list--plain"><li class="item">One</li></ul>'
     assert_includes html, '<figcaption>A caption</figcaption>'

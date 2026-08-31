@@ -112,6 +112,7 @@ a { color: var(--accent); }
 
 /* ------------------------------------------------------------ structure -- */
 .section { margin-bottom: var(--gap-loose); }
+.section-title { margin-top: 0; }
 
 .aside {
   padding: var(--gap);
@@ -122,12 +123,13 @@ a { color: var(--accent); }
 .grid {
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat(var(--columns, auto-fit), minmax(14rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--track, 14rem), 100%), 1fr));
 }
 
 .list { margin: 0 0 var(--gap); padding-left: 1.25em; }
 .list--plain { list-style: none; padding-left: 0; }
 .item { margin-bottom: var(--step); }
+.item p { margin-bottom: 0; }
 
 .card {
   padding: var(--gap);
@@ -186,6 +188,7 @@ summary { cursor: pointer; color: var(--accent); }
 
 .badge {
   display: inline-block;
+  margin-right: var(--step);
   padding: 0 calc(var(--step) * 2);
   border-radius: var(--radius);
   background: var(--surface-soft);

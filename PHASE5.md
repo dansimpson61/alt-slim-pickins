@@ -105,11 +105,38 @@ ORPHAN      "sidebar-widget" is defined but no word can emit it
   without exception: `money--negative` rather than `money negative`,
   `column--numeric` rather than `numeric`, `<li class="item">`.
 
+## Then somebody looked at it
+
+`pages/specimen.sp` puts all forty-seven words on one page, and `bin/demo.rb`
+inlines the stylesheet so it opens standalone. Rendering it and reading it in
+a browser found five defects that every checker had passed:
+
+1. **The metrics grid overflowed the page.** `repeat(var(--columns), minmax(14rem, 1fr))`
+   forced four tracks of at least 14rem, which is wider than the viewport and
+   cannot shrink. `columns:` now sets the *track width* and `auto-fit` wraps
+   when it will not fit, so the count is an aim rather than a demand.
+2. **`icon` rendered nothing at all.** It emits `<use href="#icon-warning">`
+   and the language shipped no sprite, so every icon was an empty box. The
+   vocabulary names those variants, so the vocabulary ships them: `page` emits
+   a sprite of exactly the symbols the page used, the way it emits the doctype.
+3. **`.title` was dead CSS.** `title` was the one word emitting no class, and
+   `check_styles.rb` could not see it — its orphan rule only asks whether a
+   base *corresponds to* a word, not whether anything emits it. Fixed by making
+   `title` conform, and `section` gained `section-title` for the same reason.
+4. **`fact reviewed_on` printed `2026-08-30`** while `time` printed
+   "30 August 2026". A date's shape says how to render it, so `present` now
+   knows — the same rule that right-aligns numbers.
+5. **Badges ran into each other** and into whatever followed them.
+
+The first three are the interesting ones, because all three passed every
+check. A checker can prove a class has a rule; it cannot prove the rule is any
+good, that the sprite the rule styles exists, or that anything emits the class
+at all.
+
 ## Honest limits
 
-- **The stylesheet is untested visually.** It renders in a browser; nobody has
-  looked at it. `check_styles.rb` proves every class has a rule, not that the
-  rule is any good.
+- **An icon sits above its text in a list item**, because `text` is a block.
+  It reads acceptably and a flex row would break items with several children.
 - **Variants are open-ended.** An app may name `note anything`, and the
   checker only requires the *base* to be styled. That is deliberate — the
   alternative is a closed list of variants, which the language does not have.

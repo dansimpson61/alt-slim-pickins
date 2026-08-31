@@ -5,6 +5,7 @@ require_relative 'subject'
 require_relative 'inference'
 require_relative 'markdown'
 require_relative 'charting'
+require_relative 'icons'
 
 module SlimPickins
   # The runtime. Every word is a real defined method — never method_missing —
@@ -40,6 +41,7 @@ module SlimPickins
       @branches = nil      # non-nil only while a `choose` is collecting branches
       @contents = nil      # the page's own children, while a layout renders
       @head = +''          # words that belong in <head>, wherever they are said
+      @icons_used = []     # so the sprite carries only the symbols a page uses
       define_app_words
     end
 
@@ -103,6 +105,7 @@ module SlimPickins
       @out << @head
       close(:head)
       open(:body)
+      @out << Icons.sprite(@icons_used)
       text_tag(:h1, heading)
       @out << body
       close(:body)
@@ -161,14 +164,14 @@ module SlimPickins
     def section(*args, &block)
       name, heading = name_and_content(args)
       open(:section, class: token(:section, name))
-      text_tag(:"h#{@level}", label_for(name, heading))
+      text_tag(:"h#{@level}", label_for(name, heading), class: 'section-title')
       deeper { about(name) { nest(&block) } }
       close(:section)
     end
 
     def title(*args)
       _, text = name_and_content(args)
-      text_tag(:"h#{@level}", text)
+      text_tag(:"h#{@level}", text, class: token(:title))
     end
 
     # The loop is written once, here, and never in a page.
@@ -254,7 +257,7 @@ module SlimPickins
     def grid(*args, columns: nil, &block)
       variant, = name_and_content(args)
       open(:div, class: token(:grid, variant),
-                 style: columns && "--columns: #{columns}")
+                 style: columns && "--track: calc((100% - #{columns - 1} * var(--gap)) / #{columns})")
       nest(&block)
       close(:div)
     end
@@ -344,6 +347,7 @@ module SlimPickins
     def icon(*args)
       name, data = name_and_content(args)
       name ||= data
+      @icons_used << name.to_s.to_sym
       emit(%(<svg class="icon icon--#{name}" aria-hidden="true">) +
            %(<use href="#icon-#{name}"></use></svg>))
     end
@@ -520,7 +524,8 @@ module SlimPickins
       when :money   then Inference.money(value)
       when :percent then Inference.percent(value)
       when :number  then Inference.number(value)
-      else value.to_s
+      else
+        value.respond_to?(:strftime) ? Inference.moment(value, nil) : value.to_s
       end
     end
 

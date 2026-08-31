@@ -30,10 +30,10 @@ class Phase3Test < Minitest::Test
     html = render("page account\n  title .name\n",
                   library: library, account: Account.new(name: 'Roth', balance: 1))
     assert_includes html, '<nav class="nav" aria-label="Main">'
-    assert_includes html, '<h2>Roth</h2>'
+    assert_includes html, '<h2 class="title">Roth</h2>'
     assert_includes html, '<footer class="footer">Made here.</footer>'
-    assert_operator html.index('<nav'), :<, html.index('<h2>Roth')
-    assert_operator html.index('<h2>Roth'), :<, html.index('<footer')
+    assert_operator html.index('<nav'), :<, html.index('>Roth<')
+    assert_operator html.index('>Roth<'), :<, html.index('<footer')
   end
 
   # The layout renders inside the body, but a stylesheet belongs in the head.
@@ -74,7 +74,7 @@ class Phase3Test < Minitest::Test
     html = render("page account\n  account_card\n",
                   library: library(layout: nil, partials: { account_card: CARD }),
                   account: Account.new(name: 'Roth', balance: 1500))
-    assert_includes html, '<h2>Roth</h2>'
+    assert_includes html, '<h2 class="title">Roth</h2>'
     assert_includes html, '$1,500'
   end
 
@@ -83,8 +83,8 @@ class Phase3Test < Minitest::Test
     html = render("page portfolio\n  each account\n    account_card\n",
                   library: library(layout: nil, partials: { account_card: CARD }),
                   portfolio: { accounts: accounts })
-    assert_includes html, '<h2>A</h2>'
-    assert_includes html, '<h2>B</h2>'
+    assert_includes html, '<h2 class="title">A</h2>'
+    assert_includes html, '<h2 class="title">B</h2>'
   end
 
   # Same rule as `section`: a name shifts the subject, and must be there.
@@ -92,7 +92,7 @@ class Phase3Test < Minitest::Test
     html = render("page portfolio\n  account_card best\n",
                   library: library(layout: nil, partials: { account_card: CARD }),
                   portfolio: { best: Account.new(name: 'Roth', balance: 9) })
-    assert_includes html, '<h2>Roth</h2>'
+    assert_includes html, '<h2 class="title">Roth</h2>'
   end
 
   # The call site must not reveal which vocabulary a word came from.
