@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: Assessment done (lore, 2026-08-31): triage before judging Phase 7 — wire scenario complaints into POST /projection, refresh the stale "nothing is implemented" headers in DESIGN/VOCABULARY/README, fix HANDOFF.md's Phase-7-is-next text; then dan judges the port, then Phase 8 chart
+next_step: Phase 7 closed — dan judged the port worth it (PHASE7.md), and the review triage is done. Phase 8 is next — redraft `chart` against examples/roth/lib/chart.rb, the real charting need it was waiting for, or cut the word
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

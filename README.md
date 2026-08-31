@@ -1,8 +1,9 @@
 # alt-slim-pickins
 
-An exploration of a view DSL whose grammar stays describable all the way
-down. There is no code yet, and that is deliberate — the first question is
-what we are building *on*.
+A view language whose grammar stays describable all the way down. It began as
+paper — the first question was what we were building *on* — and it now runs:
+one sentence, forty-seven words, its own stylesheet, and two Sinatra apps that
+speak it.
 
 `slim-pickins` is a helper vocabulary layered on Slim. This is the other
 experiment: what a view language looks like if the grammar itself is the
@@ -99,7 +100,7 @@ this as money* and the formatting belongs to the word.
 
 - **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
   no open questions.
-- **[VOCABULARY.md](VOCABULARY.md)** — forty-six words, seven slots each.
+- **[VOCABULARY.md](VOCABULARY.md)** — forty-seven words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
 - **[ROADMAP.md](ROADMAP.md)** — the phases and the risk register. Start here
@@ -114,9 +115,17 @@ this as money* and the formatting belongs to the word.
 
 ## Status
 
-No code yet, deliberately. The grammar and vocabulary are settled on paper,
-and paper has given nearly all it can. What remains unproven is **inference**
-— forty-four of the forty-six words infer something, and thirteen infer from
-the app's own domain model. Whether `field base_income` can really derive a
-label, an input name, a value and an input type from one word is the whole
-bet, and Phase 0 of the roadmap exists to settle it.
+**Phases 0–7 done.** The bet the paper could not settle was **inference** —
+whether `field base_income` can really derive a label, an input name, a value
+and an input type from one word. Phase 0 measured it and it holds: on roth's
+form of fourteen labelled controls, humanising alone got eleven labels right,
+and with `label_for` on the app the page states none of them.
+
+Phase 7 ported a real app — `~/dev/roth` — including its results, which now
+render on the server. Its 88-line page and 249-line script became 58 sentences
+and 47 lines. See [PHASE7.md](PHASE7.md) for the line-by-line review and every
+limit found, and [ROADMAP.md](ROADMAP.md) for what is next.
+
+Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
+Everything green: `ruby check_grammar.rb && ruby check_styles.rb &&
+for f in test/*_test.rb; do ruby $f; done`

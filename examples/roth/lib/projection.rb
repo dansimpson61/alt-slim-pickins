@@ -86,8 +86,13 @@ module Roth
     def chart
       @chart ||= Chart.new(years,
                            standard_deduction: primary.standard_deduction,
-                           brackets: primary.brackets)
+                           brackets: primary.brackets,
+                           baseline: compared? ? baseline.years.map { |y| Year.new(y) } : nil)
     end
+
+    # What the scenario had to say about its own inputs. Empty on a sound one,
+    # so `each complaint` renders nothing without a branch.
+    def complaints = @scenario.complaints
 
     # --- what the engine gets wrong --------------------------------------
     #

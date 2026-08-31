@@ -100,17 +100,36 @@ class Phase7Test < Minitest::Test
 
   # --- validation, which roth had none of --------------------------------
 
-  def test_nonsense_is_refused_with_a_reason
+  # The API refuses; the form does not. One object, two policies, chosen by
+  # the caller.
+  def test_the_json_endpoint_refuses_with_a_reason
     body = json_run(horizon_years: 0, age_primary: 500)
     assert_equal 422, last_response.status
-    assert_includes body['complaints'], 'Horizon (years) must be between 1 and 60'
-    assert_includes body['complaints'], 'Age (primary) must be between 0 and 120'
+    assert_includes body['complaints'], 'Horizon (years) must be between 1 and 60 — using 1'
+    assert_includes body['complaints'], 'Age (primary) must be between 0 and 120 — using 120'
+  end
+
+  # The seam an outside review found: `/run` validated and `/projection` did
+  # not, so the form rendered a 500 for input the API would have refused —
+  # the same unenforced-seam disease this round was built to cure.
+  def test_the_form_renders_and_says_what_it_did
+    post '/projection', { 'age_primary' => '200', 'horizon_years' => '0' }
+    assert_equal 200, last_response.status
+    shown = last_response.body.scan(/class="note note--warning">([^<]*)/).flatten
+    assert_includes shown, 'Age (primary) must be between 0 and 120 — using 120'
+    assert_includes shown, 'Horizon (years) must be between 1 and 60 — using 1'
+  end
+
+  def test_a_sound_scenario_says_nothing
+    get '/'
+    refute_includes last_response.body, 'note--warning'
   end
 
   # roth raised NoMethodError from inside `aggregate` on this input.
   def test_a_zero_horizon_no_longer_crashes
-    json_run(horizon_years: 0)
-    assert_equal 422, last_response.status
+    post '/projection', { 'horizon_years' => '0' }
+    assert_equal 200, last_response.status
+    assert_equal 1, Roth::Scenario.new('horizon_years' => '0').horizon_years
   end
 
   def test_blank_and_unparseable_fall_back_to_defaults
@@ -172,6 +191,37 @@ class Phase7Test < Minitest::Test
     balances = last_response.body[/chart-canvas--balances.*?<\/svg>/m]
     assert_includes balances, 'stack-trad'
     assert_includes balances, 'stack-roth'
+  end
+
+  # An outside review caught this one: roth's page had three interactive
+  # controls and the port logged only two. The "Show Baseline" checkbox
+  # overlaid the do-nothing series, and the ported charts had no such series
+  # at all — the comparison survived only as headline numbers. Drawn on the
+  # server there is nothing to defer, so it needs no control.
+  def test_the_do_nothing_series_is_drawn_whenever_there_is_one
+    get '/'
+    refute_includes last_response.body, 'baseline-line', 'nothing to compare against yet'
+
+    post '/projection', { 'conversion_value' => '50000' }
+    income = last_response.body[/chart-canvas--income.*?<\/svg>/m]
+    assert_includes income, 'baseline-line'
+  end
+
+  # roth built its legend in the browser out of divs. It is part of the
+  # picture now, and it describes only what the caller actually drew —
+  # inferring it put a "Do nothing" swatch on a chart with no such line.
+  def test_each_key_describes_only_what_its_chart_draws
+    labels = lambda do |kind|
+      last_response.body[/chart-canvas--#{kind}.*?<\/svg>/m].scan(/y="17.0">([^<]+)/).flatten
+    end
+
+    post '/projection', { 'conversion_value' => '50000' }
+    assert_equal ['Base income', 'Social Security', 'Distribution', 'Converted',
+                  'Federal tax', 'Do nothing'], labels['income']
+    assert_equal %w[Traditional Roth], labels['balances']
+
+    get '/'
+    refute_includes labels['income'], 'Do nothing'
   end
 
   # A viewBox is responsive with no script at all. roth's chart measured

@@ -33,7 +33,16 @@ module Roth
       def complaint(value)
         return nil if within.nil? || within.cover?(value)
 
-        "#{label} must be between #{within.first} and #{within.last}"
+        "#{label} must be between #{within.first} and #{within.last} — using #{clamp(value)}"
+      end
+
+      # Out of range is held at the edge rather than passed on. A projection
+      # always exists, so a half-typed `2` in the age box cannot take the page
+      # down — and `complaint` says what was done with it.
+      def clamp(value)
+        return value if within.nil? || within.cover?(value)
+
+        value < within.first ? within.first : within.last
       end
     end
 
@@ -68,6 +77,10 @@ module Roth
                 format: :money, coerce: method(:number), within: 0..10_000_000)
     ].freeze
 
+    # A thing with a `description`, so a page can say `note warning,
+    # .description` rather than reaching into a string.
+    Complaint = Struct.new(:description)
+
     BY_NAME = FIELDS.to_h { |f| [f.name, f] }.freeze
     STRATEGIES = { 'fixed' => 'Fixed amount', 'fill_bracket' => 'Fill bracket' }.freeze
 
@@ -86,11 +99,15 @@ module Roth
     # than reaching the engine as nil.
     def initialize(params)
       params = params.transform_keys(&:to_sym)
-      @values = BY_NAME.transform_values { |f| f.cast(params[f.name]) }
+      cast = BY_NAME.transform_values { |f| f.cast(params[f.name]) }
+      @complaints = FIELDS.filter_map { |f| f.complaint(cast[f.name]) }.map { |c| Complaint.new(c) }
+      @values = BY_NAME.to_h { |name, f| [name, f.clamp(cast[name])] }
       @values[:conversion_strategy] = 'fixed' unless STRATEGIES.key?(@values[:conversion_strategy])
-      @complaints = FIELDS.filter_map { |f| f.complaint(@values[f.name]) }
     end
 
+    # A page shows these; the JSON endpoint refuses on them. The interactive
+    # form is forgiving and says what it did, an API is strict — one object,
+    # and the caller picks the policy.
     def sound? = @complaints.empty?
 
     # The app contract's optional half.

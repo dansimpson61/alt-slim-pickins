@@ -28,6 +28,9 @@ class Portfolio < Sinatra::Base
   # public folder — not the assets directory, which would serve it at /.
   set :public_folder, File.expand_path('../..', __dir__)
   set :static, true
+  # A `Sinatra::Base` subclass does not parse ARGV, so `-p` is silently
+  # ignored and `run!` takes 4567 — which roth is usually holding.
+  set :port, ENV.fetch('PORT', 4576).to_i
 
   # One place says what this app's vocabulary is.
   SlimPickins::Template.libraries[settings.views] =

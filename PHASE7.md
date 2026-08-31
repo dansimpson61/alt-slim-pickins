@@ -57,8 +57,8 @@ dan's call, and it changes the answer:
 |---|---|---|
 | escape-hatch words | 3 | **1** |
 | escape-hatch uses | 9 | **3** |
-| across sentences | 324 | 342 |
-| ratio | 1 in 36 | **1 in 114** |
+| across sentences | 324 | 344 |
+| ratio | 1 in 36 | **1 in 115** |
 
 `pending` is gone because the figures are real, so `metric` presents them. The
 JSON mount is gone because the table replaced it. What is left is `drawing`,
@@ -119,8 +119,8 @@ same rule that resolves every other `.foo`.
 balances, a 500% growth rate and `age_primary: 200` were all accepted silently.
 
 ```json
-{"complaints":["Age (primary) must be between 0 and 120",
-               "Horizon (years) must be between 1 and 60"]}
+{"complaints":["Age (primary) must be between 0 and 120 — using 120",
+               "Horizon (years) must be between 1 and 60 — using 1"]}
 ```
 
 Blank and unparseable input falls back to the field's default rather than
@@ -168,15 +168,17 @@ The port is **not smaller in total**.
 
 | | roth | ported |
 |---|---|---|
-| view | 88 lines of Slim | 58 sentences |
+| view | 88 lines of Slim | 60 sentences |
 | script | 249 lines | 47 lines |
-| Ruby | — | 370 lines |
-| **total** | **337** | **475** |
+| Ruby | — | 411 lines |
+| **total** | **337** | **518** |
 
-It trades ~200 lines of untested browser code for 370 lines of testable Ruby,
-and buys three things roth did not have: input validation, a data table, and
-the balance chart. Whether that is a good trade is dan's judgement, and it is
-the one this phase is still waiting on.
+It trades ~200 lines of untested browser code for 411 lines of testable Ruby,
+and buys four things roth did not have: input validation, a data table, the
+balance chart, and a chart that stays readable when the window changes size.
+
+That trade was the question this phase put to dan, and
+[his answer is below](#dans-judgement).
 
 ---
 
@@ -211,6 +213,49 @@ empty bordered box under both charts: the tooltip div shipped without `hidden`,
 so it was visible until a pointer first moved. It ships hidden now, and a test
 pins it — but nothing except looking would have caught it, which is the lesson
 Phase 5 already wrote down and this round confirmed again.
+
+### And four an outside review found
+
+An outside reviewer read the finished port. Everything it raised was real, and
+two of the four were things this round had itself created.
+
+**1. The validation seam was only half wired — the disease it was built to
+cure.** `POST /run` refused unsound input with a 422; `POST /projection`, which
+is what the *form* actually posts to, did not. `age_primary=200` with
+`horizon_years=0` reached the engine and came back a **500** from inside
+`aggregate`. Scenario now clamps out-of-range values to the edge and says what
+it did, so a projection always exists; the JSON endpoint still refuses. One
+object, two policies, chosen by the caller.
+
+```text
+Age (primary) must be between 0 and 120 — using 120
+```
+
+**2. A control went missing unlogged.** roth's page had *three* interactive
+controls and this document counted two. The "Show Baseline" checkbox overlaid
+the do-nothing series on the chart, and the ported charts had no such series at
+all — the comparison survived only as headline numbers. It is drawn now, and
+needs no checkbox: roth deferred it because a script had to redraw, and there
+is nothing to defer on the server. A control the reader does not have to find
+is one fewer control.
+
+The legend had gone the same way, unremarked. It is drawn inside the SVG now,
+so it survives the fragment swap for free — and it describes only what the
+caller actually drew, after inferring it put a "Do nothing" swatch on the
+balance chart, which has no such line.
+
+**3. The port pins itself to roth's uncommitted working tree.** `Scenario`
+speaks the `ss_primary_*` spelling of the rename that has sat half-finished
+since 2025-09-11. Finishing it keeps this working; reverting it breaks this —
+and the break would have surfaced as a *wrong number* rather than an error,
+which is exactly the failure mode being ported away from.
+`lib/engine.rb` now checks `Engine::Inputs.members` at load and raises with the
+reason and a pointer to ROTH_DOMAIN_BACKLOG §0.2.
+
+**4. `ruby examples/roth/app.rb` did not work.** A `Sinatra::Base` subclass
+does not parse ARGV, so `-p` was silently ignored and `run!` took 4567 — which
+roth itself is usually holding. Both examples now take `PORT`, defaulting to
+4577 and 4576.
 
 ### And one in the checker
 
@@ -255,7 +300,18 @@ undefined word.
 |---|---|
 | Port roth entirely — every view | done — roth has one view, and it is ported |
 | The diff against its old views reviewed line by line | done — this document |
-| Judge it: better to read and write than the Slim it replaced? | **dan** — open |
+| Judge it: better to read and write than the Slim it replaced? | **done** — see below |
 
-Suite: 112 tests, 459 assertions, 0 failures. 613 sentences, 0 problems.
+## dan's judgement
+
+Recorded 2026-08-31, after an outside review: **clearly worth it.** "We are
+exactly where we had hoped we would be at this phase of the project. We have
+strong foundations and we are learning as we build."
+
+The one flank with no evidence, and the review's sharpest point: roth exercised
+forms and tables, which are this language's home turf, and never exercised
+**conditional or bespoke UI**. `choose`/`when`/`otherwise` and the `if:`
+modifier still have no real page behind them. A second port should target that.
+
+Suite: 116 tests, 475 assertions, 0 failures. 615 sentences, 0 problems.
 58 rules, 0 problems.

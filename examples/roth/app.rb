@@ -52,6 +52,9 @@ module Roth
     # stale sheet once and cost a confusing half hour; nothing here is worth
     # caching.
     set :static_cache_control, [:no_store]
+    # A `Sinatra::Base` subclass does not parse ARGV, so `-p` is silently
+    # ignored and `run!` takes 4567 — which roth itself is usually holding.
+    set :port, ENV.fetch('PORT', 4577).to_i
 
     SlimPickins::Template.libraries[settings.views] =
       SlimPickins::Library.from(settings.views).tap do |lib|
@@ -86,7 +89,9 @@ module Roth
     post '/run' do
       content_type :json
       scenario = Scenario.new(request_params)
-      halt 422, JSON.generate(complaints: scenario.complaints) unless scenario.sound?
+      unless scenario.sound?
+        halt 422, JSON.generate(complaints: scenario.complaints.map(&:description))
+      end
 
       JSON.pretty_generate(Projection.of(scenario).to_h)
     end

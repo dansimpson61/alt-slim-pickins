@@ -1,4 +1,7 @@
 section projection, "Your projection"
+  each complaint
+    note warning, .description
+
   grid metrics, columns: 3
     metric lifetime_taxes_primary
     metric lifetime_taxes_baseline

@@ -1,6 +1,12 @@
 # Vocabulary — draft 3
 
-Status: **draft.** Forty-six words. Nothing is implemented.
+Status: **implemented.** Forty-seven words, every one of them a real method on
+`Builder` and every one exercised by a sentence somewhere in the repo —
+`check_grammar.rb` fails if either stops being true.
+
+Only `chart` is still the entry it was drafted as: written without evidence,
+carrying more irreducible configuration than any other word, and ROADMAP
+Phase 8 exists to redraft it against a real need or cut it.
 
 The grammar is settled and is one sentence ([DESIGN.md](DESIGN.md)). It cannot
 really be wrong any more. The vocabulary *can* be incomplete, and in a language

@@ -52,6 +52,7 @@
 .stack-roth { fill: #327fbf; }
 
 .tax-line { fill: none; stroke: #333; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.baseline-line { fill: none; stroke: var(--ink-faint); stroke-width: 1.5; stroke-dasharray: 6 3; }
 .axis { stroke: var(--ink-faint); stroke-width: 1; }
 .series-label { fill: var(--ink-soft); font-size: 11px; }
 .band-label { fill: var(--ink-faint); font-size: 10px; }

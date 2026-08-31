@@ -1,8 +1,12 @@
-# Draft grammar — v0.3
+# The grammar — v0.3
 
-Status: **draft.** Nothing is implemented. This document is the wish and the
-grammar it implies, written down so that every later extension can be reviewed
-against it.
+Status: **settled and implemented.** This was written as a wish, before any
+code existed, so that every later extension could be reviewed against it. It
+has not needed to change: the grammar below is the grammar the transform
+implements, and Phases 0–7 added forty-seven words without adding a rule.
+
+Everything here is exercised — `check_grammar.rb` holds every sentence in this
+document and every `.sp` file in the repo to the table in it.
 
 ## The idea
 

@@ -21,29 +21,40 @@ module Roth
   class Chart
     W = 800
     H = 320
-    M = { l: 64, r: 16, t: 14, b: 40 }.freeze
+    # The top strip holds the key.
+    M = { l: 64, r: 16, t: 34, b: 40 }.freeze
 
     INNER_W = W - M[:l] - M[:r]
     INNER_H = H - M[:t] - M[:b]
 
-    def initialize(years, standard_deduction: 0, brackets: [])
+    def initialize(years, standard_deduction: 0, brackets: [], baseline: nil)
       @years = years
       @standard_deduction = standard_deduction.to_f
       @brackets = brackets
+      @baseline = baseline
     end
 
     # What the hand-written page drew: where each year's income comes from,
     # with the tax it attracts laid over it.
+    #
+    # The do-nothing line is drawn whenever there is one. roth put it behind a
+    # "Show Baseline" checkbox because a script had to redraw for it; drawn on
+    # the server there is nothing to defer, and a control the reader does not
+    # have to find is one fewer control.
     def income
       bands = [[:base_income, 'stack-base'], [:social_security, 'stack-ss'],
                [:rmd, 'stack-rmd'], [:conversion, 'stack-conv']]
-      top = @years.map { |y| bands.sum { |name, _| value(y, name) } }.max
-      scale = nice([top, @standard_deduction].max)
+      tops = @years.map { |y| bands.sum { |name, _| value(y, name) } }
+      tops += @baseline.map { |y| value(y, :gross_income) } if @baseline
+      scale = nice([tops.max, @standard_deduction].max)
+
+      overlays = [['Federal tax', 'tax-line']]
+      overlays << ['Do nothing', 'baseline-line'] if @baseline
 
       svg('income', deduction_band(scale) + bracket_bands(scale) +
-                    stacked(bands, scale) +
+                    stacked(bands, scale) + baseline_line(scale) +
                     line(@years.map { |y| value(y, :federal_tax) }, scale, 'tax-line') +
-                    frame(scale) + hover(scale, bands))
+                    frame(scale) + key(bands, overlays) + hover(scale, bands))
     end
 
     # What the specification asked for and nobody built: the wealth story.
@@ -52,10 +63,38 @@ module Roth
       top = @years.map { |y| bands.sum { |name, _| value(y, name) } }.max
       scale = nice(top)
 
-      svg('balances', stacked(bands, scale) + frame(scale) + hover(scale, bands))
+      svg('balances', stacked(bands, scale) + frame(scale) + key(bands) + hover(scale, bands))
     end
 
     private
+
+    def baseline_line(scale)
+      return '' unless @baseline
+
+      line(@baseline.map { |y| value(y, :gross_income) }, scale, 'baseline-line')
+    end
+
+    # roth built its legend in the browser, out of divs, beside the picture.
+    # Drawn here it is part of the picture it describes, and it survives the
+    # fragment swap for free.
+    # `overlays` is passed rather than inferred, so the key can only ever
+    # describe what the caller actually drew. Inferring it put a "Do nothing"
+    # swatch on the balance chart, which has no such line.
+    def key(bands, overlays = [])
+      entries = bands.map { |name, css| [@years.first.label_for(name), css] } + overlays
+
+      at = M[:l].to_f
+      entries.map do |text, css|
+        mark = if css.end_with?('-line')
+                 %(<line class="#{css}" x1="#{f at}" y1="13" x2="#{f(at + 12)}" y2="13" />)
+               else
+                 %(<rect class="#{css}" x="#{f at}" y="8" width="12" height="10" />)
+               end
+        body = mark + label(at + 17, 17, text, 'series-label')
+        at += 17 + (text.length * 6.1) + 18
+        body
+      end.join
+    end
 
     def value(year, name) = year.public_send(name).to_f
 
