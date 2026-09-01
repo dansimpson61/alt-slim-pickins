@@ -6,14 +6,18 @@ require_relative 'inference'
 require_relative 'markdown'
 require_relative 'charting'
 require_relative 'icons'
+require_relative 'generator'
 require_relative 'components'
 
 module SlimPickins
-  # The runtime. Every word is a real defined method — never method_missing —
-  # so an unknown word fails with a name, and the vocabulary is greppable.
+  # The runtime. A page evaluates into a tree of semantic nodes —
+  # `[:word, attributes, children]` — and the Generator walks that tree to
+  # produce HTML. The Builder's job is the evaluation: the subject chain, the
+  # bindings, the gatherer stack, and the words themselves, each of which now
+  # describes its node instead of emitting strings.
   #
-  # Phase 0 scope: page, form, group, field, checkbox, choice, option,
-  # button, actions, disclosure.
+  # Every word is a real defined method — never method_missing — so an
+  # unknown word fails with a name, and the vocabulary is greppable.
   #
   # A useful property falls out of the transform: names compile to Symbols and
   # content compiles to Strings. So a word can tell a name from content by
@@ -31,16 +35,15 @@ module SlimPickins
 
     def initialize(page, library = nil)
       @library = library
-      @out = +''
       @chain = Chain.new(page)
       @in_form = false
-      @level = 2          # `title` infers its heading level from depth
-      @suppressed = false  # set when a subject is an empty collection
-      @bindings = {}       # `each holding` binds `holding` for reaching out
-      @gatherers = []      # the components whose children are declarations
-      @contents = nil      # the page's own children, while a layout renders
-      @head = +''          # words that belong in <head>, wherever they are said
-      @icons_used = []     # so the sprite carries only the symbols a page uses
+      @level = 2            # `title` infers its heading level from depth
+      @empty_active = false # set while the named subject is an empty collection
+      @bindings = {}        # `each holding` binds `holding` for reaching out
+      @gatherers = []       # the components whose children are declarations
+      @contents = nil       # the page's own nodes, while a layout renders
+      @head_nodes = []      # words that belong in <head>, wherever they are said
+      @icons_used = []      # so the sprite carries only the symbols a page uses
       define_app_words
     end
 
@@ -81,13 +84,13 @@ module SlimPickins
     end
 
     def render(ruby, path)
+      @nodes = []
       instance_eval(ruby, path, 1)
-      @out
+      @nodes
     end
 
     # `.foo` compiles to this.
     def subject = @chain.current
-
 
     # --- Document -------------------------------------------------------
 
@@ -95,84 +98,66 @@ module SlimPickins
       name, title = name_and_content(args)
       heading = title || Inference.label(name)
 
-      body = capture { about(name) { wrapped_in_layout(&block) } }
-
-      @out << '<!DOCTYPE html>'
-      open(:html, lang: 'en')
-      open(:head)
-      void(:meta, charset: 'utf-8')
-      void(:meta, name: 'viewport', content: 'width=device-width, initial-scale=1')
-      text_tag(:title, heading)
-      @out << @head
-      close(:head)
-      open(:body)
-      @out << Icons.sprite(@icons_used)
-      text_tag(:h1, heading)
-      @out << body
-      close(:body)
-      close(:html)
+      value, empty, body = about(name) { wrapped_in_layout(&block) }
+      emit_node([:page, { heading: heading, head: @head_nodes, icons: @icons_used.dup },
+                 prune(body, empty)])
+      value
     end
 
     # These three say where they belong, not where they are written, which is
     # what lets a layout mention a stylesheet from inside the body.
     def stylesheet(*args)
       _, path = name_and_content(args)
-      @head << %(<link rel="stylesheet" href="#{CGI.escapeHTML(path)}">)
+      @head_nodes << [:stylesheet, { path: path }, []]
     end
 
     def meta(*args)
       name, value = name_and_content(args)
-      @head << %(<meta name="#{name}" content="#{CGI.escapeHTML(value.to_s)}">)
+      @head_nodes << [:meta, { name: name, value: value }, []]
     end
 
     def script(*args, defer: false)
       _, path = name_and_content(args)
-      @deferred = +'' unless defined?(@deferred)
-      emit(%(<script src="#{CGI.escapeHTML(path)}"#{defer ? ' defer' : ''}></script>))
+      emit_node([:script, { path: path, defer: defer }, []])
     end
 
     def nav(*args, &block)
       variant, = name_and_content(args)
-      open(:nav, class: token(:nav, variant),
-                 'aria-label': variant ? variant.to_s.capitalize : 'Main')
-      nest(&block)
-      close(:nav)
+      emit_node([:nav, { variant: variant }, capture(&block)])
     end
 
     def link(*args, to: nil)
       name, label = name_and_content(args)
-      text_tag(:a, label_for(name, label), href: to&.to_s || "/#{name}")
+      emit_node([:link, { name: name, label: label_for(name, label), to: to }, []])
     end
 
     def footer(*args, &block)
       _, body = name_and_content(args)
-      open(:footer, class: token(:footer))
-      body ? (@out << CGI.escapeHTML(body.to_s)) : nest(&block)
-      close(:footer)
+      emit_node([:footer, { body: body }, capture(&block)])
     end
 
-    # Marks where the page's own sentences go. Only a layout has one.
+    # Marks where the page's own nodes go. Only a layout has one.
     def contents
       raise Error, '`contents` belongs in a layout' unless @contents
 
-      block = @contents
+      nodes = @contents
       @contents = nil
-      nest(&block)
+      @nodes.concat(nodes)
     end
 
     # --- Structure ------------------------------------------------------
 
     def section(*args, &block)
       name, heading = name_and_content(args)
-      open(:section, class: token(:section, name))
-      text_tag(:"h#{@level}", label_for(name, heading), class: 'section-title')
-      deeper { about(name) { nest(&block) } }
-      close(:section)
+      value, empty, children = about(name) { deeper { capture(&block) } }
+      emit_node([:section, { name: name, heading: label_for(name, heading), level: @level },
+                 prune(children, empty)])
+      value
     end
 
     def title(*args)
       _, text = name_and_content(args)
-      text_tag(:"h#{@level}", text, class: token(:title))
+      emit_node([:title, { text: text, level: @level }, []])
     end
 
     # The loop is written once, here, and never in a page.
@@ -195,20 +180,22 @@ module SlimPickins
       end
 
       items = from || collection_for(name)
-      items.each do |item|
+      collected = items.map do |item|
         @bindings[name] = item
-        @chain.with(item, described_as: "this #{name}") { nest(&block) }
+        @chain.with(item, described_as: "this #{name}") { capture(&block) }
       end
       @bindings.delete(name)
+      emit_node([:each, { name: name }, collected])
     end
 
     # Not a conditional. It names the situation, and the enclosing word
-    # already knows what "empty" refers to.
+    # already knows what "empty" refers to — the enclosing word keeps the node
+    # when the collection is empty and prunes its siblings.
     def empty(*args)
-      _, message = name_and_content(args)
-      return unless @suppressed
+      return unless @empty_active
 
-      unsuppressed { text_tag(:p, message, class: token(:empty)) }
+      _, message = name_and_content(args)
+      emit_node([:empty, { message: message }, []])
     end
 
     # A table declares its columns; the rows come from the subject. The
@@ -233,9 +220,7 @@ module SlimPickins
     end
 
     def aside(&block)
-      open(:aside, class: token(:aside))
-      nest(&block)
-      close(:aside)
+      emit_node([:aside, {}, capture(&block)])
     end
 
     # `columns:` is a wish, not a decree. An exact fractional track — a plain
@@ -244,90 +229,76 @@ module SlimPickins
     # `--track-min` gives n columns where they fit and fewer where they do not.
     def grid(*args, columns: nil, &block)
       variant, = name_and_content(args)
-      track = columns && "max(var(--track-min), calc((100% - #{columns - 1} * var(--gap)) / #{columns}))"
-      open(:div, class: token(:grid, variant), style: track && "--track: #{track}")
-      nest(&block)
-      close(:div)
+      emit_node([:grid, { variant: variant, columns: columns }, capture(&block)])
     end
 
     def list(*args, &block)
       variant, = name_and_content(args)
-      open(:ul, class: token(:list, variant))
-      nest(&block)
-      close(:ul)
+      emit_node([:list, { variant: variant }, capture(&block)])
     end
 
     def item(*args, &block)
       variant, body = name_and_content(args)
-      open(:li, class: token(:item, variant))
-      body ? emit(CGI.escapeHTML(body.to_s)) : nest(&block)
-      close(:li)
+      emit_node([:item, { variant: variant, body: body }, capture(&block)])
     end
 
     def card(*args, &block)
       variant, = name_and_content(args)
-      open(:article, class: token(:card, variant),
-                     id: card_id)
-      deeper { nest(&block) }
-      close(:article)
+      emit_node([:card, { variant: variant, id: card_id }, deeper { capture(&block) }])
     end
 
     def figure(*args, &block)
       _, caption = name_and_content(args)
-      open(:figure, class: token(:figure))
-      nest(&block)
-      text_tag(:figcaption, caption) if caption
-      close(:figure)
+      emit_node([:figure, { caption: caption }, capture(&block)])
+    end
+
+    def disclosure(*args, open: false, &block)
+      _, summary = name_and_content(args)
+      emit_node([:disclosure, { summary: summary, open: open }, capture(&block)])
     end
 
     # --- Content --------------------------------------------------------
 
     def note(*args)
       variant, body = name_and_content(args)
-      text_tag(:p, body, class: token(:note, variant))
+      emit_node([:note, { variant: variant, body: body }, []])
     end
 
     def prose(*args)
       notation, body = name_and_content(args)
-      html = notation == :plain ? Markdown.plain(body) : Markdown.render(body)
-      emit(%(<div class="#{token(:prose)}">#{html}</div>))
+      emit_node([:prose, { notation: notation, body: body }, []])
     end
+
+    KNOWN_STATUSES = %i[ok pending neutral warning error blocker polish].freeze
 
     def badge(*args)
       variant, body = name_and_content(args)
       label = body || variant
       kind = variant || (KNOWN_STATUSES.include?(body.to_s.to_sym) ? body.to_s.to_sym : nil)
-      text_tag(:span, label, class: token(:badge, kind))
+      emit_node([:badge, { variant: variant, kind: kind, label: label }, []])
     end
-
-    KNOWN_STATUSES = %i[ok pending neutral warning error blocker polish].freeze
 
     def fact(*args)
       name, value = name_and_content(args)
       shown = value.nil? ? subject.fetch(name) : value
-      open(:dl, class: token(:fact))
-      text_tag(:dt, label_for(name, nil))
-      text_tag(:dd, present(shown, format_of({ name: name, as: nil })))
-      close(:dl)
+      emit_node([:fact, { name: name, label: label_for(name, nil),
+                          value: shown, kind: format_of({ name: name, as: nil }) }, []])
     end
 
     def snippet(*args)
       language, body = name_and_content(args)
-      open(:pre, class: token(:snippet, language))
-      text_tag(:code, body)
-      close(:pre)
-      text_tag(:button, 'Copy', type: 'button', class: 'snippet-copy')
+      emit_node([:snippet, { language: language, body: body }, []])
     end
 
     def time(*args)
       variant, moment = name_and_content(args)
       machine = moment.respond_to?(:iso8601) ? moment.iso8601 : moment.to_s
-      text_tag(:time, Inference.moment(moment, variant), datetime: machine)
+      emit_node([:time, { variant: variant, moment: moment, machine: machine }, []])
     end
 
     def image(*args, alt: nil)
       _, src = name_and_content(args)
-      void(:img, src: src.to_s, alt: alt.to_s, loading: 'lazy')
+      emit_node([:image, { src: src, alt: alt }, []])
     end
 
     # Which icon may be said as a name (`icon warning`) or arrive as data
@@ -336,17 +307,14 @@ module SlimPickins
       name, data = name_and_content(args)
       name ||= data
       @icons_used << name.to_s.to_sym
-      emit(%(<svg class="icon icon--#{name}" aria-hidden="true">) +
-           %(<use href="#icon-#{name}"></use></svg>))
+      emit_node([:icon, { name: name }, []])
     end
 
     def metric(*args, as: nil)
       name, label = name_and_content(args)
       value = subject.fetch(name)
-      open(:div, class: token(:metric))
-      text_tag(:h3, label_for(name, label), class: 'metric-label')
-      text_tag(:div, present(value, as || subject.format_for(name)), class: 'metric-value')
-      close(:div)
+      emit_node([:metric, { name: name, label: label_for(name, label),
+                            value: value, kind: as || subject.format_for(name) }, []])
     end
 
     # The same shape as `table`, and for the same reason. A table declares its
@@ -408,82 +376,59 @@ module SlimPickins
       target.add_branch(nil, block)
     end
 
-
     def money(*args, precision: 0)
       _, value = name_and_content(args)
-      amount(value, :money, precision)
+      emit_node([:money, { value: value, precision: precision }, []])
     end
 
     def percent(*args, precision: 1)
       _, value = name_and_content(args)
-      amount(value, :percent, precision)
+      emit_node([:percent, { value: value, precision: precision }, []])
     end
 
     def number(*args, precision: 0)
       _, value = name_and_content(args)
-      amount(value, :number, precision)
+      emit_node([:number, { value: value, precision: precision }, []])
     end
 
     def text(*args)
       _, body = name_and_content(args)
-      text_tag(:p, body)
+      emit_node([:text, { body: body }, []])
     end
 
     # --- Interaction ----------------------------------------------------
 
     def form(*args, to: nil, method: nil, &block)
       name, = name_and_content(args)
-      open(:form, id: name&.to_s, action: to&.to_s, method: (method || :post).to_s)
+      was_in_form = @in_form
       @in_form = true
-      about(name) { nest(&block) }
-      @in_form = false
-      close(:form)
+      value, empty, children = about(name) { capture(&block) }
+      @in_form = was_in_form
+      emit_node([:form, { name: name, to: to, method: method }, prune(children, empty)])
+      value
     end
 
     def group(*args, &block)
       name, legend = name_and_content(args)
-      label = label_for(name, legend)
-      if @in_form
-        open(:fieldset, class: token(:group, name))
-        text_tag(:legend, label)
-        nest(&block)
-        close(:fieldset)
-      else
-        open(:div, class: token(:group))
-        text_tag(:h2, label)
-        nest(&block)
-        close(:div)
-      end
+      emit_node([:group, { name: name, legend: label_for(name, legend), in_form: @in_form },
+                 capture(&block)])
     end
 
     # The heaviest inference in the vocabulary: four derivations from one word.
     def field(*args, type: nil, step: nil, required: nil)
       name, label = name_and_content(args)
       value = subject.fetch(name)
-      kind = type || Inference.input_type(value)
-
-      open(:div, class: token(:field))
-      text_tag(:label, label_for(name, label), for: name.to_s)
-      void(:input,
-            id: name.to_s,
-            name: name.to_s,
-            type: kind.to_s,
-            value: value&.to_s,
-            step: (step || Inference.step_for(value))&.to_s,
-            required: required ? 'required' : nil)
-      close(:div)
+      emit_node([:field, { name: name, label: label_for(name, label),
+                           value: value,
+                           kind: type || Inference.input_type(value),
+                           step: (step || Inference.step_for(value))&.to_s,
+                           required: required }, []])
     end
 
     def checkbox(*args)
       name, label = name_and_content(args)
       value = subject.fetch(name)
-      open(:div, class: token(:field, :checkbox))
-      open(:label, for: name.to_s)
-      void(:input, id: name.to_s, name: name.to_s, type: 'checkbox',
-                    checked: value ? 'checked' : nil)
-      emit(escape(label_for(name, label)))
-      close(:label)
-      close(:div)
+      emit_node([:checkbox, { name: name, label: label_for(name, label), value: value }, []])
     end
 
     def choice(*args, &block)
@@ -498,44 +443,39 @@ module SlimPickins
 
     def button(*args, to: nil, type: nil)
       variant, label = name_and_content(args)
-      text_tag(:button,
-               label || (variant && Inference.label(variant)),
-               type: (type || (@in_form ? :submit : :button)).to_s,
-               formaction: to&.to_s,
-               class: token(:button, variant))
+      emit_node([:button, { variant: variant,
+                            label: label || (variant && Inference.label(variant)),
+                            to: to, type: type, in_form: @in_form }, []])
     end
 
     def actions(&block)
-      open(:div, class: token(:actions))
-      nest(&block)
-      close(:div)
-    end
-
-    def disclosure(*args, open: false, &block)
-      _, summary = name_and_content(args)
-      open_tag(:details, open ? { open: 'open' } : {})
-      text_tag(:summary, summary)
-      nest(&block)
-      close(:details)
+      emit_node([:actions, {}, capture(&block)])
     end
 
     private
 
-    # --- Presentation helpers -------------------------------------------
+    # --- the node assembly ------------------------------------------------
 
-    # `as:` said in the page, else what the value's shape can tell us. A
-    # number is right-aligned for free; that it is *money* is a domain fact,
-    # so it has to be said.
-    def present(value, as)
-      kind = as || Inference.presentation(value)
-      case kind
-      when :money   then Inference.money(value)
-      when :percent then Inference.percent(value)
-      when :number  then Inference.number(value)
-      else
-        value.respond_to?(:strftime) ? Inference.moment(value, nil) : value.to_s
-      end
+    # Every word hands its node to the current collection — the body's, or the
+    # head's for the words that belong there.
+    def emit_node(node) = @nodes << node
+
+    def capture(&block)
+      was = @nodes
+      @nodes = []
+      nest(&block)
+      @nodes
+    ensure
+      @nodes = was
     end
+
+    # The paper's "conditionally pruning an AST": an empty collection keeps
+    # only the `empty` node that names it; anything else keeps everything but.
+    def prune(children, empty)
+      empty ? children.select { |n| n.first == :empty } : children.reject { |n| n.first == :empty }
+    end
+
+    # --- presentation helpers ---------------------------------------------
 
     # `as:` said in the page, else the app's own answer, else what the value's
     # shape can tell us — the same three levels as labels, owned by the same
@@ -559,16 +499,6 @@ module SlimPickins
     def alignment_of(column, sample)
       kind = format_of(column, sample) || Inference.presentation(column[:sample])
       %i[money percent number].include?(kind) ? 'column--numeric' : nil
-    end
-
-    def amount(value, kind, precision)
-      body = case kind
-             when :money   then Inference.money(value, precision: precision)
-             when :percent then Inference.percent(value, precision: precision)
-             else               Inference.number(value, precision: precision)
-             end
-      classes = token(kind, ('negative' if value.negative?))
-      text_tag(:span, body, class: classes)
     end
 
     # `each holding` looks for `holdings` on the subject. When the subject is
@@ -622,19 +552,10 @@ module SlimPickins
       @level -= 1
     end
 
-    def unsuppressed
-      was = @suppressed
-      @suppressed = false
-      yield
-    ensure
-      @suppressed = was
-    end
-
-    # The three shapes of a class name, and the only place they are built.
-    # `.word`, `.word--variant`, `.word-part` — derived from the grammar, so a
-    # reader who knows the language already knows the stylesheet.
+    # The three shapes of a class name, built in exactly one place — the
+    # Generator's — so the runtime and the hatch share the truth.
     def token(word, variant = nil)
-      [word.to_s, variant && "#{word}--#{variant}"].compact.join(' ')
+      Generator.token(word, variant)
     end
 
     # Names are Symbols, content is anything else. This is why argument order
@@ -646,20 +567,21 @@ module SlimPickins
     # A word that names a subject shifts the chain for its children. A word
     # that names nothing leaves the chain alone, which is what makes
     # `page scenario` followed by a bare `form` mean the obvious thing.
+    # Returns [value, empty?, children] so the caller can prune by the
+    # situation.
     def about(name, &block)
-      return yield if name.nil?
+      return [nil, false, yield] if name.nil?
 
       # A word that names no subject leaves the chain alone. A word that names
       # one that is not there is an error — skipping quietly would report the
       # missing attribute later, on a line that is not the cause.
       value = subject.fetch(name)
-      was = @suppressed
-      # An empty collection suppresses everything except `empty`, which is how
-      # `empty` names a situation instead of writing a branch.
-      @suppressed = Inference.collection?(value) && Inference.nothing_in?(value)
-      @chain.with(value, described_as: "this #{name}", &block)
+      empty = Inference.collection?(value) && Inference.nothing_in?(value)
+      was = @empty_active
+      @empty_active = empty
+      [value, empty, @chain.with(value, described_as: "this #{name}", &block)]
     ensure
-      @suppressed = was unless was.nil?
+      @empty_active = was unless was.nil?
     end
 
     # Precedence, each level owned by whoever knows most: the page knows this
@@ -672,23 +594,16 @@ module SlimPickins
       instance_eval(&block) if block
     end
 
-    def capture
-      was = @out
-      @out = +''
-      yield
-      @out
-    ensure
-      @out = was
-    end
-
     # The layout is chrome inside the page, so `page` still owns the document
     # and the layout never repeats it.
     def wrapped_in_layout(&block)
-      return nest(&block) unless @library&.layout
+      return capture(&block) unless @library&.layout
 
-      @contents = block
-      instance_eval(Transform.call(@library.layout, path: 'layout.sp'), 'layout.sp', 1)
+      @contents = capture(&block)
+      nodes = capture { instance_eval(Transform.call(@library.layout, path: 'layout.sp'), 'layout.sp', 1) }
       raise Error, 'this layout never says `contents`' if @contents
+
+      nodes
     end
 
     # A partial takes the current subject, like any word that names none, and
@@ -697,33 +612,9 @@ module SlimPickins
       name, = name_and_content(args)
       source = @library.source_for(word)
       ruby = Transform.call(source, path: "partials/#{word}.sp")
-      about(name) do
-        was = @contents
-        @contents = block
-        instance_eval(ruby, "partials/#{word}.sp", 1)
-        @contents = was
-      end
-    end
-
-    # --- HTML -----------------------------------------------------------
-
-    def attrs(pairs)
-      pairs.reject { |_, v| v.nil? || v == '' }
-           .map { |k, v| %( #{k}="#{CGI.escapeHTML(v.to_s)}") }.join
-    end
-
-    def open(tag, **pairs) = emit("<#{tag}#{attrs(pairs)}>")
-    def open_tag(tag, pairs) = emit("<#{tag}#{attrs(pairs)}>")
-    def close(tag) = emit("</#{tag}>")
-    def void(tag, **pairs) = emit("<#{tag}#{attrs(pairs)}>")
-
-    def text_tag(tag, text, **pairs)
-      emit("<#{tag}#{attrs(pairs)}>#{CGI.escapeHTML(text.to_s)}</#{tag}>")
-    end
-
-    def emit(html)
-      @out << html unless @suppressed
-      @out
+      value, empty, children = about(name) { capture { instance_eval(ruby, "partials/#{word}.sp", 1) } }
+      @nodes.concat(prune(children, empty))
+      value
     end
 
     # --- the escape hatch -------------------------------------------------
@@ -738,10 +629,10 @@ module SlimPickins
     # stays private, so the hatch cannot quietly become an API.
     public
 
-    public :token                            # class names, in the four shapes
-    def html(string) = emit(string)          # trusted markup — you escape it
-    def children(&block) = nest(&block)      # render this word's children
-    def escape(text) = CGI.escapeHTML(text.to_s)
+    public :token # class names, in the four shapes
+    def html(string) = emit_node([:raw, {}, [string]]) # trusted markup — you escape it
+    def tag(name, attributes = {}, &block) = emit_node([:tag, { name: name, attrs: attributes }, capture(&block)])
+    def children(&block) = capture(&block) # this word's children, as nodes
     def arguments(args) = name_and_content(args)
   end
 end

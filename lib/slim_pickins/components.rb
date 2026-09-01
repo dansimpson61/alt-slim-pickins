@@ -6,12 +6,12 @@ module SlimPickins
   # becomes.
   #
   # A gatherer's children are declarations: they register while the gatherer's
-  # block runs, then the gatherer renders from what it collected. Children
-  # still evaluate against the Builder — the vocabulary is the Builder's — so
-  # a component's job is exactly two things: own its collection, and render
-  # it. The Builder keeps a stack of the gatherers currently open, which is
-  # the save-and-restore that used to be written by hand in each one (and, in
-  # choice's case, forgotten).
+  # block runs, then the gatherer builds its semantic node from what it
+  # collected. Children still evaluate against the Builder — the vocabulary is
+  # the Builder's — so a component's job is exactly two things: own its
+  # collection, and build its node. The Builder keeps a stack of the gatherers
+  # currently open, which is the save-and-restore that used to be written by
+  # hand in each one (and, in choice's case, forgotten).
   #
   # Components are part of the runtime, so they reach Builder's internals
   # through this one file. The app hatch stays five methods.
@@ -35,17 +35,12 @@ module SlimPickins
 
     def subject = @builder.send(:subject)
     def chain = @builder.send(:chain)
-    def open(...) = @builder.send(:open, ...)
-    def close(...) = @builder.send(:close, ...)
-    def void(...) = @builder.send(:void, ...)
-    def text_tag(...) = @builder.send(:text_tag, ...)
-    def emit(...) = @builder.send(:emit, ...)
-    def token(...) = @builder.send(:token, ...)
     def label_for(...) = @builder.send(:label_for, ...)
     def label_of(...) = @builder.send(:label_of, ...)
     def format_of(...) = @builder.send(:format_of, ...)
-    def present(...) = @builder.send(:present, ...)
     def alignment_of(...) = @builder.send(:alignment_of, ...)
+    def capture(&block) = @builder.send(:capture, &block)
+    def emit_node(node) = @builder.send(:emit_node, node)
   end
 
   # A table declares its columns; the rows come from the subject. `column`
@@ -68,58 +63,41 @@ module SlimPickins
       columns.each do |c|
         c[:sample] = sample && Subject.new(sample).fetch(c[:name])
         c[:header] = label_of(c, sample)
+        c[:alignment] = alignment_of(c, sample)
       end
 
-      open(:table, class: token(:table, @name))
-      text_tag(:caption, @caption) if @caption
-      open(:thead)
-      open(:tr)
-      columns.each do |c|
-        next if c[:total]
-
-        text_tag(:th, c[:header], class: alignment_of(c, sample))
-      end
-      close(:tr)
-      close(:thead)
-      open(:tbody)
-      @rows.each do |row|
+      rows = @rows.map do |row|
         chain.with(row) do
-          open(:tr)
-          columns.each do |c|
-            next if c[:total]
-
-            text_tag(:td, present(subject.fetch(c[:name]), format_of(c)), class: alignment_of(c, sample))
+          cells = columns.reject { |c| c[:total] }.map do |c|
+            { name: c[:name], value: subject.fetch(c[:name]), kind: format_of(c),
+              alignment: c[:alignment] }
           end
-          close(:tr)
+          [:row, {}, cells]
         end
       end
-      close(:tbody)
-      footer_row(columns, @rows, sample)
-      close(:table)
+
+      emit_node([:table, { name: @name, caption: @caption, columns: columns,
+                           rows: rows, foot: foot(columns, @rows, sample) }, []])
     end
 
     private
 
-    def footer_row(columns, rows, sample)
+    def foot(columns, rows, sample)
       totals = columns.select { |c| c[:total] }
-      return if totals.empty?
+      return [] if totals.empty?
 
-      open(:tfoot)
-      open(:tr)
       shown = columns.reject { |c| c[:total] }
-      shown.each_with_index do |c, i|
+      shown.each_with_index.map do |c, i|
         t = totals.find { |x| x[:name] == c[:name] }
         if t
           sum = rows.sum { |row| Subject.new(row).fetch(c[:name]) }
-          text_tag(:td, present(sum, format_of(c, rows.first)), class: alignment_of(c, sample))
+          { value: sum, kind: format_of(c, rows.first), alignment: c[:alignment] }
         elsif i.zero?
-          text_tag(:td, totals.first[:header] || 'Total')
+          { label: totals.first[:header] || 'Total' }
         else
-          text_tag(:td, '')
+          {}
         end
       end
-      close(:tr)
-      close(:tfoot)
     end
   end
 
@@ -149,10 +127,9 @@ module SlimPickins
       # place in the key.
       drawn = series.map { |s| resolve(s, @rows) }.reject { |s| s[:points].empty? }
 
-      emit(Charting.render(series: drawn,
-                           levels: levels,
+      emit_node([:chart, { series: drawn, levels: levels,
                            across: across(@rows, @over || Inference.singular(@name)),
-                           caption: @caption))
+                           caption: @caption }, []])
     end
 
     private
@@ -169,7 +146,7 @@ module SlimPickins
       { kind: series[:kind],
         label: label_of({ name: series[:name], header: series[:label] }, sample),
         points: values.map(&:to_f),
-        shown: values.map { |v| present(v, kind) } }
+        shown: values.map { |v| Generator.format(kind, v) } }
     end
 
     # `chart years` reads each row's `year`. Where the rows cannot answer that,
@@ -191,7 +168,7 @@ module SlimPickins
     def render
       with_open
       chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
-      @builder.send(:nest, &chosen.last) if chosen
+      emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
     end
 
     def add_branch(condition, block) = @collected << [condition, block]
@@ -212,16 +189,11 @@ module SlimPickins
 
     def render
       with_open
-      open(:div, class: token(:field, :choice))
-      text_tag(:label, label_for(@name, @label), for: @name.to_s)
-      open(:select, id: @name.to_s, name: @name.to_s)
-      @collected.each do |o|
-        text_tag(:option, o[:label] || Inference.label(o[:value]),
-                 value: o[:value].to_s,
-                 selected: (@selected.to_s == o[:value].to_s ? 'selected' : nil))
+      options = @collected.map do |o|
+        [:option, { value: o[:value], label: o[:label], selected: @selected }, []]
       end
-      close(:select)
-      close(:div)
+      emit_node([:choice, { name: @name, label: label_for(@name, @label), selected: @selected },
+                 options])
     end
   end
 end

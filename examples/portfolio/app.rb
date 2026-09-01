@@ -14,9 +14,8 @@ require_relative '../../test/fixtures'
 module AppWords
   def video(*args, poster: nil)
     _, source = arguments(args)
-    html(%(<video class="#{token(:video)}" src="#{escape(source)}") +
-         (poster ? %( poster="#{escape(poster)}") : '') +
-         ' controls playsinline></video>')
+    tag(:video, { class: token(:video), src: source, poster: poster,
+                  controls: true, playsinline: true })
   end
 end
 

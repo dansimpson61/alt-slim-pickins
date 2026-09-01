@@ -88,11 +88,13 @@ class Phase6Test < Minitest::Test
   end
 
   # The hatch is five methods. Everything else stays private, so it cannot
-  # quietly become an API.
+  # quietly become an API. Words build nodes now, so the surface is token,
+  # html (trusted markup), tag (a raw element), children (a word's children
+  # as nodes) and arguments.
   def test_the_escape_hatch_surface_is_exactly_five_methods
     builder = SlimPickins::Builder.new(SlimPickins::Page.new(locals: {}))
-    %i[token html children escape arguments].each { |m| assert_respond_to builder, m }
-    %i[emit nest about label_for present collection_for].each do |m|
+    %i[token html tag children arguments].each { |m| assert_respond_to builder, m }
+    %i[emit nest about label_for format_of collection_for].each do |m|
       refute_respond_to builder, m, "#{m} should not be part of the escape hatch"
     end
   end
