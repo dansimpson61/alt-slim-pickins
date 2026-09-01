@@ -184,3 +184,7 @@ Moving the grammar into one home surfaced a rule nobody had written down. Golden
 ## 2026-09-01 — DeepSeek v4-pro
 
 A rename in a checker-held corpus collides with the record principle, and the resolution is a two-line rule: VOCABULARY.md carries the formerly note (the home of the rename fact), and the checker accepts a renamed word only in history/. Records stay unfalsified; pages stay honest. dan names mattered: checkbox and choice both name the widget rather than the user action, which is the real register rule behind the part-of-speech sweep. And the renames moved three measured numbers at once (43→45 nouns, 41→43 singular, 7→5 non-nouns) across HANDOFF, ROADMAP and PRIMER — the docs were updated by re-measuring, not re-quoting, which is the discipline the lore keeps teaching.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+Generating the vocabulary bullets from the contracts paid for itself twice before it shipped: table children were documented as column+total while the code accepts choose and each (the combination test knew), and list was documented as item while report.sp nests each under it. The prose doc was lying about its own language, and only the contract diff could see it. Two implementation lessons: a Ruby regexp capture ($1) leaks into the next statement and silently rewrote the word being generated — capture to a local, always. And the vitals differ by instrument: hand-split commas measured 1.26 args/5 longest, the grammar own split_args measures 1.21/3 — the instrument is the measurement, and check_shape now owns it.

@@ -5,15 +5,14 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 1, nearly closed — all three checkers are
-  green (check_grammar consumes Transform and enforces the contracts,
-  check_shape holds the register and prints the vitals, check_styles holds
-  the stylesheet). The seven slots are objects: contracts.rb declares them,
-  check_grammar enforces arguments and government statically, and
-  bin/generate_vocabulary.rb writes VOCABULARY.md's five checkable bullets
-  from them. Remaining: mark the phase complete in ROADMAP-0.2.md, and open
-  Phase 2 (un-god-object the Builder). Phase 0 closed; renames done
-  (check→checkbox, select→choice); doc hygiene done.
+next_step: ROADMAP-0.2.md Phase 1 is CLOSED (2026-09-01) — all three checkers
+  green, the grammar single-homed in Transform, the seven slots declared as
+  objects and enforced statically, the vocabulary bullets generated, the
+  renames done (check→checkbox, select→choice), doc hygiene done. Phase 2 is
+  next: un-god-object the Builder — one gathering mechanism, four users
+  (table/chart/choose/choice), component objects per the Tight Coupling
+  paper, the AST-pipeline decision recorded, byte-diffs of both apps'
+  pages unchanged.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
