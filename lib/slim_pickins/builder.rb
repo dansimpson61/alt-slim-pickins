@@ -84,8 +84,12 @@ module SlimPickins
     # --- the node assembly ------------------------------------------------
 
     # Every word hands its node to the current collection — the body's, or the
-    # head's for the words that belong there.
-    def emit_node(node) = @nodes << node
+    # head's for the words that belong there. It returns the node, so words
+    # can compose: `tag(:div, {}, [tag(:p, {}, [])])` nests.
+    def emit_node(node)
+      @nodes << node
+      node
+    end
 
     def capture(&block)
       was = @nodes
@@ -246,16 +250,16 @@ module SlimPickins
     # the founding claim intact: extending the language adds vocabulary, never
     # syntax, and a call site still cannot tell where a word came from.
     #
-    # These five are the whole surface such a word may use — and they are the
+    # These six are the whole surface such a word may use — and they are the
     # same surface the built-in vocabulary is written with, which is the
     # dogfood: Words uses exactly this, nothing more.
     public
 
     def token(word, variant = nil) = Generator.token(word, variant)
     def html(string) = emit_node([:raw, {}, [string]]) # trusted markup — you escape it
+    def element(name, attributes = {}, children = []) = [:tag, { name: name, attrs: attributes }, children]
     def tag(name, attributes = {}, children = [], &block)
-      emit_node([:tag, { name: name, attrs: attributes },
-                 block ? capture(&block) : children])
+      emit_node(element(name, attributes, block ? capture(&block) : children))
     end
     def children(&block) = capture(&block) # this word's children, as nodes
     def arguments(args) = name_and_content(args)

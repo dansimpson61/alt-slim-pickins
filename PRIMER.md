@@ -269,8 +269,9 @@ video .tour_url
 
 which reads exactly like `image .url`. Extending the language still adds
 vocabulary and never syntax — even at the exit. The surface such a word may
-use is exactly five methods (`token`, `html`, `children`, `escape`,
-`arguments`); everything else on the builder stays private. A hatch that
+use is exactly six methods (`token`, `html`, `element`, `tag`, `children`,
+`arguments`); everything else on the builder stays private. `tag` renders
+where the word stands; `element` builds a node for nesting inside another. A hatch that
 exposes everything is not a hatch, it is an API, and it becomes the seam every
 future irregularity leaks through.
 

@@ -46,8 +46,10 @@ module SlimPickins
     private
 
     def emit(node)
-      # A bare string in the tree is escaped text — the one general rule.
+      # A bare string in the tree is escaped text; nil is nothing at all —
+      # the old runtime escaped it to an empty string.
       return @out << esc(node) if node.is_a?(String)
+      return if node.nil?
 
       kind, attrs, children = node
       case kind

@@ -14,7 +14,7 @@ module SlimPickins
   # hand in each one (and, in choice's case, forgotten).
   #
   # Components are part of the runtime, so they reach Builder's internals
-  # through this one file. The app hatch stays five methods.
+  # through this one file. The app hatch stays six methods.
   class Component
     def initialize(builder, &block)
       @builder = builder
