@@ -17,7 +17,10 @@ class WordsTest < Minitest::Test
                  'every contract needs a word, and every word a contract'
 
     flattened = %i[each choose contents] # spliced by the interpreter, not rendered
-    missing = (contracts - flattened).reject do |w|
+    registering = contracts.select { |w| SlimPickins::CONTRACTS[w].parents != :any }
+    # A registering word renders through its gatherer — Table, Chart, Choose
+    # or Choice — so its home is the component, not the Generator.
+    missing = (contracts - flattened - registering).reject do |w|
       SlimPickins::Generator.private_instance_methods.include?(w)
     end
     assert_empty missing, 'every word needs a generator handler'
