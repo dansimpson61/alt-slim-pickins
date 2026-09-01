@@ -71,7 +71,15 @@ module SlimPickins
 
     def emit(nodes, depth = 0)
       nodes.flat_map do |n|
-        ruby = if RESERVED.include?(n.word)
+        ruby = if n.word == 'when'
+                 # `when`'s condition arrives as a lambda, unevaluated, so
+                 # the guard can refuse a `when` outside a `choose` *before*
+                 # the argument runs. Without this, `when .x` outside a
+                 # choose reports "this page has no x" — the wrong problem,
+                 # on the one construct with no real page behind it. The
+                 # branch body keeps the ordinary `do` block.
+                 n.compiled.empty? ? 'send(:when)' : "send(:when, -> { #{n.compiled.join(', ')} })"
+               elsif RESERVED.include?(n.word)
                  "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
                elsif n.compiled.empty?
                  n.word

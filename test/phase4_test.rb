@@ -139,10 +139,11 @@ class Phase4Test < Minitest::Test
 
   # `when` is a Ruby keyword: it can be defined as a method but never called
   # as one. The transform routes reserved words past Ruby's parser so the
-  # language keeps its own word.
+  # language keeps its own word — and sends the condition as a lambda, so a
+  # `when` outside a `choose` is refused before its argument runs.
   def test_a_reserved_word_still_compiles
     assert_includes SlimPickins.compile("choose\n  when .x\n    note \"y\"\n"),
-                    'send(:when, subject.x)'
+                    'send(:when, -> { subject.x })'
   end
 
   # Arguments are evaluated before the word runs, so `.foo` in a word's own

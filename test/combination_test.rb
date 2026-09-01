@@ -110,6 +110,39 @@ class CombinationTest < Minitest::Test
     assert_equal 1, html.scan('selected="selected"').size
   end
 
+  # `option` was the fourth copy of the gathering mechanism, and the only one
+  # with no guard — it rendered silently outside its gatherer. It has the
+  # guard now, the same one as the other three.
+  def test_an_option_outside_a_choice_is_refused
+    error = assert_raises(SlimPickins::Error) { draw("option fixed, \"Fixed\"\n") }
+    assert_equal 'option belongs inside a choice', error.message
+  end
+
+  # `when` used to guard *after* its argument ran, so `when .x` outside a
+  # choose said "this page has no x" — the wrong problem. The condition now
+  # arrives unevaluated, and the guard names the misuse.
+  def test_when_outside_a_choose_names_the_guard_not_the_argument
+    error = assert_raises(SlimPickins::Error) { draw("when .nope\n  text \"x\"\n") }
+    assert_equal 'when belongs inside a choose', error.message
+  end
+
+  # `choice` used to clear its state instead of restoring it, so a nested
+  # choice destroyed the outer one's selection. The gatherer stack restores.
+  def test_a_choice_inside_a_choice_keeps_both_sets_of_options
+    html = draw(<<~PAGE, scenario: Row.new(name: 'b', qty: 1))
+      form scenario
+        choice name
+          option a
+          option b
+          choice name
+            option a
+            option b
+    PAGE
+    assert_equal 2, html.scan('<select').size
+    assert_equal 4, html.scan('<option').size
+    assert_equal 2, html.scan('selected="selected"').size
+  end
+
   def test_registering_words_refuse_to_stand_alone
     { 'column name' => 'column belongs inside a table',
       'band qty' => 'band belongs inside a chart',

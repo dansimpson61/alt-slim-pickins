@@ -6,6 +6,7 @@ require_relative 'inference'
 require_relative 'markdown'
 require_relative 'charting'
 require_relative 'icons'
+require_relative 'components'
 
 module SlimPickins
   # The runtime. Every word is a real defined method — never method_missing —
@@ -33,14 +34,10 @@ module SlimPickins
       @out = +''
       @chain = Chain.new(page)
       @in_form = false
-      @selected = nil
       @level = 2          # `title` infers its heading level from depth
       @suppressed = false  # set when a subject is an empty collection
       @bindings = {}       # `each holding` binds `holding` for reaching out
-      @columns = nil       # non-nil only while a table is collecting columns
-      @series = nil        # non-nil only while a chart is collecting series
-      @levels = nil
-      @branches = nil      # non-nil only while a `choose` is collecting branches
+      @gatherers = []      # the components whose children are declarations
       @contents = nil      # the page's own children, while a layout renders
       @head = +''          # words that belong in <head>, wherever they are said
       @icons_used = []     # so the sprite carries only the symbols a page uses
@@ -214,70 +211,25 @@ module SlimPickins
       unsuppressed { text_tag(:p, message, class: token(:empty)) }
     end
 
-    # A table declares its columns; the rows come from the subject. `column`
-    # does not render when it is read — it registers, so the header can be
-    # written before the first row exists.
+    # A table declares its columns; the rows come from the subject. The
+    # gatherer is Table — see components.rb — this is the router's part.
     def table(*args, &block)
       name, caption = name_and_content(args)
-      rows = name ? subject.fetch(name) : subject.object
-      # Saved, not just cleared. A `when` may hold another table, and `choose`
-      # runs the chosen branch while this one is still collecting — so nulling
-      # the collection on the way out took the outer table's columns with it,
-      # and it crashed in Ruby rather than in the language.
-      was = @columns
-      @columns = []
-      nest(&block)
-      columns = @columns
-      @columns = was
-
-      open(:table, class: token(:table, name))
-      text_tag(:caption, caption) if caption
-      sample = rows.first
-      columns.each do |c|
-        c[:sample] = sample && Subject.new(sample).fetch(c[:name])
-        c[:header] = label_of(c, sample)
-      end
-
-      open(:thead)
-      open(:tr)
-      columns.each do |c|
-        next if c[:total]
-
-        text_tag(:th, c[:header], class: alignment_of(c, sample))
-      end
-      close(:tr)
-      close(:thead)
-      open(:tbody)
-      rows.each do |row|
-        @chain.with(row) do
-          open(:tr)
-          columns.each do |c|
-            next if c[:total]
-
-            text_tag(:td, present(subject.fetch(c[:name]), format_of(c)), class: alignment_of(c, sample))
-          end
-          close(:tr)
-        end
-      end
-      close(:tbody)
-      footer_row(columns, rows, sample)
-      close(:table)
+      Table.new(self, name, caption, block).render
     end
 
     # The header is not resolved here. A column registers before any row
     # exists, so the only subject in scope is the one holding the collection —
-    # and it is the *row* that knows what its own columns are called. `table`
-    # resolves it once the first row is in hand.
+    # and it is the *row* that knows what its own columns are called. The
+    # table resolves it once the first row is in hand.
     def column(*args, as: nil)
       name, header = name_and_content(args)
-      registering!(:column)
-      @columns << { name: name, header: header, as: as }
+      register!(Table, { name: name, header: header, as: as }, 'column')
     end
 
     def total(*args)
       name, label = name_and_content(args)
-      registering!(:total)
-      @columns << { name: name, header: label, as: nil, total: true }
+      register!(Table, { name: name, header: label, as: nil, total: true }, 'total')
     end
 
     def aside(&block)
@@ -399,80 +351,61 @@ module SlimPickins
 
     # The same shape as `table`, and for the same reason. A table declares its
     # columns and the rows come from the subject; a chart declares its series
-    # and the points come from the subject. `band`, `line` and `level` register
-    # rather than render, so the scale can be worked out before anything is
-    # drawn — exactly how `column` waits for the first row.
-    #
-    # The x axis is the collection's name in the singular: `chart years` reads
-    # each row's `year`. `over:` says it when that is not so.
+    # and the points come from the subject. The gatherer is Chart.
     def chart(*args, over: nil, &block)
       name, caption = name_and_content(args)
-      rows = name ? subject.fetch(name) : subject.object
-      rows = rows.to_a
-
-      # Saved, not just cleared — see `table` for why.
-      was_series = @series
-      was_levels = @levels
-      @series = []
-      @levels = []
-      nest(&block)
-      series = @series
-      levels = @levels
-      @series = was_series
-      @levels = was_levels
-
-      # A series with nothing in it is not a series. roth's do-nothing line
-      # takes `from:` a baseline that does not exist until something is
-      # converted, and an empty one still drew an empty path and claimed a
-      # place in the key.
-      drawn = series.map { |s| resolve(s, rows) }.reject { |s| s[:points].empty? }
-
-      emit(Charting.render(series: drawn,
-                           levels: levels,
-                           across: across(rows, over || Inference.singular(name)),
-                           caption: caption))
+      Chart.new(self, name, caption, over, block).render
     end
 
     # A filled series, stacked on the ones before it.
-    def band(*args) = register_series(:band, args)
+    def band(*args)
+      name, label = name_and_content(args)
+      register!(Chart, { kind: :band, name: name, label: label }, 'band')
+    end
 
     # A series drawn over the bands rather than added to them. `from:` takes
     # its points from a different collection — the same modifier `each` uses,
     # for the same reason: this line is about something else.
-    def line(*args, from: nil) = register_series(:line, args, from)
+    def line(*args, from: nil)
+      name, label = name_and_content(args)
+      register!(Chart, { kind: :line, name: name, label: label, from: from }, 'line')
+    end
 
     # A horizontal reference — a threshold, a target, a deduction. It carries
     # a value rather than an attribute, and it is labelled where it sits
     # instead of in the key, because a threshold is read against the data.
     def level(*args)
-      charting!(:level)
-      @levels << { value: args.find { |a| a.is_a?(Numeric)}.to_f,
-                   label: args.find { |a| a.is_a?(String) } }
+      register!(Chart,
+                { value: args.find { |a| a.is_a?(Numeric) }.to_f,
+                  label: args.find { |a| a.is_a?(String) } },
+                'level')
     end
 
     # --- Situation --------------------------------------------------------
 
     # The branches register, then the first true one renders. `otherwise` is
     # an ordinary word valid inside `choose`, so `else` is never a keyword and
-    # nothing needs special parsing.
+    # nothing needs special parsing. The gatherer is Choose.
     def choose(&block)
-      was = @branches
-      @branches = []
-      nest(&block)
-      chosen = @branches.find { |c, _| c } || @branches.find { |c, _| c.nil? }
-      @branches = was
-      nest(&chosen.last) if chosen
+      Choose.new(self, &block).render
     end
 
     def when(*args, &block)
-      branching!(:when)
-      _, condition = name_and_content(args)
-      @branches << [!!condition, block]
+      target = open_gatherer(Choose)
+      raise Error, 'when belongs inside a choose' unless target
+
+      # The transform sends the condition as a lambda, unevaluated — so this
+      # guard can refuse a `when` outside a `choose` before the argument
+      # runs, instead of reporting the argument's problem.
+      condition = args.first
+      target.add_branch(!!(condition&.call), block)
     end
 
     def otherwise(&block)
-      branching!(:otherwise)
-      @branches << [nil, block]
+      target = open_gatherer(Choose)
+      raise Error, 'otherwise belongs inside a choose' unless target
+
+      target.add_branch(nil, block)
     end
 
 
@@ -548,28 +481,19 @@ module SlimPickins
       open(:label, for: name.to_s)
       void(:input, id: name.to_s, name: name.to_s, type: 'checkbox',
                     checked: value ? 'checked' : nil)
-      @out << CGI.escapeHTML(label_for(name, label))
+      emit(escape(label_for(name, label)))
       close(:label)
       close(:div)
     end
 
     def choice(*args, &block)
       name, label = name_and_content(args)
-      @selected = subject.fetch(name)
-      open(:div, class: token(:field, :choice))
-      text_tag(:label, label_for(name, label), for: name.to_s)
-      open(:select, id: name.to_s, name: name.to_s)
-      nest(&block)
-      close(:select)
-      close(:div)
-      @selected = nil
+      Choice.new(self, name, label, block).render
     end
 
     def option(*args)
       value, label = name_and_content(args)
-      text_tag(:option, label || Inference.label(value),
-               value: value.to_s,
-               selected: (@selected.to_s == value.to_s ? 'selected' : nil))
+      register!(Choice, { value: value, label: label }, 'option')
     end
 
     def button(*args, to: nil, type: nil)
@@ -647,28 +571,6 @@ module SlimPickins
       text_tag(:span, body, class: classes)
     end
 
-    def footer_row(columns, rows, sample)
-      totals = columns.select { |c| c[:total] }
-      return if totals.empty?
-
-      open(:tfoot)
-      open(:tr)
-      shown = columns.reject { |c| c[:total] }
-      shown.each_with_index do |c, i|
-        t = totals.find { |x| x[:name] == c[:name] }
-        if t
-          sum = rows.sum { |row| Subject.new(row).fetch(c[:name]) }
-          text_tag(:td, present(sum, format_of(c, rows.first)), class: alignment_of(c, sample))
-        elsif i.zero?
-          text_tag(:td, totals.first[:header] || 'Total')
-        else
-          text_tag(:td, '')
-        end
-      end
-      close(:tr)
-      close(:tfoot)
-    end
-
     # `each holding` looks for `holdings` on the subject. When the subject is
     # itself the collection — as it is under `section accounts`, which is what
     # lets `empty` know what is empty — it iterates that instead.
@@ -680,12 +582,6 @@ module SlimPickins
       raise Error, "#{subject.describe} has no #{plural} to go through"
     end
 
-    def branching!(word)
-      return if @branches
-
-      raise Error, "#{word} belongs inside a choose"
-    end
-
     # `card` infers its DOM id from the subject, so no page writes `id .id`.
     def card_id
       return nil unless subject.has?(:id)
@@ -693,47 +589,31 @@ module SlimPickins
       "#{subject.noun}-#{subject.fetch(:id)}"
     end
 
-    def registering!(word)
-      return if @columns
+    # --- the gathering mechanism, written once -----------------------------
+    #
+    # The registering words route through the stack of open gatherers — the
+    # one collect-and-restore the lore counted four times. A nested gatherer
+    # pushes and pops; the outer one's collection is untouched, which is the
+    # save-and-restore each word used to do by hand (and `choice` never did).
+    def register!(kind, item, what)
+      target = open_gatherer(kind)
+      raise Error, "#{what} belongs inside #{kind::INSIDE}" unless target
 
-      raise Error, "#{word} belongs inside a table"
+      target.collect(item)
     end
 
-    def charting!(word)
-      return if @series
-
-      raise Error, "#{word} belongs inside a chart"
+    def open_gatherer(kind)
+      @gatherers.reverse.find { |g| g.is_a?(kind) }
     end
 
-    def register_series(kind, args, from = nil)
-      charting!(kind)
-      name, label = name_and_content(args)
-      @series << { kind: kind, name: name, label: label, from: from }
+    def with_gatherer(gatherer)
+      @gatherers.push(gatherer)
+      yield
+    ensure
+      @gatherers.pop
     end
 
-    # A series becomes points to draw, a name to call it, and the same values
-    # written the way the rest of the page would write them — so a tooltip says
-    # `$412,800` because `format_for` said money, not because a chart guessed.
-    def resolve(series, rows)
-      source = series[:from] ? series[:from].to_a : rows
-      sample = source.first
-      kind = Subject.new(sample).format_for(series[:name])
-      values = source.map { |row| Subject.new(row).fetch(series[:name]) }
-
-      { kind: series[:kind],
-        label: label_of({ name: series[:name], header: series[:label] }, sample),
-        points: values.map(&:to_f),
-        shown: values.map { |v| present(v, kind) } }
-    end
-
-    # `chart years` reads each row's `year`. Where the rows cannot answer that,
-    # the axis counts instead of inventing.
-    def across(rows, attribute)
-      return (1..rows.size).map(&:to_s) unless attribute && rows.first
-      return (1..rows.size).map(&:to_s) unless Subject.new(rows.first).has?(attribute)
-
-      rows.map { |row| Subject.new(row).fetch(attribute).to_s }
-    end
+    def chain = @chain
 
     def deeper
       @level += 1
