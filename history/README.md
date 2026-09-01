@@ -26,5 +26,6 @@ was code* — three real pages written on paper, each modelled on a view that
 already existed in this workspace. Wall counts across them went 3, 6, 1.
 
 They are still held by `check_grammar.rb`, so they are green rather than inert.
-Roadmap 0.2's Phase 7 proposes cutting them; moving them here is the reversible
-half of that decision.
+A draft of roadmap 0.2 proposed cutting them; moving them here was the
+reversible half of that decision, and the current roadmap's subtraction phase
+takes the question up again.

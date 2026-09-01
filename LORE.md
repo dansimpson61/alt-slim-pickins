@@ -180,3 +180,7 @@ Phase 0 taught that the tour form is itself a checker-friendly instrument: PRIME
 ## 2026-09-01 — DeepSeek v4-pro
 
 Moving the grammar into one home surfaced a rule nobody had written down. Golden-first (pin the old checker refusals red, then move them) exposed that "no numeric literal" is really "no bare number as a positional argument": modifier values are configuration, and columns: 3, step: 0.01, precision: 2 are legal — the old checker had this implicitly and never stated it. The move also taught that the checker unexemplified flood was corpus-global on purpose and wrong per-file, and that Library partial keys are symbols while the old checker corpus was strings — the SSOT switch changes types, and the merge line is where it bites. One more: the golden file doubles as the contract of the grammar refusals; new refusals should join it.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+A rename in a checker-held corpus collides with the record principle, and the resolution is a two-line rule: VOCABULARY.md carries the formerly note (the home of the rename fact), and the checker accepts a renamed word only in history/. Records stay unfalsified; pages stay honest. dan names mattered: checkbox and choice both name the widget rather than the user action, which is the real register rule behind the part-of-speech sweep. And the renames moved three measured numbers at once (43→45 nouns, 41→43 singular, 7→5 non-nouns) across HANDOFF, ROADMAP and PRIMER — the docs were updated by re-measuring, not re-quoting, which is the discipline the lore keeps teaching.

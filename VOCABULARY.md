@@ -997,22 +997,21 @@ Predictions from the spec, and what actually happened.
   close, but three of the additions were invisible until a real page was read,
   which is the argument against ever drafting this from imagination.
 
-## Still open
+## What the drafts left open
 
-- **The `?` case is closed.** A bare helper used as a value has nowhere to
-  live *because it should not*: the page is the outermost subject, so it is
-  `.signed_in?` like everything else. Three real pages never reached the hole,
-  which was the clue that it was not a hole in the language but a missing
-  object at the bottom of the chain.
-- **`chart` is a guess.** It has more irreducible configuration than any other
-  word, and the entry above draws the inference/instruction line without
-  evidence.
-- **What the app must promise.** `field base_income` deriving a label, an
-  input name, a value and an input type assumes the subject can be asked about
-  its attributes. `section holdings` assumes a humanising rule. `column`
-  choosing an alignment assumes types are knowable. These are a contract the
-  *app* has to satisfy, and it is now visible in one place rather than
-  scattered.
-- **Under-tested by this page.** Prose and media (`text`, `image`, `icon`),
-  navigation chrome, and collections nested more than one deep. A portfolio
-  page stresses money, tables and forms; it says almost nothing about the rest.
+Every item below was open when this document was drafted. All of them landed
+during 0.1; the list is a record, not a to-do.
+
+- **The `?` case.** Closed in Phase 4 — a bare helper used as a value has
+  nowhere to live *because it should not*: the page is the outermost subject,
+  so it is `.signed_in?` like everything else. Three real pages never reached
+  the hole, which was the clue that it was not a hole in the language but a
+  missing object at the bottom of the chain.
+- **`chart`.** Redrafted in Phase 8 as the same shape as `table`; see its
+  entry above.
+- **What the app must promise.** Named in Phase 1, and written down in
+  [CONTRACT.md](CONTRACT.md): one sentence plus two optional methods.
+- **Under-tested by this page.** Prose and media were exercised by
+  [CONTENT.md](history/CONTENT.md) and [FIGURES.md](history/FIGURES.md);
+  navigation chrome by the layout; collections nested more than one deep by
+  the portfolio page.
