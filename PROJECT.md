@@ -5,14 +5,17 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 2 is CLOSED (2026-09-01) — the four
-  gatherers are components sharing one mechanism, eleven pages byte-identical,
-  the warts gone (Library.from takes words:), the AST decision recorded
-  (parse → validate → generate; the generator stays). Phase 3 is next: the
-  payload — a page may not render until the app has been proved able to
-  answer it. A validation pass over the tree before emission, report-only
-  first, then the gate; the roth test (renaming an attribute fails at boot,
-  naming line and attribute); the per-render cost measured.
+next_step: ROADMAP-0.2.md Phase 3, in progress — rounds 1-3 done and pushed:
+  words build semantic nodes and the Generator interprets them (eleven pages
+  byte-identical), the vocabulary lives in lib/slim_pickins/words.rb written
+  with the same five-method surface apps get (Builder 747 → 263 lines), and
+  words_test.rb pins that contracts, Words and the Generator agree. One
+  finding for dan: .sp-composition of the vocabulary is empty without new
+  primitive words — the vocabulary is its own lowest layer (see the last
+  LORE.md entry). Next: Phase 3's payload — the validation pass over the tree
+  before emission (report-only, then the gate); the roth boot-error test; the
+  per-render cost measured. The AST-pipeline decision stands as recorded:
+  parse → validate → generate, generator unchanged.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
