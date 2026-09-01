@@ -265,8 +265,9 @@ ordinary case. `list` governs `item` instead.
 - **renders** — `<li>`
 
 ```
-item
-item "Ruby logic before CSS before Stimulus."
+list plain
+  item
+  item "Ruby logic before CSS before Stimulus."
 ```
 
 ### `table`
@@ -299,9 +300,10 @@ table holdings, "As of today"
 - **renders** — one `<th>` in the head, one `<td>` per row
 
 ```
-column symbol
-column market_value, "Value"
-column weight, as: percent
+table holdings
+  column symbol
+  column market_value, "Value"
+  column weight, as: percent
 ```
 
 ### `total`
@@ -316,8 +318,9 @@ column weight, as: percent
 - **renders** — a `<tfoot>` row
 
 ```
-total market_value
-total market_value, "Portfolio"
+table holdings
+  total market_value
+  total market_value, "Portfolio"
 ```
 
 ### `card`
@@ -704,8 +707,9 @@ counts.
 - **renders** — a filled `<path>`, stacked on the bands before it
 
 ```
-band base_income
-band social_security
+chart years
+  band base_income
+  band social_security
 ```
 
 Valid only inside `chart`. Bands accumulate: the second sits on the first, so a
@@ -724,8 +728,9 @@ chart of four bands is a stacked area and the top of the stack is the total.
 - **renders** — a stroked `<path>`, over the bands rather than added to them
 
 ```
-line federal_tax
-line gross_income, "Do nothing", from: .baseline_years
+chart years
+  line federal_tax
+  line gross_income, "Do nothing", from: .baseline_years
 ```
 
 Valid only inside `chart`. `from:` is the same modifier `each` takes and means
@@ -745,7 +750,8 @@ laid over a chart without a second chart.
 - **renders** — a horizontal rule across the plot, labelled where it sits
 
 ```
-level .standard_deduction, "Standard deduction"
+chart years
+  level .standard_deduction, "Standard deduction"
 ```
 
 Valid only inside `chart`. A threshold, a target, a deduction — read against
@@ -888,8 +894,9 @@ choice conversion_strategy, "Strategy"
 - **renders** — `<option>`
 
 ```
-option fixed, "Fixed amount"
-option fill_bracket, "Fill bracket"
+choice conversion_strategy
+  option fixed, "Fixed amount"
+  option fill_bracket, "Fill bracket"
 ```
 
 ---
@@ -957,7 +964,8 @@ choose
 - **renders** — nothing of its own
 
 ```
-when .in_stock?
+choose
+  when .in_stock?
 ```
 
 ### `otherwise`
@@ -971,7 +979,8 @@ when .in_stock?
 - **renders** — nothing of its own
 
 ```
-otherwise
+choose
+  otherwise
 ```
 
 ---

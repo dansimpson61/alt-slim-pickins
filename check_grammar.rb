@@ -102,22 +102,30 @@ docs.each do |doc|
   where = File.basename(doc)
   each_block(doc) do |source, first_line|
     begin
-      SlimPickins::Transform.call(source, path: where)
-      # The count uses the same filter Transform uses, so the headline number
-      # cannot drift from what was actually compiled.
-      source.lines.each do |raw|
-        line = raw.chomp.sub(/\s+#.*\z/, '').rstrip
-        next if line.strip.empty?
-
-        checked += 1
-        word = line.strip.partition(' ').first
-        used[word] << where
-        used_full[word] << doc
-      end
+      tree = SlimPickins::Transform.tree(source, path: where)
     rescue SlimPickins::SyntaxError => e
       puts "  BAD SENTENCE  #{where}:#{first_line + e.lineno - 1}: #{e.line.inspect} — #{e.message.lines.first.strip}"
       problems += 1
+      next
     end
+
+    # Walk the tree with the grammar itself, enforcing each word's declared
+    # contract: what it takes, what it holds, and where it may live.
+    walk = lambda do |nodes, ancestry|
+      nodes.each do |node|
+        checked += 1
+        used[node.word] << where
+        used_full[node.word] << doc
+
+        SlimPickins::Contracts.complaints(node, ancestry).each do |complaint|
+          puts "  BAD CONTRACT  #{where}:#{first_line + node.lineno - 1}: `#{node.word}` — #{complaint}"
+          problems += 1
+        end
+
+        walk.call(node.children, ancestry + [node.word])
+      end
+    end
+    walk.call(tree, [])
   end
 end
 

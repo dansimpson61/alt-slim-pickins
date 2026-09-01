@@ -28,8 +28,20 @@ module SlimPickins
 
     Sentence = Struct.new(:indent, :body, :lineno)
 
+    # One parsed sentence with its children — the tree the checker walks to
+    # enforce government, built by the same indentation rule that builds the
+    # Ruby. `word` is the leading word, `raw_args` the arguments as written,
+    # `ranks` each argument's kind (0 name, 1 content or data, 2 modifier) and
+    # `compiled` the Ruby each argument becomes.
+    Node = Struct.new(:indent, :body, :lineno, :word, :raw_args, :ranks, :compiled, :children,
+                      keyword_init: true)
+
     def self.call(source, path: '(page)')
       new(source, path).call
+    end
+
+    def self.tree(source, path: '(page)')
+      new(source, path).tree
     end
 
     def initialize(source, path)
@@ -38,36 +50,58 @@ module SlimPickins
     end
 
     def call
-      out = []
-      open = []
+      "#{emit(tree).join("\n")}\n"
+    end
 
-      sentences.each_with_index do |s, i|
-        while open.any? && s.indent <= open.last
-          open.pop
-          out << "#{'  ' * open.size}end"
+    def tree
+      @tree ||= begin
+        stack = []
+        nodes = []
+        sentences.each do |s|
+          node = build(s)
+          stack.pop while stack.any? && s.indent <= stack.last.indent
+          (stack.any? ? stack.last.children : nodes) << node
+          stack << node
         end
-
-        nxt = sentences[i + 1]
-        pad = '  ' * open.size
-        ruby = to_ruby(s)
-
-        if nxt && nxt.indent > s.indent
-          out << "#{pad}#{ruby} do"
-          open << s.indent
-        else
-          out << "#{pad}#{ruby}"
-        end
+        nodes
       end
-
-      while open.any?
-        open.pop
-        out << "#{'  ' * open.size}end"
-      end
-
-      "#{out.join("\n")}\n"
     end
 
     private
+
+    def emit(nodes, depth = 0)
+      nodes.flat_map do |n|
+        ruby = if RESERVED.include?(n.word)
+                 "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
+               elsif n.compiled.empty?
+                 n.word
+               else
+                 "#{n.word}(#{n.compiled.join(', ')})"
+               end
+        pad = '  ' * depth
+        n.children.any? ? ["#{pad}#{ruby} do", *emit(n.children, depth + 1), "#{pad}end"] : ["#{pad}#{ruby}"]
+      end
+    end
+
+    def build(sentence)
+      word, _, rest = sentence.body.partition(' ')
+      unless word =~ WORD
+        raise SyntaxError.new("#{word.inspect} is not a word", @path, sentence.lineno, sentence.body)
+      end
+
+      raw = split_args(rest)
+      compiled = raw.map { |a| argument(a, sentence) }
+      ranks = raw.map { |a| rank(a) }
+      if ranks != ranks.sort
+        raise SyntaxError.new(
+          'a name may not come after content or data — names come first',
+          @path, sentence.lineno, sentence.body
+        )
+      end
+
+      Node.new(indent: sentence.indent, body: sentence.body, lineno: sentence.lineno,
+               word: word, raw_args: raw, ranks: ranks, compiled: compiled, children: [])
+    end
 
     def sentences
       @sentences ||= @source.lines.each_with_index.filter_map do |raw, i|
@@ -75,29 +109,6 @@ module SlimPickins
         next if line.strip.empty?
 
         Sentence.new(line[/\A */].size, line.strip, i + 1)
-      end
-    end
-
-    def to_ruby(sentence)
-      word, _, rest = sentence.body.partition(' ')
-      unless word =~ WORD
-        raise SyntaxError.new("#{word.inspect} is not a word", @path, sentence.lineno, sentence.body)
-      end
-
-      args = split_args(rest).map { |a| [a, argument(a, sentence)] }
-      order = args.map { |raw, _| rank(raw) }
-      if order != order.sort
-        raise SyntaxError.new(
-          'a name may not come after content or data — names come first',
-          @path, sentence.lineno, sentence.body
-        )
-      end
-
-      if RESERVED.include?(word)
-        parts = [":#{word}", *args.map(&:last)]
-        "send(#{parts.join(', ')})"
-      else
-        args.empty? ? word : "#{word}(#{args.map(&:last).join(', ')})"
       end
     end
 

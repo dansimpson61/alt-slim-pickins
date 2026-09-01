@@ -2,6 +2,7 @@
 
 require_relative 'slim_pickins/errors'
 require_relative 'slim_pickins/transform'
+require_relative 'slim_pickins/contracts'
 require_relative 'slim_pickins/subject'
 require_relative 'slim_pickins/inference'
 require_relative 'slim_pickins/library'
