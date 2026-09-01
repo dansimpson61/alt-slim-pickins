@@ -26,8 +26,10 @@ get around one, and the language is small because of it.
 
 It removes an ability the language currently has — **the ability to fail
 late** — and like the others it looks like a restriction and pays like a tool.
-Phase 5 builds it; Phases 0 to 4 are what make the case for it, repeatedly, by
-being the kind of work where late failure hurts.
+Phase 5 builds it. Phases 0 to 4 are the evidence it should be drafted
+against — deliberately, because 0.1 drafted `chart` without evidence and it
+stayed wrong for eight phases. But nothing above Phase 5 is a hard dependency,
+and if the port slows, it moves up.
 
 ## Two constraints that run through every phase
 
@@ -211,8 +213,9 @@ than editing it would have.
 
 - **This file is the single source of truth.** `PROJECT.md` `next_step` always
   points at the current phase. Commit after each item.
-- **Every item has a "done looks like".** If you cannot verify it, it is not
-  done.
+- **Every `agent` and `dan` item has a "done looks like".** If you cannot
+  verify it, it is not done. A `conv` is a standing convention, not a task, so
+  it has none — and if a `conv` could have one, it is really an item.
 - **`check_grammar.rb`, `check_styles.rb` and `check_shape.rb` stay green.**
   Every new word arrives with a sentence, a rule and a shape.
 - **A new word arrives with a combination test.** `test/combination_test.rb`
@@ -264,8 +267,20 @@ where routing belongs.
   it replaces, at this size, on a page you know well?
   *Done looks like:* the answer, recorded, including if it is no.
 
-**If this phase fails, the rest of the roadmap changes shape**, which is
-exactly why it is first and why it is one small file.
+**If this phase fails, the rest of the roadmap changes shape** — which is
+exactly why it is first and why it is one small file. Concretely:
+
+- **Two or three walls, each a nameable gap.** Expected. Phases 2 and 3 already
+  hold the two most likely ones. Continue.
+- **A wall that needs new syntax.** Stop. That is the founding claim failing,
+  and it outranks everything else in this document. Write it up before doing
+  anything else.
+- **It ports, but reads worse than the Slim.** Also stop, and ask why — the
+  language is for reading. This is the failure 0.1 never risked, because roth's
+  page was ugly to begin with and the dashboard's is not.
+- **More than half the page needs the app rewritten around it.** Then the
+  language is not portable-to, only buildable-in, which is a much smaller claim
+  than 0.2 assumes. Say so and re-scope.
 
 ## Phase 1 — The shapes a word comes in
 
@@ -351,16 +366,30 @@ drafted the way the good ones were: **after the pages have hurt.**
   return path may not be the same idea.
   *Done looks like:* one word, or two, decided on the evidence.
 
-## Phase 4 — The rest of it, in anger
+## Phase 4 — The three hard views
 
-Conditional and bespoke UI at 1,555 lines. The 81% is a prediction; this is the
-test.
+**Scoped down after measuring it.** "Port the rest" was 17 views and 1,385
+lines — 36× Phase 0, and 15× the entire roth port, which itself took two phases
+and produced 1,238 lines of write-up. As one phase with four bullets it was not
+a plan, it was a wish.
 
-- **Port the remaining views** `agent` — in order of ugliness, worst first.
-  `project.slim` (305), `dispatch.slim` (257) and `index.slim` (244) are where
-  the answer lives; the small ones will not teach anything the first three did
-  not.
-  *Done looks like:* every view ported or refused, with the refusals listed.
+So this phase is **three views: `project.slim` (274), `dispatch.slim` (236) and
+`index.slim` (220)**. 730 lines, and every construct in the dashboard appears in
+at least one of them. The document already said the small ones would teach
+nothing the first three did not; this takes that seriously and does not ask for
+them.
+
+The other fourteen views — 655 lines — are **not in this roadmap.** They are
+mechanical once these three are done, and porting them proves nothing. If they
+are ever wanted, they are a `conv`, not a phase.
+
+Conditional and bespoke UI is what these three are made of. The 81% is a
+prediction; this is the test.
+
+- **Port the three, worst first** `agent` — stop at anything that cannot be
+  said, as in Phase 0. Do not invent a word to get past a wall.
+  *Done looks like:* three ported views, or a list of exactly what stopped
+  each, naming the line and what the language lacks.
 - **Measure the branches honestly** `agent` — how many of the 233 really
   dissolved, how many needed `choose`, how many needed an app predicate, how
   many needed something that does not exist.
@@ -377,9 +406,15 @@ test.
 
 ## Phase 5 — The contract, checked at boot
 
-The proscription, built. By now the port will have made the case for it several
-times over, which is the right order — 0.1's mistake with `chart` was drafting
-before the evidence.
+The proscription, built. This is the phase the roadmap's question is actually
+about; everything before it is evidence-gathering.
+
+**And it is sequenced late by choice, not by necessity.** `demands(path)` needs
+a tree walker and one page — it does not need 730 ported lines. Putting it
+fifth buys the same thing 0.1's `chart` never got: a design drafted against
+several real pages instead of one. But if the port stalls, or Phase 4 turns
+into a slog, **pull this forward.** It is the payload, and nothing above it is
+a hard dependency.
 
 - **A page can say what it demands, without rendering** `agent` — walk the tree,
   collect every attribute every word will ask of every subject.
@@ -406,8 +441,13 @@ nothing has been done with that.
 - **The failing line, in context** `agent` — with the subject chain that led to
   it, because "this page has no account" is true and unhelpful without knowing
   which page and which line.
-- **A wall names its nearest word** `conv` — an unknown word is a typo more
+  *Done looks like:* every `SlimPickins::Error` carries the file, the line, the
+  word and the chain of subjects that were open when it was raised, and a test
+  pins the whole message for one failure of each kind.
+- **A wall names its nearest word** `agent` — an unknown word is a typo more
   often than a gap, and the vocabulary is fifty entries long.
+  *Done looks like:* `there is no word \`sectoin\` — did you mean \`section\`?`,
+  and no suggestion offered when nothing is close.
 
 ## Phase 7 — Subtraction
 
@@ -458,6 +498,11 @@ it.
 3 and 4 will want to add words, and adding them into an 842-line class with
 twelve shared ivars is how the next three phases would quietly make the
 language worse. It is the only item here that is cheaper early than late.
+
+**Phase 4 was cut in half after being measured.** "Port the rest" was 1,385
+lines across 17 views — 15× the whole roth port, which itself took two phases.
+It is three views and 730 lines now, and the other fourteen are explicitly not
+asked for. A phase nobody could finish is not a plan.
 
 If Phase 0 fails, everything after it changes shape. That is why it is first,
 and why it is forty-two lines.
