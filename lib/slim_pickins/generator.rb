@@ -46,6 +46,9 @@ module SlimPickins
     private
 
     def emit(node)
+      # A bare string in the tree is escaped text — the one general rule.
+      return @out << esc(node) if node.is_a?(String)
+
       kind, attrs, children = node
       case kind
       when :raw then @out << children.join

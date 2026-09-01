@@ -200,3 +200,7 @@ Phase 2 round 1 taught three things. (1) The byte-diff harness is the right inst
 ## 2026-09-01 — DeepSeek v4-pro
 
 Phase 2 closed with a decision whose shape is the lesson: the AST pipeline half-arrived by extraction rather than by plan. Transform.tree was already the parse stage, the contracts the grammar, the checkers the filters — so the paper's remaining offer was only ever about the generator. The introspection payoff was already spent, and a second generator has no consumer, so the generator stays: parse -> validate -> generate, generator unchanged. The Ode's wrong-abstraction tax, applied to architecture papers. Also measured: Builder went from sixteen ivars to twelve, and the five gathering ivars became one stack — the stack made choice's clear-not-restore defect structurally impossible.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+The semantic-node runtime landed byte-identical, and the flattest lesson of the round: Array#flatten on a node list flattens the NODES — each node is an array, so flatten(1) turns [:choose, {}, [note]] into three siblings. choose and each need different shapes: one list per iteration vs a flat capture. The second lesson: the Generator.format fallback to the value's SHAPE is a contract level, not an optimization — dropping it broke a hash-subject test by printing 1500 instead of 1,500, and the three-level precedence (as:, format_for, shape) is exactly the CONTRACT.md rule in code. Third: the language refuses bad probe pages with better errors than my probes deserved.
