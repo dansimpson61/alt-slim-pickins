@@ -41,16 +41,20 @@ which is where it belongs.
 
 ## What is next — write ROADMAP-0.2.md
 
-**0.2 is an even-numbered roadmap, so it looks back.** README.md's *How
-roadmaps go* is the rule: an odd roadmap asks something the project cannot
-answer and spends itself finding out; an even one asks whether what was built
-deserves to stand. Three movements, and no new capability:
+**0.2 is an even-numbered roadmap, so it leads with the backward eye.**
+README.md's *How roadmaps go* is the rule — *ataovy dian-tana: jerena ny aloha,
+todihana ny afara*, walk like the chameleon, which watches ahead and behind at
+once. Both eyes stay open; the number says which one leads. Three movements:
 
 1. **Look back at the progress made** — what was claimed, what was measured,
    and which of the two the documents actually record.
 2. **Read the history and the lore.**
 3. **Study the DSL and the code beneath it as objects in their own right**, to
    the standard of excellent Ruby.
+
+The forward eye stays open throughout: reshape the runtime around what it must
+next carry, not merely into something neater. **Build nothing the backward look
+did not ask for** — which is a narrower constraint than *build nothing*.
 
 Do not write the roadmap from a blank page. The findings that motivated this
 protocol are already measured and are in the last `LORE.md` entry:

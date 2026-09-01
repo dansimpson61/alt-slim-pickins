@@ -122,14 +122,23 @@ and [roth/](roth/README.md) is notes on a different project.
 
 ## How roadmaps go
 
-**Odd roadmaps push out. Even roadmaps look back.**
+> **Ataovy dian-tana: jerena ny aloha, todihana ny afara.**
+>
+> *Walk like the chameleon: what lies ahead is watched, what lies behind is
+> glanced back at.*
 
-An odd-numbered roadmap asks something the project cannot yet answer and spends
-itself finding out. 0.1 asked whether a view language could keep one sentence
-all the way down, and answered it: fifty words, two apps, no grammar changes.
+The chameleon's eyes move independently, so it does both at once. It does not
+take turns, and neither does this project. **Both eyes stay open; the roadmap's
+number says which one leads.**
 
-An even-numbered roadmap asks whether what was built deserves to stand. Three
-movements, and no new capability:
+An **odd** roadmap leads with the forward eye. It asks something the project
+cannot yet answer and spends itself finding out — 0.1 asked whether a view
+language could keep one sentence all the way down, and answered it: fifty
+words, two apps, no grammar changes. It still re-reads the history and the lore
+**before** it chooses a direction.
+
+An **even** roadmap leads with the backward eye. It asks whether what was built
+deserves to stand. Three movements:
 
 1. **Look back at the progress made** — what was claimed, what was measured,
    and which of the two the documents actually record.
@@ -139,12 +148,18 @@ movements, and no new capability:
 3. **Study the DSL and the code beneath it as objects in their own right**, to
    the standard of excellent Ruby — not as a means to the next feature.
 
-The reason is that 0.1 ran eight phases without once looking at its own runtime
-as an object, and a single afternoon of looking found four copies of one
-mechanism, two guards that fire at the wrong moment, and two words that are the
-wrong part of speech. None of that was reachable by building the next thing.
+It still has to know where the project is going, or the study is decoration.
+The constraint is not *build nothing*; it is **build nothing the backward look
+did not ask for.**
 
-**0.2 is the first of its kind**, and it is not written yet.
+Both halves are earned. 0.1 ran eight phases with both eyes forward, and a
+single afternoon of looking back found four copies of one mechanism, two guards
+that fire at the wrong moment, and two words that are the wrong part of speech —
+none of it reachable by building the next thing. The opposite failure is just as
+cheap to fall into: a runtime reshaped without knowing what it must next carry
+is a beautifully organised runtime for the wrong language.
+
+**0.2 is the first even-numbered roadmap**, and it is not written yet.
 
 ## Status
 
