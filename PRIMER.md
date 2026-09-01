@@ -122,11 +122,11 @@ and the leading word tells you how to read the rest of the line.
 
 ## The register
 
-Counted across the fifty words: **43 are common nouns** — 41 of them singular
-— and the seven non-nouns are almost exactly the control flow (`each` a
-determiner, `empty` an adjective, `choose` a verb, `when` a conjunction,
-`otherwise` an adverb). A sentence is head noun plus specifier: the register
-of a **label**, not of prose. That is why a page reads like a spec sheet of
+Counted across the fifty words: **45 are common nouns** — 43 of them singular
+— and the five non-nouns are exactly the control flow (`each` a determiner,
+`empty` an adjective, `choose` a verb, `when` a conjunction, `otherwise` an
+adverb). A sentence is head noun plus specifier: the register of a
+**label**, not of prose. That is why a page reads like a spec sheet of
 itself:
 
 ```
@@ -138,10 +138,10 @@ page scenario
     metric tax_delta
 ```
 
-Two words break the register — `check` and `select` are verbs, imperatives
-that describe the user's action rather than the widget they render. They are
-the language's known blemishes, and the roadmap that owns this document owns
-renaming them.
+Two words broke the register — `check` and `select` were verbs, imperatives
+that described the user's action rather than the widget they render. Phase 1
+renamed them `checkbox` and `choice`, and the sweep that found them is now
+the instrument that keeps a third verb out.
 
 ## Inference, and the contract that makes it honest
 

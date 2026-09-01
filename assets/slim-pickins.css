@@ -293,8 +293,8 @@ time { color: var(--ink-soft); }
   outline: var(--focus-width) solid var(--accent);
   outline-offset: var(--rule-width);
 }
-.field--check label { display: flex; align-items: center; gap: var(--step); }
-.field--check input { width: auto; }
+.field--checkbox label { display: flex; align-items: center; gap: var(--step); }
+.field--checkbox input { width: auto; }
 
 .group {
   margin: 0 0 var(--gap);

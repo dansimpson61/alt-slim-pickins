@@ -797,7 +797,7 @@ button "Show baseline", to: baseline
 - **name** — the subject the form edits; omitted, it keeps the current one
 - **content** — none
 - **modifiers** — `to:`, `method:`
-- **children** — `group`, `field`, `check`, `select`, `actions`
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`
 - **subject** — the named thing, so fields read their values from it
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`
@@ -841,7 +841,10 @@ every time; the label was right about three times in ten, which is why the
 `infers` slot above no longer promises it unconditionally. See
 [PHASE0.md](history/PHASE0.md).
 
-### `check`
+### `checkbox`
+
+Formerly `check`. Renamed in Phase 1: a verb describes the user's action
+rather than the widget, and this is a noun language.
 
 - **name** — the attribute
 - **content** — the label
@@ -852,10 +855,13 @@ every time; the label was right about three times in ten, which is why the
 - **renders** — `<label>` plus `<input type="checkbox">`
 
 ```
-check show_baseline, "Show baseline"
+checkbox show_baseline, "Show baseline"
 ```
 
-### `select`
+### `choice`
+
+Formerly `select`. Renamed in Phase 1: `select` has no noun sense in English
+outside HTML, and its children — `option` — already read as nouns.
 
 - **name** — the attribute
 - **content** — the label
@@ -868,7 +874,7 @@ check show_baseline, "Show baseline"
 - **renders** — `<label>` plus `<select>`
 
 ```
-select conversion_strategy, "Strategy"
+choice conversion_strategy, "Strategy"
 ```
 
 ### `option`

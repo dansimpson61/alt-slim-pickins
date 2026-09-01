@@ -11,8 +11,8 @@ module SlimPickins
   # The runtime. Every word is a real defined method — never method_missing —
   # so an unknown word fails with a name, and the vocabulary is greppable.
   #
-  # Phase 0 scope: page, form, group, field, check, select, option, button,
-  # actions, disclosure.
+  # Phase 0 scope: page, form, group, field, checkbox, choice, option,
+  # button, actions, disclosure.
   #
   # A useful property falls out of the transform: names compile to Symbols and
   # content compiles to Strings. So a word can tell a name from content by
@@ -25,7 +25,7 @@ module SlimPickins
                money percent number text note prose badge fact snippet
                time image icon metric chart band line level
                choose when otherwise
-               form group field check select option button
+               form group field checkbox choice option button
                ].freeze
 
     def initialize(page, library = nil)
@@ -541,10 +541,10 @@ module SlimPickins
       close(:div)
     end
 
-    def check(*args)
+    def checkbox(*args)
       name, label = name_and_content(args)
       value = subject.fetch(name)
-      open(:div, class: token(:field, :check))
+      open(:div, class: token(:field, :checkbox))
       open(:label, for: name.to_s)
       void(:input, id: name.to_s, name: name.to_s, type: 'checkbox',
                     checked: value ? 'checked' : nil)
@@ -553,10 +553,10 @@ module SlimPickins
       close(:div)
     end
 
-    def select(*args, &block)
+    def choice(*args, &block)
       name, label = name_and_content(args)
       @selected = subject.fetch(name)
-      open(:div, class: token(:field, :select))
+      open(:div, class: token(:field, :choice))
       text_tag(:label, label_for(name, label), for: name.to_s)
       open(:select, id: name.to_s, name: name.to_s)
       nest(&block)

@@ -59,10 +59,10 @@ page portfolio, "Your retirement"
     form to: contribute, method: post
       group amounts
         field amount
-        select account_id, "Account"
+        choice account_id, "Account"
       group timing
         field frequency
-        check auto_invest, "Invest automatically"
+        checkbox auto_invest, "Invest automatically"
       actions
         button primary, "Contribute"
         link cancel, "Never mind"

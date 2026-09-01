@@ -61,15 +61,16 @@ argues from them:
   **25 of the 50 words** touch directly. Sorted by purpose those 16 are **three
   ideas implemented about twelve times**.
 - `table`/`column`, `chart`/`band`/`line`/`level`, `choose`/`when`/`otherwise`
-  and `select`/`option` are **four copies of one gathering mechanism**. `choose`
+  and `choice`/`option` are **four copies of one gathering mechanism**. `choose`
   saves and restores its state; the other three clear theirs, which is why two
   of them crashed under five minutes of adversarial probing.
-- **`option` has no guard at all** — it renders silently outside a `select`.
+- **`option` has no guard at all** — it renders silently outside a `choice`.
 - **`when` guards after evaluating its argument**, so `when .x` outside a
   `choose` says *"this page has no x"* — the wrong problem, on the one construct
   with no real page behind it.
 - The vocabulary had **never been reviewed as language** until 2026-08-31. One
-  part-of-speech sweep found `check` and `select` are verbs among 43 nouns.
+  part-of-speech sweep found `check` and `select` were verbs among 43 nouns;
+  Phase 1 renamed them `checkbox` and `choice`.
 
 None of that is a plan. It is the evidence a plan should be argued from, and
 the arguing is the first thing 0.2 does.
@@ -86,13 +87,13 @@ the arguing is the first thing 0.2 does.
 - Mechanical facts derivable from a value's shape are free. Facts encoding a
   human judgement about the domain belong to the app — ask, don't guess.
 - A line that states the inferable should not exist.
-- **This is a noun language.** 43 of the 50 words are common nouns naming a
-  kind of presentation, 41 of those 43 are singular, and the seven non-nouns
-  are almost exactly the control flow — `each` a determiner, `empty` an
-  adjective, `choose` a verb, `when` a conjunction, `otherwise` an adverb. A
-  sentence is head noun plus specifier: the register of a label, not of prose.
-  Two words break it — `check` and `select` are verbs, imperatives that
-  misdescribe what they render.
+- **This is a noun language.** 45 of the 50 words are common nouns naming a
+  kind of presentation, 43 of those 45 are singular, and the five non-nouns
+  are the control flow — `each` a determiner, `empty` an adjective, `choose`
+  a verb, `when` a conjunction, `otherwise` an adverb. A sentence is head noun
+  plus specifier: the register of a label, not of prose. Two words broke it —
+  `check` and `select` were verbs, imperatives that misdescribed what they
+  render — and Phase 1 renamed them `checkbox` and `choice`.
 
 ## How this project works
 

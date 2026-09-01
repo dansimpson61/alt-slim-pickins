@@ -212,7 +212,7 @@ page account
     field name
     field email, type: email
     field bio, long
-    check newsletter, "Send me updates"
+    checkbox newsletter, "Send me updates"
     actions
       button primary, "Save"
       link cancel, "Never mind"

@@ -38,6 +38,12 @@ docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 vocab = File.read(File.join(here, 'VOCABULARY.md'))
             .scan(/^### `([a-z_]+)`/).flatten.to_set
 
+# Words the language has renamed. The records in history/ speak the language
+# as it was when each phase closed, and a record that updates itself is not a
+# record — so a renamed word stays legal there, and only there.
+renamed = File.read(File.join(here, 'VOCABULARY.md'))
+              .scan(/^Formerly `([a-z_]+)`/).flatten.to_set
+
 app_words = Set.new
 app_words |= SlimPickins::Library.from(File.join(here, 'pages')).partials.keys.map(&:to_s)
 Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
@@ -88,6 +94,7 @@ def each_block(path)
 end
 
 used = Hash.new { |h, k| h[k] = [] }
+used_full = Hash.new { |h, k| h[k] = [] }
 problems = 0
 checked = 0
 
@@ -103,7 +110,9 @@ docs.each do |doc|
         next if line.strip.empty?
 
         checked += 1
-        used[line.strip.partition(' ').first] << where
+        word = line.strip.partition(' ').first
+        used[word] << where
+        used_full[word] << doc
       end
     rescue SlimPickins::SyntaxError => e
       puts "  BAD SENTENCE  #{where}:#{first_line + e.lineno - 1}: #{e.line.inspect} — #{e.message.lines.first.strip}"
@@ -113,6 +122,9 @@ docs.each do |doc|
 end
 
 (used.keys.to_set - vocab).sort.each do |w|
+  history_only = used_full[w].all? { |f| f.start_with?(File.join(here, 'history')) }
+  next if renamed.include?(w) && history_only
+
   puts "  UNDEFINED     #{w.inspect} used in #{used[w].uniq.join(', ')} but not in VOCABULARY.md"
   problems += 1
 end

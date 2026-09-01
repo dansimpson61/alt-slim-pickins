@@ -87,10 +87,10 @@ page specimen, "slim-pickins — every word"
         field amount
         field rate
       group timing
-        select frequency, "How often"
+        choice frequency, "How often"
           option monthly, "Monthly"
           option quarterly, "Quarterly"
-        check auto_invest, "Invest automatically"
+        checkbox auto_invest, "Invest automatically"
       disclosure "Show advanced assumptions"
         field growth_rate
         field horizon_years

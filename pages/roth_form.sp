@@ -17,7 +17,7 @@ page scenario, "Directional Roth Conversion Sketch"
       field inflation_rate
       field horizon_years
     group conversion, "Conversion strategy"
-      select conversion_strategy
+      choice conversion_strategy
         option fixed, "Fixed amount"
         option fill_bracket, "Fill bracket"
       field conversion_value

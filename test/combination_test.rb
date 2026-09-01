@@ -98,10 +98,10 @@ class CombinationTest < Minitest::Test
 
   # --- the words that carry state for their children ----------------------
 
-  def test_a_select_inside_a_form_does_not_leak_its_selection
+  def test_a_choice_inside_a_form_does_not_leak_its_selection
     html = draw(<<~PAGE, scenario: Row.new(name: 'b', qty: 1))
       form scenario
-        select name
+        choice name
           option a
           option b
         field qty

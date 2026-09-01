@@ -104,8 +104,9 @@ shape a second time and generalised it.
 sweep found 43 of 50 words are common nouns, 41 singular, and the seven
 non-nouns are almost exactly the control flow. A sentence is head noun plus
 specifier — the register of a label, not of prose. That is why pages read the
-way they do, and nobody designed it. Two words break it: `check` and `select`
-are verbs, imperatives that misdescribe what they render.
+way they do, and nobody designed it. Two words broke it: `check` and `select`
+were verbs, imperatives that misdescribed what they render — Phase 1 renamed
+them `checkbox` and `choice`.
 
 **What words do alone was tested thoroughly; what words do when they meet was
 not.** Two crashes in five minutes of adversarial probing, both Ruby errors
@@ -179,6 +180,9 @@ form(@in_form)  group(@in_form)  check(@out)  select(@selected)  option(@selecte
 button(@in_form)
 ```
 
+Names as measured at 0.2's opening; Phase 1 renamed `check` → `checkbox` and
+`select` → `choice`.
+
 Sorted by purpose, those sixteen are **three ideas implemented about twelve
 times**: a place for a word's children to register, a flag for the situation
 the word is in, and a chain of subjects. The sharpest instance, re-verified by
@@ -219,7 +223,7 @@ The paper offers two stages, and the distinction is the structural substance
 0.2 needs:
 
 - **Component objects.** Each heavy concept — `table`, `chart`, `choose`,
-  `select` — becomes its own object owning its state and lifecycle; the Builder
+  `choice` — becomes its own object owning its state and lifecycle; the Builder
   becomes a router. This *isolates* the complexity. It stays coupled to HTML.
 - **An AST pipeline.** Parse to a tree, apply filters to the tree, generate
   from the tree. This *decouples*: the tree can be introspected, validated
@@ -359,8 +363,8 @@ re-measured 2026-09-01 across every `.sp` file in `pages/` and `examples/`
 | longest sentence | **5 arguments** | a word doing more than one job |
 | deepest nesting | **7 levels** | structure the vocabulary is not carrying |
 | words used in real pages | **49 of 50** (`meta` only in doc examples) | dead vocabulary, which is kruft |
-| nouns among the fifty | **43** | the register of a label, not prose |
-| words whose English misdescribes them | **2** (`check`, `select`) | see Phase 1 |
+| nouns among the fifty | **45** | the register of a label, not prose |
+| words whose English misdescribes them | **0** — `check` and `select` renamed to `checkbox` and `choice` in Phase 1 | a verb arriving unnoticed |
 
 **3. Nothing is verified by a checker alone.** A checker can prove a class has
 a rule; it cannot prove the rule is good. Every phase ends by rendering and
@@ -442,21 +446,21 @@ the checker stops being a second copy of the grammar it checks.
   modifiers and children stop being prose in `VOCABULARY.md` and become
   declarations the code reads. The checker then holds every sentence to its
   word's signature and its nesting government, so `when` outside `choose` and
-  `option` outside `select` fail statically, in docs and pages, before any
+  `option` outside `choice` fail statically, in docs and pages, before any
   render — and `VOCABULARY.md`'s slots are generated from the declarations
   rather than written by hand. These are the same objects Phase 3's gate runs
   on.
 - **The third checker** `agent` — `check_shape.rb` holds each word to its
   declared part of speech and its declared shape, prints the vitals table, and
-  fails only on violations — so `check` and `select` cannot be joined by a
-  third verb unnoticed. A word that fits no shape must be argued for in
-  writing, in the checker's own output.
-- **The two renames** `dan` `agent` — `check` and `select` are verbs in a noun
-  language. Candidates that keep the register: `check` → `toggle` or `flag`;
-  `select` → `choice` (whose children, `option`, already read as the noun they
-  are). Your call which names; the work is mine — vocabulary entry, builder
-  method, stylesheet rules, pages, tests, and every document the checkers
-  hold.
+  fails only on violations — so no third verb can arrive unnoticed. A word
+  that fits no shape must be argued for in writing, in the checker's own
+  output.
+- **The two renames** `dan` `agent` — decided and done (dan, 2026-09-01):
+  `check` → `checkbox`, `select` → `choice`, whose children `option` already
+  read as the noun they are. The sweep touched the vocabulary entries, the
+  builder methods, the stylesheet rules, the pages, the tests, and every
+  document the checkers hold — and the `formerly` note in VOCABULARY.md lets
+  the records in history/ keep speaking the old names.
 - **Doc hygiene** `agent` — `VOCABULARY.md`'s *Still open* section rewritten
   to the settled truth, and `history/README.md`'s reference to a deleted
   roadmap corrected, so no future reader follows a pointer into nothing.
@@ -472,14 +476,14 @@ become objects that own their state, and the Builder becomes what its name
 says.
 
 - **One gathering mechanism, four users** `agent` — `table`, `chart`,
-  `choose` and `select` become component objects sharing one
+  `choose` and `choice` become component objects sharing one
   collect-and-restore mechanism, each owning its collection and its guards.
   `option` gains the guard the other three have; `when` guards *before* its
   argument can be evaluated, so a misused `when` names the misuse rather than
   the page; every gatherer saves and restores, including the one that never
   has. `@columns`, `@series`, `@levels`, `@branches`, `@selected` leave
   `Builder`.
-- **The warts** `agent` — `check` returns to the escaping helpers; `Library.from`
+- **The warts** `agent` — `checkbox` returns to the escaping helpers; `Library.from`
   learns to take `words:`, and the portfolio app stops reaching into our ivars.
 - **The one architecture decision** `dan` `agent` — the paper's second stage,
   the tree pipeline, argued honestly: it buys introspection, static
