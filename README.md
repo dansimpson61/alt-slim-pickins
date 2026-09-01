@@ -105,20 +105,26 @@ this as money* and the formatting belongs to the word.
   arrives through conventions.
 - **[ROADMAP-0.2.md](ROADMAP-0.2.md)** — the live roadmap: the question, the
   proscription, the risk register. Start here to know what happens next.
-  [ROADMAP-0.1.md](ROADMAP-0.1.md) is closed, and kept as the record of what
+  [ROADMAP-0.1.md](history/ROADMAP-0.1.md) is closed, and kept as the record of what
   0.1 set out to do and what it found.
-- **[PORTFOLIO.md](PORTFOLIO.md)**, **[CONTENT.md](CONTENT.md)**,
-  **[FIGURES.md](FIGURES.md)** — three real pages written in the language,
-  each modelled on a view that already exists in this workspace. They are the
-  tests: wall counts across them went 3, 6, 1.
-- **`check_grammar.rb`** — keeps every document accountable to the others.
-  Every sentence must obey the grammar table; every word used must be defined;
-  every word defined must have a sentence.
+- **[CONTRACT.md](CONTRACT.md)** — what an app must promise to be renderable,
+  which is one sentence plus two optional methods.
+- **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
+  conversation.
+- **`check_grammar.rb`**, **`check_styles.rb`** — keep every document
+  accountable to the code and to each other. Every sentence must obey the
+  grammar table; every word used must be defined; every word defined must have
+  a sentence; every class emitted must have a rule.
+
+Two directories hold what is consulted rather than read:
+[history/](history/README.md) is roadmap 0.1 — its eight phase records and the
+three paper pages that were the vocabulary's evidence before there was code —
+and [roth/](roth/README.md) is notes on a different project.
 
 ## Status
 
 **Roadmap 0.1 is finished** — all eight phases, closed in
-[ROADMAP-0.1.md](ROADMAP-0.1.md). [ROADMAP-0.2.md](ROADMAP-0.2.md) is the live
+[ROADMAP-0.1.md](history/ROADMAP-0.1.md). [ROADMAP-0.2.md](ROADMAP-0.2.md) is the live
 one, argued for in [BLUESKY-0.2.md](BLUESKY-0.2.md).
 
 The bet the paper could not settle was **inference** — whether `field
@@ -132,9 +138,9 @@ render on the server. Its 88-line page and 249-line script became 71 sentences
 and 25 lines, and it uses **no Ruby-defined words at all**. Across every `.sp`
 file here the escape hatch stands at **1 use in 356 sentences**.
 
-- [PHASE7.md](PHASE7.md) — the port, and its architecture
-- [PHASE8.md](PHASE8.md) — `chart`, redrafted as the same shape as `table`
-- [ROTH_STUDY.md](ROTH_STUDY.md) — what reading a real app closely found
+- [PHASE7.md](history/PHASE7.md) — the port, and its architecture
+- [PHASE8.md](history/PHASE8.md) — `chart`, redrafted as the same shape as `table`
+- [ROTH_STUDY.md](roth/ROTH_STUDY.md) — what reading a real app closely found
 
 Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
 Everything green: `ruby check_grammar.rb && ruby check_styles.rb &&

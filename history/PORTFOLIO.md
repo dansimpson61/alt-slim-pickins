@@ -1,6 +1,6 @@
 # The retirement portfolio page — the vocabulary's first real test
 
-A whole page, written using only words defined in [VOCABULARY.md](VOCABULARY.md).
+A whole page, written using only words defined in [VOCABULARY.md](../VOCABULARY.md).
 The point is not that it reads well. The point is to find out where the
 vocabulary stops, because in a language whose only construct is words, a
 missing word is a wall rather than an inconvenience.

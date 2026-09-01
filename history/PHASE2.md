@@ -100,7 +100,7 @@ This is now a pattern rather than a special case, and worth stating as one:
 > encode a human judgement about the domain belong to the app, and the
 > language should ask rather than guess.**
 
-Labels and formats are the two instances so far. [CONTRACT.md](CONTRACT.md)
+Labels and formats are the two instances so far. [CONTRACT.md](../CONTRACT.md)
 carries both.
 
 ## A bug the tests found that the demo did not

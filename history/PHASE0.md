@@ -102,7 +102,7 @@ worth keeping.
 `form scenario` under `page scenario` names the same subject twice, which is
 the "line which states the inferable" smell. A word that names no subject
 leaves the chain alone.
-[VOCABULARY.md](VOCABULARY.md)'s `form` entry is corrected accordingly.
+[VOCABULARY.md](../VOCABULARY.md)'s `form` entry is corrected accordingly.
 
 ## Done-conditions
 

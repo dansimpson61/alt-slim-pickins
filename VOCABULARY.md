@@ -839,7 +839,7 @@ times.
 Phase 0 built this word and measured it. The name, value and type were right
 every time; the label was right about three times in ten, which is why the
 `infers` slot above no longer promises it unconditionally. See
-[PHASE0.md](PHASE0.md).
+[PHASE0.md](history/PHASE0.md).
 
 ### `check`
 

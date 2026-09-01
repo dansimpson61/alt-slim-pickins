@@ -3,9 +3,9 @@
 > **All eight phases are complete.** This document is kept as the record of
 > what 0.1 set out to do and what it found; the numbers in the sections below
 > are what was true when each phase closed, not what is true now. For the
-> current state read [README.md](README.md). Its successor is
-> [ROADMAP-0.2.md](ROADMAP-0.2.md), argued for in
-> [BLUESKY-0.2.md](BLUESKY-0.2.md).
+> current state read [README.md](../README.md). Its successor is
+> [ROADMAP-0.2.md](../ROADMAP-0.2.md), argued for in
+> [BLUESKY-0.2.md](../BLUESKY-0.2.md).
 >
 > At close: **fifty words**, 133 tests, 632 sentences, 65 style rules, zero
 > problems. Two Sinatra apps speak the language, and the deeper of the two —
@@ -18,8 +18,8 @@
 **Retire the risk we have no evidence for, before building the parts we do.**
 
 The grammar is settled: one sentence, one resolution rule, no open questions
-([DESIGN.md](DESIGN.md) v0.3). All forty-seven words are implemented
-([VOCABULARY.md](VOCABULARY.md)), and the three pages drafted on paper before
+([DESIGN.md](../DESIGN.md) v0.3). All forty-seven words are implemented
+([VOCABULARY.md](../VOCABULARY.md)), and the three pages drafted on paper before
 any code existed now render — see `bin/render_pages.rb`.
 
 **The three High risks are retired.** Inference works, and where it cannot

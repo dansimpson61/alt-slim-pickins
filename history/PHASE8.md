@@ -9,7 +9,7 @@ Run it: `ruby examples/roth/app.rb` · `ruby test/phase8_test.rb`
 
 ## What the first draft was
 
-`chart` was the one entry in [VOCABULARY.md](VOCABULARY.md) written without
+`chart` was the one entry in [VOCABULARY.md](../VOCABULARY.md) written without
 evidence. It was drafted on paper, three pages failed to test it, and the
 roadmap held it back to last for exactly that reason.
 

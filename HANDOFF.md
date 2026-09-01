@@ -11,15 +11,18 @@ Resume work on `~/dev/alt-slim-pickins`.
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `ROADMAP-0.2.md` — the live roadmap. `ROADMAP-0.1.md` is closed; its eight phases are all complete
 3. `DESIGN.md`, `VOCABULARY.md`, `CONTRACT.md` — grammar, 50 words, what an app must promise
-4. `PHASE8.md`, then `PHASE7.md` — the last two phases, and the language defects they found
+4. `history/PHASE8.md`, then `history/PHASE7.md` — the last two phases, and the language defects they found
 5. `LORE.md` — what previous sessions *learned*, which is not what they did
+
+Root holds what you read. `history/` is roadmap 0.1 and is consulted, not
+maintained; `roth/` is notes on a different project. Both have a README saying so.
 
 Don't re-derive any of that in conversation; it is all written down.
 
 ## Where things stand
 
 **Roadmap 0.1 is finished and 0.2 is written.** All eight phases of
-[ROADMAP-0.1.md](ROADMAP-0.1.md) are complete; [ROADMAP-0.2.md](ROADMAP-0.2.md)
+[ROADMAP-0.1.md](history/ROADMAP-0.1.md) are complete; [ROADMAP-0.2.md](ROADMAP-0.2.md)
 is the live one and nothing in it is started.
 
 The language runs: one sentence, fifty words, its own stylesheet, and two

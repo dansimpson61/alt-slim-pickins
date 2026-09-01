@@ -9,8 +9,8 @@ Run it: `ruby examples/roth/app.rb` · `ruby test/phase7_test.rb`
 
 The engine is roth's, required off disk and otherwise untouched. `~/dev/roth`
 was not modified. What it gets wrong is measured in
-[ROTH_STUDY.md](ROTH_STUDY.md) and scheduled in
-[ROTH_DOMAIN_BACKLOG.md](ROTH_DOMAIN_BACKLOG.md).
+[ROTH_STUDY.md](../roth/ROTH_STUDY.md) and scheduled in
+[ROTH_DOMAIN_BACKLOG.md](../roth/ROTH_DOMAIN_BACKLOG.md).
 
 This happened in two rounds, and the difference between them is the finding.
 
@@ -277,7 +277,7 @@ undefined word.
 
 - **The numbers on the page are wrong**, because roth's engine is wrong. The
   page says so: an `aside` lists the six defects. Fixing them is
-  [ROTH_DOMAIN_BACKLOG.md](ROTH_DOMAIN_BACKLOG.md), deliberately a separate
+  [ROTH_DOMAIN_BACKLOG.md](../roth/ROTH_DOMAIN_BACKLOG.md), deliberately a separate
   project.
 - **The page adds structure roth did not have** — three `group` fieldsets where
   roth had flat divs. It flatters the sentence count slightly.

@@ -16,8 +16,10 @@
 
 require 'set'
 
-DOCS = (%w[DESIGN.md VOCABULARY.md ROADMAP-0.1.md ROADMAP-0.2.md README.md
-            PORTFOLIO.md CONTENT.md FIGURES.md PHASE0.md PHASE2.md PHASE7.md] +
+DOCS = (%w[DESIGN.md VOCABULARY.md ROADMAP-0.2.md README.md
+            history/ROADMAP-0.1.md history/PORTFOLIO.md history/CONTENT.md
+            history/FIGURES.md history/PHASE0.md history/PHASE2.md
+            history/PHASE7.md] +
          Dir[File.join(__dir__, '{pages,examples}', '**', '*.sp')]
            .map { |f| f.sub("#{__dir__}/", '') }).freeze
 

@@ -4,7 +4,7 @@
 
 0.1 asked whether a view language could keep one sentence all the way down. It
 can — fifty words, two apps, no grammar changes, closed in
-[ROADMAP-0.1.md](ROADMAP-0.1.md). Asking the same question of a third app
+[ROADMAP-0.1.md](history/ROADMAP-0.1.md). Asking the same question of a third app
 produces a third number and no new knowledge.
 
 What 0.1 built and never used is that a `.sp` file is now **a parsed tree in
