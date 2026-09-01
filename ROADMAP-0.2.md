@@ -469,7 +469,7 @@ the checker stops being a second copy of the grammar it checks.
 of its own; the seven slots live once, as objects; the two verb-words renamed
 or explicitly excused by dan; the vitals table printed by a checker.
 
-### Phase 2 — The Builder, un-god-objected
+### Phase 2 — The Builder, un-god-objected  ✅ complete (2026-09-01)
 
 The Tight Coupling paper's first stage, done for certain: the heavy concepts
 become objects that own their state, and the Builder becomes what its name
@@ -490,6 +490,30 @@ says.
   validation, and a second generator someday; it costs the transform's output,
   the escaping plumbing, and the hatch surface. The criterion is Phase 3's
   payload, so the decision is recorded here and built there.
+
+  **Recorded 2026-09-01, argued from the work above.** The pipeline has
+  already half-arrived, and it arrived by extraction rather than by plan:
+  `Transform.tree` is the parse stage, the contracts are the grammar the
+  filters hold against, and the checkers are the filters. What remains of the
+  paper's offer is a choice about the *generator* — and the honest reading is
+  that nothing in the next payload needs a new one.
+
+  - The introspection payoff is already spent: three checkers walk the tree.
+  - Phase 3's payload — *a page may not render until the app has been proved
+    able to answer it* — is a filter over the tree the parse stage already
+    produces. It needs resolution against the page's own locals, which exist
+    at render time; it does not need the HTML generator rewritten, and it
+    does not need the compiled Ruby abandoned. The generator stays; the gate
+    walks the tree before the generator runs.
+  - The second generator (JSON, or anything else) has no consumer. Building
+    it now would be the wrong-abstraction tax the Ode charges for imagined
+    futures: a name to learn, an indirection to follow, no rent.
+
+  **The decision: adopt the pipeline as parse → validate → generate, with the
+  generator staying exactly what it is.** The tree is the middle stage; the
+  checkers and Phase 3's gate are its filters; the compiled-Ruby emitter
+  remains the last stage until a real second target asks for its own. dan may
+  override; this is the recommendation the evidence supports.
 
 *Done looks like:* gatherers live in their own files; `builder.rb` is a router
 and the presentation words; each new object reviewed as Ruby rather than

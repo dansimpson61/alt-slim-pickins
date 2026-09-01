@@ -5,14 +5,14 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 1 is CLOSED (2026-09-01) — all three checkers
-  green, the grammar single-homed in Transform, the seven slots declared as
-  objects and enforced statically, the vocabulary bullets generated, the
-  renames done (check→checkbox, select→choice), doc hygiene done. Phase 2 is
-  next: un-god-object the Builder — one gathering mechanism, four users
-  (table/chart/choose/choice), component objects per the Tight Coupling
-  paper, the AST-pipeline decision recorded, byte-diffs of both apps'
-  pages unchanged.
+next_step: ROADMAP-0.2.md Phase 2 is CLOSED (2026-09-01) — the four
+  gatherers are components sharing one mechanism, eleven pages byte-identical,
+  the warts gone (Library.from takes words:), the AST decision recorded
+  (parse → validate → generate; the generator stays). Phase 3 is next: the
+  payload — a page may not render until the app has been proved able to
+  answer it. A validation pass over the tree before emission, report-only
+  first, then the gate; the roth test (renaming an attribute fails at boot,
+  naming line and attribute); the per-render cost measured.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

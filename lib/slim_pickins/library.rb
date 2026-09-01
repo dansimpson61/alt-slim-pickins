@@ -13,13 +13,13 @@ module SlimPickins
   class Library
     attr_reader :layout, :partials, :words
 
-    def self.from(dir)
+    def self.from(dir, words: nil)
       dir = File.expand_path(dir)
       layout_path = File.join(dir, 'layout.sp')
       partials = Dir[File.join(dir, 'partials', '*.sp')].to_h do |path|
         [File.basename(path, '.sp').to_sym, File.read(path)]
       end
-      new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials)
+      new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials, words: words)
     end
 
     # `words:` is the escape hatch: a module whose methods become words,

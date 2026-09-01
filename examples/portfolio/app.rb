@@ -32,11 +32,10 @@ class Portfolio < Sinatra::Base
   # ignored and `run!` takes 4567 — which roth is usually holding.
   set :port, ENV.fetch('PORT', 4576).to_i
 
-  # One place says what this app's vocabulary is.
+  # One place says what this app's vocabulary is — its own words ride the
+  # same Library as the built-ins.
   SlimPickins::Template.libraries[settings.views] =
-    SlimPickins::Library.from(settings.views).tap do |lib|
-      lib.instance_variable_set(:@words, AppWords)
-    end
+    SlimPickins::Library.from(settings.views, words: AppWords)
 
   helpers do
     def portfolio = Fixtures.portfolio
