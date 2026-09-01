@@ -337,11 +337,12 @@ rather than a hope. The grammar is implemented once, in `Transform`, and the
 checker consumes it rather than mirroring it. A word's contract is declared
 once, as an object, and both the checker and `VOCABULARY.md` are derived from
 it. The vocabulary registry is `Library`, and nothing else lists it. The
-evidence that this is not free exists today, measured: the checker and the
-transform already disagree — the transform accepts `level 1000000.0` and the
-checker refuses it, so the no-numeric-literal invariant is enforced by
-nothing except the checker. Every phase ends by counting the copies of each
-truth it touched, and the number may only fall. This is the Ode's *give every
+evidence that this is not free was measured at 0.2's opening: the checker and
+the transform disagreed — the transform accepted `level 1000000.0` and the
+checker refused it, so the no-numeric-literal invariant was enforced by
+nothing except the checker. Phase 1 closed that seam: the transform refuses
+now, and the checker holds no grammar of its own. Every phase ends by
+counting the copies of each truth it touched, and the number may only fall. This is the Ode's *give every
 truth one home* made operational, and it is the same medicine as the OOP the
 Builder phase prescribes: objects with one job, dependencies injected, nothing
 re-implemented by hand.

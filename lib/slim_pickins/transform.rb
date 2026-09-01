@@ -84,29 +84,59 @@ module SlimPickins
         raise SyntaxError.new("#{word.inspect} is not a word", @path, sentence.lineno, sentence.body)
       end
 
-      args = split_args(rest).map { |a| argument(a, sentence) }
+      args = split_args(rest).map { |a| [a, argument(a, sentence)] }
+      order = args.map { |raw, _| rank(raw) }
+      if order != order.sort
+        raise SyntaxError.new(
+          'a name may not come after content or data — names come first',
+          @path, sentence.lineno, sentence.body
+        )
+      end
+
       if RESERVED.include?(word)
-        parts = [":#{word}", *args]
+        parts = [":#{word}", *args.map(&:last)]
         "send(#{parts.join(', ')})"
       else
-        args.empty? ? word : "#{word}(#{args.join(', ')})"
+        args.empty? ? word : "#{word}(#{args.map(&:last).join(', ')})"
       end
     end
 
     # An argument is one of five things, and each has exactly one spelling.
-    def argument(arg, sentence)
+    # A bare number has one legal home: a modifier's value, where it is
+    # configuration (`columns: 3`, `step: 0.01`) rather than content. As a
+    # positional argument it has nowhere to stand — a figure belongs to the
+    # app.
+    def argument(arg, sentence, as_modifier: false)
       case arg
-      when MODIFIER then "#{Regexp.last_match(1)}: #{argument(Regexp.last_match(2), sentence)}"
+      when MODIFIER then "#{Regexp.last_match(1)}: #{argument(Regexp.last_match(2), sentence, as_modifier: true)}"
       when /\A".*"\z/ then arg
       when DOTTED then "subject.#{Regexp.last_match(1)}"
       when BINDING then arg
       when NAME then ":#{arg}"
-      when /\A-?\d+(\.\d+)?\z/ then arg
+      when /\A-?\d+(\.\d+)?\z/
+        return arg if as_modifier
+
+        raise SyntaxError.new(
+          "#{arg.inspect} is not an argument — a bare number has nowhere to " \
+          'stand; a figure belongs to the app',
+          @path, sentence.lineno, sentence.body
+        )
       else
         raise SyntaxError.new(
           "#{arg.inspect} is not an argument — a name, \"text\", .data, or a modifier:",
           @path, sentence.lineno, sentence.body
         )
+      end
+    end
+
+    # A name, then content or data, then modifiers — the same order the
+    # grammar checker held the documents to, now enforced by the grammar
+    # itself, in the grammar's one home.
+    def rank(arg)
+      case arg
+      when MODIFIER then 2
+      when /\A".*"\z/, DOTTED, BINDING then 1
+      else 0
       end
     end
 

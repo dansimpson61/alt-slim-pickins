@@ -5,11 +5,15 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 0, nearly closed — PRIMER.md (the Way
-  replacement) is written and held by check_grammar.rb. Two things remain:
-  dan's read of the document, and dan's decision on the old PRIMER's fate
-  (~/dev/slim-pickins/slim-pickins/PRIMER.md: pointer, copy, or left). Then
-  Phase 1 opens: the checker consumes the grammar instead of mirroring it.
+next_step: ROADMAP-0.2.md Phase 1, in progress. Round 1 done: the grammar has
+  one home — Transform now refuses bare numbers and misplaced names,
+  test/checker_golden_test.rb pins the old checker's refusals, check_grammar.rb
+  compiles instead of mirroring (KINDS/split_args/WORD deleted), partials are
+  found via Library, UNEXEMPLIFIED scopes to the corpus given. Next: dan
+  names the two renames (check → toggle/flag? select → choice?), then the
+  seven slots become objects, check_shape.rb, and the doc-hygiene fixes.
+  Phase 0 closed: PRIMER.md written and held; old PRIMER became a pointer
+  (uncommitted in ~/dev/slim-pickins — dan's call to commit there).
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

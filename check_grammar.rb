@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 #
-# Keeps the design documents accountable to each other.
+# Keeps the design documents accountable to the code, and to the grammar —
+# which has exactly one home, Transform. This checker holds no grammar of its
+# own: it compiles, and Transform raises.
 #
-#   - every sentence obeys the grammar table in DESIGN.md
-#   - every word used in a sentence is defined in VOCABULARY.md
+#   - every sentence compiles — Transform names the line and what was expected
+#   - every word used in a sentence is defined in VOCABULARY.md, or is an app
+#     word (a partial found through Library, or a method of a *Words module)
 #   - every word defined in VOCABULARY.md has at least one sentence
 #
 # An untagged fence holds sentences and is checked. Tag a fence (```slim,
@@ -15,6 +18,7 @@
 # Exits non-zero when anything is wrong, so it can gate a commit.
 
 require 'set'
+require_relative 'lib/slim_pickins'
 
 DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md
             history/ROADMAP-0.1.md history/PORTFOLIO.md history/CONTENT.md
@@ -23,121 +27,88 @@ DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md
          Dir[File.join(__dir__, '{pages,examples}', '**', '*.sp')]
            .map { |f| f.sub("#{__dir__}/", '') }).freeze
 
-WORD = /\A[a-z][a-z_]*\z/
-
-# A name is never evaluated; all data is dotted. Ranks must never decrease
-# across a sentence: names, then content, then modifiers.
-KINDS = {
-  0 => /\A[a-z][a-z_]*\z/,                                # a name
-  1 => /\A(".*"|\.[a-z_]+\??|[a-z_]+(\.[a-z_]+)+\??)\z/,  # data — always dotted
-  2 => /\A[a-z_]+:\s*.+\z/                                # a modifier
-}.freeze
-
-# Split on commas that are not inside quotes or parentheses.
-def split_args(str)
-  parts, buf, depth, quoted = [], +'', 0, false
-  str.each_char do |c|
-    if c == '"'                   then quoted = !quoted; buf << c
-    elsif quoted                  then buf << c
-    elsif c == ',' && depth.zero? then parts << buf.strip; buf = +''
-    else
-      depth += 1 if c == '('
-      depth -= 1 if c == ')'
-      buf << c
-    end
-  end
-  parts << buf.strip unless buf.strip.empty?
-  parts
-end
-
-def kind_of(arg)
-  KINDS.each { |rank, re| return rank if arg =~ re }
-  nil
-end
-
-# Walk a document and yield each line of every *untagged* fenced block.
-# A regex cannot do this: a closing fence is indistinguishable from an opening
-# one, so the pairing has to be tracked. Getting this wrong made the checker
-# read prose as grammar.
-def each_sentence_line(path)
-  # A .sp file is a page: all of it is sentences, no fences involved.
-  unless path.end_with?('.md')
-    File.readlines(path).each_with_index { |raw, i| yield raw, i + 1 }
-    return
-  end
-
-  open = false
-  checking = false
-  File.readlines(path).each_with_index do |raw, i|
-    if raw.start_with?('```')
-      if open
-        open = false
-      else
-        open = true
-        checking = raw.chomp == '```'
-      end
-      next
-    end
-    yield raw, i + 1 if open && checking
-  end
-end
-
 here = File.expand_path(__dir__)
 docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 
-# slim-pickins' vocabulary, plus the app's own — a partial file defines a
-# word, and a call site cannot tell the two apart, so neither can this.
+# The vocabulary, plus the app's own. A partial file defines a word, and it
+# is found the way the runtime finds it — through Library, not a glob of this
+# checker's own. Words defined in Ruby through the escape hatch live in a
+# module named *Words; the scan below is *discovery only*, and the runtime's
+# registry (Builder extends the module's methods) is what makes them words.
 vocab = File.read(File.join(here, 'VOCABULARY.md'))
             .scan(/^### `([a-z_]+)`/).flatten.to_set
-# An app's vocabulary: partials anywhere in the repo, plus words defined in
-# Ruby through the escape hatch, which live in a module named *Words.
-app_words = Dir[File.join(here, '**', 'partials', '*.sp')]
-            .map { |f| File.basename(f, '.sp') }.to_set
+
+app_words = Set.new
+app_words |= SlimPickins::Library.from(File.join(here, 'pages')).partials.keys.map(&:to_s)
+Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
+  app_words |= SlimPickins::Library.from(dir).partials.keys.map(&:to_s)
+end
+
 # The `end` that closes the module is the one at the module's own indentation.
 # Anchoring on `^end` instead read straight past a nested module and counted
-# every later method as a word — which would quietly hide a genuinely undefined
-# one.
+# every later method as a word — which would quietly hide a genuinely
+# undefined one.
 Dir[File.join(here, 'examples', '**', '*.rb')].each do |f|
   File.read(f).scan(/^([ \t]*)module \w*Words\b(.*?)^\1end/m).each do |_indent, body|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end
 vocab |= app_words
+
+# Walk a document and yield each untagged fenced block, with the line its
+# first sentence stands on. A regex cannot pair fences: a closing ``` is
+# indistinguishable from an opening one, so the pairing is tracked.
+def each_block(path)
+  unless path.end_with?('.md')
+    yield File.read(path), 1
+    return
+  end
+
+  open = false
+  checking = false
+  buf = []
+  start = 1
+  File.readlines(path).each_with_index do |raw, i|
+    if raw.start_with?('```')
+      if open
+        yield buf.join, start if checking && buf.any?
+        open = false
+        checking = false
+        buf = []
+      else
+        open = true
+        checking = raw.chomp == '```'
+        start = i + 2
+      end
+      next
+    end
+    buf << raw if open && checking
+  end
+  yield buf.join, start if open && checking && buf.any?
+end
+
 used = Hash.new { |h, k| h[k] = [] }
 problems = 0
 checked = 0
 
 docs.each do |doc|
   where = File.basename(doc)
-  each_sentence_line(doc) do |raw, lineno|
-    line = raw.chomp.sub(/\s+#.*\z/, '').rstrip
-    next if line.strip.empty?
+  each_block(doc) do |source, first_line|
+    begin
+      SlimPickins::Transform.call(source, path: where)
+      # The count uses the same filter Transform uses, so the headline number
+      # cannot drift from what was actually compiled.
+      source.lines.each do |raw|
+        line = raw.chomp.sub(/\s+#.*\z/, '').rstrip
+        next if line.strip.empty?
 
-    body = line.strip
-    at = "#{where}:#{lineno}"
-    word, _, rest = body.partition(' ')
-
-    unless word =~ WORD
-      puts "  BAD WORD      #{at}: #{body.inspect}"
-      problems += 1
-      next
-    end
-
-    checked += 1
-    used[word] << where
-    ranks = split_args(rest).map { |a| [a, kind_of(a)] }
-    ranks.each do |arg, rank|
-      next unless rank.nil?
-
-      puts "  UNKNOWN ARG   #{at}: #{arg.inspect} in #{body.inspect}"
+        checked += 1
+        used[line.strip.partition(' ').first] << where
+      end
+    rescue SlimPickins::SyntaxError => e
+      puts "  BAD SENTENCE  #{where}:#{first_line + e.lineno - 1}: #{e.line.inspect} — #{e.message.lines.first.strip}"
       problems += 1
     end
-
-    seq = ranks.map(&:last).compact
-    next if seq == seq.sort
-
-    puts "  ORDER         #{at}: #{body.inspect} ranks=#{seq.inspect}"
-    problems += 1
   end
 end
 
@@ -146,9 +117,13 @@ end
   problems += 1
 end
 
-((vocab - app_words) - used.keys.to_set).sort.each do |w|
-  puts "  UNEXEMPLIFIED #{w.inspect} defined but has no sentence"
-  problems += 1
+# A single file is not a fair corpus, so the unexemplified check only runs
+# over the documents as a whole.
+if ARGV.empty?
+  ((vocab - app_words) - used.keys.to_set).sort.each do |w|
+    puts "  UNEXEMPLIFIED #{w.inspect} defined but has no sentence"
+    problems += 1
+  end
 end
 
 puts "\n#{checked} sentences checked, #{vocab.size} words defined, #{problems} problems"
