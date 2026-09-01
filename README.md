@@ -103,10 +103,9 @@ this as money* and the formatting belongs to the word.
 - **[VOCABULARY.md](VOCABULARY.md)** — fifty words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
-- **[ROADMAP-0.2.md](ROADMAP-0.2.md)** — the live roadmap: the question, the
-  proscription, the risk register. Start here to know what happens next.
-  [ROADMAP-0.1.md](history/ROADMAP-0.1.md) is closed, and kept as the record of what
-  0.1 set out to do and what it found.
+- **[ROADMAP-0.1.md](history/ROADMAP-0.1.md)** — closed, and kept as the record
+  of what 0.1 set out to do and what it found. `ROADMAP-0.2.md` is not written
+  yet; see *How roadmaps go* below for what it has to be.
 - **[CONTRACT.md](CONTRACT.md)** — what an app must promise to be renderable,
   which is one sentence plus two optional methods.
 - **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
@@ -121,11 +120,38 @@ Two directories hold what is consulted rather than read:
 three paper pages that were the vocabulary's evidence before there was code —
 and [roth/](roth/README.md) is notes on a different project.
 
+## How roadmaps go
+
+**Odd roadmaps push out. Even roadmaps look back.**
+
+An odd-numbered roadmap asks something the project cannot yet answer and spends
+itself finding out. 0.1 asked whether a view language could keep one sentence
+all the way down, and answered it: fifty words, two apps, no grammar changes.
+
+An even-numbered roadmap asks whether what was built deserves to stand. Three
+movements, and no new capability:
+
+1. **Look back at the progress made** — what was claimed, what was measured,
+   and which of the two the documents actually record.
+2. **Read the history and the lore.** [history/](history/README.md) and
+   [LORE.md](LORE.md) are eight phases of findings that were written down and
+   then rarely re-read.
+3. **Study the DSL and the code beneath it as objects in their own right**, to
+   the standard of excellent Ruby — not as a means to the next feature.
+
+The reason is that 0.1 ran eight phases without once looking at its own runtime
+as an object, and a single afternoon of looking found four copies of one
+mechanism, two guards that fire at the wrong moment, and two words that are the
+wrong part of speech. None of that was reachable by building the next thing.
+
+**0.2 is the first of its kind**, and it is not written yet.
+
 ## Status
 
 **Roadmap 0.1 is finished** — all eight phases, closed in
-[ROADMAP-0.1.md](history/ROADMAP-0.1.md). [ROADMAP-0.2.md](ROADMAP-0.2.md) is the live
-one, argued for in [BLUESKY-0.2.md](BLUESKY-0.2.md).
+[ROADMAP-0.1.md](history/ROADMAP-0.1.md). **Roadmap 0.2 is not yet written.**
+It is an even-numbered roadmap and so it looks back; the material it starts
+from is the last entry in [LORE.md](LORE.md).
 
 The bet the paper could not settle was **inference** — whether `field
 base_income` can really derive a label, an input name, a value and an input
