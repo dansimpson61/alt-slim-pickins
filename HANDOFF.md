@@ -31,34 +31,32 @@ file in the repo the escape hatch stands at **1 use in 356 sentences**.
 dan's verdict on the port, recorded 2026-08-31: *clearly worth it. We are
 exactly where we had hoped we would be at this phase of the project.*
 
-## What is next
+## What is next — Phase 0 of ROADMAP-0.2.md
 
-Nothing is scheduled. The three things worth doing, in the order the evidence
-argues for:
+**Port one dashboard view: `~/dev/dashboard/views/ports.slim`, 42 lines.**
 
-### A second port, aimed at conditional and bespoke UI
+Not the easiest — the one holding most of the problem in miniature: a form with
+two hidden fields, four conditionals, three `each` loops, and an app word
+(`ports`, a `SlimPickins::Tabular` subclass in the dashboard's `words/`).
 
-The sharpest point an outside review made, and the biggest hole. roth exercised
-**forms and tables**, which are this language's home turf; `choose`, `when`,
-`otherwise` and the `if:` modifier have no real page behind them, and neither
-does anything genuinely irregular. Every claim about the vocabulary's coverage
-rests on two apps that happened to suit it.
+The phase answers one question: **can a page nobody here designed be said in
+this language at all?** Port it, and **stop at the first thing that cannot be
+said** — do not invent a word to get past a wall, record the wall. The roadmap
+has the done-conditions and the pivot criteria, including what to do if it
+fails in each of four different ways.
 
-### Still open, and older
+Two things already known before a line is written:
 
-`link show, "Details"` derives `/show`, not `/accounts/2`. Phase 7 was supposed
-to settle whether `link` asks the app — a `path_for(name, subject)` on the
-contract, the same shape as `label_for` and `format_for` — or whether routes
-are simply said with `to:`. **roth had no links at all**, so there was nothing
-real to draft against and it was deliberately left alone. The precedent from
-Phases 0 and 2 says ask the app. It needs a page that actually navigates.
+- `ports.slim` has **no `href` of its own.** Every link on it is emitted from
+  inside the `ports` Ruby class. Routing is deferred one level, not absent.
+- The dashboard's own `words/` directory means **it independently invented app
+  words.** A port is the only head-to-head of the two experiments that will
+  exist.
 
-### And the thing nobody has tried
-
-**Nobody but this project has written a page in it.** Every sentence in the
-repo was written by whoever wrote the vocabulary — the roth port came closest,
-and even there the *page* was ported by the same hand that owned the words.
-Handing it to someone else is the only test that has not been run.
+Read the whole of `ROADMAP-0.2.md` before starting. It is short, it has a
+measured risk register, and two standing constraints that apply to every phase:
+the language must stay lovely to read, and adding a word must be easy to do
+*well*.
 
 ## Design invariants — do not break these without saying so
 
@@ -80,11 +78,16 @@ Handing it to someone else is the only test that has not been run.
   docs were wrong on first writing because they were asserted from memory.
 - **Checkers are not enough — look at the rendered output.** `ruby bin/demo.rb
   specimen` builds a standalone page; `ruby examples/roth/app.rb` serves the
-  port on 4577. Five defects in Phase 5 and two more in Phase 7 passed every
-  checker and were found only by looking.
+  port on 4577. Across 0.1, eleven defects passed every checker and were found
+  only by loading the page.
+- **Nor are happy-path tests.** `test/combination_test.rb` crosses the words
+  that hold state against each other. Two crashes lived behind 133 green tests
+  because every one of them rendered a page somebody wrote on purpose. A word
+  that gathers, binds or shifts anything gets crossed against the ones that
+  already do.
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 133 tests / 0 failures, 632 sentences / 0 problems, 65 rules / 0 problems)
+  (currently 142 tests / 0 failures, 632 sentences / 0 problems, 65 rules / 0 problems)
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore
   (`POST /api/lore/alt-slim-pickins`; journal messages max 500 chars).
@@ -92,7 +95,7 @@ Handing it to someone else is the only test that has not been run.
   what dan wants.
 - Report honestly: failures verbatim, limits named, no claim of green that isn't.
 
-## Two caveats to carry
+## Three caveats to carry
 
 **The escape hatch is not the measurement it looks like.** It stood at once in
 284 sentences, then 9 uses in 324 when roth's markup was ported, then 3 uses in
@@ -100,6 +103,12 @@ Handing it to someone else is the only test that has not been run.
 redrafted and roth's last word went. It counts the distance between what a page
 needs and where its data is — not the vocabulary's coverage. Read any future
 number that way.
+
+**`~/dev/dashboard` must keep working, untouched.** It is the tool that runs
+everything else in `~/dev`. The port is a *parallel* set of views that can be
+thrown away, never a replacement — the discipline that kept roth clean through
+two phases and produced a better result than editing it would have. Its own
+`journal.md` churns from lore posts and is exempt.
 
 **`~/dev/roth` is a separate, dormant project and has not been touched.** Its
 working tree has been mid-rename since 2025-09-11, and `examples/roth` pins the

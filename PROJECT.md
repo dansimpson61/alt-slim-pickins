@@ -5,28 +5,25 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: ROADMAP-0.2.md written, nothing started. Probing for fragility found and fixed two crashes (table/chart not reentrant through `when`; `each item` colliding with the word `item`) — test/combination_test.rb is the new guard. Phase 0 is one dashboard view; Phase 1 extracts the triplicated gathering mechanism before any word is added
+next_step: ROADMAP-0.2.md Phase 0 — port ~/dev/dashboard/views/ports.slim (42 lines) until the first thing that cannot be said, and record the wall. Do not invent a word to get past it. Dashboard must keep working untouched; HANDOFF.md is the resume prompt
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
-notes: Working language. Grammar settled (DESIGN.md v0.3) — one sentence, one
-  resolution rule, no open questions. All 50 words implemented, and the three
-  pages drafted on paper before any code existed now render
-  (bin/render_pages.rb). App contract is one sentence plus two optional
-  methods (CONTRACT.md). Phases 0-8 done — its own stylesheet, a working
-  Sinatra integration, roth ported deeply (examples/roth, PHASE7.md), and
-  `chart` redrafted against roth's two charts (PHASE8.md): 130 lines of Ruby
-  became 13 sentences, roth lost its last app word, and the escape hatch across
-  the repo is 1 use in 356 sentences. Scenario owns the input names,
-  Projection presents the results. roth's own domain defects are a separate
-  project (ROTH_STUDY.md, ROTH_DOMAIN_BACKLOG.md) and ~/dev/roth is untouched.
-  Only dan's judgement of the port is outstanding; 8 is chart, deliberately
-  last. The routing question `link` raised is still open — roth had no links to
-  settle it against. check_grammar.rb and check_styles.rb hold every document,
-  page and class rule to the same grammar.
-  HANDOFF.md is the prompt that resumes this work in a fresh conversation.
+notes: A working view language. Grammar settled (DESIGN.md v0.3) and never changed
+  across eight phases — one sentence, one resolution rule, no numeric literal.
+  Fifty words, all implemented and all exercised. App contract is one sentence
+  plus two optional methods (CONTRACT.md). Roadmap 0.1 is CLOSED
+  (ROADMAP-0.1.md); ROADMAP-0.2.md is live and nothing in it is started. Two
+  Sinatra apps speak the language; examples/roth is a deep port of ~/dev/roth
+  that renders its results server-side and uses no Ruby-defined words at all.
+  Escape hatch: 1 use in 356 sentences. Three checkers hold docs, styles and
+  tests to each other; test/combination_test.rb crosses the words that hold
+  state, after two crashes lived behind 133 happy-path tests. 0.2 targets
+  ~/dev/dashboard (23 views, 1555 lines, 233 branches) and asks what a language
+  can do once it knows what every page means. HANDOFF.md is the prompt that
+  resumes this work in a fresh conversation.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---
@@ -34,5 +31,5 @@ conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
 # alt-slim-pickins
 
 A working view language: one-sentence grammar, 50 words, its own stylesheet,
-and a Sinatra app that speaks it. See [README.md](README.md), then
-[ROADMAP-0.1.md](ROADMAP-0.1.md).
+and two Sinatra apps that speak it. See [README.md](README.md), then
+[ROADMAP-0.2.md](ROADMAP-0.2.md) for what happens next.
