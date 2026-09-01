@@ -104,8 +104,10 @@ this as money* and the formatting belongs to the word.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
 - **[ROADMAP-0.1.md](history/ROADMAP-0.1.md)** — closed, and kept as the record
-  of what 0.1 set out to do and what it found. `ROADMAP-0.2.md` is not written
-  yet; see *How roadmaps go* below for what it has to be.
+  of what 0.1 set out to do and what it found.
+- **[ROADMAP-0.2.md](ROADMAP-0.2.md)** — the even-numbered, backward-leading
+  successor. Its phases begin with rewriting the Slim-Pickins Way and end with
+  subtraction; see *How roadmaps go* below for what that shape means.
 - **[CONTRACT.md](CONTRACT.md)** — what an app must promise to be renderable,
   which is one sentence plus two optional methods.
 - **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
@@ -159,14 +161,16 @@ none of it reachable by building the next thing. The opposite failure is just as
 cheap to fall into: a runtime reshaped without knowing what it must next carry
 is a beautifully organised runtime for the wrong language.
 
-**0.2 is the first even-numbered roadmap**, and it is not written yet.
+**0.2 is the first even-numbered roadmap**, and it is written —
+[ROADMAP-0.2.md](ROADMAP-0.2.md) is the protocol above, executed.
 
 ## Status
 
 **Roadmap 0.1 is finished** — all eight phases, closed in
-[ROADMAP-0.1.md](history/ROADMAP-0.1.md). **Roadmap 0.2 is not yet written.**
-It is an even-numbered roadmap and so it looks back; the material it starts
-from is the last entry in [LORE.md](LORE.md).
+[ROADMAP-0.1.md](history/ROADMAP-0.1.md). **Roadmap 0.2 is written** —
+[ROADMAP-0.2.md](ROADMAP-0.2.md). It leads with the backward eye: its first
+phase rewrites the Slim-Pickins Way, and its payload is the contract checked
+before a page renders.
 
 The bet the paper could not settle was **inference** — whether `field
 base_income` can really derive a label, an input name, a value and an input

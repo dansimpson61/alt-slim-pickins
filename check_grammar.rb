@@ -16,7 +16,7 @@
 
 require 'set'
 
-DOCS = (%w[DESIGN.md VOCABULARY.md README.md
+DOCS = (%w[DESIGN.md VOCABULARY.md README.md ROADMAP-0.2.md
             history/ROADMAP-0.1.md history/PORTFOLIO.md history/CONTENT.md
             history/FIGURES.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +

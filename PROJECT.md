@@ -4,29 +4,36 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
-last_touched: '2026-08-31'
-next_step: Write ROADMAP-0.2.md. It is an even-numbered roadmap, so by the protocol in README.md "How roadmaps go" it leads with the backward eye — review the progress made, re-read history/ and LORE.md, and study the DSL and the code beneath it as objects, to the standard of excellent Ruby. The forward eye stays open: reshape the runtime around what it must next carry, and build nothing the backward look did not ask for. Argue it from the measured findings in the last LORE.md entry; do not start from a blank page
+last_touched: '2026-09-01'
+next_step: ROADMAP-0.2.md Phase 0 — write the replacement for the Slim-Pickins
+  Way: one document describing the language as it stands (grammar, morphology,
+  government, contract, noun register, how words are added), every example an
+  untagged fence held by check_grammar.rb, every claim measured. dan decides
+  what happens to ~/dev/slim-pickins' PRIMER (pointer, copy, or left).
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
-notes: A working view language. Grammar settled (DESIGN.md v0.3) and never changed
-  across eight phases — one sentence, one resolution rule, no numeric literal.
-  Fifty words, all implemented and all exercised. App contract is one sentence
-  plus two optional methods (CONTRACT.md). Roadmap 0.1 is CLOSED
-  (history/ROADMAP-0.1.md); ROADMAP-0.2.md is NOT YET WRITTEN. Two Sinatra apps
-  speak the language; examples/roth is a deep port of ~/dev/roth that renders
-  its results server-side and uses no Ruby-defined words at all. Two checkers
-  hold docs and styles to the code; test/combination_test.rb crosses the words
-  that hold state, after two crashes lived behind 133 happy-path tests.
-  Roadmap protocol, set 2026-08-31: ataovy dian-tana — walk like the chameleon,
-  watching ahead and behind at once. Both eyes stay open; the roadmap number
-  says which leads. Odd leads forward, even leads back, so 0.2 is a
-  retrospective on the DSL and the objects beneath it, and is the first of
-  its kind. A draft 0.2 aimed at porting ~/dev/dashboard was
-  written and deleted the same day; it is in commit 8542111 if wanted.
-  HANDOFF.md is the prompt that resumes this work in a fresh conversation.
+notes: Roadmap 0.2 is WRITTEN (ROADMAP-0.2.md, 2026-09-01), the first
+  even-numbered, backward-leading roadmap (ataovy dian-tana). Verdict: the
+  grammar stands; the vocabulary stands with two renames (check/select are
+  verbs among 43 nouns) and a shape checker; the Builder does NOT stand — 867
+  lines, 16 ivars, 25 of 50 words touching them, four copies of one gathering
+  mechanism (select/option unguarded, `when` guards after its argument is
+  evaluated). Phases: 0 rewrite the Slim-Pickins Way, 1 the part-of-speech
+  checker + renames + doc hygiene, 2 un-god-object the Builder (component
+  objects; AST-pipeline decision recorded), 3 the payload — a page may not
+  render until the app can answer it, 4 the dashboard exam port (conditional
+  UI, routing), 5 dogfood (prose grows fences/tables/ordered lists for this
+  repo's own docs), 6 subtraction. check_grammar.rb now holds ROADMAP-0.2.md.
+  The deleted 0.2 draft's lesson survives in it: the port is the exam, not
+  the syllabus. Escape-hatch number is retired, in writing. Roadmap protocol
+  set 2026-08-31: odd leads forward, even leads back; both eyes stay open.
+  history/ is roadmap 0.1, consulted not maintained. HANDOFF.md is the prompt
+  that resumes this work in a fresh conversation. "Tight Coupling in Ruby
+  DSLs.md" (Gemini's critique of the Builder) is untracked in git and is
+  cited by the roadmap.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---
@@ -35,4 +42,6 @@ conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
 
 A working view language: one-sentence grammar, 50 words, its own stylesheet,
 and two Sinatra apps that speak it. See [README.md](README.md) — its *How
-roadmaps go* section governs what 0.2 has to be, and 0.2 is not written yet.
+roadmaps go* section governs how roadmaps work, and
+[ROADMAP-0.2.md](ROADMAP-0.2.md) is the active one, beginning with the rewrite
+of the Slim-Pickins Way.

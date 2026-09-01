@@ -12,7 +12,8 @@ Resume work on `~/dev/alt-slim-pickins`.
 2. `README.md` — what the project is, and **How roadmaps go**, which governs what 0.2 must be
 3. `DESIGN.md`, `VOCABULARY.md`, `CONTRACT.md` — grammar, 50 words, what an app must promise
 4. `LORE.md` — what previous sessions *learned*, which is not what they did. The last entry is the raw material for 0.2
-5. `history/ROADMAP-0.1.md`, then `history/PHASE8.md` and `history/PHASE7.md` — what 0.1 set out to do, and the language defects its last two phases found
+5. `ROADMAP-0.2.md` — the active roadmap; `PROJECT.md` `next_step` points at its current phase
+6. `history/ROADMAP-0.1.md`, then `history/PHASE8.md` and `history/PHASE7.md` — what 0.1 set out to do, and the language defects its last two phases found
 
 Root holds what you read. `history/` is roadmap 0.1 and is consulted, not
 maintained; `roth/` is notes on a different project. Both have a README saying so.
@@ -21,7 +22,8 @@ Don't re-derive any of that in conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is closed. Roadmap 0.2 is not yet written.**
+**Roadmap 0.1 is closed. Roadmap 0.2 is written** — `ROADMAP-0.2.md`,
+backward-leading, beginning with the rewrite of the Slim-Pickins Way.
 
 All eight phases of [ROADMAP-0.1.md](history/ROADMAP-0.1.md) are complete. The
 language runs: one sentence, fifty words, its own stylesheet, and two Sinatra
@@ -39,25 +41,21 @@ recoverable from commit `8542111` if ever wanted, but they are not the starting
 point and should not be treated as one. What survives of them is in `LORE.md`,
 which is where it belongs.
 
-## What is next — write ROADMAP-0.2.md
+## What is next — ROADMAP-0.2.md, Phase 0
 
-**0.2 is an even-numbered roadmap, so it leads with the backward eye.**
-README.md's *How roadmaps go* is the rule — *ataovy dian-tana: jerena ny aloha,
-todihana ny afara*, walk like the chameleon, which watches ahead and behind at
-once. Both eyes stay open; the number says which one leads. Three movements:
+**`ROADMAP-0.2.md` is written** (2026-09-01). It is the even-numbered,
+backward-leading roadmap — the verdict on what 0.1 built, then seven phases.
+`PROJECT.md` `next_step` points at the current phase; the roadmap and
+`PROJECT.md` are the resume, not this section.
 
-1. **Look back at the progress made** — what was claimed, what was measured,
-   and which of the two the documents actually record.
-2. **Read the history and the lore.**
-3. **Study the DSL and the code beneath it as objects in their own right**, to
-   the standard of excellent Ruby.
+**Phase 0 is the rewrite of the Slim-Pickins Way.** Write one document in this
+repo describing the language as it stands — grammar, morphology, government,
+the app contract, the noun register, how words are added — with every example
+an untagged fence held by `check_grammar.rb` and every claim measured. dan
+decides what happens to `~/dev/slim-pickins`'s PRIMER.
 
-The forward eye stays open throughout: reshape the runtime around what it must
-next carry, not merely into something neater. **Build nothing the backward look
-did not ask for** — which is a narrower constraint than *build nothing*.
-
-Do not write the roadmap from a blank page. The findings that motivated this
-protocol are already measured and are in the last `LORE.md` entry:
+The findings that motivated the roadmap are kept here because the roadmap
+argues from them:
 
 - `builder.rb` is **867 lines — 50% of the library** — with **16 ivars** that
   **25 of the 50 words** touch directly. Sorted by purpose those 16 are **three
