@@ -5,15 +5,15 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 1, in progress. Grammar is single-homed
-  (Transform refuses bare numbers and misplaced names; golden test pins;
-  checker compiles). Renames decided and done (dan, 2026-09-01): check →
-  checkbox, select → choice, with `formerly` notes in VOCABULARY.md so
-  history/ keeps speaking the old names. Next: the seven slots become
-  objects, check_shape.rb, and the doc-hygiene fixes (VOCABULARY Still open,
-  history/README dead reference). Phase 0 closed: PRIMER.md written and held;
-  old PRIMER became a pointer (uncommitted in ~/dev/slim-pickins — dan's call
-  to commit there).
+next_step: ROADMAP-0.2.md Phase 1, nearly closed — all three checkers are
+  green (check_grammar consumes Transform and enforces the contracts,
+  check_shape holds the register and prints the vitals, check_styles holds
+  the stylesheet). The seven slots are objects: contracts.rb declares them,
+  check_grammar enforces arguments and government statically, and
+  bin/generate_vocabulary.rb writes VOCABULARY.md's five checkable bullets
+  from them. Remaining: mark the phase complete in ROADMAP-0.2.md, and open
+  Phase 2 (un-god-object the Builder). Phase 0 closed; renames done
+  (check→checkbox, select→choice); doc hygiene done.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

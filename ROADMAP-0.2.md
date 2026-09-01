@@ -358,10 +358,10 @@ re-measured 2026-09-01 across every `.sp` file in `pages/` and `examples/`
 
 | vital | today | what a move would mean |
 |---|---|---|
-| distinct modifiers used in real pages | **8** (`columns alt as over step to method from`) | configuration creeping in where words should be |
-| mean arguments per sentence | **1.26** | sentences being configured rather than said |
-| longest sentence | **5 arguments** | a word doing more than one job |
-| deepest nesting | **7 levels** | structure the vocabulary is not carrying |
+| distinct modifiers used in real pages | **8** (`alt as columns from method over step to`) | configuration creeping in where words should be |
+| mean arguments per sentence | **1.21** | sentences being configured rather than said |
+| longest sentence | **3 arguments** | a word doing more than one job |
+| deepest nesting | **8 levels** | structure the vocabulary is not carrying |
 | words used in real pages | **49 of 50** (`meta` only in doc examples) | dead vocabulary, which is kruft |
 | nouns among the fifty | **45** | the register of a label, not prose |
 | words whose English misdescribes them | **0** — `check` and `select` renamed to `checkbox` and `choice` in Phase 1 | a verb arriving unnoticed |
@@ -396,7 +396,7 @@ Ordered foundations first, payload next, exam, dogfood, subtraction — the
 lesson the deleted 0.2 draft taught by getting it backwards. Nothing here was
 invented for this roadmap; every phase is the answer to a finding named above.
 
-### Phase 0 — The Way, rewritten
+### Phase 0 — The Way, rewritten  ✅ complete (2026-09-01)
 
 The backward eye's deliverable in prose: the study of the language as
 language, written down as the replacement for the Slim-Pickins Way.
@@ -427,7 +427,7 @@ page "The way, served"
 *Done looks like:* the document exists in this repo, passes the checker, and
 the old PRIMER's fate is recorded.
 
-### Phase 1 — A word is reviewable
+### Phase 1 — A word is reviewable  ✅ complete (2026-09-01)
 
 The part-of-speech sweep becomes an instrument instead of an afternoon — and
 the checker stops being a second copy of the grammar it checks.

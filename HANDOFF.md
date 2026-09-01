@@ -110,8 +110,9 @@ the arguing is the first thing 0.2 does.
   that gathers, binds or shifts anything gets crossed against the ones that
   already do.
 - **Everything green before committing:**
-  `ruby check_grammar.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 142 tests / 0 failures, 632 sentences / 0 problems, 65 rules / 0 problems)
+  `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done`
+  (currently 158 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  0 problems)
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore
   (`POST /api/lore/alt-slim-pickins`; **lore entries max 2000 chars**, journal

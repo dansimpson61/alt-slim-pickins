@@ -146,5 +146,26 @@ if ARGV.empty?
   end
 end
 
+# VOCABULARY.md's five checkable bullets are generated from the contracts —
+# the declarations are the single home, and bin/generate_vocabulary.rb is the
+# only way to edit them. A hand-edited bullet fails here.
+File.read(File.join(here, 'VOCABULARY.md'))
+    .split(/^(### `[a-z_]+`)/).drop(1).each_slice(2) do |header, body|
+  next unless header =~ /\A### `([a-z_]+)`/
+
+  word = Regexp.last_match(1)
+  contract = SlimPickins::CONTRACTS[word.to_sym]
+  next unless contract
+
+  SlimPickins::Contracts.bullets(word, contract).each do |bullet|
+    slot = bullet[/^- \*\*(\w+)\*\*/, 1]
+    actual = body[/^- \*\*#{slot}\*\* —.*$/, 0]
+    next if actual == bullet
+
+    puts "  UNGENERATED   VOCABULARY.md `#{word}`: expected #{bullet.inspect}, got #{actual.inspect}"
+    problems += 1
+  end
+end
+
 puts "\n#{checked} sentences checked, #{vocab.size} words defined, #{problems} problems"
 exit(problems.zero? ? 0 : 1)

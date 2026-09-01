@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+#
+# Rewrites the five checkable bullets of every VOCABULARY.md entry from the
+# contracts in lib/slim_pickins/contracts.rb — the single home of what each
+# word takes, holds, and may live inside. The prose half of an entry
+# (`infers`, `renders`, and the paragraphs) is left alone.
+#
+# check_grammar.rb fails if an entry's bullets drift from the contracts, so
+# this script is the only way to edit them: change the contract, run this.
+
+require_relative '../lib/slim_pickins'
+
+path = File.join(__dir__, '..', 'VOCABULARY.md')
+source = File.read(path)
+changed = 0
+
+parts = source.split(/^(### `[a-z_]+`)/)
+out = [parts.shift] # the preamble
+parts.each_slice(2) do |header, body|
+  out << header
+  next unless header && body && header =~ /\A### `([a-z_]+)`/
+
+  word = Regexp.last_match(1)
+  contract = SlimPickins::CONTRACTS[word.to_sym]
+  unless contract
+    puts "no contract for #{word} — skipped"
+    out << body
+    next
+  end
+
+  SlimPickins::Contracts.bullets(word, contract).each do |bullet|
+    slot = bullet[/^- \*\*(\w+)\*\*/, 1]
+    old = body[/^- \*\*#{slot}\*\* —.*$/, 0]
+    unless old
+      puts "#{word} has no #{slot} bullet — skipped"
+      next
+    end
+    next if old == bullet
+
+    body = body.sub(old, bullet)
+    changed += 1
+  end
+  out << body
+end
+
+File.write(path, out.join)
+puts "#{changed} bullets regenerated"

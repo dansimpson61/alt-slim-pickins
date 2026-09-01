@@ -60,8 +60,8 @@ condition holds. It is not repeated in the entries below.
 
 ### `page`
 
-- **name** — the subject: what this page is about
-- **content** — the page title
+- **name** — the subject this word presents; it must be there
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — anything
 - **subject** — the named thing
@@ -98,8 +98,8 @@ page goes, and no page mentions the layout at all.
 
 ### `meta`
 
-- **name** — which metadatum (`description`, `viewport`, `charset`)
-- **content** — its value
+- **name** — a name
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -114,7 +114,7 @@ meta description, "A directional Roth conversion sketch."
 ### `stylesheet`
 
 - **name** — none
-- **content** — the path
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -128,7 +128,7 @@ stylesheet "/css/base.css"
 ### `script`
 
 - **name** — none
-- **content** — the path
+- **content** — text or data, when there is any
 - **modifiers** — `defer:`
 - **children** — none
 - **subject** — unchanged
@@ -161,9 +161,9 @@ and bit immediately, because every real page has navigation.
 ### `footer`
 
 - **name** — none
-- **content** — the text, when it is a single line
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — anything, when it is not
+- **children** — anything
 - **subject** — unchanged
 - **infers** — its position as the last thing in the page
 - **renders** — `<footer>`
@@ -178,11 +178,11 @@ footer "Approximate directional estimates. Not tax advice."
 
 ### `section`
 
-- **name** — the subject this section presents; it must be there
-- **content** — the heading text
+- **name** — the subject this word presents; it must be there
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — any presentation word; `empty` is governed here
-- **subject** — the named thing. With no name, unchanged
+- **children** — anything
+- **subject** — the named thing
 - **infers** — the heading from the name (`holdings` → "Holdings"); the class
   from the name. Override the heading with content
 - **renders** — `<section class="holdings"><h2>Holdings</h2>…</section>`
@@ -207,10 +207,10 @@ change an untouched page. See the rule in [DESIGN.md](DESIGN.md).
 
 ### `group`
 
-- **name** — the topic of the cluster
-- **content** — the label
+- **name** — the topic
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — anything; inside a `form`, fields
+- **children** — anything
 - **subject** — unchanged
 - **infers** — the label from the name; renders as a `fieldset` with a
   `legend` inside a form, and a labelled `div` outside one
@@ -223,10 +223,10 @@ group assumptions, "Advanced assumptions"
 
 ### `grid`
 
-- **name** — the variant: what the cells are
+- **name** — the variant
 - **content** — none
 - **modifiers** — `columns:`
-- **children** — the cells, repeated as given
+- **children** — anything
 - **subject** — unchanged
 - **infers** — the column count from the viewport
 - **renders** — `<div class="grid grid--cards">`
@@ -236,12 +236,14 @@ grid cards
 grid metrics, columns: 3
 ```
 
+The name says what the cells are: `grid cards`, `grid metrics`.
+
 ### `list`
 
 - **name** — the variant
 - **content** — none
 - **modifiers** — none
-- **children** — `item`
+- **children** — `item`, `each`
 - **subject** — unchanged
 - **infers** — an unordered list
 - **renders** — `<ul>`
@@ -257,9 +259,9 @@ ordinary case. `list` governs `item` instead.
 ### `item`
 
 - **name** — the variant
-- **content** — the text, when it is a single line
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — anything, when it is not
+- **children** — anything
 - **subject** — unchanged
 - **infers** — nothing
 - **renders** — `<li>`
@@ -272,11 +274,11 @@ list plain
 
 ### `table`
 
-- **name** — the subject: the collection whose rows these are
-- **content** — the caption
+- **name** — the subject this word presents; it must be there
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — `column`, `total`
-- **subject** — the named collection; each row in turn for its columns
+- **children** — `column`, `total`, `choose`, `each`
+- **subject** — the named thing
 - **infers** — one row per element, in the collection's order. The loop is
   never written
 - **renders** — `<table>` with head and body
@@ -288,11 +290,11 @@ table holdings, "As of today"
 
 ### `column`
 
-- **name** — the attribute of each row to show
-- **content** — the header text
-- **modifiers** — `as:` — the presentation word to use for each cell
+- **name** — the attribute
+- **content** — text or data, when there is any
+- **modifiers** — `as:`
 - **children** — none
-- **subject** — unchanged; `table` supplies each row in turn
+- **subject** — unchanged; the enclosing word supplies each row in turn
 - **infers** — the header from the name (`due_on` → "Due on"); each cell's
   value from that attribute; the cell's presentation and alignment from the
   value's type, so money is formatted and right-aligned without being asked.
@@ -308,8 +310,8 @@ table holdings
 
 ### `total`
 
-- **name** — the column to total
-- **content** — the label
+- **name** — the attribute
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -329,7 +331,7 @@ table holdings
 - **content** — none
 - **modifiers** — none
 - **children** — anything
-- **subject** — unchanged; usually the element of an enclosing `each`
+- **subject** — unchanged
 - **infers** — its DOM id from the subject, so `id` is never written
 - **renders** — `<article class="card">`
 
@@ -374,9 +376,9 @@ Replaces the CSS arithmetic — a three-column grid whose body spans two — tha
 ### `disclosure`
 
 - **name** — none
-- **content** — the toggle label
+- **content** — text or data, when there is any
 - **modifiers** — `open:`
-- **children** — the content that is revealed
+- **children** — anything
 - **subject** — unchanged
 - **infers** — closed until opened; the toggle control and its state, so no
   script is written. Override with `open:`
@@ -397,7 +399,7 @@ button, an id, a data attribute, a CSS class and a JavaScript handler on it.
 ### `title`
 
 - **name** — none
-- **content** — the text
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -415,7 +417,7 @@ title "Lifetime taxes"
 ### `text`
 
 - **name** — none
-- **content** — the prose
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -429,7 +431,7 @@ text .summary
 ### `note`
 
 - **name** — the variant
-- **content** — the prose
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -444,8 +446,8 @@ note warning, "Conversions above this bracket raise your IRMAA."
 
 ### `prose`
 
-- **name** — the notation: `markdown`, `asciidoc`, `plain`
-- **content** — the document
+- **name** — the notation
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -476,8 +478,8 @@ already exists and renders something else.
 
 ### `badge`
 
-- **name** — the variant: `ok`, `pending`, `neutral`, `warning`
-- **content** — the label
+- **name** — the variant
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -490,10 +492,13 @@ badge ok, "canonical"
 badge .status
 ```
 
+The known variants are the statuses the vocabulary names — `ok`, `pending`,
+`neutral`, `warning`, `error`, `blocker`, `polish` — and `icon` draws each.
+
 ### `fact`
 
 - **name** — the attribute
-- **content** — the value
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -517,8 +522,8 @@ that. A reader who knows HTML would have read `detail` as the singular of
 
 ### `snippet`
 
-- **name** — the variant: the language, when it is code
-- **content** — the text
+- **name** — the notation
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -534,7 +539,7 @@ snippet ruby, .example
 ### `money`
 
 - **name** — none
-- **content** — the amount
+- **content** — text or data, when there is any
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
@@ -555,7 +560,7 @@ currency" — not a domain noun. A portfolio has balances, not prices, and
 ### `percent`
 
 - **name** — none
-- **content** — the fraction
+- **content** — text or data, when there is any
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
@@ -571,7 +576,7 @@ percent .weight, precision: 2
 ### `number`
 
 - **name** — none
-- **content** — the value
+- **content** — text or data, when there is any
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
@@ -584,8 +589,8 @@ number .shares
 
 ### `time`
 
-- **name** — the variant: `date`, `datetime`, `relative`
-- **content** — the moment
+- **name** — the variant
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -598,10 +603,12 @@ time .as_of
 time relative, .updated_at
 ```
 
+The variants are `date`, `datetime` and `relative`.
+
 ### `image`
 
 - **name** — none
-- **content** — the source
+- **content** — text or data, when there is any
 - **modifiers** — `alt:`
 - **children** — none
 - **subject** — unchanged
@@ -615,9 +622,9 @@ image .image_url, alt: .name
 ### `figure`
 
 - **name** — none
-- **content** — the caption
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — the thing being figured: an `image`, a `chart`, a `snippet`
+- **children** — anything
 - **subject** — unchanged
 - **infers** — that the caption belongs to the child, and associates them for
   screen readers
@@ -632,8 +639,8 @@ round that lets a figure hold a chart or a listing rather than only an image.
 
 ### `icon`
 
-- **name** — which icon
-- **content** — none
+- **name** — a name
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -645,10 +652,13 @@ round that lets a figure hold a chart or a listing rather than only an image.
 icon warning
 ```
 
+The names are the seven symbols the vocabulary ships — `warning`, `blocker`,
+`polish`, `ok`, `error`, `pending`, `neutral` — plus any an app adds.
+
 ### `metric`
 
 - **name** — the attribute
-- **content** — the label
+- **content** — text or data, when there is any
 - **modifiers** — `as:`
 - **children** — none
 - **subject** — unchanged
@@ -668,11 +678,11 @@ Found by reading a real page, not by imagining one. `#metrics` in
 
 ### `chart`
 
-- **name** — the collection to chart
-- **content** — a caption
-- **modifiers** — `over:` — which attribute the x axis reads
-- **children** — `band`, `line`, `level`
-- **subject** — becomes the collection, for its children
+- **name** — the subject this word presents; it must be there
+- **content** — text or data, when there is any
+- **modifiers** — `over:`
+- **children** — `band`, `line`, `level`, `each`, `choose`
+- **subject** — the named thing
 - **infers** — the scale, the axes and their ticks, the x labels from the
   singular of the name, every series label from the row's `label_for`, every
   value's formatting from the row's `format_for`, and the key from the series
@@ -698,8 +708,8 @@ counts.
 
 ### `band`
 
-- **name** — the attribute to draw
-- **content** — a label, overriding the row's own
+- **name** — the attribute
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -719,9 +729,9 @@ chart of four bands is a stacked area and the top of the stack is the total.
 
 ### `line`
 
-- **name** — the attribute to draw
-- **content** — a label, overriding the row's own
-- **modifiers** — `from:` — take the points from another collection
+- **name** — the attribute
+- **content** — text or data, when there is any
+- **modifiers** — `from:`
 - **children** — none
 - **subject** — unchanged
 - **infers** — as `band`
@@ -742,7 +752,7 @@ laid over a chart without a second chart.
 ### `level`
 
 - **name** — none
-- **content** — the value, then a label
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -769,8 +779,8 @@ tells a reader nothing and flattens everything that would have.
 ### `link`
 
 - **name** — the destination
-- **content** — the label
-- **modifiers** — none
+- **content** — text or data, when there is any
+- **modifiers** — `to:`
 - **children** — none
 - **subject** — unchanged
 - **infers** — the path from the name and the subject (`show` on a holding
@@ -785,7 +795,7 @@ link show, "View holding"
 ### `button`
 
 - **name** — the variant
-- **content** — the label
+- **content** — text or data, when there is any
 - **modifiers** — `to:`, `type:`
 - **children** — none
 - **subject** — unchanged
@@ -800,11 +810,11 @@ button "Show baseline", to: baseline
 
 ### `form`
 
-- **name** — the subject the form edits; omitted, it keeps the current one
+- **name** — the subject this word presents; it must be there
 - **content** — none
 - **modifiers** — `to:`, `method:`
-- **children** — `group`, `field`, `checkbox`, `choice`, `actions`
-- **subject** — the named thing, so fields read their values from it
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`
+- **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`
 - **renders** — `<form>`
@@ -821,10 +831,10 @@ alone.
 ### `field`
 
 - **name** — the attribute
-- **content** — the label
+- **content** — text or data, when there is any
 - **modifiers** — `type:`, `step:`, `required:`
 - **children** — none
-- **subject** — unchanged; reads from the form's subject
+- **subject** — unchanged
 - **infers** — the input name from the attribute; the current value from the
   subject; the input type from the *value's class*, so a number is a number
   without being told. The label is inferred from the name only when that name
@@ -853,10 +863,10 @@ Formerly `check`. Renamed in Phase 1: a verb describes the user's action
 rather than the widget, and this is a noun language.
 
 - **name** — the attribute
-- **content** — the label
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
-- **subject** — unchanged; reads from the form's subject
+- **subject** — unchanged
 - **infers** — the label from the name; checked state from the subject
 - **renders** — `<label>` plus `<input type="checkbox">`
 
@@ -870,10 +880,10 @@ Formerly `select`. Renamed in Phase 1: `select` has no noun sense in English
 outside HTML, and its children — `option` — already read as nouns.
 
 - **name** — the attribute
-- **content** — the label
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — `option`
-- **subject** — unchanged; reads from the form's subject
+- **subject** — unchanged
 - **infers** — the label from the name; the selected option from the subject.
   When it has no `option` children, the choices come from the attribute's own
   domain
@@ -886,7 +896,7 @@ choice conversion_strategy, "Strategy"
 ### `option`
 
 - **name** — the value
-- **content** — the label
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
@@ -908,7 +918,7 @@ choice conversion_strategy
 - **name** — the singular of the collection; also binds that name
 - **content** — none
 - **modifiers** — `from:`
-- **children** — repeated once per element
+- **children** — anything
 - **subject** — each element in turn
 - **infers** — the collection by pluralising the name (`holding` →
   `holdings`). Override with `from:`
@@ -922,9 +932,9 @@ each holding, from: .taxable
 ### `empty`
 
 - **name** — none
-- **content** — what to say instead
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — anything, when a sentence is not enough
+- **children** — anything
 - **subject** — unchanged
 - **infers** — the condition: it renders when the enclosing subject has
   nothing in it, and suppresses its siblings when it does
@@ -956,9 +966,9 @@ choose
 ### `when`
 
 - **name** — none
-- **content** — the condition
+- **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — what to render
+- **children** — anything
 - **subject** — unchanged
 - **infers** — nothing
 - **renders** — nothing of its own
@@ -973,7 +983,7 @@ choose
 - **name** — none
 - **content** — none
 - **modifiers** — none
-- **children** — what to render
+- **children** — anything
 - **subject** — unchanged
 - **infers** — that it is the last branch
 - **renders** — nothing of its own
