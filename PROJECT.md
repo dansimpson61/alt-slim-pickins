@@ -5,11 +5,11 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 0 — write the replacement for the Slim-Pickins
-  Way: one document describing the language as it stands (grammar, morphology,
-  government, contract, noun register, how words are added), every example an
-  untagged fence held by check_grammar.rb, every claim measured. dan decides
-  what happens to ~/dev/slim-pickins' PRIMER (pointer, copy, or left).
+next_step: ROADMAP-0.2.md Phase 0, nearly closed — PRIMER.md (the Way
+  replacement) is written and held by check_grammar.rb. Two things remain:
+  dan's read of the document, and dan's decision on the old PRIMER's fate
+  (~/dev/slim-pickins/slim-pickins/PRIMER.md: pointer, copy, or left). Then
+  Phase 1 opens: the checker consumes the grammar instead of mirroring it.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
