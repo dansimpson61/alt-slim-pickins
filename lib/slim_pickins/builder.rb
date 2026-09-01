@@ -179,8 +179,24 @@ module SlimPickins
     end
 
     # The loop is written once, here, and never in a page.
+    #
+    # A binding may not be named after a word. `each` binds its name so an
+    # inner loop can reach back out — but that reaching is served by
+    # `method_missing`, and a word is a real method, so the word would answer
+    # instead and hand back its own output. `each item` then made `item.name`
+    # fail with a Ruby error about a String.
+    #
+    # It is refused rather than allowed-until-it-bites, for the same reason
+    # `section` refuses to shift its subject opportunistically: a cost that
+    # only appears in some pages is a cost nobody can see.
     def each(*args, from: nil, &block)
       name, = name_and_content(args)
+      if WORDS.include?(name)
+        raise Error, "`each #{name}` cannot bind `#{name}` — it is a word of " \
+                     "the language. Name the binding something else and say " \
+                     "`from:` — `each row, from: .#{Inference.plural(name)}`."
+      end
+
       items = from || collection_for(name)
       items.each do |item|
         @bindings[name] = item
@@ -204,10 +220,15 @@ module SlimPickins
     def table(*args, &block)
       name, caption = name_and_content(args)
       rows = name ? subject.fetch(name) : subject.object
+      # Saved, not just cleared. A `when` may hold another table, and `choose`
+      # runs the chosen branch while this one is still collecting — so nulling
+      # the collection on the way out took the outer table's columns with it,
+      # and it crashed in Ruby rather than in the language.
+      was = @columns
       @columns = []
       nest(&block)
       columns = @columns
-      @columns = nil
+      @columns = was
 
       open(:table, class: token(:table, name))
       text_tag(:caption, caption) if caption
@@ -389,12 +410,16 @@ module SlimPickins
       rows = name ? subject.fetch(name) : subject.object
       rows = rows.to_a
 
+      # Saved, not just cleared — see `table` for why.
+      was_series = @series
+      was_levels = @levels
       @series = []
       @levels = []
       nest(&block)
       series = @series
       levels = @levels
-      @series = @levels = nil
+      @series = was_series
+      @levels = was_levels
 
       # A series with nothing in it is not a series. roth's do-nothing line
       # takes `from:` a baseline that does not exist until something is

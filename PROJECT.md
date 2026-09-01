@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: ROADMAP-0.2.md written, nothing started. Phase 0 is one dashboard view (views/ports.slim, 42 lines) ported until the first wall. Phase 1 lands before any new word: extract the triplicated gathering mechanism, name the 7 shapes a word comes in, add check_shape.rb. ~/dev/dashboard keeps working untouched
+next_step: ROADMAP-0.2.md written, nothing started. Probing for fragility found and fixed two crashes (table/chart not reentrant through `when`; `each item` colliding with the word `item`) — test/combination_test.rb is the new guard. Phase 0 is one dashboard view; Phase 1 extracts the triplicated gathering mechanism before any word is added
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

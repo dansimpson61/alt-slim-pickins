@@ -82,6 +82,30 @@ That third copy is mine. I wrote `charting!` in 0.1's Phase 8 by pattern-matchin
 `registering!` without noticing I was duplicating it, which is exactly how kruft
 arrives: not by bad judgement but by a reasonable local decision made twice.
 
+**And the duplication was already producing bugs.** Asked whether the
+principles were hiding fragile foundations, I went looking, and five minutes of
+adversarial probing found two crashes — both of which failed with a Ruby error
+rather than one that speaks the language, which is this project's strongest
+claim:
+
+- A `table` or a `chart` reached through a `when` **destroyed the collection of
+  the one it was nested inside**. `choose` was fine, because `choose` saves and
+  restores its state and the other two only cleared theirs. The copy that
+  happened to be correct was the one written first.
+- **`each item` bound `item`, which is also a word.** Bindings are served by
+  `method_missing`; a word is a real method, so the word answered instead and
+  handed back its own output. 23 of the 50 words are plausible loop nouns.
+
+Both are fixed, and `test/combination_test.rb` is the guard that was missing —
+133 tests found neither, because every one of them was a happy path over a page
+somebody wrote on purpose.
+
+The lesson is not that the foundations are rotten; 50 words average 9.6 lines
+each and all 13 ivars are a parent word talking to its own children. It is
+that **every proscription in this language constrains what a page may say, and
+none constrains what happens when words meet.** The grammar guarantees each
+sentence is well formed. Nothing guaranteed the tree was.
+
 **So a word should be built from named shapes, not from Builder's insides.** The
 fifty existing words already fall into seven:
 
@@ -160,6 +184,7 @@ Highest first. This is what the phase order is for.
 | **The language stays lovely as it grows** | **High**, permanent | never — it is a standing constraint |
 | What a page cannot say about arrangement | **Medium** | Phase 4 |
 | Demands are computable without rendering | Medium | Phase 5 |
+| **Words that meet in ways no page has used yet** | **High** | Phase 1, then per word |
 | The vocabulary has words with no page behind them | Low, unexamined | Phase 7 |
 | The grammar needs changing | Low | eight phases said no |
 
@@ -190,6 +215,10 @@ than editing it would have.
   done.
 - **`check_grammar.rb`, `check_styles.rb` and `check_shape.rb` stay green.**
   Every new word arrives with a sentence, a rule and a shape.
+- **A new word arrives with a combination test.** `test/combination_test.rb`
+  crosses the words that hold state against each other. Two crashes lived
+  behind 133 happy-path tests; a word that gathers, binds or shifts anything
+  gets crossed against the ones that already do.
 - **A word is added by declaring a shape, or by arguing in writing for a new
   one.** No word reaches into `Builder`'s insides that a shape could reach for
   it. This is the second standing constraint, enforced per commit.
@@ -251,9 +280,16 @@ progress. It should be small.
 - **Extract gathering** `agent` — one mechanism for `table`/`column`,
   `chart`/`band`/`line`/`level` and `choose`/`when`/`otherwise`, in place of
   three. The guard message writes itself from the declaration, so *"`band`
-  belongs inside a chart"* stops being a hand-written string in three places.
+  belongs inside a chart"* stops being a hand-written string in three places,
+  and **reentrancy is a property of the mechanism rather than of whoever wrote
+  the copy** — which is how two of the three came to be broken.
   *Done looks like:* the three collection ivars and the three `…!` guards are
   one thing, every test still passes, and no page changed.
+- **Cross the state-holding words against each other** `agent` — `form`,
+  `select`, `each`, `section` and `page` all carry something for their
+  children, and only the gatherers have been probed.
+  *Done looks like:* `test/combination_test.rb` covers every pair, and every
+  wall in it is a language error rather than a Ruby one.
 - **Name the seven shapes, in the vocabulary** `agent` — `VOCABULARY.md`
   already declares seven slots per word; the shape is the eighth thing every
   entry implicitly has and never states.
