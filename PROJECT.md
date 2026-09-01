@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-08-31'
-next_step: ROADMAP-0.2.md Phase 0 — port ~/dev/dashboard/views/ports.slim (42 lines) until the first thing that cannot be said, and record the wall. Do not invent a word to get past it. Dashboard must keep working untouched; HANDOFF.md is the resume prompt
+next_step: ROADMAP-0.2.md Phase 0 — one gathering mechanism in place of four (table/chart/choose/select), guards that fire before their word evaluates its arguments, then name the seven shapes and build check_shape.rb. Roadmap re-sequenced 2026-08-31: foundations first, contract-at-boot second, the dashboard port is now the exam at Phase 5. HANDOFF.md is stale and still describes the old order
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

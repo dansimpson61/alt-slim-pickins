@@ -28,38 +28,46 @@ is the live one and nothing in it is started.
 The language runs: one sentence, fifty words, its own stylesheet, and two
 Sinatra apps that speak it. `examples/roth` is a deep port of `~/dev/roth`
 whose results — six figures, two charts and a thirty-row table — render on the
-server, and which uses **no Ruby-defined words at all**. Across every `.sp`
-file in the repo the escape hatch stands at **1 use in 356 sentences**.
+server, and which uses **no Ruby-defined words at all**.
 
 dan's verdict on the port, recorded 2026-08-31: *clearly worth it. We are
 exactly where we had hoped we would be at this phase of the project.*
 
+**ROADMAP-0.2.md was re-sequenced on 2026-08-31.** It had been two roadmaps
+interleaved — a dashboard port at phases 0, 2, 3, 4 and the language itself at
+1, 5, 6, 7 — with the port first and the release's payload, the contract
+checked at boot, buried at Phase 5. It is now four parts: **foundations, then
+the payload, then the exam, then subtraction.** The port is unchanged in
+substance and sits at Phase 5. The roadmap's own "Why this document was
+re-sequenced" section has the was/is mapping; read it rather than assuming any
+older document's phase numbers are current.
+
 ## What is next — Phase 0 of ROADMAP-0.2.md
 
-**Port one dashboard view: `~/dev/dashboard/views/ports.slim`, 42 lines.**
+**One gathering mechanism in place of four, then name the shapes.**
 
-Not the easiest — the one holding most of the problem in miniature: a form with
-two hidden fields, four conditionals, three `each` loops, and an app word
-(`ports`, a `SlimPickins::Tabular` subclass in the dashboard's `words/`).
+Nothing here is visible to a user, and all of it is cheaper now than after
+three phases of adding words. `builder.rb` is 867 lines — 50% of the library —
+with 16 ivars that 25 of the 50 words touch directly. Sorted by purpose those
+16 are **three ideas implemented about twelve times**, and the copies have
+drifted:
 
-The phase answers one question: **can a page nobody here designed be said in
-this language at all?** Port it, and **stop at the first thing that cannot be
-said** — do not invent a word to get past a wall, record the wall. The roadmap
-has the done-conditions and the pivot criteria, including what to do if it
-fails in each of four different ways.
+- `table`/`column`, `chart`/`band`/`line`/`level`, `choose`/`when`/`otherwise`
+  and `select`/`option` are **four copies of one gathering mechanism**. `choose`
+  saves and restores its state; the other three clear theirs, which is why two
+  of them crashed under five minutes of adversarial probing.
+- **`option` has no guard at all** — it renders silently outside a `select`.
+- **`when` guards after evaluating its argument**, so `when .x` outside a
+  `choose` says *"this page has no x"* — the wrong problem, on the one construct
+  with no real page behind it.
 
-Two things already known before a line is written:
+Then: cross the state-holding words against each other, name the seven shapes
+in `VOCABULARY.md`, and build `check_shape.rb`. Phase 1 follows immediately and
+is about the vocabulary as *language* rather than as code.
 
-- `ports.slim` has **no `href` of its own.** Every link on it is emitted from
-  inside the `ports` Ruby class. Routing is deferred one level, not absent.
-- The dashboard's own `words/` directory means **it independently invented app
-  words.** A port is the only head-to-head of the two experiments that will
-  exist.
-
-Read the whole of `ROADMAP-0.2.md` before starting. It is short, it has a
-measured risk register, and two standing constraints that apply to every phase:
-the language must stay lovely to read, and adding a word must be easy to do
-*well*.
+Read the whole of `ROADMAP-0.2.md` before starting. It has a measured risk
+register and two standing constraints that apply to every phase: the language
+must stay lovely to read, and adding a word must be easy to do *well*.
 
 ## Design invariants — do not break these without saying so
 
@@ -73,6 +81,13 @@ the language must stay lovely to read, and adding a word must be easy to do
 - Mechanical facts derivable from a value's shape are free. Facts encoding a
   human judgement about the domain belong to the app — ask, don't guess.
 - A line that states the inferable should not exist.
+- **This is a noun language.** 43 of the 50 words are common nouns naming a
+  kind of presentation, 41 of those 43 are singular, and the seven non-nouns
+  are almost exactly the control flow — `each` a determiner, `empty` an
+  adjective, `choose` a verb, `when` a conjunction, `otherwise` an adverb. A
+  sentence is head noun plus specifier: the register of a label, not of prose.
+  Two words break it — `check` and `select` are verbs, imperatives that
+  misdescribe what they render — and Phase 1 decides them.
 
 ## How this project works
 
