@@ -522,11 +522,45 @@ into another object's ivars; byte-diffs of both apps' pages unchanged except
 the deliberate renames; the gathering-copy count is **1**, measured;
 `test/combination_test.rb` extended with the crash cases and green.
 
-### Phase 3 — Spend the description
+### Phase 3 — Spend the description  🔄 in progress — rounds 1–4 done (2026-09-01)
 
 The payload. 0.1 built a parsed, checkable description of what a page means and
 spent it only on HTML. This phase spends it on the one question that matters
 before a byte is served.
+
+**What the study above asked for, and what has already landed** — the runtime
+output model was re-decided with dan, in two named axes, after the Phase 2
+record conflated them:
+
+1. *Compile-time pipeline* (parse → validate → generate): unchanged, as
+   recorded — the generator stays; no second target exists.
+2. *Runtime output model* (strings-and-side-effects vs nodes-and-assembly):
+   **decided for nodes** — words build semantic nodes (`[:word, attrs,
+   children]`), the Generator interprets them as HTML, suppression became
+   pruning, and `SlimPickins.evaluate` exposes the tree a second interpreter
+   would walk — unbuilt, because none has asked.
+
+Round by round: (1) the node runtime, eleven pages byte-identical against the
+old runtime; (2) the vocabulary left the Builder — `words.rb`, written with
+the same surface apps get, Builder 747 → 263 lines; (3) `words_test.rb` pins
+that contracts, Words and the Generator agree on all fifty; (4) dan's
+app-word examples were worked, found two real defects (a nil child crashed
+the generator; nested `tag` calls double-rendered), and the hatch became six
+methods — `token`, `html`, `element`, `tag`, `children`, `arguments` —
+`element` the value-form for nesting.
+
+**The dogfood finding, recorded for dan.** The vocabulary is the language's
+own lowest layer: a `.sp` composition of `note` would have to be `note`
+itself, because compositions need finer atoms the exclusivity contract
+deliberately refuses. Measured instead, the vocabulary's layers: **21 of 50
+words are rebuildable by an app word with the six-method surface** (the leaf
+presenters and the pure containers — the flour is handed out); the other 29
+carry the nutrients apps cannot synthesize: the app contract inside words
+(`subject`, `label_for`, `format_of` — see the `stat` example), gathering
+(`thumbnails`), head and sprite routing (`favicon`), subject flow and
+emptiness pruning, and context (`@level`, `@in_form`). Whether to extend the
+hatch with any of those is a dan decision, each a candidate future surface —
+not something to add unbidden.
 
 - **Report, then gate** `agent` — a validation pass over the tree, running on
   the word contracts Phase 1 objectified: every subject resolvable, every
