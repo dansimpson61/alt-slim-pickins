@@ -156,19 +156,26 @@ this much further, because it is where a small language beats a large one:
 A blue-sky document that only adds is a wish list.
 
 - **`icons.rb` and the sprite.** Thirty-four lines serving one word, with a
-  fixed set of symbols. It has one page of evidence — the specimen — and
-  specimen pages are not evidence.
-- **`markdown.rb`.** `prose` renders a hand-rolled safe subset. It is 55 lines
-  of a problem other people have solved, and its only real use is the dashboard
-  page that was drafted on paper and never built.
+  fixed set of symbols. Its only users are `pages/figures.sp` and
+  `pages/specimen.sp` — **both also on this list**, which is circular evidence
+  and worse than none. The dashboard uses no icons at all.
+- ~~**`markdown.rb`**~~ — **wrong, and worth leaving visible.** I listed it
+  after checking the specimen and not the subject. Three dashboard views render
+  markdown (`brief`, `doc`, `pattern`), so `prose` is needed by the very port
+  0.2 is built around. Measured, it handles paragraphs, headings, lists, bold,
+  inline code, links and blockquotes but **not code fences, tables or ordered
+  lists** — all of which appear in the documents those views display. It is a
+  gap to decide about, not a thing to cut.
 - **The three drafted-on-paper pages** — `PORTFOLIO.md`, `CONTENT.md`,
   `FIGURES.md` — have done their job. They were the evidence for the vocabulary
   before there was code; they are now three more documents to keep true.
 - **`bin/diff_roth.rb`** compares against a hand-written page that the port has
   superseded.
 
-Roughly 200 lines of library and four documents. The project's own rule — *a
-word with no page behind it goes* — should be applied to files.
+Roughly 100 lines of library and four documents. The project's own rule — *a
+word with no page behind it goes* — should be applied to files, and **only
+after checking the app the roadmap is about.** That is how `markdown.rb` got
+onto this list, in a document that says verify before asserting.
 
 ---
 

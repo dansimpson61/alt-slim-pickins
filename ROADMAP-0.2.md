@@ -399,6 +399,20 @@ prediction; this is the test.
   the list of those that should and could not.
   *Done looks like:* the list, and a recommendation for each — a word, a
   variant, or nothing.
+- **Decide how far `prose` goes** `dan` — three dashboard views render markdown
+  from files, and alt's renderer is 55 lines against the dashboard's 181.
+  Measured, `prose` handles paragraphs, headings, lists, bold, inline code,
+  links and blockquotes; it does **not** handle **code fences, tables or
+  ordered lists**, all of which appear in the documents those three views
+  display.
+
+  This is the roadmap's sharpest tension in miniature. A document viewer that
+  cannot render a fenced code block is useless, and "support all of markdown"
+  is precisely the feature creep this document refuses. `prose` is one word
+  whose job is genuinely large, and it may be the one place the vocabulary has
+  to admit a dependency instead of growing a renderer.
+  *Done looks like:* the decision — extend it, bound it explicitly in
+  `VOCABULARY.md`, or take a gem — and the reason.
 - **The head-to-head** `dan` — the same app, in two languages, both by hand.
   This comparison will not be available again.
   *Done looks like:* the judgement, recorded, including what the sibling does
@@ -454,12 +468,23 @@ nothing has been done with that.
 A language that only grows is not being designed. Applied to files, using the
 project's own rule: **a word with no page behind it goes.**
 
-- **The candidates, measured** `agent` — `icons.rb` and `markdown.rb` are ~90
-  lines serving one word each, with the specimen as their only evidence, and
-  specimen pages are not evidence. `bin/diff_roth.rb` compares against a page
-  the port superseded. `PORTFOLIO.md`, `CONTENT.md` and `FIGURES.md` were the
-  evidence for the vocabulary before there was code.
-  *Done looks like:* for each, the pages that use it and whether any is real.
+**`markdown.rb` was on this list and should not have been.** Three dashboard
+views render markdown — `brief.slim`, `doc.slim`, `pattern.slim` — so `prose`
+is needed by the very port this roadmap is built around. It was listed after
+checking the specimen and not the subject, which is the error this document
+warns against twice. It is a Phase 4 gap now, not a cut; see there.
+
+- **The candidates, measured** `agent` — `icons.rb` is 34 lines serving one
+  word, used only by `pages/figures.sp` and `pages/specimen.sp` — **both of
+  which are themselves on this list**, which is circular evidence and worse
+  than no evidence. The dashboard uses no icons at all. `bin/diff_roth.rb`
+  compares against a page the port superseded. `PORTFOLIO.md`, `CONTENT.md`
+  and `FIGURES.md` were the evidence for the vocabulary before there was code.
+  *Done looks like:* for each, the pages outside this list that use it, and
+  whether any is real.
+- **Check every candidate against the dashboard first** `conv` — the mistake
+  above, made a rule. A thing is only unused if it is unused by the app the
+  roadmap is about.
 - **Cut** `dan` — the call is yours; the measurement is mine.
   *Done looks like:* the repo is smaller, and `check_grammar.rb` is still
   green.
