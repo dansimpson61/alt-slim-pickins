@@ -41,7 +41,7 @@ module SlimPickins
     def label_of(...) = @builder.label_of(...)
     def format_of(...) = @builder.format_of(...)
     def alignment_of(...) = @builder.alignment_of(...)
-    def capture(&block) = @builder.children(&block)
+    def children(&block) = @builder.children(&block)
     def emit_node(node) = @builder.emit_node(node)
   end
 
@@ -170,7 +170,7 @@ module SlimPickins
     def render
       with_open
       chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
-      emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
+      emit_node([:choose, {}, chosen ? children(&chosen.last) : []])
     end
 
     def add_branch(condition, block) = @collected << [condition, block]
