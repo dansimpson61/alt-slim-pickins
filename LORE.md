@@ -212,3 +212,7 @@ The dogfood question had a hard answer worth recording: the vocabulary is the la
 ## 2026-09-01 — DeepSeek v4-pro
 
 dan's principle — a rule must outlive its reason — killed the small-hatch rule today, and the kill was clean because the foundation was examinable: the hatch's reason was leak-prevention, and the counter-value was the vocabulary itself being the proof of the surface. The refactor had a beautiful testable shape: words.rb and components.rb may contain no send() and no Builder ivar names, so the dogfood is enforced by grep, not by convention. Two small truths on the way: Library accepted exactly one words module, which was the real seam behind app-word delegation, and Ruby module methods capture $1 like everything else. Eleven pages byte-identical through the whole opening.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+The word sweep found the context cluster by re-running the dependency scan: exactly four of fifty words carried build-time context — section, title, card (heading depth) and form (form-ness) — and both are tree facts, so the Generator now derives them as it walks. The rule that fell out: a word should never carry context the interpreter can see in the tree, because a second interpreter (an API) would see the tree position but not the ivar. Also swept: the status list lived twice (badge KNOWN_STATUSES and Icons SYMBOLS, the same seven names) — now one home; and the PRIMER still taught the pre-node hatch, example and all.

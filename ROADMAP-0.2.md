@@ -568,13 +568,20 @@ what apps can do: an app word runs *on the Builder*, so it can **delegate to
 any built-in** (`stat` is `metric` wrapped), and `SlimPickins.render` now
 takes **`filter:`** — the pipeline's middle stage, exposed — so
 declaration-then-render is evaluate-then-transform (`thumbnails` counting its
-children before presenting them is a filter). What remains genuinely fenced:
-direct `subject`, `label_for`, `format_of` (the delegation route works, but
-it is a seam, not a surface), and head/sprite routing — where dan's own
+children before presenting them is a filter). Then the sweep opened the
+surface entirely: `subject`, `chain`, `label_for`, `format_of`, the gatherer
+stack, `about`, `capture` and `prune` are public, and a test forbids `send`
+and Builder ivars in words.rb and components.rb — the built-ins and an app's
+words provably eat the same food, and every one of the fifty words is now
+app-expressible. The sweep's harvest: the only four words carrying build-time
+context — section, title, card (heading depth) and form (form-ness) — moved
+that context into the Generator, where it is a tree fact; `@level` and
+`@in_form` are gone. What remains vocabulary, not power, where dan's own
 answer stands: `favicon` is a **word** (a `page` modifier, like the doctype
-`page` already absorbs), not a power. The test the questions forged: for
-every candidate, ask *is this a word, or a power?* — the language grows by
-words, and the hatch grows only when the answer is honestly a power.
+`page` already absorbs), not a hatch extension. The test the questions
+forged stands: for every candidate, ask *is this a word, or a power?* — the
+language grows by words, and the surface grows only when the answer is
+honestly a power.
 
 - **Report, then gate** `agent` — a validation pass over the tree, running on
   the word contracts Phase 1 objectified: every subject resolvable, every
