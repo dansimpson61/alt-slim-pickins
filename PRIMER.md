@@ -257,7 +257,8 @@ third-party embed — the app adds a word of its own, in Ruby:
 ```ruby
 def video(*args, poster: nil)
   _, source = arguments(args)
-  html(%(<video class="#{token(:video)}" src="#{escape(source)}"></video>))
+  tag(:video, { class: token(:video), src: source, poster: poster,
+                controls: true, playsinline: true })
 end
 ```
 
@@ -268,12 +269,13 @@ video .tour_url
 ```
 
 which reads exactly like `image .url`. Extending the language still adds
-vocabulary and never syntax — even at the exit. The surface such a word may
-use is exactly six methods (`token`, `html`, `element`, `tag`, `children`,
-`arguments`); everything else on the builder stays private. `tag` renders
-where the word stands; `element` builds a node for nesting inside another. A hatch that
-exposes everything is not a hatch, it is an API, and it becomes the seam every
-future irregularity leaks through.
+vocabulary and never syntax — even at the exit. An app word may use the whole
+surface the vocabulary itself is written with: `token`, `html`, `element`,
+`tag`, `children` and `arguments` for structure; `subject`, `chain`,
+`label_for` and `format_of` for the contract; `register!` and
+`with_gatherer` for gathering; `about`, `capture` and `prune` for the
+subject flow. There is no other surface, and no secret one: the built-ins
+and an app's words eat the same food, which a test enforces.
 
 The hatch is for the genuinely missing word, and the vocabulary earns its keep
 by making that rare: across every page in this repository, one app word covers
