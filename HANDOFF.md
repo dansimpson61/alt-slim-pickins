@@ -131,15 +131,17 @@ special case is dead — a word whose shape declares `lazy: content` receives
 that argument unevaluated, so laziness is a declared capability any word may
 claim.
 
-**What remains, in order:** (1) partials receive blocks — a `children`
-splice word so a partial body says where the caller's children go
-(`render_partial` currently ignores the block); (2) the `gathers:`/`inside:`
-shapes honored by the runtime, which is what promotes `thumbnails` from
-dogfood_test into lib/vocabulary — do it; (3) the promotion pass — words
-move from Ruby to lib/vocabulary where the language can say them, each a
-round-end decision, the byte-diff harness the acceptance test; (4) docs
-derived — VOCABULARY.md entries for composed words, generated from the
-preambles.
+**Done since:** partials receive blocks (the `children` splice word), the
+`gathers:`/`inside:` shapes are honored by the runtime, and `thumbnails` +
+`thumb` are the first promoted words — written entirely in the language,
+their preambles their declarations, their VOCABULARY entries generated.
+
+**What remains, in order:** (1) the promotion pass — words move from Ruby to
+lib/vocabulary where the language can say them, each a round-end decision,
+the byte-diff harness the acceptance test; (2) docs derived — the generator
+extends to compose the remaining entries from preambles; (3) name-passing to
+partials — a partial's body cannot yet read its name argument (`.name`), the
+next seam the promotion pass will meet.
 
 ## What is next — Phase 4, the exam
 
