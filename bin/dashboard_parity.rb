@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# The exam's instrument: render the ported /triage against the same live
-# data the dashboard at :4000 serves, and compare affordances — forms and
-# their hidden inputs, links, badges, buttons — between the two. Byte
-# equality is not the bar (a different renderer, and the named gaps); the
-# bar is: nothing the original can do is missing here.
+# The exam's instrument, behaviour-only: render the ported /triage against
+# the same live data the dashboard at :4000 serves, and compare what each
+# page can DO — the forms it posts, the hidden payloads they carry, the
+# buttons and the links. Looks are the port's own; behaviour must not lose
+# a single thing the original could do.
 
 require 'net/http'
 require 'rack/test'
@@ -21,10 +21,11 @@ end
 
 def affordances(html)
   {
-    forms: html.scan(%r{<form[^>]*action="([^"]*)"[^>]*>}).flatten.sort,
+    forms: html.scan(%r{<form\b[^>]*>}).map do |tag|
+      "#{tag[/method="([^"]*)"/, 1] || 'get'} #{tag[/action="([^"]*)"/, 1]}"
+    end.sort,
     hiddens: html.scan(%r{<input type="hidden" name="([^"]*)" value="([^"]*)"})
                   .map { |n, v| "#{n}=#{v}" }.sort,
-    badges: html.scan(/class="([^"]*sp-badge[^"]*)"/).flatten.sort,
     buttons: html.scan(%r{<button[^>]*>([^<]*)</button>}).flatten.sort,
     links: html.scan(%r{<a[^>]*href="([^"]*)"[^>]*>([^<]*)</a>})
                .map { |h, t| "#{t.strip} → #{h}" }.sort
@@ -46,7 +47,7 @@ original.each_key do |kind|
   next if missing.empty? && extra.empty?
 
   problems += missing.size
-  puts "#{kind.upcase}"
+  puts kind.upcase
   missing.each { |x| puts "  MISSING IN PORT  #{x}" }
   extra.each { |x| puts "  extra in port    #{x}" }
 end

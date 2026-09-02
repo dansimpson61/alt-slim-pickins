@@ -802,3 +802,16 @@ The same machine 0.1 ran on, and it is not negotiable:
 - **The Way document will be wrong in places on the day it is written.** That
   is what the checker convention is for: a document whose examples cannot rot
   is a document that earns correction instead of trust.
+
+*Round C (2026-09-02).* The port re-authored: `DashboardWords` is deleted —
+the queue, unreviewed card and dormant action are partials in
+`views/partials`, the chrome is core words, and `flash`/`action`/`search`
+are vocabulary partials in `lib/vocabulary` (nav widened for `search`).
+Behaviour parity holds on the authored page — 25 affordances, 0 missing —
+and the round's findings are G12 (a partial cannot ask whether a modifier
+was said; optionality has no spelling) and G14 (a bare name that is also a
+word can never name data — the queue partial recursed into itself until the
+stack died; flat, word-free locals are the app's rule). The promotion
+decision for `flash`/`action`/`search` waits on dan: all three are small,
+used by one app so far, and promotion is for words that have proven
+themselves across pages.

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-# Phase 4, the exam: the dashboard's /triage, ported. This app reads the
-# dashboard's pure-Ruby lib (scan, workspace) and its stylesheet, renders
-# the ported views with alt-slim-pickins, and wires the four triage actions
-# to the same Workspace calls the original makes. ~/dev/dashboard itself is
-# never written to.
+# Phase 4, the exam: the dashboard's /triage, authored in slim-pickins.
+# This app reads the dashboard's pure-Ruby lib (scan, workspace) and its
+# stylesheet, shapes the queue's judgements into locals, and renders the
+# views — the vocabulary's words and the partials in views/partials — with
+# the four triage actions wired to the same Workspace calls the original
+# makes. ~/dev/dashboard itself is never written to.
 
 require 'sinatra/base'
 require 'uri'
 require_relative '../../lib/slim_pickins/template'
-require_relative 'words/dashboard_words'
 
 require '/home/dan/dev/dashboard/lib/workspace'
 require '/home/dan/dev/dashboard/lib/scan'
@@ -21,24 +21,21 @@ module DashboardPort
     set :views, File.join(__dir__, 'views')
     set :port, ENV.fetch('PORT', 4578).to_i
 
-    SlimPickins::Template.libraries[settings.views] =
-      SlimPickins::Library.from(settings.views, words: DashboardWords)
+    SlimPickins::Template.libraries[settings.views] = SlimPickins::Library.from(settings.views)
 
     # Boot proves the pages: a field the queue asks for that Scan no longer
     # answers fails here, naming the line — the payload, working for the
     # exam's app too.
-    SlimPickins.prove!(settings.views, words: DashboardWords) do |name|
-      base = { notice: nil, search_q: '', error_entry: nil,
-               nav: { studio: false, library: false, reconcile: false,
+    SlimPickins.prove!(settings.views) do |name|
+      base = { notice: nil, q: '', error_entry: nil,
+               nav_state: { studio: false, library: false, reconcile: false,
                       dispatch: false, ports: false } }
       case name
       when 'triage'
-        base.merge(queue: Scan.triage_queue,
-                   unreviewed: Scan.instruction_files.count { |f| f[:disposition] == 'unreviewed' })
+        base.merge(first_item: nil, queue_intro: '', unreviewed: nil)
       when 'confirm_archive'
         base.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
-                   archive_reference: nil, archive_return_to: '/triage',
-                   archive_reason: '')
+                   archive_return_to: '/triage', reason: '')
       end
     end
 
@@ -65,6 +62,38 @@ module DashboardPort
           ports: nav_here?('ports') }
       end
 
+      def status_variant(status)
+        { 'active' => :ok, 'repaired' => :ok, 'abandoned' => :danger,
+          'dormant' => :pending }.fetch(status, :neutral)
+      end
+
+      # Judgement belongs to the app; the page says only mechanical facts.
+      # Each queue item is decorated with the sentences and choices the view
+      # used to compute in Ruby, so the partial has nothing to decide.
+      def decorate(p)
+        { path: p[:path], status: p[:status],
+          status_variant: status_variant(p[:status]),
+          stale_text: p[:stale_days] ? "stale #{p[:stale_days]}d" : 'never committed',
+          purpose: p[:purpose],
+          next_line: (p[:next_step] == '-' ? nil : "Next: #{p[:next_step]}"),
+          offer_commit: p[:dirty] || p[:zero_commits] }
+      end
+
+      def unreviewed_sentence
+        n = Scan.instruction_files.count { |f| f[:disposition] == 'unreviewed' }
+        return if n.zero?
+
+        "#{n} instruction file#{'s' if n > 1} awaiting judgment — hand-kept rules nobody has ruled canonical or legacy."
+      end
+
+      def error_entry
+        err = Workspace.recent_error
+        return unless err && !err[:log].to_s.strip.empty?
+
+        { project: "Launch Error Log — #{err[:project]}", log: err[:log],
+          href: "/projects/#{err[:project]}" }
+      end
+
       def redirect_with_notice(message)
         target = params['return_to'].to_s.strip
         target = '/' if target.empty?
@@ -79,11 +108,13 @@ module DashboardPort
 
     get '/triage' do
       @view = 'triage'
+      queue = Scan.triage_queue
       sp :triage, locals: {
-        queue: Scan.triage_queue,
-        unreviewed: Scan.instruction_files.count { |f| f[:disposition] == 'unreviewed' },
-        notice: params['notice'], search_q: params['q'].to_s,
-        error_entry: Workspace.recent_error, nav: nav_map
+        first_item: (decorate(queue.first) if queue.first),
+        queue_intro: "#{queue.size} item(s) need attention — this is the first:",
+        unreviewed: unreviewed_sentence,
+        notice: params['notice'], q: params['q'].to_s,
+        error_entry: error_entry, nav_state: nav_map
       }
     end
 
@@ -107,9 +138,9 @@ module DashboardPort
       if params['confirmed'] != '1'
         sp :confirm_archive, locals: {
           archive_heading: %(Archive "#{rel}"?),
-          archive_path: rel, archive_reference: params['reference'],
-          archive_return_to: params['return_to'], archive_reason: params['reason'].to_s,
-          notice: nil, search_q: '', error_entry: nil, nav: nav_map
+          archive_path: rel, archive_return_to: params['return_to'],
+          reason: params['reason'].to_s,
+          notice: nil, q: '', error_entry: nil, nav_state: nav_map
         }
       else
         _ok, message = Workspace.archive!(rel, reason: params['reason'], reference: params['reference'])

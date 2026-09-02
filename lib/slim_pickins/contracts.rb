@@ -42,7 +42,7 @@ module SlimPickins
     stylesheet: Contract.new(content: true, shape: :document),
     meta:       Contract.new(name: :name, content: true, shape: :document),
     script:     Contract.new(content: true, modifiers: [:defer], shape: :document),
-    nav:        Contract.new(name: :variant, children: [:link], shape: :encloses),
+    nav:        Contract.new(name: :variant, children: %i[link input search], shape: :encloses),
     link:       Contract.new(name: :destination, content: true, modifiers: %i[to active], shape: :says),
     footer:     Contract.new(content: true, children: :any, shape: :encloses),
     aside:      Contract.new(children: :any, shape: :encloses),

@@ -96,3 +96,26 @@ serves, the hatch where it doesn't, and name every hatch use here.
   `.sp-page` shell (`shell` wrapping `contents`).
 
 ~/dev/dashboard stays untouched; this port only reads its lib/ and stylesheet.
+
+## Round C — the port, re-authored
+
+The port is now an authored slim-pickins page: `DashboardWords` is deleted;
+the queue, the unreviewed card and the dormant action are partials in
+`views/partials`; `flash`, `action` and `search` live in `lib/vocabulary`;
+the chrome is core words (`nav`, `link active:`, `input`, `disclosure`,
+`snippet`). The parity instrument compares behaviour only — 25 affordances,
+0 missing. Resolved: G1, G2, G4, G5, G8, G9, G10 (vocabulary and partials);
+G3 and G7 dissolved with the re-frame (the port wears our look; our `page`
+owns its own document). Remaining and named:
+
+- **G12 — a partial cannot ask whether a modifier was said.** Every
+  parameter is unconditional; `action` requires its variant at every call
+  site. Optionality has no spelling yet.
+- **G14 — a bare name that is also a word can never name data.** The queue
+  partial's first draft said `when queue.first` — and recursed into itself,
+  because `queue` was the partial's own name: a word is a real method, so
+  the word answers instead. The lesson is `each item`'s, at vocabulary
+  scale: data names must stay out of the word namespace. The port passes
+  flat, word-free locals (`first_item`), and conditions say `.first_item`
+  or the bare chain `first_item.next_line` — a bare single name compiles to
+  a symbol, so it is a name, not data.

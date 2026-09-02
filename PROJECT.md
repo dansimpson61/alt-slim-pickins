@@ -5,14 +5,14 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-02'
-next_step: ROADMAP-0.2.md Phase 4 — Round B1 landed the vocabulary-as-partials
-  mechanism: lib/vocabulary/*.sp (flash, action) load into every app's
-  library through Library.from, shadowing refused; the grammar and shape
-  checkers hold the new corpus. Next: Round C — re-author triage in our own
-  look with the new words and partials (delete DashboardWords, rewrite the
-  views, tests, and the parity instrument to behaviour-only); round ends
-  with dan's promotion decision on flash/action. ~/dev/dashboard stays
-  untouched.
+next_step: ROADMAP-0.2.md Phase 4 — Round C landed: the triage port is
+  re-authored in slim-pickins' own look (DashboardWords deleted; queue/
+  unreviewed/dormant as app partials; flash/action/search as lib/vocabulary
+  partials; chrome in core words), behaviour parity 25 affordances / 0
+  missing, G12 and G14 named in INVENTORY.md. Next: dan's promotion
+  decision on flash/action/search — my recommendation is to hold promotion
+  until a second consumer (index.slim) proves them, then settle routing.
+  ~/dev/dashboard stays untouched.
   Phase 3's compile-once cache landed (round 10, 2026-09-02): Compilation
   holds the gate's verdict and the compiled Ruby keyed by source — warm
   render 1.37 ms, cold 2.75 ms, 0.10 ms per partial-in-each row.

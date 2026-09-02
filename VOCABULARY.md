@@ -144,7 +144,7 @@ script "/js/app.js"
 - **name** — the variant
 - **content** — none
 - **modifiers** — none
-- **children** — `link`
+- **children** — `link`, `input`, `search`
 - **subject** — unchanged
 - **infers** — which link is the current page, and marks it; the accessible
   label. This is the part hand-written navigation always gets wrong
