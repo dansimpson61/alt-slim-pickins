@@ -218,8 +218,8 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 192 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
-  0 problems, 11 pages verified)
+  (currently 217 tests / 871 assertions / 0 failures, 780 sentences / 0
+  problems, 77 rules / 0 problems, 13 pages verified)
 - **The cost, re-measured**: `ruby bin/measure_cost.rb` — the instrument;
   the numbers live in ROADMAP-0.2.md Phase 3's record.
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
