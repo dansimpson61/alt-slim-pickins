@@ -13,13 +13,17 @@ module SlimPickins
   module_function
 
   # Render a page written in the language: evaluate it into a tree of
-  # semantic nodes, then let the Generator interpret the tree as HTML.
+  # semantic nodes, let an optional filter transform the tree — the AST
+  # pipeline's middle stage, exposed — then the Generator interprets it.
   #
-  #   SlimPickins.render(File.read("form.sp"), locals: { scenario: inputs })
-  def render(source, path: '(page)', locals: {}, helpers: nil, library: nil)
+  #   SlimPickins.render(File.read("form.sp"), locals: { scenario: inputs },
+  #                      filter: ->(tree) { [[:badge, { kind: :ok, label: "12" }, []]] + tree })
+  def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
     ruby = Transform.call(source, path: path)
     builder = Builder.new(Page.new(locals: locals, helpers: helpers), library)
-    Generator.new.call(builder.render(ruby, path))
+    nodes = builder.render(ruby, path)
+    nodes = filter.call(nodes) if filter
+    Generator.new.call(nodes)
   end
 
   # The semantic tree a page evaluates to, without the HTML. Useful for

@@ -99,6 +99,15 @@ class Phase6Test < Minitest::Test
     end
   end
 
+  # The AST pipeline's middle stage, exposed: a filter transforms the tree
+  # between evaluation and the generator. The thumbnails question — count the
+  # children, then present — is a filter over the tree.
+  def test_a_filter_intercepts_the_tree_before_the_generator
+    badge = ->(nodes) { [[:badge, { kind: :ok, label: 'filtered' }, []]] + nodes }
+    html = SlimPickins.render("page p\n  text \"x\"\n", locals: { p: {} }, filter: badge)
+    assert_includes html, '<span class="badge badge--ok">filtered</span>'
+  end
+
   # An app word building a void element gets what the built-in `image` gets —
   # no closing tag. The thumbnails example surfaced the opposite: an app word
   # writing tag(:img) used to emit a closing tag the built-in never would.
