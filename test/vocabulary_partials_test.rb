@@ -18,7 +18,7 @@ class VocabularyPartialsTest < Minitest::Test
       File.write(File.join(dir, 'one.sp'), "page p\n  flash \"Saved.\"\n")
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
-      assert_includes html, '<p class="note">Saved.</p>'
+      assert_includes html, '<p class="flash">Saved.</p>'
     end
   end
 

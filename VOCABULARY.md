@@ -1193,3 +1193,19 @@ region shelf
   card
 ```
 
+
+### `heading`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+
+The atom under `title` — the heading level derives from where it sits,
+which is a tree fact the interpreter reads.
+
+```
+heading "A line worth a heading."
+```
+

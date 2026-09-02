@@ -236,7 +236,7 @@ class DogfoodTest < Minitest::Test
     eaten = SlimPickins.render(dogfood_source(source), locals: locals,
                                library: SlimPickins::Library.new(words: Dogfood,
                                                                  layout: library&.layout,
-                                                                 partials: library ? library.partials : {}))
+                                                                 partials: library ? library.app_partials : {}))
     assert_equal built_in, eaten, 'the app-word gatherers must render byte-identically'
   end
 

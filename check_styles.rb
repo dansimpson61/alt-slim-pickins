@@ -48,6 +48,9 @@ defined = selectors.join(' ').scan(/\.([a-z][a-z0-9_-]*)/).flatten.to_set
 # so both are greppable.
 source = Dir[File.join(__dir__, 'lib', '**', '*.rb')].flat_map { |f| File.read(f).lines }.join
 can_emit = source.scan(/token\(:([a-z_]+)/).flatten.to_set
+# A promoted partial carries its own name as the class base, so every
+# composed word's name is emittable — and must have a rule.
+can_emit |= (SlimPickins::CONTRACTS.keys - SlimPickins::Words.instance_methods(false)).map(&:to_s)
 can_emit |= source.scan(/class="([a-z][a-z0-9-]*)/).flatten.map { |c| c.split.first }.to_set
 
 # --- what the runtime emits, by rendering every page in the repo ------------

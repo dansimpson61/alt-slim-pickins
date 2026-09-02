@@ -79,7 +79,7 @@ class DashboardTest < Minitest::Test
   end
 
   def test_the_notice_flash_renders_only_when_there_is_one
-    assert_includes render_triage(notice: 'Saved.'), '<p class="note">Saved.</p>'
+    assert_includes render_triage(notice: 'Saved.'), '<p class="flash">Saved.</p>'
     refute_includes render_triage(first_item: nil, queue_intro: ''), 'class="note"'
   end
 

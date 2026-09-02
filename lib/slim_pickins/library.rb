@@ -11,7 +11,7 @@ module SlimPickins
   # A layout is the same idea one level up: the chrome every page shares,
   # written once, with `contents` marking where the page goes.
   class Library
-    attr_reader :layout, :partials, :words
+    attr_reader :layout, :partials, :words, :app_partials
 
     # The language's own vocabulary, written as partials — the dogfood made
     # visible: new words are drafted in the language itself, in
@@ -22,14 +22,8 @@ module SlimPickins
     def self.from(dir, words: nil)
       dir = File.expand_path(dir)
       layout_path = File.join(dir, 'layout.sp')
-      partials = Dir[File.join(VOCABULARY_DIR, '*.sp')].to_h do |path|
+      partials = Dir[File.join(dir, 'partials', '*.sp')].to_h do |path|
         [File.basename(path, '.sp').to_sym, File.read(path)]
-      end
-      Dir[File.join(dir, 'partials', '*.sp')].each do |path|
-        name = File.basename(path, '.sp').to_sym
-        raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it" if partials.key?(name)
-
-        partials[name] = File.read(path)
       end
       new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials, words: words)
     end
@@ -41,9 +35,30 @@ module SlimPickins
     # they may use.
     def initialize(layout: nil, partials: {}, words: nil)
       @layout = layout
-      @partials = partials.transform_keys(&:to_sym)
+      app_partials = partials.transform_keys(&:to_sym)
+      vocabulary = self.class.builtin_partials
+      dupes = app_partials.keys & vocabulary.keys
+      unless dupes.empty?
+        raise Error, "`#{dupes.first}` is already a slim-pickins word — an app cannot redefine it"
+      end
+
+      @app_partials = app_partials
+      @partials = vocabulary.merge(app_partials)
       @words = words.nil? ? [] : Array(words)
       refuse_shadowing!
+    end
+
+    # The vocabulary is built in — a promoted word is a word everywhere, not
+    # something an app opts into by loading a library.
+    def self.builtin_partials
+      @builtin_partials ||= Dir[File.join(VOCABULARY_DIR, '*.sp')].to_h do |path|
+        [File.basename(path, '.sp').to_sym, File.read(path)]
+      end
+    end
+
+    # The library every render gets when the app passes none.
+    def self.builtin
+      @builtin ||= new
     end
 
     def word?(name) = @partials.key?(name)

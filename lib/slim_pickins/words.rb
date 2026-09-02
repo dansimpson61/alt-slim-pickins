@@ -76,6 +76,11 @@ module SlimPickins
       emit_node([:region, { variant: variant }, capture(&block)])
     end
 
+    def heading(*args)
+      _, body = arguments(args)
+      emit_node([:heading, { body: body }, []])
+    end
+
     # Marks where the caller's children go — the partial's `contents`.
     def children
       raise Error, '`children` has nothing to splice — this word took no children' if spliced.nil?
@@ -98,11 +103,6 @@ module SlimPickins
       emit_node([:section, { name: name, heading: label_for(name, heading) },
                  prune(children, empty)])
       value
-    end
-
-    def title(*args)
-      _, text = arguments(args)
-      emit_node([:title, { text: text }, []])
     end
 
     # The loop is written once, here, and never in a page.
@@ -203,11 +203,6 @@ module SlimPickins
     end
 
     # --- Content --------------------------------------------------------
-
-    def note(*args)
-      variant, body = arguments(args)
-      tag(:p, { class: token(:note, variant) }, [body])
-    end
 
     def prose(*args)
       notation, body = arguments(args)
@@ -417,10 +412,6 @@ module SlimPickins
       emit_node([:button, { variant: variant,
                             label: label || (variant && Inference.label(variant)),
                             to: to, type: type, size: size }, []])
-    end
-
-    def actions(&block)
-      emit_node([:actions, {}, capture(&block)])
     end
   end
 end

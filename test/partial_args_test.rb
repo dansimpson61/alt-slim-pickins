@@ -25,8 +25,8 @@ class PartialArgsTest < Minitest::Test
 
   def test_a_partial_reads_its_modifiers
     action = "form method: post, to: .to\n  hidden path, .path\n  button .content\n"
-    html = render(%(page account\n  action "Commit", to: "/actions/commit", path: .name\n),
-                  partials: { action: action },
+    html = render(%(page account\n  go_form "Commit", to: "/actions/commit", path: .name\n),
+                  partials: { go_form: action },
                   account: Account.new(name: 'ode-to-joy', balance: 1))
     assert_includes html, '<form action="/actions/commit" method="post">'
     assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
@@ -45,8 +45,8 @@ class PartialArgsTest < Minitest::Test
   def test_missing_parameters_name_the_partial
     action = "form method: post, to: .to\n  button .content\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render(%(page account\n  action "Go"\n), partials: { action: action }, account: {})
+      render(%(page account\n  go_form "Go"\n), partials: { go_form: action }, account: {})
     end
-    assert_match(/\Athis action has no to\n/, error.message)
+    assert_match(/\Athis go_form has no to\n/, error.message)
   end
 end

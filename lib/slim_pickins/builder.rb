@@ -21,7 +21,7 @@ module SlimPickins
     WORDS = Words::WORDS # the vocabulary's one list, for callers that look here
 
     def initialize(page, library = nil)
-      @library = library
+      @library = library || Library.builtin
       @chain = Chain.new(page)
       @empty_active = false # set while the named subject is an empty collection
       @bindings = {}        # `each holding` binds `holding` for reaching out
@@ -207,7 +207,7 @@ module SlimPickins
     # Names are Symbols, content is anything else. This is why argument order
     # never has to be counted.
     def name_and_content(args)
-      [args.find { |a| a.is_a?(Symbol) }, args.find { |a| !a.is_a?(Symbol) }]
+      [args.find { |a| a.is_a?(Symbol) }, args.find { |a| !a.nil? && !a.is_a?(Symbol) }]
     end
 
     # A word that names a subject shifts the chain for its children. A word
@@ -365,6 +365,12 @@ module SlimPickins
         else
           [nil, false, body_block.call]
         end
+      # Root-classing: a promoted vocabulary word owns its box — its single
+      # root node carries the word's own name as the class base. An app's
+      # partials keep the classes of the words they compose.
+      if Library.builtin_partials.key?(word) && body.size == 1 && body.first.is_a?(Array)
+        body.first[1][:class_base] = word.to_sym
+      end
       @nodes.concat(prune(body, empty)) unless contract&.inside && contract.inside != :any
       value
     end

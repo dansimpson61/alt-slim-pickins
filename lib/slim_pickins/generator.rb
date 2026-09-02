@@ -158,10 +158,6 @@ module SlimPickins
       @out << '</section>'
     end
 
-    def title(attrs, _children)
-      full_tag(:"h#{@depth + 1}", attrs[:text], class: token(:title))
-    end
-
     def empty(attrs, _children)
       full_tag('p', attrs[:message], class: token(:empty))
     end
@@ -251,10 +247,6 @@ module SlimPickins
 
     # --- Content ----------------------------------------------------------
 
-    def note(attrs, _children)
-      full_tag('p', attrs[:body], class: token(:note, attrs[:variant]))
-    end
-
     def prose(attrs, _children)
       html = attrs[:notation] == :plain ? Markdown.plain(attrs[:body]) : Markdown.render(attrs[:body])
       @out << %(<div class="#{token(:prose)}">#{html}</div>)
@@ -325,14 +317,18 @@ module SlimPickins
       full_tag('span', body, class: classes)
     end
 
+    def heading(attrs, _children)
+      full_tag(:"h#{@depth + 1}", attrs[:body], class: token(attrs[:class_base] || :heading))
+    end
+
     def paragraph(attrs, children)
-      open_tag('p', class: token(:paragraph, attrs[:variant]))
+      open_tag('p', class: token(attrs[:class_base] || :paragraph, attrs[:variant]))
       attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
       @out << '</p>'
     end
 
     def region(attrs, children)
-      open_tag('div', class: token(:region, attrs[:variant]))
+      open_tag('div', class: token(attrs[:class_base] || :region, attrs[:variant]))
       children.each { |c| emit(c) }
       @out << '</div>'
     end
@@ -431,12 +427,6 @@ module SlimPickins
                type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
                formaction: attrs[:to]&.to_s,
                class: classes)
-    end
-
-    def actions(_attrs, children)
-      open_tag('div', class: token(:actions))
-      children.each { |c| emit(c) }
-      @out << '</div>'
     end
 
     # --- bits -------------------------------------------------------------
