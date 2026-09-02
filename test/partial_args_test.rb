@@ -49,4 +49,92 @@ class PartialArgsTest < Minitest::Test
     end
     assert_match(/\Athis go_form has no to\n/, error.message)
   end
+
+  # The optionality spelling (dan, 2026-09-02): slots a preamble declares
+  # materialise as keys of the parameters subject, nil when the call did not
+  # say them — `when .open` is "was the modifier said", in the language's
+  # own conditional.
+  def test_a_declared_modifier_reads_nil_when_unsaid
+    badge = <<~PART
+      # content: true
+      # modifiers: tone
+
+      paragraph .tone, .content
+    PART
+    html = render("page account\n  chip \"hello\"\n", partials: { chip: badge },
+                   account: Account.new(name: 'x', balance: 1))
+    assert_includes html, '<p class="paragraph">hello</p>'
+  end
+
+  def test_when_a_modifier_is_said_is_the_languages_own_conditional
+    toggle = <<~PART
+      # content: true
+      # modifiers: open
+
+      choose
+        when .open
+          paragraph "open", .content
+        otherwise
+          paragraph "closed", .content
+    PART
+    open = render(%(page account\n  toggle "x", open: true\n), partials: { toggle: toggle },
+                  account: Account.new(name: 'x', balance: 1))
+    closed = render(%(page account\n  toggle "x"\n), partials: { toggle: toggle },
+                    account: Account.new(name: 'x', balance: 1))
+    assert_includes open, '>open</p>'
+    assert_includes closed, '>closed</p>'
+  end
+
+  def test_when_a_variant_is_named_is_the_languages_own_conditional
+    chip = <<~PART
+      # name: variant
+      # content: true
+
+      choose
+        when .name
+          paragraph .name, .content
+        otherwise
+          paragraph "plain", .content
+    PART
+    named = render(%(page account\n  chip warning, "x"\n), partials: { chip: chip },
+                   account: Account.new(name: 'x', balance: 1))
+    bare = render(%(page account\n  chip "x"\n), partials: { chip: chip },
+                  account: Account.new(name: 'x', balance: 1))
+    assert_includes named, '<p class="paragraph paragraph--warning">x</p>'
+    assert_includes bare, '<p class="paragraph">plain</p>'
+  end
+
+  # Declared slots are scope; everything else falls through to the subject
+  # the partial was invoked against.
+  def test_a_declared_partial_still_reads_the_subject_it_was_invoked_against
+    card = <<~PART
+      # content: true
+
+      title .name
+      money .balance
+      paragraph .content
+    PART
+    html = render(%(page account\n  account_card "note"\n), partials: { account_card: card },
+                  account: Account.new(name: 'Roth', balance: 1500))
+    assert_includes html, '<h2 class="title">Roth</h2>'
+    assert_includes html, '$1,500'
+    assert_includes html, '<p class="paragraph">note</p>'
+  end
+
+  # The runtime consumes the declaration: a preambled partial refuses what
+  # its own file says it does not take.
+  def test_a_declared_partial_refuses_an_undeclared_modifier
+    badge = <<~PART
+      # content: true
+      # modifiers: tone
+
+      paragraph .content
+    PART
+    error = assert_raises(SlimPickins::Error) do
+      render(%(page account\n  chip "x", wat: true\n), partials: { chip: badge },
+             account: Account.new(name: 'x', balance: 1))
+    end
+    assert_match(/`chip` has no `wat:` modifier/, error.message)
+    assert_match(/chip "x", wat: true/, error.message)
+  end
 end

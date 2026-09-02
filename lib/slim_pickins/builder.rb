@@ -321,39 +321,55 @@ module SlimPickins
     # with become its own innermost subject, read as `.content`, `.to`, … —
     # pushed only when the call said any, so a bare partial still reads the
     # subject it was invoked against.
+    #
+    # A partial WITH a preamble declares its scope: its declared slots are
+    # keys of that subject, materialised as nil when the call did not say
+    # them — `when .open` is "was the modifier said" — and everything else
+    # falls through to the subject beneath. Its own file is the single
+    # source of the declaration, read here so the runtime consumes it.
     def render_partial(word, args, **kwargs, &block)
       name, content = name_and_content(args)
       source = @library.source_for(word)
       compilation = Compilation.of(source, "partials/#{word}.sp")
       compilation.refuse!("partials/#{word}.sp")
-      contract = CONTRACTS[word.to_sym]
-      parameters = { content: content, name: name }.merge(kwargs)
+      # The vocabulary's shapes are merged into CONTRACTS; an app partial's
+      # preamble is parsed at the call — one declaration, one home, consumed
+      # by gate (vocabulary) and runtime (every partial).
+      contract = CONTRACTS[word.to_sym] || VocabularyShapes.parse(source)
+      if contract
+        complaint = Contracts.call_complaint(contract, word,
+                                             name.nil? ? [] : [name],
+                                             content.nil? ? [] : [content],
+                                             kwargs.keys)
+        raise Error, complaint if complaint
+      end
+      parameters = parameters_for(contract, name, content, kwargs)
       evaluate = -> { capture { eval_with(compilation.ruby, "partials/#{word}.sp", source.lines) } }
       # Decided before the lambda below, because a local assigned only after
       # a lambda is parsed is a method call inside it — Ruby's locals run
       # forward from their first assignment.
       shifts = contract.nil? || contract.name == :subject
-      push = kwargs.any? || !content.nil? || (!shifts && !name.nil?)
+      push = !contract.nil? || kwargs.any? || !content.nil? || (!shifts && !name.nil?)
       body_block = lambda do
         if contract&.gathers
             # Collect the caller's children as declarations, then let the
             # body splice them at `children` — the gatherer as a partial.
             gatherer = SlimPickins::PartialGatherer.new(self, word)
             with_gatherer(gatherer) { nest(&block) }
-            with_splice(gatherer.collected.flatten(1)) { evaluate_body(evaluate, parameters, kwargs, content, word, push) }
+            with_splice(gatherer.collected.flatten(1)) { evaluate_body(evaluate, parameters, word, push, contract) }
           elsif contract&.inside && contract.inside != :any
             # A child that registers: render, then hand the nodes to the
             # gatherer named in the declaration instead of emitting them.
             target = open_gatherer_named(contract.inside)
             raise Error, "#{word} belongs inside a #{contract.inside}" unless target
 
-            nodes = evaluate_body(evaluate, parameters, kwargs, content, word, push)
+            nodes = evaluate_body(evaluate, parameters, word, push, contract)
             target.collect(nodes)
             nodes
           elsif block
-            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, kwargs, content, word, push) }
+            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, word, push, contract) }
           else
-            evaluate_body(evaluate, parameters, kwargs, content, word, push)
+            evaluate_body(evaluate, parameters, word, push, contract)
           end
         end
       value, empty, body =
@@ -375,8 +391,26 @@ module SlimPickins
       value
     end
 
-    def evaluate_body(evaluate, parameters, _kwargs, _content, word, push)
-      push ? @chain.with(parameters, described_as: "this #{word}") { evaluate.call } : evaluate.call
+    # The optionality spelling (dan, 2026-09-02): slots a preamble declares —
+    # name, content, each modifier — are keys of the parameters subject, nil
+    # when the call did not say them. A preamble-less partial keeps the old
+    # subject: whatever the call carried, nothing more.
+    def parameters_for(contract, name, content, kwargs)
+      return { content: content, name: name }.merge(kwargs) unless contract
+
+      declared = {}
+      declared[:name] = name if contract.name != :none
+      declared[:content] = content if contract.content
+      contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
+      declared
+    end
+
+    def evaluate_body(evaluate, parameters, word, push, contract)
+      if push
+        @chain.with(parameters, described_as: "this #{word}", overlay: !contract.nil?) { evaluate.call }
+      else
+        evaluate.call
+      end
     end
 
     # --- the escape hatch -------------------------------------------------

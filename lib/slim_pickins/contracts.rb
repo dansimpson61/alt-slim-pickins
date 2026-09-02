@@ -199,6 +199,18 @@ module SlimPickins
       end
     end
 
+    # The name/content/modifier half of a violation, in the language's voice.
+    # The gate calls it walking the tree; render_partial calls it for a
+    # partial's own preamble, so an app partial's declaration is consumed by
+    # the runtime too — one complaint machine, two consumers.
+    def call_complaint(contract, word, names, data, modifiers)
+      return "`#{word}` takes no name — #{names.join(', ')}" if contract.name == :none && names.any?
+      return "`#{word}` takes no content or data — #{data.join(', ')}" if !contract.content && data.any?
+
+      unknown = modifiers - (contract.modifiers + [:if])
+      "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?
+    end
+
     def complaints(node, ancestry)
       contract = CONTRACTS[node.word.to_sym]
       return [] unless contract
@@ -209,11 +221,8 @@ module SlimPickins
       modifiers = node.raw_args.zip(node.ranks).select { |_, r| r == 2 }
                   .map { |a, _| a[/\A([a-z_]+):/, 1].to_sym }
 
-      out << "`#{node.word}` takes no name — #{names.join(', ')}" if contract.name == :none && names.any?
-      out << "`#{node.word}` takes no content or data — #{data.join(', ')}" if !contract.content && data.any?
-
-      unknown = modifiers - (contract.modifiers + [:if])
-      out << "`#{node.word}` has no `#{unknown.first}:` modifier" if unknown.any?
+      complaint = call_complaint(contract, node.word, names, data, modifiers)
+      out << complaint if complaint
 
       children = node.children.map(&:word).uniq
       case contract.children

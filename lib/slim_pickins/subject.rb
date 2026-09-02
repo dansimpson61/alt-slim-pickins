@@ -7,9 +7,14 @@ module SlimPickins
   # missing attribute raises in the language's terms instead of resolving to
   # nothing.
   class Subject
-    def initialize(object, described_as: nil)
+    # `fallback` is the subject beneath this one, answered when this subject
+    # does not hold the attribute. Only a partial's parameters use it — an
+    # overlay — so a declared partial's slots are its scope and the rest of
+    # the world stays visible.
+    def initialize(object, described_as: nil, fallback: nil)
       @object = object
       @described_as = described_as
+      @fallback = fallback
     end
 
     attr_reader :object
@@ -52,21 +57,27 @@ module SlimPickins
     # disagreed once — fetch understood hash keys and respond_to? did not — and
     # a hash-backed subject behaved differently from a struct-backed one.
     def has?(attribute)
-      return false if @object.nil?
-      return @object.key?(attribute) || @object.key?(attribute.to_s) if @object.is_a?(Hash)
-
-      @object.respond_to?(attribute)
+      if @object.is_a?(Hash)
+        return true if @object.key?(attribute) || @object.key?(attribute.to_s)
+      elsif !@object.nil? && @object.respond_to?(attribute)
+        return true
+      end
+      @fallback ? @fallback.has?(attribute) : false
     end
 
     def fetch(attribute)
-      raise Nothing.new(attribute, self) if @object.nil?
-      raise UnknownAttribute.new(attribute, self) unless has?(attribute)
-
-      if @object.is_a?(Hash)
-        return @object.key?(attribute) ? @object[attribute] : @object[attribute.to_s]
+      if @object.is_a?(Hash) && @object.key?(attribute)
+        return @object[attribute]
+      elsif @object.is_a?(Hash) && @object.key?(attribute.to_s)
+        return @object[attribute.to_s]
+      elsif !@object.nil? && @object.respond_to?(attribute)
+        return @object.public_send(attribute)
+      elsif @fallback
+        return @fallback.fetch(attribute)
       end
+      raise Nothing.new(attribute, self) if @object.nil?
 
-      @object.public_send(attribute)
+      raise UnknownAttribute.new(attribute, self)
     end
 
     def method_missing(name, *args)
@@ -114,8 +125,12 @@ module SlimPickins
 
     def current = @stack.last
 
-    def with(object, described_as: nil)
-      @stack.push(Subject.new(object, described_as: described_as))
+    # `overlay:` pushes a subject that falls through to the one beneath for
+    # anything it does not answer itself — a partial's declared slots are
+    # scope, the rest of the chain stays visible.
+    def with(object, described_as: nil, overlay: false)
+      fallback = overlay ? @stack.last : nil
+      @stack.push(Subject.new(object, described_as: described_as, fallback: fallback))
       yield
     ensure
       @stack.pop
