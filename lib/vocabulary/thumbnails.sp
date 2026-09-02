@@ -1,6 +1,8 @@
+# name: variant
+# content: true
 # children: thumb
 # gathers: true
 # shape: gathers
 
-grid thumbnails
+grid .name
   children

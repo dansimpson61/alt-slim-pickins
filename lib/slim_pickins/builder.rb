@@ -329,39 +329,48 @@ module SlimPickins
       contract = CONTRACTS[word.to_sym]
       parameters = { content: content, name: name }.merge(kwargs)
       evaluate = -> { capture { eval_with(compilation.ruby, "partials/#{word}.sp", source.lines) } }
-      value, empty, body =
-        about(name) do
-          if contract&.gathers
+      # Decided before the lambda below, because a local assigned only after
+      # a lambda is parsed is a method call inside it — Ruby's locals run
+      # forward from their first assignment.
+      shifts = contract.nil? || contract.name == :subject
+      push = kwargs.any? || !content.nil? || (!shifts && !name.nil?)
+      body_block = lambda do
+        if contract&.gathers
             # Collect the caller's children as declarations, then let the
             # body splice them at `children` — the gatherer as a partial.
             gatherer = SlimPickins::PartialGatherer.new(self, word)
             with_gatherer(gatherer) { nest(&block) }
-            with_splice(gatherer.collected.flatten(1)) { evaluate_body(evaluate, parameters, kwargs, content, word) }
+            with_splice(gatherer.collected.flatten(1)) { evaluate_body(evaluate, parameters, kwargs, content, word, push) }
           elsif contract&.inside && contract.inside != :any
             # A child that registers: render, then hand the nodes to the
             # gatherer named in the declaration instead of emitting them.
             target = open_gatherer_named(contract.inside)
             raise Error, "#{word} belongs inside a #{contract.inside}" unless target
 
-            nodes = evaluate_body(evaluate, parameters, kwargs, content, word)
+            nodes = evaluate_body(evaluate, parameters, kwargs, content, word, push)
             target.collect(nodes)
             nodes
           elsif block
-            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, kwargs, content, word) }
+            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, kwargs, content, word, push) }
           else
-            evaluate_body(evaluate, parameters, kwargs, content, word)
+            evaluate_body(evaluate, parameters, kwargs, content, word, push)
           end
+        end
+      value, empty, body =
+        # A name is a subject unless the word's declaration says otherwise —
+        # a preamble-less partial keeps the old rule, and `name: variant`
+        # passes the name through the parameters without shifting.
+        if shifts
+          about(name, &body_block)
+        else
+          [nil, false, body_block.call]
         end
       @nodes.concat(prune(body, empty)) unless contract&.inside && contract.inside != :any
       value
     end
 
-    def evaluate_body(evaluate, parameters, kwargs, content, word)
-      if kwargs.empty? && content.nil?
-        evaluate.call
-      else
-        @chain.with(parameters, described_as: "this #{word}") { evaluate.call }
-      end
+    def evaluate_body(evaluate, parameters, _kwargs, _content, word, push)
+      push ? @chain.with(parameters, described_as: "this #{word}") { evaluate.call } : evaluate.call
     end
 
     # --- the escape hatch -------------------------------------------------

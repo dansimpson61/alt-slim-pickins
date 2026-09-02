@@ -76,8 +76,15 @@ class ContractsTest < Minitest::Test
     assert_complaint("money primary, .balance\n", '`money` takes no name')
   end
 
+  # nav was the word with no content slot; grid and the other variant words
+  # now accept data as a derived variant, so a partial can pass its own name
+  # through. nav still refuses.
   def test_a_word_with_no_content_slot_refuses_data
-    assert_complaint("grid .cards\n", '`grid` takes no content or data')
+    assert_complaint("nav .cards\n", '`nav` takes no content or data')
+  end
+
+  def test_a_variant_word_accepts_a_derived_variant
+    assert_empty complaints("grid .name\n")
   end
 
   def test_an_unknown_modifier_is_named
