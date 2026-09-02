@@ -13,11 +13,23 @@ module SlimPickins
   class Library
     attr_reader :layout, :partials, :words
 
+    # The language's own vocabulary, written as partials — the dogfood made
+    # visible: new words are drafted in the language itself, in
+    # lib/vocabulary, and every app gets them. Promotion to a Ruby built-in
+    # is a round-end decision, not an assumption.
+    VOCABULARY_DIR = File.expand_path('../vocabulary', __dir__)
+
     def self.from(dir, words: nil)
       dir = File.expand_path(dir)
       layout_path = File.join(dir, 'layout.sp')
-      partials = Dir[File.join(dir, 'partials', '*.sp')].to_h do |path|
+      partials = Dir[File.join(VOCABULARY_DIR, '*.sp')].to_h do |path|
         [File.basename(path, '.sp').to_sym, File.read(path)]
+      end
+      Dir[File.join(dir, 'partials', '*.sp')].each do |path|
+        name = File.basename(path, '.sp').to_sym
+        raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it" if partials.key?(name)
+
+        partials[name] = File.read(path)
       end
       new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials, words: words)
     end

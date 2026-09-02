@@ -37,7 +37,7 @@ non_nouns = contracts.values.reject { |c| c.speech == :noun }
              .map { |c| "#{c.speech}" }.uniq.sort
 
 # --- the vitals, measured over the .sp corpus --------------------------------
-files = Dir[File.join(__dir__, '{pages,examples}', '**', '*.sp')]
+files = Dir[File.join(__dir__, '{pages,examples,lib/vocabulary}', '**', '*.sp')]
 sentences = 0
 args = 0
 max_args = 0

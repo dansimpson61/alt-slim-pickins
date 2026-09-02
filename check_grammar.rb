@@ -24,7 +24,7 @@ DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md
             history/ROADMAP-0.1.md history/PORTFOLIO.md history/CONTENT.md
             history/FIGURES.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +
-         Dir[File.join(__dir__, '{pages,examples}', '**', '*.sp')]
+         Dir[File.join(__dir__, '{pages,examples,lib/vocabulary}', '**', '*.sp')]
            .map { |f| f.sub("#{__dir__}/", '') }).freeze
 
 here = File.expand_path(__dir__)
@@ -46,6 +46,7 @@ renamed = File.read(File.join(here, 'VOCABULARY.md'))
 
 app_words = Set.new
 app_words |= SlimPickins::Library.from(File.join(here, 'pages')).partials.keys.map(&:to_s)
+app_words |= Dir[File.join(here, 'lib', 'vocabulary', '*.sp')].map { |f| File.basename(f, '.sp') }
 Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
   app_words |= SlimPickins::Library.from(dir).partials.keys.map(&:to_s)
 end
