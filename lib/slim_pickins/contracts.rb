@@ -28,14 +28,18 @@ module SlimPickins
   #             :iterates. A word with no declared shape has to argue for
   #             itself in writing; check_shape.rb fails on it.
   Contract = Struct.new(:name, :content, :modifiers, :children, :parents, :subject,
-                        :speech, :shape, keyword_init: true) do
+                        :speech, :shape, :gathers, :inside, :lazy, keyword_init: true) do
     def initialize(**kw)
       super(**{ name: :none, content: false, modifiers: [], children: :none,
-                parents: :any, subject: :keep, speech: :noun, shape: nil }.merge(kw))
+                parents: :any, subject: :keep, speech: :noun, shape: nil,
+                gathers: false, inside: :any, lazy: [] }.merge(kw))
     end
   end
 
-  CONTRACTS = {
+  # The Ruby primitives. The full vocabulary merges these with the shapes
+  # declared in lib/vocabulary's partials — each word's definition and its
+  # declaration live in one file, and this hash is the primitives' home.
+  PRIMITIVES = {
     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
                              children: :any, subject: :shift, shape: :document),
     contents:   Contract.new(shape: :document),
@@ -88,7 +92,8 @@ module SlimPickins
     level:      Contract.new(content: true, parents: [:chart], shape: :registers),
     choose:     Contract.new(children: %i[when otherwise], speech: :verb, shape: :gathers),
     when:       Contract.new(content: true, children: :any, parents: [:choose],
-                             speech: :conjunction, shape: :encloses),
+                             speech: :conjunction, shape: :encloses,
+                             lazy: [:content]),
     otherwise:  Contract.new(children: :any, parents: [:choose], speech: :adverb, shape: :encloses),
     form:       Contract.new(name: :subject, modifiers: %i[to method],
                              children: %i[group field checkbox choice actions disclosure
@@ -107,6 +112,44 @@ module SlimPickins
     option:     Contract.new(name: :value, content: true, parents: [:choice], shape: :registers),
     button:     Contract.new(name: :variant, content: true, modifiers: %i[to type size], shape: :says)
   }.freeze
+
+  # The shapes a vocabulary partial declares, as comment preambles at the top
+  # of its file — the word's own file is the single source of what it is, and
+  # the checkers hold it. Keys: name, content, modifiers, children, gathers,
+  # inside, lazy, shape.
+  module VocabularyShapes
+    module_function
+
+    def load
+      dir = File.expand_path('../vocabulary', __dir__)
+      Dir[File.join(dir, '*.sp')].to_h do |path|
+        word = File.basename(path, '.sp').to_sym
+        [word, parse(File.read(path))]
+      end.compact
+    end
+
+    def parse(source)
+      kwargs = {}
+      source.lines.each do |line|
+        break unless line =~ /\A#\s*([a-z_]+):\s*(.+?)\s*\z/
+
+        key = Regexp.last_match(1).to_sym
+        value = Regexp.last_match(2)
+        kwargs[key] = case key
+                      when :name, :inside then value.to_sym
+                      when :content, :gathers then value == 'true'
+                      when :shape then value.to_sym
+                      else value.split.map(&:to_sym)
+                      end
+      end
+      return nil if kwargs.empty?
+
+      Contract.new(**kwargs)
+    end
+  end
+
+  # The vocabulary's one list: primitives plus the partials' declared shapes.
+  CONTRACTS = PRIMITIVES.merge(VocabularyShapes.load).freeze
 
   # The same checks check_grammar.rb runs, as a module so tests can hold them.
   # A node is Transform's; ancestry is the stack of words above it. Errors

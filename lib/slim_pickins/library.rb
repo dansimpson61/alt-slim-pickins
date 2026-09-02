@@ -53,10 +53,12 @@ module SlimPickins
     private
 
     # Two meanings for one word is the alias problem wearing a new hat, so a
-    # collision is an error rather than an override.
+    # collision is an error rather than an override. The vocabulary's own
+    # partials are words, not app words — they pass the check by right.
     def refuse_shadowing!
       require_relative 'builder'
-      app_words = @partials.keys + @words.flat_map(&:instance_methods)
+      vocabulary = Dir[File.join(VOCABULARY_DIR, '*.sp')].map { |p| File.basename(p, '.sp').to_sym }
+      app_words = (@partials.keys - vocabulary) + @words.flat_map(&:instance_methods)
       app_words.each do |name|
         next unless Builder::WORDS.include?(name)
 

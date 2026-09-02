@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'contracts'
+
 module SlimPickins
   # Turns a page into Ruby source: indentation becomes blocks, and every
   # sentence becomes a method call on the builder, wrapped in `with_line` so
@@ -19,6 +21,7 @@ module SlimPickins
   # every argument is already valid Ruby once a bare name becomes a symbol and
   # a leading dot becomes the subject.
   class Transform
+    def contract_for(word) = CONTRACTS[word.to_sym]
     WORD    = /\A[a-z][a-z_]*\z/
     NAME    = /\A[a-z][a-z_]*\z/
     DOTTED  = /\A\.([a-z_]+\??)\z/
@@ -77,15 +80,7 @@ module SlimPickins
 
     def emit(nodes, depth = 0)
       nodes.flat_map do |n|
-        ruby = if n.word == 'when'
-                 # `when`'s condition arrives as a lambda, unevaluated, so
-                 # the guard can refuse a `when` outside a `choose` *before*
-                 # the argument runs. Without this, `when .x` outside a
-                 # choose reports "this page has no x" — the wrong problem,
-                 # on the one construct with no real page behind it. The
-                 # branch body keeps the ordinary `do` block.
-                 n.compiled.empty? ? 'send(:when)' : "send(:when, -> { #{n.compiled.join(', ')} })"
-               elsif RESERVED.include?(n.word)
+        ruby = if RESERVED.include?(n.word)
                  "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
                elsif n.compiled.empty?
                  n.word
@@ -113,6 +108,15 @@ module SlimPickins
       raw = split_args(rest)
       compiled = raw.map { |a| argument(a, sentence) }
       ranks = raw.map { |a| rank(a) }
+      if contract_for(word)&.lazy&.include?(:content)
+        # A word whose shape declares lazy content receives it unevaluated,
+        # so its guard can fire before the argument runs. `when` was the one
+        # hardcoded case; now laziness is a declared capability any word —
+        # built-in, vocabulary partial, or an app's own — may claim.
+        raw.each_with_index do |arg, i|
+          compiled[i] = "-> { #{compiled[i]} }" if ranks[i] == 1
+        end
+      end
       if ranks != ranks.sort
         raise SyntaxError.new(
           'a name may not come after content or data — names come first',

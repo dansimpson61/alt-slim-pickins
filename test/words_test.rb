@@ -9,21 +9,26 @@ require_relative '../lib/slim_pickins'
 # machinery holds the language's own vocabulary, so a word added to one home
 # and forgotten in another fails here before it can drift.
 class WordsTest < Minitest::Test
+  # The vocabulary is two kinds of word now: Ruby primitives and partials in
+  # lib/vocabulary. Each kind has one home that must agree with the contracts
+  # — the primitives their Words methods and generator handlers, the composed
+  # words their .sp file, whose preamble is the declaration.
   def test_contracts_words_and_generator_agree_on_the_vocabulary
     contracts = SlimPickins::CONTRACTS.keys
-    words = SlimPickins::Words.instance_methods(false)
-
-    assert_equal contracts.sort, words.sort,
-                 'every contract needs a word, and every word a contract'
+    primitives = SlimPickins::Words.instance_methods(false)
+    composed = contracts - primitives
+    vocab_dir = File.expand_path('../lib/vocabulary', __dir__)
+    composed.each do |w|
+      assert File.exist?(File.join(vocab_dir, "#{w}.sp")),
+             "`#{w}` is in the contracts but has no partial in lib/vocabulary"
+    end
 
     flattened = %i[each choose contents] # spliced by the interpreter, not rendered
-    registering = contracts.select { |w| SlimPickins::CONTRACTS[w].parents != :any }
-    # A registering word renders through its gatherer — Table, Chart, Choose
-    # or Choice — so its home is the component, not the Generator.
-    missing = (contracts - flattened - registering).reject do |w|
+    registering = primitives.select { |w| SlimPickins::CONTRACTS[w].parents != :any }
+    missing = (primitives - flattened - registering).reject do |w|
       SlimPickins::Generator.private_instance_methods.include?(w)
     end
-    assert_empty missing, 'every word needs a generator handler'
+    assert_empty missing, 'every primitive needs a generator handler'
   end
 
   # The dogfood, enforced: the vocabulary and the components are written with
