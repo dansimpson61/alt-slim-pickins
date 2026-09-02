@@ -64,7 +64,7 @@ class Phase2Test < Minitest::Test
     error = assert_raises(SlimPickins::Error) do
       render("page book\n  each entry\n    title .name\n", book: { other: [] })
     end
-    assert_equal 'this book has no entries to go through', error.message
+    assert_match(/\Athis book has no entries to go through\n/, error.message)
   end
 
   # --- three levels, through the language this time --------------------
@@ -116,7 +116,7 @@ class Phase2Test < Minitest::Test
 
   def test_column_outside_a_table_says_where_it_belongs
     error = assert_raises(SlimPickins::Error) { render("page book\n  column name\n", book: {}) }
-    assert_equal 'column belongs inside a table', error.message
+    assert_match(/\Acolumn belongs inside a table\n/, error.message)
   end
 
   # --- empty names a situation, it does not write a branch --------------
@@ -218,14 +218,14 @@ class Phase2Test < Minitest::Test
     error = assert_raises(SlimPickins::UnknownAttribute) do
       render("page portfolio\n  section summary\n    title .x\n", portfolio: { x: 1 })
     end
-    assert_equal 'this portfolio has no summary', error.message
+    assert_match(/\Athis portfolio has no summary\n  \(test\), line 2\n    section summary\z/, error.message)
   end
 
   # --- unknown words ----------------------------------------------------
 
   def test_an_unknown_word_fails_with_its_own_name
     error = assert_raises(SlimPickins::Error) { render(%(page book\n  sparkline "x"\n), book: {}) }
-    assert_equal 'there is no word `sparkline`', error.message
+    assert_match(/\Athere is no word `sparkline`\n/, error.message)
   end
 
   # Ruby evaluates arguments before the call, so an unknown word carrying a
@@ -233,6 +233,6 @@ class Phase2Test < Minitest::Test
   # a real problem; this one just names the inner one.
   def test_an_unknown_word_with_a_bad_argument_reports_the_argument_first
     error = assert_raises(SlimPickins::Error) { render("page book\n  sparkline .x\n", book: {}) }
-    assert_equal 'this book has no x', error.message
+    assert_match(/\Athis book has no x\n/, error.message)
   end
 end

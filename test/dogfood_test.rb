@@ -262,6 +262,6 @@ class DogfoodTest < Minitest::Test
       SlimPickins.render("page p\n  option_app fixed, \"Fixed\"\n", locals: { p: {} },
                          library: SlimPickins::Library.new(words: Dogfood))
     end
-    assert_equal 'option belongs inside a choice', error.message
+    assert_match(/\Aoption belongs inside a choice\n/, error.message)
   end
 end

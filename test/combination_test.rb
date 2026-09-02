@@ -115,7 +115,7 @@ class CombinationTest < Minitest::Test
   # guard now, the same one as the other three.
   def test_an_option_outside_a_choice_is_refused
     error = assert_raises(SlimPickins::Error) { draw("option fixed, \"Fixed\"\n") }
-    assert_equal 'option belongs inside a choice', error.message
+    assert_match(/\Aoption belongs inside a choice\n/, error.message)
   end
 
   # `when` used to guard *after* its argument ran, so `when .x` outside a
@@ -123,7 +123,7 @@ class CombinationTest < Minitest::Test
   # arrives unevaluated, and the guard names the misuse.
   def test_when_outside_a_choose_names_the_guard_not_the_argument
     error = assert_raises(SlimPickins::Error) { draw("when .nope\n  text \"x\"\n") }
-    assert_equal 'when belongs inside a choose', error.message
+    assert_match(/\Awhen belongs inside a choose\n/, error.message)
   end
 
   # `choice` used to clear its state instead of restoring it, so a nested
@@ -149,7 +149,7 @@ class CombinationTest < Minitest::Test
       'level .qty, "x"' => 'level belongs inside a chart',
       'when .yes' => 'when belongs inside a choose' }.each do |source, message|
       error = assert_raises(SlimPickins::Error) { draw("#{source}\n", qty: 1) }
-      assert_equal message, error.message
+      assert_match(/\A#{Regexp.escape(message)}\n/, error.message)
     end
   end
 

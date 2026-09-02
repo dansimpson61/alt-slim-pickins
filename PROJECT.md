@@ -5,16 +5,16 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 3, the payload — everything before it has
-  landed: pages evaluate into semantic nodes, the Generator interprets them,
-  the vocabulary lives in words.rb on the same public surface app words get,
-  the sweep moved heading-depth and form-context into the interpreter, and
-  test/dogfood_test.rb re-implements all four gatherers as app words,
-  byte-identical (Builder 867 → ~298 lines). Next: the validation pass over
-  the evaluated tree before emission — every subject resolvable, every
-  attribute answered, the contract satisfied — report-only first, then the
-  gate: a page may not render until the app has been proved able to answer
-  it. Then the roth boot-error test and the per-render cost, measured.
+next_step: ROADMAP-0.2.md Phase 3, the payload — the lineno seam is landed
+  (round 5): the transform wraps every compiled sentence in `with_line`, the
+  Builder keeps the sentence's line on a stack, and runtime errors are
+  located at raise time — path, line, and the sentence itself, in the same
+  voice as a syntax error; test/lineno_test.rb pins it, eleven pages
+  byte-identical. Next: the report-only verifier — evaluate every repo page
+  and both apps against their defaults/fixtures and report (bin/verify_pages.rb
+  shape): every subject resolvable, every attribute answered, the contract
+  satisfied. Then the gate (an app boots by proving its pages, loudly), the
+  roth boot-error test, and the per-render cost, measured.
   Both parked decisions are closed (dan, 2026-09-01): favicon is a page
   modifier, landed and tested; the when-deferral asymmetry stays as
   documented in dogfood_test — an app word that wants guard-before-read uses

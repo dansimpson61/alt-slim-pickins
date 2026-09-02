@@ -45,6 +45,12 @@ landed Phase 3's first half:
   `page` modifier, landed and tested; the `when`-deferral asymmetry stays as
   documented in `dogfood_test.rb` — an app word that wants guard-before-read
   uses a bare name, which the grammar never evaluates.
+- **The lineno seam is landed.** The transform wraps every compiled sentence
+  in `with_line`; the Builder keeps the current sentence's line on a stack
+  while it evaluates, and a runtime error is located *where it is raised* —
+  path, line, and the sentence itself, in the same voice as a syntax error.
+  `test/lineno_test.rb` pins it through nesting, loops, guards, choose
+  branches, partials and the layout; the eleven pages stay byte-identical.
 
 ## The architecture, in one map
 
@@ -62,9 +68,10 @@ landed Phase 3's first half:
 - `contracts.rb` — per-word declarations (name/content/modifiers/children/
   parents/subject/speech/shape) + the generated vocabulary bullets; the
   vocabulary's one list.
-- `builder.rb` (298 lines, 9 ivars) — evaluation only. Its public methods are
+- `builder.rb` (333 lines, 12 ivars) — evaluation only. Its public methods are
   the surface; private are exactly `nest`, `render_partial`,
-  `define_app_words`.
+  `define_app_words`, and the line stack (`with_line`, `eval_with`,
+  `locate`).
 - `words.rb` — the fifty words, node-builders on the public surface.
 - `components.rb` — `Component` + `Table`/`Chart`/`Choose`/`Choice`.
 - `generator.rb` — the HTML interpreter; owns escaping, `format`, tag shape,
@@ -83,18 +90,21 @@ The delete-the-ability-to-fail-late pass, in three steps:
    evaluate every repo page and both apps against their defaults/fixtures and
    report), then as the gate (an app boots by proving its pages, loudly).
 2. **The roth test** — renaming or removing an attribute makes the roth page
-   fail at boot, naming the line and the attribute. The eleven-month silence
-   becomes a boot error, by construction.
+   fail at boot, naming the line and the attribute. The naming half is
+   landed: runtime errors already carry path, line and the sentence itself
+   (the seam, above). What remains is making boot the moment the app proves
+   its pages.
 3. **The cost, measured** — milliseconds per render, with the answer for apps
    that cannot pay them.
 
-**One design note the previous session left for you:** the *runtime* nodes
-(`[:word, attrs, children]`) do not carry line numbers — `Transform::Node`
-does, but `emit_node` drops them. For step 2 to name the line, thread the
-lineno from the transform into evaluation (e.g., the Builder tracks the
-current sentence's line as it evaluates). This is the first sub-task; it is
-the seam between "the error speaks the language" and "the error names the
-line."
+**The design note the previous session left is now closed.** The runtime
+nodes (`[:word, attrs, children]`) still do not carry line numbers — that
+decision stands: the line is *provenance, not meaning*, and the semantic
+tree stays a description. The seam landed differently, and better: the line
+is threaded from the transform into *evaluation* (`with_line` around every
+compiled sentence, a stack in the Builder), and errors are located at raise
+time, before the stack unwinds. A later validator that must name lines on
+tree nodes will need to say so — but the roth test no longer does.
 
 ## How this project works
 
@@ -114,7 +124,7 @@ line."
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 171 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  (currently 177 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
   0 problems)
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore

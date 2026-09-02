@@ -39,6 +39,6 @@ class AppGathererTest < Minitest::Test
       SlimPickins.render("page p\n  thumb .url\n", locals: { p: { url: '/t.png' } },
                          library: SlimPickins::Library.new(words: Words))
     end
-    assert_equal 'thumb belongs inside a thumbnails', error.message
+    assert_match(/\Athumb belongs inside a thumbnails\n/, error.message)
   end
 end

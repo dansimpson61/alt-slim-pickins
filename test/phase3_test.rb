@@ -58,12 +58,12 @@ class Phase3Test < Minitest::Test
              library: library(layout: %(footer "Only chrome.")),
              account: Account.new(name: 'x', balance: 1))
     end
-    assert_equal 'this layout never says `contents`', error.message
+    assert_match(/\Athis layout never says `contents`\n/, error.message)
   end
 
   def test_contents_outside_a_layout_is_an_error
     error = assert_raises(SlimPickins::Error) { render("page account\n  contents\n", account: {}) }
-    assert_equal '`contents` belongs in a layout', error.message
+    assert_match(/\A`contents` belongs in a layout\n/, error.message)
   end
 
   # --- partials as app-defined words ------------------------------------
@@ -110,7 +110,7 @@ class Phase3Test < Minitest::Test
       render(%(page account\n  sparkline "x"\n),
              library: library(layout: nil, partials: { account_card: CARD }), account: {})
     end
-    assert_equal 'there is no word `sparkline`', error.message
+    assert_match(/\Athere is no word `sparkline`\n/, error.message)
   end
 
   # --- shadowing is an error, not an override ---------------------------

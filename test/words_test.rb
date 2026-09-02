@@ -34,7 +34,7 @@ class WordsTest < Minitest::Test
     %w[words.rb components.rb].each do |f|
       source = File.read(File.join(__dir__, '..', 'lib', 'slim_pickins', f))
       refute_match(/\.send\(/, source, "#{f} must not reach private methods with send")
-      refute_match(/@(nodes|chain|bindings|level|in_form|empty_active|gatherers|contents|head_nodes|icons_used|library|out)\b/,
+      refute_match(/@(nodes|chain|bindings|lines|path|source_lines|level|in_form|empty_active|gatherers|contents|head_nodes|icons_used|library|out)\b/,
                    source, "#{f} must not reach into the Builder's ivars")
     end
   end

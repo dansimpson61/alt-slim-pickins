@@ -26,6 +26,7 @@ module SlimPickins
       @empty_active = false # set while the named subject is an empty collection
       @bindings = {}        # `each holding` binds `holding` for reaching out
       @gatherers = []       # the components whose children are declarations
+      @lines = []           # the sentence being evaluated, so an error can name it
       @contents = nil       # the page's own nodes, while a layout renders
       @head_nodes = []      # words that belong in <head>, wherever they are said
       @icons_used = []      # so the sprite carries only the symbols a page uses
@@ -69,9 +70,9 @@ module SlimPickins
       @bindings.key?(name) || subject.has?(name) || super
     end
 
-    def render(ruby, path)
+    def render(ruby, path, source: nil)
       @nodes = []
-      instance_eval(ruby, path, 1)
+      eval_with(ruby, path, source&.lines)
       @nodes
     end
 
@@ -89,7 +90,7 @@ module SlimPickins
     # is no other surface; this is the dogfood made true: the vocabulary is
     # written with exactly what apps get. What remains private is the
     # evaluation plumbing no word needs: nest, render_partial,
-    # define_app_words.
+    # define_app_words, and the line stack (with_line, eval_with, locate).
 
     # Every word hands its node to the current collection — the body's, or the
     # head's for the words that belong there. It returns the node, so words
@@ -251,13 +252,47 @@ module SlimPickins
       return capture(&block) unless @library&.layout
 
       stow_contents(capture(&block))
-      nodes = capture { instance_eval(Transform.call(@library.layout, path: 'layout.sp'), 'layout.sp', 1) }
+      nodes = capture { eval_with(Transform.call(@library.layout, path: 'layout.sp'),
+                                  'layout.sp', @library.layout.lines) }
       raise Error, 'this layout never says `contents`' if @contents
 
       nodes
     end
 
     private
+
+    # Every place the grammar's Ruby runs — the page, a partial, the layout.
+    # It remembers where, so an error the words raise can be located there.
+    def eval_with(ruby, path, source_lines)
+      was_path = @path
+      was_lines = @source_lines
+      @path = path
+      @source_lines = source_lines
+      instance_eval(ruby, path, 1)
+    ensure
+      @path = was_path
+      @source_lines = was_lines
+    end
+
+    # The transform wraps every compiled sentence in this, so the builder
+    # always knows which sentence is evaluating. An error is located here —
+    # where the line is still on the stack — so a runtime error names the
+    # line the way a syntax error names it.
+    def with_line(lineno)
+      @lines.push(lineno)
+      yield
+    rescue Error => e
+      raise locate(e)
+    ensure
+      @lines.pop
+    end
+
+    def locate(error)
+      return error if error.located?
+
+      line = @lines.last
+      error.locate(@path, line, line && @source_lines && @source_lines[line - 1]&.strip)
+    end
 
     def nest(&block)
       instance_eval(&block) if block
@@ -269,7 +304,7 @@ module SlimPickins
       name, = name_and_content(args)
       source = @library.source_for(word)
       ruby = Transform.call(source, path: "partials/#{word}.sp")
-      value, empty, children = about(name) { capture { instance_eval(ruby, "partials/#{word}.sp", 1) } }
+      value, empty, children = about(name) { capture { eval_with(ruby, "partials/#{word}.sp", source.lines) } }
       @nodes.concat(prune(children, empty))
       value
     end

@@ -228,3 +228,7 @@ Both parked decisions closed by dan in one breath: favicon is a page modifier (l
 ## 2026-09-01 — DeepSeek v4-pro
 
 Handoff prepared at 66% context, and the discipline it required was the project's own: the handoff now opens with the architecture map and the payload's first design note — the runtime nodes carry no line numbers, and threading the transform's lineno into evaluation is the seam between 'the error speaks the language' and 'the error names the line'. A handoff is a resume, not a novel: it should teach the next conversation the one thing it must not re-derive (the map) and the one sub-task it should start with (the seam).
+
+## 2026-09-01 — DeepSeek v4-pro
+
+The lineno seam landed, and its lesson was where the location must be captured: not at the rescue site. Every ensure pops the line stack as the error unwinds, so a rescue at the eval boundary sees an empty stack — locate at RAISE time, inside the innermost with_line rescue, where the stack is still full. Second: the line is provenance, not meaning — runtime nodes stay [:word, attrs, children], and the seam went into evaluation, exactly as the handoff suggested, so the semantic tree stays a description. Third: wrapping every sentence costs an indentation level per nesting, so the transform emits children at depth+2 — the compile-output test caught the off-by-one. Fourth: the location must be composed into message itself (SyntaxErrors voice) — a separate reader would not make a boot failure print the line without app cooperation.

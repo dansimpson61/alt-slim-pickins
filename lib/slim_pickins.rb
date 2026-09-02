@@ -21,7 +21,7 @@ module SlimPickins
   def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
     ruby = Transform.call(source, path: path)
     builder = Builder.new(Page.new(locals: locals, helpers: helpers), library)
-    nodes = builder.render(ruby, path)
+    nodes = builder.render(ruby, path, source: source)
     nodes = filter.call(nodes) if filter
     Generator.new.call(nodes)
   end
@@ -31,7 +31,7 @@ module SlimPickins
   # would walk.
   def evaluate(source, path: '(page)', locals: {}, helpers: nil, library: nil)
     ruby = Transform.call(source, path: path)
-    Builder.new(Page.new(locals: locals, helpers: helpers), library).render(ruby, path)
+    Builder.new(Page.new(locals: locals, helpers: helpers), library).render(ruby, path, source: source)
   end
 
   # The Ruby a page compiles to. Useful for seeing what the transform did.

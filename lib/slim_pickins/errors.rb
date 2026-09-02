@@ -1,18 +1,37 @@
 # frozen_string_literal: true
 
 module SlimPickins
-  Error = Class.new(StandardError)
-
   # Errors speak the language, not the implementation: they name the word, the
   # line, and what was expected — never a Ruby method or an internal class.
-  class SyntaxError < Error
+  # A syntax error is located by the Transform as it compiles; a runtime error
+  # is located by the Builder, which knows the sentence being evaluated. Both
+  # carry the location the same way, so both speak with the same voice.
+  class Error < StandardError
     attr_reader :path, :lineno, :line
 
-    def initialize(message, path, lineno, line)
+    def locate(path, lineno, line)
       @path = path
       @lineno = lineno
       @line = line
-      super("#{message}\n  #{path}, line #{lineno}\n    #{line}")
+      self
+    end
+
+    def located? = !@path.nil?
+
+    def message
+      return super unless located?
+
+      where = +@path
+      where << ", line #{@lineno}" if @lineno
+      where << "\n    #{@line}" if @line
+      "#{super}\n  #{where}"
+    end
+  end
+
+  class SyntaxError < Error
+    def initialize(message, path, lineno, line)
+      super(message)
+      locate(path, lineno, line)
     end
   end
 

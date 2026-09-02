@@ -62,21 +62,21 @@ class ContractTest < Minitest::Test
     error = assert_raises(SlimPickins::UnknownAttribute) do
       label(locals: { account: Object.new })
     end
-    assert_equal 'this account has no name', error.message
+    assert_match(/\Athis account has no name\n/, error.message)
   end
 
   # The failure is that the subject is empty, not that it lacks an attribute,
   # and saying the second would send a reader looking in the wrong place.
   def test_an_empty_subject_says_so_rather_than_blaming_the_attribute
     error = assert_raises(SlimPickins::Nothing) { label(locals: { account: nil }) }
-    assert_equal 'nothing to ask for name — the subject is empty', error.message
+    assert_match(/\Anothing to ask for name — the subject is empty\n/, error.message)
   end
 
   # `page account` is the line at fault. Skipping quietly would report the
   # missing attribute three lines later, on a line that is not the cause.
   def test_a_named_subject_that_is_absent_fails_on_the_line_that_named_it
     error = assert_raises(SlimPickins::UnknownAttribute) { label(locals: {}) }
-    assert_equal 'this page has no account', error.message
+    assert_match(/\Athis page has no account\n  \(test\), line 1\n    page account\z/, error.message)
   end
 
   # --- the page is the outermost subject ------------------------------

@@ -54,12 +54,12 @@ class Phase8Test < Minitest::Test
 
   def test_a_band_outside_a_chart_says_so
     error = assert_raises(SlimPickins::Error) { draw('band rent') }
-    assert_equal 'band belongs inside a chart', error.message
+    assert_match(/\Aband belongs inside a chart\n/, error.message)
   end
 
   def test_a_level_outside_a_chart_says_so
     error = assert_raises(SlimPickins::Error) { draw('level .ceiling, "Cap"') }
-    assert_equal 'level belongs inside a chart', error.message
+    assert_match(/\Alevel belongs inside a chart\n/, error.message)
   end
 
   # --- what it infers ------------------------------------------------------

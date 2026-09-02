@@ -2,10 +2,16 @@
 
 module SlimPickins
   # Turns a page into Ruby source: indentation becomes blocks, and every
-  # sentence becomes a method call on the builder.
+  # sentence becomes a method call on the builder, wrapped in `with_line` so
+  # the builder always knows which sentence it is evaluating — the seam that
+  # lets a runtime error name the line.
   #
-  #   section holdings          section(:holdings) do
-  #     title .name        =>     title(subject.name)
+  #   section holdings          with_line(3) do
+  #     title .name        =>     section(:holdings) do
+  #                                 with_line(4) do
+  #                                   title(subject.name)
+  #                                 end
+  #                               end
   #                             end
   #
   # The transform is deliberately thin. It does not know what any word means —
@@ -87,7 +93,14 @@ module SlimPickins
                  "#{n.word}(#{n.compiled.join(', ')})"
                end
         pad = '  ' * depth
-        n.children.any? ? ["#{pad}#{ruby} do", *emit(n.children, depth + 1), "#{pad}end"] : ["#{pad}#{ruby}"]
+        # Children nest two levels deeper than their sentence — one for
+        # with_line's block, one for the word's own.
+        if n.children.any?
+          ["#{pad}with_line(#{n.lineno}) do", "#{pad}  #{ruby} do",
+           *emit(n.children, depth + 2), "#{pad}  end", "#{pad}end"]
+        else
+          ["#{pad}with_line(#{n.lineno}) do", "#{pad}  #{ruby}", "#{pad}end"]
+        end
       end
     end
 

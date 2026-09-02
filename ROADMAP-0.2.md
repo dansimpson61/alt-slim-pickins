@@ -533,7 +533,7 @@ into another object's ivars; byte-diffs of both apps' pages unchanged except
 the deliberate renames; the gathering-copy count is **1**, measured;
 `test/combination_test.rb` extended with the crash cases and green.
 
-### Phase 3 — Spend the description  🔄 in progress — rounds 1–4 done (2026-09-01)
+### Phase 3 — Spend the description  🔄 in progress — rounds 1–5 done (2026-09-01)
 
 The payload. 0.1 built a parsed, checkable description of what a page means and
 spent it only on HTML. This phase spends it on the one question that matters
@@ -558,7 +558,14 @@ that contracts, Words and the Generator agree on all fifty; (4) dan's
 app-word examples were worked, found two real defects (a nil child crashed
 the generator; nested `tag` calls double-rendered), and the hatch became six
 methods — `token`, `html`, `element`, `tag`, `children`, `arguments` —
-`element` the value-form for nesting.
+`element` the value-form for nesting. (5) the lineno seam — the payload's
+first sub-task. The transform wraps every compiled sentence in `with_line`,
+the Builder keeps the sentence's line on a stack while it evaluates, and a
+runtime error is located *where it is raised*, before any stack unwinds:
+path, line, and the sentence itself, in the same voice as a syntax error.
+`test/lineno_test.rb` pins it through nesting, loops, guards, re-rendered
+choose branches, partials and the layout; the eleven pages stay
+byte-identical.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
 The vocabulary is the language's own lowest layer: a `.sp` composition of
@@ -599,7 +606,8 @@ evaluated. No grammar change; the evidence asks for none.
   to answer it.
 - **The roth test** `agent` — renaming or removing an attribute makes the roth
   page fail at boot, naming the line and the attribute. The eleven-month
-  silence becomes a boot error, by construction.
+  silence becomes a boot error, by construction. The naming half is landed
+  (round 5's seam); the boot half rides the gate above.
 - **The cost, measured** `agent` — the milliseconds the pass adds per render,
   recorded, with the answer for apps that cannot pay them.
 

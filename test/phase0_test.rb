@@ -22,9 +22,15 @@ class Phase0Test < Minitest::Test
           field name
     PAGE
     assert_equal <<~RUBY, ruby
-      page(:account) do
-        form(to: :save) do
-          field(:name)
+      with_line(1) do
+        page(:account) do
+          with_line(2) do
+            form(to: :save) do
+              with_line(3) do
+                field(:name)
+              end
+            end
+          end
         end
       end
     RUBY
@@ -32,10 +38,10 @@ class Phase0Test < Minitest::Test
 
   def test_the_five_argument_kinds_each_have_one_spelling
     ruby = SlimPickins.compile('field name, "Label", type: text')
-    assert_equal %(field(:name, "Label", type: :text)\n), ruby
+    assert_equal %(with_line(1) do\n  field(:name, "Label", type: :text)\nend\n), ruby
 
-    assert_equal %(title(subject.name)\n), SlimPickins.compile('title .name')
-    assert_equal %(note(order.number)\n), SlimPickins.compile('note order.number')
+    assert_equal %(with_line(1) do\n  title(subject.name)\nend\n), SlimPickins.compile('title .name')
+    assert_equal %(with_line(1) do\n  note(order.number)\nend\n), SlimPickins.compile('note order.number')
   end
 
   # --- errors speak the language --------------------------------------
@@ -54,7 +60,7 @@ class Phase0Test < Minitest::Test
       render("page account\n  form\n    field nmae\n",
              account: Account.new(name: 'Roth', balance: 1))
     end
-    assert_equal 'this account has no nmae', error.message
+    assert_match(/\Athis account has no nmae\n  \(test\), line 3\n    field nmae\z/, error.message)
   end
 
   # --- the subject chain ----------------------------------------------
