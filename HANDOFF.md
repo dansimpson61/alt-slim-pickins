@@ -32,7 +32,7 @@ byte-identical throughout) and then landed all of Phase 3:
   tree of `[:word, attrs, children]`; `SlimPickins.evaluate` returns it;
   `Generator` interprets it as HTML; `SlimPickins.render(..., filter:)`
   exposes the pipeline's middle stage.
-- **The vocabulary left the Builder.** `words.rb` holds the fifty words,
+- **The vocabulary left the Builder.** `words.rb` holds the fifty-three words,
   `components.rb` the four gatherers, `generator.rb` the presentation,
   `builder.rb` the evaluation — and the vocabulary is written on the **same
   public surface an app's words get** (subject, chain, label_for, format_of,
@@ -108,7 +108,7 @@ byte-identical throughout) and then landed all of Phase 3:
   the surface; private are exactly `nest`, `render_partial`,
   `define_app_words`, and the line stack (`with_line`, `eval_with`,
   `locate`).
-- `words.rb` — the fifty words, node-builders on the public surface.
+- `words.rb` — the fifty-three words, node-builders on the public surface.
 - `components.rb` — `Component` + `Table`/`Chart`/`Choose`/`Choice`.
 - `generator.rb` — the HTML interpreter; owns escaping, `format`, tag shape,
   and the walk's context (depth, form-ness — tree facts, not word state).
@@ -137,11 +137,17 @@ short-list — and the challenges showed up anyway.
   modifier, flash, bare input, textarea, link active-state; `page` owns the
   h1 and head title; and the hatch's emit-vs-value trap (`tag` emits,
   `element` doesn't) rendered the port's nav three times before a test saw.
-- **Next** — dan's call: which gaps become words. `Settle routing` (the
-  roadmap's next step) is its first case — `link` and the minimal POST form
-  (G1+G2) are the dashboard's dominant idiom; the class-scheme question
-  (G3) is the big one. `~/dev/dashboard` stays untouched and working
-  throughout.
+- **Next** — Round A landed the negotiated primitives: `hidden`, `input`,
+  `textarea`, `form` widened to carry `button`/`hidden`/`input`/`textarea`
+  (the restriction was an accidental artifact, not bedrock — dan's method,
+  applied and recorded in the roadmap), `card` titles, `link active:`,
+  `button size:` — and partials now receive their arguments as their own
+  subject (`.content`, `.to`). Round B: the port's vocabulary moves into
+  partials (`lib/vocabulary` for ours, `views/partials` for the app's),
+  triage is re-authored as a slim-pickins page in our own look, and
+  `bin/dashboard_parity.rb` compares behaviour only — not classes. Round
+  ends with dan's promotion decision: which vocabulary graduates to core.
+  `~/dev/dashboard` stays untouched and working throughout.
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that

@@ -17,8 +17,8 @@ is scaffolding. This language exists so that a page holds only the first kind
 of line, and every piece of scaffolding — the markup, the classes, the
 escaping, the loop — lives in one place where it can be fixed once.
 
-A page in this language is a **description of what the page means**, in fifty
-known words, with every subject resolvable. What the page means is checkable,
+A page in this language is a **description of what the page means**, in
+fifty-three known words, with every subject resolvable. What the page means is checkable,
 before it renders.
 
 ## The grammar, in one sentence
@@ -122,8 +122,9 @@ and the leading word tells you how to read the rest of the line.
 
 ## The register
 
-Counted across the fifty words: **45 are common nouns** — 43 of them singular
-— and the five non-nouns are exactly the control flow (`each` a determiner,
+Counted across the fifty-three words: **48 are common nouns** — two of them
+plural by nature (`actions`, `contents`) — and the five non-nouns are
+exactly the control flow (`each` a determiner,
 `empty` an adjective, `choose` a verb, `when` a conjunction, `otherwise` an
 adverb). A sentence is head noun plus specifier: the register of a
 **label**, not of prose. That is why a page reads like a spec sheet of
@@ -362,8 +363,8 @@ What this document exists to carry forward, sentence by sentence:
 
 ## Adding a word
 
-Fifty words is where the vocabulary stands, and the discipline for the
-fifty-first is the same one that wrote the first fifty: draft it against a
+Fifty-three words is where the vocabulary stands, and the discipline for
+the next is the same one that wrote the first fifty-three: draft it against a
 real page that already hand-builds the thing, fill the seven slots (name,
 content, modifiers, children, subject, infers, renders) without a blank, and
 give it a sentence that [`check_grammar.rb`](check_grammar.rb) holds. A word

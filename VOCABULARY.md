@@ -221,6 +221,25 @@ group assumptions
 group assumptions, "Advanced assumptions"
 ```
 
+### `hidden`
+
+- **name** — a name
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+- **infers** — the value from the subject when it is not said, the way `field`
+  reads it. A hidden input is what a form carries without showing: the name
+  and value travel with the submit.
+- **renders** — `<input type="hidden">`
+
+```
+form to: "/actions/commit", method: post
+  hidden path, .name
+  hidden return_to, "/triage"
+  button "Commit"
+```
+
 ### `grid`
 
 - **name** — the variant
@@ -328,7 +347,7 @@ table holdings
 ### `card`
 
 - **name** — the variant
-- **content** — none
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
@@ -780,7 +799,7 @@ tells a reader nothing and flattens everything that would have.
 
 - **name** — the destination
 - **content** — text or data, when there is any
-- **modifiers** — `to:`
+- **modifiers** — `to:`, `active:`
 - **children** — none
 - **subject** — unchanged
 - **infers** — the path from the name and the subject (`show` on a holding
@@ -796,7 +815,7 @@ link show, "View holding"
 
 - **name** — the variant
 - **content** — text or data, when there is any
-- **modifiers** — `to:`, `type:`
+- **modifiers** — `to:`, `type:`, `size:`
 - **children** — none
 - **subject** — unchanged
 - **infers** — `type="submit"` inside a `form`, `type="button"` outside one.
@@ -813,7 +832,7 @@ button "Show baseline", to: baseline
 - **name** — the subject this word presents; it must be there
 - **content** — none
 - **modifiers** — `to:`, `method:`
-- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`
 - **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`
@@ -856,6 +875,38 @@ Phase 0 built this word and measured it. The name, value and type were right
 every time; the label was right about three times in ten, which is why the
 `infers` slot above no longer promises it unconditionally. See
 [PHASE0.md](history/PHASE0.md).
+
+### `input`
+
+- **name** — the attribute
+- **content** — text or data, when there is any
+- **modifiers** — `type:`, `placeholder:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — the current value from the subject; the input type from the
+  value's class, like `field`. Unlike `field`, it says no label — a search
+  box names nothing, it just sits there.
+- **renders** — a bare `<input>`
+
+```
+input q, placeholder: "search…"
+```
+
+### `textarea`
+
+- **name** — the attribute
+- **content** — text or data, when there is any
+- **modifiers** — `rows:`, `required:`
+- **children** — none
+- **subject** — unchanged
+- **infers** — the same as `field`: the name, the current value from the
+  subject, and the label with the same three levels of precedence.
+- **renders** — `<label>` plus `<textarea>`
+
+```
+form
+  textarea notes, "What changed?", rows: 3
+```
 
 ### `checkbox`
 

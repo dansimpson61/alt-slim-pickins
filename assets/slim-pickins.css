@@ -315,3 +315,9 @@ time { color: var(--ink-soft); }
 }
 .button:hover { background: var(--surface-soft); }
 .button--primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.button--danger { color: var(--negative); border-color: var(--negative); }
+.button--sm { padding: calc(var(--step) / 2) var(--step); font-size: var(--size-small); }
+
+.link { color: var(--accent); text-decoration: none; }
+.link:hover { text-decoration: underline; }
+.link--active { color: var(--ink); font-weight: var(--weight-strong); }

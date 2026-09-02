@@ -138,7 +138,9 @@ module SlimPickins
     end
 
     def link(attrs, _children)
-      full_tag('a', attrs[:label], href: attrs[:to]&.to_s || "/#{attrs[:name]}")
+      classes = [token(:link), attrs[:active] ? 'link--active' : nil].compact.join(' ')
+      full_tag('a', attrs[:label], href: attrs[:to]&.to_s || "/#{attrs[:name]}",
+               class: classes, 'aria-current': attrs[:active] ? 'page' : nil)
     end
 
     def footer(attrs, children)
@@ -228,6 +230,7 @@ module SlimPickins
 
     def card(attrs, children)
       open_tag('article', class: token(:card, attrs[:variant]), id: attrs[:id])
+      full_tag(:h2, attrs[:title], class: token(:card, :title)) if attrs[:title]
       with_depth(@depth + 1) { children.each { |c| emit(c) } }
       @out << '</article>'
     end
@@ -362,6 +365,28 @@ module SlimPickins
       @out << '</div>'
     end
 
+    def input(attrs, _children)
+      void_tag('input',
+               id: attrs[:name].to_s,
+               name: attrs[:name].to_s,
+               type: attrs[:kind].to_s,
+               value: attrs[:value]&.to_s,
+               placeholder: attrs[:placeholder]&.to_s)
+    end
+
+    def textarea(attrs, _children)
+      open_tag('div', class: token(:field))
+      full_tag('label', attrs[:label], for: attrs[:name].to_s)
+      open_tag('textarea', id: attrs[:name].to_s, name: attrs[:name].to_s,
+                           rows: attrs[:rows], required: attrs[:required] ? 'required' : nil)
+      @out << esc(attrs[:value])
+      @out << '</textarea></div>'
+    end
+
+    def hidden(attrs, _children)
+      void_tag('input', type: 'hidden', name: attrs[:name].to_s, value: attrs[:value]&.to_s)
+    end
+
     def checkbox(attrs, _children)
       open_tag('div', class: token(:field, :checkbox))
       open_tag('label', for: attrs[:name].to_s)
@@ -388,10 +413,12 @@ module SlimPickins
     end
 
     def button(attrs, _children)
+      classes = token(:button, attrs[:variant])
+      classes += " button--#{attrs[:size]}" if attrs[:size]
       full_tag('button', attrs[:label],
                type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
                formaction: attrs[:to]&.to_s,
-               class: token(:button, attrs[:variant]))
+               class: classes)
     end
 
     def actions(_attrs, children)

@@ -41,8 +41,8 @@ module SlimPickins
 
       Array(@library.words).each { |mod| extend mod }
       @library.partials.each_key do |word|
-        define_singleton_method(word) do |*args, &block|
-          render_partial(word, args, &block)
+        define_singleton_method(word) do |*args, **kwargs, &block|
+          render_partial(word, args, **kwargs, &block)
         end
       end
     end
@@ -300,13 +300,26 @@ module SlimPickins
     end
 
     # A partial takes the current subject, like any word that names none, and
-    # shifts it when it names one — the same rule as `section`.
-    def render_partial(word, args, &block)
-      name, = name_and_content(args)
+    # shifts it when it names one — the same rule as `section`. Its
+    # arguments are its scope: the content and the modifiers it was said
+    # with become its own innermost subject, read as `.content`, `.to`, … —
+    # pushed only when the call said any, so a bare partial still reads the
+    # subject it was invoked against.
+    def render_partial(word, args, **kwargs, &block)
+      name, content = name_and_content(args)
       source = @library.source_for(word)
       compilation = Compilation.of(source, "partials/#{word}.sp")
       compilation.refuse!("partials/#{word}.sp")
-      value, empty, children = about(name) { capture { eval_with(compilation.ruby, "partials/#{word}.sp", source.lines) } }
+      parameters = { content: content }.merge(kwargs)
+      evaluate = -> { capture { eval_with(compilation.ruby, "partials/#{word}.sp", source.lines) } }
+      value, empty, children =
+        about(name) do
+          if kwargs.empty? && content.nil?
+            evaluate.call
+          else
+            @chain.with(parameters, described_as: "this #{word}") { evaluate.call }
+          end
+        end
       @nodes.concat(prune(children, empty))
       value
     end

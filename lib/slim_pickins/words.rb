@@ -53,9 +53,9 @@ module SlimPickins
       emit_node([:nav, { variant: variant }, capture(&block)])
     end
 
-    def link(*args, to: nil)
+    def link(*args, to: nil, active: nil)
       name, label = arguments(args)
-      emit_node([:link, { name: name, label: label_for(name, label), to: to }, []])
+      emit_node([:link, { name: name, label: label_for(name, label), to: to, active: active }, []])
     end
 
     def footer(*args, &block)
@@ -168,8 +168,8 @@ module SlimPickins
     end
 
     def card(*args, &block)
-      variant, = arguments(args)
-      emit_node([:card, { variant: variant, id: card_id }, capture(&block)])
+      variant, title = arguments(args)
+      emit_node([:card, { variant: variant, id: card_id, title: title }, capture(&block)])
     end
 
     def figure(*args, &block)
@@ -346,6 +346,36 @@ module SlimPickins
                            required: required }, []])
     end
 
+    # `field` insists on a label, because data entry explains what it asks.
+    # A search box does not; it names nothing and just sits there, so the
+    # bare input is its own word rather than a field with its label omitted.
+    def input(*args, type: nil, placeholder: nil)
+      name, value = arguments(args)
+      shown = value.nil? ? subject.fetch(name) : value
+      emit_node([:input, { name: name, value: shown,
+                           kind: type || Inference.input_type(shown),
+                           placeholder: placeholder }, []])
+    end
+
+    # The multi-line sibling of `field` — the same label/value inference, a
+    # different widget.
+    def textarea(*args, rows: nil, required: nil)
+      name, label = arguments(args)
+      value = subject.fetch(name)
+      emit_node([:textarea, { name: name, label: label_for(name, label),
+                              value: value, rows: (rows || 4).to_s,
+                              required: required }, []])
+    end
+
+    # What a form carries that is not said: the name and the value travel
+    # with the submit without ever being seen. `hidden path, .value` names
+    # both; `hidden path` reads the subject, like `field` reads it.
+    def hidden(*args)
+      name, value = arguments(args)
+      shown = value.nil? ? subject.fetch(name) : value
+      emit_node([:hidden, { name: name, value: shown }, []])
+    end
+
     def checkbox(*args)
       name, label = arguments(args)
       value = subject.fetch(name)
@@ -362,11 +392,11 @@ module SlimPickins
       register!(Choice, { value: value, label: label }, 'option')
     end
 
-    def button(*args, to: nil, type: nil)
+    def button(*args, to: nil, type: nil, size: nil)
       variant, label = arguments(args)
       emit_node([:button, { variant: variant,
                             label: label || (variant && Inference.label(variant)),
-                            to: to, type: type }, []])
+                            to: to, type: type, size: size }, []])
     end
 
     def actions(&block)

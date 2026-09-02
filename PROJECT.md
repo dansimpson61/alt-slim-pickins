@@ -5,19 +5,17 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-02'
-next_step: ROADMAP-0.2.md Phase 4, the exam — dan chose triage.slim and the
-  first port is landed: examples/dashboard/ renders the real Scan queue
-  through the language (layout + triage + confirm_archive + DashboardWords
-  on the public surface, actions wired to Workspace, boot-proven, in
-  verify_pages' corpus), held by test/dashboard_test.rb and
-  bin/dashboard_parity.rb — 26 affordances, 0 missing against the live
-  dashboard. The exam did its job: INVENTORY.md logs eleven gaps (G1–G11) —
-  no hidden word, form forbids button, the class scheme lives in the
-  Generator not the description, no card title/size/flash/textarea/bare
-  input/link-active-state, page owns the h1, and the tag-vs-element trap.
-  Next: dan's call on which gaps become words (Settle routing's first case:
-  link + the minimal POST form), then the next view. ~/dev/dashboard stays
-  untouched.
+next_step: ROADMAP-0.2.md Phase 4 — Round A landed by dan's method: form's
+  children-list was shown to be an accidental artifact (born from the roth
+  data-entry slice), so the minimal POST form is now prose — hidden, input,
+  textarea joined the vocabulary (53 words), form carries button/hidden/
+  input/textarea, card takes a title, link takes active:, button takes
+  size:; and partials receive their arguments as their own subject
+  (.content, .to). Next: Round B — the port's vocabulary moves into
+  partials (lib/vocabulary for ours, views/partials for the app's), triage
+  is re-authored as a slim-pickins page in our own look, the parity
+  instrument compares behaviour only; round ends with dan's promotion
+  decision. ~/dev/dashboard stays untouched.
   Phase 3's compile-once cache landed (round 10, 2026-09-02): Compilation
   holds the gate's verdict and the compiled Ruby keyed by source — warm
   render 1.37 ms, cold 2.75 ms, 0.10 ms per partial-in-each row.

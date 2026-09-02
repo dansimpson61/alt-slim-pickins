@@ -711,6 +711,25 @@ rendered the whole nav three times before a test saw it. These are the
 limitations the exam exists to find; which become words is the next round's
 question, and `Settle routing` is its first case.
 
+*Round A (2026-09-02), by dan's method.* dan re-set the exam: the port is
+the page *as authored in slim-pickins* — our look, not the dashboard's
+bytes — success is the missing vocabulary named and negotiated. The method:
+a rule falls when the change empowers and improves, once it is shown to be
+an accidental artifact rather than bedrock. Applied to `form`: its
+children-list was born from the roth data-entry slice (Phase 0) and
+objectified from those pages; nothing in the form's design depends on
+excluding subject-free words — artifact, challenged. Landed: `hidden`,
+`input`, `textarea` joined the vocabulary (53 words now); `form`'s children
+widened to `button`/`hidden`/`input`/`textarea` — the minimal POST form is
+prose; `card` takes a title; `link` takes `active:` (aria-current); `button`
+takes `size:`. And the mechanism the vocabulary-as-partials plan needs: **a
+partial's arguments are its scope** — its content and modifiers become its
+own innermost subject (`.content`, `.to`), pushed only when the call said
+any, so bare partials are untouched. Held by `test/ui_words_test.rb` and
+`test/partial_args_test.rb`; the stylesheet gained `.link`/`.link--active`/
+`.button--sm`/`.button--danger`. Round B: the port's vocabulary moves into
+partials, triage is re-authored, parity measures behaviour only.
+
 *Done looks like:* the view renders through the language; the branch inventory
 matches with every difference logged; routing is settled and recorded; dan's
 judgement stands in this file.

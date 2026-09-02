@@ -43,7 +43,7 @@ module SlimPickins
     meta:       Contract.new(name: :name, content: true, shape: :document),
     script:     Contract.new(content: true, modifiers: [:defer], shape: :document),
     nav:        Contract.new(name: :variant, children: [:link], shape: :encloses),
-    link:       Contract.new(name: :destination, content: true, modifiers: [:to], shape: :says),
+    link:       Contract.new(name: :destination, content: true, modifiers: %i[to active], shape: :says),
     footer:     Contract.new(content: true, children: :any, shape: :encloses),
     aside:      Contract.new(children: :any, shape: :encloses),
     section:    Contract.new(name: :subject, content: true, children: :any, subject: :shift,
@@ -62,7 +62,7 @@ module SlimPickins
     list:       Contract.new(name: :variant, children: %i[item each], shape: :encloses),
     item:       Contract.new(name: :variant, content: true, children: :any, parents: [:list],
                              shape: :registers),
-    card:       Contract.new(name: :variant, children: :any, shape: :encloses),
+    card:       Contract.new(name: :variant, content: true, children: :any, shape: :encloses),
     actions:    Contract.new(children: %i[link button], shape: :encloses),
     figure:     Contract.new(content: true, children: :any, shape: :encloses),
     disclosure: Contract.new(content: true, modifiers: [:open], children: :any, shape: :encloses),
@@ -91,15 +91,21 @@ module SlimPickins
                              speech: :conjunction, shape: :encloses),
     otherwise:  Contract.new(children: :any, parents: [:choose], speech: :adverb, shape: :encloses),
     form:       Contract.new(name: :subject, modifiers: %i[to method],
-                             children: %i[group field checkbox choice actions disclosure],
+                             children: %i[group field checkbox choice actions disclosure
+                                          button hidden input textarea],
                              subject: :shift, shape: :encloses),
     group:      Contract.new(name: :topic, content: true, children: :any, shape: :encloses),
     field:      Contract.new(name: :attribute, content: true, modifiers: %i[type step required],
                              shape: :says),
+    textarea:   Contract.new(name: :attribute, content: true, modifiers: %i[rows required],
+                             shape: :says),
+    input:      Contract.new(name: :attribute, content: true, modifiers: %i[type placeholder],
+                             shape: :says),
+    hidden:     Contract.new(name: :name, content: true, parents: [:form], shape: :says),
     checkbox:   Contract.new(name: :attribute, content: true, shape: :says),
     choice:     Contract.new(name: :attribute, content: true, children: %i[option choice], shape: :gathers),
     option:     Contract.new(name: :value, content: true, parents: [:choice], shape: :registers),
-    button:     Contract.new(name: :variant, content: true, modifiers: %i[to type], shape: :says)
+    button:     Contract.new(name: :variant, content: true, modifiers: %i[to type size], shape: :says)
   }.freeze
 
   # The same checks check_grammar.rb runs, as a module so tests can hold them.
