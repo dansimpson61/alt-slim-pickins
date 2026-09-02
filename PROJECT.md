@@ -5,16 +5,17 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 3 is closed — the payload is landed end to
-  end: report (bin/verify_pages.rb), gate (Contracts.enforce!, one parse
-  shared with the compile), boot (SlimPickins.prove!; the roth test fails a
-  renamed attribute at boot naming line 14), and the cost measured
-  (bin/measure_cost.rb: full render 3.59 ms, the gate 1.09 ms, 0.29 ms per
-  partial-in-each row; the escape for apps that cannot pay is a compile-once
-  cache, none built because none asked). Next: Phase 4, the exam — the first
-  step is dan's call: choose the dashboard view (heavy in branches,
-  navigation, hidden inputs and inline styles) for the second port;
-  ~/dev/dashboard stays untouched and working throughout. Ask him first.
+next_step: ROADMAP-0.2.md Phase 4, the exam — the candidate short-list is in
+  front of dan, scored: index.slim/Studio 81, project.slim 73, dispatch.slim
+  73, compare.slim 61, triage.slim 50 (rubric: branches, navigation, hidden
+  inputs, inline styles, partial pressure, gap exposure, portability). The
+  dashboard speaks the ORIGINAL slim-pickins gem — ui_button/ui_badge/
+  ui_flash/ui_table built-ins plus Tabular/Word component words — so the port
+  re-expresses old-language views in the current language against the
+  dashboard's pure-Ruby lib/ modules, and partials take over where the
+  original used app words. Awaiting dan's pick; then Inventory first (what
+  the original could do, not what it said), then the port. ~/dev/dashboard
+  stays untouched and working throughout.
   Both parked decisions are closed (dan, 2026-09-01): favicon is a page
   modifier, landed and tested; the when-deferral asymmetry stays as
   documented in dogfood_test — an app word that wants guard-before-read uses

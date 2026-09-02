@@ -114,21 +114,25 @@ byte-identical throughout) and then landed all of Phase 3:
 **Phase 3 is closed: a page may not render until the app has been proved
 able to answer it, at report, at gate, at boot, and the proof costs 1.09 ms
 measured.** Roadmap 0.2's next phase is the exam — the second port, aimed
-at exactly what 0.1 never exercised:
+at exactly what 0.1 never exercised. The candidate short-list is in front
+of dan (scored in this session): `index.slim`/Studio 81, `project.slim` 73,
+`dispatch.slim` 73, `compare.slim` 61, `triage.slim` 50. Key recon fact:
+the dashboard speaks the **original** slim-pickins gem — `ui_button`,
+`ui_badge`, `ui_flash`, `ui_table` built-ins and `Tabular`/`Word` component
+classes — so the port re-expresses old-language views in the current
+language, against the dashboard's pure-Ruby `lib/` modules, with partials
+where the original used app words.
 
-- **Choose the view** `dan` — one dashboard view (or a small set) heavy in
-  branches, navigation, hidden inputs and inline styles — the three things
-  lore measured as the real blockers. The port reads the dashboard's files
-  the way the roth port read roth's: **`~/dev/dashboard` stays untouched
-  and working throughout.** This is the first step, and it is dan's call —
-  the next session should start by asking him.
+- **Choose the view** `dan` — the short-list above is the material; the
+  pick is his.
 - **Inventory first** `agent` — what the original could *do*, not what it
   said: the parity-plus lesson from the Phase 7 review, which caught the
   checkbox that vanished unlogged.
 - **Settle routing** `agent` — `link` finally meets a real page that asks
   for more than `/name`, and the answer is recorded in the vocabulary.
 
-See `ROADMAP-0.2.md` Phase 4 for the rest of the phase.
+See `ROADMAP-0.2.md` Phase 4 for the rest of the phase. **`~/dev/dashboard`
+stays untouched and working throughout.**
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that
