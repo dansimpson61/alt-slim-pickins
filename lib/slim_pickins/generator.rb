@@ -45,6 +45,10 @@ module SlimPickins
 
     private
 
+    # Elements that may not carry a closing tag — an app word building
+    # `tag(:img, ...)` must get what the built-in `image` word gets.
+    VOID = %w[area base br col embed hr img input link meta param source track wbr].freeze
+
     def emit(node)
       # A bare string in the tree is escaped text; nil is nothing at all —
       # the old runtime escaped it to an empty string.
@@ -56,8 +60,8 @@ module SlimPickins
       when :raw then @out << children.join
       when :tag
         @out << "<#{attrs[:name]}#{attrs_html(attrs[:attrs])}>"
-        children.each { |c| emit(c) }
-        @out << "</#{attrs[:name]}>"
+        children.each { |c| emit(c) } unless VOID.include?(attrs[:name].to_s)
+        @out << "</#{attrs[:name]}>" unless VOID.include?(attrs[:name].to_s)
       when :each then children.flatten(1).each { |c| emit(c) } # one list per iteration
       when :choose, :contents then children.each { |c| emit(c) } # already flat
       else

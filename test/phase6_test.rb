@@ -98,4 +98,18 @@ class Phase6Test < Minitest::Test
       refute_respond_to builder, m, "#{m} should not be part of the escape hatch"
     end
   end
+
+  # An app word building a void element gets what the built-in `image` gets —
+  # no closing tag. The thumbnails example surfaced the opposite.
+  def test_an_app_tag_knows_void_elements
+    html = SlimPickins.render("page p\n  video .url\n", locals: { p: { url: '/c.mp4' } },
+                              library: SlimPickins::Library.new(words: Module.new do
+        def video(*args)
+          _, src = arguments(args)
+          tag(:video, { class: token(:video), src: src, controls: true }, [])
+        end
+      end))
+    refute_includes html, '</video>'
+    assert_includes html, '<video class="video" src="/c.mp4" controls>'
+  end
 end
