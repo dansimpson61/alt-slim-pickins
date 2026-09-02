@@ -63,6 +63,19 @@ module SlimPickins
       emit_node([:footer, { body: body }, capture(&block)])
     end
 
+    # The element primitives. `paragraph` is the atom under note and text;
+    # `region` is the atom under the wrappers. Classes still derive from the
+    # word, so a partial composing over them keeps the language's shape.
+    def paragraph(*args, &block)
+      variant, body = arguments(args)
+      emit_node([:paragraph, { variant: variant, body: body }, capture(&block)])
+    end
+
+    def region(*args, &block)
+      variant, = arguments(args)
+      emit_node([:region, { variant: variant }, capture(&block)])
+    end
+
     # Marks where the caller's children go — the partial's `contents`.
     def children
       raise Error, '`children` has nothing to splice — this word took no children' if spliced.nil?

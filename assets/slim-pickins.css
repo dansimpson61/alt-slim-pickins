@@ -321,3 +321,7 @@ time { color: var(--ink-soft); }
 .link { color: var(--accent); text-decoration: none; }
 .link:hover { text-decoration: underline; }
 .link--active { color: var(--ink); font-weight: var(--weight-strong); }
+
+/* The element primitives — the atoms words compose over. */
+.paragraph { margin: 0 0 var(--step); }
+.region { display: block; }

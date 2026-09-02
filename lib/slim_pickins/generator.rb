@@ -325,6 +325,18 @@ module SlimPickins
       full_tag('span', body, class: classes)
     end
 
+    def paragraph(attrs, children)
+      open_tag('p', class: token(:paragraph, attrs[:variant]))
+      attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
+      @out << '</p>'
+    end
+
+    def region(attrs, children)
+      open_tag('div', class: token(:region, attrs[:variant]))
+      children.each { |c| emit(c) }
+      @out << '</div>'
+    end
+
     def text(attrs, _children)
       full_tag('p', attrs[:body])
     end

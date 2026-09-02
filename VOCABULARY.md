@@ -1160,3 +1160,36 @@ the gallery can gather every thumb before laying any out.
 thumbnails
   thumb .url
 ```
+
+### `paragraph`
+
+- **name** — the variant
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
+
+The atom under the leaf presenters — `note` and `text` are its vocabulary.
+A partial composes over it the way a Ruby word composes over `tag`.
+
+```
+paragraph quiet, "A quieter line."
+```
+
+
+### `region`
+
+- **name** — the variant
+- **content** — none
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
+
+The atom under the wrappers — the box a word owns. Classes still derive
+from the word, so nothing a human could style by hand comes back.
+
+```
+region shelf
+  card
+```
+

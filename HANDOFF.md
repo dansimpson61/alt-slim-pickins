@@ -141,13 +141,15 @@ its name through the parameters (`.name`), variant-named words accept a
 derived variant as data, and a name shifts the subject only when the
 declaration says `subject` — preamble-less partials keep the old rule.
 
-**Docs derived landed:** bin/generate_vocabulary.rb now creates missing
-entries — heading plus the five generated bullets — and the checker holds
-them, demanding the example sentence. The promotion pass is audited in
-ROADMAP-0.2: the five promoted words are the complete movable set under
-today's primitives; two dan decisions unlock the next tranche — a
-classed-paragraph primitive (reatomizing) and an optionality spelling
-("was the modifier said").
+**Docs derived landed:** bin/generate_vocabulary.rb creates missing entries
+from the contracts, and the checker holds them, demanding the example
+sentence. The primitives landed too: `paragraph` and `region` are words —
+the atoms under the leaf presenters and the wrappers, classes deriving from
+the words, so nothing styleable by hand returns. The promotion pass is
+audited in ROADMAP-0.2; what promotion needs next is root-classing — a
+partial composed over `paragraph` must emit its own name as the class, the
+"word owns its box" law made mechanical — and one dan decision remains, the
+optionality spelling ("was the modifier said").
 
 ## What is next — Phase 4, the exam
 

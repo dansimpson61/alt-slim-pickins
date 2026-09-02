@@ -280,3 +280,7 @@ Name-passing closed the last mechanism seam with two durable lessons. One is a R
 ## 2026-09-02 — DeepSeek v4-pro
 
 The completion round's lesson is that an audit is also an implementation: measuring the promotion pass word by word showed the five promoted words are the complete movable set under today's primitives, and the honest deliverable became the recorded map — optionality words need a spelling for was-the-modifier-said, leaf presenters need classed-element primitives (a reatomizing decision), head and subject-flow words are the runtime's job by design. The docs-derived item completed the loop: the generator now creates missing entries from the contracts, so a new word cannot exist without its documentation being demanded of someone.
+
+## 2026-09-02 — DeepSeek v4-pro
+
+dan's principle aimed at the vocabulary's own absence produced the session's cleanest kill: the element primitives were never absent — tag() gave Ruby words unlimited generic elements all along — so the language-level absence was not a wall but an asymmetry, denying to partials what Ruby words had. The original fear (authors reaching past the vocabulary to style) died with the class scheme, because classes still derive from words. paragraph and region are now words, and the promotion pass gained its atoms. What remains for promotion is root-classing: a partial over paragraph must emit its own name as the class — the word-owns-its-box law, mechanical.

@@ -41,6 +41,13 @@ module SlimPickins
   # declaration live in one file, and this hash is the primitives' home.
   PRIMITIVES = {
     children:   Contract.new(shape: :document),
+    # The element primitives — the atoms the vocabulary composes over, now
+    # first-class words so a partial gets the same power a Ruby word's tag()
+    # already had. The semantic words remain the default; these are the
+    # substrate, and their classes still derive from the words, so nothing
+    # a human could style by hand comes back.
+    paragraph:  Contract.new(name: :variant, content: true, children: :any, shape: :presents),
+    region:     Contract.new(name: :variant, children: :any, shape: :encloses),
     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
                              children: :any, subject: :shift, shape: :document),
     contents:   Contract.new(shape: :document),

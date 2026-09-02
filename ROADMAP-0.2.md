@@ -639,13 +639,18 @@ preambles, args, the children splice, gathers/inside, lazy — the words that
 can be said in the language today are the five already promoted: action,
 flash, search, thumbnails, thumb. The audit of every remaining Ruby word by
 mechanism: optionality words (footer, item, disclosure) are blocked on a
-spelling for "was the modifier said"; the leaf presenters (note, badge, text,
-money, time, link, button, the form controls) are blocked on classed-element
-primitives — a reatomizing decision, dan's; head words and the
-subject-flow words are the runtime's own job by design; choose needs
-condition evaluation, which is not a sentence's business. Two dan decisions
-unlock the next tranche: a classed-paragraph primitive, and an optionality
-spelling. Until then, the five promoted words are the complete movable set.
+spelling for "was the modifier said"; the leaf presenters are blocked only on
+optionality; head words and the subject-flow words are the runtime's own job
+by design; choose needs condition evaluation, which is not a sentence's
+business. dan's principle applied to the absence itself: the element
+primitives existed for Ruby words (`tag`) and were denied to language words —
+an asymmetry word-is-word-is-word forbids. `paragraph` and `region` are now
+words, the atoms the leaf presenters and wrappers compose over, classes
+still deriving from the words. What promotion still needs is root-classing:
+a partial composed over `paragraph` must emit its OWN name as the class —
+the "word owns its box" law made mechanical — and that is the next small
+mechanism. Until it lands, the five promoted words plus the atoms are the
+movable set, and one dan decision — the optionality spelling — remains.
 
 **The when-asymmetry, decided (dan, 2026-09-01).** The transform defers the
 built-in `when`'s condition so its guard fires before the argument runs; an
