@@ -252,9 +252,9 @@ module SlimPickins
       return capture(&block) unless @library&.layout
 
       stow_contents(capture(&block))
-      Contracts.enforce!(@library.layout, path: 'layout.sp')
-      nodes = capture { eval_with(Transform.call(@library.layout, path: 'layout.sp'),
-                                  'layout.sp', @library.layout.lines) }
+      transform = Transform.new(@library.layout, 'layout.sp')
+      Contracts.enforce!(transform.tree, path: 'layout.sp')
+      nodes = capture { eval_with(transform.call, 'layout.sp', @library.layout.lines) }
       raise Error, 'this layout never says `contents`' if @contents
 
       nodes
@@ -304,9 +304,9 @@ module SlimPickins
     def render_partial(word, args, &block)
       name, = name_and_content(args)
       source = @library.source_for(word)
-      Contracts.enforce!(source, path: "partials/#{word}.sp")
-      ruby = Transform.call(source, path: "partials/#{word}.sp")
-      value, empty, children = about(name) { capture { eval_with(ruby, "partials/#{word}.sp", source.lines) } }
+      transform = Transform.new(source, "partials/#{word}.sp")
+      Contracts.enforce!(transform.tree, path: "partials/#{word}.sp")
+      value, empty, children = about(name) { capture { eval_with(transform.call, "partials/#{word}.sp", source.lines) } }
       @nodes.concat(prune(children, empty))
       value
     end

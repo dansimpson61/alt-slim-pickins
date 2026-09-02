@@ -19,10 +19,10 @@ module SlimPickins
   #   SlimPickins.render(File.read("form.sp"), locals: { scenario: inputs },
   #                      filter: ->(tree) { [[:badge, { kind: :ok, label: "12" }, []]] + tree })
   def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
-    Contracts.enforce!(source, path: path)
-    ruby = Transform.call(source, path: path)
+    transform = Transform.new(source, path)
+    Contracts.enforce!(transform.tree, path: path)
     builder = Builder.new(Page.new(locals: locals, helpers: helpers), library)
-    nodes = builder.render(ruby, path, source: source)
+    nodes = builder.render(transform.call, path, source: source)
     nodes = filter.call(nodes) if filter
     Generator.new.call(nodes)
   end
@@ -31,9 +31,9 @@ module SlimPickins
   # seeing what a page means — and the tree a second interpreter (an API)
   # would walk.
   def evaluate(source, path: '(page)', locals: {}, helpers: nil, library: nil)
-    Contracts.enforce!(source, path: path)
-    ruby = Transform.call(source, path: path)
-    Builder.new(Page.new(locals: locals, helpers: helpers), library).render(ruby, path, source: source)
+    transform = Transform.new(source, path)
+    Contracts.enforce!(transform.tree, path: path)
+    Builder.new(Page.new(locals: locals, helpers: helpers), library).render(transform.call, path, source: source)
   end
 
   # The Ruby a page compiles to. Useful for seeing what the transform did.

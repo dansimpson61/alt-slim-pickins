@@ -5,16 +5,16 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 3, the payload — report, gate, and boot are
-  landed (rounds 6–8): bin/verify_pages.rb reports; Contracts.enforce!
-  refuses contract-violating pages/partials/layouts before evaluation; and
-  SlimPickins.prove! makes both apps prove their pages at boot — the roth
-  test (test/boot_test.rb) plays the rename on the real page: a model minus
-  ss_primary_amount fails at boot naming controls.sp line 14 and the
-  sentence. Next: the cost, measured — the gate parses each source twice per
-  render and a partial inside each is gated per iteration; measure
-  milliseconds per render, then decide whether a compile-once cache is the
-  answer for apps that cannot pay them. Then Phase 4.
+next_step: ROADMAP-0.2.md Phase 3 is closed — the payload is landed end to
+  end: report (bin/verify_pages.rb), gate (Contracts.enforce!, one parse
+  shared with the compile), boot (SlimPickins.prove!; the roth test fails a
+  renamed attribute at boot naming line 14), and the cost measured
+  (bin/measure_cost.rb: full render 3.59 ms, the gate 1.09 ms, 0.29 ms per
+  partial-in-each row; the escape for apps that cannot pay is a compile-once
+  cache, none built because none asked). Next: Phase 4, the exam — the first
+  step is dan's call: choose the dashboard view (heavy in branches,
+  navigation, hidden inputs and inline styles) for the second port;
+  ~/dev/dashboard stays untouched and working throughout. Ask him first.
   Both parked decisions are closed (dan, 2026-09-01): favicon is a page
   modifier, landed and tested; the when-deferral asymmetry stays as
   documented in dogfood_test — an app word that wants guard-before-read uses

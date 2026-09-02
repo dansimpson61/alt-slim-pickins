@@ -21,12 +21,12 @@ conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is closed. Roadmap 0.2's backward look is done, and Phase 3 is
-halfway.** The 2026-09-01 session closed Phases 0–2 (the Way rewritten in
-`PRIMER.md`; the vocabulary reviewed as contracts with `check`→`checkbox`,
-`select`→`choice`; the Builder un-god-objected — four gathering copies became
-one stack, 867 lines/16 ivars became 298/9, byte-identical throughout) and
-landed Phase 3's first half:
+**Roadmap 0.1 is closed. Roadmap 0.2's backward look is done, and Phase 3 —
+the payload — is complete.** The 2026-09-01 session closed Phases 0–2 (the
+Way rewritten in `PRIMER.md`; the vocabulary reviewed as contracts with
+`check`→`checkbox`, `select`→`choice`; the Builder un-god-objected — four
+gathering copies became one stack, 867 lines/16 ivars became 298/9,
+byte-identical throughout) and then landed all of Phase 3:
 
 - **The runtime output model is semantic nodes.** A page evaluates into a
   tree of `[:word, attrs, children]`; `SlimPickins.evaluate` returns it;
@@ -72,6 +72,13 @@ landed Phase 3's first half:
   roth test on the real page: a model minus `ss_primary_amount` fails at
   boot naming `controls.sp`, line 14, and the sentence. The eleven-month
   silence is a boot error, by construction.
+- **The cost is measured, and Phase 3 is closed.** `bin/measure_cost.rb` is
+  the instrument: full render 3.59 ms, without the gate 2.50 ms, the gate
+  itself 1.09 ms, a partial inside a 50-row `each` 0.29 ms per row (ruby
+  4.0.1, specimen.sp, 200 runs). The gate once parsed each source twice;
+  `Contracts.enforce!` now takes the tree, so one `Transform` serves the
+  gate and the compile. No app here cannot pay; the escape, should one
+  appear, is a compile-once cache keyed by source.
 
 ## The architecture, in one map
 
@@ -102,25 +109,26 @@ landed Phase 3's first half:
 - `check_grammar.rb` / `check_shape.rb` / `check_styles.rb` — the three
   checkers that hold docs, shapes, and styles to the code.
 
-## What is next — the cost
+## What is next — Phase 4, the exam
 
-**A page may not render until the app has been proved able to answer it** —
-landed, all of it: the report (`bin/verify_pages.rb`, round 6), the gate
-(`Contracts.enforce!`, round 7), and the boot moment (`SlimPickins.prove!`
-+ the roth test, round 8). What remains is the third step, the honest
-price:
+**Phase 3 is closed: a page may not render until the app has been proved
+able to answer it, at report, at gate, at boot, and the proof costs 1.09 ms
+measured.** Roadmap 0.2's next phase is the exam — the second port, aimed
+at exactly what 0.1 never exercised:
 
-- **The cost, measured** — milliseconds per render, with the answer for
-  apps that cannot pay them. The debts to measure: the gate parses each
-  source twice per render (`Transform.tree` for the gate, `Transform.call`
-  for compilation), and a partial inside `each` is gated per iteration. A
-  compile-once cache (the gate's verdict keyed by source) may be the
-  answer — measure first, then decide.
+- **Choose the view** `dan` — one dashboard view (or a small set) heavy in
+  branches, navigation, hidden inputs and inline styles — the three things
+  lore measured as the real blockers. The port reads the dashboard's files
+  the way the roth port read roth's: **`~/dev/dashboard` stays untouched
+  and working throughout.** This is the first step, and it is dan's call —
+  the next session should start by asking him.
+- **Inventory first** `agent` — what the original could *do*, not what it
+  said: the parity-plus lesson from the Phase 7 review, which caught the
+  checkbox that vanished unlogged.
+- **Settle routing** `agent` — `link` finally meets a real page that asks
+  for more than `/name`, and the answer is recorded in the vocabulary.
 
-The payload's *done looks like* from the roadmap: both apps still serve,
-every repo page still renders, and the failure mode the whole project
-exists to remove is removed from this project first. All three hold; only
-the measurement and its record remain.
+See `ROADMAP-0.2.md` Phase 4 for the rest of the phase.
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that
@@ -149,8 +157,10 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 184 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  (currently 187 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
   0 problems, 11 pages verified)
+- **The cost, re-measured**: `ruby bin/measure_cost.rb` — the instrument;
+  the numbers live in ROADMAP-0.2.md Phase 3's record.
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore
   (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars). dan has

@@ -175,12 +175,13 @@ module SlimPickins
 
     # The gate: the same complaints, raised instead of reported. Every place
     # the grammar's Ruby runs — a page, a partial, the layout — refuses the
-    # source before evaluation, so a sentence that violates its word's
+    # parsed tree before evaluation, so a sentence that violates its word's
     # contract fails with the word, the line and the sentence, in the same
     # voice as a syntax error. The report half of this truth is
-    # check_grammar's; this is the refusal half.
-    def enforce!(source, path: '(page)')
-      tree = Transform.tree(source, path: path)
+    # check_grammar's; this is the refusal half. It takes the tree rather
+    # than the source, so a renderer that compiles too pays for one parse,
+    # not two.
+    def enforce!(tree, path: '(page)')
       walk = lambda do |nodes, ancestry|
         nodes.each do |node|
           complaint = complaints(node, ancestry).first

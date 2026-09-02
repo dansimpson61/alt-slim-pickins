@@ -533,7 +533,7 @@ into another object's ivars; byte-diffs of both apps' pages unchanged except
 the deliberate renames; the gathering-copy count is **1**, measured;
 `test/combination_test.rb` extended with the crash cases and green.
 
-### Phase 3 — Spend the description  🔄 in progress — rounds 1–8 done (2026-09-01)
+### Phase 3 — Spend the description  ✅ complete (2026-09-01)
 
 The payload. 0.1 built a parsed, checkable description of what a page means and
 spent it only on HTML. This phase spends it on the one question that matters
@@ -588,7 +588,17 @@ app gives it, before any request can: both apps prove at boot, loudly
 too. The roth test, played on the real page: a model minus
 `ss_primary_amount` fails at boot naming `controls.sp`, line 14, and the
 sentence — the eleven-month silence is a boot error, by construction. Only
-the cost remains.
+the cost remains. (9) the cost, measured and paid once: the gate used to
+parse each source twice per render — `Contracts.enforce!` now takes the
+tree, so the renderer's one `Transform` serves both the gate and the
+compile, and a partial inside `each` pays per iteration. Measured by
+`bin/measure_cost.rb` (ruby 4.0.1, pages/specimen.sp, 200 runs): full
+render 3.59 ms, without the gate 2.50 ms, the gate itself 1.09 ms, a
+partial inside a 50-row `each` 0.29 ms per row. The answer for apps that
+cannot pay them: none has asked — 3.59 ms for the heaviest page is
+payable everywhere this project has apps — and the known shape of the
+escape is a compile-once cache of the gate's verdict and the compiled
+Ruby, keyed by source. Eleven pages byte-identical throughout.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
 The vocabulary is the language's own lowest layer: a `.sp` composition of
@@ -636,11 +646,15 @@ evaluated. No grammar change; the evidence asks for none.
   `test/boot_test.rb`): the real page, the model minus the attribute, the
   boot refuses it naming line 14 and the sentence.
 - **The cost, measured** `agent` — the milliseconds the pass adds per render,
-  recorded, with the answer for apps that cannot pay them.
+  recorded, with the answer for apps that cannot pay them. Landed (round 9,
+  `bin/measure_cost.rb`): full render 3.59 ms, the gate 1.09 ms, 0.29 ms per
+  partial-in-`each` row (ruby 4.0.1, specimen.sp, 200 runs). The answer: no
+  app here cannot pay; the escape, should one appear, is a compile-once
+  cache keyed by source.
 
 *Done looks like:* both apps still serve, every repo page still renders, and
 the failure mode the whole project exists to remove is removed from this
-project first.
+project first. All three hold, all three checked each round.
 
 ### Phase 4 — The exam: the untested flank
 
