@@ -143,13 +143,19 @@ declaration says `subject` — preamble-less partials keep the old rule.
 
 **Docs derived landed:** bin/generate_vocabulary.rb creates missing entries
 from the contracts, and the checker holds them, demanding the example
-sentence. The primitives landed too: `paragraph` and `region` are words —
-the atoms under the leaf presenters and the wrappers, classes deriving from
-the words, so nothing styleable by hand returns. The promotion pass is
-audited in ROADMAP-0.2; what promotion needs next is root-classing — a
-partial composed over `paragraph` must emit its own name as the class, the
-"word owns its box" law made mechanical — and one dan decision remains, the
-optionality spelling ("was the modifier said").
+sentence. The primitives landed too: `paragraph`, `heading` and `region` are
+words — the atoms under the leaf presenters and the wrappers, classes deriving
+from the words, so nothing styleable by hand returns. Root-classing landed:
+a partial composed over the atoms emits its own name as the class — the
+"word owns its box" law made mechanical. With it, the second movable set
+promoted: `note`, `title`, `actions` left words.rb and the Generator for
+lib/vocabulary, composed entirely in the language over the atoms and the
+`children` splice — **eight vocabulary partials** (action, flash, search,
+thumbnails, thumb, note, title, actions), seven fixture pages byte-identical
+through the stash harness. The promotion pass's movable set is now
+exhausted: footer, item, disclosure and the leaf presenters are blocked on
+the one remaining dan decision — the optionality spelling ("was the modifier
+said").
 
 ## What is next — Phase 4, the exam
 

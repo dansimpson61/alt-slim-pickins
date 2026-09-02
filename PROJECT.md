@@ -5,21 +5,19 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-02'
-next_step: ROADMAP-0.2.md Phase 4 — Round C landed: the triage port is
-  re-authored in slim-pickins' own look (DashboardWords deleted; queue/
-  unreviewed/dormant as app partials; flash/action/search as lib/vocabulary
-  partials; chrome in core words), behaviour parity 25 affordances / 0
-  missing, G12 and G14 named in INVENTORY.md. Next: dan's promotion
-  decision on flash/action/search — my recommendation is to hold promotion
-  until a second consumer (index.slim) proves them, then settle routing.
-  ~/dev/dashboard stays untouched.
-  Phase 3's compile-once cache landed (round 10, 2026-09-02): Compilation
-  holds the gate's verdict and the compiled Ruby keyed by source — warm
-  render 1.37 ms, cold 2.75 ms, 0.10 ms per partial-in-each row.
-  Both parked decisions are closed (dan, 2026-09-01): favicon is a page
-  modifier, landed and tested; the when-deferral asymmetry stays as
-  documented in dogfood_test — an app word that wants guard-before-read uses
-  a bare name, which the grammar never evaluates.
+next_step: The promotion pass is at its gate. Root-classing landed and the
+  second movable set promoted: note/title/actions left words.rb and the
+  Generator for lib/vocabulary, composed over the paragraph/heading/region
+  atoms — eight vocabulary partials now (action, flash, search, thumbnails,
+  thumb, note, title, actions), seven fixture pages byte-identical. Suite
+  217 runs / 0 failures, checkers 0 problems, committed and pushed
+  (aa0d6e1). The movable set is exhausted: footer, item, disclosure and the
+  leaf presenters are blocked on ONE dan decision — the optionality
+  spelling, "was the modifier said" (a partial cannot ask whether its call
+  named a variant or a modifier). Decide that spelling, and the rest of the
+  promotion pass unblocks. Round A of Phase 4 landed the negotiated
+  primitives (hidden/input/textarea, form widened, card titles, link
+  active:, button size:); ~/dev/dashboard stays untouched.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

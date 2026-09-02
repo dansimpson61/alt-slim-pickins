@@ -634,23 +634,29 @@ forged stands: for every candidate, ask *is this a word, or a power?* — the
 language grows by words, and the surface grows only when the answer is
 honestly a power.
 
-**The promotion pass, audited (2026-09-01).** With the mechanisms landed —
-preambles, args, the children splice, gathers/inside, lazy — the words that
-can be said in the language today are the five already promoted: action,
-flash, search, thumbnails, thumb. The audit of every remaining Ruby word by
-mechanism: optionality words (footer, item, disclosure) are blocked on a
-spelling for "was the modifier said"; the leaf presenters are blocked only on
-optionality; head words and the subject-flow words are the runtime's own job
-by design; choose needs condition evaluation, which is not a sentence's
-business. dan's principle applied to the absence itself: the element
-primitives existed for Ruby words (`tag`) and were denied to language words —
-an asymmetry word-is-word-is-word forbids. `paragraph` and `region` are now
-words, the atoms the leaf presenters and wrappers compose over, classes
-still deriving from the words. What promotion still needs is root-classing:
-a partial composed over `paragraph` must emit its OWN name as the class —
-the "word owns its box" law made mechanical — and that is the next small
-mechanism. Until it lands, the five promoted words plus the atoms are the
-movable set, and one dan decision — the optionality spelling — remains.
+**The promotion pass, audited (2026-09-01, updated 2026-09-02).** With the
+mechanisms landed — preambles, args, the children splice, gathers/inside,
+lazy — the first movable set was promoted: action, flash, search,
+thumbnails, thumb. dan's principle applied to the absence itself: the
+element primitives existed for Ruby words (`tag`) and were denied to
+language words — an asymmetry word-is-word-is-word forbids — so `paragraph`,
+`heading` and `region` are now words, the atoms the leaf presenters and
+wrappers compose over, classes still deriving from the words. The last
+mechanism the pass needed was root-classing: a partial composed over
+`paragraph` must emit its OWN name as the class — the "word owns its box"
+law made mechanical. It is landed, and with it the second movable set:
+`note`, `title`, `actions` left words.rb and the Generator for
+lib/vocabulary, composed entirely in the language over the atoms and the
+`children` splice — eight vocabulary partials now. The seven fixture pages
+render byte-identical through the stash harness; promotion changed nothing
+a page sees. The audit of every remaining Ruby word by mechanism: the
+optionality words (footer, item, disclosure) and the leaf presenters are
+blocked on one spelling — "was the modifier said" — a partial cannot ask
+whether its call named a variant or a modifier; head words and the
+subject-flow words are the runtime's own job by design; choose needs
+condition evaluation, which is not a sentence's business. The movable set
+is exhausted until that spelling exists: one dan decision — the optionality
+spelling — gates the rest of the pass.
 
 **The when-asymmetry, decided (dan, 2026-09-01).** The transform defers the
 built-in `when`'s condition so its guard fires before the argument runs; an
