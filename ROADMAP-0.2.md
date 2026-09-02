@@ -634,6 +634,19 @@ forged stands: for every candidate, ask *is this a word, or a power?* — the
 language grows by words, and the surface grows only when the answer is
 honestly a power.
 
+**The promotion pass, audited (2026-09-01).** With the mechanisms landed —
+preambles, args, the children splice, gathers/inside, lazy — the words that
+can be said in the language today are the five already promoted: action,
+flash, search, thumbnails, thumb. The audit of every remaining Ruby word by
+mechanism: optionality words (footer, item, disclosure) are blocked on a
+spelling for "was the modifier said"; the leaf presenters (note, badge, text,
+money, time, link, button, the form controls) are blocked on classed-element
+primitives — a reatomizing decision, dan's; head words and the
+subject-flow words are the runtime's own job by design; choose needs
+condition evaluation, which is not a sentence's business. Two dan decisions
+unlock the next tranche: a classed-paragraph primitive, and an optionality
+spelling. Until then, the five promoted words are the complete movable set.
+
 **The when-asymmetry, decided (dan, 2026-09-01).** The transform defers the
 built-in `when`'s condition so its guard fires before the argument runs; an
 app word cannot have that, because Ruby evaluates arguments before any method

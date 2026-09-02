@@ -1067,6 +1067,33 @@ Predictions from the spec, and what actually happened.
   close, but three of the additions were invisible until a real page was read,
   which is the argument against ever drafting this from imagination.
 
+
+### `action`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — `to:`, `path:`, `return_to:`, `variant:`
+- **children** — none
+- **subject** — unchanged
+
+
+### `flash`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+
+
+### `search`
+
+- **name** — none
+- **content** — none
+- **modifiers** — `q:`, `placeholder:`
+- **children** — none
+- **subject** — unchanged
+
 ## What the drafts left open
 
 Every item below was open when this document was drafted. All of them landed

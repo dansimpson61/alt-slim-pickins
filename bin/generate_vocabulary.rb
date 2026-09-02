@@ -44,5 +44,18 @@ parts.each_slice(2) do |header, body|
   out << body
 end
 
+# A word in the contracts without an entry gets one — heading and the five
+# generated bullets, nothing more. The prose and the example sentence are the
+# author's; check_grammar holds the bullets and demands the sentence.
+added = []
+SlimPickins::CONTRACTS.keys.map(&:to_s).each do |word|
+  next if source =~ /^### `#{word}`/
+
+  added << word
+  out << "\n### `#{word}`\n\n"
+  out << SlimPickins::Contracts.bullets(word, SlimPickins::CONTRACTS[word.to_sym]).join("\n")
+  out << "\n\n"
+end
+
 File.write(path, out.join)
-puts "#{changed} bullets regenerated"
+puts "#{changed} bullets regenerated, #{added.size} entries created#{" (#{added.join(", ")})" if added.any?}"

@@ -141,10 +141,13 @@ its name through the parameters (`.name`), variant-named words accept a
 derived variant as data, and a name shifts the subject only when the
 declaration says `subject` — preamble-less partials keep the old rule.
 
-**What remains, in order:** (1) the promotion pass — words move from Ruby to
-lib/vocabulary where the language can say them, each a round-end decision,
-the byte-diff harness the acceptance test; (2) docs derived — the generator
-extends to compose the remaining entries from preambles.
+**Docs derived landed:** bin/generate_vocabulary.rb now creates missing
+entries — heading plus the five generated bullets — and the checker holds
+them, demanding the example sentence. The promotion pass is audited in
+ROADMAP-0.2: the five promoted words are the complete movable set under
+today's primitives; two dan decisions unlock the next tranche — a
+classed-paragraph primitive (reatomizing) and an optionality spelling
+("was the modifier said").
 
 ## What is next — Phase 4, the exam
 

@@ -16,12 +16,12 @@ require_relative '../examples/roth/lib/projection'
 # byte-identical to the built-ins. If they ever differ, the surface is
 # incomplete and the vocabulary has food it would not serve.
 #
-# One honest limit, named: the built-in `when` gets its condition deferred by
-# the transform (a lambda), so its guard fires before the argument runs. That
-# deferral is grammar-level — Ruby evaluates arguments before any method —
-# and no surface can give it to an app word. `when_app` therefore evaluates its
-# condition eagerly; valid usage renders identically, and only the error for
-# an invalid `when_app` differs. Everything else here is byte-complete.
+# One honest limit, named: laziness is a declared shape now — a partial can
+# declare `lazy: content` and the transform defers it, so the guard fires
+# before the argument runs. This Ruby module cannot carry a preamble, so its
+# when_app receives the eager value; valid usage renders identically, and
+# only the error for an invalid when_app differs. Everything else here is
+# byte-complete.
 module Dogfood
   class TableApp < SlimPickins::Component
     INSIDE = 'a table'
@@ -197,8 +197,9 @@ module Dogfood
     target = open_gatherer(ChooseApp)
     raise SlimPickins::Error, 'when belongs inside a choose' unless target
 
-    # The built-in `when` receives a lambda from the transform; an app word
-    # receives the already-evaluated value. Valid usage renders identically.
+    # A partial declaring `lazy: content` receives a lambda from the
+    # transform; a Ruby word receives the already-evaluated value. Valid
+    # usage renders identically.
     target.add_branch(!!args.first, block)
   end
 
