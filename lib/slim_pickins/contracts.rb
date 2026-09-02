@@ -33,8 +33,8 @@ module SlimPickins
   end
 
   CONTRACTS = {
-    page:       Contract.new(name: :subject, content: true, children: :any, subject: :shift,
-                             shape: :document),
+    page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
+                             children: :any, subject: :shift, shape: :document),
     contents:   Contract.new(shape: :document),
     stylesheet: Contract.new(content: true, shape: :document),
     meta:       Contract.new(name: :name, content: true, shape: :document),

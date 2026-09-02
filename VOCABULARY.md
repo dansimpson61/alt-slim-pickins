@@ -62,7 +62,7 @@ condition holds. It is not repeated in the entries below.
 
 - **name** — the subject this word presents; it must be there
 - **content** — text or data, when there is any
-- **modifiers** — none
+- **modifiers** — `favicon:`
 - **children** — anything
 - **subject** — the named thing
 - **infers** — the `<title>` and the top heading from the name; the doctype,

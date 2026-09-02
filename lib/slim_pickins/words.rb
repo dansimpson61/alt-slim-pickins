@@ -20,12 +20,13 @@ module SlimPickins
 
     # --- Document -------------------------------------------------------
 
-    def page(*args, &block)
+    def page(*args, favicon: nil, &block)
       name, title = arguments(args)
       heading = title || Inference.label(name)
 
       value, empty, body = about(name) { wrapped_in_layout(&block) }
-      emit_node([:page, { heading: heading, head: head_nodes, icons: sprite_symbols },
+      emit_node([:page, { heading: heading, head: head_nodes, icons: sprite_symbols,
+                          favicon: favicon },
                  prune(body, empty)])
       value
     end

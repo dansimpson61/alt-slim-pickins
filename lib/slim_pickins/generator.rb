@@ -106,6 +106,7 @@ module SlimPickins
       open_tag('head')
       void_tag('meta', charset: 'utf-8')
       void_tag('meta', name: 'viewport', content: 'width=device-width, initial-scale=1')
+      void_tag('link', rel: 'icon', href: attrs[:favicon]) if attrs[:favicon]
       full_tag('title', attrs[:heading])
       attrs[:head].each { |node| emit(node) }
       @out << '</head>'
