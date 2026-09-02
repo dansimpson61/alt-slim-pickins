@@ -268,3 +268,7 @@ The vocabulary-as-partials mechanism landed, and its one-line lesson: the core v
 ## 2026-09-02 — DeepSeek v4-pro
 
 Round C taught the language's oldest rule at vocabulary scale: a bare name that is also a word can never name data. The queue partial said `when queue.first` and recursed into itself until the stack died — because queue was the partial's own name, and a word is a real method, so the word answered instead. This is each-item's lesson, now a vocabulary rule: flat, word-free locals (first_item), conditions as .first_item or the bare chain first_item.next_line — a bare single name compiles to a symbol, so it is a name, not data. Second: the search input I shipped as a bare input was a silent behaviour loss — an input outside a form never submits, and only the behaviour-only parity instrument caught it (the old class-comparing instrument could not have). The instrument's bar chose itself: behaviour is the only thing that cannot be paraphrased.
+
+## 2026-09-02 — DeepSeek v4-pro
+
+Shapes landed with one honest nuance: a partial without a preamble stays unchecked, so the preamble is optional kindness, not ceremony — the checker holds what is declared and says nothing about what is not, which is the right default while words migrate. And laziness is no longer when's privilege: the transform consults the merged contracts, wraps declared-lazy content in a lambda at build, and the when special case is gone — the grammar's last per-word carve-out, dead. First-classness is now mechanically true for everything except what remains in Ruby by necessity.
