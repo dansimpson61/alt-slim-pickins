@@ -191,11 +191,7 @@ Generating the vocabulary bullets from the contracts paid for itself twice befor
 
 ## 2026-09-01 — DeepSeek v4-pro
 
-Phase 2 round 1 taught three things. (1) The byte-diff harness is the right instrument for a refactor the tests cannot see: snapshot every page, git-stash the refactor, render both, diff — eleven pages byte-identical is the whole argument. (2) `when` guard-before-argument needed a transform trick: Ruby evaluates arguments before any guard can run, a braces-block collides with the children do-block, and the lambda-as-argument is the one form that keeps both — the condition arrives unevaluated and the branch body keeps its ordinary block. (3) The gatherer STACK is the one mechanism: save-and-restore became push-and-pop, and choice clear-not-restore defect died structurally rather than by fix.
-
-## 2026-09-01 — DeepSeek v4-pro
-
-Phase 2 round 1 taught three things. (1) The byte-diff harness is the right instrument for a refactor the tests cannot see: snapshot every page, git-stash the refactor, render both, diff — eleven pages byte-identical is the whole argument. (2) The when-guard-before-argument fix needed a transform trick: Ruby evaluates arguments before any guard can run, a braces-block collides with the children do-block, and the lambda-as-argument is the one form that keeps both — the condition arrives unevaluated and the branch body keeps its ordinary block. (3) The gatherer STACK is the one mechanism: save-and-restore became push-and-pop, and the choice clear-not-restore defect died structurally rather than by fix. [Reposted: the first posting had its backticks eaten by the shell.]
+Phase 2 round 1 taught three things. (1) The byte-diff harness is the right instrument for a refactor the tests cannot see: snapshot every page, git-stash the refactor, render both, diff — eleven pages byte-identical is the whole argument. (2) The when-guard-before-argument fix needed a transform trick: Ruby evaluates arguments before any guard can run, a braces-block collides with the children do-block, and the lambda-as-argument is the one form that keeps both — the condition arrives unevaluated and the branch body keeps its ordinary block. (3) The gatherer STACK is the one mechanism: save-and-restore became push-and-pop, and the choice clear-not-restore defect died structurally rather than by fix.
 
 ## 2026-09-01 — DeepSeek v4-pro
 
