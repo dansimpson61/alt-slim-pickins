@@ -147,15 +147,19 @@ sentence. The primitives landed too: `paragraph`, `heading` and `region` are
 words — the atoms under the leaf presenters and the wrappers, classes deriving
 from the words, so nothing styleable by hand returns. Root-classing landed:
 a partial composed over the atoms emits its own name as the class — the
-"word owns its box" law made mechanical. With it, the second movable set
-promoted: `note`, `title`, `actions` left words.rb and the Generator for
-lib/vocabulary, composed entirely in the language over the atoms and the
-`children` splice — **eight vocabulary partials** (action, flash, search,
-thumbnails, thumb, note, title, actions), seven fixture pages byte-identical
-through the stash harness. The promotion pass's movable set is now
-exhausted: footer, item, disclosure and the leaf presenters are blocked on
-the one remaining dan decision — the optionality spelling ("was the modifier
-said").
+"word owns its box" law made mechanical. The optionality spelling landed
+(dan, 2026-09-02): a partial's declared slots materialise as keys of its
+parameters subject, nil when unsaid — `when .open` is "was the modifier
+said" — and the rest of the world falls through the overlay. With it:
+**twelve vocabulary partials** — note, title, actions over the atoms;
+action, flash, search, thumbnails, thumb from Round C; and footer, aside,
+list, item over a `region` that now knows its word's tag (BOX_TAGS — a
+promoted footer stays a `<footer>`) and its content. All 13 pages
+(repo + portfolio + roth + dashboard) byte-identical through the stash
+harness. What promotion still needs: `empty`'s register-with-any-gatherer;
+one markup bit each for card/disclosure/figure/section; dan's call on
+text's box class and on whether presentation inference becomes language
+(the money/time/icon family) — the audit lives in ROADMAP-0.2.
 
 ## What is next — Phase 4, the exam
 

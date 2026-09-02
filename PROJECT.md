@@ -5,19 +5,16 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-02'
-next_step: The promotion pass is at its gate. Root-classing landed and the
-  second movable set promoted: note/title/actions left words.rb and the
-  Generator for lib/vocabulary, composed over the paragraph/heading/region
-  atoms — eight vocabulary partials now (action, flash, search, thumbnails,
-  thumb, note, title, actions), seven fixture pages byte-identical. Suite
-  217 runs / 0 failures, checkers 0 problems, committed and pushed
-  (aa0d6e1). The movable set is exhausted: footer, item, disclosure and the
-  leaf presenters are blocked on ONE dan decision — the optionality
-  spelling, "was the modifier said" (a partial cannot ask whether its call
-  named a variant or a modifier). Decide that spelling, and the rest of the
-  promotion pass unblocks. Round A of Phase 4 landed the negotiated
-  primitives (hidden/input/textarea, form widened, card titles, link
-  active:, button size:); ~/dev/dashboard stays untouched.
+next_step: The optionality spelling is landed and harvested: footer, aside,
+  list, item are vocabulary partials over a tag-aware region (BOX_TAGS — a
+  promoted footer stays a <footer>), twelve partials total, 13 pages
+  byte-identical, committed and pushed (a5557e9, 5b382a1). Suite 224 runs /
+  0 failures, checkers 0 problems. Remaining promotion gates, audited in
+  ROADMAP-0.2: empty needs register-with-any-gatherer; card/disclosure/
+  figure/section need one markup bit each; dan's calls on text's box class
+  and on whether presentation inference becomes language (money/percent/
+  number/time/icon/metric/fact/snippet). Round A of Phase 4 landed the
+  negotiated primitives; ~/dev/dashboard stays untouched.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

@@ -641,22 +641,28 @@ thumbnails, thumb. dan's principle applied to the absence itself: the
 element primitives existed for Ruby words (`tag`) and were denied to
 language words — an asymmetry word-is-word-is-word forbids — so `paragraph`,
 `heading` and `region` are now words, the atoms the leaf presenters and
-wrappers compose over, classes still deriving from the words. The last
-mechanism the pass needed was root-classing: a partial composed over
-`paragraph` must emit its OWN name as the class — the "word owns its box"
-law made mechanical. It is landed, and with it the second movable set:
-`note`, `title`, `actions` left words.rb and the Generator for
-lib/vocabulary, composed entirely in the language over the atoms and the
-`children` splice — eight vocabulary partials now. The seven fixture pages
-render byte-identical through the stash harness; promotion changed nothing
-a page sees. The audit of every remaining Ruby word by mechanism: the
-optionality words (footer, item, disclosure) and the leaf presenters are
-blocked on one spelling — "was the modifier said" — a partial cannot ask
-whether its call named a variant or a modifier; head words and the
-subject-flow words are the runtime's own job by design; choose needs
-condition evaluation, which is not a sentence's business. The movable set
-is exhausted until that spelling exists: one dan decision — the optionality
-spelling — gates the rest of the pass.
+wrappers compose over, classes still deriving from the words. Then the two
+mechanisms the pass was waiting for, both landed and both dan's:
+root-classing — a partial composed over an atom emits its OWN name as the
+class, the "word owns its box" law made mechanical — brought note, title
+and actions out of Ruby; the optionality spelling — a partial's declared
+slots materialise as keys, nil when the call did not say them, so
+`when .open` is "was the modifier said" in the language's own conditional —
+brought the named boxes: footer, aside, list and item, composed over a
+`region` that now knows its word's tag (a promoted footer stays a
+`<footer>`) and its content. Twelve vocabulary partials now, and all
+thirteen pages — the repo's, both apps' — byte-identical throughout. The
+audit of what remains: `empty` needs register-with-any-open-gatherer (it
+registers with every gatherer, not one); card, disclosure, figure and
+section each need one bit of their markup the atoms cannot say yet (the
+card--title class, a summary tag, a caption after the children, the
+section-title); text would gain its box class — the pass's law applying,
+but a byte change dan may ratify or refuse; and the inference presenters
+(money, percent, number, time, icon, metric, fact, snippet) are blocked on
+whether presentation inference becomes language — the same word-or-power
+question that kept `said` out. Head words and the subject-flow words are
+the runtime's own job by design; choose needs condition evaluation, which
+is not a sentence's business.
 
 **The when-asymmetry, decided (dan, 2026-09-01).** The transform defers the
 built-in `when`'s condition so its guard fires before the argument runs; an
