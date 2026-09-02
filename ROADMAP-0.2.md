@@ -607,8 +607,8 @@ pays once, not once per row. The cached verdict carries no path, so each
 render composes its own refusal (roth's report.sp renders as a partial
 and as a page, and each names itself); a source that will not parse is
 never cached, so every render names its own path. Re-measured, same
-instrument: cold render 3.42 ms, warm render 1.66 ms — what a request
-pays, halved — and 0.12 ms per partial-in-`each` row. `test/compilation_test.rb`
+instrument: cold render 2.75 ms, warm render 1.37 ms — what a request
+pays, halved — and 0.10 ms per partial-in-`each` row. `test/compilation_test.rb`
 pins the cache; eleven pages byte-identical.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
@@ -661,8 +661,8 @@ evaluated. No grammar change; the evidence asks for none.
   `bin/measure_cost.rb`): full render 3.59 ms, the gate 1.09 ms, 0.29 ms per
   partial-in-`each` row (ruby 4.0.1, specimen.sp, 200 runs). The answer
   landed later (round 10, at dan's direction, after Phase 4 began): the
-  compile-once cache — `Compilation` — is built; warm render 1.66 ms, cold
-  3.42 ms, 0.12 ms per partial-in-`each` row.
+  compile-once cache — `Compilation` — is built; warm render 1.37 ms, cold
+  2.75 ms, 0.10 ms per partial-in-`each` row.
 
 *Done looks like:* both apps still serve, every repo page still renders, and
 the failure mode the whole project exists to remove is removed from this

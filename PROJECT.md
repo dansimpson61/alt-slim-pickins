@@ -18,7 +18,7 @@ next_step: ROADMAP-0.2.md Phase 4, the exam — the candidate short-list is in
   stays untouched and working throughout.
   Phase 3's compile-once cache landed (round 10, 2026-09-02): Compilation
   holds the gate's verdict and the compiled Ruby keyed by source — warm
-  render 1.66 ms, cold 3.42 ms, 0.12 ms per partial-in-each row.
+  render 1.37 ms, cold 2.75 ms, 0.10 ms per partial-in-each row.
   Both parked decisions are closed (dan, 2026-09-01): favicon is a page
   modifier, landed and tested; the when-deferral asymmetry stays as
   documented in dogfood_test — an app word that wants guard-before-read uses

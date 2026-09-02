@@ -77,7 +77,7 @@ byte-identical throughout) and then landed all of Phase 3:
   silence is a boot error, by construction.
 - **The cost is measured, and the escape is built.** `bin/measure_cost.rb`
   is the instrument (ruby 4.0.1, specimen.sp, 200 runs): cold render
-  3.42 ms, warm render 1.66 ms — what a request pays — and 0.12 ms per
+  2.75 ms, warm render 1.37 ms — what a request pays — and 0.10 ms per
   partial-in-`each` row. `Compilation` is the compile-once cache: the
   gate's verdict and the compiled Ruby, keyed by source, behind a mutex; a
   source that will not parse is never cached, so every render names its
