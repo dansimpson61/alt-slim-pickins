@@ -5,41 +5,39 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 3, in progress — rounds 1-3 done and pushed:
-  words build semantic nodes and the Generator interprets them (eleven pages
-  byte-identical), the vocabulary lives in lib/slim_pickins/words.rb written
-  with the same five-method surface apps get (Builder 747 → 263 lines), and
-  words_test.rb pins that contracts, Words and the Generator agree. One
-  finding for dan: .sp-composition of the vocabulary is empty without new
-  primitive words — the vocabulary is its own lowest layer (see the last
-  LORE.md entry). Next: Phase 3's payload — the validation pass over the tree
-  before emission (report-only, then the gate); the roth boot-error test; the
-  per-render cost measured. The AST-pipeline decision stands as recorded:
-  parse → validate → generate, generator unchanged.
+next_step: ROADMAP-0.2.md Phase 3, the payload — everything before it has
+  landed: pages evaluate into semantic nodes, the Generator interprets them,
+  the vocabulary lives in words.rb on the same public surface app words get,
+  the sweep moved heading-depth and form-context into the interpreter, and
+  test/dogfood_test.rb re-implements all four gatherers as app words,
+  byte-identical (Builder 867 → ~298 lines). Next: the validation pass over
+  the evaluated tree before emission — every subject resolvable, every
+  attribute answered, the contract satisfied — report-only first, then the
+  gate: a page may not render until the app has been proved able to answer
+  it. Then the roth boot-error test and the per-render cost, measured.
+  Open dan decisions: favicon as a page modifier (word, not power), and
+  whether the when-deferral asymmetry (transform-level, documented in
+  dogfood_test) ever deserves a grammar answer.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
-notes: Roadmap 0.2 is WRITTEN (ROADMAP-0.2.md, 2026-09-01), the first
-  even-numbered, backward-leading roadmap (ataovy dian-tana). Verdict: the
-  grammar stands; the vocabulary stands with two renames (check→checkbox,
-  select→choice — verbs among nouns, renamed in Phase 1) and a shape checker;
-  the Builder does NOT stand — 867 lines, 16 ivars, 25 of 50 words touching
-  them, four copies of one gathering mechanism (option unguarded, `when`
-  guards after its argument is evaluated). Phases: 0 rewrite the Slim-Pickins Way, 1 the part-of-speech
-  checker + renames + doc hygiene, 2 un-god-object the Builder (component
-  objects; AST-pipeline decision recorded), 3 the payload — a page may not
-  render until the app can answer it, 4 the dashboard exam port (conditional
-  UI, routing), 5 dogfood (prose grows fences/tables/ordered lists for this
-  repo's own docs), 6 subtraction. check_grammar.rb now holds ROADMAP-0.2.md.
-  The deleted 0.2 draft's lesson survives in it: the port is the exam, not
-  the syllabus. Escape-hatch number is retired, in writing. Roadmap protocol
-  set 2026-08-31: odd leads forward, even leads back; both eyes stay open.
-  history/ is roadmap 0.1, consulted not maintained. HANDOFF.md is the prompt
-  that resumes this work in a fresh conversation. "Tight Coupling in Ruby
-  DSLs.md" (Gemini's critique of the Builder) is untracked in git and is
-  cited by the roadmap.
+notes: Roadmap 0.2 (ROADMAP-0.2.md, 2026-09-01), the first even-numbered,
+  backward-leading roadmap (ataovy dian-tana), is past its backward look:
+  Phases 0-2 closed — the Way rewritten (PRIMER.md), the vocabulary reviewed
+  as contracts with check→checkbox and select→choice, the Builder
+  un-god-objected (867 lines/16 ivars → 298/9, four gathering copies → one
+  stack, byte-identical throughout). Phase 3's first half landed the
+  semantic-node runtime, the open surface (built-ins and app words eat the
+  same food, enforced by test), the filter: seam in render, and dan's
+  principle recorded as constraint 3: a rule must outlive its reason. The
+  payload — the boot gate — is next. The escape-hatch number is retired, in
+  writing. Roadmap protocol set 2026-08-31: odd leads forward, even leads
+  back; both eyes stay open. history/ is roadmap 0.1, consulted not
+  maintained. HANDOFF.md is the prompt that resumes this work in a fresh
+  conversation. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
+  Builder) is cited by the roadmap.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---

@@ -41,18 +41,23 @@ recoverable from commit `8542111` if ever wanted, but they are not the starting
 point and should not be treated as one. What survives of them is in `LORE.md`,
 which is where it belongs.
 
-## What is next — ROADMAP-0.2.md, Phase 0
+## What is next — ROADMAP-0.2.md, Phase 3's payload
 
-**`ROADMAP-0.2.md` is written** (2026-09-01). It is the even-numbered,
-backward-leading roadmap — the verdict on what 0.1 built, then seven phases.
-`PROJECT.md` `next_step` points at the current phase; the roadmap and
+**`ROADMAP-0.2.md` is written** (2026-09-01), and Phases 0–2 are closed:
+the Way rewritten (PRIMER.md), the vocabulary reviewed and re-registered as
+contracts, the Builder un-god-objected. Phase 3's first half is done — pages
+evaluate into semantic nodes, the Generator interprets them, the vocabulary
+lives in words.rb on the same public surface app words get, and
+test/dogfood_test.rb re-implements the gatherers as app words, byte for
+byte. `PROJECT.md` `next_step` points at the current phase; the roadmap and
 `PROJECT.md` are the resume, not this section.
 
-**Phase 0 is the rewrite of the Slim-Pickins Way.** Write one document in this
-repo describing the language as it stands — grammar, morphology, government,
-the app contract, the noun register, how words are added — with every example
-an untagged fence held by `check_grammar.rb` and every claim measured. dan
-decides what happens to `~/dev/slim-pickins`'s PRIMER.
+**What remains is the payload:** a validation pass over the evaluated tree
+before emission — every subject resolvable, every attribute answered, the
+contract satisfied — report-only first, then the gate: *a page may not render
+until the app has been proved able to answer it.* Then the roth test
+(renaming an attribute fails at boot, naming the line and the attribute) and
+the per-render cost, measured.
 
 The findings that motivated the roadmap are kept here because the roadmap
 argues from them:
@@ -111,7 +116,7 @@ the arguing is the first thing 0.2 does.
   already do.
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 158 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  (currently 170 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
   0 problems)
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore

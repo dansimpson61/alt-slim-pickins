@@ -167,10 +167,15 @@ is a beautifully organised runtime for the wrong language.
 ## Status
 
 **Roadmap 0.1 is finished** — all eight phases, closed in
-[ROADMAP-0.1.md](history/ROADMAP-0.1.md). **Roadmap 0.2 is written** —
-[ROADMAP-0.2.md](ROADMAP-0.2.md). It leads with the backward eye: its first
-phase rewrites the Slim-Pickins Way, and its payload is the contract checked
-before a page renders.
+[ROADMAP-0.1.md](history/ROADMAP-0.1.md). **Roadmap 0.2 is under way** —
+[ROADMAP-0.2.md](ROADMAP-0.2.md). Its backward look is done: Phases 0–2 are
+closed (the Way rewritten, the vocabulary reviewed and re-registered as
+contracts, the Builder un-god-objected), and Phase 3 has landed its first
+half — the runtime now evaluates pages into **semantic nodes**, the Generator
+interprets them, the vocabulary lives in `words.rb` on the same public
+surface app words get, and the dogfood test re-implements the gatherers as
+app words, byte for byte. What remains is the payload: a page may not render
+until the app has been proved able to answer it.
 
 The bet the paper could not settle was **inference** — whether `field
 base_income` can really derive a label, an input name, a value and an input
