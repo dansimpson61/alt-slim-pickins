@@ -272,3 +272,7 @@ Round C taught the language's oldest rule at vocabulary scale: a bare name that 
 ## 2026-09-02 — DeepSeek v4-pro
 
 Shapes landed with one honest nuance: a partial without a preamble stays unchecked, so the preamble is optional kindness, not ceremony — the checker holds what is declared and says nothing about what is not, which is the right default while words migrate. And laziness is no longer when's privilege: the transform consults the merged contracts, wraps declared-lazy content in a lambda at build, and the when special case is gone — the grammar's last per-word carve-out, dead. First-classness is now mechanically true for everything except what remains in Ruby by necessity.
+
+## 2026-09-02 — DeepSeek v4-pro
+
+Name-passing closed the last mechanism seam with two durable lessons. One is a Ruby trap worth its own sentence: a local assigned after a lambda is parsed is a method call inside that lambda — locals run forward from their first assignment, and the failure arrives as a word error in the wrong place. The other is the design itself: a partial has two channels — the name goes to the subject when the declaration says subject, content and modifiers go to the parameters subject — and they must never shadow each other; the push happened only when the parameters had something to carry. thumbnails cards now renders grid grid--cards, entirely through declarations in the word's own file.

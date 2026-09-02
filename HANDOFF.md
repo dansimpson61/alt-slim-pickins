@@ -136,12 +136,15 @@ claim.
 `thumb` are the first promoted words — written entirely in the language,
 their preambles their declarations, their VOCABULARY entries generated.
 
+**Name-passing landed too:** a partial declaring `name: variant` receives
+its name through the parameters (`.name`), variant-named words accept a
+derived variant as data, and a name shifts the subject only when the
+declaration says `subject` — preamble-less partials keep the old rule.
+
 **What remains, in order:** (1) the promotion pass — words move from Ruby to
 lib/vocabulary where the language can say them, each a round-end decision,
 the byte-diff harness the acceptance test; (2) docs derived — the generator
-extends to compose the remaining entries from preambles; (3) name-passing to
-partials — a partial's body cannot yet read its name argument (`.name`), the
-next seam the promotion pass will meet.
+extends to compose the remaining entries from preambles.
 
 ## What is next — Phase 4, the exam
 
