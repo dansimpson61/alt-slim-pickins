@@ -15,17 +15,26 @@ require_relative '../lib/slim_pickins'
 require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
+require_relative '../examples/dashboard/words/dashboard_words'
+
+require '/home/dan/dev/dashboard/lib/workspace'
+require '/home/dan/dev/dashboard/lib/scan'
 
 repo = SlimPickins::Library.from(File.expand_path('../pages', __dir__))
 portfolio = SlimPickins::Library.from(File.expand_path('../examples/portfolio/views', __dir__),
                                       words: AppWords)
 roth = SlimPickins::Library.from(File.expand_path('../examples/roth/views', __dir__))
+dashboard = SlimPickins::Library.from(File.expand_path('../examples/dashboard/views', __dir__),
+                                      words: DashboardWords)
 scenario = Roth::Scenario.defaults
 projection = Roth::Projection.of(scenario)
 
 # Every page, and how its app answers it — the corpus the gate will prove at
 # boot. A page is a label, the library it renders with, and the locals its
 # app would give it.
+dashboard_base = { notice: nil, search_q: '', error_entry: nil,
+                   nav: { studio: false, library: false, reconcile: false,
+                          dispatch: false, ports: false } }.freeze
 PAGES = [
   *%w[portfolio portfolio_table account_detail content figures roth_form specimen].map do |name|
     ["pages/#{name}.sp", repo, Fixtures.for(name)]
@@ -33,7 +42,13 @@ PAGES = [
   ['examples/portfolio/views/index.sp', portfolio, { portfolio: Fixtures.portfolio }],
   ['examples/portfolio/views/account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
   ['examples/roth/views/controls.sp', roth, { scenario: scenario, projection: projection }],
-  ['examples/roth/views/partials/report.sp', roth, { scenario: scenario, projection: projection }]
+  ['examples/roth/views/partials/report.sp', roth, { scenario: scenario, projection: projection }],
+  ['examples/dashboard/views/triage.sp', dashboard,
+   dashboard_base.merge(queue: Scan.triage_queue,
+                        unreviewed: Scan.instruction_files.count { |f| f[:disposition] == 'unreviewed' })],
+  ['examples/dashboard/views/confirm_archive.sp', dashboard,
+   dashboard_base.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
+                        archive_reference: nil, archive_return_to: '/triage', archive_reason: '')]
 ].freeze
 
 problems = 0

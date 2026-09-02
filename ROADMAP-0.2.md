@@ -677,14 +677,39 @@ put down.
   branches, navigation, hidden inputs and inline styles — the three things
   lore measured as the real blockers. The port reads the dashboard's files the
   way the roth port read roth's: **`~/dev/dashboard` stays untouched and
-  working throughout.**
+  working throughout.** ✅ Done (dan, 2026-09-02): `triage.slim` — the
+  smallest of the short-list, chosen deliberately to see which challenges the
+  short-list had overlooked. They showed up: see the round record below.
 - **Inventory first** `agent` — what the original could *do*, not what it
   said: the parity-plus lesson from the Phase 7 review, which caught the
-  checkbox that vanished unlogged.
+  checkbox that vanished unlogged. ✅ Done — `examples/dashboard/INVENTORY.md`
+  lists every affordance of /triage and the confirm page, and logs the gaps
+  the port exposed, G1–G11.
 - **Settle routing** `agent` — `link` finally meets a real page that asks for
   more than `/name`, and the answer is recorded in the vocabulary, not
   drafted in the abstract.
 - **Judge it** `dan` — as Phase 7 was judged. The exam is not the syllabus.
+
+*Round record (2026-09-02).* The port landed at `examples/dashboard/` — a
+Sinatra app on 4578 rendering the real `Scan.triage_queue` through the
+language: `layout.sp` (nav, search, error card, the `.sp-page` shell around
+`contents`), `triage.sp`, `confirm_archive.sp` (whose computed h1 is `page
+.archive_heading` — a dot is data), `DashboardWords` building the sp-*
+design system on the public surface, the four actions wired to the same
+`Workspace` calls the original makes, boot-proven with `prove!`, in
+`bin/verify_pages.rb`'s corpus, held by `test/dashboard_test.rb` (10 tests)
+and `bin/dashboard_parity.rb` — 26 affordances compared against the live
+dashboard, 0 missing. The gaps it named: G1 hidden inputs have no word; G2
+`form` forbids `button` — two form theories, the language knows one; G3 the
+class scheme is the Generator's, not the description's — a second design
+system forces the hatch for every presenting word; G4 `card` has no title
+slot; G5 no size modifier; G6 no flash word; G7 `page` owns the h1 and the
+head title (the dashboard's document order is inexpressible); G8 no bare
+input; G9 `link` has no active state; G10 `textarea` has no word; G11 the
+hatch's emit-vs-value contract is a silent trap — the port's first bug
+rendered the whole nav three times before a test saw it. These are the
+limitations the exam exists to find; which become words is the next round's
+question, and `Settle routing` is its first case.
 
 *Done looks like:* the view renders through the language; the branch inventory
 matches with every difference logged; routing is settled and recorded; dan's

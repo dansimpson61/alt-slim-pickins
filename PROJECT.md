@@ -5,17 +5,19 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-02'
-next_step: ROADMAP-0.2.md Phase 4, the exam — the candidate short-list is in
-  front of dan, scored: index.slim/Studio 81, project.slim 73, dispatch.slim
-  73, compare.slim 61, triage.slim 50 (rubric: branches, navigation, hidden
-  inputs, inline styles, partial pressure, gap exposure, portability). The
-  dashboard speaks the ORIGINAL slim-pickins gem — ui_button/ui_badge/
-  ui_flash/ui_table built-ins plus Tabular/Word component words — so the port
-  re-expresses old-language views in the current language against the
-  dashboard's pure-Ruby lib/ modules, and partials take over where the
-  original used app words. Awaiting dan's pick; then Inventory first (what
-  the original could do, not what it said), then the port. ~/dev/dashboard
-  stays untouched and working throughout.
+next_step: ROADMAP-0.2.md Phase 4, the exam — dan chose triage.slim and the
+  first port is landed: examples/dashboard/ renders the real Scan queue
+  through the language (layout + triage + confirm_archive + DashboardWords
+  on the public surface, actions wired to Workspace, boot-proven, in
+  verify_pages' corpus), held by test/dashboard_test.rb and
+  bin/dashboard_parity.rb — 26 affordances, 0 missing against the live
+  dashboard. The exam did its job: INVENTORY.md logs eleven gaps (G1–G11) —
+  no hidden word, form forbids button, the class scheme lives in the
+  Generator not the description, no card title/size/flash/textarea/bare
+  input/link-active-state, page owns the h1, and the tag-vs-element trap.
+  Next: dan's call on which gaps become words (Settle routing's first case:
+  link + the minimal POST form), then the next view. ~/dev/dashboard stays
+  untouched.
   Phase 3's compile-once cache landed (round 10, 2026-09-02): Compilation
   holds the gate's verdict and the compiled Ruby keyed by source — warm
   render 1.37 ms, cold 2.75 ms, 0.10 ms per partial-in-each row.

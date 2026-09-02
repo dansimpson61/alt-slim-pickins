@@ -119,26 +119,29 @@ byte-identical throughout) and then landed all of Phase 3:
 
 **Phase 3 is closed: a page may not render until the app has been proved
 able to answer it, at report, at gate, at boot, and the proof costs 1.09 ms
-measured.** Roadmap 0.2's next phase is the exam — the second port, aimed
-at exactly what 0.1 never exercised. The candidate short-list is in front
-of dan (scored in this session): `index.slim`/Studio 81, `project.slim` 73,
-`dispatch.slim` 73, `compare.slim` 61, `triage.slim` 50. Key recon fact:
-the dashboard speaks the **original** slim-pickins gem — `ui_button`,
-`ui_badge`, `ui_flash`, `ui_table` built-ins and `Tabular`/`Word` component
-classes — so the port re-expresses old-language views in the current
-language, against the dashboard's pure-Ruby `lib/` modules, with partials
-where the original used app words.
+measured (1.37 ms warm render after the round-10 compile-once cache).**
+Phase 4's first port is landed: dan chose `triage.slim`, the smallest of the
+short-list — and the challenges showed up anyway.
 
-- **Choose the view** `dan` — the short-list above is the material; the
-  pick is his.
-- **Inventory first** `agent` — what the original could *do*, not what it
-  said: the parity-plus lesson from the Phase 7 review, which caught the
-  checkbox that vanished unlogged.
-- **Settle routing** `agent` — `link` finally meets a real page that asks
-  for more than `/name`, and the answer is recorded in the vocabulary.
-
-See `ROADMAP-0.2.md` Phase 4 for the rest of the phase. **`~/dev/dashboard`
-stays untouched and working throughout.**
+- **The port** — `examples/dashboard/`: a Sinatra app on 4578 rendering the
+  real `Scan.triage_queue` through the language (`layout.sp`, `triage.sp`,
+  `confirm_archive.sp`, `DashboardWords` on the public surface), actions
+  wired to the same `Workspace` calls the original makes, boot-proven,
+  in `bin/verify_pages.rb`'s corpus, held by `test/dashboard_test.rb`
+  (10 tests) and `bin/dashboard_parity.rb` — 26 affordances, 0 missing
+  against the live dashboard at :4000.
+- **The gaps** — `examples/dashboard/INVENTORY.md` logs G1–G11: no hidden
+  word; `form` forbids `button` (two form theories, the language knows one);
+  the class scheme is the Generator's, not the description's (the deepest —
+  it forced the hatch for *every* presenting word); no card title, size
+  modifier, flash, bare input, textarea, link active-state; `page` owns the
+  h1 and head title; and the hatch's emit-vs-value trap (`tag` emits,
+  `element` doesn't) rendered the port's nav three times before a test saw.
+- **Next** — dan's call: which gaps become words. `Settle routing` (the
+  roadmap's next step) is its first case — `link` and the minimal POST form
+  (G1+G2) are the dashboard's dominant idiom; the class-scheme question
+  (G3) is the big one. `~/dev/dashboard` stays untouched and working
+  throughout.
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that
