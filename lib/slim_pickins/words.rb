@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'contracts'
+require_relative 'icons'
 
 module SlimPickins
   # The vocabulary, in its own home. The Builder is the runtime — the chain,
@@ -72,15 +73,15 @@ module SlimPickins
 
     def section(*args, &block)
       name, heading = arguments(args)
-      value, empty, children = about(name) { deeper { capture(&block) } }
-      emit_node([:section, { name: name, heading: label_for(name, heading), level: heading_level },
+      value, empty, children = about(name) { capture(&block) }
+      emit_node([:section, { name: name, heading: label_for(name, heading) },
                  prune(children, empty)])
       value
     end
 
     def title(*args)
       _, text = arguments(args)
-      emit_node([:title, { text: text, level: heading_level }, []])
+      emit_node([:title, { text: text }, []])
     end
 
     # The loop is written once, here, and never in a page.
@@ -167,7 +168,7 @@ module SlimPickins
 
     def card(*args, &block)
       variant, = arguments(args)
-      emit_node([:card, { variant: variant, id: card_id }, deeper { capture(&block) }])
+      emit_node([:card, { variant: variant, id: card_id }, capture(&block)])
     end
 
     def figure(*args, &block)
@@ -192,7 +193,7 @@ module SlimPickins
       emit_node([:prose, { notation: notation, body: body }, []])
     end
 
-    KNOWN_STATUSES = %i[ok pending neutral warning error blocker polish].freeze
+    KNOWN_STATUSES = Icons::SYMBOLS.keys.freeze
 
     def badge(*args)
       variant, body = arguments(args)
@@ -323,15 +324,14 @@ module SlimPickins
 
     def form(*args, to: nil, method: nil, &block)
       name, = arguments(args)
-      value, empty, children = form_context { about(name) { capture(&block) } }
+      value, empty, children = about(name) { capture(&block) }
       emit_node([:form, { name: name, to: to, method: method }, prune(children, empty)])
       value
     end
 
     def group(*args, &block)
       name, legend = arguments(args)
-      emit_node([:group, { name: name, legend: label_for(name, legend), in_form: in_form? },
-                 capture(&block)])
+      emit_node([:group, { name: name, legend: label_for(name, legend) }, capture(&block)])
     end
 
     # The heaviest inference in the vocabulary: four derivations from one word.
@@ -365,7 +365,7 @@ module SlimPickins
       variant, label = arguments(args)
       emit_node([:button, { variant: variant,
                             label: label || (variant && Inference.label(variant)),
-                            to: to, type: type, in_form: in_form? }, []])
+                            to: to, type: type }, []])
     end
 
     def actions(&block)

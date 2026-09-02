@@ -23,8 +23,6 @@ module SlimPickins
     def initialize(page, library = nil)
       @library = library
       @chain = Chain.new(page)
-      @in_form = false
-      @level = 2            # `title` infers its heading level from depth
       @empty_active = false # set while the named subject is an empty collection
       @bindings = {}        # `each holding` binds `holding` for reaching out
       @gatherers = []       # the components whose children are declarations
@@ -189,13 +187,6 @@ module SlimPickins
 
     def chain = @chain
 
-    def deeper
-      @level += 1
-      yield
-    ensure
-      @level -= 1
-    end
-
     # Names are Symbols, content is anything else. This is why argument order
     # never has to be counted.
     def name_and_content(args)
@@ -231,21 +222,11 @@ module SlimPickins
     # --- the context accessors the words read ------------------------------
 
     def empty_active? = @empty_active
-    def in_form? = @in_form
-    def heading_level = @level
     def head_nodes = @head_nodes
     def sprite_symbols = @icons_used.dup
 
     def in_head(node) = @head_nodes << node
     def use_icon(name) = @icons_used << name
-
-    def form_context(&block)
-      was = @in_form
-      @in_form = true
-      yield
-    ensure
-      @in_form = was
-    end
 
     def bind(name, value) = @bindings[name] = value
     def unbind(name) = @bindings.delete(name)

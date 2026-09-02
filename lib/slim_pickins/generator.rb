@@ -39,8 +39,28 @@ module SlimPickins
     end
 
     def call(nodes)
+      @depth = 1
+      @in_form = false
       nodes.each { |node| emit(node) }
       @out
+    end
+
+    # The walk's context — heading depth and form-ness are tree facts, so the
+    # interpreter derives them as it goes. The words stopped carrying them.
+    def with_depth(depth)
+      was = @depth
+      @depth = depth
+      yield
+    ensure
+      @depth = was
+    end
+
+    def with_form(in_form)
+      was = @in_form
+      @in_form = in_form
+      yield
+    ensure
+      @in_form = was
     end
 
     private
@@ -130,13 +150,13 @@ module SlimPickins
 
     def section(attrs, children)
       open_tag('section', class: token(:section, attrs[:name]))
-      full_tag(:"h#{attrs[:level]}", attrs[:heading], class: 'section-title')
-      children.each { |c| emit(c) }
+      full_tag(:"h#{@depth + 1}", attrs[:heading], class: 'section-title')
+      with_depth(@depth + 1) { children.each { |c| emit(c) } }
       @out << '</section>'
     end
 
     def title(attrs, _children)
-      full_tag(:"h#{attrs[:level]}", attrs[:text], class: token(:title))
+      full_tag(:"h#{@depth + 1}", attrs[:text], class: token(:title))
     end
 
     def empty(attrs, _children)
@@ -207,7 +227,7 @@ module SlimPickins
 
     def card(attrs, children)
       open_tag('article', class: token(:card, attrs[:variant]), id: attrs[:id])
-      children.each { |c| emit(c) }
+      with_depth(@depth + 1) { children.each { |c| emit(c) } }
       @out << '</article>'
     end
 
@@ -310,12 +330,12 @@ module SlimPickins
     def form(attrs, children)
       open_tag('form', id: attrs[:name]&.to_s, action: attrs[:to]&.to_s,
                       method: (attrs[:method] || :post).to_s)
-      children.each { |c| emit(c) }
+      with_form(true) { children.each { |c| emit(c) } }
       @out << '</form>'
     end
 
     def group(attrs, children)
-      if attrs[:in_form]
+      if @in_form
         open_tag('fieldset', class: token(:group, attrs[:name]))
         full_tag('legend', attrs[:legend])
         children.each { |c| emit(c) }
@@ -368,7 +388,7 @@ module SlimPickins
 
     def button(attrs, _children)
       full_tag('button', attrs[:label],
-               type: (attrs[:type] || (attrs[:in_form] ? :submit : :button)).to_s,
+               type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
                formaction: attrs[:to]&.to_s,
                class: token(:button, attrs[:variant]))
     end
