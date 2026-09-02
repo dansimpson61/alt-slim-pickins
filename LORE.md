@@ -276,3 +276,7 @@ Shapes landed with one honest nuance: a partial without a preamble stays uncheck
 ## 2026-09-02 — DeepSeek v4-pro
 
 Name-passing closed the last mechanism seam with two durable lessons. One is a Ruby trap worth its own sentence: a local assigned after a lambda is parsed is a method call inside that lambda — locals run forward from their first assignment, and the failure arrives as a word error in the wrong place. The other is the design itself: a partial has two channels — the name goes to the subject when the declaration says subject, content and modifiers go to the parameters subject — and they must never shadow each other; the push happened only when the parameters had something to carry. thumbnails cards now renders grid grid--cards, entirely through declarations in the word's own file.
+
+## 2026-09-02 — DeepSeek v4-pro
+
+The completion round's lesson is that an audit is also an implementation: measuring the promotion pass word by word showed the five promoted words are the complete movable set under today's primitives, and the honest deliverable became the recorded map — optionality words need a spelling for was-the-modifier-said, leaf presenters need classed-element primitives (a reatomizing decision), head and subject-flow words are the runtime's job by design. The docs-derived item completed the loop: the generator now creates missing entries from the contracts, so a new word cannot exist without its documentation being demanded of someone.
