@@ -43,4 +43,34 @@ class VocabularyPartialsTest < Minitest::Test
       assert_match(/`flash` is already a slim-pickins word/, error.message)
     end
   end
+
+  # The named boxes (2026-09-02): footer, aside, list and item are drafted in
+  # the language over `region`, which derives its tag from the word — a
+  # promoted footer stays a <footer>, classes included.
+  def test_the_named_boxes_keep_their_tags
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          aside
+            list plain
+              item "One"
+              item "Two"
+          footer "Approximate."
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<aside class="aside">'
+      assert_includes html, '<ul class="list list--plain">'
+      assert_includes html, '<li class="item">One</li>'
+      assert_includes html, '<li class="item">Two</li>'
+      assert_includes html, '<footer class="footer">Approximate.</footer>'
+    end
+  end
+
+  def test_the_box_passes_through_choose
+    branch = [:paragraph, {}, []]
+    root = SlimPickins::Builder.box_root([[:choose, {}, [branch]]])
+    assert_same branch, root
+    assert_same branch, SlimPickins::Builder.box_root([branch])
+  end
 end

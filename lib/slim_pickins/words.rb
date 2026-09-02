@@ -58,22 +58,19 @@ module SlimPickins
       emit_node([:link, { name: name, label: label_for(name, label), to: to, active: active }, []])
     end
 
-    def footer(*args, &block)
-      _, body = arguments(args)
-      emit_node([:footer, { body: body }, capture(&block)])
-    end
-
     # The element primitives. `paragraph` is the atom under note and text;
-    # `region` is the atom under the wrappers. Classes still derive from the
-    # word, so a partial composing over them keeps the language's shape.
+    # `region` is the atom under the wrappers — and under the named boxes it
+    # derives its tag from the word, so a promoted `footer` stays a footer.
+    # Classes still derive from the word, so a partial composing over them
+    # keeps the language's shape.
     def paragraph(*args, &block)
       variant, body = arguments(args)
       emit_node([:paragraph, { variant: variant, body: body }, capture(&block)])
     end
 
     def region(*args, &block)
-      variant, = arguments(args)
-      emit_node([:region, { variant: variant }, capture(&block)])
+      variant, body = arguments(args)
+      emit_node([:region, { variant: variant, body: body }, capture(&block)])
     end
 
     def heading(*args)
@@ -164,10 +161,6 @@ module SlimPickins
       register!(Table, { name: name, header: label, as: nil, total: true }, 'total')
     end
 
-    def aside(&block)
-      emit_node([:aside, {}, capture(&block)])
-    end
-
     # `columns:` is a wish, not a decree. An exact fractional track — a plain
     # `calc(100% / n)` — scales with its container and so can never reflow,
     # which quietly made every `columns:` grid non-responsive. Flooring it at
@@ -175,16 +168,6 @@ module SlimPickins
     def grid(*args, columns: nil, &block)
       variant, = arguments(args)
       emit_node([:grid, { variant: variant, columns: columns }, capture(&block)])
-    end
-
-    def list(*args, &block)
-      variant, = arguments(args)
-      emit_node([:list, { variant: variant }, capture(&block)])
-    end
-
-    def item(*args, &block)
-      variant, body = arguments(args)
-      emit_node([:item, { variant: variant, body: body }, capture(&block)])
     end
 
     def card(*args, &block)

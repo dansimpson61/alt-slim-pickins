@@ -143,12 +143,6 @@ module SlimPickins
                class: classes, 'aria-current': attrs[:active] ? 'page' : nil)
     end
 
-    def footer(attrs, children)
-      open_tag('footer', class: token(:footer))
-      attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
-      @out << '</footer>'
-    end
-
     # --- Structure --------------------------------------------------------
 
     def section(attrs, children)
@@ -198,30 +192,12 @@ module SlimPickins
       @out << '</table>'
     end
 
-    def aside(_attrs, children)
-      open_tag('aside', class: token(:aside))
-      children.each { |c| emit(c) }
-      @out << '</aside>'
-    end
-
     def grid(attrs, children)
       track = attrs[:columns] &&
               "max(var(--track-min), calc((100% - #{attrs[:columns] - 1} * var(--gap)) / #{attrs[:columns]}))"
       open_tag('div', class: token(:grid, attrs[:variant]), style: track && "--track: #{track}")
       children.each { |c| emit(c) }
       @out << '</div>'
-    end
-
-    def list(attrs, children)
-      open_tag('ul', class: token(:list, attrs[:variant]))
-      children.each { |c| emit(c) }
-      @out << '</ul>'
-    end
-
-    def item(attrs, children)
-      open_tag('li', class: token(:item, attrs[:variant]))
-      attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
-      @out << '</li>'
     end
 
     def card(attrs, children)
@@ -327,10 +303,16 @@ module SlimPickins
       @out << '</p>'
     end
 
+    # The named boxes: a promoted word's box is its tag too. `region` under
+    # a `footer` partial emits a <footer>, so promotion changes nothing a
+    # page sees, tags included. Words not named here keep the div they are.
+    BOX_TAGS = { footer: 'footer', aside: 'aside', item: 'li', list: 'ul' }.freeze
+
     def region(attrs, children)
-      open_tag('div', class: token(attrs[:class_base] || :region, attrs[:variant]))
-      children.each { |c| emit(c) }
-      @out << '</div>'
+      tag_name = BOX_TAGS.fetch(attrs[:class_base], 'div')
+      open_tag(tag_name, class: token(attrs[:class_base] || :region, attrs[:variant]))
+      attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
+      @out << "</#{tag_name}>"
     end
 
     def text(attrs, _children)

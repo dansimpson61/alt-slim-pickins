@@ -47,7 +47,7 @@ module SlimPickins
     # substrate, and their classes still derive from the words, so nothing
     # a human could style by hand comes back.
     paragraph:  Contract.new(name: :variant, content: true, children: :any, shape: :presents),
-    region:     Contract.new(name: :variant, children: :any, shape: :encloses),
+    region:     Contract.new(name: :variant, content: true, children: :any, shape: :encloses),
     heading:    Contract.new(content: true, shape: :presents),
     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
                              children: :any, subject: :shift, shape: :document),
@@ -57,8 +57,6 @@ module SlimPickins
     script:     Contract.new(content: true, modifiers: [:defer], shape: :document),
     nav:        Contract.new(name: :variant, children: %i[link input search], shape: :encloses),
     link:       Contract.new(name: :destination, content: true, modifiers: %i[to active], shape: :says),
-    footer:     Contract.new(content: true, children: :any, shape: :encloses),
-    aside:      Contract.new(children: :any, shape: :encloses),
     section:    Contract.new(name: :subject, content: true, children: :any, subject: :shift,
                              shape: :encloses),
     each:       Contract.new(name: :binding, modifiers: [:from], children: :any, subject: :each,
@@ -71,9 +69,6 @@ module SlimPickins
                              parents: [:table], subject: :row, shape: :registers),
     total:      Contract.new(name: :attribute, content: true, parents: [:table], shape: :registers),
     grid:       Contract.new(name: :variant, content: true, modifiers: [:columns], children: :any, shape: :encloses),
-    list:       Contract.new(name: :variant, content: true, children: %i[item each], shape: :encloses),
-    item:       Contract.new(name: :variant, content: true, children: :any, parents: [:list],
-                             shape: :registers),
     card:       Contract.new(name: :variant, content: true, children: :any, shape: :encloses),
     figure:     Contract.new(content: true, children: :any, shape: :encloses),
     disclosure: Contract.new(content: true, modifiers: [:open], children: :any, shape: :encloses),
@@ -145,6 +140,7 @@ module SlimPickins
                       when :name, :inside then value.to_sym
                       when :content, :gathers then value == 'true'
                       when :shape then value.to_sym
+                      when :children, :parents then value == 'any' ? :any : value.split.map(&:to_sym)
                       else value.split.map(&:to_sym)
                       end
       end

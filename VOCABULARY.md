@@ -260,7 +260,7 @@ The name says what the cells are: `grid cards`, `grid metrics`.
 ### `list`
 
 - **name** — the variant
-- **content** — text or data, when there is any
+- **content** — none
 - **modifiers** — none
 - **children** — `item`, `each`
 - **subject** — unchanged
@@ -1180,7 +1180,7 @@ paragraph quiet, "A quieter line."
 ### `region`
 
 - **name** — the variant
-- **content** — none
+- **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged

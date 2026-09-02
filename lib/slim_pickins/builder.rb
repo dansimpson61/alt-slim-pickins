@@ -315,6 +315,17 @@ module SlimPickins
       instance_eval(&block) if block
     end
 
+    # The word's box: the node a single-root body will render. `choose` is
+    # presentation-transparent — its branches render in its place, and the
+    # generator splices it away — so the box passes through it.
+    def self.box_root(body)
+      root = body.first
+      while root[0] == :choose && root[2].size == 1 && root[2].first.is_a?(Array)
+        root = root[2].first
+      end
+      root
+    end
+
     # A partial takes the current subject, like any word that names none, and
     # shifts it when it names one — the same rule as `section`. Its
     # arguments are its scope: the content and the modifiers it was said
@@ -366,10 +377,11 @@ module SlimPickins
             nodes = evaluate_body(evaluate, parameters, word, push, contract)
             target.collect(nodes)
             nodes
-          elsif block
-            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, word, push, contract) }
           else
-            evaluate_body(evaluate, parameters, word, push, contract)
+            # The caller's children splice into the body at `children` —
+            # established even when the call took none, so a partial whose
+            # body says `children` splices nothing instead of raising.
+            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, word, push, contract) }
           end
         end
       value, empty, body =
@@ -385,7 +397,7 @@ module SlimPickins
       # root node carries the word's own name as the class base. An app's
       # partials keep the classes of the words they compose.
       if Library.builtin_partials.key?(word) && body.size == 1 && body.first.is_a?(Array)
-        body.first[1][:class_base] = word.to_sym
+        self.class.box_root(body)[1][:class_base] = word.to_sym
       end
       @nodes.concat(prune(body, empty)) unless contract&.inside && contract.inside != :any
       value
