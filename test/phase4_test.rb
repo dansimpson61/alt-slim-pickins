@@ -69,7 +69,7 @@ class Phase4Test < Minitest::Test
 
   def test_time_renders_machine_readable_alongside_human
     html = render("page thing\n  time .on\n", thing: { on: Date.new(2026, 8, 30) })
-    assert_includes html, '<time datetime="2026-08-30">30 August 2026</time>'
+    assert_includes html, '<time class="time" datetime="2026-08-30">30 August 2026</time>'
   end
 
   def test_metric_derives_label_and_value_from_one_word

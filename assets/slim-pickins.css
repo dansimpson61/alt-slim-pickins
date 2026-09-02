@@ -167,8 +167,17 @@ a { color: var(--accent); }
 }
 .card--compact { padding: var(--gap) var(--gap) 0; font-size: var(--size-small); }
 .card > :last-child { margin-bottom: 0; }
+.card-title {}
 
 .actions { display: flex; flex-wrap: wrap; gap: var(--gap); align-items: center; }
+
+/* The boxes the promotion pass gave a class of their own: the box exists,
+ * the default look is the browser's — these rules declare the hook and
+ * change nothing. */
+.disclosure {}
+.text {}
+.time {}
+.span {}
 
 .figure { margin: 0 0 var(--gap); }
 .figure img { max-width: 100%; height: auto; border-radius: var(--radius); }

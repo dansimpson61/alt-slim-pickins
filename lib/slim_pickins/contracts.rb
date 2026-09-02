@@ -27,12 +27,19 @@ module SlimPickins
   #             :encloses, :presents, :says, :registers, :gathers,
   #             :iterates. A word with no declared shape has to argue for
   #             itself in writing; check_shape.rb fails on it.
+  # empty     — the word renders only while the enclosing subject is an
+  #             empty collection (the gatherers' `empty`).
+  # id        — the word's id derives from the subject (`card`).
+  # label     — the word's content is labelled by the app contract
+  #             (`section`'s heading).
   Contract = Struct.new(:name, :content, :modifiers, :children, :parents, :subject,
-                        :speech, :shape, :gathers, :inside, :lazy, keyword_init: true) do
+                        :speech, :shape, :gathers, :inside, :lazy, :empty, :id, :label,
+                        keyword_init: true) do
     def initialize(**kw)
       super(**{ name: :none, content: false, modifiers: [], children: :none,
                 parents: :any, subject: :keep, speech: :noun, shape: nil,
-                gathers: false, inside: :any, lazy: [] }.merge(kw))
+                gathers: false, inside: :any, lazy: [], empty: false, id: false,
+                label: false }.merge(kw))
     end
   end
 
@@ -47,8 +54,12 @@ module SlimPickins
     # substrate, and their classes still derive from the words, so nothing
     # a human could style by hand comes back.
     paragraph:  Contract.new(name: :variant, content: true, children: :any, shape: :presents),
-    region:     Contract.new(name: :variant, content: true, children: :any, shape: :encloses),
+    region:     Contract.new(name: :variant, content: true, modifiers: %i[open id],
+                             children: :any, shape: :encloses),
     heading:    Contract.new(content: true, shape: :presents),
+    span:       Contract.new(name: :variant, content: true, modifiers: [:precision], shape: :presents),
+    figcaption: Contract.new(content: true, shape: :presents),
+    summary:    Contract.new(content: true, shape: :presents),
     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
                              children: :any, subject: :shift, shape: :document),
     contents:   Contract.new(shape: :document),
@@ -57,11 +68,8 @@ module SlimPickins
     script:     Contract.new(content: true, modifiers: [:defer], shape: :document),
     nav:        Contract.new(name: :variant, children: %i[link input search], shape: :encloses),
     link:       Contract.new(name: :destination, content: true, modifiers: %i[to active], shape: :says),
-    section:    Contract.new(name: :subject, content: true, children: :any, subject: :shift,
-                             shape: :encloses),
     each:       Contract.new(name: :binding, modifiers: [:from], children: :any, subject: :each,
                              speech: :determiner, shape: :iterates),
-    empty:      Contract.new(content: true, children: :any, speech: :adjective, shape: :says),
     table:      Contract.new(name: :subject, content: true,
                              children: %i[column total choose each], subject: :shift,
                              shape: :gathers),
@@ -69,18 +77,9 @@ module SlimPickins
                              parents: [:table], subject: :row, shape: :registers),
     total:      Contract.new(name: :attribute, content: true, parents: [:table], shape: :registers),
     grid:       Contract.new(name: :variant, content: true, modifiers: [:columns], children: :any, shape: :encloses),
-    card:       Contract.new(name: :variant, content: true, children: :any, shape: :encloses),
-    figure:     Contract.new(content: true, children: :any, shape: :encloses),
-    disclosure: Contract.new(content: true, modifiers: [:open], children: :any, shape: :encloses),
-    money:      Contract.new(content: true, modifiers: [:precision], shape: :presents),
-    percent:    Contract.new(content: true, modifiers: [:precision], shape: :presents),
-    number:     Contract.new(content: true, modifiers: [:precision], shape: :presents),
-    text:       Contract.new(content: true, shape: :presents),
     prose:      Contract.new(name: :notation, content: true, shape: :presents),
-    badge:      Contract.new(name: :variant, content: true, shape: :presents),
     fact:       Contract.new(name: :attribute, content: true, shape: :presents),
     snippet:    Contract.new(name: :notation, content: true, shape: :presents),
-    time:       Contract.new(name: :variant, content: true, shape: :presents),
     image:      Contract.new(content: true, modifiers: [:alt], shape: :presents),
     icon:       Contract.new(name: :name, content: true, shape: :says),
     metric:     Contract.new(name: :attribute, content: true, modifiers: [:as], shape: :says),
@@ -116,8 +115,8 @@ module SlimPickins
 
   # The shapes a vocabulary partial declares, as comment preambles at the top
   # of its file — the word's own file is the single source of what it is, and
-  # the checkers hold it. Keys: name, content, modifiers, children, gathers,
-  # inside, lazy, shape.
+  # the checkers hold it. Keys: name, content, modifiers, children, parents,
+  # gathers, inside, lazy, shape, speech, subject, empty, id, label.
   module VocabularyShapes
     module_function
 
@@ -137,8 +136,8 @@ module SlimPickins
         key = Regexp.last_match(1).to_sym
         value = Regexp.last_match(2)
         kwargs[key] = case key
-                      when :name, :inside then value.to_sym
-                      when :content, :gathers then value == 'true'
+                      when :name, :inside, :speech, :subject then value.to_sym
+                      when :content, :gathers, :empty, :id, :label then value == 'true'
                       when :shape then value.to_sym
                       when :children, :parents then value == 'any' ? :any : value.split.map(&:to_sym)
                       else value.split.map(&:to_sym)

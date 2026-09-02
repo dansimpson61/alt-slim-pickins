@@ -113,8 +113,20 @@ module SlimPickins
 
     # The paper's "conditionally pruning an AST": an empty collection keeps
     # only the `empty` node that names it; anything else keeps everything but.
+    # The promoted `empty` is a paragraph whose box carries the word's name,
+    # so the selector reads the declaration, not the old node kind.
     def prune(children, empty)
-      empty ? children.select { |n| n.first == :empty } : children.reject { |n| n.first == :empty }
+      if empty
+        children.select { |n| empty_node?(n) }
+      else
+        children.reject { |n| empty_node?(n) }
+      end
+    end
+
+    def empty_node?(node)
+      return false unless node.is_a?(Array)
+
+      node[0] == :empty || CONTRACTS[node[1][:class_base]]&.empty
     end
 
     # --- presentation helpers ---------------------------------------------
@@ -380,16 +392,26 @@ module SlimPickins
           else
             # The caller's children splice into the body at `children` —
             # established even when the call took none, so a partial whose
-            # body says `children` splices nothing instead of raising.
-            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, word, push, contract) }
+            # body says `children` splices nothing instead of raising. The
+            # same capture is where the old words pruned: an empty named
+            # collection keeps only the `empty` node that names it, the
+            # box's own parts untouched.
+            with_splice(prune(capture(&block), @empty_active)) do
+              evaluate_body(evaluate, parameters, word, push, contract)
+            end
           end
         end
       value, empty, body =
         # A name is a subject unless the word's declaration says otherwise —
         # a preamble-less partial keeps the old rule, and `name: variant`
-        # passes the name through the parameters without shifting.
+        # passes the name through the parameters without shifting. A word
+        # declared `empty:` renders only while the enclosing subject is an
+        # empty collection — its body is not even evaluated, the guard the
+        # promoted `empty` word carries.
         if shifts
           about(name, &body_block)
+        elsif contract&.empty && !@empty_active
+          [nil, false, []]
         else
           [nil, false, body_block.call]
         end
@@ -399,7 +421,7 @@ module SlimPickins
       if Library.builtin_partials.key?(word) && body.size == 1 && body.first.is_a?(Array)
         self.class.box_root(body)[1][:class_base] = word.to_sym
       end
-      @nodes.concat(prune(body, empty)) unless contract&.inside && contract.inside != :any
+      @nodes.concat(body) unless contract&.inside && contract.inside != :any
       value
     end
 
@@ -407,6 +429,11 @@ module SlimPickins
     # name, content, each modifier — are keys of the parameters subject, nil
     # when the call did not say them. A preamble-less partial keeps the old
     # subject: whatever the call carried, nothing more.
+    #
+    # Two declarations derive a slot from the situation, the way the Ruby
+    # words they replace did: `# id: true` names the subject's id (`card`),
+    # `# label: true` the app contract's label (`section`'s heading). The
+    # derivation is runtime inference — a page never writes either.
     def parameters_for(contract, name, content, kwargs)
       return { content: content, name: name }.merge(kwargs) unless contract
 
@@ -414,6 +441,8 @@ module SlimPickins
       declared[:name] = name if contract.name != :none
       declared[:content] = content if contract.content
       contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
+      declared[:id] = card_id if contract.id
+      declared[:label] = label_for(name, content) if contract.label
       declared
     end
 

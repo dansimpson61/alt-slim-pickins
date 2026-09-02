@@ -73,4 +73,62 @@ class VocabularyPartialsTest < Minitest::Test
     assert_same branch, root
     assert_same branch, SlimPickins::Builder.box_root([branch])
   end
+
+  # The leaf family over the span atom: the Generator owns the formatting the
+  # words used to carry — mechanical inference, not the app's judgement.
+  def test_the_leaf_family_formats_by_its_word
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          section "Numbers"
+            money .amount
+            percent .rate
+            number .count
+            badge warning, "text"
+            badge .status
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { amount: 1500, rate: 0.074, count: 3, status: 'ok' } },
+                                library: library_for(dir))
+      assert_includes html, '<span class="money">$1,500</span>'
+      assert_includes html, '<span class="percent">7.4%</span>'
+      assert_includes html, '<span class="number">3</span>'
+      assert_includes html, '<span class="badge badge--warning">text</span>'
+      assert_includes html, '<span class="badge badge--ok">ok</span>'
+    end
+  end
+
+  # The box's parts derive from the word: a heading inside a box is the box's
+  # title, at the box's own level — the part convention, `.section-title`.
+  def test_the_boxes_title_themselves
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          section "Held"
+            title .deep
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { deep: 'x' } }, library: library_for(dir))
+      assert_includes html, '<h2 class="section-title">Held</h2>'
+      assert_includes html, '<h3 class="title">x</h3>'
+    end
+  end
+
+  # `empty` is the situation, not a branch: it renders only while the
+  # enclosing subject is an empty collection, and the box keeps its parts.
+  def test_empty_renders_only_while_the_subject_is_empty
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          section accounts
+            empty "None."
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { accounts: [] } }, library: library_for(dir))
+      assert_includes html, '<p class="empty">None.</p>'
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { accounts: ['x'] } }, library: library_for(dir))
+      refute_includes html, 'empty'
+    end
+  end
 end

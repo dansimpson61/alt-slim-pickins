@@ -68,14 +68,33 @@ module SlimPickins
       emit_node([:paragraph, { variant: variant, body: body }, capture(&block)])
     end
 
-    def region(*args, &block)
+    def region(*args, open: nil, id: nil, &block)
       variant, body = arguments(args)
-      emit_node([:region, { variant: variant, body: body }, capture(&block)])
+      emit_node([:region, { variant: variant, body: body, open: open, id: id }, capture(&block)])
     end
 
     def heading(*args)
       _, body = arguments(args)
       emit_node([:heading, { body: body }, []])
+    end
+
+    # The classed leaf — the atom under badge, money, percent, number and
+    # time. Tag, class and formatting all derive from the word; the
+    # Generator owns the inference, which is where formatting has always
+    # lived.
+    def span(*args, precision: 0)
+      variant, body = arguments(args)
+      emit_node([:span, { variant: variant, body: body, precision: precision }, []])
+    end
+
+    def figcaption(*args)
+      _, body = arguments(args)
+      emit_node([:figcaption, { body: body }, []])
+    end
+
+    def summary(*args)
+      _, body = arguments(args)
+      emit_node([:summary, { body: body }, []])
     end
 
     # Marks where the caller's children go — the partial's `contents`.
@@ -93,14 +112,6 @@ module SlimPickins
     end
 
     # --- Structure ------------------------------------------------------
-
-    def section(*args, &block)
-      name, heading = arguments(args)
-      value, empty, children = about(name) { capture(&block) }
-      emit_node([:section, { name: name, heading: label_for(name, heading) },
-                 prune(children, empty)])
-      value
-    end
 
     # The loop is written once, here, and never in a page.
     #
@@ -128,16 +139,6 @@ module SlimPickins
       end
       unbind(name)
       emit_node([:each, { name: name }, collected])
-    end
-
-    # Not a conditional. It names the situation, and the enclosing word
-    # already knows what "empty" refers to — the enclosing word keeps the node
-    # when the collection is empty and prunes its siblings.
-    def empty(*args)
-      return unless empty_active?
-
-      _, message = arguments(args)
-      emit_node([:empty, { message: message }, []])
     end
 
     # A table declares its columns; the rows come from the subject. The
@@ -170,35 +171,11 @@ module SlimPickins
       emit_node([:grid, { variant: variant, columns: columns }, capture(&block)])
     end
 
-    def card(*args, &block)
-      variant, title = arguments(args)
-      emit_node([:card, { variant: variant, id: card_id, title: title }, capture(&block)])
-    end
-
-    def figure(*args, &block)
-      _, caption = arguments(args)
-      emit_node([:figure, { caption: caption }, capture(&block)])
-    end
-
-    def disclosure(*args, open: false, &block)
-      _, summary = arguments(args)
-      emit_node([:disclosure, { summary: summary, open: open }, capture(&block)])
-    end
-
     # --- Content --------------------------------------------------------
 
     def prose(*args)
       notation, body = arguments(args)
       emit_node([:prose, { notation: notation, body: body }, []])
-    end
-
-    KNOWN_STATUSES = Icons::SYMBOLS.keys.freeze
-
-    def badge(*args)
-      variant, body = arguments(args)
-      label = body || variant
-      kind = variant || (KNOWN_STATUSES.include?(body.to_s.to_sym) ? body.to_s.to_sym : nil)
-      tag(:span, { class: token(:badge, kind) }, [label])
     end
 
     def fact(*args)
@@ -211,12 +188,6 @@ module SlimPickins
     def snippet(*args)
       language, body = arguments(args)
       emit_node([:snippet, { language: language, body: body }, []])
-    end
-
-    def time(*args)
-      variant, moment = arguments(args)
-      machine = moment.respond_to?(:iso8601) ? moment.iso8601 : moment.to_s
-      emit_node([:time, { variant: variant, moment: moment, machine: machine }, []])
     end
 
     def image(*args, alt: nil)
@@ -297,26 +268,6 @@ module SlimPickins
       raise Error, 'otherwise belongs inside a choose' unless target
 
       target.add_branch(nil, block)
-    end
-
-    def money(*args, precision: 0)
-      _, value = arguments(args)
-      emit_node([:money, { value: value, precision: precision }, []])
-    end
-
-    def percent(*args, precision: 1)
-      _, value = arguments(args)
-      emit_node([:percent, { value: value, precision: precision }, []])
-    end
-
-    def number(*args, precision: 0)
-      _, value = arguments(args)
-      emit_node([:number, { value: value, precision: precision }, []])
-    end
-
-    def text(*args)
-      _, body = arguments(args)
-      tag(:p, {}, [body])
     end
 
     # --- Interaction ----------------------------------------------------

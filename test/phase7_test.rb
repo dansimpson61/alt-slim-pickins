@@ -221,7 +221,7 @@ class Phase7Test < Minitest::Test
   # reason to exist now the table does its job.
   def test_the_hand_rolled_toggles_are_gone
     get '/'
-    assert_equal 1, last_response.body.scan('<details>').size
+    assert_equal 1, last_response.body.scan('<details').size
     assert_includes last_response.body, '<summary>Show advanced assumptions</summary>'
 
     js = File.read(SCRIPT)

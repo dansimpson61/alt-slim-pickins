@@ -20,9 +20,13 @@ module SlimPickins
   # names the path of every render that tries it.
   class Compilation
     def self.of(source, path)
-      @mutex ||= Mutex.new
-      @cache ||= {}
-      @mutex.synchronize { @cache[source] ||= new(source, path) }
+      # The cache is read without the lock first: under MRI a Hash read is
+      # atomic, and the common path is a hit — every partial invocation pays
+      # this call, so the lock only belongs to the miss that builds.
+      cached = (@cache ||= {})[source]
+      return cached if cached
+
+      (@mutex ||= Mutex.new).synchronize { @cache[source] ||= new(source, path) }
     end
 
     # The instrument's reach: bin/measure_cost.rb empties it to measure the

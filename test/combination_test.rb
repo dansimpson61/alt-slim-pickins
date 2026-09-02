@@ -93,7 +93,7 @@ class CombinationTest < Minitest::Test
 
   def test_a_loop_over_a_name_that_is_not_a_word_still_reaches_back_out
     html = draw("each holding\n  text holding.name\n", holdings: INNER)
-    assert_includes html, '<p>a</p>'
+    assert_includes html, '<p class="text">a</p>'
   end
 
   # --- the words that carry state for their children ----------------------

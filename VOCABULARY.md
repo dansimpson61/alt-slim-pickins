@@ -985,7 +985,7 @@ each holding, from: .taxable
 - **name** — none
 - **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — anything
+- **children** — none
 - **subject** — unchanged
 - **infers** — the condition: it renders when the enclosing subject has
   nothing in it, and suppresses its siblings when it does
@@ -1181,7 +1181,7 @@ paragraph quiet, "A quieter line."
 
 - **name** — the variant
 - **content** — text or data, when there is any
-- **modifiers** — none
+- **modifiers** — `open:`, `id:`
 - **children** — anything
 - **subject** — unchanged
 
@@ -1208,4 +1208,31 @@ which is a tree fact the interpreter reads.
 ```
 heading "A line worth a heading."
 ```
+
+
+### `span`
+
+- **name** — the variant
+- **content** — text or data, when there is any
+- **modifiers** — `precision:`
+- **children** — none
+- **subject** — unchanged
+
+
+### `figcaption`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+
+
+### `summary`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
 

@@ -143,23 +143,27 @@ declaration says `subject` — preamble-less partials keep the old rule.
 
 **Docs derived landed:** bin/generate_vocabulary.rb creates missing entries
 from the contracts, and the checker holds them, demanding the example
-sentence. The primitives landed too: `paragraph`, `heading` and `region` are
-words — the atoms under the leaf presenters and the wrappers, classes deriving
-from the words, so nothing styleable by hand returns. Root-classing landed:
-a partial composed over the atoms emits its own name as the class — the
-"word owns its box" law made mechanical. The optionality spelling landed
-(dan, 2026-09-02): a partial's declared slots materialise as keys of its
-parameters subject, nil when unsaid — `when .open` is "was the modifier
-said" — and the rest of the world falls through the overlay. With it:
-**twelve vocabulary partials** — note, title, actions over the atoms;
-action, flash, search, thumbnails, thumb from Round C; and footer, aside,
-list, item over a `region` that now knows its word's tag (BOX_TAGS — a
-promoted footer stays a `<footer>`) and its content. All 13 pages
-(repo + portfolio + roth + dashboard) byte-identical through the stash
-harness. What promotion still needs: `empty`'s register-with-any-gatherer;
-one markup bit each for card/disclosure/figure/section; dan's call on
-text's box class and on whether presentation inference becomes language
-(the money/time/icon family) — the audit lives in ROADMAP-0.2.
+sentence. The primitives landed too: `paragraph`, `heading`, `region`,
+`span`, `figcaption` and `summary` are the atoms, classes deriving from the
+words, so nothing styleable by hand returns. Root-classing landed (a
+partial emits its own name as the class), the optionality spelling landed
+(dan, 2026-09-02: declared slots materialise, nil when unsaid — `when
+.open` is "was the modifier said"), and with them the promotion pass is
+**complete**: twenty-three vocabulary partials — action, flash, search,
+thumbnails, thumb, note, title, actions, footer, aside, list, item,
+figure, disclosure, empty, text, money, percent, number, badge, time,
+card, section. The atoms carry the box: BOX_TAGS (a promoted footer stays
+a `<footer>`), BOX_DEPTH (card and section deepen), a heading inside a box
+is the box's title (`#{box}-title`, which reproduces `section-title`
+exactly and normalises `card--title`), and the preamble grew `parents:`,
+`empty:`, `id:`, `label:`, `speech:`, `subject:`. The byte-diff over all
+13 pages shows exactly three changes, each the law applying: `text`,
+`time` and `disclosure` gained their class (hook-only rules). What stays
+Ruby, with written verdicts in ROADMAP-0.2: metric, fact (the app
+contract), icon (the sprite registry), snippet (chrome), plus the form
+family, gatherers and subject-flow words. Cost re-measured: cold 6.95 ms,
+warm 3.98 ms, 0.17 ms/row (up from 2.75/1.37/0.10 — the price of every
+word being a composition; the cache's read path is lock-free now).
 
 ## What is next — Phase 4, the exam
 
@@ -222,8 +226,8 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 217 tests / 871 assertions / 0 failures, 780 sentences / 0
-  problems, 77 rules / 0 problems, 13 pages verified)
+  (currently 227 tests / 937 assertions / 0 failures, 809 sentences / 0
+  problems, 82 rules / 0 problems, 13 pages verified)
 - **The cost, re-measured**: `ruby bin/measure_cost.rb` — the instrument;
   the numbers live in ROADMAP-0.2.md Phase 3's record.
 - **RIF loop per round**: implement → verify → commit with an intention-revealing

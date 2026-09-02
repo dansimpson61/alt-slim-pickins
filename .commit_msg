@@ -1,0 +1,43 @@
+Complete the promotion pass: the language's presentational layer is .sp
+
+dan's verdict: "all of it, if we still can write beautifully simple views
+that look like an outline" — held: no page source changed a sentence, and
+the vitals hold (mean 1.24 args, longest 5).
+
+Eleven more words leave Ruby for lib/vocabulary — figure, disclosure,
+empty, text, money, percent, number, badge, time, card, section — over the
+atoms the pass grew to carry them:
+
+- `span`, the classed leaf: tag, class and formatting all derive from the
+  word; Inference stays in the Generator where it always lived (money,
+  percent, number defaults and negative, badge's known-status map, time's
+  datetime and moment). Badge's promotion deletes a hatch use.
+- `figcaption` (nil-safe) and `summary` (always emitted) — the atoms'
+  guards are the old handlers' exact behaviour.
+- `region` takes the box's id and open, and BOX_TAGS/BOX_DEPTH carry the
+  word's tag and heading depth (a promoted section stays a <section> and
+  still deepens).
+- A heading inside a box is the box's title: class `#{box}-title` at the
+  box's own level — the documented part convention, which reproduces
+  `section-title` exactly and quietly normalises `card--title`.
+- The preamble grows `parents:`, `speech:`, `subject:`, and three
+  situation derivations a page never writes: `empty:` (renders only while
+  the enclosing subject is empty — the old guard, and the splice prunes by
+  the same flag, the box's own parts untouched), `id:` (the subject's id —
+  "no page writes id" survives), `label:` (the app contract's label).
+- Compilation's cache read is lock-free (double-checked build), because
+  every partial invocation pays it.
+
+Byte-diff over all 13 pages shows exactly three changes, each the law
+applying to a word that never owned its box: text, time and disclosure
+gained their class — 22 class attributes, hook-only CSS rules. Everything
+else — money formatting, badge statuses, section titles, card ids, empty
+suppression, heading levels — byte-identical.
+
+Cost re-measured (same instrument): cold 6.95 ms, warm 3.98 ms, 0.17 ms
+per partial-in-each row (from 2.75 / 1.37 / 0.10) — the price of every
+word being a composition; still payable everywhere.
+
+Stated as atoms, with written verdicts: metric and fact (their bodies are
+the app contract), icon (the sprite registry), snippet (chrome). 227 runs /
+937 assertions, three checkers 0 problems, 13 pages verified.

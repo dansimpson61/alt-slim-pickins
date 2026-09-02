@@ -634,35 +634,49 @@ forged stands: for every candidate, ask *is this a word, or a power?* — the
 language grows by words, and the surface grows only when the answer is
 honestly a power.
 
-**The promotion pass, audited (2026-09-01, updated 2026-09-02).** With the
+**The promotion pass, audited (2026-09-01, completed 2026-09-02).** With the
 mechanisms landed — preambles, args, the children splice, gathers/inside,
 lazy — the first movable set was promoted: action, flash, search,
 thumbnails, thumb. dan's principle applied to the absence itself: the
 element primitives existed for Ruby words (`tag`) and were denied to
 language words — an asymmetry word-is-word-is-word forbids — so `paragraph`,
-`heading` and `region` are now words, the atoms the leaf presenters and
-wrappers compose over, classes still deriving from the words. Then the two
-mechanisms the pass was waiting for, both landed and both dan's:
-root-classing — a partial composed over an atom emits its OWN name as the
-class, the "word owns its box" law made mechanical — brought note, title
-and actions out of Ruby; the optionality spelling — a partial's declared
-slots materialise as keys, nil when the call did not say them, so
-`when .open` is "was the modifier said" in the language's own conditional —
-brought the named boxes: footer, aside, list and item, composed over a
-`region` that now knows its word's tag (a promoted footer stays a
-`<footer>`) and its content. Twelve vocabulary partials now, and all
-thirteen pages — the repo's, both apps' — byte-identical throughout. The
-audit of what remains: `empty` needs register-with-any-open-gatherer (it
-registers with every gatherer, not one); card, disclosure, figure and
-section each need one bit of their markup the atoms cannot say yet (the
-card--title class, a summary tag, a caption after the children, the
-section-title); text would gain its box class — the pass's law applying,
-but a byte change dan may ratify or refuse; and the inference presenters
-(money, percent, number, time, icon, metric, fact, snippet) are blocked on
-whether presentation inference becomes language — the same word-or-power
-question that kept `said` out. Head words and the subject-flow words are
-the runtime's own job by design; choose needs condition evaluation, which
-is not a sentence's business.
+`heading` and `region` became words, the atoms the vocabulary composes
+over, classes deriving from the words. Then the mechanisms the pass was
+waiting for, all dan's: root-classing (a partial emits its OWN name as the
+class — the "word owns its box" law, mechanical) brought note, title and
+actions; the optionality spelling (declared slots materialise as keys, nil
+when unsaid — `when .open` is "was the modifier said") brought the named
+boxes over a `region` that knows its word's tag and its content — footer,
+aside, list, item. And the final harvest, on dan's word ("all of it, if the
+views still look like an outline"): **figure, disclosure, empty, text,
+money, percent, number, badge, time, card and section** — twenty-three
+vocabulary partials, the language's whole presentational layer except the
+judged atoms below. The atoms grew to carry them: `span` (the classed leaf
+— tag, class and formatting all derive from the word, Inference staying in
+the Generator where it always lived), `figcaption`, `summary`; `region`
+took the box's id and open; the preamble took `empty:` (renders only while
+the enclosing subject is empty — the situation, not a branch), `id:` and
+`label:` (subject derivations a page never writes), `speech:` and
+`subject:`. A heading inside a box is the box's title — class
+`#{box}-title` at the box's own level, the documented part convention,
+which reproduces `section-title` exactly and quietly normalises
+`card--title`. The byte-diff over all thirteen pages shows exactly three
+changes, each the law applying to a word that never owned its box:
+`text`, `time` and `disclosure` gained their class (22 class attributes,
+hook-only CSS rules that change no look). The cost, re-measured (same
+instrument, ruby 4.0.1, specimen.sp, 200 runs): cold 6.95 ms, warm 3.98 ms,
+0.17 ms per partial-in-`each` row — up from 2.75/1.37/0.10 because the
+heaviest page now exercises every promoted word as a composition; still
+payable everywhere this project has apps, and the compile-once cache's
+read path was made lock-free to blunt it. The judged atoms that stay Ruby,
+each with its verdict: **section's siblings metric and fact** (their bodies
+are the app contract — `fetch`, `label_for`, `format_of` — the runtime's
+own job, like the head words); **icon** (its job is the sprite registry);
+**snippet** (a chrome word); and the form family, table/chart gatherers and
+subject-flow words, which were never candidates. `meta`, `thumb` and
+`thumbnails` remain the only words no real page uses. The views stayed
+outlines: no page source changed a sentence, and the vitals hold (mean 1.24
+args, longest 5).
 
 **The when-asymmetry, decided (dan, 2026-09-01).** The transform defers the
 built-in `when`'s condition so its guard fires before the argument runs; an

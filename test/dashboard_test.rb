@@ -35,7 +35,7 @@ class DashboardTest < Minitest::Test
     html = render_triage(first_item: item, queue_intro: '2 item(s) need attention — this is the first:')
     assert_includes html, '2 item(s) need attention — this is the first:'
     assert_includes html, '<article class="card">'
-    assert_includes html, '<h2 class="card card--title">ode-to-joy</h2>'
+    assert_includes html, '<h2 class="card-title">ode-to-joy</h2>'
     assert_includes html, '<span class="badge badge--ok">active</span>'
     assert_includes html, 'The credo'
     assert_includes html, 'Next: Rewrite Part V'

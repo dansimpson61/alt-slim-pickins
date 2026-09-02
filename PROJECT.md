@@ -5,16 +5,19 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-02'
-next_step: The optionality spelling is landed and harvested: footer, aside,
-  list, item are vocabulary partials over a tag-aware region (BOX_TAGS — a
-  promoted footer stays a <footer>), twelve partials total, 13 pages
-  byte-identical, committed and pushed (a5557e9, 5b382a1). Suite 224 runs /
-  0 failures, checkers 0 problems. Remaining promotion gates, audited in
-  ROADMAP-0.2: empty needs register-with-any-gatherer; card/disclosure/
-  figure/section need one markup bit each; dan's calls on text's box class
-  and on whether presentation inference becomes language (money/percent/
-  number/time/icon/metric/fact/snippet). Round A of Phase 4 landed the
-  negotiated primitives; ~/dev/dashboard stays untouched.
+next_step: The promotion pass is COMPLETE (dan: "all of it, if the views
+  still look like an outline" — they do; no page source changed a sentence).
+  Twenty-three vocabulary partials: the last harvest promoted figure,
+  disclosure, empty, text, money, percent, number, badge, time, card and
+  section over the new span/figcaption/summary atoms, box tags/depth, the
+  heading-in-box title rule, and the empty:/id:/label: preamble
+  derivations. Byte-diff over 13 pages: exactly the three ratified class
+  additions (text/time/disclosure — the law applying), nothing else. Suite
+  227 runs / 0 failures, checkers 0 problems. Cost re-measured: warm 3.98
+  ms (from 1.37 — every word is now a composition; cache read made
+  lock-free). metric/fact/icon/snippet stay Ruby with written verdicts.
+  Round A of Phase 4 landed the negotiated primitives; ~/dev/dashboard
+  stays untouched.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

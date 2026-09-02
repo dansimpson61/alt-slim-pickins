@@ -58,7 +58,7 @@ class UiWordsTest < Minitest::Test
   card "Holdings"
     text "VTI"
 ), account: Account.new(name: 'Roth'))
-    assert_includes html, '<h2 class="card card--title">Holdings</h2>'
+    assert_includes html, '<h2 class="card-title">Holdings</h2>'
   end
 
   def test_a_link_can_say_where_you_are
