@@ -24,7 +24,7 @@ module SlimPickins
       heading = title || Inference.label(name)
 
       value, empty, body = about(name) { wrapped_in_layout(&block) }
-      emit_node([:page, { heading: heading, head: @head_nodes, icons: @icons_used.dup },
+      emit_node([:page, { heading: heading, head: head_nodes, icons: sprite_symbols },
                  prune(body, empty)])
       value
     end
@@ -33,12 +33,12 @@ module SlimPickins
     # what lets a layout mention a stylesheet from inside the body.
     def stylesheet(*args)
       _, path = arguments(args)
-      @head_nodes << [:stylesheet, { path: path }, []]
+      in_head([:stylesheet, { path: path }, []])
     end
 
     def meta(*args)
       name, value = arguments(args)
-      @head_nodes << [:meta, { name: name, value: value }, []]
+      in_head([:meta, { name: name, value: value }, []])
     end
 
     def script(*args, defer: false)
@@ -63,11 +63,9 @@ module SlimPickins
 
     # Marks where the page's own nodes go. Only a layout has one.
     def contents
-      raise Error, '`contents` belongs in a layout' unless @contents
+      raise Error, '`contents` belongs in a layout' unless contents_stowed?
 
-      nodes = @contents
-      @contents = nil
-      @nodes.concat(nodes)
+      take_contents&.each { |n| emit_node(n) }
     end
 
     # --- Structure ------------------------------------------------------
@@ -75,14 +73,14 @@ module SlimPickins
     def section(*args, &block)
       name, heading = arguments(args)
       value, empty, children = about(name) { deeper { capture(&block) } }
-      emit_node([:section, { name: name, heading: label_for(name, heading), level: @level },
+      emit_node([:section, { name: name, heading: label_for(name, heading), level: heading_level },
                  prune(children, empty)])
       value
     end
 
     def title(*args)
       _, text = arguments(args)
-      emit_node([:title, { text: text, level: @level }, []])
+      emit_node([:title, { text: text, level: heading_level }, []])
     end
 
     # The loop is written once, here, and never in a page.
@@ -106,10 +104,10 @@ module SlimPickins
 
       items = from || collection_for(name)
       collected = items.map do |item|
-        @bindings[name] = item
-        @chain.with(item, described_as: "this #{name}") { capture(&block) }
+        bind(name, item)
+        chain.with(item, described_as: "this #{name}") { capture(&block) }
       end
-      @bindings.delete(name)
+      unbind(name)
       emit_node([:each, { name: name }, collected])
     end
 
@@ -117,7 +115,7 @@ module SlimPickins
     # already knows what "empty" refers to — the enclosing word keeps the node
     # when the collection is empty and prunes its siblings.
     def empty(*args)
-      return unless @empty_active
+      return unless empty_active?
 
       _, message = arguments(args)
       emit_node([:empty, { message: message }, []])
@@ -231,7 +229,7 @@ module SlimPickins
     def icon(*args)
       name, data = arguments(args)
       name ||= data
-      @icons_used << name.to_s.to_sym
+      use_icon(name.to_s.to_sym)
       emit_node([:icon, { name: name }, []])
     end
 
@@ -325,17 +323,14 @@ module SlimPickins
 
     def form(*args, to: nil, method: nil, &block)
       name, = arguments(args)
-      was_in_form = @in_form
-      @in_form = true
-      value, empty, children = about(name) { capture(&block) }
-      @in_form = was_in_form
+      value, empty, children = form_context { about(name) { capture(&block) } }
       emit_node([:form, { name: name, to: to, method: method }, prune(children, empty)])
       value
     end
 
     def group(*args, &block)
       name, legend = arguments(args)
-      emit_node([:group, { name: name, legend: label_for(name, legend), in_form: @in_form },
+      emit_node([:group, { name: name, legend: label_for(name, legend), in_form: in_form? },
                  capture(&block)])
     end
 
@@ -370,7 +365,7 @@ module SlimPickins
       variant, label = arguments(args)
       emit_node([:button, { variant: variant,
                             label: label || (variant && Inference.label(variant)),
-                            to: to, type: type, in_form: @in_form }, []])
+                            to: to, type: type, in_form: in_form? }, []])
     end
 
     def actions(&block)

@@ -87,15 +87,19 @@ class Phase6Test < Minitest::Test
     assert_equal '`account_card` is defined twice — as a partial and in Ruby', error.message
   end
 
-  # The hatch is six methods. Everything else stays private, so it cannot
-  # quietly become an API. Words build nodes: token (class names), html
-  # (trusted markup), element (a node, for nesting), tag (a node, rendered
-  # where the word stands), children (a word's children) and arguments.
-  def test_the_escape_hatch_surface_is_exactly_six_methods
+  # The surface is the whole of what a word may use — the same surface the
+  # vocabulary itself is written with. App words get the nutrients: the
+  # subject, the contract's label_for and format_of, the gatherer stack, the
+  # capture and pruning. What stays private is the evaluation plumbing no
+  # word needs.
+  def test_an_app_word_gets_the_same_surface_the_vocabulary_uses
     builder = SlimPickins::Builder.new(SlimPickins::Page.new(locals: {}))
-    %i[token html element tag children arguments].each { |m| assert_respond_to builder, m }
-    %i[emit nest about label_for format_of collection_for].each do |m|
-      refute_respond_to builder, m, "#{m} should not be part of the escape hatch"
+    %i[token html element tag children arguments subject chain label_for format_of
+       register! with_gatherer emit_node about prune evaluate capture].each do |m|
+      assert_respond_to builder, m
+    end
+    %i[nest render_partial define_app_words].each do |m|
+      refute_respond_to builder, m, "#{m} is evaluation plumbing, not a word's surface"
     end
   end
 

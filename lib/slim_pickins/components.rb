@@ -26,21 +26,23 @@ module SlimPickins
     def collect(item) = @collected << item
 
     # The Builder routes the registering words through the stack of open
-    # gatherers — the guard and the save-and-restore, written once.
+    # gatherers — the guard and the save-and-restore, written once. The
+    # builder's whole surface is public, and the components use it directly —
+    # no send, no ivars of another object: the dogfood the vocabulary eats.
     def with_open
-      @builder.send(:with_gatherer, self) { @builder.send(:nest, &@block) }
+      @builder.with_gatherer(self) { @builder.evaluate(&@block) }
     end
 
     private
 
-    def subject = @builder.send(:subject)
-    def chain = @builder.send(:chain)
-    def label_for(...) = @builder.send(:label_for, ...)
-    def label_of(...) = @builder.send(:label_of, ...)
-    def format_of(...) = @builder.send(:format_of, ...)
-    def alignment_of(...) = @builder.send(:alignment_of, ...)
-    def capture(&block) = @builder.send(:capture, &block)
-    def emit_node(node) = @builder.send(:emit_node, node)
+    def subject = @builder.subject
+    def chain = @builder.chain
+    def label_for(...) = @builder.label_for(...)
+    def label_of(...) = @builder.label_of(...)
+    def format_of(...) = @builder.format_of(...)
+    def alignment_of(...) = @builder.alignment_of(...)
+    def capture(&block) = @builder.children(&block)
+    def emit_node(node) = @builder.emit_node(node)
   end
 
   # A table declares its columns; the rows come from the subject. `column`

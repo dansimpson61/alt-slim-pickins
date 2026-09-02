@@ -25,4 +25,17 @@ class WordsTest < Minitest::Test
     end
     assert_empty missing, 'every word needs a generator handler'
   end
+
+  # The dogfood, enforced: the vocabulary and the components are written with
+  # the public surface only — no send, no reaching into the Builder's ivars.
+  # An app word is exactly as powerful as a built-in because both eat the
+  # same food.
+  def test_the_vocabulary_uses_the_public_surface_only
+    %w[words.rb components.rb].each do |f|
+      source = File.read(File.join(__dir__, '..', 'lib', 'slim_pickins', f))
+      refute_match(/\.send\(/, source, "#{f} must not reach private methods with send")
+      refute_match(/@(nodes|chain|bindings|level|in_form|empty_active|gatherers|contents|head_nodes|icons_used|library|out)\b/,
+                   source, "#{f} must not reach into the Builder's ivars")
+    end
+  end
 end

@@ -47,6 +47,7 @@ module SlimPickins
         end
       end
     end
+    private :define_app_words
 
     # Words are real methods, so an unknown word fails with its own name.
     # The only thing method_missing serves is a binding introduced by `each`,
@@ -79,9 +80,18 @@ module SlimPickins
     # `.foo` compiles to this.
     def subject = @chain.current
 
-    private
+    # The subject chain itself, for words that iterate rows the way `table`
+    # does.
+    def chain = @chain
 
-    # --- the node assembly ------------------------------------------------
+    # --- the surface -------------------------------------------------------
+    #
+    # Everything below is public, and it is the whole of what a word may use —
+    # the built-in vocabulary (words.rb) and an app's own words alike. There
+    # is no other surface; this is the dogfood made true: the vocabulary is
+    # written with exactly what apps get. What remains private is the
+    # evaluation plumbing no word needs: nest, render_partial,
+    # define_app_words.
 
     # Every word hands its node to the current collection — the body's, or the
     # head's for the words that belong there. It returns the node, so words
@@ -99,6 +109,9 @@ module SlimPickins
     ensure
       @nodes = was
     end
+
+    # A word's own children, as nodes — the capture above, by its hatch name.
+    def children(&block) = capture(&block)
 
     # The paper's "conditionally pruning an AST": an empty collection keeps
     # only the `empty` node that names it; anything else keeps everything but.
@@ -215,20 +228,58 @@ module SlimPickins
       given || subject.label_for(name) || Inference.label(name)
     end
 
-    def nest(&block)
-      instance_eval(&block) if block
+    # --- the context accessors the words read ------------------------------
+
+    def empty_active? = @empty_active
+    def in_form? = @in_form
+    def heading_level = @level
+    def head_nodes = @head_nodes
+    def sprite_symbols = @icons_used.dup
+
+    def in_head(node) = @head_nodes << node
+    def use_icon(name) = @icons_used << name
+
+    def form_context(&block)
+      was = @in_form
+      @in_form = true
+      yield
+    ensure
+      @in_form = was
     end
+
+    def bind(name, value) = @bindings[name] = value
+    def unbind(name) = @bindings.delete(name)
+
+    # The layout's splice point — the contents word takes what page stowed.
+    def stow_contents(nodes) = @contents = nodes
+    def contents_stowed? = !@contents.nil?
+
+    def take_contents
+      nodes = @contents
+      @contents = nil
+      nodes
+    end
+
+    # Evaluate a block in the word's own context — what a gatherer's
+    # collection phase needs.
+    def evaluate(&block) = nest(&block)
 
     # The layout is chrome inside the page, so `page` still owns the document
     # and the layout never repeats it.
     def wrapped_in_layout(&block)
       return capture(&block) unless @library&.layout
 
-      @contents = capture(&block)
+      stow_contents(capture(&block))
       nodes = capture { instance_eval(Transform.call(@library.layout, path: 'layout.sp'), 'layout.sp', 1) }
       raise Error, 'this layout never says `contents`' if @contents
 
       nodes
+    end
+
+    private
+
+    def nest(&block)
+      instance_eval(&block) if block
     end
 
     # A partial takes the current subject, like any word that names none, and
@@ -250,9 +301,9 @@ module SlimPickins
     # the founding claim intact: extending the language adds vocabulary, never
     # syntax, and a call site still cannot tell where a word came from.
     #
-    # These six are the whole surface such a word may use — and they are the
-    # same surface the built-in vocabulary is written with, which is the
-    # dogfood: Words uses exactly this, nothing more.
+    # An app word may use the whole public surface above — the same surface
+    # words.rb and the components are written with. There is no other.
+
     public
 
     def token(word, variant = nil) = Generator.token(word, variant)
@@ -261,7 +312,6 @@ module SlimPickins
     def tag(name, attributes = {}, children = [], &block)
       emit_node(element(name, attributes, block ? capture(&block) : children))
     end
-    def children(&block) = capture(&block) # this word's children, as nodes
     def arguments(args) = name_and_content(args)
   end
 end
