@@ -533,7 +533,7 @@ into another object's ivars; byte-diffs of both apps' pages unchanged except
 the deliberate renames; the gathering-copy count is **1**, measured;
 `test/combination_test.rb` extended with the crash cases and green.
 
-### Phase 3 — Spend the description  🔄 in progress — rounds 1–5 done (2026-09-01)
+### Phase 3 — Spend the description  🔄 in progress — rounds 1–6 done (2026-09-01)
 
 The payload. 0.1 built a parsed, checkable description of what a page means and
 spent it only on HTML. This phase spends it on the one question that matters
@@ -565,7 +565,12 @@ runtime error is located *where it is raised*, before any stack unwinds:
 path, line, and the sentence itself, in the same voice as a syntax error.
 `test/lineno_test.rb` pins it through nesting, loops, guards, re-rendered
 choose branches, partials and the layout; the eleven pages stay
-byte-identical.
+byte-identical. (6) the report half of the payload — `bin/verify_pages.rb`
+evaluates all eleven pages (the repo's, both apps' views) against the data
+the app would serve, and reports: a page the app cannot answer names the
+page, the attribute, the line and the sentence — the seam's voice — and the
+run continues to the next page. It exits non-zero on any problem, so it can
+gate a commit; the boot gate is what remains.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
 The vocabulary is the language's own lowest layer: a `.sp` composition of
@@ -603,7 +608,8 @@ evaluated. No grammar change; the evidence asks for none.
   the word contracts Phase 1 objectified: every subject resolvable, every
   attribute answered, the contract satisfied — first as a report-only checker,
   then as the gate. A page may not render until the app has been proved able
-  to answer it.
+  to answer it. The report half is landed (round 6, `bin/verify_pages.rb`);
+  the gate is next.
 - **The roth test** `agent` — renaming or removing an attribute makes the roth
   page fail at boot, naming the line and the attribute. The eleven-month
   silence becomes a boot error, by construction. The naming half is landed
