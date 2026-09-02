@@ -216,3 +216,7 @@ dan's principle — a rule must outlive its reason — killed the small-hatch ru
 ## 2026-09-01 — DeepSeek v4-pro
 
 The word sweep found the context cluster by re-running the dependency scan: exactly four of fifty words carried build-time context — section, title, card (heading depth) and form (form-ness) — and both are tree facts, so the Generator now derives them as it walks. The rule that fell out: a word should never carry context the interpreter can see in the tree, because a second interpreter (an API) would see the tree position but not the ivar. Also swept: the status list lived twice (badge KNOWN_STATUSES and Icons SYMBOLS, the same seven names) — now one home; and the PRIMER still taught the pre-node hatch, example and all.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+Eating the dogfood worked because the proof was byte-level, not belief-level: the app-word gatherers render the repo's real pages and must come out identical, so any surface gap fails as a diff, not an argument. It caught two real gaps on contact: Component's helper was named capture while the public surface says children (aligned), and the test itself tripped the language's own rule that word names carry no digits. The one thing the surface cannot give an app word is grammar-level: when's condition-deferral belongs to the transform, so an app's when receives the eager value — valid usage identical, guard-order different, and that asymmetry is now documented in the test where a future dan will look for it.
