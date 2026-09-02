@@ -549,18 +549,21 @@ the generator; nested `tag` calls double-rendered), and the hatch became six
 methods — `token`, `html`, `element`, `tag`, `children`, `arguments` —
 `element` the value-form for nesting.
 
-**The dogfood finding, recorded for dan.** The vocabulary is the language's
-own lowest layer: a `.sp` composition of `note` would have to be `note`
-itself, because compositions need finer atoms the exclusivity contract
-deliberately refuses. Measured instead, the vocabulary's layers: **21 of 50
-words are rebuildable by an app word with the six-method surface** (the leaf
-presenters and the pure containers — the flour is handed out); the other 29
-carry the nutrients apps cannot synthesize: the app contract inside words
-(`subject`, `label_for`, `format_of` — see the `stat` example), gathering
-(`thumbnails`), head and sprite routing (`favicon`), subject flow and
-emptiness pruning, and context (`@level`, `@in_form`). Whether to extend the
-hatch with any of those is a dan decision, each a candidate future surface —
-not something to add unbidden.
+**The dogfood finding, recorded for dan — and corrected by his questions.**
+The vocabulary is the language's own lowest layer: a `.sp` composition of
+`note` would have to be `note` itself, because compositions need finer atoms
+the exclusivity contract deliberately refuses. But the first pass understated
+what apps can do: an app word runs *on the Builder*, so it can **delegate to
+any built-in** (`stat` is `metric` wrapped), and `SlimPickins.render` now
+takes **`filter:`** — the pipeline's middle stage, exposed — so
+declaration-then-render is evaluate-then-transform (`thumbnails` counting its
+children before presenting them is a filter). What remains genuinely fenced:
+direct `subject`, `label_for`, `format_of` (the delegation route works, but
+it is a seam, not a surface), and head/sprite routing — where dan's own
+answer stands: `favicon` is a **word** (a `page` modifier, like the doctype
+`page` already absorbs), not a power. The test the questions forged: for
+every candidate, ask *is this a word, or a power?* — the language grows by
+words, and the hatch grows only when the answer is honestly a power.
 
 - **Report, then gate** `agent` — a validation pass over the tree, running on
   the word contracts Phase 1 objectified: every subject resolvable, every
