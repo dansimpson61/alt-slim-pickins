@@ -115,6 +115,32 @@ byte-identical throughout) and then landed all of Phase 3:
 - `check_grammar.rb` / `check_shape.rb` / `check_styles.rb` — the three
   checkers that hold docs, shapes, and styles to the code.
 
+## What is next — word is word is word, then the exam
+
+**dan's current directive, four items, one design:** lib/vocabulary as the
+single source of what a word is; optional shape declarations a partial
+carries; the dogfood *done* (gatherers as partials, thumbnails promoted);
+the `when` deferral solved by declared shapes; every word first-class.
+
+**Landed for it:** vocabulary partials carry a comment preamble (`# name:`,
+`# content:`, `# modifiers:`, `# children:`, `# gathers:`, `# inside:`,
+`# lazy:`, `# shape:`) and `VocabularyShapes` merges them with the Ruby
+primitives into the one `CONTRACTS` list; a partial without a preamble stays
+unchecked (the preamble is optional kindness). The transform's `when`
+special case is dead — a word whose shape declares `lazy: content` receives
+that argument unevaluated, so laziness is a declared capability any word may
+claim.
+
+**What remains, in order:** (1) partials receive blocks — a `children`
+splice word so a partial body says where the caller's children go
+(`render_partial` currently ignores the block); (2) the `gathers:`/`inside:`
+shapes honored by the runtime, which is what promotes `thumbnails` from
+dogfood_test into lib/vocabulary — do it; (3) the promotion pass — words
+move from Ruby to lib/vocabulary where the language can say them, each a
+round-end decision, the byte-diff harness the acceptance test; (4) docs
+derived — VOCABULARY.md entries for composed words, generated from the
+preambles.
+
 ## What is next — Phase 4, the exam
 
 **Phase 3 is closed: a page may not render until the app has been proved
