@@ -366,7 +366,18 @@ re-measured 2026-09-01 across every `.sp` file in `pages/` and `examples/`
 | nouns among the fifty | **45** | the register of a label, not prose |
 | words whose English misdescribes them | **0** — `check` and `select` renamed to `checkbox` and `choice` in Phase 1 | a verb arriving unnoticed |
 
-**3. Nothing is verified by a checker alone.** A checker can prove a class has
+**3. A rule must outlive its reason.** dan's principle, now the standing one.
+Most of this project's rules were descriptive observations of the code or the
+language at some past moment. When a rule blocks something that empowers devs
+and users *and* makes the code better, the rule is examined, not obeyed — the
+question is whether its foundation is worth more than what it blocks. Phase 3
+applied it to the small-hatch proscription: its foundation was keeping the
+runtime private; the value that outweighed it was the vocabulary itself
+proving the surface. The hatch opened, words.rb and the components were
+rewritten on it, and the purity test now enforces that built-ins and app
+words eat the same food.
+
+**4. Nothing is verified by a checker alone.** A checker can prove a class has
 a rule; it cannot prove the rule is good. Every phase ends by rendering and
 *looking*, by measuring what it claims, and by running the whole gate:
 
