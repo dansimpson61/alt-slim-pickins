@@ -251,7 +251,7 @@ class Phase7Test < Minitest::Test
   # roth now speaks nothing but the vocabulary.
   def test_roth_has_no_words_of_its_own
     refute Roth.const_defined?(:Words), 'roth should need no Ruby-defined words'
-    assert_nil SlimPickins::Template.libraries[VIEWS].words
+    assert_empty SlimPickins::Template.libraries[VIEWS].words
   end
 
   # Nothing in either page reaches for markup.

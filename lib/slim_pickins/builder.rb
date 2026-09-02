@@ -40,7 +40,7 @@ module SlimPickins
     def define_app_words
       return unless @library
 
-      extend @library.words if @library.words
+      Array(@library.words).each { |mod| extend mod }
       @library.partials.each_key do |word|
         define_singleton_method(word) do |*args, &block|
           render_partial(word, args, &block)
