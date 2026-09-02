@@ -10,137 +10,145 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs what 0.2 must be
-3. `DESIGN.md`, `VOCABULARY.md`, `CONTRACT.md` — grammar, 50 words, what an app must promise
-4. `LORE.md` — what previous sessions *learned*, which is not what they did. The last entry is the raw material for 0.2
-5. `ROADMAP-0.2.md` — the active roadmap; `PROJECT.md` `next_step` points at its current phase
-6. `history/ROADMAP-0.1.md`, then `history/PHASE8.md` and `history/PHASE7.md` — what 0.1 set out to do, and the language defects its last two phases found
+3. `ROADMAP-0.2.md` — the active roadmap; `PROJECT.md` `next_step` points at its current phase
+4. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
+5. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
+6. `LORE.md` — what previous sessions *learned*; the last entries are this session's
 
-Root holds what you read. `history/` is roadmap 0.1 and is consulted, not
-maintained; `roth/` is notes on a different project. Both have a README saying so.
-
-Don't re-derive any of that in conversation; it is all written down.
+Root holds what you read. `history/` is roadmap 0.1, consulted, not maintained;
+`roth/` is notes on a different project. Don't re-derive any of the above in
+conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is closed. Roadmap 0.2 is written** — `ROADMAP-0.2.md`,
-backward-leading, beginning with the rewrite of the Slim-Pickins Way.
+**Roadmap 0.1 is closed. Roadmap 0.2's backward look is done, and Phase 3 is
+halfway.** The 2026-09-01 session closed Phases 0–2 (the Way rewritten in
+`PRIMER.md`; the vocabulary reviewed as contracts with `check`→`checkbox`,
+`select`→`choice`; the Builder un-god-objected — four gathering copies became
+one stack, 867 lines/16 ivars became 298/9, byte-identical throughout) and
+landed Phase 3's first half:
 
-All eight phases of [ROADMAP-0.1.md](history/ROADMAP-0.1.md) are complete. The
-language runs: one sentence, fifty words, its own stylesheet, and two Sinatra
-apps that speak it. `examples/roth` is a deep port of `~/dev/roth` whose
-results — six figures, two charts and a thirty-row table — render on the
-server, and which uses **no Ruby-defined words at all**.
+- **The runtime output model is semantic nodes.** A page evaluates into a
+  tree of `[:word, attrs, children]`; `SlimPickins.evaluate` returns it;
+  `Generator` interprets it as HTML; `SlimPickins.render(..., filter:)`
+  exposes the pipeline's middle stage.
+- **The vocabulary left the Builder.** `words.rb` holds the fifty words,
+  `components.rb` the four gatherers, `generator.rb` the presentation,
+  `builder.rb` the evaluation — and the vocabulary is written on the **same
+  public surface an app's words get** (subject, chain, label_for, format_of,
+  register!, with_gatherer, about, capture, prune, tag, element, html, token,
+  arguments, children, evaluate, emit_node). `words_test.rb` forbids `send`
+  and Builder ivars in the vocabulary files; `dogfood_test.rb` re-implements
+  all four gatherers as app words and renders the repo's real pages
+  byte-identically through them.
+- **Both parked decisions are closed** (dan, 2026-09-01): `favicon` is a
+  `page` modifier, landed and tested; the `when`-deferral asymmetry stays as
+  documented in `dogfood_test.rb` — an app word that wants guard-before-read
+  uses a bare name, which the grammar never evaluates.
 
-dan's verdict on the port, recorded 2026-08-31: *clearly worth it. We are
-exactly where we had hoped we would be at this phase of the project.*
+## The architecture, in one map
 
-**A draft 0.2 and its blue-sky argument were written and then deleted on
-2026-08-31.** They aimed the release at porting `~/dev/dashboard` — outward,
-at a third app — when the foundations had never been examined. They are
-recoverable from commit `8542111` if ever wanted, but they are not the starting
-point and should not be treated as one. What survives of them is in `LORE.md`,
-which is where it belongs.
+```text
+.sp source  →  Transform (one grammar: parses, validates, compiles)
+            →  Builder (evaluates: chain, bindings, gatherer stack, capture)
+            →  semantic tree [:word, attrs, children]   ← the description
+            →  filter: (optional transform of the tree)
+            →  Generator (interprets: escaping, formatting, tag shape)
+            →  HTML
+```
 
-## What is next — ROADMAP-0.2.md, Phase 3's payload
+- `lib/slim_pickins/transform.rb` — the grammar's one home; also exposes
+  `Transform.tree` for the checkers.
+- `contracts.rb` — per-word declarations (name/content/modifiers/children/
+  parents/subject/speech/shape) + the generated vocabulary bullets; the
+  vocabulary's one list.
+- `builder.rb` (298 lines, 9 ivars) — evaluation only. Its public methods are
+  the surface; private are exactly `nest`, `render_partial`,
+  `define_app_words`.
+- `words.rb` — the fifty words, node-builders on the public surface.
+- `components.rb` — `Component` + `Table`/`Chart`/`Choose`/`Choice`.
+- `generator.rb` — the HTML interpreter; owns escaping, `format`, tag shape,
+  and the walk's context (depth, form-ness — tree facts, not word state).
+- `check_grammar.rb` / `check_shape.rb` / `check_styles.rb` — the three
+  checkers that hold docs, shapes, and styles to the code.
 
-**`ROADMAP-0.2.md` is written** (2026-09-01), and Phases 0–2 are closed:
-the Way rewritten (PRIMER.md), the vocabulary reviewed and re-registered as
-contracts, the Builder un-god-objected. Phase 3's first half is done — pages
-evaluate into semantic nodes, the Generator interprets them, the vocabulary
-lives in words.rb on the same public surface app words get, and
-test/dogfood_test.rb re-implements the gatherers as app words, byte for
-byte. `PROJECT.md` `next_step` points at the current phase; the roadmap and
-`PROJECT.md` are the resume, not this section.
+## What is next — the payload
 
-**What remains is the payload:** a validation pass over the evaluated tree
-before emission — every subject resolvable, every attribute answered, the
-contract satisfied — report-only first, then the gate: *a page may not render
-until the app has been proved able to answer it.* Then the roth test
-(renaming an attribute fails at boot, naming the line and the attribute) and
-the per-render cost, measured.
+**A page may not render until the app has been proved able to answer it.**
+The delete-the-ability-to-fail-late pass, in three steps:
 
-The findings that motivated the roadmap are kept here because the roadmap
-argues from them:
+1. **Report, then gate** — a validation pass over the evaluated tree before
+   emission: every subject resolvable, every attribute answered, the contract
+   satisfied. First as a report-only checker (`bin/verify_pages.rb`-shaped:
+   evaluate every repo page and both apps against their defaults/fixtures and
+   report), then as the gate (an app boots by proving its pages, loudly).
+2. **The roth test** — renaming or removing an attribute makes the roth page
+   fail at boot, naming the line and the attribute. The eleven-month silence
+   becomes a boot error, by construction.
+3. **The cost, measured** — milliseconds per render, with the answer for apps
+   that cannot pay them.
 
-- `builder.rb` is **867 lines — 50% of the library** — with **16 ivars** that
-  **25 of the 50 words** touch directly. Sorted by purpose those 16 are **three
-  ideas implemented about twelve times**.
-- `table`/`column`, `chart`/`band`/`line`/`level`, `choose`/`when`/`otherwise`
-  and `choice`/`option` are **four copies of one gathering mechanism**. `choose`
-  saves and restores its state; the other three clear theirs, which is why two
-  of them crashed under five minutes of adversarial probing.
-- **`option` has no guard at all** — it renders silently outside a `choice`.
-- **`when` guards after evaluating its argument**, so `when .x` outside a
-  `choose` says *"this page has no x"* — the wrong problem, on the one construct
-  with no real page behind it.
-- The vocabulary had **never been reviewed as language** until 2026-08-31. One
-  part-of-speech sweep found `check` and `select` were verbs among 43 nouns;
-  Phase 1 renamed them `checkbox` and `choice`.
-
-None of that is a plan. It is the evidence a plan should be argued from, and
-the arguing is the first thing 0.2 does.
-
-## Design invariants — do not break these without saying so
-
-- One sentence: `word arguments`, indentation nests it.
-- **Extending the language adds vocabulary, never syntax.** Even the escape
-  hatch is a word.
-- A dot means data; a bare word is language.
-- **There is no numeric literal.** A bare number is neither a dot nor a word,
-  so a figure in a page has nowhere to stand — it belongs to the app.
-- A name is a subject and must exist; content is a label. Never runtime-decided.
-- Mechanical facts derivable from a value's shape are free. Facts encoding a
-  human judgement about the domain belong to the app — ask, don't guess.
-- A line that states the inferable should not exist.
-- **This is a noun language.** 45 of the 50 words are common nouns naming a
-  kind of presentation, 43 of those 45 are singular, and the five non-nouns
-  are the control flow — `each` a determiner, `empty` an adjective, `choose`
-  a verb, `when` a conjunction, `otherwise` an adverb. A sentence is head noun
-  plus specifier: the register of a label, not of prose. Two words broke it —
-  `check` and `select` were verbs, imperatives that misdescribed what they
-  render — and Phase 1 renamed them `checkbox` and `choice`.
+**One design note the previous session left for you:** the *runtime* nodes
+(`[:word, attrs, children]`) do not carry line numbers — `Transform::Node`
+does, but `emit_node` drops them. For step 2 to name the line, thread the
+lineno from the transform into evaluation (e.g., the Builder tracks the
+current sentence's line as it evaluates). This is the first sub-task; it is
+the seam between "the error speaks the language" and "the error names the
+line."
 
 ## How this project works
 
-- **Verify before asserting.** Never state a count, ratio or claim without
-  measuring it, and say what the measurement covered. Several claims in these
-  docs were wrong on first writing because they were asserted from memory.
-- **Checkers are not enough — look at the rendered output.** `ruby bin/demo.rb
-  specimen` builds a standalone page; `ruby examples/roth/app.rb` serves the
-  port on 4577. Across 0.1, eleven defects passed every checker and were found
-  only by loading the page.
-- **Nor are happy-path tests.** `test/combination_test.rb` crosses the words
-  that hold state against each other. Two crashes lived behind 133 green tests
-  because every one of them rendered a page somebody wrote on purpose. A word
-  that gathers, binds or shifts anything gets crossed against the ones that
-  already do.
+- **Verify before asserting.** Never state a count without measuring it and
+  saying what it covered.
+- **Checkers are not enough — look.** Eleven 0.1 defects passed every checker.
+  `ruby bin/demo.rb specimen` builds a standalone page; `ruby examples/roth/app.rb`
+  serves the port on 4577.
+- **Nor are happy-path tests.** `test/combination_test.rb` crosses words that
+  hold state; extend it for anything that gathers, binds, or shifts.
+- **The byte-diff harness is the acceptance test for refactors.** Snapshot all
+  eleven pages (repo pages + both apps' views), `git stash` the refactor,
+  render before and after, `diff -r` — byte-identical is the whole argument.
+  The snapshot script's shape is recreated per session; the pages are
+  `pages/*.sp` (via `Fixtures.for`), `examples/portfolio/views/*` (with the
+  `video` AppWord), `examples/roth/views/*` (via `Scenario.defaults` +
+  `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 170 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  (currently 171 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
   0 problems)
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore
-  (`POST /api/lore/alt-slim-pickins`; **lore entries max 2000 chars**, journal
-  messages max 500). Recent sessions have committed at the end of each round —
-  check that is still what dan wants.
+  (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars). dan has
+  wanted a commit and push per round this session; check that still holds.
 - Report honestly: failures verbatim, limits named, no claim of green that isn't.
+
+## Standing principles — do not break without saying so
+
+- One sentence: `word arguments`, indentation nests it. Extending the language
+  adds vocabulary, never syntax. A dot means data; a bare word is language.
+  There is no numeric literal. A name is a subject and must exist. Mechanical
+  facts are free; judgements belong to the app. A line that states the
+  inferable should not exist. This is a noun language — 45 of 50.
+- **Every truth has one home** (the grammar in Transform, the vocabulary in
+  contracts, the checkers consuming, never mirroring).
+- **A rule must outlive its reason** — when a proscription blocks empowerment
+  *and* better code, examine its foundation; it survives only if the
+  foundation is worth more than what it blocks.
+- **Word, or power?** — for every candidate surface, the language grows by
+  words; the surface grows only when the answer is honestly "power."
+- **The dogfood is enforced**: built-ins and app words eat the same food, by
+  test, and the gatherers are re-provable as app words, byte for byte.
 
 ## Three caveats to carry
 
-**The escape hatch is not the measurement it looks like.** It stood at once in
-284 sentences, then 9 uses in 324 when roth's markup was ported, then 3 uses in
-344 when roth's *results* moved to the server, then 1 in 356 when `chart` was
-redrafted and roth's last word went. It counts the distance between what a page
-needs and where its data is — not the vocabulary's coverage. Read any future
-number that way, or better, stop quoting it.
+**The escape-hatch number is retired.** It measured where rendering happened,
+never the vocabulary's coverage. Stop quoting it.
 
 **`~/dev/dashboard` must keep working, untouched.** It is the tool that runs
 everything else in `~/dev`, and nothing this project does is worth breaking it.
-Its own `journal.md` churns from lore posts and is exempt from any cleanliness
-complaint.
 
 **`~/dev/roth` is a separate, dormant project and has not been touched.** Its
-working tree has been mid-rename since 2025-09-11, and `examples/roth` pins the
-new spelling — `lib/engine.rb` raises with an explanation if that is reverted.
-roth's own defects are catalogued in `ROTH_STUDY.md` and scheduled in
-`ROTH_DOMAIN_BACKLOG.md`; they are deliberately not this project's work.
+working tree has been mid-rename since 2025-09-11; `examples/roth` pins the
+new spelling and raises if it is reverted. roth's defects are catalogued in
+`ROTH_STUDY.md` and `ROTH_DOMAIN_BACKLOG.md` — deliberately not this project's
+work.

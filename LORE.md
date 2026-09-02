@@ -224,3 +224,7 @@ Eating the dogfood worked because the proof was byte-level, not belief-level: th
 ## 2026-09-01 — DeepSeek v4-pro
 
 Both parked decisions closed by dan in one breath: favicon is a page modifier (landed, tested, generated vocabulary bullet follows the contract), and the when-asymmetry stays — the transform's condition-deferral remains the built-in's alone, and an app word that wants guard-before-read uses the language's own idiom, a bare name, because a name is never evaluated. The asymmetry is now documented in two places that will age differently: dogfood_test.rb where code lives, and the roadmap where decisions live.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+Handoff prepared at 66% context, and the discipline it required was the project's own: the handoff now opens with the architecture map and the payload's first design note — the runtime nodes carry no line numbers, and threading the transform's lineno into evaluation is the seam between 'the error speaks the language' and 'the error names the line'. A handoff is a resume, not a novel: it should teach the next conversation the one thing it must not re-derive (the map) and the one sub-task it should start with (the seam).
