@@ -882,7 +882,7 @@ outside HTML, and its children — `option` — already read as nouns.
 - **name** — the attribute
 - **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — `option`
+- **children** — `option`, `choice`
 - **subject** — unchanged
 - **infers** — the label from the name; the selected option from the subject.
   When it has no `option` children, the choices come from the attribute's own

@@ -533,7 +533,7 @@ into another object's ivars; byte-diffs of both apps' pages unchanged except
 the deliberate renames; the gathering-copy count is **1**, measured;
 `test/combination_test.rb` extended with the crash cases and green.
 
-### Phase 3 — Spend the description  🔄 in progress — rounds 1–6 done (2026-09-01)
+### Phase 3 — Spend the description  🔄 in progress — rounds 1–7 done (2026-09-01)
 
 The payload. 0.1 built a parsed, checkable description of what a page means and
 spent it only on HTML. This phase spends it on the one question that matters
@@ -570,7 +570,18 @@ evaluates all eleven pages (the repo's, both apps' views) against the data
 the app would serve, and reports: a page the app cannot answer names the
 page, the attribute, the line and the sentence — the seam's voice — and the
 run continues to the next page. It exits non-zero on any problem, so it can
-gate a commit; the boot gate is what remains.
+gate a commit; the boot gate is what remains. (7) the gate itself —
+`Contracts.enforce!` refuses a page, partial or layout whose sentence
+violates its word's contract, before evaluation, in the syntax error's
+voice (word, line, sentence). What rendered silently — `money name`, a
+block dropped under `title`, my own test fixture's `title` under `nav` —
+now fails by construction. The gate's first catch was a contract that
+under-described the runtime: nested `choice` was tested and supported (the
+gatherer stack restores), but the contract said `choice` holds only
+`option` — the declaration, not the language, changed, and
+`bin/generate_vocabulary.rb` kept the one bullet honest. Eleven pages stay
+byte-identical; both apps still serve. What remains of the payload: the
+boot moment (the roth test) and the measured cost.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
 The vocabulary is the language's own lowest layer: a `.sp` composition of
@@ -608,8 +619,10 @@ evaluated. No grammar change; the evidence asks for none.
   the word contracts Phase 1 objectified: every subject resolvable, every
   attribute answered, the contract satisfied — first as a report-only checker,
   then as the gate. A page may not render until the app has been proved able
-  to answer it. The report half is landed (round 6, `bin/verify_pages.rb`);
-  the gate is next.
+  to answer it. Both halves are landed (rounds 6–7: `bin/verify_pages.rb`
+  reports; `Contracts.enforce!` refuses pages, partials and layouts at
+  render). What remains is the boot moment — an app proving its pages as it
+  boots — which is the roth test's other half.
 - **The roth test** `agent` — renaming or removing an attribute makes the roth
   page fail at boot, naming the line and the attribute. The eleven-month
   silence becomes a boot error, by construction. The naming half is landed

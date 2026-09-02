@@ -34,7 +34,7 @@ class LinenoTest < Minitest::Test
     error = assert_raises(SlimPickins::Error) do
       render("page account\n  when .name\n    note \"x\"\n", account: Account.new(name: 'Roth'))
     end
-    assert_match(/\Awhen belongs inside a choose\n  form\.sp, line 2\n    when \.name\z/, error.message)
+    assert_match(/\A`when` belongs inside `choose`\n  form\.sp, line 2\n    when \.name\z/, error.message)
   end
 
   def test_an_error_in_the_chosen_branch_names_the_branch_not_the_choose
@@ -56,7 +56,7 @@ class LinenoTest < Minitest::Test
   end
 
   def test_an_error_in_the_layout_names_the_layout_not_the_page
-    layout = "nav\n  link home\n  title .nmae\ncontents\n"
+    layout = "nav\n  link home\ntitle .nmae\ncontents\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
       render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(layout: layout),
              account: Account.new(name: 'Roth'))

@@ -132,7 +132,7 @@ class Phase4Test < Minitest::Test
     error = assert_raises(SlimPickins::Error) do
       render("page thing\n  when .x\n    note \"y\"\n", thing: { x: true })
     end
-    assert_match(/\Awhen belongs inside a choose\n/, error.message)
+    assert_match(/\A`when` belongs inside `choose`\n/, error.message)
   end
 
   # --- collisions with the host language ---------------------------------

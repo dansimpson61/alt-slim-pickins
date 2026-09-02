@@ -58,11 +58,20 @@ landed Phase 3's first half:
   non-zero on any, so it can gate a commit. The static half — the word
   contracts — remains check_grammar's; this checker owns only the evaluation
   half.
+- **The gate is landed** — `Contracts.enforce!` refuses a page, partial or
+  layout whose sentence violates its word's contract, before evaluation, in
+  the syntax error's voice (word, line, sentence). The gate's first catch was
+  a contract that under-described the runtime — nested `choice` was tested
+  and supported, but the contract said `choice` holds only `option` — so the
+  declaration changed, and `bin/generate_vocabulary.rb` kept its bullet
+  honest. `test/gate_test.rb` pins the holes that used to pass silently.
 
 ## The architecture, in one map
 
 ```text
 .sp source  →  Transform (one grammar: parses, validates, compiles)
+            →  the gate (Contracts.enforce!: each sentence against its
+               word's contract, refused before evaluation)
             →  Builder (evaluates: chain, bindings, gatherer stack, capture)
             →  semantic tree [:word, attrs, children]   ← the description
             →  filter: (optional transform of the tree)
@@ -91,19 +100,20 @@ landed Phase 3's first half:
 **A page may not render until the app has been proved able to answer it.**
 The delete-the-ability-to-fail-late pass, in three steps:
 
-1. **Report, then gate** — the report half is landed: `bin/verify_pages.rb`
-   evaluates every repo page and both apps' views against their
-   defaults/fixtures and reports, naming page, line and sentence, exiting
-   non-zero on any problem. What remains is the gate: an app boots by
-   proving its pages, loudly — a page may not render until the app has been
-   proved able to answer it.
+1. **Report, then gate** — landed, both halves: `bin/verify_pages.rb` reports
+   (round 6) and `Contracts.enforce!` refuses pages, partials and layouts at
+   render (round 7). What remains is the boot moment: an app proving its
+   pages as it boots, loudly.
 2. **The roth test** — renaming or removing an attribute makes the roth page
    fail at boot, naming the line and the attribute. The naming half is
    landed: runtime errors already carry path, line and the sentence itself
    (the seam, above). What remains is making boot the moment the app proves
    its pages.
 3. **The cost, measured** — milliseconds per render, with the answer for apps
-   that cannot pay them.
+   that cannot pay them. Note: the gate parses each source twice per render
+   (`Transform.tree` for the gate, `Transform.call` for compilation), and a
+   partial inside `each` is gated per iteration — the measurement must cover
+   both, and a compile-once cache may be the answer.
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that
@@ -132,7 +142,7 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 177 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  (currently 184 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
   0 problems, 11 pages verified)
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore

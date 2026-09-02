@@ -19,6 +19,7 @@ module SlimPickins
   #   SlimPickins.render(File.read("form.sp"), locals: { scenario: inputs },
   #                      filter: ->(tree) { [[:badge, { kind: :ok, label: "12" }, []]] + tree })
   def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
+    Contracts.enforce!(source, path: path)
     ruby = Transform.call(source, path: path)
     builder = Builder.new(Page.new(locals: locals, helpers: helpers), library)
     nodes = builder.render(ruby, path, source: source)
@@ -30,6 +31,7 @@ module SlimPickins
   # seeing what a page means — and the tree a second interpreter (an API)
   # would walk.
   def evaluate(source, path: '(page)', locals: {}, helpers: nil, library: nil)
+    Contracts.enforce!(source, path: path)
     ruby = Transform.call(source, path: path)
     Builder.new(Page.new(locals: locals, helpers: helpers), library).render(ruby, path, source: source)
   end

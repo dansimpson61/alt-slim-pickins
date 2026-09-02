@@ -116,7 +116,7 @@ class Phase2Test < Minitest::Test
 
   def test_column_outside_a_table_says_where_it_belongs
     error = assert_raises(SlimPickins::Error) { render("page book\n  column name\n", book: {}) }
-    assert_match(/\Acolumn belongs inside a table\n/, error.message)
+    assert_match(/\A`column` belongs inside `table`\n/, error.message)
   end
 
   # --- empty names a situation, it does not write a branch --------------

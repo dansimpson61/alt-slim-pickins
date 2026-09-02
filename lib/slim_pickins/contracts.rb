@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require_relative 'errors'
+require_relative 'transform'
+
 module SlimPickins
   # The checkable half of each word's seven slots, declared once and held to
   # by check_grammar.rb and by VOCABULARY.md. The prose half — `infers` and
@@ -94,7 +97,7 @@ module SlimPickins
     field:      Contract.new(name: :attribute, content: true, modifiers: %i[type step required],
                              shape: :says),
     checkbox:   Contract.new(name: :attribute, content: true, shape: :says),
-    choice:     Contract.new(name: :attribute, content: true, children: [:option], shape: :gathers),
+    choice:     Contract.new(name: :attribute, content: true, children: %i[option choice], shape: :gathers),
     option:     Contract.new(name: :value, content: true, parents: [:choice], shape: :registers),
     button:     Contract.new(name: :variant, content: true, modifiers: %i[to type], shape: :says)
   }.freeze
@@ -168,6 +171,25 @@ module SlimPickins
       end
 
       out
+    end
+
+    # The gate: the same complaints, raised instead of reported. Every place
+    # the grammar's Ruby runs — a page, a partial, the layout — refuses the
+    # source before evaluation, so a sentence that violates its word's
+    # contract fails with the word, the line and the sentence, in the same
+    # voice as a syntax error. The report half of this truth is
+    # check_grammar's; this is the refusal half.
+    def enforce!(source, path: '(page)')
+      tree = Transform.tree(source, path: path)
+      walk = lambda do |nodes, ancestry|
+        nodes.each do |node|
+          complaint = complaints(node, ancestry).first
+          raise SyntaxError.new(complaint, path, node.lineno, node.body) if complaint
+
+          walk.call(node.children, ancestry + [node.word])
+        end
+      end
+      walk.call(tree, [])
     end
   end
 end

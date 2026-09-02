@@ -112,10 +112,11 @@ class CombinationTest < Minitest::Test
 
   # `option` was the fourth copy of the gathering mechanism, and the only one
   # with no guard — it rendered silently outside its gatherer. It has the
-  # guard now, the same one as the other three.
+  # guard now, the same one as the other three — and the gate refuses it
+  # before evaluation ever runs.
   def test_an_option_outside_a_choice_is_refused
     error = assert_raises(SlimPickins::Error) { draw("option fixed, \"Fixed\"\n") }
-    assert_match(/\Aoption belongs inside a choice\n/, error.message)
+    assert_match(/\A`option` belongs inside `choice`\n/, error.message)
   end
 
   # `when` used to guard *after* its argument ran, so `when .x` outside a
@@ -123,7 +124,7 @@ class CombinationTest < Minitest::Test
   # arrives unevaluated, and the guard names the misuse.
   def test_when_outside_a_choose_names_the_guard_not_the_argument
     error = assert_raises(SlimPickins::Error) { draw("when .nope\n  text \"x\"\n") }
-    assert_match(/\Awhen belongs inside a choose\n/, error.message)
+    assert_match(/\A`when` belongs inside `choose`\n/, error.message)
   end
 
   # `choice` used to clear its state instead of restoring it, so a nested
@@ -144,10 +145,10 @@ class CombinationTest < Minitest::Test
   end
 
   def test_registering_words_refuse_to_stand_alone
-    { 'column name' => 'column belongs inside a table',
-      'band qty' => 'band belongs inside a chart',
-      'level .qty, "x"' => 'level belongs inside a chart',
-      'when .yes' => 'when belongs inside a choose' }.each do |source, message|
+    { 'column name' => '`column` belongs inside `table`',
+      'band qty' => '`band` belongs inside `chart`',
+      'level .qty, "x"' => '`level` belongs inside `chart`',
+      'when .yes' => '`when` belongs inside `choose`' }.each do |source, message|
       error = assert_raises(SlimPickins::Error) { draw("#{source}\n", qty: 1) }
       assert_match(/\A#{Regexp.escape(message)}\n/, error.message)
     end
