@@ -63,6 +63,13 @@ module SlimPickins
       emit_node([:footer, { body: body }, capture(&block)])
     end
 
+    # Marks where the caller's children go — the partial's `contents`.
+    def children
+      raise Error, '`children` has nothing to splice — this word took no children' if spliced.nil?
+
+      spliced.each { |n| emit_node(n) }
+    end
+
     # Marks where the page's own nodes go. Only a layout has one.
     def contents
       raise Error, '`contents` belongs in a layout' unless contents_stowed?

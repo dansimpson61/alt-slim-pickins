@@ -2,43 +2,43 @@ require 'minitest/autorun'
 require_relative '../lib/slim_pickins'
 
 # An app word that IS a gatherer, built with the public surface alone: the
-# page declares thumbs, the word collects them, then renders the grid. This
+# page declares photos, the word collects them, then renders the grid. This
 # is the proof that the gatherer mechanism — the thing only table, chart,
 # choose and choice used to own — is now food any word may eat.
 class AppGathererTest < Minitest::Test
-  class Thumbnails < SlimPickins::Component
-    INSIDE = 'a thumbnails'
+  class Gallery < SlimPickins::Component
+    INSIDE = 'a gallery'
 
     def render
       with_open
-      emit_node([:grid, { variant: :thumbnails }, @collected])
+      emit_node([:grid, { variant: :gallery }, @collected])
     end
   end
 
   module Words
-    def thumbnails(&block) = Thumbnails.new(self, &block).render
+    def gallery(&block) = Gallery.new(self, &block).render
 
-    def thumb(*args)
+    def photo(*args)
       _, src = arguments(args)
-      register!(Thumbnails,
-                element(:img, { class: token(:thumb), src: src }, []),
-                'thumb')
+      register!(Gallery,
+                element(:img, { class: token(:photo), src: src }, []),
+                'photo')
     end
   end
 
   def test_an_app_word_can_be_a_gatherer
-    html = SlimPickins.render("page p\n  thumbnails\n    thumb .url\n    thumb .url\n",
+    html = SlimPickins.render("page p\n  gallery\n    photo .url\n    photo .url\n",
                               locals: { p: { url: '/t/1.png' } },
                               library: SlimPickins::Library.new(words: Words))
-    assert_includes html, '<div class="grid grid--thumbnails">'
-    assert_equal 2, html.scan('<img class="thumb"').size
+    assert_includes html, '<div class="grid grid--gallery">'
+    assert_equal 2, html.scan('<img class="photo"').size
   end
 
-  def test_a_thumb_outside_a_thumbnails_is_refused_like_any_registering_word
+  def test_a_photo_outside_a_gallery_is_refused_like_any_registering_word
     error = assert_raises(SlimPickins::Error) do
-      SlimPickins.render("page p\n  thumb .url\n", locals: { p: { url: '/t.png' } },
+      SlimPickins.render("page p\n  photo .url\n", locals: { p: { url: '/t.png' } },
                          library: SlimPickins::Library.new(words: Words))
     end
-    assert_match(/\Athumb belongs inside a thumbnails\n/, error.message)
+    assert_match(/\Aphoto belongs inside a gallery\n/, error.message)
   end
 end

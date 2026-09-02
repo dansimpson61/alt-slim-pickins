@@ -23,7 +23,7 @@ class WordsTest < Minitest::Test
              "`#{w}` is in the contracts but has no partial in lib/vocabulary"
     end
 
-    flattened = %i[each choose contents] # spliced by the interpreter, not rendered
+    flattened = %i[each choose contents children] # spliced by the interpreter, not rendered
     registering = primitives.select { |w| SlimPickins::CONTRACTS[w].parents != :any }
     missing = (primitives - flattened - registering).reject do |w|
       SlimPickins::Generator.private_instance_methods.include?(w)

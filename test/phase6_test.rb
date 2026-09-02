@@ -94,7 +94,7 @@ class Phase6Test < Minitest::Test
   # word needs.
   def test_an_app_word_gets_the_same_surface_the_vocabulary_uses
     builder = SlimPickins::Builder.new(SlimPickins::Page.new(locals: {}))
-    %i[token html element tag children arguments subject chain label_for format_of
+    %i[token html element tag arguments subject chain label_for format_of
        register! with_gatherer emit_node about prune evaluate capture].each do |m|
       assert_respond_to builder, m
     end

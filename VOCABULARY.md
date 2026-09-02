@@ -1085,3 +1085,51 @@ during 0.1; the list is a record, not a to-do.
   [CONTENT.md](history/CONTENT.md) and [FIGURES.md](history/FIGURES.md);
   navigation chrome by the layout; collections nested more than one deep by
   the portfolio page.
+
+### `children`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+
+Marks where the caller's children go, inside a partial's body. A partial
+that took no children has nothing to splice, and says so.
+
+```
+children
+```
+
+### `thumbnails`
+
+- **name** — none
+- **content** — none
+- **modifiers** — none
+- **children** — `thumb`
+- **subject** — unchanged
+
+A gallery: the page declares its thumbs, the word gathers them, then lays
+them out in a grid. Written entirely in the language — its file in
+lib/vocabulary is the word, and its preamble is the declaration.
+
+```
+thumbnails
+  thumb .url
+```
+
+### `thumb`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — none
+- **subject** — unchanged
+
+One declared image of a `thumbnails`. It registers rather than renders, so
+the gallery can gather every thumb before laying any out.
+
+```
+thumbnails
+  thumb .url
+```

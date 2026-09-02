@@ -272,7 +272,7 @@ video .tour_url
 which reads exactly like `image .url`. Extending the language still adds
 vocabulary and never syntax — even at the exit. An app word may use the whole
 surface the vocabulary itself is written with: `token`, `html`, `element`,
-`tag`, `children` and `arguments` for structure; `subject`, `chain`,
+`tag` and `arguments` for structure, `capture` for a word's children; `subject`, `chain`,
 `label_for` and `format_of` for the contract; `register!` and
 `with_gatherer` for gathering; `about`, `capture` and `prune` for the
 subject flow. There is no other surface, and no secret one: the built-ins

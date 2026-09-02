@@ -40,6 +40,7 @@ module SlimPickins
   # declared in lib/vocabulary's partials — each word's definition and its
   # declaration live in one file, and this hash is the primitives' home.
   PRIMITIVES = {
+    children:   Contract.new(shape: :document),
     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
                              children: :any, subject: :shift, shape: :document),
     contents:   Contract.new(shape: :document),
@@ -144,6 +145,7 @@ module SlimPickins
       end
       return nil if kwargs.empty?
 
+      kwargs[:parents] = [kwargs[:inside]] if kwargs[:inside] && !kwargs[:parents]
       Contract.new(**kwargs)
     end
   end

@@ -41,8 +41,20 @@ module SlimPickins
     def label_of(...) = @builder.label_of(...)
     def format_of(...) = @builder.format_of(...)
     def alignment_of(...) = @builder.alignment_of(...)
-    def children(&block) = @builder.children(&block)
+    def capture(&block) = @builder.capture(&block)
     def emit_node(node) = @builder.emit_node(node)
+  end
+
+  # A gatherer that is a vocabulary partial — its word name is how its
+  # children find it, and its collection is what the body's `children`
+  # splices.
+  class PartialGatherer < Component
+    attr_reader :word, :collected
+
+    def initialize(builder, word, &block)
+      @word = word.to_sym
+      super(builder, &block)
+    end
   end
 
   # A table declares its columns; the rows come from the subject. `column`
@@ -170,7 +182,7 @@ module SlimPickins
     def render
       with_open
       chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
-      emit_node([:choose, {}, chosen ? children(&chosen.last) : []])
+      emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
     end
 
     def add_branch(condition, block) = @collected << [condition, block]

@@ -110,7 +110,6 @@ module SlimPickins
     end
 
     # A word's own children, as nodes — the capture above, by its hatch name.
-    def children(&block) = capture(&block)
 
     # The paper's "conditionally pruning an AST": an empty collection keeps
     # only the `empty` node that names it; anything else keeps everything but.
@@ -178,6 +177,23 @@ module SlimPickins
     def open_gatherer(kind)
       @gatherers.reverse.find { |g| g.is_a?(kind) }
     end
+
+    # A gatherer addressed by its word name — how a vocabulary partial's
+    # children find their collector.
+    def open_gatherer_named(word)
+      @gatherers.reverse.find { |g| g.respond_to?(:word) && g.word == word.to_sym }
+    end
+
+    # The nodes a `children` word splices — set by a partial around its body.
+    def with_splice(nodes)
+      was = @spliced
+      @spliced = nodes
+      yield
+    ensure
+      @spliced = was
+    end
+
+    def spliced = @spliced
 
     def with_gatherer(gatherer)
       @gatherers.push(gatherer)
@@ -310,18 +326,42 @@ module SlimPickins
       source = @library.source_for(word)
       compilation = Compilation.of(source, "partials/#{word}.sp")
       compilation.refuse!("partials/#{word}.sp")
-      parameters = { content: content }.merge(kwargs)
+      contract = CONTRACTS[word.to_sym]
+      parameters = { content: content, name: name }.merge(kwargs)
       evaluate = -> { capture { eval_with(compilation.ruby, "partials/#{word}.sp", source.lines) } }
-      value, empty, children =
+      value, empty, body =
         about(name) do
-          if kwargs.empty? && content.nil?
-            evaluate.call
+          if contract&.gathers
+            # Collect the caller's children as declarations, then let the
+            # body splice them at `children` — the gatherer as a partial.
+            gatherer = SlimPickins::PartialGatherer.new(self, word)
+            with_gatherer(gatherer) { nest(&block) }
+            with_splice(gatherer.collected.flatten(1)) { evaluate_body(evaluate, parameters, kwargs, content, word) }
+          elsif contract&.inside && contract.inside != :any
+            # A child that registers: render, then hand the nodes to the
+            # gatherer named in the declaration instead of emitting them.
+            target = open_gatherer_named(contract.inside)
+            raise Error, "#{word} belongs inside a #{contract.inside}" unless target
+
+            nodes = evaluate_body(evaluate, parameters, kwargs, content, word)
+            target.collect(nodes)
+            nodes
+          elsif block
+            with_splice(capture(&block)) { evaluate_body(evaluate, parameters, kwargs, content, word) }
           else
-            @chain.with(parameters, described_as: "this #{word}") { evaluate.call }
+            evaluate_body(evaluate, parameters, kwargs, content, word)
           end
         end
-      @nodes.concat(prune(children, empty))
+      @nodes.concat(prune(body, empty)) unless contract&.inside && contract.inside != :any
       value
+    end
+
+    def evaluate_body(evaluate, parameters, kwargs, content, word)
+      if kwargs.empty? && content.nil?
+        evaluate.call
+      else
+        @chain.with(parameters, described_as: "this #{word}") { evaluate.call }
+      end
     end
 
     # --- the escape hatch -------------------------------------------------

@@ -128,7 +128,7 @@ module Dogfood
     def render
       with_open
       chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
-      emit_node([:choose, {}, chosen ? children(&chosen.last) : []])
+      emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
     end
 
     def add_branch(condition, block) = @collected << [condition, block]
