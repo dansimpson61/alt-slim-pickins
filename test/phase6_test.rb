@@ -100,16 +100,18 @@ class Phase6Test < Minitest::Test
   end
 
   # An app word building a void element gets what the built-in `image` gets —
-  # no closing tag. The thumbnails example surfaced the opposite.
+  # no closing tag. The thumbnails example surfaced the opposite: an app word
+  # writing tag(:img) used to emit a closing tag the built-in never would.
+  # (video is NOT void — it keeps its closing tag, as it should.)
   def test_an_app_tag_knows_void_elements
-    html = SlimPickins.render("page p\n  video .url\n", locals: { p: { url: '/c.mp4' } },
+    html = SlimPickins.render("page p\n  photo .url\n", locals: { p: { url: '/t.png' } },
                               library: SlimPickins::Library.new(words: Module.new do
-        def video(*args)
+        def photo(*args)
           _, src = arguments(args)
-          tag(:video, { class: token(:video), src: src, controls: true }, [])
+          tag(:img, { class: token(:photo), src: src }, [])
         end
       end))
-    refute_includes html, '</video>'
-    assert_includes html, '<video class="video" src="/c.mp4" controls>'
+    refute_includes html, '</img>'
+    assert_includes html, '<img class="photo" src="/t.png">'
   end
 end
