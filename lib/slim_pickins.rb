@@ -40,4 +40,29 @@ module SlimPickins
   def compile(source, path: '(page)')
     Transform.call(source, path: path)
   end
+
+  # An app boots by proving its pages: every top-level view renders against
+  # the locals the app gives it, and the first page the app cannot answer
+  # raises — naming the line — so a renamed attribute is a boot error, not an
+  # eleven-month silence. `layout.sp` is chrome, not a page, and partials are
+  # proven through the pages that include them. A view the block answers
+  # nothing for is refused, loudly: an unproven page may not boot either.
+  #
+  #   SlimPickins.prove!(settings.views) do |name|
+  #     { scenario: Scenario.defaults, projection: Projection.of(Scenario.defaults) }
+  #   end
+  def prove!(dir, words: nil, &locals_for)
+    library = Library.from(dir, words: words)
+    views = Dir[File.join(dir, '*.sp')].sort.reject { |p| File.basename(p) == 'layout.sp' }
+    raise Error, "no pages to prove in #{dir}" if views.empty?
+
+    views.each do |path|
+      name = File.basename(path, '.sp')
+      locals = locals_for.call(name)
+      raise Error, "no locals were given to prove `#{name}.sp`" unless locals
+
+      render(File.read(path), path: path, locals: locals, library: library)
+      puts "  proved #{name}.sp"
+    end
+  end
 end

@@ -5,17 +5,16 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
 last_touched: '2026-09-01'
-next_step: ROADMAP-0.2.md Phase 3, the payload — report and gate are both
-  landed (rounds 6–7): bin/verify_pages.rb reports every page's answer; and
-  Contracts.enforce! refuses a page, partial or layout whose sentence
-  violates its word's contract, before evaluation, in the syntax error's
-  voice — `money name` and dropped blocks now fail by construction, and the
-  gate caught one under-declared contract (nested choice). Next: the roth
-  test — renaming or removing an attribute makes the roth page fail at boot,
-  naming the line and the attribute: make boot the moment an app proves its
-  pages, loudly. Then the per-render cost, measured (the gate parses each
-  source twice per render; a partial inside each is gated per iteration —
-  a compile-once cache may be the answer).
+next_step: ROADMAP-0.2.md Phase 3, the payload — report, gate, and boot are
+  landed (rounds 6–8): bin/verify_pages.rb reports; Contracts.enforce!
+  refuses contract-violating pages/partials/layouts before evaluation; and
+  SlimPickins.prove! makes both apps prove their pages at boot — the roth
+  test (test/boot_test.rb) plays the rename on the real page: a model minus
+  ss_primary_amount fails at boot naming controls.sp line 14 and the
+  sentence. Next: the cost, measured — the gate parses each source twice per
+  render and a partial inside each is gated per iteration; measure
+  milliseconds per render, then decide whether a compile-once cache is the
+  answer for apps that cannot pay them. Then Phase 4.
   Both parked decisions are closed (dan, 2026-09-01): favicon is a page
   modifier, landed and tested; the when-deferral asymmetry stays as
   documented in dogfood_test — an app word that wants guard-before-read uses

@@ -533,7 +533,7 @@ into another object's ivars; byte-diffs of both apps' pages unchanged except
 the deliberate renames; the gathering-copy count is **1**, measured;
 `test/combination_test.rb` extended with the crash cases and green.
 
-### Phase 3 — Spend the description  🔄 in progress — rounds 1–7 done (2026-09-01)
+### Phase 3 — Spend the description  🔄 in progress — rounds 1–8 done (2026-09-01)
 
 The payload. 0.1 built a parsed, checkable description of what a page means and
 spent it only on HTML. This phase spends it on the one question that matters
@@ -581,7 +581,14 @@ gatherer stack restores), but the contract said `choice` holds only
 `option` — the declaration, not the language, changed, and
 `bin/generate_vocabulary.rb` kept the one bullet honest. Eleven pages stay
 byte-identical; both apps still serve. What remains of the payload: the
-boot moment (the roth test) and the measured cost.
+boot moment (the roth test) and the measured cost. (8) the boot moment —
+`SlimPickins.prove!` renders every top-level view against the locals the
+app gives it, before any request can: both apps prove at boot, loudly
+(`proved controls.sp`), and a view the app answers nothing for is refused
+too. The roth test, played on the real page: a model minus
+`ss_primary_amount` fails at boot naming `controls.sp`, line 14, and the
+sentence — the eleven-month silence is a boot error, by construction. Only
+the cost remains.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
 The vocabulary is the language's own lowest layer: a `.sp` composition of
@@ -625,8 +632,9 @@ evaluated. No grammar change; the evidence asks for none.
   boots — which is the roth test's other half.
 - **The roth test** `agent` — renaming or removing an attribute makes the roth
   page fail at boot, naming the line and the attribute. The eleven-month
-  silence becomes a boot error, by construction. The naming half is landed
-  (round 5's seam); the boot half rides the gate above.
+  silence becomes a boot error, by construction. Landed (round 8,
+  `test/boot_test.rb`): the real page, the model minus the attribute, the
+  boot refuses it naming line 14 and the sentence.
 - **The cost, measured** `agent` — the milliseconds the pass adds per render,
   recorded, with the answer for apps that cannot pay them.
 

@@ -52,6 +52,14 @@ module Roth
 
     SlimPickins::Template.libraries[settings.views] = SlimPickins::Library.from(settings.views)
 
+    # Boot proves the pages: an attribute renamed or removed in the model
+    # fails here, naming the line and the attribute — the eleven-month
+    # silence is a boot error, by construction.
+    SlimPickins.prove!(settings.views) do |_name|
+      scenario = Scenario.defaults
+      { scenario: scenario, projection: Projection.of(scenario) }
+    end
+
     REPORT = File.join(settings.views, 'partials', 'report.sp')
 
     helpers do

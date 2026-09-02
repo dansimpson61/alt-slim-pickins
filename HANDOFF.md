@@ -65,6 +65,13 @@ landed Phase 3's first half:
   and supported, but the contract said `choice` holds only `option` — so the
   declaration changed, and `bin/generate_vocabulary.rb` kept its bullet
   honest. `test/gate_test.rb` pins the holes that used to pass silently.
+- **The boot moment is landed** — `SlimPickins.prove!(dir)` renders every
+  top-level view against the locals the app gives it, before any request
+  can: both apps prove at boot, loudly (`proved controls.sp`), and a view
+  the app answers nothing for is refused too. `test/boot_test.rb` plays the
+  roth test on the real page: a model minus `ss_primary_amount` fails at
+  boot naming `controls.sp`, line 14, and the sentence. The eleven-month
+  silence is a boot error, by construction.
 
 ## The architecture, in one map
 
@@ -95,25 +102,25 @@ landed Phase 3's first half:
 - `check_grammar.rb` / `check_shape.rb` / `check_styles.rb` — the three
   checkers that hold docs, shapes, and styles to the code.
 
-## What is next — the payload
+## What is next — the cost
 
-**A page may not render until the app has been proved able to answer it.**
-The delete-the-ability-to-fail-late pass, in three steps:
+**A page may not render until the app has been proved able to answer it** —
+landed, all of it: the report (`bin/verify_pages.rb`, round 6), the gate
+(`Contracts.enforce!`, round 7), and the boot moment (`SlimPickins.prove!`
++ the roth test, round 8). What remains is the third step, the honest
+price:
 
-1. **Report, then gate** — landed, both halves: `bin/verify_pages.rb` reports
-   (round 6) and `Contracts.enforce!` refuses pages, partials and layouts at
-   render (round 7). What remains is the boot moment: an app proving its
-   pages as it boots, loudly.
-2. **The roth test** — renaming or removing an attribute makes the roth page
-   fail at boot, naming the line and the attribute. The naming half is
-   landed: runtime errors already carry path, line and the sentence itself
-   (the seam, above). What remains is making boot the moment the app proves
-   its pages.
-3. **The cost, measured** — milliseconds per render, with the answer for apps
-   that cannot pay them. Note: the gate parses each source twice per render
-   (`Transform.tree` for the gate, `Transform.call` for compilation), and a
-   partial inside `each` is gated per iteration — the measurement must cover
-   both, and a compile-once cache may be the answer.
+- **The cost, measured** — milliseconds per render, with the answer for
+  apps that cannot pay them. The debts to measure: the gate parses each
+  source twice per render (`Transform.tree` for the gate, `Transform.call`
+  for compilation), and a partial inside `each` is gated per iteration. A
+  compile-once cache (the gate's verdict keyed by source) may be the
+  answer — measure first, then decide.
+
+The payload's *done looks like* from the roadmap: both apps still serve,
+every repo page still renders, and the failure mode the whole project
+exists to remove is removed from this project first. All three hold; only
+the measurement and its record remain.
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that

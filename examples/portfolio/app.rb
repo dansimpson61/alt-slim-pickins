@@ -36,6 +36,15 @@ class Portfolio < Sinatra::Base
   SlimPickins::Template.libraries[settings.views] =
     SlimPickins::Library.from(settings.views, words: AppWords)
 
+  # Boot proves the pages: a view the app cannot answer fails here, naming
+  # the line — before any request can render it blank.
+  SlimPickins.prove!(settings.views, words: AppWords) do |name|
+    case name
+    when 'index' then { portfolio: Fixtures.portfolio }
+    when 'account' then { account: Fixtures.portfolio.accounts.last }
+    end
+  end
+
   helpers do
     def portfolio = Fixtures.portfolio
   end
