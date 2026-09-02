@@ -15,9 +15,10 @@ next_step: ROADMAP-0.2.md Phase 3, the payload — everything before it has
   attribute answered, the contract satisfied — report-only first, then the
   gate: a page may not render until the app has been proved able to answer
   it. Then the roth boot-error test and the per-render cost, measured.
-  Open dan decisions: favicon as a page modifier (word, not power), and
-  whether the when-deferral asymmetry (transform-level, documented in
-  dogfood_test) ever deserves a grammar answer.
+  Both parked decisions are closed (dan, 2026-09-01): favicon is a page
+  modifier, landed and tested; the when-deferral asymmetry stays as
+  documented in dogfood_test — an app word that wants guard-before-read uses
+  a bare name, which the grammar never evaluates.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

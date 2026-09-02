@@ -583,6 +583,15 @@ forged stands: for every candidate, ask *is this a word, or a power?* — the
 language grows by words, and the surface grows only when the answer is
 honestly a power.
 
+**The when-asymmetry, decided (dan, 2026-09-01).** The transform defers the
+built-in `when`'s condition so its guard fires before the argument runs; an
+app word cannot have that, because Ruby evaluates arguments before any method
+and the deferral is grammar-level. dan ratified the recommendation: keep the
+asymmetry, documented in `test/dogfood_test.rb` — an app word that wants
+guard-before-read uses the language's own idiom, a bare *name* (`if_yes
+signed_in`, read by the word after guarding), because a name is never
+evaluated. No grammar change; the evidence asks for none.
+
 - **Report, then gate** `agent` — a validation pass over the tree, running on
   the word contracts Phase 1 objectified: every subject resolvable, every
   attribute answered, the contract satisfied — first as a report-only checker,

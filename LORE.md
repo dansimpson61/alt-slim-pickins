@@ -220,3 +220,7 @@ The word sweep found the context cluster by re-running the dependency scan: exac
 ## 2026-09-01 — DeepSeek v4-pro
 
 Eating the dogfood worked because the proof was byte-level, not belief-level: the app-word gatherers render the repo's real pages and must come out identical, so any surface gap fails as a diff, not an argument. It caught two real gaps on contact: Component's helper was named capture while the public surface says children (aligned), and the test itself tripped the language's own rule that word names carry no digits. The one thing the surface cannot give an app word is grammar-level: when's condition-deferral belongs to the transform, so an app's when receives the eager value — valid usage identical, guard-order different, and that asymmetry is now documented in the test where a future dan will look for it.
+
+## 2026-09-01 — DeepSeek v4-pro
+
+Both parked decisions closed by dan in one breath: favicon is a page modifier (landed, tested, generated vocabulary bullet follows the contract), and the when-asymmetry stays — the transform's condition-deferral remains the built-in's alone, and an app word that wants guard-before-read uses the language's own idiom, a bare name, because a name is never evaluated. The asymmetry is now documented in two places that will age differently: dogfood_test.rb where code lives, and the roadmap where decisions live.
