@@ -4,7 +4,7 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
-last_touched: '2026-09-01'
+last_touched: '2026-09-02'
 next_step: ROADMAP-0.2.md Phase 4, the exam — the candidate short-list is in
   front of dan, scored: index.slim/Studio 81, project.slim 73, dispatch.slim
   73, compare.slim 61, triage.slim 50 (rubric: branches, navigation, hidden
@@ -16,6 +16,9 @@ next_step: ROADMAP-0.2.md Phase 4, the exam — the candidate short-list is in
   original used app words. Awaiting dan's pick; then Inventory first (what
   the original could do, not what it said), then the port. ~/dev/dashboard
   stays untouched and working throughout.
+  Phase 3's compile-once cache landed (round 10, 2026-09-02): Compilation
+  holds the gate's verdict and the compiled Ruby keyed by source — warm
+  render 1.66 ms, cold 3.42 ms, 0.12 ms per partial-in-each row.
   Both parked decisions are closed (dan, 2026-09-01): favicon is a page
   modifier, landed and tested; the when-deferral asymmetry stays as
   documented in dogfood_test — an app word that wants guard-before-read uses

@@ -599,6 +599,17 @@ cannot pay them: none has asked — 3.59 ms for the heaviest page is
 payable everywhere this project has apps — and the known shape of the
 escape is a compile-once cache of the gate's verdict and the compiled
 Ruby, keyed by source. Eleven pages byte-identical throughout.
+(10, after Phase 4 began, at dan's direction) the escape became real:
+`Compilation` caches the gate's verdict and the compiled Ruby together,
+keyed by the source, behind a mutex — the parse, the walk and the emit
+run once per source, not once per render, and a partial inside `each`
+pays once, not once per row. The cached verdict carries no path, so each
+render composes its own refusal (roth's report.sp renders as a partial
+and as a page, and each names itself); a source that will not parse is
+never cached, so every render names its own path. Re-measured, same
+instrument: cold render 3.42 ms, warm render 1.66 ms — what a request
+pays, halved — and 0.12 ms per partial-in-`each` row. `test/compilation_test.rb`
+pins the cache; eleven pages byte-identical.
 
 **The dogfood finding, recorded for dan — and corrected by his questions.**
 The vocabulary is the language's own lowest layer: a `.sp` composition of
@@ -637,9 +648,9 @@ evaluated. No grammar change; the evidence asks for none.
   attribute answered, the contract satisfied — first as a report-only checker,
   then as the gate. A page may not render until the app has been proved able
   to answer it. Both halves are landed (rounds 6–7: `bin/verify_pages.rb`
-  reports; `Contracts.enforce!` refuses pages, partials and layouts at
-  render). What remains is the boot moment — an app proving its pages as it
-  boots — which is the roth test's other half.
+  reports; the refusal — the gate — compiles once through `Compilation` and
+  is raised per render with that render's own path). The boot moment is the
+  roth test's other half, landed in round 8.
 - **The roth test** `agent` — renaming or removing an attribute makes the roth
   page fail at boot, naming the line and the attribute. The eleven-month
   silence becomes a boot error, by construction. Landed (round 8,
@@ -648,9 +659,10 @@ evaluated. No grammar change; the evidence asks for none.
 - **The cost, measured** `agent` — the milliseconds the pass adds per render,
   recorded, with the answer for apps that cannot pay them. Landed (round 9,
   `bin/measure_cost.rb`): full render 3.59 ms, the gate 1.09 ms, 0.29 ms per
-  partial-in-`each` row (ruby 4.0.1, specimen.sp, 200 runs). The answer: no
-  app here cannot pay; the escape, should one appear, is a compile-once
-  cache keyed by source.
+  partial-in-`each` row (ruby 4.0.1, specimen.sp, 200 runs). The answer
+  landed later (round 10, at dan's direction, after Phase 4 began): the
+  compile-once cache — `Compilation` — is built; warm render 1.66 ms, cold
+  3.42 ms, 0.12 ms per partial-in-`each` row.
 
 *Done looks like:* both apps still serve, every repo page still renders, and
 the failure mode the whole project exists to remove is removed from this

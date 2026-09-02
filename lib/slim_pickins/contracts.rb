@@ -173,24 +173,31 @@ module SlimPickins
       out
     end
 
-    # The gate: the same complaints, raised instead of reported. Every place
-    # the grammar's Ruby runs — a page, a partial, the layout — refuses the
-    # parsed tree before evaluation, so a sentence that violates its word's
-    # contract fails with the word, the line and the sentence, in the same
-    # voice as a syntax error. The report half of this truth is
-    # check_grammar's; this is the refusal half. It takes the tree rather
-    # than the source, so a renderer that compiles too pays for one parse,
-    # not two.
-    def enforce!(tree, path: '(page)')
-      walk = lambda do |nodes, ancestry|
-        nodes.each do |node|
-          complaint = complaints(node, ancestry).first
-          raise SyntaxError.new(complaint, path, node.lineno, node.body) if complaint
+    # The gate's verdict, in a shape a cache can hold. The sentence that
+    # broke its word's contract, where it stands, and what it may not do —
+    # no path, because the same source may render under several names
+    # (roth's report.sp renders as a partial and as a page), and each
+    # render composes its own.
+    Violation = Struct.new(:lineno, :body, :complaint, keyword_init: true)
 
-          walk.call(node.children, ancestry + [node.word])
+    # The gate, walked: the first sentence that violates its word's
+    # contract, or nil. The report half of this truth is check_grammar's
+    # walk, which reports every complaint; the refusal half — the raise,
+    # with the render's own path — lives in Compilation, which caches this
+    # verdict so the walk runs once per source, not once per render.
+    def first_violation(tree)
+      catch(:violation) do
+        walk = lambda do |nodes, ancestry|
+          nodes.each do |node|
+            complaint = complaints(node, ancestry).first
+            throw :violation, Violation.new(lineno: node.lineno, body: node.body, complaint: complaint) if complaint
+
+            walk.call(node.children, ancestry + [node.word])
+          end
         end
+        walk.call(tree, [])
+        nil
       end
-      walk.call(tree, [])
     end
   end
 end

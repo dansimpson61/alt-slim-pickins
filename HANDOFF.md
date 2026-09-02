@@ -58,13 +58,16 @@ byte-identical throughout) and then landed all of Phase 3:
   non-zero on any, so it can gate a commit. The static half — the word
   contracts — remains check_grammar's; this checker owns only the evaluation
   half.
-- **The gate is landed** — `Contracts.enforce!` refuses a page, partial or
-  layout whose sentence violates its word's contract, before evaluation, in
-  the syntax error's voice (word, line, sentence). The gate's first catch was
-  a contract that under-described the runtime — nested `choice` was tested
-  and supported, but the contract said `choice` holds only `option` — so the
-  declaration changed, and `bin/generate_vocabulary.rb` kept its bullet
-  honest. `test/gate_test.rb` pins the holes that used to pass silently.
+- **The gate is landed** — every page, partial and layout compiles once
+  through `Compilation`: the parse, the contract walk and the emit run on
+  the first render, and a violating sentence is refused before evaluation
+  in the syntax error's voice (word, line, sentence), each render
+  composing its own path. The gate's first catch was a contract that
+  under-described the runtime — nested `choice` was tested and supported,
+  but the contract said `choice` holds only `option` — so the declaration
+  changed, and `bin/generate_vocabulary.rb` kept its bullet honest.
+  `test/gate_test.rb` pins the holes that used to pass silently;
+  `test/compilation_test.rb` pins the cache.
 - **The boot moment is landed** — `SlimPickins.prove!(dir)` renders every
   top-level view against the locals the app gives it, before any request
   can: both apps prove at boot, loudly (`proved controls.sp`), and a view
@@ -72,20 +75,21 @@ byte-identical throughout) and then landed all of Phase 3:
   roth test on the real page: a model minus `ss_primary_amount` fails at
   boot naming `controls.sp`, line 14, and the sentence. The eleven-month
   silence is a boot error, by construction.
-- **The cost is measured, and Phase 3 is closed.** `bin/measure_cost.rb` is
-  the instrument: full render 3.59 ms, without the gate 2.50 ms, the gate
-  itself 1.09 ms, a partial inside a 50-row `each` 0.29 ms per row (ruby
-  4.0.1, specimen.sp, 200 runs). The gate once parsed each source twice;
-  `Contracts.enforce!` now takes the tree, so one `Transform` serves the
-  gate and the compile. No app here cannot pay; the escape, should one
-  appear, is a compile-once cache keyed by source.
+- **The cost is measured, and the escape is built.** `bin/measure_cost.rb`
+  is the instrument (ruby 4.0.1, specimen.sp, 200 runs): cold render
+  3.42 ms, warm render 1.66 ms — what a request pays — and 0.12 ms per
+  partial-in-`each` row. `Compilation` is the compile-once cache: the
+  gate's verdict and the compiled Ruby, keyed by source, behind a mutex; a
+  source that will not parse is never cached, so every render names its
+  own path. Phase 3 is closed.
 
 ## The architecture, in one map
 
 ```text
-.sp source  →  Transform (one grammar: parses, validates, compiles)
-            →  the gate (Contracts.enforce!: each sentence against its
-               word's contract, refused before evaluation)
+.sp source  →  Compilation (Transform parses, validates, compiles; the
+                gate's walk runs once and its verdict is cached with the
+                Ruby, keyed by source; each render refuses with its own
+                path)
             →  Builder (evaluates: chain, bindings, gatherer stack, capture)
             →  semantic tree [:word, attrs, children]   ← the description
             →  filter: (optional transform of the tree)
@@ -97,7 +101,9 @@ byte-identical throughout) and then landed all of Phase 3:
   `Transform.tree` for the checkers.
 - `contracts.rb` — per-word declarations (name/content/modifiers/children/
   parents/subject/speech/shape) + the generated vocabulary bullets; the
-  vocabulary's one list.
+  vocabulary's one list, and the gate's walk (`first_violation`).
+- `compilation.rb` — the compile-once cache: the gate's verdict and the
+  compiled Ruby, keyed by source; `clear!` is the instrument's reach.
 - `builder.rb` (333 lines, 12 ivars) — evaluation only. Its public methods are
   the surface; private are exactly `nest`, `render_partial`,
   `define_app_words`, and the line stack (`with_line`, `eval_with`,
@@ -161,7 +167,7 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 187 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
+  (currently 192 tests / 0 failures, 693 sentences / 0 problems, 65 rules /
   0 problems, 11 pages verified)
 - **The cost, re-measured**: `ruby bin/measure_cost.rb` — the instrument;
   the numbers live in ROADMAP-0.2.md Phase 3's record.
