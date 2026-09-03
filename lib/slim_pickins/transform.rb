@@ -22,11 +22,11 @@ module SlimPickins
   # a leading dot becomes the subject.
   class Transform
     def contract_for(word) = CONTRACTS[word.to_sym]
-    WORD    = /\A[a-z][a-z_]*\z/
-    NAME    = /\A[a-z][a-z_]*\z/
-    DOTTED  = /\A\.([a-z_]+\??)\z/
-    BINDING = /\A[a-z_]+(\.[a-z_]+\??)+\z/
-    MODIFIER = /\A([a-z_]+):\s*(.+)\z/m
+    WORD    = /\A[a-z][a-z0-9_]*\z/
+    NAME    = /\A[a-z][a-z0-9_]*\z/
+    DOTTED  = /\A\.([a-z0-9_-]+\??)\z/
+    BINDING = /\A[a-z0-9_-]+(\.[a-z0-9_-]+\??)+\z/
+    MODIFIER = /\A([a-z0-9_-]+):\s*(.+)\z/m
 
     # Words the host language reserves. A page may still use them — `when` is
     # part of the vocabulary — so the transform routes them past Ruby's parser
@@ -144,10 +144,10 @@ module SlimPickins
     # app.
     def argument(arg, sentence, as_modifier: false)
       case arg
-      when MODIFIER then "#{Regexp.last_match(1)}: #{argument(Regexp.last_match(2), sentence, as_modifier: true)}"
+      when MODIFIER then "'#{Regexp.last_match(1)}': #{argument(Regexp.last_match(2), sentence, as_modifier: true)}"
       when /\A".*"\z/ then arg
-      when DOTTED then "subject.#{Regexp.last_match(1)}"
-      when BINDING then arg
+      when DOTTED then "subject.send(:'#{Regexp.last_match(1)}')"
+      when BINDING then arg.split('.').map { |p| "send(:'#{p}')" }.join('.')
       when NAME then ":#{arg}"
       when /\A-?\d+(\.\d+)?\z/
         return arg if as_modifier

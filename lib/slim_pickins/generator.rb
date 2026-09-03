@@ -81,7 +81,15 @@ module SlimPickins
       case kind
       when :raw then @out << children.join
       when :tag
-        @out << "<#{attrs[:name]}#{attrs_html(attrs[:attrs])}>"
+        tag_attrs = attrs[:attrs].dup
+        if attrs[:class_base]
+          base_class = token(attrs[:class_base], attrs[:variant])
+          tag_attrs[:class] = [base_class, tag_attrs[:class]].compact.join(' ')
+        end
+        tag_attrs[:class] = [tag_attrs[:class], attrs[:class]].compact.join(' ') if attrs[:class]
+        tag_attrs[:id] ||= attrs[:id] if attrs[:id]
+        
+        @out << "<#{attrs[:name]}#{attrs_html(tag_attrs)}>"
         children.each { |c| emit(c) } unless VOID.include?(attrs[:name].to_s)
         @out << "</#{attrs[:name]}>" unless VOID.include?(attrs[:name].to_s)
       when :each then children.flatten(1).each { |c| emit(c) } # one list per iteration
@@ -239,55 +247,6 @@ module SlimPickins
     SPAN_TAGS = { badge: 'span', money: 'span', percent: 'span', number: 'span', time: 'time' }.freeze
     KNOWN_STATUSES = Icons::SYMBOLS.keys.freeze
 
-    def span(attrs, _children)
-      base = attrs[:class_base] || :span
-      body = attrs[:body]
-      case base
-      when :money, :percent, :number
-        precision = attrs[:precision] || (base == :percent ? 1 : 0)
-        text = Inference.send(base, body, precision: precision)
-        negative = body.respond_to?(:negative?) && body.negative?
-        full_tag('span', text, class: token(base, negative ? 'negative' : nil))
-      when :badge
-        kind = attrs[:variant] ||
-               (KNOWN_STATUSES.include?(body.to_s.to_sym) ? body.to_s.to_sym : nil)
-        full_tag('span', body || kind, class: token(:badge, kind))
-      when :time
-        machine = body.respond_to?(:iso8601) ? body.iso8601 : body.to_s
-        full_tag('time', Inference.moment(body, attrs[:variant]), class: token(:time, attrs[:variant]),
-                                                               datetime: machine)
-      else
-        full_tag(SPAN_TAGS.fetch(base, 'span'), body, class: token(base, attrs[:variant]))
-      end
-    end
-
-    def figcaption(attrs, _children)
-      full_tag('figcaption', attrs[:body]) if attrs[:body]
-    end
-
-    def summary(attrs, _children)
-      full_tag('summary', attrs[:body])
-    end
-
-    def heading(attrs, _children)
-      # A heading inside a box is the box's title — the class follows the
-      # part convention, `#{box}-title`, at the box's own level; the depth
-      # rule still governs a heading of its own.
-      if attrs[:class_base]
-        full_tag(:"h#{@depth + 1}", attrs[:body], class: token(attrs[:class_base]))
-      elsif @box_base
-        full_tag(:"h#{@box_level + 1}", attrs[:body], class: "#{@box_base}-title")
-      else
-        full_tag(:"h#{@depth + 1}", attrs[:body], class: token(:heading))
-      end
-    end
-
-    def paragraph(attrs, children)
-      open_tag('p', class: token(attrs[:class_base] || :paragraph, attrs[:variant]))
-      attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
-      @out << '</p>'
-    end
-
     # The named boxes: a promoted word's box is its tag too. `region` under
     # a `footer` partial emits a <footer>, so promotion changes nothing a
     # page sees, tags included. Words not named here keep the div they are.
@@ -297,24 +256,6 @@ module SlimPickins
                   card: 'article', section: 'section', figure: 'figure',
                   disclosure: 'details' }.freeze
     BOX_DEPTH = { card: 1, section: 1 }.freeze
-
-    def region(attrs, children)
-      tag_name = BOX_TAGS.fetch(attrs[:class_base], 'div')
-      open_tag(tag_name, class: token(attrs[:class_base] || :region, attrs[:variant]),
-                          id: attrs[:id]&.to_s, open: attrs[:open] && 'open')
-      if attrs[:body]
-        @out << esc(attrs[:body])
-      else
-        was_box, was_level = @box_base, @box_level
-        begin
-          @box_base, @box_level = attrs[:class_base], @depth if attrs[:class_base]
-          with_depth(@depth + BOX_DEPTH.fetch(attrs[:class_base], 0)) { children.each { |c| emit(c) } }
-        ensure
-          @box_base, @box_level = was_box, was_level
-        end
-      end
-      @out << "</#{tag_name}>"
-    end
 
     # --- Interaction ------------------------------------------------------
 

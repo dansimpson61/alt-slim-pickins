@@ -4,4 +4,4 @@
 
 region
   children
-  figcaption .content
+  tag figcaption, .content

@@ -1,8 +1,8 @@
+# name: variant
 # content: true
-# modifiers: open
+# modifiers: open id
 # children: any
 # shape: encloses
 
-region open: .open
-  tag summary, .content
+tag div, id: .id
   children

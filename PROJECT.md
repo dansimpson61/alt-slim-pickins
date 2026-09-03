@@ -4,20 +4,8 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: active
 kind: project
-last_touched: '2026-09-02'
-next_step: The promotion pass is COMPLETE (dan: "all of it, if the views
-  still look like an outline" — they do; no page source changed a sentence).
-  Twenty-three vocabulary partials: the last harvest promoted figure,
-  disclosure, empty, text, money, percent, number, badge, time, card and
-  section over the new span/figcaption/summary atoms, box tags/depth, the
-  heading-in-box title rule, and the empty:/id:/label: preamble
-  derivations. Byte-diff over 13 pages: exactly the three ratified class
-  additions (text/time/disclosure — the law applying), nothing else. Suite
-  227 runs / 0 failures, checkers 0 problems. Cost re-measured: warm 3.98
-  ms (from 1.37 — every word is now a composition; cache read made
-  lock-free). metric/fact/icon/snippet stay Ruby with written verdicts.
-  Round A of Phase 4 landed the negotiated primitives; ~/dev/dashboard
-  stays untouched.
+last_touched: "2026-09-03"
+next_step: "Round 1 complete: tag is a public primitive, class/id are universal modifiers, hyphenated modifiers parse natively, and region/paragraph/span/heading are ported to .sp. Roth app proved byte-identical HTML. Awaiting dan for Round 2 direction (layouts/wrappers)."
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

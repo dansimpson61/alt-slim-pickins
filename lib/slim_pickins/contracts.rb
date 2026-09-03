@@ -53,11 +53,7 @@ module SlimPickins
     # already had. The semantic words remain the default; these are the
     # substrate, and their classes still derive from the words, so nothing
     # a human could style by hand comes back.
-    paragraph:  Contract.new(name: :variant, content: true, children: :any, shape: :presents),
-    region:     Contract.new(name: :variant, content: true, modifiers: %i[open id],
-                             children: :any, shape: :encloses),
-    heading:    Contract.new(content: true, shape: :presents),
-    span:       Contract.new(name: :variant, content: true, modifiers: [:precision], shape: :presents),
+    tag:        Contract.new(name: :name, content: true, children: :any, shape: :encloses),
     figcaption: Contract.new(content: true, shape: :presents),
     summary:    Contract.new(content: true, shape: :presents),
     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
@@ -199,10 +195,11 @@ module SlimPickins
     # partial's own preamble, so an app partial's declaration is consumed by
     # the runtime too — one complaint machine, two consumers.
     def call_complaint(contract, word, names, data, modifiers)
+      return nil if word.to_sym == :tag
       return "`#{word}` takes no name — #{names.join(', ')}" if contract.name == :none && names.any?
       return "`#{word}` takes no content or data — #{data.join(', ')}" if !contract.content && data.any?
 
-      unknown = modifiers - (contract.modifiers + [:if])
+      unknown = modifiers - (contract.modifiers + %i[if class id])
       "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?
     end
 
@@ -214,7 +211,7 @@ module SlimPickins
       names = node.raw_args.zip(node.ranks).select { |_, r| r.zero? }.map(&:first)
       data = node.raw_args.zip(node.ranks).select { |_, r| r == 1 }.map(&:first)
       modifiers = node.raw_args.zip(node.ranks).select { |_, r| r == 2 }
-                  .map { |a, _| a[/\A([a-z_]+):/, 1].to_sym }
+                  .map { |a, _| a[/\A([a-z0-9_-]+):/, 1].to_sym }
 
       complaint = call_complaint(contract, node.word, names, data, modifiers)
       out << complaint if complaint

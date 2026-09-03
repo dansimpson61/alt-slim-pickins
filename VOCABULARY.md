@@ -1236,3 +1236,12 @@ heading "A line worth a heading."
 - **children** — none
 - **subject** — unchanged
 
+
+### `tag`
+
+- **name** — a name
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
+

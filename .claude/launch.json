@@ -12,6 +12,12 @@
       "runtimeExecutable": "ruby",
       "runtimeArgs": ["examples/portfolio/app.rb", "-p", "4576"],
       "port": 4576
+    },
+    {
+      "name": "word-graph",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["-run", "-e", "httpd", ".", "-p", "4579"],
+      "port": 4579
     }
   ]
 }
