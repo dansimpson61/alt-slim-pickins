@@ -20,7 +20,7 @@ class PartialArgsTest < Minitest::Test
     html = render("page account\n  shout \"hello\"\n",
                   partials: { shout: "title .content\n" },
                   account: Account.new(name: 'x', balance: 1))
-    assert_includes html, '<h2 class="title">hello</h2>'
+    assert_includes html, '<h2 class="title shout">hello</h2>'
   end
 
   def test_a_partial_reads_its_modifiers
@@ -63,7 +63,7 @@ class PartialArgsTest < Minitest::Test
     PART
     html = render("page account\n  chip \"hello\"\n", partials: { chip: badge },
                    account: Account.new(name: 'x', balance: 1))
-    assert_includes html, '<p class="paragraph">hello</p>'
+    assert_includes html, '<p class="paragraph chip">hello</p>'
   end
 
   def test_when_a_modifier_is_said_is_the_languages_own_conditional
@@ -100,8 +100,8 @@ class PartialArgsTest < Minitest::Test
                    account: Account.new(name: 'x', balance: 1))
     bare = render(%(page account\n  chip "x"\n), partials: { chip: chip },
                   account: Account.new(name: 'x', balance: 1))
-    assert_includes named, '<p class="paragraph paragraph--warning">x</p>'
-    assert_includes bare, '<p class="paragraph">plain</p>'
+    assert_includes named, '<p class="paragraph paragraph--warning chip">x</p>'
+    assert_includes bare, '<p class="paragraph chip">plain</p>'
   end
 
   # Declared slots are scope; everything else falls through to the subject

@@ -302,7 +302,10 @@ module SlimPickins
       name, = arguments(args)
       emit_node([:iframe, { name: name, src: src, srcdoc: srcdoc, width: width, height: height }, []])
     end
-        def image(*args, alt: nil)
+# content: true
+# modifiers: alt
+# shape: presents
+def image(*args, alt: nil)
       _, src = arguments(args)
       emit_node([:image, { src: src, alt: alt }, []])
     end

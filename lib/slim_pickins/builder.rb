@@ -418,9 +418,14 @@ module SlimPickins
       # Root-classing: a promoted vocabulary word owns its box — its single
       # root node carries the word's own name as the class base. An app's
       # partials keep the classes of the words they compose.
-      if Library.builtin_partials.key?(word) && body.size == 1 && body.first.is_a?(Array)
-        self.class.box_root(body)[1][:class_base] = word.to_sym
-      end
+if body.size == 1 && body.first.is_a?(Array)
+  box = self.class.box_root(body)[1]
+  if Library.builtin_partials.key?(word)
+    box[:class_base] = word.to_sym
+  else
+    box[:app_class] = word.to_sym
+  end
+end
       @nodes.concat(body) unless contract&.inside && contract.inside != :any
       value
     end

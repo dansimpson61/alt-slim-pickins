@@ -1,19 +1,8 @@
 page "Slim-Pickins Studio"
   stylesheet "/assets/slim-pickins.css"
   sidebar_layout
-    sidebar
-      heading "Vocabulary"
-      link "iframe", to: "/docs/iframe"
-      link "split_pane", to: "/docs/split_pane"
-      link "sidebar", to: "/docs/sidebar"
-
+    vocabulary
     split_pane
-      region editor
-        heading "Write .sp Code"
-        form to: "/render", method: "post", target: "preview"
-          textarea source
-          button "Render"
-          
-      region preview
-        heading "Output"
-        iframe preview
+      editor
+      preview
+      # html_preview is planned for the future when we implement tabs

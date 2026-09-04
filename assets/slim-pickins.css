@@ -371,3 +371,41 @@ time { color: var(--ink-soft); }
   height: 100%;
   border: 1px solid var(--border);
 }
+
+/* App Partials for the Studio */
+.vocabulary {
+  /* Inherits from sidebar, maybe we need specific styles */
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.editor_form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor_form .field {
+  flex-grow: 1;
+}
+
+.editor_form textarea {
+  height: 100%;
+  resize: none;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.preview iframe {
+  flex-grow: 1;
+  width: 100%;
+  border: 1px solid var(--border);
+}
