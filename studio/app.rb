@@ -21,6 +21,23 @@ post '/render' do
   source = params[:source].to_s
   # Render the raw .sp source without layout
   begin
+    SlimPickins.render(source, path: "playground.sp", library: STUDIO_LIBRARY)
+  rescue => e
+    "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{e.message}</div>"
+  end
+end
+
+post '/render_html' do
+  source = params[:source].to_s
+  begin
+    html = SlimPickins.render(source, path: "playground.sp", library: STUDIO_LIBRARY)
+    # Return HTML safely formatted for viewing inside an iframe
+    "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(html)}</body></html>"
+  rescue => e
+    "<!DOCTYPE html><html><head><style>body { font-family: sans-serif; padding: 1rem; color: red; }</style></head><body><strong>Error:</strong> #{CGI.escapeHTML(e.message)}</body></html>"
+  end
+ender the raw .sp source without layout
+  begin
     # Create a temporary file path string to pass to render
     SlimPickins.render(source, path: "playground.sp", library: STUDIO_LIBRARY)
   rescue => e

@@ -4,5 +4,8 @@ page "Slim-Pickins Studio"
     vocabulary
     split_pane
       editor
-      preview
-      # html_preview is planned for the future when we implement tabs
+      tabs
+        tab "Visual", active: true
+          preview
+        tab "HTML"
+          html_preview

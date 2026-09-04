@@ -431,7 +431,26 @@ def image(*args, alt: nil)
       target.add_branch(nil, block)
     end
 
-    # --- Interaction ----------------------------------------------------
+# --- Navigation -------------------------------------------------------
+
+# name: variant
+# children: any
+# shape: encloses
+def tabs(*args, &block)
+  variant, = arguments(args)
+  emit_node([:tabs, { variant: variant }, capture(&block)])
+end
+
+# content: true
+# children: any
+# modifiers: active
+# shape: encloses
+def tab(*args, active: nil, &block)
+  name, label = arguments(args)
+  emit_node([:tab, { label: label, active: active }, capture(&block)])
+end
+
+# --- Interaction ----------------------------------------------------
 
     # name: subject
     # modifiers: to method target
@@ -549,14 +568,14 @@ def image(*args, alt: nil)
 
     # name: variant
     # content: true
-    # modifiers: to type size
-    # shape: says
-    # lazy: 
-    def button(*args, to: nil, type: nil, size: nil)
-      variant, label = arguments(args)
-      emit_node([:button, { variant: variant,
-                            label: label || (variant && Inference.label(variant)),
-                            to: to, type: type, size: size }, []])
+# modifiers: to target type size
+# shape: says
+# lazy: 
+def button(*args, to: nil, target: nil, type: nil, size: nil)
+  variant, label = arguments(args)
+  emit_node([:button, { variant: variant,
+                        label: label || (variant && Inference.label(variant)),
+                        to: to, target: target, type: type, size: size }, []])
     end
   end
 end

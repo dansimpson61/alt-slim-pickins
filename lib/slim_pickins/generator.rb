@@ -143,11 +143,45 @@ end
       @out << %(<script src="#{CGI.escapeHTML(attrs[:path])}"#{attrs[:defer] ? ' defer' : ''}></script>)
     end
 
-    def nav(attrs, children)
-      open_tag('nav', class: token(:nav, attrs[:variant]),
-                     'aria-label': attrs[:variant] ? attrs[:variant].to_s.capitalize : 'Main')
-      children.each { |c| emit(c) }
+def nav(attrs, children)
+  open_tag('nav', class: token(:nav, attrs[:variant]),
+                 'aria-label': attrs[:variant] ? attrs[:variant].to_s.capitalize : 'Main')
+  children.each { |c| emit(c) }
+  @out << '</nav>'
+end
+
+def tabs(attrs, children)
+      open_tag('div', class: token(:tabs, attrs[:variant]))
+      
+      # Extract tab labels from children to build the nav using radio buttons
+      tabs = children.select { |c| c && c[0] == :tab }
+      
+      tabs.each_with_index do |child, index|
+        tab_attrs = child[1]
+        is_active = tab_attrs[:active] || (index == 0 && !tabs.any? { |t| t[1][:active] })
+        open_tag('input', type: 'radio', name: "tabs-#{object_id}", id: "tab-#{object_id}-#{index}", checked: (is_active ? 'checked' : nil))
+      end
+      
+      open_tag('nav', class: 'tabs-nav', role: 'tablist')
+      tabs.each_with_index do |child, index|
+        tab_attrs = child[1]
+        label = tab_attrs[:label] || "Tab #{index + 1}"
+        classes = ['tab-button']
+        full_tag('label', label, class: classes.join(' '), for: "tab-#{object_id}-#{index}", role: 'tab')
+      end
       @out << '</nav>'
+      
+      open_tag('div', class: 'tabs-content')
+      children.each { |c| emit(c) }
+      @out << '</div>'
+      
+      @out << '</div>'
+    end
+
+    def tab(attrs, children)
+      open_tag('div', class: 'tab-panel', role: 'tabpanel')
+      children.each { |c| emit(c) }
+      @out << '</div>'
     end
 
     def link(attrs, _children)
@@ -424,10 +458,11 @@ def form(attrs, children)
     def button(attrs, _children)
       classes = token(:button, attrs[:variant])
       classes += " button--#{attrs[:size]}" if attrs[:size]
-      full_tag('button', attrs[:label],
-               type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
-               formaction: attrs[:to]&.to_s,
-               class: classes)
+full_tag('button', attrs[:label],
+         type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
+         formaction: attrs[:to]&.to_s,
+         formtarget: attrs[:target]&.to_s,
+         class: classes)
     end
 
     # --- bits -------------------------------------------------------------
