@@ -2,10 +2,10 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: active
+status: IMPLEMENTATION - Studio skeleton created, form target and tag escape hatch supported
 kind: project
-last_touched: "2026-09-03"
-next_step: "Round 1 complete: tag is a public primitive, class/id are universal modifiers, hyphenated modifiers parse natively, and region/paragraph/span/heading are ported to .sp. Roth app proved byte-identical HTML. Awaiting dan for Round 2 direction (layouts/wrappers)."
+last_touched: 2026-09-03
+next_step: RIF next features of the Studio (tabs, sidebars extensions, interactivity) using the new tag escape hatch
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
