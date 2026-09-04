@@ -1,0 +1,5 @@
+project = File.read("PROJECT.md")
+project.sub!(/^next_step: .*$/, "next_step: RIF next features of the Studio (tabs, sidebars extensions, interactivity) using the new tag escape hatch")
+project.sub!(/^status: .*$/, "status: IMPLEMENTATION - Studio skeleton created, form target and tag escape hatch supported")
+project.sub!(/^last_touched: .*$/, "last_touched: #{Time.now.strftime('%Y-%m-%d')}")
+File.write("PROJECT.md", project)

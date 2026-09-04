@@ -1,0 +1,5 @@
+code = File.read("studio/app.rb")
+code.sub!(/# Load the vocabulary\nSlimPickins::Library\.from\(File\.expand_path\('\.\.\/lib\/vocabulary', __dir__\)\)\n/, "STUDIO_LIBRARY = SlimPickins::Library.from(File.expand_path('views', __dir__))\n")
+code.sub!(/locals: \{ source: default_source \} \)/, "locals: { source: default_source }, library: STUDIO_LIBRARY)")
+code.sub!(/path: "playground\.sp"\)/, 'path: "playground.sp", library: STUDIO_LIBRARY)')
+File.write("studio/app.rb", code)
