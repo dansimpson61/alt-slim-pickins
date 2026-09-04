@@ -2,10 +2,10 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Studio skeleton created, form target and tag escape hatch supported
+status: IMPLEMENTATION - Evolved idiom for app partial class injection implemented in language and Studio
 kind: project
-last_touched: 2026-09-03
-next_step: RIF next features of the Studio (tabs, sidebars extensions, interactivity) using the new tag escape hatch
+last_touched: 2026-09-04
+next_step: RIF html_preview/tabs and interactivity using Stimulus.js
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
