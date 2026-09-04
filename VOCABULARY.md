@@ -831,7 +831,7 @@ button "Show baseline", to: baseline
 
 - **name** — the subject this word presents; it must be there
 - **content** — none
-- **modifiers** — `to:`, `method:`
+- **modifiers** — `to:`, `method:`, `target:`
 - **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`
 - **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it

@@ -46,72 +46,39 @@ module SlimPickins
   # The Ruby primitives. The full vocabulary merges these with the shapes
   # declared in lib/vocabulary's partials — each word's definition and its
   # declaration live in one file, and this hash is the primitives' home.
-  PRIMITIVES = {
-    children:   Contract.new(shape: :document),
-    # The element primitives — the atoms the vocabulary composes over, now
-    # first-class words so a partial gets the same power a Ruby word's tag()
-    # already had. The semantic words remain the default; these are the
-    # substrate, and their classes still derive from the words, so nothing
-    # a human could style by hand comes back.
-    paragraph:  Contract.new(name: :variant, content: true, children: :any, shape: :presents),
-    region:     Contract.new(name: :variant, content: true, modifiers: %i[open id],
-                             children: :any, shape: :encloses),
-    heading:    Contract.new(content: true, shape: :presents),
-    span:       Contract.new(name: :variant, content: true, modifiers: [:precision], shape: :presents),
-    figcaption: Contract.new(content: true, shape: :presents),
-    summary:    Contract.new(content: true, shape: :presents),
-    page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
-                             children: :any, subject: :shift, shape: :document),
-    contents:   Contract.new(shape: :document),
-    stylesheet: Contract.new(content: true, shape: :document),
-    meta:       Contract.new(name: :name, content: true, shape: :document),
-    script:     Contract.new(content: true, modifiers: [:defer], shape: :document),
-    nav:        Contract.new(name: :variant, children: %i[link input search], shape: :encloses),
-    link:       Contract.new(name: :destination, content: true, modifiers: %i[to active], shape: :says),
-    each:       Contract.new(name: :binding, modifiers: [:from], children: :any, subject: :each,
-                             speech: :determiner, shape: :iterates),
-    table:      Contract.new(name: :subject, content: true,
-                             children: %i[column total choose each], subject: :shift,
-                             shape: :gathers),
-    column:     Contract.new(name: :attribute, content: true, modifiers: [:as],
-                             parents: [:table], subject: :row, shape: :registers),
-    total:      Contract.new(name: :attribute, content: true, parents: [:table], shape: :registers),
-    grid:       Contract.new(name: :variant, content: true, modifiers: [:columns], children: :any, shape: :encloses),
-    prose:      Contract.new(name: :notation, content: true, shape: :presents),
-    fact:       Contract.new(name: :attribute, content: true, shape: :presents),
-    snippet:    Contract.new(name: :notation, content: true, shape: :presents),
-    image:      Contract.new(content: true, modifiers: [:alt], shape: :presents),
-    icon:       Contract.new(name: :name, content: true, shape: :says),
-    metric:     Contract.new(name: :attribute, content: true, modifiers: [:as], shape: :says),
-    chart:      Contract.new(name: :subject, content: true, modifiers: [:over],
-                             children: %i[band line level each choose], subject: :shift,
-                             shape: :gathers),
-    band:       Contract.new(name: :attribute, content: true, parents: [:chart], shape: :registers),
-    line:       Contract.new(name: :attribute, content: true, modifiers: [:from], parents: [:chart],
-                             shape: :registers),
-    level:      Contract.new(content: true, parents: [:chart], shape: :registers),
-    choose:     Contract.new(children: %i[when otherwise], speech: :verb, shape: :gathers),
-    when:       Contract.new(content: true, children: :any, parents: [:choose],
-                             speech: :conjunction, shape: :encloses,
-                             lazy: [:content]),
-    otherwise:  Contract.new(children: :any, parents: [:choose], speech: :adverb, shape: :encloses),
-    form:       Contract.new(name: :subject, modifiers: %i[to method target],
-                             children: %i[group field checkbox choice actions disclosure
-                                          button hidden input textarea],
-                             subject: :shift, shape: :encloses),
-    group:      Contract.new(name: :topic, content: true, children: :any, shape: :encloses),
-    field:      Contract.new(name: :attribute, content: true, modifiers: %i[type step required],
-                             shape: :says),
-    textarea:   Contract.new(name: :attribute, content: true, modifiers: %i[rows required],
-                             shape: :says),
-    input:      Contract.new(name: :attribute, content: true, modifiers: %i[type placeholder],
-                             shape: :says),
-    hidden:     Contract.new(name: :name, content: true, parents: [:form], shape: :says),
-    checkbox:   Contract.new(name: :attribute, content: true, shape: :says),
-    choice:     Contract.new(name: :attribute, content: true, children: %i[option choice], shape: :gathers),
-    option:     Contract.new(name: :value, content: true, parents: [:choice], shape: :registers),
-    button:     Contract.new(name: :variant, content: true, modifiers: %i[to type size], shape: :says)
-  }.freeze
+    module PrimitiveShapes
+    module_function
+
+    def load
+      source = File.read(File.expand_path('words.rb', __dir__))
+      blocks = source.scan(/((?:^[ 	]*#[^
+]*
+)+)[ 	]*def ([a-z_]+)/)
+      
+      blocks.to_h do |comment_block, word|
+        kwargs = {}
+        comment_block.lines.each do |line|
+          if line =~ /^[ 	]*#\s*([a-z_]+):\s*(.+?)\s*$/
+            key = $1.to_sym
+            value = $2
+            kwargs[key] = case key
+                          when :name, :inside, :speech, :subject then value.to_sym
+                          when :content, :gathers, :empty, :id, :label then value == 'true'
+                          when :shape then value.to_sym
+                          when :children, :parents then value == 'any' ? :any : value.split.map(&:to_sym)
+                          else value.split.map(&:to_sym)
+                          end
+          end
+        end
+        next nil if kwargs.empty?
+        kwargs[:parents] = [kwargs[:inside]] if kwargs[:inside] && !kwargs[:parents]
+        [word.to_sym, Contract.new(**kwargs)]
+      end.compact
+    end
+  end
+
+  PRIMITIVES = PrimitiveShapes.load.freeze
+
 
   # The shapes a vocabulary partial declares, as comment preambles at the top
   # of its file — the word's own file is the single source of what it is, and

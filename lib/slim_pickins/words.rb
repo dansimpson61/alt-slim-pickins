@@ -20,6 +20,13 @@ module SlimPickins
 
     # --- Document -------------------------------------------------------
 
+    # name: subject
+    # content: true
+    # modifiers: favicon
+    # children: any
+    # subject: shift
+    # shape: document
+    # lazy: 
     def page(*args, favicon: nil, &block)
       name, title = arguments(args)
       heading = title || Inference.label(name)
@@ -33,26 +40,46 @@ module SlimPickins
 
     # These three say where they belong, not where they are written, which is
     # what lets a layout mention a stylesheet from inside the body.
+    # content: true
+    # shape: document
+    # lazy: 
     def stylesheet(*args)
       _, path = arguments(args)
       in_head([:stylesheet, { path: path }, []])
     end
 
+    # name: name
+    # content: true
+    # shape: document
+    # lazy: 
     def meta(*args)
       name, value = arguments(args)
       in_head([:meta, { name: name, value: value }, []])
     end
 
+    # content: true
+    # modifiers: defer
+    # shape: document
+    # lazy: 
     def script(*args, defer: false)
       _, path = arguments(args)
       emit_node([:script, { path: path, defer: defer }, []])
     end
 
+    # name: variant
+    # children: link input search
+    # shape: encloses
+    # lazy: 
     def nav(*args, &block)
       variant, = arguments(args)
       emit_node([:nav, { variant: variant }, capture(&block)])
     end
 
+    # name: destination
+    # content: true
+    # modifiers: to active
+    # shape: says
+    # lazy: 
     def link(*args, to: nil, active: nil)
       name, label = arguments(args)
       emit_node([:link, { name: name, label: label_for(name, label), to: to, active: active }, []])
@@ -63,16 +90,30 @@ module SlimPickins
     # derives its tag from the word, so a promoted `footer` stays a footer.
     # Classes still derive from the word, so a partial composing over them
     # keeps the language's shape.
+    # name: variant
+    # content: true
+    # children: any
+    # shape: presents
+    # lazy: 
     def paragraph(*args, &block)
       variant, body = arguments(args)
       emit_node([:paragraph, { variant: variant, body: body }, capture(&block)])
     end
 
+    # name: variant
+    # content: true
+    # modifiers: open id
+    # children: any
+    # shape: encloses
+    # lazy: 
     def region(*args, open: nil, id: nil, &block)
       variant, body = arguments(args)
       emit_node([:region, { variant: variant, body: body, open: open, id: id }, capture(&block)])
     end
 
+    # content: true
+    # shape: presents
+    # lazy: 
     def heading(*args)
       _, body = arguments(args)
       emit_node([:heading, { body: body }, []])
@@ -82,22 +123,35 @@ module SlimPickins
     # time. Tag, class and formatting all derive from the word; the
     # Generator owns the inference, which is where formatting has always
     # lived.
+    # name: variant
+    # content: true
+    # modifiers: precision
+    # shape: presents
+    # lazy: 
     def span(*args, precision: 0)
       variant, body = arguments(args)
       emit_node([:span, { variant: variant, body: body, precision: precision }, []])
     end
 
+    # content: true
+    # shape: presents
+    # lazy: 
     def figcaption(*args)
       _, body = arguments(args)
       emit_node([:figcaption, { body: body }, []])
     end
 
+    # content: true
+    # shape: presents
+    # lazy: 
     def summary(*args)
       _, body = arguments(args)
       emit_node([:summary, { body: body }, []])
     end
 
     # Marks where the caller's children go — the partial's `contents`.
+    # shape: document
+    # lazy: 
     def children
       raise Error, '`children` has nothing to splice — this word took no children' if spliced.nil?
 
@@ -105,6 +159,8 @@ module SlimPickins
     end
 
     # Marks where the page's own nodes go. Only a layout has one.
+    # shape: document
+    # lazy: 
     def contents
       raise Error, '`contents` belongs in a layout' unless contents_stowed?
 
@@ -124,6 +180,13 @@ module SlimPickins
     # It is refused rather than allowed-until-it-bites, for the same reason
     # `section` refuses to shift its subject opportunistically: a cost that
     # only appears in some pages is a cost nobody can see.
+    # name: binding
+    # modifiers: from
+    # children: any
+    # subject: each
+    # speech: determiner
+    # shape: iterates
+    # lazy: 
     def each(*args, from: nil, &block)
       name, = arguments(args)
       if WORDS.include?(name)
@@ -143,6 +206,12 @@ module SlimPickins
 
     # A table declares its columns; the rows come from the subject. The
     # gatherer is Table — see components.rb — this is the router's part.
+    # name: subject
+    # content: true
+    # children: column total choose each
+    # subject: shift
+    # shape: gathers
+    # lazy: 
     def table(*args, &block)
       name, caption = arguments(args)
       Table.new(self, name, caption, block).render
@@ -152,11 +221,23 @@ module SlimPickins
     # exists, so the only subject in scope is the one holding the collection —
     # and it is the *row* that knows what its own columns are called. The
     # table resolves it once the first row is in hand.
+    # name: attribute
+    # content: true
+    # modifiers: as
+    # parents: table
+    # subject: row
+    # shape: registers
+    # lazy: 
     def column(*args, as: nil)
       name, header = arguments(args)
       register!(Table, { name: name, header: header, as: as }, 'column')
     end
 
+    # name: attribute
+    # content: true
+    # parents: table
+    # shape: registers
+    # lazy: 
     def total(*args)
       name, label = arguments(args)
       register!(Table, { name: name, header: label, as: nil, total: true }, 'total')
@@ -166,6 +247,12 @@ module SlimPickins
     # `calc(100% / n)` — scales with its container and so can never reflow,
     # which quietly made every `columns:` grid non-responsive. Flooring it at
     # `--track-min` gives n columns where they fit and fewer where they do not.
+    # name: variant
+    # content: true
+    # modifiers: columns
+    # children: any
+    # shape: encloses
+    # lazy: 
     def grid(*args, columns: nil, &block)
       variant, = arguments(args)
       emit_node([:grid, { variant: variant, columns: columns }, capture(&block)])
@@ -173,11 +260,19 @@ module SlimPickins
 
     # --- Content --------------------------------------------------------
 
+    # name: notation
+    # content: true
+    # shape: presents
+    # lazy: 
     def prose(*args)
       notation, body = arguments(args)
       emit_node([:prose, { notation: notation, body: body }, []])
     end
 
+    # name: attribute
+    # content: true
+    # shape: presents
+    # lazy: 
     def fact(*args)
       name, value = arguments(args)
       shown = value.nil? ? subject.fetch(name) : value
@@ -185,11 +280,19 @@ module SlimPickins
                           value: shown, kind: format_of({ name: name, as: nil }) }, []])
     end
 
+    # name: notation
+    # content: true
+    # shape: presents
+    # lazy: 
     def snippet(*args)
       language, body = arguments(args)
       emit_node([:snippet, { language: language, body: body }, []])
     end
 
+    # content: true
+    # modifiers: alt
+    # shape: presents
+    # lazy: 
     def image(*args, alt: nil)
       _, src = arguments(args)
       emit_node([:image, { src: src, alt: alt }, []])
@@ -197,6 +300,10 @@ module SlimPickins
 
     # Which icon may be said as a name (`icon warning`) or arrive as data
     # (`icon .severity`). Both name the same thing.
+    # name: name
+    # content: true
+    # shape: says
+    # lazy: 
     def icon(*args)
       name, data = arguments(args)
       name ||= data
@@ -204,6 +311,11 @@ module SlimPickins
       emit_node([:icon, { name: name }, []])
     end
 
+    # name: attribute
+    # content: true
+    # modifiers: as
+    # shape: says
+    # lazy: 
     def metric(*args, as: nil)
       name, label = arguments(args)
       value = subject.fetch(name)
@@ -214,12 +326,24 @@ module SlimPickins
     # The same shape as `table`, and for the same reason. A table declares its
     # columns and the rows come from the subject; a chart declares its series
     # and the points come from the subject. The gatherer is Chart.
+    # name: subject
+    # content: true
+    # modifiers: over
+    # children: band line level each choose
+    # subject: shift
+    # shape: gathers
+    # lazy: 
     def chart(*args, over: nil, &block)
       name, caption = arguments(args)
       Chart.new(self, name, caption, over, block).render
     end
 
     # A filled series, stacked on the ones before it.
+    # name: attribute
+    # content: true
+    # parents: chart
+    # shape: registers
+    # lazy: 
     def band(*args)
       name, label = arguments(args)
       register!(Chart, { kind: :band, name: name, label: label }, 'band')
@@ -228,6 +352,12 @@ module SlimPickins
     # A series drawn over the bands rather than added to them. `from:` takes
     # its points from a different collection — the same modifier `each` uses,
     # for the same reason: this line is about something else.
+    # name: attribute
+    # content: true
+    # modifiers: from
+    # parents: chart
+    # shape: registers
+    # lazy: 
     def line(*args, from: nil)
       name, label = arguments(args)
       register!(Chart, { kind: :line, name: name, label: label, from: from }, 'line')
@@ -236,6 +366,10 @@ module SlimPickins
     # A horizontal reference — a threshold, a target, a deduction. It carries
     # a value rather than an attribute, and it is labelled where it sits
     # instead of in the key, because a threshold is read against the data.
+    # content: true
+    # parents: chart
+    # shape: registers
+    # lazy: 
     def level(*args)
       register!(Chart,
                 { value: args.find { |a| a.is_a?(Numeric) }.to_f,
@@ -248,10 +382,20 @@ module SlimPickins
     # The branches register, then the first true one renders. `otherwise` is
     # an ordinary word valid inside `choose`, so `else` is never a keyword and
     # nothing needs special parsing. The gatherer is Choose.
+    # children: when otherwise
+    # speech: verb
+    # shape: gathers
+    # lazy: 
     def choose(&block)
       Choose.new(self, &block).render
     end
 
+    # content: true
+    # children: any
+    # parents: choose
+    # speech: conjunction
+    # shape: encloses
+    # lazy: content
     def when(*args, &block)
       target = open_gatherer(Choose)
       raise Error, 'when belongs inside a choose' unless target
@@ -263,6 +407,11 @@ module SlimPickins
       target.add_branch(!!(condition&.call), block)
     end
 
+    # children: any
+    # parents: choose
+    # speech: adverb
+    # shape: encloses
+    # lazy: 
     def otherwise(&block)
       target = open_gatherer(Choose)
       raise Error, 'otherwise belongs inside a choose' unless target
@@ -272,6 +421,12 @@ module SlimPickins
 
     # --- Interaction ----------------------------------------------------
 
+    # name: subject
+    # modifiers: to method target
+    # children: group field checkbox choice actions disclosure button hidden input textarea
+    # subject: shift
+    # shape: encloses
+    # lazy: 
     def form(*args, to: nil, method: nil, target: nil, &block)
       name, = arguments(args)
       value, empty, children = about(name) { capture(&block) }
@@ -279,12 +434,22 @@ module SlimPickins
       value
     end
 
+    # name: topic
+    # content: true
+    # children: any
+    # shape: encloses
+    # lazy: 
     def group(*args, &block)
       name, legend = arguments(args)
       emit_node([:group, { name: name, legend: label_for(name, legend) }, capture(&block)])
     end
 
     # The heaviest inference in the vocabulary: four derivations from one word.
+    # name: attribute
+    # content: true
+    # modifiers: type step required
+    # shape: says
+    # lazy: 
     def field(*args, type: nil, step: nil, required: nil)
       name, label = arguments(args)
       value = subject.fetch(name)
@@ -298,6 +463,11 @@ module SlimPickins
     # `field` insists on a label, because data entry explains what it asks.
     # A search box does not; it names nothing and just sits there, so the
     # bare input is its own word rather than a field with its label omitted.
+    # name: attribute
+    # content: true
+    # modifiers: type placeholder
+    # shape: says
+    # lazy: 
     def input(*args, type: nil, placeholder: nil)
       name, value = arguments(args)
       shown = value.nil? ? subject.fetch(name) : value
@@ -308,6 +478,11 @@ module SlimPickins
 
     # The multi-line sibling of `field` — the same label/value inference, a
     # different widget.
+    # name: attribute
+    # content: true
+    # modifiers: rows required
+    # shape: says
+    # lazy: 
     def textarea(*args, rows: nil, required: nil)
       name, label = arguments(args)
       value = subject.fetch(name)
@@ -319,28 +494,52 @@ module SlimPickins
     # What a form carries that is not said: the name and the value travel
     # with the submit without ever being seen. `hidden path, .value` names
     # both; `hidden path` reads the subject, like `field` reads it.
+    # name: name
+    # content: true
+    # parents: form
+    # shape: says
+    # lazy: 
     def hidden(*args)
       name, value = arguments(args)
       shown = value.nil? ? subject.fetch(name) : value
       emit_node([:hidden, { name: name, value: shown }, []])
     end
 
+    # name: attribute
+    # content: true
+    # shape: says
+    # lazy: 
     def checkbox(*args)
       name, label = arguments(args)
       value = subject.fetch(name)
       emit_node([:checkbox, { name: name, label: label_for(name, label), value: value }, []])
     end
 
+    # name: attribute
+    # content: true
+    # children: option choice
+    # shape: gathers
+    # lazy: 
     def choice(*args, &block)
       name, label = arguments(args)
       Choice.new(self, name, label, block).render
     end
 
+    # name: value
+    # content: true
+    # parents: choice
+    # shape: registers
+    # lazy: 
     def option(*args)
       value, label = arguments(args)
       register!(Choice, { value: value, label: label }, 'option')
     end
 
+    # name: variant
+    # content: true
+    # modifiers: to type size
+    # shape: says
+    # lazy: 
     def button(*args, to: nil, type: nil, size: nil)
       variant, label = arguments(args)
       emit_node([:button, { variant: variant,
