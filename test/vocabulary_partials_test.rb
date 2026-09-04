@@ -28,7 +28,7 @@ class VocabularyPartialsTest < Minitest::Test
                  %(page p\n  action "Commit", to: "/actions/commit", path: .name, return_to: "/triage", variant: primary\n))
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
-      assert_includes html, '<form action="/actions/commit" method="post">'
+      assert_includes html, '<form class="form" action="/actions/commit" method="post">'
       assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
       assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
       assert_includes html, '<button type="submit" class="button button--primary">Commit</button>'

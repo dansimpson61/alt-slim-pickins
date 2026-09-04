@@ -342,14 +342,14 @@ time { color: var(--ink-soft); }
 .search { display: block; }
 
 /* Layout Primitives */
-.region--split-pane {
+.region--split_pane {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
   height: 100%;
 }
 
-.region--sidebar-layout {
+.region--sidebar_layout {
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: var(--gap);

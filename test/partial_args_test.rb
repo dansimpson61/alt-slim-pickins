@@ -28,7 +28,7 @@ class PartialArgsTest < Minitest::Test
     html = render(%(page account\n  go_form "Commit", to: "/actions/commit", path: .name\n),
                   partials: { go_form: action },
                   account: Account.new(name: 'ode-to-joy', balance: 1))
-    assert_includes html, '<form action="/actions/commit" method="post">'
+    assert_includes html, '<form class="form go_form" action="/actions/commit" method="post">'
     assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
     assert_includes html, '<button type="submit" class="button">Commit</button>'
   end

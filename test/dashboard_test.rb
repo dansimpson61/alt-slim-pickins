@@ -43,10 +43,10 @@ class DashboardTest < Minitest::Test
 
   def test_the_four_actions_post_the_original_payloads
     html = render_triage(first_item: item, queue_intro: '1 item(s) need attention — this is the first:')
-    assert_includes html, '<form action="/actions/commit" method="post">'
-    assert_includes html, '<form action="/actions/status" method="post">'
-    assert_includes html, '<form action="/actions/archive" method="post">'
-    assert_includes html, '<form action="/actions/skip" method="post">'
+    assert_includes html, '<form class="form" action="/actions/commit" method="post">'
+    assert_includes html, '<form class="form dormant" action="/actions/status" method="post">'
+    assert_includes html, '<form class="form" action="/actions/archive" method="post">'
+    assert_includes html, '<form class="form" action="/actions/skip" method="post">'
     assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
     assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
     assert_includes html, '<input type="hidden" name="status" value="dormant">'

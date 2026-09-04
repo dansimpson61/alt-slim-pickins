@@ -22,7 +22,7 @@ class UiWordsTest < Minitest::Test
     button "Commit"
 ),
                   account: Account.new(name: 'ode-to-joy'))
-    assert_includes html, '<form action="/actions/commit" method="post">'
+    assert_includes html, '<form class="form" action="/actions/commit" method="post">'
     assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
     assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
     assert_includes html, '<button type="submit" class="button">Commit</button>'
