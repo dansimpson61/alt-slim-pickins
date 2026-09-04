@@ -8,12 +8,12 @@ page "Slim-Pickins Studio"
       link "sidebar", to: "/docs/sidebar"
 
     split_pane
-      tag section, class: "studio-editor"
+      region editor
         heading "Write .sp Code"
         form to: "/render", method: "post", target: "preview"
           textarea source
           button "Render"
           
-      tag section, class: "studio-preview"
+      region preview
         heading "Output"
-        tag iframe, name: "preview", class: "w-full h-full border"
+        iframe preview

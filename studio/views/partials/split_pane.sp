@@ -1,5 +1,5 @@
 # children: any
 # shape: encloses
 
-tag div, class: "split-pane"
+region split_pane
   children

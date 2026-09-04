@@ -212,6 +212,17 @@ module SlimPickins
       full_tag('button', 'Copy', type: 'button', class: 'snippet-copy')
     end
 
+    def iframe(attrs, _children)
+      open_tag('iframe',
+               class: token(:iframe, attrs[:name]),
+               name: attrs[:name],
+               src: attrs[:src],
+               srcdoc: attrs[:srcdoc],
+               width: attrs[:width],
+               height: attrs[:height])
+      @out << "</iframe>"
+    end
+
     def image(attrs, _children)
       void_tag('img', src: attrs[:src].to_s, alt: attrs[:alt].to_s, loading: 'lazy')
     end

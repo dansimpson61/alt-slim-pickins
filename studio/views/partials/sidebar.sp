@@ -1,5 +1,5 @@
 # children: any
 # shape: encloses
 
-tag aside, class: "sidebar"
+aside sidebar
   children

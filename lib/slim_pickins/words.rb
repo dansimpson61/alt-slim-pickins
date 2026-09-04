@@ -293,7 +293,16 @@ module SlimPickins
     # modifiers: alt
     # shape: presents
     # lazy: 
-    def image(*args, alt: nil)
+
+    # name: name
+    # modifiers: src srcdoc width height
+    # shape: presents
+    # lazy: 
+    def iframe(*args, src: nil, srcdoc: nil, width: nil, height: nil)
+      name, = arguments(args)
+      emit_node([:iframe, { name: name, src: src, srcdoc: srcdoc, width: width, height: height }, []])
+    end
+        def image(*args, alt: nil)
       _, src = arguments(args)
       emit_node([:image, { src: src, alt: alt }, []])
     end

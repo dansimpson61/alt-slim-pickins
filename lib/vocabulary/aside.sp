@@ -1,5 +1,6 @@
+# name: variant
 # children: any
 # shape: encloses
 
-region
+region .name
   children

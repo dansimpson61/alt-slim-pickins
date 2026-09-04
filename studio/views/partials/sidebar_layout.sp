@@ -1,5 +1,5 @@
 # children: any
 # shape: encloses
 
-tag div, class: "sidebar-layout"
+region sidebar_layout
   children
