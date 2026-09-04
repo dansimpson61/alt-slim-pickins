@@ -91,7 +91,7 @@ module SlimPickins
                              speech: :conjunction, shape: :encloses,
                              lazy: [:content]),
     otherwise:  Contract.new(children: :any, parents: [:choose], speech: :adverb, shape: :encloses),
-    form:       Contract.new(name: :subject, modifiers: %i[to method],
+    form:       Contract.new(name: :subject, modifiers: %i[to method target],
                              children: %i[group field checkbox choice actions disclosure
                                           button hidden input textarea],
                              subject: :shift, shape: :encloses),

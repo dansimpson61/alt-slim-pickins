@@ -242,10 +242,10 @@ module SlimPickins
 
     # --- Interaction ----------------------------------------------------
 
-    def form(*args, to: nil, method: nil, &block)
+    def form(*args, to: nil, method: nil, target: nil, &block)
       name, = arguments(args)
       value, empty, children = about(name) { capture(&block) }
-      emit_node([:form, { name: name, to: to, method: method }, prune(children, empty)])
+      emit_node([:form, { name: name, to: to, method: method, target: target }, prune(children, empty)])
       value
     end
 

@@ -1,0 +1,30 @@
+require 'sinatra'
+require_relative '../lib/slim_pickins'
+
+set :port, 4580
+set :views, File.join(__dir__, 'views')
+
+# Load the vocabulary
+SlimPickins::Library.from(File.expand_path('../lib/vocabulary', __dir__))
+
+get '/' do
+  default_source = "page \"Slim-Pickins Studio\"\n  heading \"Hello World\"\n"
+  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source })
+end
+
+post '/render' do
+  source = params[:source].to_s
+  # Render the raw .sp source without layout
+  begin
+    # Create a temporary file path string to pass to render
+    SlimPickins.render(source, path: "playground.sp")
+  rescue => e
+    "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{e.message}</div>"
+  end
+end
+
+get '/assets/slim-pickins.css' do
+  content_type 'text/css'
+  File.read(File.expand_path('../assets/slim-pickins.css', __dir__))
+end
+

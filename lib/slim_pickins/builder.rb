@@ -478,6 +478,10 @@ module SlimPickins
     def element(name, attributes = {}, children = []) = [:tag, { name: name, attrs: attributes }, children]
     def tag(*args, **kwargs, &block)
       name, content = arguments(args)
+      if content.is_a?(Hash)
+        kwargs = content.merge(kwargs)
+        content = nil
+      end
       children_nodes = []
       children_nodes << content if content
       children_nodes.concat(capture(&block)) if block

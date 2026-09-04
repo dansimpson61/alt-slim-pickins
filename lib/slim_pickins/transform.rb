@@ -146,8 +146,8 @@ module SlimPickins
       case arg
       when MODIFIER then "'#{Regexp.last_match(1)}': #{argument(Regexp.last_match(2), sentence, as_modifier: true)}"
       when /\A".*"\z/ then arg
-      when DOTTED then "subject.send(:'#{Regexp.last_match(1)}')"
-      when BINDING then arg.split('.').map { |p| "send(:'#{p}')" }.join('.')
+      when DOTTED then "subject.public_send(:'#{Regexp.last_match(1)}')"
+      when BINDING then arg.split('.').map { |p| "public_send(:'#{p}')" }.join('.')
       when NAME then ":#{arg}"
       when /\A-?\d+(\.\d+)?\z/
         return arg if as_modifier

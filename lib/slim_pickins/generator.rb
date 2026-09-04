@@ -261,7 +261,7 @@ module SlimPickins
 
     def form(attrs, children)
       open_tag('form', id: attrs[:name]&.to_s, action: attrs[:to]&.to_s,
-                      method: (attrs[:method] || :post).to_s)
+                      method: (attrs[:method] || :post).to_s, target: attrs[:target]&.to_s)
       with_form(true) { children.each { |c| emit(c) } }
       @out << '</form>'
     end
