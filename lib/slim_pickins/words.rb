@@ -63,10 +63,40 @@ module SlimPickins
     # derives its tag from the word, so a promoted `footer` stays a footer.
     # Classes still derive from the word, so a partial composing over them
     # keeps the language's shape.
+    def paragraph(*args, &block)
+      variant, body = arguments(args)
+      emit_node([:paragraph, { variant: variant, body: body }, capture(&block)])
+    end
+
+    def region(*args, open: nil, id: nil, &block)
+      variant, body = arguments(args)
+      emit_node([:region, { variant: variant, body: body, open: open, id: id }, capture(&block)])
+    end
+
+    def heading(*args)
+      _, body = arguments(args)
+      emit_node([:heading, { body: body }, []])
+    end
+
     # The classed leaf — the atom under badge, money, percent, number and
     # time. Tag, class and formatting all derive from the word; the
     # Generator owns the inference, which is where formatting has always
     # lived.
+    def span(*args, precision: 0)
+      variant, body = arguments(args)
+      emit_node([:span, { variant: variant, body: body, precision: precision }, []])
+    end
+
+    def figcaption(*args)
+      _, body = arguments(args)
+      emit_node([:figcaption, { body: body }, []])
+    end
+
+    def summary(*args)
+      _, body = arguments(args)
+      emit_node([:summary, { body: body }, []])
+    end
+
     # Marks where the caller's children go — the partial's `contents`.
     def children
       raise Error, '`children` has nothing to splice — this word took no children' if spliced.nil?

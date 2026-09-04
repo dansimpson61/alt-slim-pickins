@@ -24,8 +24,8 @@ module SlimPickins
     def contract_for(word) = CONTRACTS[word.to_sym]
     WORD    = /\A[a-z][a-z0-9_]*\z/
     NAME    = /\A[a-z][a-z0-9_]*\z/
-    DOTTED  = /\A\.([a-z0-9_-]+\??)\z/
-    BINDING = /\A[a-z0-9_-]+(\.[a-z0-9_-]+\??)+\z/
+    DOTTED  = /\A\.([a-z_][a-z0-9_-]*\??)\z/
+    BINDING = /\A[a-z_][a-z0-9_-]*(\.[a-z0-9_-]+\??)+\z/
     MODIFIER = /\A([a-z0-9_-]+):\s*(.+)\z/m
 
     # Words the host language reserves. A page may still use them — `when` is
@@ -144,10 +144,16 @@ module SlimPickins
     # app.
     def argument(arg, sentence, as_modifier: false)
       case arg
-      when MODIFIER then "'#{Regexp.last_match(1)}': #{argument(Regexp.last_match(2), sentence, as_modifier: true)}"
+      when MODIFIER
+        key = Regexp.last_match(1)
+        key = "'#{key}'" if key.include?('-')
+        "#{key}: #{argument(Regexp.last_match(2), sentence, as_modifier: true)}"
       when /\A".*"\z/ then arg
-      when DOTTED then "subject.public_send(:'#{Regexp.last_match(1)}')"
-      when BINDING then arg.split('.').map { |p| "public_send(:'#{p}')" }.join('.')
+      when DOTTED
+        method = Regexp.last_match(1)
+        method.include?('-') ? "subject.public_send(:'#{method}')" : "subject.#{method}"
+      when BINDING
+        arg.split('.').map { |p| p.include?('-') ? "public_send(:'#{p}')" : p }.join('.')
       when NAME then ":#{arg}"
       when /\A-?\d+(\.\d+)?\z/
         return arg if as_modifier

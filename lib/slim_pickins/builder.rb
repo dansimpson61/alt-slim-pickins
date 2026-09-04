@@ -418,14 +418,8 @@ module SlimPickins
       # Root-classing: a promoted vocabulary word owns its box — its single
       # root node carries the word's own name as the class base. An app's
       # partials keep the classes of the words they compose.
-      if body.size == 1 && body.first.is_a?(Array)
-        root_attrs = self.class.box_root(body)[1]
-        if Library.builtin_partials.key?(word)
-          root_attrs[:class_base] = word.to_sym
-          root_attrs[:variant] = name if name && !shifts
-        end
-        root_attrs[:class] = kwargs[:class] if kwargs[:class]
-        root_attrs[:id] ||= kwargs[:id] if kwargs[:id]
+      if Library.builtin_partials.key?(word) && body.size == 1 && body.first.is_a?(Array)
+        self.class.box_root(body)[1][:class_base] = word.to_sym
       end
       @nodes.concat(body) unless contract&.inside && contract.inside != :any
       value
@@ -476,16 +470,8 @@ module SlimPickins
     def token(word, variant = nil) = Generator.token(word, variant)
     def html(string) = emit_node([:raw, {}, [string]]) # trusted markup — you escape it
     def element(name, attributes = {}, children = []) = [:tag, { name: name, attrs: attributes }, children]
-    def tag(*args, **kwargs, &block)
-      name, content = arguments(args)
-      if content.is_a?(Hash)
-        kwargs = content.merge(kwargs)
-        content = nil
-      end
-      children_nodes = []
-      children_nodes << content if content
-      children_nodes.concat(capture(&block)) if block
-      emit_node(element(name, kwargs, children_nodes))
+    def tag(name, attributes = {}, children = [], &block)
+      emit_node(element(name, attributes, block ? capture(&block) : children))
     end
     def arguments(args) = name_and_content(args)
   end

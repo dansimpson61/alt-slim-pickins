@@ -1237,11 +1237,3 @@ heading "A line worth a heading."
 - **subject** — unchanged
 
 
-### `tag`
-
-- **name** — a name
-- **content** — text or data, when there is any
-- **modifiers** — none
-- **children** — anything
-- **subject** — unchanged
-

@@ -4,5 +4,5 @@
 # shape: encloses
 
 region open: .open
-  tag summary, .content
+  summary .content
   children

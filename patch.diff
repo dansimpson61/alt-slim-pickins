@@ -1,0 +1,42 @@
+--- lib/slim_pickins/contracts.rb
++++ lib/slim_pickins/contracts.rb
+@@ -58,9 +58,10 @@
+     summary:    Contract.new(content: true, shape: :presents),
+     page:       Contract.new(name: :subject, content: true, modifiers: [:favicon],
+                              children: %i[layout contents title stylesheet nav footer skip_link
+                                           video callout metric band card section grid group
+-                                          list header actions],
++                                          list header actions split_pane sidebar sidebar_layout iframe],
+                              shape: :encloses),
++    tag:        Contract.new(name: :name, content: true, modifiers: :any, children: :any, shape: :encloses),
+     layout:     Contract.new(children: :any, parents: [:page], shape: :encloses),
+     contents:   Contract.new(parents: [:layout], shape: :presents),
+@@ -95,7 +96,7 @@
+                              speech: :conjunction, shape: :encloses,
+                              lazy: [:content]),
+     otherwise:  Contract.new(children: :any, parents: [:choose], speech: :adverb, shape: :encloses),
+-    form:       Contract.new(name: :subject, modifiers: %i[to method],
++    form:       Contract.new(name: :subject, modifiers: %i[to method target],
+                              children: %i[group field checkbox choice actions disclosure
+                                           button hidden input textarea],
+                              subject: :shift, shape: :encloses),
+@@ -198,11 +199,12 @@
+     # the runtime too — one complaint machine, two consumers.
+     def call_complaint(contract, word, names, data, modifiers)
++      return nil if word.to_sym == :tag
+       return "`#{word}` takes no name — #{names.join(', ')}" if contract.name == :none && names.any?
+       return "`#{word}` takes no content or data — #{data.join(', ')}" if !contract.content && data.any?
+ 
+-      unknown = modifiers - (contract.modifiers + [:if])
++      unknown = modifiers - (contract.modifiers + %i[if class id])
+       "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?
+     end
+ 
+@@ -213,7 +215,7 @@
+       names = node.raw_args.zip(node.ranks).select { |_, r| r.zero? }.map(&:first)
+       data = node.raw_args.zip(node.ranks).select { |_, r| r == 1 }.map(&:first)
+       modifiers = node.raw_args.zip(node.ranks).select { |_, r| r == 2 }
+-                  .map { |a, _| a[/\A([a-z_]+):/, 1].to_sym }
++                  .map { |a, _| a[/\A([a-z0-9_-]+):/, 1].to_sym }
+ 
+       complaint = call_complaint(contract, node.word, names, data, modifiers)
