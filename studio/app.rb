@@ -11,6 +11,12 @@ get '/' do
   SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source }, library: STUDIO_LIBRARY)
 end
 
+get '/docs/:word' do
+  word = params[:word]
+  default_source = "page \"Docs: #{word}\"\n  heading \"Docs for #{word} will go here\"\n"
+  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source }, library: STUDIO_LIBRARY)
+end
+
 post '/render' do
   source = params[:source].to_s
   # Render the raw .sp source without layout

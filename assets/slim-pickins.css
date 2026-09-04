@@ -374,7 +374,9 @@ time { color: var(--ink-soft); }
 
 /* App Partials for the Studio */
 .vocabulary {
-  /* Inherits from sidebar, maybe we need specific styles */
+  display: flex;
+  flex-direction: column;
+  gap: var(--step);
 }
 
 .editor {
