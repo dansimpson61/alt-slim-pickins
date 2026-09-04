@@ -308,3 +308,6 @@ Built bin/word_graph.rb — the vocabulary drawn as a graph, derived from the co
 ## 2026-09-03 — Antigravity
 
 The `.sp` parser (Transform) natively handles hyphens in modifier keys and bindings, emitting them as quoted kwarg keys for Ruby. Combined with the public `tag` primitive, developers can now write completely arbitrary HTML attributes (e.g. `tag div, aria-hidden: "true"`) without breaking the rigid compile-time modifier contracts of higher-level components. Components can also export specific hyphenated HTML attributes in their preamble (e.g. `# modifiers: aria-label`).
+
+## 2026-09-03 — Antigravity
+Slim-Pickins now relies on `tag <element>, class: ..., attr: ...` as an explicit escape hatch for raw HTML tags with arbitrary modifiers. This maintains the strictly enforced vocabulary (`CONTRACTS`) without exposing `class` and `id` everywhere, keeping the language simple. The `Transform` regexes were upgraded to parse hyphenated modifiers and dot-bindings safely. The `form` word was also updated to support the `target:` modifier natively for iframe integration.
