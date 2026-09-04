@@ -5,7 +5,7 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: IMPLEMENTATION - Evolved idiom for app partial class injection implemented in language and Studio
 kind: project
 last_touched: 2026-09-04
-next_step: RIF html_preview/tabs and interactivity using Stimulus.js
+next_step: RIF documentation payloads for sidebar links
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
