@@ -40,16 +40,9 @@ module SlimPickins
       contract name: :variant, children: [:link, :input, :search], shape: :encloses, lazy: []
     end
 
-    class Link < Word
+    class Link < Says
       contract name: :destination, content: true, modifiers: [:to, :active], shape: :says, lazy: []
-
-      def evaluate
-        to = @kwargs.key?(:to) ? @kwargs[:to] : nil
-        active = @kwargs.key?(:active) ? @kwargs[:active] : nil
-      name, label = arguments(@args)
-      emit_node([:link, { name: name, label: label_for(name, label), to: to, active: active }, []])
-
-      end
+      maps name: :name, content: :label
     end
 
     class Paragraph < Encloses
@@ -222,29 +215,13 @@ def ___dummy
       maps name: :language, content: :body
     end
 
-    class Iframe < Word
+    class Iframe < Says
       contract name: :name, modifiers: [:src, :srcdoc, :width, :height], shape: :presents, lazy: []
-
-      def evaluate
-        src = @kwargs.key?(:src) ? @kwargs[:src] : nil
-        srcdoc = @kwargs.key?(:srcdoc) ? @kwargs[:srcdoc] : nil
-        width = @kwargs.key?(:width) ? @kwargs[:width] : nil
-        height = @kwargs.key?(:height) ? @kwargs[:height] : nil
-      name, = arguments(@args)
-      emit_node([:iframe, { name: name, src: src, srcdoc: srcdoc, width: width, height: height }, []])
-
-      end
     end
 
-    class Image < Word
+    class Image < Says
       contract content: true, modifiers: [:alt], shape: :presents
-
-      def evaluate
-        alt = @kwargs.key?(:alt) ? @kwargs[:alt] : nil
-      _, src = arguments(@args)
-      emit_node([:image, { src: src, alt: alt }, []])
-
-      end
+      maps content: :src
     end
 
     class Icon < Word
