@@ -311,3 +311,8 @@ The `.sp` parser (Transform) natively handles hyphens in modifier keys and bindi
 
 ## 2026-09-03 — Antigravity
 Slim-Pickins now relies on `tag <element>, class: ..., attr: ...` as an explicit escape hatch for raw HTML tags with arbitrary modifiers. This maintains the strictly enforced vocabulary (`CONTRACTS`) without exposing `class` and `id` everywhere, keeping the language simple. The `Transform` regexes were upgraded to parse hyphenated modifiers and dot-bindings safely. The `form` word was also updated to support the `target:` modifier natively for iframe integration.
+
+## 2026-09-05 — Antigravity
+The great "Word as Class" refactoring revealed two deep truths about evaluating anonymous blocks. 
+1. When dynamic partials evaluate their pre-parsed `.sp` source inside a `nest` block, they are subjected to `instance_eval`. This changes `self` to the `Builder`. Therefore, lambdas (`-> {}`) passed to `.evaluate_body` must strictly capture the `Builder` as a local variable before execution, rather than relying on `self` or `@builder` inside the closure. 
+2. When every partial (including App partials like `dormant`) is dynamically compiled and registered as an anonymous subclass of `PartialWord`, it is suddenly subjected to the built-in validation suite (`Contracts.complaints`). Therefore, app partials *without* a formal `expects` preamble must explicitly define a default `Contract` that gracefully accepts `modifiers: []` and content, or else they will fatally fail compilation on boot with "dormant takes no path: modifier".

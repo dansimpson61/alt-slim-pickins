@@ -2,10 +2,10 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Evolved idiom for app partial class injection implemented in language and Studio
+status: IMPLEMENTATION - Unified language into Word classes and native partial contracts
 kind: project
-last_touched: 2026-09-04
-next_step: RIF documentation payloads for sidebar links
+last_touched: 2026-09-05
+next_step: Resume ROADMAP-0.2.md (RIF documentation payloads for sidebar links)
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
