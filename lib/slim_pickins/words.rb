@@ -21,45 +21,23 @@ module SlimPickins
       end
     end
 
-    class Stylesheet < Word
+    class Stylesheet < Head
       contract content: true, shape: :document, lazy: []
-
-      def evaluate
-      _, path = arguments(@args)
-      in_head([:stylesheet, { path: path }, []])
-
-      end
+      maps content: :path
     end
 
-    class Meta < Word
+    class Meta < Head
       contract name: :name, content: true, shape: :document, lazy: []
-
-      def evaluate
-      name, value = arguments(@args)
-      in_head([:meta, { name: name, value: value }, []])
-
-      end
+      maps content: :content
     end
 
-    class Script < Word
+    class Script < Head
       contract content: true, modifiers: [:defer], shape: :document, lazy: []
-
-      def evaluate
-        defer = @kwargs.key?(:defer) ? @kwargs[:defer] : false
-      _, path = arguments(@args)
-      emit_node([:script, { path: path, defer: defer }, []])
-
-      end
+      maps content: :path
     end
 
-    class Nav < Word
+    class Nav < Encloses
       contract name: :variant, children: [:link, :input, :search], shape: :encloses, lazy: []
-
-      def evaluate
-      variant, = arguments(@args)
-      emit_node([:nav, { variant: variant }, capture(&@block)])
-
-      end
     end
 
     class Link < Word
@@ -74,14 +52,8 @@ module SlimPickins
       end
     end
 
-    class Paragraph < Word
+    class Paragraph < Encloses
       contract name: :variant, content: true, children: :any, shape: :presents, lazy: []
-
-      def evaluate
-      variant, body = arguments(@args)
-      emit_node([:paragraph, { variant: variant, body: body }, capture(&@block)])
-
-      end
     end
 
     class Region < Word
@@ -96,45 +68,24 @@ module SlimPickins
       end
     end
 
-    class Heading < Word
+    class Heading < Encloses
       contract content: true, shape: :presents, lazy: []
-
-      def evaluate
-      _, body = arguments(@args)
-      emit_node([:heading, { body: body }, []])
-
-      end
+      maps content: :body
     end
 
-    class Span < Word
-      contract name: :variant, content: true, modifiers: [:precision], shape: :presents, lazy: []
+class Span < Encloses
+  contract name: :variant, content: true, modifiers: [:precision], shape: :presents, lazy: []
+  maps content: :body
+end
 
-      def evaluate
-        precision = @kwargs.key?(:precision) ? @kwargs[:precision] : 0
-      variant, body = arguments(@args)
-      emit_node([:span, { variant: variant, body: body, precision: precision }, []])
-
-      end
+    class Figcaption < Encloses
+      contract content: true, shape: :presents, lazy: []
+      maps content: :body
     end
 
-    class Figcaption < Word
+    class Summary < Encloses
       contract content: true, shape: :presents, lazy: []
-
-      def evaluate
-      _, body = arguments(@args)
-      emit_node([:figcaption, { body: body }, []])
-
-      end
-    end
-
-    class Summary < Word
-      contract content: true, shape: :presents, lazy: []
-
-      def evaluate
-      _, body = arguments(@args)
-      emit_node([:summary, { body: body }, []])
-
-      end
+      maps content: :body
     end
 
     class Each < Word
@@ -249,14 +200,9 @@ def ___dummy
       end
     end
 
-    class Prose < Word
+    class Prose < Encloses
       contract name: :notation, content: true, shape: :presents, lazy: []
-
-      def evaluate
-      notation, body = arguments(@args)
-      emit_node([:prose, { notation: notation, body: body }, []])
-
-      end
+      maps content: :body
     end
 
     class Fact < Word
@@ -271,14 +217,9 @@ def ___dummy
       end
     end
 
-    class Snippet < Word
+    class Snippet < Encloses
       contract name: :notation, content: true, shape: :presents, lazy: []
-
-      def evaluate
-      language, body = arguments(@args)
-      emit_node([:snippet, { language: language, body: body }, []])
-
-      end
+      maps name: :language, content: :body
     end
 
     class Iframe < Word
@@ -429,25 +370,13 @@ def ___dummy
       end
     end
 
-    class Tabs < Word
+    class Tabs < Encloses
       contract name: :variant, children: :any, shape: :encloses
-
-      def evaluate
-  variant, = arguments(@args)
-  emit_node([:tabs, { variant: variant }, capture(&@block)])
-
-      end
     end
 
-    class Tab < Word
+    class Tab < Encloses
       contract content: true, children: :any, modifiers: [:active], shape: :encloses
-
-      def evaluate
-        active = @kwargs.key?(:active) ? @kwargs[:active] : nil
-  name, label = arguments(@args)
-  emit_node([:tab, { label: label, active: active }, capture(&@block)])
-
-      end
+      maps content: :label
     end
 
     class Form < Word
@@ -465,14 +394,9 @@ def ___dummy
       end
     end
 
-    class Group < Word
+    class Group < Encloses
       contract name: :topic, content: true, children: :any, shape: :encloses, lazy: []
-
-      def evaluate
-      name, legend = arguments(@args)
-      emit_node([:group, { name: name, legend: label_for(name, legend) }, capture(&@block)])
-
-      end
+      maps content: :legend
     end
 
     class Field < Word

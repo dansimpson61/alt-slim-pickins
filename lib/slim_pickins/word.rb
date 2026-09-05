@@ -6,7 +6,7 @@ module SlimPickins
   class Word
     class << self
       def registry
-        @registry ||= {}
+        SlimPickins::Word.instance_variable_get(:@registry) || SlimPickins::Word.instance_variable_set(:@registry, {})
       end
 
       def inherited(subclass)
@@ -17,7 +17,7 @@ unless name.nil? || name == "AppWord" || name == "Gatherer" || name == "PartialW
                    gsub(/([a-z\d])([A-Z])/,'_').
                    tr("-", "_").
                    downcase.to_sym
-  registry[word_name] = subclass
+  SlimPickins::Word.registry[word_name] = subclass
 end
       end
 
@@ -27,6 +27,27 @@ end
              tr("-", "_").
              downcase.to_sym
       end
+
+def maps(mapping = nil)
+  if mapping
+    @mapping = (@mapping || {}).merge(mapping)
+  end
+  @mapping || {}
+end
+
+def maps(mapping = nil)
+  if mapping
+    @mapping = (@mapping || {}).merge(mapping)
+  end
+  @mapping || {}
+end
+
+def maps(mapping = nil)
+  if mapping
+    @mapping = (@mapping || {}).merge(mapping)
+  end
+  @mapping || {}
+end
 
       def contract(**kwargs)
         @contract = Contract.new(**kwargs)
@@ -44,6 +65,84 @@ end
       @block = block
       @collected = []
     end
+
+def unpack_arguments
+  name_val, content_val = arguments(@args)
+  c = self.class.get_contract
+  mapping = self.class.maps
+
+  attrs = {}
+
+  if name_val && c.name != :none
+    key = mapping[:name] || c.name
+    key = :name if key == :attribute || key == :subject
+    attrs[key] = name_val
+  end
+
+  if content_val && c.content
+    key = mapping[:content] || :content
+    if key == :label || key == :legend || key == :alt
+      attrs[key] = label_for(name_val, content_val)
+    else
+      attrs[key] = content_val
+    end
+  end
+
+  attrs.merge!(@kwargs)
+  attrs
+end
+
+def unpack_arguments
+  name_val, content_val = arguments(@args)
+  c = self.class.get_contract
+  mapping = self.class.maps
+
+  attrs = {}
+
+  if name_val && c.name != :none
+    key = mapping[:name] || c.name
+    key = :name if key == :attribute || key == :subject
+    attrs[key] = name_val
+  end
+
+  if content_val && c.content
+    key = mapping[:content] || :content
+    if key == :label || key == :legend || key == :alt
+      attrs[key] = label_for(name_val, content_val)
+    else
+      attrs[key] = content_val
+    end
+  end
+
+  attrs.merge!(@kwargs)
+  attrs
+end
+
+def unpack_arguments
+  name_val, content_val = arguments(@args)
+  c = self.class.get_contract
+  mapping = self.class.maps
+
+  attrs = {}
+
+  if name_val && c.name != :none
+    key = mapping[:name] || c.name
+    key = :name if key == :attribute || key == :subject
+    attrs[key] = name_val
+  end
+
+  if content_val && c.content
+    key = mapping[:content] || :content
+    if key == :label || key == :legend || key == :alt
+      attrs[key] = label_for(name_val, content_val)
+    else
+      attrs[key] = content_val
+    end
+  end
+
+  attrs.merge!(@kwargs)
+  attrs
+end
 
     def evaluate
       raise NotImplementedError
@@ -85,26 +184,36 @@ end
     def contents_stowed? = @builder.contents_stowed?
     def take_contents = @builder.take_contents
   end
+
+class Encloses < Word
+  def evaluate
+    emit_node([self.class.word_name, unpack_arguments, capture(&@block)])
+  end
 end
 
-    class Encloses < Word
-      def evaluate
-        name, content = arguments(@args)
-        attrs = {}
-        attrs[:name] = name if name
-        attrs[:label] = label_for(name, content) if name && content
-        attrs.merge!(@kwargs)
-        emit_node([self.class.word_name, attrs, capture(&@block)])
-      end
-    end
+class Says < Word
+  def evaluate
+    emit_node([self.class.word_name, unpack_arguments, []])
+  end
+end
 
-    class Says < Word
-      def evaluate
-        name, content = arguments(@args)
-        attrs = {}
-        attrs[:name] = name if name
-        attrs[:content] = content if content
-        attrs.merge!(@kwargs)
-        emit_node([self.class.word_name, attrs, []])
-      end
+class Registers < Word
+  class << self
+    def registers_to(target, type:)
+      @register_target = target
+      @register_type = type
     end
+    attr_reader :register_target, :register_type
+  end
+
+  def evaluate
+    register!(self.class.register_target, unpack_arguments, self.class.register_type)
+  end
+end
+class Head < Word
+  def evaluate
+    in_head([self.class.word_name, unpack_arguments, []])
+  end
+end
+
+end
