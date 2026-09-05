@@ -1,5 +1,5 @@
 # children: any
 # shape: encloses
 
-region split_pane
+region
   children

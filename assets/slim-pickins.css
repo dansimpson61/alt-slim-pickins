@@ -342,21 +342,21 @@ time { color: var(--ink-soft); }
 .search { display: block; }
 
 /* Layout Primitives */
-.region--split_pane {
+.split_pane {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
   height: 100%;
 }
 
-.region--sidebar_layout {
+.sidebar_layout {
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: var(--gap);
   height: calc(100vh - 120px);
 }
 
-.aside--sidebar {
+.sidebar {
   border-right: 1px solid var(--border);
   padding-right: var(--gap);
   overflow-y: auto;
@@ -365,12 +365,6 @@ time { color: var(--ink-soft); }
 .h-full { height: 100%; }
 .w-full { width: 100%; }
 .border { border: 1px solid var(--border); }
-
-.iframe--preview {
-  width: 100%;
-  height: 100%;
-  border: 1px solid var(--border);
-}
 
 /* App Partials for the Studio */
 .vocabulary {

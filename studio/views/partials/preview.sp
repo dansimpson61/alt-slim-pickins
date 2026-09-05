@@ -1,2 +1,2 @@
 section "Output"
-  iframe preview
+  iframe
