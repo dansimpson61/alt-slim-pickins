@@ -9,6 +9,7 @@ require_relative 'slim_pickins/inference'
 require_relative 'slim_pickins/library'
 require_relative 'slim_pickins/generator'
 require_relative 'slim_pickins/builder'
+require_relative 'slim_pickins/partial_word'
 
 module SlimPickins
   module_function

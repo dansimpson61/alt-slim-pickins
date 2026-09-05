@@ -5,7 +5,6 @@ require_relative 'subject'
 require_relative 'inference'
 require_relative 'generator'
 require_relative 'words'
-require_relative 'components'
 
 module SlimPickins
   # The runtime — nothing else. A page evaluates into a tree of semantic
@@ -16,10 +15,6 @@ module SlimPickins
   # the gatherer stack, the capture and pruning of children, and the escape
   # hatch every word — built-in or an app's own — is written with.
   class Builder
-    include Words
-
-    WORDS = Words::WORDS # the vocabulary's one list, for callers that look here
-
     def initialize(page, library = nil)
       @library = library || Library.builtin
       @chain = Chain.new(page)
@@ -36,17 +31,19 @@ module SlimPickins
     # An app's words become real singleton methods, for the same reason the
     # built-ins are real methods: a call site should not be able to tell them
     # apart, and an unknown word should still fail with its own name.
-    def define_app_words
-      return unless @library
-
-      Array(@library.words).each { |mod| extend mod }
-      @library.partials.each_key do |word|
-        define_singleton_method(word) do |*args, **kwargs, &block|
-          render_partial(word, args, **kwargs, &block)
-        end
-      end
+def define_app_words
+  SlimPickins::Word.registry.each do |word, klass|
+    define_singleton_method(word) do |*args, **kwargs, &block|
+      klass.new(self, args, kwargs, block).evaluate
     end
-    private :define_app_words
+  end
+  return unless @library
+
+  Array(@library.words).each { |mod| extend mod }
+end
+private :define_app_words
+
+
 
     # Words are real methods, so an unknown word fails with its own name.
     # The only thing method_missing serves is a binding introduced by `each`,

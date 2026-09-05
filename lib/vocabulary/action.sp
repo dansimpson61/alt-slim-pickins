@@ -1,6 +1,5 @@
-# content: true
-# modifiers: to path return_to variant
-# shape: encloses
+expects content: true, shape: encloses, to: true, path: true, return_to: true, variant: true
+
 
 form method: post, to: .to
   hidden path, .path

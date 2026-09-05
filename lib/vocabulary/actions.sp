@@ -1,5 +1,5 @@
-# children: link button
-# shape: encloses
+expects children: "link button", shape: encloses
+
 
 region
   children

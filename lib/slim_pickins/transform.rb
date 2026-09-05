@@ -78,9 +78,12 @@ module SlimPickins
 
     private
 
-    def emit(nodes, depth = 0)
-      nodes.flat_map do |n|
-        ruby = if RESERVED.include?(n.word)
+def emit(nodes, depth = 0)
+  nodes.flat_map do |n|
+    next [] if n.word == 'expects'
+
+    ruby = if RESERVED.include?(n.word)
+
                  "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
                elsif n.compiled.empty?
                  n.word

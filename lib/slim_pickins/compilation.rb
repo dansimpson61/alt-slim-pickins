@@ -19,6 +19,21 @@ module SlimPickins
   # will not parse raises during the first build, is not cached, and so
   # names the path of every render that tries it.
   class Compilation
+def self.compile_partial(word, source, is_builtin)
+  klass = Class.new(PartialWord)
+  klass.partial_name = word
+  klass.is_builtin = is_builtin
+  klass.source_lines = source.lines
+  klass.compilation = of(source, "partials/#{word}.sp")
+  
+  # Now parse the contract from the AST
+contract = VocabularyShapes.parse(source)
+  klass.instance_variable_set(:@contract, contract) if contract
+
+  
+  SlimPickins::Word.registry[word] = klass
+end
+
     def self.of(source, path)
       # The cache is read without the lock first: under MRI a Hash read is
       # atomic, and the common path is a hit — every partial invocation pays

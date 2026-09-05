@@ -1,6 +1,5 @@
-# name: variant
-# children: any
-# shape: encloses
+expects variant, children: any, shape: encloses
+
 
 region .name
   children

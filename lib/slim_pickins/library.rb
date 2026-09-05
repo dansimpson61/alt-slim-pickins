@@ -46,6 +46,10 @@ module SlimPickins
       @partials = vocabulary.merge(app_partials)
       @words = words.nil? ? [] : Array(words)
       refuse_shadowing!
+      
+      @partials.each do |word, source|
+        Compilation.compile_partial(word, source, vocabulary.key?(word))
+      end
     end
 
     # The vocabulary is built in — a promoted word is a word everywhere, not
@@ -71,14 +75,21 @@ module SlimPickins
     # collision is an error rather than an override. The vocabulary's own
     # partials are words, not app words — they pass the check by right.
     def refuse_shadowing!
-      require_relative 'builder'
       vocabulary = Dir[File.join(VOCABULARY_DIR, '*.sp')].map { |p| File.basename(p, '.sp').to_sym }
       app_words = (@partials.keys - vocabulary) + @words.flat_map(&:instance_methods)
+      
       app_words.each do |name|
-        next unless Builder::WORDS.include?(name)
-
-        raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it"
+        primitive_keys = SlimPickins::Words.constants.map do |c|
+          c.to_s.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+                 gsub(/([a-z\d])([A-Z])/,'\1_\2').
+                 tr("-", "_").
+                 downcase.to_sym
+        end
+        if primitive_keys.include?(name)
+          raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it"
+        end
       end
+      
       duplicated = app_words.tally.select { |_, n| n > 1 }.keys
       return if duplicated.empty?
 

@@ -1,4 +1,4 @@
-# content: true
-# shape: presents
+expects content: true, shape: presents
+
 
 heading .content

@@ -1,6 +1,5 @@
-# content: true
-# children: any
-# shape: encloses
+expects content: true, children: any, shape: encloses
+
 
 region
   children

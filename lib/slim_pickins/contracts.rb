@@ -84,41 +84,84 @@ module SlimPickins
   # of its file — the word's own file is the single source of what it is, and
   # the checkers hold it. Keys: name, content, modifiers, children, parents,
   # gathers, inside, lazy, shape, speech, subject, empty, id, label.
-  module VocabularyShapes
-    module_function
+module VocabularyShapes
+  module_function
 
-    def load
-      dir = File.expand_path('../vocabulary', __dir__)
-      Dir[File.join(dir, '*.sp')].to_h do |path|
-        word = File.basename(path, '.sp').to_sym
-        [word, parse(File.read(path))]
-      end.compact
-    end
-
-    def parse(source)
-      kwargs = {}
-      source.lines.each do |line|
-        break unless line =~ /\A#\s*([a-z_]+):\s*(.+?)\s*\z/
-
-        key = Regexp.last_match(1).to_sym
-        value = Regexp.last_match(2)
-        kwargs[key] = case key
-                      when :name, :inside, :speech, :subject then value.to_sym
-                      when :content, :gathers, :empty, :id, :label then value == 'true'
-                      when :shape then value.to_sym
-                      when :children, :parents then value == 'any' ? :any : value.split.map(&:to_sym)
-                      else value.split.map(&:to_sym)
-                      end
-      end
-      return nil if kwargs.empty?
-
-      kwargs[:parents] = [kwargs[:inside]] if kwargs[:inside] && !kwargs[:parents]
-      Contract.new(**kwargs)
-    end
+  def load
+    dir = File.expand_path('../vocabulary', __dir__)
+    Dir[File.join(dir, '*.sp')].to_h do |path|
+      word = File.basename(path, '.sp').to_sym
+      [word, parse(File.read(path))]
+    end.compact
   end
 
-  # The vocabulary's one list: primitives plus the partials' declared shapes.
-  CONTRACTS = PRIMITIVES.merge(VocabularyShapes.load).freeze
+  def parse(source)
+    tree = Transform.tree(source)
+    expects_node = tree.first
+    return nil unless expects_node && expects_node.word == 'expects'
+
+    kwargs = {}
+    
+    names = expects_node.raw_args.zip(expects_node.ranks).select { |_, r| r.zero? }.map(&:first)
+    kwargs[:name] = names.first.to_sym if names.any?
+
+    expects_node.raw_args.zip(expects_node.ranks).each do |arg, rank|
+      if rank == 2
+        key = arg[/\A([a-z_]+):/, 1].to_sym
+        value_str = arg.split(':', 2).last.strip
+        value = if value_str == 'true'
+                  true
+                elsif value_str == 'false'
+                  false
+                elsif value_str == 'any'
+                  :any
+                elsif value_str.start_with?('[')
+                  # rough array parsing if needed, but the grammar naturally uses multiple lines or space?
+                  # Wait, our `expects` uses nested children!
+                  value_str
+                else
+                  value_str.to_sym
+                end
+
+if %i[content gathers empty id label].include?(key)
+  kwargs[key] = value == true || value == 'true'
+elsif %i[name inside speech subject shape].include?(key)
+  kwargs[key] = value.to_sym
+elsif %i[children parents].include?(key)
+  str_val = value_str.gsub(/^"|"$/, '')
+  kwargs[key] = str_val == 'any' ? :any : str_val.split.map(&:to_sym)
+else
+  # Unrecognized keys become modifiers!
+  kwargs[:modifiers] ||= []
+  kwargs[:modifiers] << key
+end
+
+      end
+    end
+    
+    expects_node.children.each do |child|
+      if child.word == 'modifier'
+        kwargs[:modifiers] ||= []
+        kwargs[:modifiers] << child.raw_args.first.to_sym
+      elsif child.word == 'takes' || child.word == 'children'
+        kwargs[:children] ||= []
+        kwargs[:children] << child.raw_args.first.to_sym
+      end
+    end
+
+    kwargs[:parents] = [kwargs[:inside]] if kwargs[:inside] && !kwargs[:parents]
+    Contract.new(**kwargs)
+  end
+end
+
+# CONTRACTS just pulls from Word.registry + VocabularyShapes for now
+# But actually, VocabularyShapes is only needed if we don't compile them to Word subclasses instantly.
+# Let's define CONTRACTS as a dynamic lookup
+CONTRACTS = Hash.new do |h, k|
+  h[k] = SlimPickins::Word.registry[k]&.instance_variable_get(:@contract)
+end
+
+
 
   # The same checks check_grammar.rb runs, as a module so tests can hold them.
   # A node is Transform's; ancestry is the stack of words above it. Errors
