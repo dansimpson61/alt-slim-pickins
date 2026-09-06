@@ -43,7 +43,10 @@
   --radius: calc(var(--step) * 2);
   --rule-width: 1px;
   --focus-width: 2px;
+  --marker-width: 2px;
   --measure: 68ch;
+  --sidebar-width: 250px;
+  --chrome-height: 120px;
   --lift: 0 1px 2px rgb(0 0 0 / 0.05);
 
   --face: ui-sans-serif, system-ui, sans-serif;
@@ -305,6 +308,13 @@ time { color: var(--ink-soft); }
 .field--checkbox label { display: flex; align-items: center; gap: var(--step); }
 .field--checkbox input { width: auto; }
 
+/* `form` emits a class, so it owns one. The groups and fields inside it carry
+   the visible structure; the form itself only sets the measure they sit in,
+   so a bare form is not a full-width sprawl. */
+.form {
+  max-width: var(--measure);
+}
+
 .group {
   margin: 0 0 var(--gap);
   padding: var(--gap);
@@ -351,20 +361,20 @@ time { color: var(--ink-soft); }
 
 .sidebar_layout {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: minmax(0, 100%);
   gap: var(--gap);
-  height: calc(100vh - 120px);
+  height: calc(100vh - var(--chrome-height));
 }
 
-.sidebar {
-  border-right: 1px solid var(--border);
-  padding-right: var(--gap);
+/* `scroll` is the word for a pane that outruns its box — a guide, mostly.
+   `min-height: 0` is what lets it actually scroll inside a grid or flex
+   parent instead of stretching the page. */
+.scroll {
   overflow-y: auto;
+  min-height: 0;
+  height: 100%;
 }
-
-.h-full { height: 100%; }
-.w-full { width: 100%; }
-.border { border: 1px solid var(--border); }
 
 /* App Partials for the Studio */
 .vocabulary {
@@ -397,13 +407,20 @@ time { color: var(--ink-soft); }
 .preview {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   height: 100%;
+  min-height: 0;
 }
 
-.preview iframe {
+/* `iframe` is a word, so the class it emits carries the rule — once, here,
+   rather than a copy under each pane that happens to hold one. */
+.iframe {
+  display: block;
   flex-grow: 1;
   width: 100%;
-  border: 1px solid var(--border);
+  height: 100%;
+  min-height: 0;
+  border: var(--rule-width) solid var(--rule);
 }
 
 /* Tabs styling */
@@ -411,6 +428,7 @@ time { color: var(--ink-soft); }
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
 }
 
 .tabs-nav {
@@ -422,7 +440,7 @@ time { color: var(--ink-soft); }
 .tab-button {
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: var(--marker-width) solid transparent;
   padding: var(--step) var(--gap);
   cursor: pointer;
   color: var(--ink-soft);
@@ -441,12 +459,14 @@ time { color: var(--ink-soft); }
   flex-direction: column;
   overflow: hidden;
   padding-top: var(--gap);
+  min-height: 0;
 }
 
 .tab-panel {
   display: none;
   flex-grow: 1;
   height: 100%;
+  min-height: 0;
 }
 
 .tab-panel--active {
@@ -457,13 +477,9 @@ time { color: var(--ink-soft); }
 .html_preview {
   display: flex;
   flex-direction: column;
-  height: 100%;
-}
-
-.html_preview iframe {
   flex-grow: 1;
-  width: 100%;
-  border: 1px solid var(--border);
+  height: 100%;
+  min-height: 0;
 }
 
 /* Pure CSS Tabs Logic */
@@ -483,4 +499,5 @@ time { color: var(--ink-soft); }
 .tabs > input[type="radio"]:nth-of-type(2):checked ~ .tabs-content .tab-panel:nth-of-type(2),
 .tabs > input[type="radio"]:nth-of-type(3):checked ~ .tabs-content .tab-panel:nth-of-type(3) {
   display: flex;
+  flex-direction: column;
 }
