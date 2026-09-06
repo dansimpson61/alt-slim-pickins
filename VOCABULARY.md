@@ -376,7 +376,7 @@ actions
 
 ### `aside`
 
-- **name** — none
+- **name** — the variant
 - **content** — none
 - **modifiers** — none
 - **children** — anything
@@ -815,7 +815,7 @@ link show, "View holding"
 
 - **name** — the variant
 - **content** — text or data, when there is any
-- **modifiers** — `to:`, `type:`, `size:`
+- **modifiers** — `to:`, `target:`, `type:`, `size:`
 - **children** — none
 - **subject** — unchanged
 - **infers** — `type="submit"` inside a `form`, `type="button"` outside one.
@@ -1236,4 +1236,40 @@ heading "A line worth a heading."
 - **children** — none
 - **subject** — unchanged
 
+
+
+### `iframe`
+
+- **name** — a name
+- **content** — none
+- **modifiers** — `src:`, `srcdoc:`, `width:`, `height:`
+- **children** — none
+- **subject** — unchanged
+
+
+### `tabs`
+
+- **name** — the variant
+- **content** — none
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
+
+
+### `tab`
+
+- **name** — none
+- **content** — text or data, when there is any
+- **modifiers** — `active:`
+- **children** — anything
+- **subject** — unchanged
+
+
+### `scroll`
+
+- **name** — the variant
+- **content** — none
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
 

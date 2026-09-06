@@ -48,7 +48,9 @@ end
 # generated bullets, nothing more. The prose and the example sentence are the
 # author's; check_grammar holds the bullets and demands the sentence.
 added = []
-SlimPickins::CONTRACTS.keys.map(&:to_s).each do |word|
+SlimPickins::Library.builtin
+all_words = SlimPickins::Word.registry.keys.map(&:to_s)
+all_words.each do |word|
   next if source =~ /^### `#{word}`/
 
   added << word

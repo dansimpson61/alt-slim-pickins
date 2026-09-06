@@ -36,11 +36,20 @@ module WordArguments
   # The census reads one set of words, and every section reads it through
   # here — so a filter is applied once rather than remembered in nine
   # places. `only` is :ruby, :partials, or nil for the whole vocabulary.
+  def all_words
+    @all_words ||= begin
+      # Ensure builtin partials are registered
+      SlimPickins::Library.builtin
+      SlimPickins::Word.registry.keys.map(&:to_sym)
+    end
+  end
+
   def words
+    hash = all_words.to_h { |w| [w, SlimPickins::CONTRACTS[w]] }.compact
     case @only
-    when :ruby     then SlimPickins::CONTRACTS.reject { |word, _| partial?(word) }
-    when :partials then SlimPickins::CONTRACTS.select { |word, _| partial?(word) }
-    else SlimPickins::CONTRACTS
+    when :ruby     then hash.reject { |word, _| partial?(word) }
+    when :partials then hash.select { |word, _| partial?(word) }
+    else hash
     end
   end
 
