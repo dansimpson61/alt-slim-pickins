@@ -14,6 +14,12 @@
       "port": 4576
     },
     {
+      "name": "studio",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["studio/app.rb", "-p", "4580"],
+      "port": 4580
+    },
+    {
       "name": "word-graph",
       "runtimeExecutable": "ruby",
       "runtimeArgs": ["-run", "-e", "httpd", ".", "-p", "4579"],

@@ -19,13 +19,22 @@ get '/docs/:word' do
   SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build }, library: STUDIO_LIBRARY)
 end
 
+# A guide is one of this repo's own documents, served through the language
+# rather than round-tripped through the playground. The playground could not
+# serve it: `/render` receives only the editor's `source`, so a page saying
+# `prose markdown, .content` arrives with no content to read.
+#
+# `File.basename` is what keeps `../` out of the path; the guide must be a
+# markdown document sitting at the repo root, or it does not exist.
 get '/guides/:name' do
-  name = params[:name]
-  content = File.read(File.expand_path("../#{name}.md", __dir__)) rescue "Guide not found."
-  default_source = "page \"Guide: #{name}\"\n  scroll\n    prose markdown, docs.#{name}.implementation\n"
-  # Actually, we can just pass the markdown directly!
-  default_source = "page \"Guide: #{name}\"\n  scroll\n    prose markdown, .content\n"
-  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, content: content, docs: StudioDocs.build }, library: STUDIO_LIBRARY)
+  name = File.basename(params[:name], '.md')
+  document = File.expand_path("../#{name}.md", __dir__)
+  halt 404, "There is no guide called #{name}." unless File.file?(document)
+
+  SlimPickins.render(File.read(File.join(settings.views, 'guide.sp')),
+                     path: 'guide.sp',
+                     locals: { title: "Guide: #{name}", content: File.read(document) },
+                     library: STUDIO_LIBRARY)
 end
 
 post '/render' do
