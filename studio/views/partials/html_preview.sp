@@ -1,2 +1,2 @@
 section "Raw HTML"
-  iframe
+  iframe html_preview
