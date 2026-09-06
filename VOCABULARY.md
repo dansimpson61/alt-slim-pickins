@@ -1246,6 +1246,15 @@ heading "A line worth a heading."
 - **children** — none
 - **subject** — unchanged
 
+```
+iframe preview
+iframe report, src: "/projection"
+```
+
+The name is the frame's `name` attribute, which is what a `form` targets: a
+form whose `target:` is `preview` renders into the frame called `preview`,
+and the page never reloads. That is the whole mechanism, and it is HTML's.
+
 
 ### `tabs`
 
@@ -1255,6 +1264,18 @@ heading "A line worth a heading."
 - **children** — anything
 - **subject** — unchanged
 
+```
+tabs
+  tab "Visual", active: true
+    paragraph "What the page looks like."
+  tab "HTML"
+    paragraph "What it emits."
+```
+
+The panels are switched by a radio input and its labels — no script. `tabs`
+draws the nav from the tabs it holds, so the two never disagree about how
+many there are.
+
 
 ### `tab`
 
@@ -1263,6 +1284,15 @@ heading "A line worth a heading."
 - **modifiers** — `active:`
 - **children** — anything
 - **subject** — unchanged
+
+```
+tab "Raw HTML"
+tab "Visual", active: true
+```
+
+The content is the tab's label; `active:` says which panel opens first. A
+`tab` outside a `tabs` renders its panel and no nav, which is the honest
+degradation rather than an error.
 
 
 ### `scroll`

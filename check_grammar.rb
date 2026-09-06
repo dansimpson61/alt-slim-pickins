@@ -67,7 +67,13 @@ vocab |= app_words
 # indistinguishable from an opening one, so the pairing is tracked.
 def each_block(path)
   unless path.end_with?('.md')
-    yield File.read(path), 1
+    # A vocabulary partial opens with its contract — `expects variant,
+    # children: any, shape: encloses` — which *declares* the word rather than
+    # saying anything with it. The runtime reads that line as a declaration
+    # (`VocabularyShapes.parse`), so the checker does too: it is not a
+    # sentence and is not counted as one. The line is blanked rather than
+    # dropped, so every sentence below it still reports its own number.
+    yield File.read(path).sub(/\Aexpects\b.*$/, ''), 1
     return
   end
 

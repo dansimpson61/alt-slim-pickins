@@ -21,16 +21,33 @@ require_relative 'test/fixtures'
 CSS = File.join(__dir__, 'assets', 'slim-pickins.css')
 
 # .word | .word--variant | .word-part | .word-part--variant
-# A variant comes from an attribute name, so it may be snake_case.
-SHAPE = /\A[a-z]+(-[a-z]+)?(--[a-z0-9_]+)?\z/
+#
+# A variant comes from an attribute name, so it may be snake_case — and so may
+# a word, for exactly the same reason: both are Ruby identifiers, and a word
+# that is two words long has no other spelling available to it. The rule used
+# to forbid it, and the reason it could was that every word in the vocabulary
+# happened to be one English word. That stopped being true when app partials
+# arrived: `account_card` and `unreviewed_card` have been in `pages/partials/`
+# all along and escaped only because no rule ever named them. Examined and
+# widened (2026-09-06, dan's constraint 3) rather than obeyed — the shapes are
+# still four, and a hyphen still means "part of".
+SHAPE = /\A[a-z][a-z0-9_]*(-[a-z][a-z0-9_]*)?(--[a-z0-9_]+)?\z/
 
 def base_of(klass) = klass.split('--').first.split('-').first
 
 problems = 0
 def fail!(line) = (puts "  #{line}")
 
-words = SlimPickins::Builder::WORDS.map(&:to_s).to_set
-app_words = Dir[File.join(__dir__, 'pages', 'partials', '*.sp')]
+# The registry is the vocabulary's one home, and it is not complete until the
+# built-in library has loaded the words that are written as `.sp` partials.
+SlimPickins::Library.builtin
+words = SlimPickins::Word.registry.keys.map(&:to_s).to_set
+# Words an app defines for itself. Every app in this repo renders through the
+# one stylesheet, so a rule may belong to any of their partials — the studio's
+# as much as the pages'. Reading every `partials/` there is stops this list
+# needing an edit each time an app arrives, which is how the studio's own
+# words came to look like orphans.
+app_words = Dir[File.join(__dir__, '**', 'partials', '*.sp')]
             .map { |f| File.basename(f, '.sp') }.to_set
 
 # --- what the stylesheet defines -------------------------------------------
