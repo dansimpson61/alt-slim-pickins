@@ -352,19 +352,36 @@ Builder phase prescribes: objects with one job, dependencies injected, nothing
 re-implemented by hand.
 
 **2. It must stay lovely to read.** The vitals below are the baseline,
-re-measured 2026-09-01 across every `.sp` file in `pages/` and `examples/`
-(356 sentences). A vital that moves is not a failure — it is a conversation.
+re-measured 2026-09-06 across every `.sp` file in `pages/` and `examples/`
+(413 sentences). A vital that moves is not a failure — it is a conversation.
 `check_shape.rb` (Phase 1) prints them and fails only on the shape rows.
 
-| vital | today | what a move would mean |
-|---|---|---|
-| distinct modifiers used in real pages | **8** (`alt as columns from method over step to`) | configuration creeping in where words should be |
-| mean arguments per sentence | **1.21** | sentences being configured rather than said |
-| longest sentence | **3 arguments** | a word doing more than one job |
-| deepest nesting | **8 levels** | structure the vocabulary is not carrying |
-| words used in real pages | **49 of 50** (`meta` only in doc examples) | dead vocabulary, which is kruft |
-| nouns among the fifty | **45** | the register of a label, not prose |
-| words whose English misdescribes them | **0** — `check` and `select` renamed to `checkbox` and `choice` in Phase 1 | a verb arriving unnoticed |
+| vital | 0.2's opening (2026-09-01) | today (2026-09-06) | what a move would mean |
+|---|---|---|---|
+| distinct modifiers used in real pages | 8 (`alt as columns from method over step to`) | **16** (+ `active path placeholder q required return_to rows variant`) | configuration creeping in where words should be |
+| mean arguments per sentence | 1.21 | **1.26** | sentences being configured rather than said |
+| longest sentence | 3 arguments | **5 arguments** | a word doing more than one job |
+| deepest nesting | 8 levels | **8 levels** | structure the vocabulary is not carrying |
+| words used in real pages | 49 of 50 (`meta` only in doc examples) | **54 of 69** | dead vocabulary, which is kruft |
+| nouns among the vocabulary | 45 of 50 | **64 of 69** | the register of a label, not prose |
+| words whose English misdescribes them | 0 | **0** | a verb arriving unnoticed |
+
+*The conversation those moves were owed, held 2026-09-06.* **Every mover is the
+dashboard port.** All eight new modifiers are used by `examples/dashboard` and
+by nothing else, and all three five-argument sentences are `action` in
+`queue.sp` — `action "Commit", to:, path:, return_to:, variant:`. Those are
+precisely the words Phase 4's round record says it landed (`hidden`, `input`,
+`textarea`, `link active:`, `button size:`), so the table was simply measured
+before Phase 4 happened and is updated here rather than treated as drift.
+
+Two rows still deserve a look rather than a shrug, and neither is closed:
+`action` at five arguments is the strongest candidate in the language for *a
+word doing more than one job*, and vocabulary coverage fell from 49-of-50 to
+**54-of-69** because the vocabulary grew faster than the corpus that exercises
+it — fifteen words now appear in no real page (`box`, `children`, `figcaption`,
+`heading`, `iframe`, `input`, `meta`, `paragraph`, `scroll`, `span`, `summary`,
+`tab`, `tabs`, `thumb`, `thumbnails`). Both are Phase 6's business, which is
+where subtraction lives.
 
 **3. A rule must outlive its reason.** dan's principle, now the standing one.
 Most of this project's rules were descriptive observations of the code or the
