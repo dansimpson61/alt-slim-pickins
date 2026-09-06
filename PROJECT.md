@@ -5,9 +5,8 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: IMPLEMENTATION - Unified language into Word classes and native partial contracts
 kind: project
 last_touched: 2026-09-06
-next_step: Daytrip closed on branch `daytrip` — gate green, fresh clone green;
-  merge it, then resume ROADMAP-0.2.md (RIF documentation payloads for sidebar
-  links)
+next_step: Resume ROADMAP-0.2.md (RIF documentation payloads for sidebar links)
+  — DAYTRIP.md holds three findings awaiting dan's call
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
