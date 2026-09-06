@@ -171,8 +171,16 @@ CONTRACTS = Hash.new do |h, k|
     @vocab_shapes_cache ||= VocabularyShapes.load
     @loading_vocab = false
   end
-  # Cache the vocabulary shapes since they never change
-  h[k] = @vocab_shapes_cache&.[](k)
+
+  # Cache the vocabulary shapes, since they never change — but never cache a
+  # miss. A lookup that arrives *while* the vocabulary is loading finds the
+  # cache still empty, and writing that nil down made the answer permanent:
+  # `note` lost its contract in every process that called `Library.builtin`,
+  # which is every app, so the transform stopped governing it and nothing
+  # said so. A miss is only ever "not yet".
+  shape = @vocab_shapes_cache&.[](k)
+  h[k] = shape if shape
+  shape
 end
 
 
