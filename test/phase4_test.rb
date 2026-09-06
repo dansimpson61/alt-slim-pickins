@@ -38,7 +38,8 @@ class Phase4Test < Minitest::Test
                     '<div class="grid grid--cards" ' \
                     'style="--track: max(var(--track-min), calc((100% - 2 * var(--gap)) / 3))">'
     assert_includes html, '<article class="card card--compact" id="thing-7">'
-    assert_includes html, '<ul class="list list--plain"><li class="item">One</li></ul>'
+    assert_includes html, '<ul class="list list--plain">'
+    assert_includes html, '<li class="item">One</li>'
     assert_includes html, '<figcaption>A caption</figcaption>'
     assert_includes html, '<img src="/a.png" alt="A" loading="lazy">'
   end
@@ -56,7 +57,8 @@ class Phase4Test < Minitest::Test
     PAGE
     assert_includes html, '<p class="note note--warning">Careful.</p>'
     assert_includes html, '<span class="badge badge--ok">ok</span>'
-    assert_includes html, '<dt>Origin</dt><dd>dashboard</dd>'
+    assert_includes html, '<dt>Origin</dt>'
+    assert_includes html, '<dd>dashboard</dd>'
     assert_includes html, '<pre class="snippet snippet--ruby"><code>puts 1</code></pre>'
     assert_includes html, 'class="icon icon--warning"'
   end

@@ -210,11 +210,21 @@ class Phase7Test < Minitest::Test
 
     assert_equal 200, last_response.status
     refute_includes fragment, '<!DOCTYPE'
-assert fragment.start_with?('<section class="section section--projection">')
-# The fragment was rendered standalone so it lacks the 'report' app_class 
-# that the partial call received. We inject it to match.
-assert_includes whole, fragment.sub('<section class="section section--projection">', '<section class="section section--projection report">')
+    assert fragment.start_with?('<section class="section section--projection">')
+
+    # Two differences are expected and neither is content. The fragment was
+    # rendered standalone, so it lacks the `report` app_class the partial call
+    # received — injected here to match. And standalone it sits at depth 0,
+    # where in the page the same markup is indented to its nesting, so the
+    # comparison is made with indentation set aside.
+    claimed = fragment.sub('<section class="section section--projection">',
+                           '<section class="section section--projection report">')
+    assert_includes unindent(whole), unindent(claimed)
   end
+
+  # Layout is not content. Prettify indents by depth, so the same markup
+  # nested one level deeper is the same markup.
+  def unindent(html) = html.gsub(/^[ \t]+/, '')
 
   # --- what the language took away from the script -----------------------
 

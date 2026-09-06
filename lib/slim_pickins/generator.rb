@@ -13,50 +13,81 @@ module SlimPickins
   # formatting, and the shape of every tag. A second interpreter over the
   # same tree is what an API would be; none is built, because none has asked.
   class Generator
-def self.prettify(html)
-  return html if ENV['RACK_ENV'] == 'test'
-  
-  indent = 0
-  result = []
-  
-  inline_tags = %w[a span button label time strong em code b i u s q p h1 h2 h3 h4 h5 h6 title textarea option iframe].freeze
-  void_tags = %w[meta link img input br hr source].freeze
-  
-  html.scan(/(<[^>]+>|[^<]+)/).flatten.each do |token|
-    if token.match?(/^<\//)
-      tag = token[2..-2].split(' ').first.downcase
-      indent -= 1 unless inline_tags.include?(tag)
-      
-      if !inline_tags.include?(tag) && result.last && !result.last.end_with?("\n#{'  ' * indent}")
-        if result.last.strip.empty?
-          result.pop
-        end
-        result << "\n#{'  ' * indent}" unless result.last && result.last.end_with?("\n#{'  ' * indent}")
-      end
-      result << token
-      result << "\n#{'  ' * indent}" if tag == 'html' # trailing newline
-    elsif token.match?(/^<!/)
-      result << token
-      result << "\n#{'  ' * indent}"
-    elsif token.match?(/^</)
-      tag = token.match(/^<([a-zA-Z0-9_-]+)/)[1].downcase
-      
-      if !inline_tags.include?(tag)
-        result << "\n#{'  ' * indent}" unless result.empty? || result.last.end_with?("\n#{'  ' * indent}")
-      end
-      
-      result << token
-      
-      unless void_tags.include?(tag) || inline_tags.include?(tag) || token.end_with?("/>")
-        indent += 1
-      end
-    else
-      result << token
+    # Elements that never begin a line of their own, and are never broken
+    # open. Some are inline by the spec's reckoning and some — `p`, the
+    # headings, `pre` — are here because breaking them helps nobody: their
+    # content is prose, and `pre`'s whitespace is load-bearing.
+    UNBROKEN = %w[a span button label time strong em code b i u s q p pre
+                  h1 h2 h3 h4 h5 h6 title textarea option iframe].freeze
+
+    # The document, laid out for a person to read. Both of the consumers that
+    # ask for this are people — the studio's HTML tab, which exists to show
+    # what the language emits, and whoever is later debugging that output —
+    # which fixes the one rule that matters: **an element holding nothing but
+    # text is never broken across lines.** `<li class="item">One</li>`, not a
+    # newline and six spaces before the closing tag. An element earns its
+    # indentation by having element children of its own; nothing else does.
+    def self.prettify(html)
+      structure(html).map { |node| lay_out(node, 0) }.join("\n").strip + "\n"
     end
-  end
-  
-  result.join.gsub(/\n\s*\n/, "\n").strip + "\n"
-end
+
+    # The flat token stream, stacked back into a tree. Text and self-closing
+    # tags are leaves carrying their own source; everything else is an element
+    # with children, which is the only thing layout needs to know. `VOID` is
+    # the emitter's own list, read here rather than kept twice.
+    def self.structure(html)
+      root = []
+      open = [root]
+
+      html.scan(/<[^>]+>|[^<]+/).each do |token|
+        case token
+        when %r{\A</}    then open.pop if open.size > 1
+        when /\A<[!?]/   then open.last << [:leaf, token]
+        when /\A<([\w:-]+)/
+          name = Regexp.last_match(1).downcase
+          if VOID.include?(name) || token.end_with?('/>')
+            open.last << [:leaf, token]
+          else
+            element = [:element, token, name, []]
+            open.last << element
+            open << element[3]
+          end
+        else open.last << [:text, token]
+        end
+      end
+
+      spacing_removed(root)
+    end
+
+    # Whitespace a previous layout inserted is not content, and laying a
+    # document out twice must not deepen it. A run of spaces with no line
+    # break may be a deliberate separator between inline words, so only the
+    # runs carrying a break are dropped — and only where an element is being
+    # broken anyway, which is never inside `pre`, whose whitespace *is* the
+    # content.
+    def self.spacing_removed(children)
+      children.reject { |child| child[0] == :text && child[1].match?(/\A\s*\n\s*\z/) }
+    end
+
+    # An element breaks only if it holds an element that breaks the line —
+    # which is what "has structure" means here, and what indentation is for.
+    def self.breaking?(node)
+      node[0] == :element && !UNBROKEN.include?(node[2])
+    end
+
+    def self.lay_out(node, depth)
+      return node[1] unless node[0] == :element
+
+      _, open_tag, name, children = node
+      return "#{open_tag}#{children.map { |c| lay_out(c, depth) }.join}</#{name}>" unless
+        children.any? { |child| breaking?(child) }
+
+      pad = '  ' * (depth + 1)
+      body = spacing_removed(children).map do |child|
+        breaking?(child) ? "\n#{pad}#{lay_out(child, depth + 1)}" : lay_out(child, depth)
+      end
+      "#{open_tag}#{body.join}\n#{'  ' * depth}</#{name}>"
+    end
 
     # The four class-name shapes, and the only place they are built. The
     # Builder's hatch exposes this through its own `token`, so the truth has
