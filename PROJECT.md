@@ -4,8 +4,10 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: IMPLEMENTATION - Unified language into Word classes and native partial contracts
 kind: project
-last_touched: 2026-09-05
-next_step: Resume ROADMAP-0.2.md (RIF documentation payloads for sidebar links)
+last_touched: 2026-09-06
+next_step: Daytrip closed on branch `daytrip` — gate green, fresh clone green;
+  merge it, then resume ROADMAP-0.2.md (RIF documentation payloads for sidebar
+  links)
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -24,7 +26,11 @@ notes: Roadmap 0.2 (ROADMAP-0.2.md, 2026-09-01), the first even-numbered,
   writing. Roadmap protocol set 2026-08-31: odd leads forward, even leads
   back; both eyes stay open. history/ is roadmap 0.1, consulted not
   maintained. HANDOFF.md is the prompt that resumes this work in a fresh
-  conversation. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
+  conversation. DAYTRIP.md (2026-09-06) is a jaunt, not a roadmap — it leads
+  with neither eye and took no ground the language did not already hold: the
+  gate runs again, the suite tests what ships, the studio's guides work. Three
+  findings it named but did not take are dan's or Phase 6's, and are listed
+  there. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
   Builder) is cited by the roadmap.
 conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
