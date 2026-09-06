@@ -1,6 +1,6 @@
 expects content: true, children: any, shape: encloses
 
 
-region
+box
   children
   figcaption .content

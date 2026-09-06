@@ -6,7 +6,7 @@ Slim-Pickins is designed to make a view's structure read like a human outline, u
 
 The mental model for designing apps in Slim-Pickins revolves around a few key conventions:
 
-1. **A Word is a Word is a Word:** There is no structural difference between a built-in core language primitive (`page`, `region`), a built-in UI component (`section`, `card`), or an app-specific partial (`editor`, `preview`). They all share the same rights, privileges, and syntax.
+1. **A Word is a Word is a Word:** There is no structural difference between a built-in core language primitive (`page`, `box`), a built-in UI component (`section`, `card`), or an app-specific partial (`editor`, `preview`). They all share the same rights, privileges, and syntax.
 2. **The Single Source of Truth:** Every word has exactly one definition. For primitives, it is the method implementation in `words.rb` alongside its declarative preamble. For partials (both core and app-specific), the `.sp` file *is* the contract, defined entirely by its preamble.
 3. **Automatic Class Inference:** When a `.sp` file is rendered, its root enclosing element automatically inherits a CSS class matching the partial's name. You don't need to manually inject `class: "editor"` — you simply create an `editor.sp` partial, and the language infers the class for you.
 4. **Grow the Language:** If a layout requires a semantic element that doesn't exist, we don't fall back to `tag iframe`. We create an `iframe.sp` or `iframe` Ruby primitive. We expand the vocabulary to meet the domain's needs.

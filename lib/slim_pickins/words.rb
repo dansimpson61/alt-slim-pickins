@@ -47,16 +47,17 @@ module SlimPickins
 
     class Paragraph < Encloses
       contract name: :variant, content: true, children: :any, shape: :presents, lazy: []
+      maps content: :body
     end
 
-    class Region < Word
+    class Box < Word
       contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: []
 
       def evaluate
         open = @kwargs.key?(:open) ? @kwargs[:open] : nil
         id = @kwargs.key?(:id) ? @kwargs[:id] : nil
       variant, body = arguments(@args)
-      emit_node([:region, { variant: variant, body: body, open: open, id: id }, capture(&@block)])
+      emit_node([:box, { variant: variant, body: body, open: open, id: id }, capture(&@block)])
 
       end
     end

@@ -391,7 +391,7 @@ def tabs(attrs, children)
       @out << '</p>'
     end
 
-    # The named boxes: a promoted word's box is its tag too. `region` under
+    # The named boxes: a promoted word's box is its tag too. `box` under
     # a `footer` partial emits a <footer>, so promotion changes nothing a
     # page sees, tags included. Words not named here keep the div they are.
     # Some boxes also deepen their children's headings, like the words they
@@ -401,9 +401,9 @@ def tabs(attrs, children)
                   disclosure: 'details' }.freeze
     BOX_DEPTH = { card: 1, section: 1 }.freeze
 
-    def region(attrs, children)
+    def box(attrs, children)
       tag_name = BOX_TAGS.fetch(attrs[:class_base], 'div')
-      open_tag(tag_name, class: token(attrs[:class_base] || :region, attrs[:variant]),
+      open_tag(tag_name, class: token(attrs[:class_base] || :box, attrs[:variant]),
                           id: attrs[:id]&.to_s, open: attrs[:open] && 'open')
       if attrs[:body]
         @out << esc(attrs[:body])

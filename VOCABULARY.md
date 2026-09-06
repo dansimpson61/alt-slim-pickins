@@ -1177,7 +1177,7 @@ paragraph quiet, "A quieter line."
 ```
 
 
-### `region`
+### `box`
 
 - **name** — the variant
 - **content** — text or data, when there is any
@@ -1189,7 +1189,7 @@ The atom under the wrappers — the box a word owns. Classes still derive
 from the word, so nothing a human could style by hand comes back.
 
 ```
-region shelf
+box shelf
   card
 ```
 

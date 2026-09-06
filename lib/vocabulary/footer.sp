@@ -1,5 +1,5 @@
 expects content: true, children: any, shape: encloses
 
 
-region .content
+box .content
   children

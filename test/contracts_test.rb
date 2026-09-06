@@ -23,10 +23,13 @@ class ContractsTest < Minitest::Test
            "expected a complaint containing #{message.inspect}, got #{complaints(source).inspect}"
   end
 
-  def test_every_word_has_a_contract
-    missing = SlimPickins::Builder::WORDS - SlimPickins::CONTRACTS.keys
-    assert_empty missing
+def test_every_word_has_a_contract
+  missing = SlimPickins::Word.registry.keys.map(&:to_sym).reject do |word|
+    cls = SlimPickins::Word.registry[word]
+    cls < SlimPickins::PartialWord || cls.instance_variable_get(:@contract)
   end
+  assert_empty missing
+end
 
   # --- government -------------------------------------------------------
 

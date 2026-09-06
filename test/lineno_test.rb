@@ -47,11 +47,11 @@ class LinenoTest < Minitest::Test
 
   def test_an_error_in_a_partial_names_the_partial_not_the_page
     library = SlimPickins::Library.new(layout: nil,
-                                       partials: { account_card: "title .name\nmoney .nmae\n" })
+                                       partials: { test_account_card: "title .name\nmoney .nmae\n" })
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  account_card\n", library: library, account: Account.new(name: 'Roth'))
+      render("page account\n  test_account_card\n", library: library, account: Account.new(name: 'Roth'))
     end
-    assert_match(/\Athis account has no nmae\n  partials\/account_card\.sp, line 2\n    money \.nmae\z/,
+    assert_match(/\Athis account has no nmae\n  partials\/test_account_card\.sp, line 2\n    money \.nmae\z/,
                  error.message)
   end
 

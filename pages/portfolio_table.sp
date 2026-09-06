@@ -5,4 +5,4 @@ page portfolio, "Your retirement"
   section accounts, "Your accounts"
     empty "No accounts linked yet."
     each account
-      account_card
+      test_account_card

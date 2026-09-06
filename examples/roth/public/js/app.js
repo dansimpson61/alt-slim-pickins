@@ -12,7 +12,7 @@
   const form = document.getElementById('scenario');
   if (!form) return;
 
-  const region = () => document.querySelector('.section--projection');
+  const box = () => document.querySelector('.section--projection');
 
   let pending;
   form.addEventListener('input', () => {
@@ -25,7 +25,7 @@
   });
 
   async function refresh() {
-    const here = region();
+    const here = box();
     if (!here) return;
     here.setAttribute('aria-busy', 'true');
     const res = await fetch('/projection', { method: 'POST', body: new FormData(form) });

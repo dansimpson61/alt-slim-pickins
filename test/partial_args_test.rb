@@ -7,7 +7,7 @@ require_relative '../lib/slim_pickins'
 # it was said with become its own subject, so vocabulary written as
 # partials can take parameters — `.content`, `.to`, and friends — without a
 # line of Ruby. A bare partial still reads the subject it was invoked
-# against, which is what keeps `account_card` untouched.
+# against, which is what keeps `test_test_account_card` untouched.
 class PartialArgsTest < Minitest::Test
   Account = Struct.new(:name, :balance, keyword_init: true)
 
@@ -17,26 +17,26 @@ class PartialArgsTest < Minitest::Test
   end
 
   def test_a_partial_reads_its_content
-    html = render("page account\n  shout \"hello\"\n",
-                  partials: { shout: "title .content\n" },
+    html = render("page account\n  test_test_shout \"hello\"\n",
+                  partials: { test_test_shout: "title .content\n" },
                   account: Account.new(name: 'x', balance: 1))
-    assert_includes html, '<h2 class="title shout">hello</h2>'
+    assert_includes html, '<h2 class="title test_test_shout">hello</h2>'
   end
 
   def test_a_partial_reads_its_modifiers
     action = "form method: post, to: .to\n  hidden path, .path\n  button .content\n"
-    html = render(%(page account\n  go_form "Commit", to: "/actions/commit", path: .name\n),
-                  partials: { go_form: action },
+    html = render(%(page account\n  test_test_go_form "Commit", to: "/actions/commit", path: .name\n),
+                  partials: { test_test_go_form: action },
                   account: Account.new(name: 'ode-to-joy', balance: 1))
-    assert_includes html, '<form class="form go_form" action="/actions/commit" method="post">'
+    assert_includes html, '<form class="form test_test_go_form" action="/actions/commit" method="post">'
     assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
     assert_includes html, '<button type="submit" class="button">Commit</button>'
   end
 
   def test_a_bare_partial_still_reads_the_subject_it_was_invoked_against
     card = "title .name\nmoney .balance\n"
-    html = render("page account\n  account_card\n",
-                  partials: { account_card: card },
+    html = render("page account\n  test_test_account_card\n",
+                  partials: { test_test_account_card: card },
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<h2 class="title">Roth</h2>'
     assert_includes html, '$1,500'
@@ -45,9 +45,9 @@ class PartialArgsTest < Minitest::Test
   def test_missing_parameters_name_the_partial
     action = "form method: post, to: .to\n  button .content\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render(%(page account\n  go_form "Go"\n), partials: { go_form: action }, account: {})
+      render(%(page account\n  test_test_go_form "Go"\n), partials: { test_test_go_form: action }, account: {})
     end
-    assert_match(/\Athis go_form has no to\n/, error.message)
+    assert_match(/\Athis test_test_go_form has no to\n/, error.message)
   end
 
   # The optionality spelling (dan, 2026-09-02): slots a preamble declares
@@ -56,20 +56,18 @@ class PartialArgsTest < Minitest::Test
   # own conditional.
   def test_a_declared_modifier_reads_nil_when_unsaid
     badge = <<~PART
-      # content: true
-      # modifiers: tone
+      expects content: true, tone: true
 
       paragraph .tone, .content
     PART
-    html = render("page account\n  chip \"hello\"\n", partials: { chip: badge },
+    html = render("page account\n  test_chip \"hello\"\n", partials: { test_chip: badge },
                    account: Account.new(name: 'x', balance: 1))
-    assert_includes html, '<p class="paragraph chip">hello</p>'
+    assert_includes html, '<p class="paragraph test_chip">hello</p>'
   end
 
   def test_when_a_modifier_is_said_is_the_languages_own_conditional
     toggle = <<~PART
-      # content: true
-      # modifiers: open
+      expects content: true, open: true
 
       choose
         when .open
@@ -86,9 +84,8 @@ class PartialArgsTest < Minitest::Test
   end
 
   def test_when_a_variant_is_named_is_the_languages_own_conditional
-    chip = <<~PART
-      # name: variant
-      # content: true
+    test_chip = <<~PART
+      expects variant, content: true
 
       choose
         when .name
@@ -96,25 +93,25 @@ class PartialArgsTest < Minitest::Test
         otherwise
           paragraph "plain", .content
     PART
-    named = render(%(page account\n  chip warning, "x"\n), partials: { chip: chip },
+    named = render(%(page account\n  test_chip warning, "x"\n), partials: { test_chip: test_chip },
                    account: Account.new(name: 'x', balance: 1))
-    bare = render(%(page account\n  chip "x"\n), partials: { chip: chip },
+    bare = render(%(page account\n  test_chip "x"\n), partials: { test_chip: test_chip },
                   account: Account.new(name: 'x', balance: 1))
-    assert_includes named, '<p class="paragraph paragraph--warning chip">x</p>'
-    assert_includes bare, '<p class="paragraph chip">plain</p>'
+    assert_includes named, '<p class="paragraph paragraph--warning test_chip">x</p>'
+    assert_includes bare, '<p class="paragraph test_chip">plain</p>'
   end
 
   # Declared slots are scope; everything else falls through to the subject
   # the partial was invoked against.
   def test_a_declared_partial_still_reads_the_subject_it_was_invoked_against
     card = <<~PART
-      # content: true
+      expects content: true
 
       title .name
       money .balance
       paragraph .content
     PART
-    html = render(%(page account\n  account_card "note"\n), partials: { account_card: card },
+    html = render(%(page account\n  test_test_account_card "note"\n), partials: { test_test_account_card: card },
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<h2 class="title">Roth</h2>'
     assert_includes html, '$1,500'
@@ -125,16 +122,15 @@ class PartialArgsTest < Minitest::Test
   # its own file says it does not take.
   def test_a_declared_partial_refuses_an_undeclared_modifier
     badge = <<~PART
-      # content: true
-      # modifiers: tone
+      expects content: true, tone: true
 
       paragraph .content
     PART
     error = assert_raises(SlimPickins::Error) do
-      render(%(page account\n  chip "x", wat: true\n), partials: { chip: badge },
+      render(%(page account\n  test_chip "x", wat: true\n), partials: { test_chip: badge },
              account: Account.new(name: 'x', balance: 1))
     end
-    assert_match(/`chip` has no `wat:` modifier/, error.message)
-    assert_match(/chip "x", wat: true/, error.message)
+    assert_match(/`test_chip` has no `wat:` modifier/, error.message)
+    assert_match(/test_chip "x", wat: true/, error.message)
   end
 end

@@ -1,5 +1,5 @@
 expects children: "link button", shape: encloses
 
 
-region
+box
   children

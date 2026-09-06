@@ -38,11 +38,11 @@ class GateTest < Minitest::Test
 
   def test_a_violating_partial_names_the_partial
     library = SlimPickins::Library.new(layout: nil,
-                                       partials: { account_card: "title .name\nmoney name\n" })
+                                       partials: { test_account_card: "title .name\nmoney name\n" })
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page account\n  account_card\n", library: library, account: { name: 'Roth' })
+      render("page account\n  test_account_card\n", library: library, account: { name: 'Roth' })
     end
-    assert_match(/\A`money` takes no name — name\n  partials\/account_card\.sp, line 2\n    money name\z/,
+    assert_match(/\A`money` takes no name — name\n  partials\/test_account_card\.sp, line 2\n    money name\z/,
                  error.message)
   end
 

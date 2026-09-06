@@ -34,7 +34,7 @@ warm = ms do
 end
 
 rows = (1..ROWS).map { |i| Fixtures.account("A#{i}", i, 100, 7_000, 'Pre-tax', []) }
-loop_page = "page p\n  each account\n    account_card\n"
+loop_page = "page p\n  each account\n    test_account_card\n"
 partials = SlimPickins::Library.new(layout: nil, partials: pages.app_partials)
 SlimPickins.render(loop_page, path: 'x', locals: { p: { accounts: rows } }, library: partials) # warm it
 per_row = ms { 20.times { SlimPickins.render(loop_page, path: 'x',
@@ -43,4 +43,4 @@ per_row = ms { 20.times { SlimPickins.render(loop_page, path: 'x',
 puts "The cost, measured — #{RUBY_DESCRIPTION[/ruby \S+/]}, pages/specimen.sp, #{RUNS} runs"
 puts format('  cold render   %5.2f ms  (parse, walk, emit, evaluate, generate)', cold / RUNS)
 puts format('  warm render   %5.2f ms  (the cache hit — what a request pays)', warm / RUNS)
-puts format('  per row       %5.2f ms  (account_card inside a %d-row each, warm)', per_row, ROWS)
+puts format('  per row       %5.2f ms  (test_account_card inside a %d-row each, warm)', per_row, ROWS)

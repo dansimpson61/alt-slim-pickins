@@ -1,5 +1,5 @@
 expects variant, children: "item each", shape: encloses
 
 
-region .name
+box .name
   children

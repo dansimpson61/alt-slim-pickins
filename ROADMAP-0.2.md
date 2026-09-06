@@ -640,20 +640,20 @@ lazy — the first movable set was promoted: action, flash, search,
 thumbnails, thumb. dan's principle applied to the absence itself: the
 element primitives existed for Ruby words (`tag`) and were denied to
 language words — an asymmetry word-is-word-is-word forbids — so `paragraph`,
-`heading` and `region` became words, the atoms the vocabulary composes
+`heading` and `box` became words, the atoms the vocabulary composes
 over, classes deriving from the words. Then the mechanisms the pass was
 waiting for, all dan's: root-classing (a partial emits its OWN name as the
 class — the "word owns its box" law, mechanical) brought note, title and
 actions; the optionality spelling (declared slots materialise as keys, nil
 when unsaid — `when .open` is "was the modifier said") brought the named
-boxes over a `region` that knows its word's tag and its content — footer,
+boxes over a `box` that knows its word's tag and its content — footer,
 aside, list, item. And the final harvest, on dan's word ("all of it, if the
 views still look like an outline"): **figure, disclosure, empty, text,
 money, percent, number, badge, time, card and section** — twenty-three
 vocabulary partials, the language's whole presentational layer except the
 judged atoms below. The atoms grew to carry them: `span` (the classed leaf
 — tag, class and formatting all derive from the word, Inference staying in
-the Generator where it always lived), `figcaption`, `summary`; `region`
+the Generator where it always lived), `figcaption`, `summary`; `box`
 took the box's id and open; the preamble took `empty:` (renders only while
 the enclosing subject is empty — the situation, not a branch), `id:` and
 `label:` (subject derivations a page never writes), `speech:` and

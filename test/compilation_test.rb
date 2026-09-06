@@ -58,8 +58,8 @@ class CompilationTest < Minitest::Test
   # would compile it per row, so two clears apart, the same render stays
   # byte-identical either way.
   def test_a_partial_renders_identically_whether_cached_or_recompiled
-    partial = SlimPickins::Library.new(layout: nil, partials: { account_card: "title .name\nmoney .balance\n" })
-    source = "page p\n  each account\n    account_card\n"
+    partial = SlimPickins::Library.new(layout: nil, partials: { test_account_card: "title .name\nmoney .balance\n" })
+    source = "page p\n  each account\n    test_account_card\n"
     locals = { p: { accounts: [{ name: 'A', balance: 10 }, { name: 'B', balance: 20 }] } }
 
     warm = SlimPickins.render(source, path: 'x.sp', locals: locals, library: partial)

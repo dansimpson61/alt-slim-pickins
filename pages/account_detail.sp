@@ -1,2 +1,2 @@
 page account, "Account detail"
-  account_card
+  test_account_card

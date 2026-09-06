@@ -228,10 +228,10 @@ it is the smallest power that unblocks seven words.
 
 ## The atom set is not orthogonal
 
-Six atoms: `region`, `paragraph`, `heading`, `span`, `figcaption`,
+Six atoms: `box`, `paragraph`, `heading`, `span`, `figcaption`,
 `summary`. They factor into three shapes, not six:
 
-- **a box that holds children** — `region`
+- **a box that holds children** — `box`
 - **a block that holds text** — `paragraph`, `heading`, `figcaption`, `summary`
 - **an inline run of text** — `span`
 
@@ -241,7 +241,7 @@ them, and the proof is in the partials themselves:
 
 ```
 # figure.sp                    # disclosure.sp              # section.sp
-region                         region open: .open           region .name
+box                         box open: .open           box .name
   children                       summary .content             heading .label
   figcaption .content            children                     children
 ```
@@ -256,7 +256,7 @@ elsif @box_base
   full_tag(:"h#{@box_level + 1}", attrs[:body], class: "#{@box_base}-title")
 ```
 
-It hardcodes `h{n}`. Give it the same word→element map `region` already has
+It hardcodes `h{n}`. Give it the same word→element map `box` already has
 for tags, and both primitives disappear:
 
 ```ruby
@@ -346,7 +346,7 @@ the split, because none of them is element emission:
 4. **Evaluation control and document side effects** — unchanged: `each`,
    `choose`, `children`, `contents`, the `<head>` words, the sprite.
 
-`region`, `paragraph`, `figcaption`, `summary`, and the *element half* of
+`box`, `paragraph`, `figcaption`, `summary`, and the *element half* of
 `heading` and `span` all fall out of the kernel. So, plausibly, do `nav`,
 `grid`, `image`, `link`, `hidden`, `input`, `snippet` and the form
 wrappers — every Generator method whose body is "open a tag, put things in
@@ -422,8 +422,8 @@ half of the trade.
 
 | word | the question |
 |---|---|
-| `nav` | `region` + an aria-label. Widen `region`, or is nav a shape? |
-| `grid` | `region` + a `--track` style var. Same question, same answer either way. |
+| `nav` | `box` + an aria-label. Widen `box`, or is nav a shape? |
+| `grid` | `box` + a `--track` style var. Same question, same answer either way. |
 | `snippet` | `pre` + `code` + a copy button. Needs a code atom; low value. |
 | `link` | needs an `anchor` atom. Is that an atom or an element? Rule five bites here. |
 | `table` | the gatherer mechanism is proven (`dogfood_test.rb`), but per-cell formatting and alignment inference are computation. The hardest, and the last. |
@@ -511,7 +511,7 @@ different job once it exists.
   refused in the gate's voice. This is the round that can go wrong quietly,
   so it goes first and alone.
 - **Round 2 — the atoms over the primitive.** `figcaption` and `summary`
-  leave outright; `region` and `paragraph` are rewritten over `tag`.
+  leave outright; `box` and `paragraph` are rewritten over `tag`.
   Note what Round 1 saves here: **`BOX_TITLE_TAGS` is no longer needed at
   all.** `figcaption` carries no class today, so `figure.sp` can simply say
   `tag figcaption` — the special-case mechanism the previous draft proposed
@@ -553,7 +553,7 @@ regenerating is one command.
 What it shows that the tables above do not:
 
 - **`figcaption` and `summary` have in-degree 1.** They sit on the floor at
-  the size of a speck, next to `region` at 9 and `children` at 10. *An atom
+  the size of a speck, next to `box` at 9 and `children` at 10. *An atom
   with one consumer is not an atom* — the picture makes that argument
   without a sentence of prose.
 - **The unreached band.** Eight Ruby words that no partial composes over at

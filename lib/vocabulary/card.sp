@@ -1,7 +1,7 @@
 expects variant, content: true, children: any, id: true, shape: encloses
 
 
-region .name, id: .id
+box .name, id: .id
   choose
     when .content
       heading .content

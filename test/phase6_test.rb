@@ -80,11 +80,11 @@ class Phase6Test < Minitest::Test
   end
 
   def test_a_word_defined_twice_is_refused
-    both = Module.new { def account_card; end }
+    both = Module.new { def test_account_card; end }
     error = assert_raises(SlimPickins::Error) do
-      SlimPickins::Library.new(partials: { account_card: 'title .name' }, words: both)
+      SlimPickins::Library.new(partials: { test_account_card: 'title .name' }, words: both)
     end
-    assert_equal '`account_card` is defined twice — as a partial and in Ruby', error.message
+    assert_equal '`test_account_card` is defined twice — as a partial and in Ruby', error.message
   end
 
   # The surface is the whole of what a word may use — the same surface the

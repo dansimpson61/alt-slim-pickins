@@ -12,7 +12,7 @@ module SlimPickins
       def inherited(subclass)
 return unless subclass.name
 name = subclass.name.split('::').last
-unless name.nil? || name == "AppWord" || name == "Gatherer" || name == "PartialWord"
+unless name.nil? || %w[AppWord Gatherer PartialWord Encloses Says Registers Head].include?(name)
   word_name = name.gsub(/([A-Z]+)([A-Z][a-z])/,'_').
                    gsub(/([a-z\d])([A-Z])/,'_').
                    tr("-", "_").
@@ -28,26 +28,12 @@ end
              downcase.to_sym
       end
 
-def maps(mapping = nil)
-  if mapping
-    @mapping = (@mapping || {}).merge(mapping)
-  end
-  @mapping || {}
-end
-
-def maps(mapping = nil)
-  if mapping
-    @mapping = (@mapping || {}).merge(mapping)
-  end
-  @mapping || {}
-end
-
-def maps(mapping = nil)
-  if mapping
-    @mapping = (@mapping || {}).merge(mapping)
-  end
-  @mapping || {}
-end
+      def maps(mapping = nil)
+        if mapping
+          @mapping = (@mapping || {}).merge(mapping)
+        end
+        @mapping || {}
+      end
 
       def contract(**kwargs)
         @contract = Contract.new(**kwargs)
@@ -79,63 +65,11 @@ def unpack_arguments
     attrs[key] = name_val
   end
 
-  if content_val && c.content
+  if c.content
     key = mapping[:content] || :content
     if key == :label || key == :legend || key == :alt
       attrs[key] = label_for(name_val, content_val)
-    else
-      attrs[key] = content_val
-    end
-  end
-
-  attrs.merge!(@kwargs)
-  attrs
-end
-
-def unpack_arguments
-  name_val, content_val = arguments(@args)
-  c = self.class.get_contract
-  mapping = self.class.maps
-
-  attrs = {}
-
-  if name_val && c.name != :none
-    key = mapping[:name] || c.name
-    key = :name if key == :attribute || key == :subject
-    attrs[key] = name_val
-  end
-
-  if content_val && c.content
-    key = mapping[:content] || :content
-    if key == :label || key == :legend || key == :alt
-      attrs[key] = label_for(name_val, content_val)
-    else
-      attrs[key] = content_val
-    end
-  end
-
-  attrs.merge!(@kwargs)
-  attrs
-end
-
-def unpack_arguments
-  name_val, content_val = arguments(@args)
-  c = self.class.get_contract
-  mapping = self.class.maps
-
-  attrs = {}
-
-  if name_val && c.name != :none
-    key = mapping[:name] || c.name
-    key = :name if key == :attribute || key == :subject
-    attrs[key] = name_val
-  end
-
-  if content_val && c.content
-    key = mapping[:content] || :content
-    if key == :label || key == :legend || key == :alt
-      attrs[key] = label_for(name_val, content_val)
-    else
+    elsif content_val
       attrs[key] = content_val
     end
   end

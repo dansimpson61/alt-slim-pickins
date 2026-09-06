@@ -14,7 +14,7 @@ class Phase4Test < Minitest::Test
   def test_every_documented_word_is_implemented
     documented = File.read(File.expand_path('../VOCABULARY.md', __dir__))
                      .scan(/^### `([a-z_]+)`/).flatten.map(&:to_sym)
-    assert_empty documented - SlimPickins::Builder::WORDS
+    assert_empty documented - SlimPickins::Word.registry.keys.map(&:to_sym)
   end
 
   # --- structure --------------------------------------------------------

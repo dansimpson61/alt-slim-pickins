@@ -1,5 +1,5 @@
 # children: any
 # shape: encloses
 
-region
+box
   children

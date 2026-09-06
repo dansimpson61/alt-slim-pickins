@@ -71,7 +71,7 @@ module WordGraph
   # With `tag` public, nearly all structural and contextual words become partials
   # written over `tag` or other atoms.
   PROMOTED = {
-    region:    %i[tag],
+    box:    %i[tag],
     paragraph: %i[tag],
     fact:      %i[tag],
     metric:    %i[tag],
@@ -174,7 +174,7 @@ module WordGraph
       # Because `tag` is public, almost every structural and layout 
       # word in the language becomes a .sp partial built on top of it.
       #
-      #   region        ->  tag div
+      #   box        ->  tag div
       #   paragraph     ->  tag p
       #   heading       ->  tag h2
       #   span          ->  tag span

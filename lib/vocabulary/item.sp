@@ -1,5 +1,5 @@
 expects variant, content: true, children: any, parents: list, shape: registers
 
 
-region .name, .content
+box .name, .content
   children

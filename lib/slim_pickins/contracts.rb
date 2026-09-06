@@ -96,7 +96,7 @@ module VocabularyShapes
   end
 
   def parse(source)
-    tree = Transform.tree(source)
+    tree = SlimPickins::Transform.tree(source)
     expects_node = tree.first
     return nil unless expects_node && expects_node.word == 'expects'
 
@@ -157,9 +157,27 @@ end
 # CONTRACTS just pulls from Word.registry + VocabularyShapes for now
 # But actually, VocabularyShapes is only needed if we don't compile them to Word subclasses instantly.
 # Let's define CONTRACTS as a dynamic lookup
+@loading_vocab = false
+@vocab_shapes_cache = nil
 CONTRACTS = Hash.new do |h, k|
-  h[k] = SlimPickins::Word.registry[k]&.instance_variable_get(:@contract)
+  contract = SlimPickins::Word.registry[k]&.instance_variable_get(:@contract)
+  if contract
+    # Don't cache Word.registry contracts in the Hash so tests can redefine them
+    next contract
+  end
+  
+  unless @loading_vocab
+    @loading_vocab = true
+    @vocab_shapes_cache ||= VocabularyShapes.load
+    @loading_vocab = false
+  end
+  # Cache the vocabulary shapes since they never change
+  h[k] = @vocab_shapes_cache&.[](k)
 end
+
+
+
+
 
 
 

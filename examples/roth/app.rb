@@ -75,7 +75,7 @@ module Roth
       sp :controls, locals: { scenario: scenario, projection: projection }
     end
 
-    # The results region on its own, for the swap. It renders the *same file*
+    # The results box on its own, for the swap. It renders the *same file*
     # the full page includes as a partial, so the two cannot drift.
     post '/projection' do
       scenario, projection = project(request_params)

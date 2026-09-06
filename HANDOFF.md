@@ -143,7 +143,7 @@ declaration says `subject` — preamble-less partials keep the old rule.
 
 **Docs derived landed:** bin/generate_vocabulary.rb creates missing entries
 from the contracts, and the checker holds them, demanding the example
-sentence. The primitives landed too: `paragraph`, `heading`, `region`,
+sentence. The primitives landed too: `paragraph`, `heading`, `box`,
 `span`, `figcaption` and `summary` are the atoms, classes deriving from the
 words, so nothing styleable by hand returns. Root-classing landed (a
 partial emits its own name as the class), the optionality spelling landed

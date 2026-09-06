@@ -45,7 +45,7 @@ class VocabularyPartialsTest < Minitest::Test
   end
 
   # The named boxes (2026-09-02): footer, aside, list and item are drafted in
-  # the language over `region`, which derives its tag from the word — a
+  # the language over `box`, which derives its tag from the word — a
   # promoted footer stays a <footer>, classes included.
   def test_the_named_boxes_keep_their_tags
     Dir.mktmpdir do |dir|

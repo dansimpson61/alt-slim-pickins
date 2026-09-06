@@ -9,12 +9,13 @@ module SlimPickins
     end
 
     def evaluate
+      self.class.compilation.refuse!("partials/#{self.class.partial_name}.sp")
       name, content = arguments(@args)
-      contract = self.class.get_contract
+      contract = self.class.instance_variable_get(:@contract)
       
       # We no longer need to parse the contract here!
       # We just check the complaint!
-      complaint = Contracts.call_complaint(contract, self.class.partial_name,
+      complaint = contract && Contracts.call_complaint(contract, self.class.partial_name,
                                            name.nil? ? [] : [name],
                                            content.nil? ? [] : [content],
                                            @kwargs.keys)
@@ -33,14 +34,14 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
 
       
       body_block = lambda do
-        if contract.gathers
+        if contract&.gathers
           with_open
           collected = @collected
           # We need to splice the collected items
           with_splice(collected.flatten(1)) { evaluate_body(evaluate_proc, parameters, self.class.partial_name, push, contract) }
-        elsif contract.inside && contract.inside != :any
-          target = open_gatherer_named(contract.inside)
-          raise Error, "#{self.class.partial_name} belongs inside a #{contract.inside}" unless target
+        elsif contract&.inside && contract&.inside != :any
+          target = open_gatherer_named(contract&.inside)
+          raise Error, "#{self.class.partial_name} belongs inside a #{contract&.inside}" unless target
 
           nodes = evaluate_body(evaluate_proc, parameters, self.class.partial_name, push, contract)
           target.collect(nodes)
@@ -55,7 +56,7 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
       value, empty, body =
         if shifts
           about(name, &body_block)
-        elsif contract.empty && !empty_active?
+        elsif contract&.empty && !empty_active?
           [nil, false, []]
         else
           [nil, false, body_block.call]
@@ -70,8 +71,8 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
         end
       end
 
-      emit_node(body.first) if body.size == 1 && !(contract.inside && contract.inside != :any)
-      body.each { |n| emit_node(n) } if body.size > 1 && !(contract.inside && contract.inside != :any)
+      emit_node(body.first) if body.size == 1 && !(contract&.inside && contract&.inside != :any)
+      body.each { |n| emit_node(n) } if body.size > 1 && !(contract&.inside && contract&.inside != :any)
       
       value
     end
@@ -79,7 +80,9 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
     private
 
     def parameters_for(contract, name, content, kwargs)
+      return { content: content, name: name }.merge(kwargs) unless contract
       declared = {}
+      contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
       declared[:name] = name if contract.name != :none
       declared[:content] = content if contract.content
       contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
@@ -90,7 +93,7 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
 
     def evaluate_body(evaluate_proc, parameters, word, push, contract)
       if push
-        chain.with(parameters, described_as: "this #{word}", overlay: true) { evaluate_proc.call }
+        chain.with(parameters, described_as: "this #{word}", overlay: !contract.nil?) { evaluate_proc.call }
       else
         evaluate_proc.call
       end
