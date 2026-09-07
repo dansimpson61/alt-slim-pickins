@@ -2,10 +2,10 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Unified language into Word classes and native partial contracts
+status: IMPLEMENTATION - Phase 4 closed (the exam, judged); studio docs pages render their payloads
 kind: project
 last_touched: 2026-09-06
-next_step: Resume ROADMAP-0.2.md (RIF documentation payloads for sidebar links)
+next_step: Resume ROADMAP-0.2.md Phase 5 (prose grows fences, tables, ordered lists; then the checkers' status page)
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -30,7 +30,12 @@ notes: >-
   gate runs again, the suite tests what ships, the studio's guides work. Its
   findings are all settled; the two it left to Phase 6 are `action` at five
   arguments and vocabulary coverage at 54 of 69. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
-  Builder) is cited by the roadmap.
+  Builder) is cited by the roadmap. Phase 4 is closed (2026-09-06), judged
+  by dan: the gap ledger G1–G13 is disposed in examples/dashboard/INVENTORY.md,
+  flash/action/search stay partials, and the verdict stands in ROADMAP-0.2.md
+  Round D. The studio's docs links now render truthful payloads server-side
+  (StudioDocs.entries is a plain hash, so word names never dispatch on an
+  OpenStruct) with the fence warning note; the playground is unchanged.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

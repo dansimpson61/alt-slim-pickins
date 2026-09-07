@@ -21,8 +21,9 @@ conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is closed. Roadmap 0.2's backward look is done, and Phase 3 —
-the payload — is complete.** The 2026-09-01 session closed Phases 0–2 (the
+**Roadmap 0.1 is closed. Roadmap 0.2's backward look is done; Phase 3 — the
+payload — is complete, and Phase 4 — the exam — is closed, judged by dan
+2026-09-06.** The 2026-09-01 session closed Phases 0–2 (the
 Way rewritten in `PRIMER.md`; the vocabulary reviewed as contracts with
 `check`→`checkbox`, `select`→`choice`; the Builder un-god-objected — four
 gathering copies became one stack, 867 lines/16 ivars became 298/9,
@@ -117,7 +118,7 @@ byte-identical throughout) and then landed all of Phase 3:
 
 ## What is next — word is word is word, then the exam
 
-**dan's current directive, four items, one design:** lib/vocabulary as the
+**dan's directive of 2026-09-02, four items, one design — all landed:** lib/vocabulary as the
 single source of what a word is; optional shape declarations a partial
 carries; the dogfood *done* (gatherers as partials, thumbnails promoted);
 the `when` deferral solved by declared shapes; every word first-class.
@@ -165,39 +166,44 @@ family, gatherers and subject-flow words. Cost re-measured: cold 6.95 ms,
 warm 3.98 ms, 0.17 ms/row (up from 2.75/1.37/0.10 — the price of every
 word being a composition; the cache's read path is lock-free now).
 
-## What is next — Phase 4, the exam
+## What was Phase 4 — the exam, and how it closed
 
-**Phase 3 is closed: a page may not render until the app has been proved
-able to answer it, at report, at gate, at boot, and the proof costs 1.09 ms
-measured (1.37 ms warm render after the round-10 compile-once cache).**
-Phase 4's first port is landed: dan chose `triage.slim`, the smallest of the
-short-list — and the challenges showed up anyway.
+**Phase 4 is closed, judged by dan 2026-09-06 (the judgement stands in
+ROADMAP-0.2.md, Round D).** dan chose `triage.slim`, the smallest of the
+short-list — and the challenges showed up anyway. The port at
+`examples/dashboard/` renders the real `Scan.triage_queue` through the
+language: `layout.sp`, `triage.sp`, `confirm_archive.sp`, the queue,
+unreviewed card and dormant action as partials, `flash`/`action`/`search`
+as vocabulary partials, actions wired to the same `Workspace` calls the
+original makes, boot-proven, held by `test/dashboard_test.rb` and
+`bin/dashboard_parity.rb` — 25 affordances, 0 missing against the live
+dashboard. The exam's harvest is the gap ledger G1–G13 in
+`examples/dashboard/INVENTORY.md`, all disposed: G1–G10 resolved by the
+negotiated primitives (`hidden`, `input`, `textarea`, `form` widened,
+`card` titles, `link active:`, `button size:`) and the partials; G3 and G7
+dissolved with the re-frame (the port wears our look); G11 disposed as
+documented-and-pinned (a test holds the hatch's emit-vs-value contract —
+`tag` emits, `element` returns, the nav renders once); G12 resolved by the
+optionality spelling; G13 (first recorded as G14 — the original numbering
+skipped 13) resolved by the word-free-locals rule. The promotion decision:
+`flash`/`action`/`search` stay partials — promotion is for words that have
+proven themselves across pages, and all three are used by exactly one app.
+`~/dev/dashboard` stayed untouched and working throughout.
 
-- **The port** — `examples/dashboard/`: a Sinatra app on 4578 rendering the
-  real `Scan.triage_queue` through the language (`layout.sp`, `triage.sp`,
-  `confirm_archive.sp`, `DashboardWords` on the public surface), actions
-  wired to the same `Workspace` calls the original makes, boot-proven,
-  in `bin/verify_pages.rb`'s corpus, held by `test/dashboard_test.rb`
-  (10 tests) and `bin/dashboard_parity.rb` — 26 affordances, 0 missing
-  against the live dashboard at :4000.
-- **The gaps** — `examples/dashboard/INVENTORY.md` logs G1–G11: no hidden
-  word; `form` forbids `button` (two form theories, the language knows one);
-  the class scheme is the Generator's, not the description's (the deepest —
-  it forced the hatch for *every* presenting word); no card title, size
-  modifier, flash, bare input, textarea, link active-state; `page` owns the
-  h1 and head title; and the hatch's emit-vs-value trap (`tag` emits,
-  `element` doesn't) rendered the port's nav three times before a test saw.
-- **Next** — Round A landed the negotiated primitives: `hidden`, `input`,
-  `textarea`, `form` widened to carry `button`/`hidden`/`input`/`textarea`
-  (the restriction was an accidental artifact, not bedrock — dan's method,
-  applied and recorded in the roadmap), `card` titles, `link active:`,
-  `button size:` — and partials now receive their arguments as their own
-  subject (`.content`, `.to`). Round B: the port's vocabulary moves into
-  partials (`lib/vocabulary` for ours, `views/partials` for the app's),
-  triage is re-authored as a slim-pickins page in our own look, and
-  `bin/dashboard_parity.rb` compares behaviour only — not classes. Round
-  ends with dan's promotion decision: which vocabulary graduates to core.
-  `~/dev/dashboard` stays untouched and working throughout.
+## What is next — Phase 5, eat it yourself
+
+The studio (`studio/`, port 4580) is Phase 5's "studio page", arrived
+early, and its docs links now tell the truth (2026-09-06): `/docs/:word`
+renders the word's contract and implementation server-side through the
+language — `StudioDocs.entries` is a plain hash, so a word's name is a
+string key and never survives dispatch on an OpenStruct — with a
+`note--warning` that code blocks are not yet formatted as code. The
+playground at `/` is unchanged. Phase 5's declared work remains: `prose`
+grows exactly what the documents use — fences, tables, ordered lists (safe
+by construction, no general markdown engine) — and the warning notes in
+`guide.sp` and `docs.sp` shrink the day those land; a status page of the
+checkers' output; and dan's question — whether the dashboard's markdown
+surfaces are the next dogfood target.
 
 **The design note the previous session left is now closed.** The runtime
 nodes (`[:word, attrs, children]`) still do not carry line numbers — that
@@ -226,7 +232,7 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-06: 231 tests / 906 assertions / 0 failures, 820
+  (re-measured 2026-09-06: 237 tests / 1463 assertions / 0 failures, 820
   sentences / 0 problems, 99 rules / 0 problems, 69 words / 0 problems, 13
   pages verified, 25 affordances / 0 missing)
   **Set no environment variable to make this pass.** It used to need
