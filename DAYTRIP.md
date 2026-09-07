@@ -405,18 +405,18 @@ or breaking it quietly.
 The same way every phase does — the gate, which is the point:
 
 ```bash
-ruby check_grammar.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby "$f"; done
+ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby "$f"; done
 ```
 
 A daytrip is closed when that command runs clean **with nothing set by hand**,
 and not before. If it still needs `RACK_ENV=test`, Stop 2 was not taken; if it
 still dies on leg two, Stop 1 was not.
 
-**Closed 2026-09-06.** It runs clean, and `check_shape.rb` — which is not in
-that line and should be — runs clean too. Adding it is the obvious next
-edit to this project's own instructions, and is left for dan because the gate
-command is quoted in `README.md` and `ROADMAP-0.2.md` as well as here, and a
-truth with three homes is the thing constraint 1 is about.
+**Closed 2026-09-06.** It runs clean, and `check_shape.rb` — which was not in
+that line and should have been — runs clean too. Added with dan's approval
+2026-09-06, together with `bin/verify_pages.rb`: the command above is now the
+full gate, and `README.md` and `ROADMAP-0.2.md` quote it — one command, three
+citations, one truth.
 
 ## Honest limits, named now
 

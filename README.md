@@ -193,5 +193,6 @@ file here the escape hatch stands at **1 use in 356 sentences**.
 - [ROTH_STUDY.md](roth/ROTH_STUDY.md) — what reading a real app closely found
 
 Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
-Everything green: `ruby check_grammar.rb && ruby check_styles.rb &&
+Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
+ruby check_styles.rb && ruby bin/verify_pages.rb &&
 for f in test/*_test.rb; do ruby $f; done`
