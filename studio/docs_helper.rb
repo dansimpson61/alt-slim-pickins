@@ -5,6 +5,8 @@ module StudioDocs
   # view reads `.name` and `.path` off it.
   Entry = Struct.new(:name, :path, keyword_init: true)
 
+  ROOT = File.expand_path('..', __dir__)
+
   # The documents worth reading end to end, in the order a newcomer should
   # meet them. Curated rather than globbed: not every `.md` at the root is a
   # guide, and the order is part of the argument.
@@ -31,62 +33,83 @@ module StudioDocs
       .map { |word| Entry.new(name: word, path: "/docs/#{word}") }
   end
 
-  def self.build
-    require_relative '../lib/slim_pickins'
-    SlimPickins::Library.builtin
-    
-    docs = {}
-    SlimPickins::Word.registry.each do |name, klass|
-      word = name.to_s
-      
-      contract = SlimPickins::CONTRACTS[word.to_sym]
-      contract_md = if contract
-        SlimPickins::Contracts.bullets(word, contract).join("\n")
-      else
-        "No explicit contract defined."
+  # The payloads, with one home: a plain hash of word name to its contract
+  # and implementation. A word's name is a string key here — never a method
+  # name — so a docs page is served by lookup, and no word name ever has to
+  # survive being dispatched on an OpenStruct whose real methods (`each`,
+  # `map`, `send`, `class`...) it might collide with. `build` is the same
+  # payloads as an OpenStruct, kept for the playground, where the reader
+  # writes `docs.word.contract` by hand and owns the dispatch.
+  def self.entries
+    @entries ||= begin
+      require_relative '../lib/slim_pickins'
+      SlimPickins::Library.builtin
+      SlimPickins::Word.registry.keys.sort.to_h do |name|
+        word = name.to_s
+        [word, { contract: contract_of(word),
+                 implementation: implementation_of(word, SlimPickins::Word.registry[name]) }]
       end
-      
-      impl = if klass.respond_to?(:partial_name)
-        file = "lib/vocabulary/#{word}.sp"
-        source = File.read(file) rescue "Source not found"
-        "**Type:** App Partial\n(`#{word}.sp`)\n\n**Defined in**\n`#{file}`\n\n```sp\n#{source.strip}\n```"
-      else
-        source_loc = klass.instance_method(:evaluate).source_location rescue nil
-        source_loc ||= klass.instance_method(:initialize).source_location rescue nil
-        source_loc ||= klass.methods(false).map { |m| klass.method(m).source_location }.compact.first rescue nil
-        
-        file, line = source_loc
-        if file
-          file = file.sub(Dir.pwd + '/', '')
-          lines = File.readlines(file)
-          
-          # Find the class declaration by walking backwards from the method definition
-          class_start_line = line - 1
-          while class_start_line > 0 && lines[class_start_line] !~ /^(\s*)class #{klass.name.split('::').last}/
-            class_start_line -= 1
-          end
-          
-          class_lines = []
-          if class_start_line >= 0 && lines[class_start_line] =~ /^(\s*)class #{klass.name.split('::').last}/
-            class_indent = $1.length
-            lines[class_start_line..-1].each do |l|
-              class_lines << l
-              break if l =~ /^#{" " * class_indent}end/
-            end
-          end
-          
-          if class_lines.any?
-            "**Type:** Ruby Class\n(`#{klass.name}`)\n\n**Defined in**\n`#{file}:#{class_start_line + 1}`\n\n```ruby\n#{class_lines.join.strip}\n```"
-          else
-            "**Type:** Ruby Class\n(`#{klass.name}`)\n\n**Defined in**\n`#{file}:#{line}`"
-          end
-        else
-          "**Type:** Ruby Class\n(`#{klass.name}`)\n\n**Defined in**\nUnknown location"
-        end
-      end
-      
-      docs[word] = OpenStruct.new(contract: contract_md, implementation: impl)
     end
-    OpenStruct.new(docs)
   end
+
+  def self.build = OpenStruct.new(entries)
+
+  def self.contract_of(word)
+    contract = SlimPickins::CONTRACTS[word.to_sym]
+    contract ? SlimPickins::Contracts.bullets(word, contract).join("\n") : 'No explicit contract defined.'
+  end
+
+  # A partial's home is its .sp file, read. A Ruby class's home is its
+  # declaration, found by scanning the library for `class <Name>` — never
+  # by trusting a method's source_location: a class that inherits its
+  # `evaluate` (Prose inherits Encloses') would otherwise send the reader to
+  # the base class's line, in the wrong file. The declaration scan is the
+  # one mechanism for all of them.
+  def self.implementation_of(word, klass)
+    if klass.respond_to?(:partial_name)
+      file = "lib/vocabulary/#{word}.sp"
+      source = File.read(File.join(ROOT, file)) rescue 'Source not found'
+      "**Type:** App Partial\n(`#{word}.sp`)\n\n**Defined in**\n`#{file}`\n\n```sp\n#{source.strip}\n```"
+    else
+      file, line = class_declaration(klass)
+      if file
+        "**Type:** Ruby Class\n(`#{klass.name}`)\n\n**Defined in**\n`#{file}:#{line}`\n\n```ruby\n#{class_body(file, line).strip}\n```"
+      else
+        "**Type:** Ruby Class\n(`#{klass.name}`)\n\n**Defined in**\nUnknown location"
+      end
+    end
+  end
+
+  # The declaration, not the method: the word's simple name inside its own
+  # module. Two files can declare `class Page` (the runtime's Page lives in
+  # subject.rb, the word's in words.rb), so a bare name match is not enough
+  # — the file must also hold the class's module.
+  def self.class_declaration(klass)
+    simple = klass.name.split('::').last
+    parent = klass.name.split('::')[-2]
+    pattern = /^\s*class #{Regexp.escape(simple)}\b/
+    library_files.each do |file|
+      next unless File.read(file).include?("module #{parent}")
+
+      line = File.readlines(file).index { |l| l =~ pattern }
+      return [file.sub("#{ROOT}/", ''), line + 1] if line
+    end
+    nil
+  end
+
+  # The class's own body: from its declaration to the first `end` at the
+  # declaration's own indent — inner blocks close first, so the first `end`
+  # at the class's indent is the class's.
+  def self.class_body(file, line)
+    lines = File.readlines(File.join(ROOT, file))
+    indent = lines[line - 1][/^\s*/].length
+    body = []
+    lines[line..].each do |l|
+      body << l
+      break if l =~ /^#{' ' * indent}end\s*$/
+    end
+    body.join
+  end
+
+  def self.library_files = Dir[File.join(ROOT, 'lib', '**', '*.rb')].sort
 end

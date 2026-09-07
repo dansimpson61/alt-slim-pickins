@@ -1,0 +1,58 @@
+# frozen_string_literal: true
+
+require 'minitest/autorun'
+require_relative '../lib/slim_pickins'
+require_relative '../studio/docs_helper'
+
+SlimPickins::Library.builtin
+
+# The docs payloads are the studio's documentation of the vocabulary, and
+# their "Defined in" line used to lie: the extraction trusted a method's
+# source_location, so every word whose class inherits its `evaluate` (17 of
+# 69, measured 2026-09-06) pointed at the base class's line in the wrong
+# file. These tests pin the truth each payload must tell: the pointer lands
+# on the word's own declaration, or there is no pointer at all.
+class StudioDocsTest < Minitest::Test
+  ROOT = File.expand_path('..', __dir__)
+
+  def entries = StudioDocs.entries
+
+  def test_every_word_has_a_payload_that_names_a_home
+    SlimPickins::Word.registry.keys.each do |name|
+      entry = entries[name.to_s]
+      refute_nil entry, "#{name} has no payload"
+      refute_empty entry[:contract], "#{name} has no contract"
+      assert_includes entry[:implementation], '**Defined in**', "#{name} names no home"
+    end
+  end
+
+  def test_every_partial_payload_points_at_its_sp_file
+    entries.each do |word, entry|
+      next unless entry[:implementation].include?('App Partial')
+
+      path = entry[:implementation][/`(lib\/vocabulary\/[^`]+\.sp)`/, 1]
+      assert_includes entry[:implementation], "`lib/vocabulary/#{word}.sp`", "#{word} names the wrong file"
+      assert File.file?(File.join(ROOT, path)), "#{word}'s partial file is missing"
+    end
+  end
+
+  def test_every_class_payload_points_at_the_words_own_declaration
+    entries.each do |word, entry|
+      impl = entry[:implementation]
+      next if impl.include?('App Partial')
+
+      m = impl.match(/`([^`]+\.rb):(\d+)`/)
+      refute_nil m, "#{word} names no location"
+      file, line = m[1], m[2].to_i
+      lines = File.readlines(File.join(ROOT, file))
+      simple = word.split('_').map(&:capitalize).join
+      assert_match(/^\s*class #{Regexp.escape(simple)}\b/, lines[line - 1],
+                   "#{word} points at #{file}:#{line}, which is not its declaration")
+    end
+  end
+
+  def test_no_payload_falls_back_to_an_unknown_location
+    unknown = entries.values.map { |e| e[:implementation] }.select { |i| i.include?('Unknown location') }
+    assert_empty unknown, "payloads without a home: #{unknown.size}"
+  end
+end
