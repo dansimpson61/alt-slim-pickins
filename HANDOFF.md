@@ -240,11 +240,17 @@ tree nodes will need to say so — but the roth test no longer does.
   (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars).
   **Do this per round, not at the end of the session** — dan restated it
   2026-09-06: *"I don't have another way to know what should be done with
-  git."* He is not reading `git status`, and `/brief/alt-slim-pickins` returns
-  `Status: unknown` (its card fields do not load, though it does report health,
-  lore and a DIRTY flag correctly), so **read `PROJECT.md` directly** for where
-  things stand. **Commit per round; never push.** The push is dan's alone —
-  that is the one part of the loop that is not the agent's to take.
+  git."* He is not reading `git status`, so unnamed git state is invisible
+  state. **Commit per round; push only when dan says so** — the push is his,
+  and it is the one part of the loop that is not the agent's to take.
+- **`PROJECT.md` frontmatter is real YAML, and the dashboard fails silently on
+  it.** If it does not parse, `/brief` returns `Status: unknown` with every
+  field `-`, while health, anatomy, lore and the DIRTY flag keep rendering — so
+  a broken card is indistinguishable from an empty one. This project sat that
+  way for weeks: `notes:` was an unquoted multi-line scalar containing
+  colon-space ("the filter: seam in render"), which Psych refuses. Prose fields
+  are folded block scalars (`>-`) now. After editing the card, check it:
+  `ruby -ryaml -e 'YAML.safe_load(File.read("PROJECT.md")[/\A---\n(.*?)\n---/m, 1], permitted_classes: [Date])'`
 - Report honestly: failures verbatim, limits named, no claim of green that isn't.
 
 ## Standing principles — do not break without saying so
