@@ -8,15 +8,19 @@ set :views, File.join(__dir__, 'views')
 
 STUDIO_LIBRARY = SlimPickins::Library.from(File.expand_path('views', __dir__))
 
+# What the sidebar iterates. Every page that draws it needs both, so they are
+# named once here rather than repeated at each render.
+SIDEBAR = { words: StudioDocs.words, guides: StudioDocs.guides }.freeze
+
 get '/' do
   default_source = "page \"Slim-Pickins Studio\"\n  heading \"Hello World\"\n"
-  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build }, library: STUDIO_LIBRARY)
+  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build, **SIDEBAR }, library: STUDIO_LIBRARY)
 end
 
 get '/docs/:word' do
   word = params[:word]
   default_source = "page \"Docs: #{word}\"\n  scroll\n    section \"Contract\"\n      prose markdown, docs.#{word}.contract\n    section \"Implementation\"\n      prose markdown, docs.#{word}.implementation\n"
-  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build }, library: STUDIO_LIBRARY)
+  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build, **SIDEBAR }, library: STUDIO_LIBRARY)
 end
 
 # A guide is one of this repo's own documents, served through the language
@@ -33,7 +37,7 @@ get '/guides/:name' do
 
   SlimPickins.render(File.read(File.join(settings.views, 'guide.sp')),
                      path: 'guide.sp',
-                     locals: { title: "Guide: #{name}", content: File.read(document) },
+                     locals: { title: "Guide: #{name}", content: File.read(document), **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 

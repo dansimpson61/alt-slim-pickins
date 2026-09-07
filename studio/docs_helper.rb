@@ -1,5 +1,36 @@
 require 'ostruct'
 module StudioDocs
+  # One link in the sidebar. A plain Struct is the app contract satisfied with
+  # no ceremony, which is the point — `each word` binds one of these and the
+  # view reads `.name` and `.path` off it.
+  Entry = Struct.new(:name, :path, keyword_init: true)
+
+  # The documents worth reading end to end, in the order a newcomer should
+  # meet them. Curated rather than globbed: not every `.md` at the root is a
+  # guide, and the order is part of the argument.
+  GUIDES = %w[PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
+              design_conventions].freeze
+
+  def self.guides = GUIDES.map { |name| Entry.new(name: name, path: "/guides/#{name}") }
+
+  # The studio's own partials register as words too — `editor`, `preview`,
+  # `split_pane`. They are this app's furniture, not the language, so the
+  # sidebar leaves them out. Named explicitly rather than relying on being
+  # read before the studio's library loads, which would be true today and
+  # silently false the first time a line moved.
+  FURNITURE = Dir[File.join(__dir__, 'views', 'partials', '*.sp')]
+              .map { |f| File.basename(f, '.sp') }.freeze
+
+  # Every word the language actually knows. The sidebar used to be 77
+  # hand-written `link` sentences, which could disagree with the vocabulary
+  # and had no way to say so. Read from the registry, it cannot.
+  def self.words
+    require_relative '../lib/slim_pickins'
+    SlimPickins::Library.builtin
+    (SlimPickins::Word.registry.keys.map(&:to_s) - FURNITURE).sort
+      .map { |word| Entry.new(name: word, path: "/docs/#{word}") }
+  end
+
   def self.build
     require_relative '../lib/slim_pickins'
     SlimPickins::Library.builtin

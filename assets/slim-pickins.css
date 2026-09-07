@@ -377,10 +377,19 @@ time { color: var(--ink-soft); }
 }
 
 /* App Partials for the Studio */
+
+/* The sidebar. This chrome lived under a `.sidebar` rule that never matched
+   anything: the word rendered an `<aside>`, so the class on the element was
+   `vocabulary`, and the divider and the scrolling it asked for never arrived.
+   It lands here, on the class the element actually carries. */
 .vocabulary {
   display: flex;
   flex-direction: column;
   gap: var(--step);
+  border-right: var(--rule-width) solid var(--rule);
+  padding-right: var(--gap);
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .editor {
