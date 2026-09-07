@@ -296,9 +296,16 @@ rule *could* forbid it was that every word in the 50-word vocabulary happened to
 be one English word — and that stopped being true when app partials arrived:
 `account_card` and `unreviewed_card` have sat in `pages/partials/` all along and
 escaped only because no rule ever named them. Widened, under constraint 3, with
-the argument written into the checker beside the pattern. **This one is dan's to
-reverse** — the alternative is renaming the studio's words, which cannot be done
-with hyphens.
+the argument written into the checker beside the pattern.
+
+*Settled 2026-09-06: the widening stands.* Renaming the studio's four words was
+the alternative and it is not one — a word is a Ruby method name, so it cannot
+carry a hyphen, and a class that differed from its word's name would break the
+thing the four shapes exist to guarantee. Renaming would also only treat the
+symptom: `account_card` and `unreviewed_card` are legitimate two-word app words
+from Phase 4's dashboard port, and they will trip the old rule the first time
+anyone styles them. The rule's reason — that every word is one English word —
+is not coming back.
 
 **The stylesheet lost what nothing could emit and gained what words demanded.**
 `.h-full`, `.w-full` and `.border` were utility classes nothing in the repo
@@ -309,8 +316,13 @@ had been written under `.preview` and `.html_preview` separately. Four literals
 that a theme could not reach — `250px`, `120px`, and the `1px`/`2px` borders —
 became `--sidebar-width`, `--chrome-height`, `--rule-width` and `--marker-width`.
 *Named because it is visible:* giving `.form` a rule set roth's form to the
-`--measure` width where it had been full-bleed. It reads better; it is also a
-change nobody asked for, and it is one line to revert.
+`--measure` width where it had been full-bleed.
+
+*Settled 2026-09-06: it stays, and the measurement is why.* `.note` was already
+capped at `--measure`, so roth's page had a note 622px wide sitting directly
+above a form running the full 875px — ragged, and nobody had noticed. At the
+same measure the two align exactly. The rule did not impose a new opinion on
+the page; it finished one the stylesheet already held.
 
 **`expects` is a declaration, not a sentence.** The grammar checker was counting
 each vocabulary partial's contract line as a sentence whose word was `expects` —
