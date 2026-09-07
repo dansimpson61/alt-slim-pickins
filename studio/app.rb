@@ -17,10 +17,19 @@ get '/' do
   SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build, **SIDEBAR }, library: STUDIO_LIBRARY)
 end
 
+# A word's documentation, served through the language rather than
+# round-tripped through the playground — the same reason the guides are.
+# The payload comes from `StudioDocs.entries` as a plain hash lookup: a
+# word's name is a string key here, never a method name, so no word name
+# ever has to survive dispatch on the playground's OpenStruct.
 get '/docs/:word' do
-  word = params[:word]
-  default_source = "page \"Docs: #{word}\"\n  scroll\n    section \"Contract\"\n      prose markdown, docs.#{word}.contract\n    section \"Implementation\"\n      prose markdown, docs.#{word}.implementation\n"
-  SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp', locals: { source: default_source, docs: StudioDocs.build, **SIDEBAR }, library: STUDIO_LIBRARY)
+  entry = StudioDocs.entries[params[:word]]
+  halt 404, "There is no word called #{params[:word]}." unless entry
+
+  SlimPickins.render(File.read(File.join(settings.views, 'docs.sp')), path: 'docs.sp',
+                     locals: { title: "Docs: #{params[:word]}", contract: entry[:contract],
+                               implementation: entry[:implementation], **SIDEBAR },
+                     library: STUDIO_LIBRARY)
 end
 
 # A guide is one of this repo's own documents, served through the language
