@@ -14,6 +14,12 @@
       "port": 4576
     },
     {
+      "name": "dashboard-port",
+      "runtimeExecutable": "ruby",
+      "runtimeArgs": ["examples/dashboard/app.rb", "-p", "4578"],
+      "port": 4578
+    },
+    {
       "name": "studio",
       "runtimeExecutable": "ruby",
       "runtimeArgs": ["studio/app.rb", "-p", "4580"],
