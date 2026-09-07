@@ -226,14 +226,25 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (currently 227 tests / 937 assertions / 0 failures, 809 sentences / 0
-  problems, 82 rules / 0 problems, 13 pages verified)
+  (re-measured 2026-09-06: 231 tests / 906 assertions / 0 failures, 820
+  sentences / 0 problems, 99 rules / 0 problems, 69 words / 0 problems, 13
+  pages verified, 25 affordances / 0 missing)
+  **Set no environment variable to make this pass.** It used to need
+  `RACK_ENV=test`, which switched the prettifier off and made every rendering
+  test assert HTML production never emitted. If the suite only passes with
+  something exported, that is the bug, not the workaround.
 - **The cost, re-measured**: `ruby bin/measure_cost.rb` — the instrument;
   the numbers live in ROADMAP-0.2.md Phase 3's record.
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore
-  (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars). dan has
-  wanted a commit and push per round this session; check that still holds.
+  (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars).
+  **Do this per round, not at the end of the session** — dan restated it
+  2026-09-06: *"I don't have another way to know what should be done with
+  git."* He is not reading `git status`, and `/brief/alt-slim-pickins` returns
+  `Status: unknown` (its card fields do not load, though it does report health,
+  lore and a DIRTY flag correctly), so **read `PROJECT.md` directly** for where
+  things stand. **Commit per round; never push.** The push is dan's alone —
+  that is the one part of the loop that is not the agent's to take.
 - Report honestly: failures verbatim, limits named, no claim of green that isn't.
 
 ## Standing principles — do not break without saying so
