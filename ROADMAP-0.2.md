@@ -399,7 +399,7 @@ a rule; it cannot prove the rule is good. Every phase ends by rendering and
 *looking*, by measuring what it claims, and by running the whole gate:
 
 ```text
-ruby check_grammar.rb && ruby check_styles.rb && for f in test/*_test.rb; do ruby $f; done
+ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done
 ```
 
 (142 tests, 632 sentences, 65 rules — all green at this document's writing.)
@@ -729,7 +729,7 @@ evaluated. No grammar change; the evidence asks for none.
 the failure mode the whole project exists to remove is removed from this
 project first. All three hold, all three checked each round.
 
-### Phase 4 — The exam: the untested flank
+### Phase 4 — The exam: the untested flank  ✅ complete (2026-09-06)
 
 The second port, aimed at exactly what 0.1 never exercised, judged and then
 put down.
@@ -748,8 +748,13 @@ put down.
   the port exposed, G1–G11.
 - **Settle routing** `agent` — `link` finally meets a real page that asks for
   more than `/name`, and the answer is recorded in the vocabulary, not
-  drafted in the abstract.
+  drafted in the abstract. ✅ Done (2026-09-06) — the answer is in the
+  vocabulary: `link` carries `to:` and `active:` (aria-current), and its
+  infers bullet holds the path rule (a name and a subject yield the
+  destination; a holding's `show` gives that holding's page). The port
+  exercises both (`to: .archive_return_to`, `active: nav_state.*`).
 - **Judge it** `dan` — as Phase 7 was judged. The exam is not the syllabus.
+  ✅ Done (dan, 2026-09-06) — the judgement is recorded below, Round D.
 
 *Round record (2026-09-02).* The port landed at `examples/dashboard/` — a
 Sinatra app on 4578 rendering the real `Scan.triage_queue` through the
@@ -870,9 +875,27 @@ the queue, unreviewed card and dormant action are partials in
 are vocabulary partials in `lib/vocabulary` (nav widened for `search`).
 Behaviour parity holds on the authored page — 25 affordances, 0 missing —
 and the round's findings are G12 (a partial cannot ask whether a modifier
-was said; optionality has no spelling) and G14 (a bare name that is also a
+was said; optionality has no spelling) and G13 (a bare name that is also a
 word can never name data — the queue partial recursed into itself until the
 stack died; flat, word-free locals are the app's rule). The promotion
 decision for `flash`/`action`/`search` waits on dan: all three are small,
 used by one app so far, and promotion is for words that have proven
 themselves across pages.
+
+*Round D (2026-09-06) — dan's judgement, recorded.* The exam is judged, on
+the ledger above: G1–G10 stand resolved by the negotiated primitives and the
+vocabulary partials; G3 and G7 stand dissolved with the re-frame (the port
+wears our look; our `page` owns its own document); G11 stands disposed as
+documented-and-pinned — the hatch's emit-vs-value contract is named, and a
+test holds it (`element` returns without emitting; `tag` emits at call time,
+so composing it again doubles — the nav renders once, by test), the
+vocabulary unchanged; G12 stands resolved by the optionality spelling; G13
+(first recorded as G14 — the original numbering skipped 13; the ledger is
+renumbered) stands resolved by the word-free-locals rule. The promotion
+question is answered: `flash`, `action` and `search` stay partials —
+measured, all three are used by exactly one app (the port), and promotion is
+for words that have proven themselves across pages; a partial is a
+first-class word where it lives. The verdict: **the exam passed** — a page
+written by someone else ports through the language with 25 affordances and
+0 missing, every difference logged G1–G13, the primitives it forced landed
+and tested, and the gaps left open recorded for Phase 6. Phase 4 is closed.
