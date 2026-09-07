@@ -103,4 +103,36 @@ class DashboardTest < Minitest::Test
     assert_includes html, 'Confirm archive'
     assert_includes html, 'Cancel'
   end
+
+  # G11 — the hatch's emit-vs-value contract, pinned. `tag` emits at call
+  # time and returns its node, so composing that node again emits it again —
+  # the port's first bug built the nav's children with `tag` and composed the
+  # whole, and the nav rendered three times. `element` only returns, so
+  # composition emits once. The contract is deliberate (power words), so the
+  # test pins the behaviour: a change here is a language decision, not a
+  # refactor.
+  def hatch_library
+    SlimPickins::Library.new(words: Module.new do
+      def nav_bug(*)
+        inner = tag(:span, { class: token(:nav_inner) }, ['x'])
+        emit_node(element(:nav, { class: token(:nav) }, [inner]))
+      end
+      def nav_ok(*)
+        inner = element(:span, { class: token(:nav_inner) }, ['x'])
+        emit_node(element(:nav, { class: token(:nav) }, [inner]))
+      end
+    end)
+  end
+
+  def test_the_nav_renders_once_not_thrice
+    html = render_triage(first_item: item, queue_intro: '1 item(s) need attention — this is the first:')
+    assert_equal 1, html.scan('class="nav"').size
+  end
+
+  def test_element_returns_and_tag_emits_doubly_when_composed
+    bug = SlimPickins.render("page p\n  nav_bug\n", locals: { p: {} }, library: hatch_library)
+    ok  = SlimPickins.render("page p\n  nav_ok\n", locals: { p: {} }, library: hatch_library)
+    assert_equal 2, bug.scan('nav_inner').size # tag: emitted now, composed again
+    assert_equal 1, ok.scan('nav_inner').size  # element: composed once
+  end
 end
