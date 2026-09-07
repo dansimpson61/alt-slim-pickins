@@ -324,26 +324,42 @@ were defined with no example sentence anywhere, and now have one each.
 Constraint 4 ends a stop by looking, not only by checking. Three findings, none
 of them acted on, because each is either outside the border or a decision:
 
-- **Inline words emitted adjacently can never wrap.** The studio's sidebar is
-  3185px wide inside a 224px column, so every studio page scrolls sideways to
-  3222px. The cause is not CSS: `link` emits `<a>…</a><a>…</a>` with no
-  whitespace between, and a browser has no break opportunity in that. It is
-  **pre-existing** — the old formatter produced identical output, verified
-  against `HEAD` — and it is a *language* question, not a studio one: should the
-  Generator separate inline siblings? That changes spacing on every page that
-  puts two badges side by side, so it is dan's, not a daytrip's.
-- **A rule with no word.** `.sidebar` is defined in the stylesheet and nothing
-  emits it — `sidebar.sp` renders `aside`, so the class is `aside vocabulary`.
-  `check_styles.rb` named this the moment it could run. The inverse of Stop 4,
-  and the same medicine.
-- **The vitals have moved, and the corpus moved under them.** Measured on the
-  roadmap's own corpus — `pages/` and `examples/`, as constraint 2's table was —
-  sentences 356 → **413**, mean args 1.21 → **1.26**, longest 3 → **5**, deepest
-  nesting 8 → **8**, distinct modifiers 8 → **16**. Note that `check_shape.rb`
-  now measures `lib/vocabulary/` too, where `expects` lines carry contract
-  keywords, which is why it prints 29 modifiers rather than 16; the two numbers
-  are not the same measurement and should not be compared. A vital that moves is
-  a conversation, and this one is Phase 6's, not a daytrip's.
+- ~~**Inline words emitted adjacently can never wrap.**~~ and ~~**a rule with
+  no word**~~ — **both wrong, and both were one defect. Settled 2026-09-06.**
+  I framed the first as a language question: should the Generator separate
+  inline siblings, at the cost of a space between every pair of adjacent inline
+  words on every page? dan asked why the studio would have wanted those links
+  unseparated, and whether `each` should not be putting them in a list. It
+  should. The sidebar was 77 hand-written `link` sentences as bare inline
+  siblings; `list` and `item` emit block `<li>`s that stack, which the language
+  has always had. **No Generator change, no spacing change to three apps** —
+  the question was withdrawn, not answered. It now draws from `Word.registry`
+  through `each word`, so it cannot disagree with the vocabulary.
+
+  The second was worse than I described. I called `.sidebar` "a rule no word
+  emits", which sounds like tidiness; it is why the sidebar **had no divider
+  and did not scroll**, because `sidebar.sp` rendered an `<aside>` and the
+  element carried `vocabulary` instead. The rule had the right intent and never
+  landed. `sidebar.sp` is deleted — one caller, contributing nothing the `aside`
+  word did not already give.
+
+  *The lesson is the framing, not the fix.* Both findings were handed over as
+  decisions about the language when they were defects in one app's authoring.
+  A finding that proposes changing the Generator deserves the question dan
+  asked first: what should the page have said?
+- **The vitals have moved, and the corpus moved under them.** *Settled
+  2026-09-06 (dan): the table is updated in place.* Measured on the roadmap's
+  own corpus — `pages/` and `examples/`, as constraint 2's table was — sentences
+  356 → **413**, mean args 1.21 → **1.26**, longest 3 → **5**, deepest nesting
+  8 → **8**, distinct modifiers 8 → **16**. Every mover is the dashboard port:
+  all eight new modifiers are used by `examples/dashboard` and nothing else, and
+  all three five-argument sentences are `action` in `queue.sp`. The table was
+  simply measured before Phase 4 happened. Two rows stay open for Phase 6 rather
+  than shrugged at — `action` at five arguments, and coverage down to 54 of 69
+  because the vocabulary grew faster than the corpus exercising it. Note that
+  `check_shape.rb` also measures `lib/vocabulary/`, where `expects` lines carry
+  contract keywords, so it prints 29 modifiers rather than 16; the two are not
+  the same measurement and should not be compared.
 
 ## Constraints inherited
 
