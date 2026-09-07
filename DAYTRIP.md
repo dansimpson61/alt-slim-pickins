@@ -173,10 +173,13 @@ things it says are nonetheless untrue:
   way. This is the border holding: the daytrip warns about fences, it does not
   grow them.
 - **A stale comment.** [editor_form.sp](studio/views/partials/editor_form.sp)
-  says a single form can only target one iframe and that Stimulus will fix it
+  said a single form can only target one iframe and that Stimulus would fix it
   later. The rendered HTML already emits `formaction="/render_html"
-  formtarget="html_preview"` on the second button. The language solved it; only
-  the comment still claims otherwise. Delete the comment.
+  formtarget="html_preview"` on the second button. **Settled differently than
+  the stop proposed (dan, 2026-09-06): the comment stays** — rewritten as a
+  deliberate burr under the saddle: the two Render buttons exist because one
+  form cannot target two iframes natively, and future Stimulus integration
+  obviates them. The comment now says so.
 - **An unused view.** `studio/views/guide.sp` is untracked and referenced by no
   route. It is the beginning of the honest fix — a guide rendered server-side
   instead of round-tripped through the playground. It is finished or it is
