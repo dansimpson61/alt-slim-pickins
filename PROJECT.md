@@ -11,7 +11,8 @@ docs: README.md
 related:
 - slim-pickins
 - ode-to-joy
-notes: Roadmap 0.2 (ROADMAP-0.2.md, 2026-09-01), the first even-numbered,
+notes: >-
+  Roadmap 0.2 (ROADMAP-0.2.md, 2026-09-01), the first even-numbered,
   backward-leading roadmap (ataovy dian-tana), is past its backward look:
   Phases 0-2 closed — the Way rewritten (PRIMER.md), the vocabulary reviewed
   as contracts with check→checkbox and select→choice, the Builder
@@ -30,7 +31,8 @@ notes: Roadmap 0.2 (ROADMAP-0.2.md, 2026-09-01), the first even-numbered,
   findings are all settled; the two it left to Phase 6 are `action` at five
   arguments and vocabulary coverage at 54 of 69. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
   Builder) is cited by the roadmap.
-conventions: Views speak the slim-pickins DSL; the best JavaScript is the least
+conventions: >-
+  Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
 ---
 
