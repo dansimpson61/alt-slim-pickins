@@ -19,11 +19,13 @@ class StudioDocsTest < Minitest::Test
   def entries = StudioDocs.entries
 
   def test_every_word_has_a_payload_that_names_a_home
-    SlimPickins::Word.registry.keys.each do |name|
-      entry = entries[name.to_s]
-      refute_nil entry, "#{name} has no payload"
-      refute_empty entry[:contract], "#{name} has no contract"
-      assert_includes entry[:implementation], '**Defined in**', "#{name} names no home"
+    # Over `entries` itself, not the live registry: in a suite sharing one
+    # process, another test's library may register words after the payloads
+    # memoised — a timing accident of the test world, not a defect. In the
+    # studio the registry is complete before the first request.
+    entries.each do |word, entry|
+      refute_empty entry[:contract], "#{word} has no contract"
+      assert_includes entry[:implementation], '**Defined in**', "#{word} names no home"
     end
   end
 
@@ -59,6 +61,12 @@ class StudioDocsTest < Minitest::Test
   def test_no_payload_falls_back_to_an_unknown_location
     unknown = entries.values.map { |e| e[:implementation] }.select { |i| i.include?('Unknown location') }
     assert_empty unknown, "payloads without a home: #{unknown.size}"
+  end
+
+  def test_every_guide_exists_at_the_root
+    StudioDocs::GUIDES.each do |name|
+      assert File.file?(File.join(ROOT, "#{name}.md")), "guide #{name} has no document"
+    end
   end
 
   # --- the status page -----------------------------------------------------

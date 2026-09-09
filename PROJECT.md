@@ -2,13 +2,15 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Phase 5 nearly closed — prose grew its three forms, the studio's status page runs the four gate legs live, the studio itself joined the gate; dan's dogfood question is next
+status: IMPLEMENTATION - Phase 5 closed (2026-09-09) — prose grew its three forms, the status page runs the gate live, dan's answer names both dashboard and studio md docs the next dogfood; Phase 6 subtraction is all that remains of roadmap 0.2
 kind: project
 last_touched: 2026-09-09
 next_step: >-
-  Ask dan whether the dashboard's markdown surfaces are the next dogfood
-  target, then close ROADMAP-0.2.md Phase 5: the round record, PROJECT.md
-  next_step to Phase 6 (subtraction), HANDOFF and lore.
+  Resume ROADMAP-0.2.md Phase 6 (subtraction): the cut list — the three
+  paper pages, icon's circular evidence, meta with no sentence in a real
+  page, orphaned style rules, duplicated documents — plus the two parked
+  vitals rows (action at five arguments, vocabulary coverage) and the prose
+  named-limits from Phase 5's record
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -52,7 +54,12 @@ notes: >-
   (2026-09-09): /status runs the four gate legs live as subprocesses and
   serves their output through prose fences; the studio's pages joined the
   checker corpora (the furniture partials learned as an app), so the page
-  the gate describes is held by the gate it describes.
+  the gate describes is held by the gate it describes. dan's Phase 5
+  question is answered (2026-09-09): "Both the dashboard's md docs and the
+  studio's md docs" — the dashboard's markdown surfaces are the next
+  dogfood target (read-only, untouched), and the studio's curated guides
+  grew README, ROADMAP-0.2, HANDOFF and DAYTRIP. Phase 5 is closed; the
+  round record stands in ROADMAP-0.2.md.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

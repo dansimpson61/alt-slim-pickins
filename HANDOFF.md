@@ -21,9 +21,11 @@ conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is closed. Roadmap 0.2's backward look is done; Phase 3 — the
-payload — is complete, and Phase 4 — the exam — is closed, judged by dan
-2026-09-06.** The 2026-09-01 session closed Phases 0–2 (the
+**Roadmap 0.1 is closed. Roadmap 0.2 is one phase from closed: Phases 0–5
+are complete — the Way, the reviewable word, the un-god-objected Builder,
+the payload, the exam (judged by dan), and now Eat it yourself (closed
+2026-09-09).** Phase 6 — subtraction — is all that remains. The
+2026-09-01 session closed Phases 0–2 (the
 Way rewritten in `PRIMER.md`; the vocabulary reviewed as contracts with
 `check`→`checkbox`, `select`→`choice`; the Builder un-god-objected — four
 gathering copies became one stack, 867 lines/16 ivars became 298/9,
@@ -116,7 +118,7 @@ byte-identical throughout) and then landed all of Phase 3:
 - `check_grammar.rb` / `check_shape.rb` / `check_styles.rb` — the three
   checkers that hold docs, shapes, and styles to the code.
 
-## What is next — word is word is word, then the exam
+## What landed next — word is word is word, then the exam
 
 **dan's directive of 2026-09-02, four items, one design — all landed:** lib/vocabulary as the
 single source of what a word is; optional shape declarations a partial
@@ -190,29 +192,67 @@ skipped 13) resolved by the word-free-locals rule. The promotion decision:
 proven themselves across pages, and all three are used by exactly one app.
 `~/dev/dashboard` stayed untouched and working throughout.
 
-## What is next — Phase 5, eat it yourself
+## What was Phase 5 — eat it yourself, and how it closed
 
-The studio (`studio/`, port 4580) is Phase 5's "studio page", arrived
-early, and its docs links now tell the truth (2026-09-06): `/docs/:word`
-renders the word's contract and implementation server-side through the
-language — `StudioDocs.entries` is a plain hash, so a word's name is a
-string key and never survives dispatch on an OpenStruct — with a
-`note--warning` that code blocks are not yet formatted as code. The
-playground at `/` is unchanged. Phase 5's declared work remains: `prose`
-grows exactly what the documents use — fences, tables, ordered lists (safe
-by construction, no general markdown engine) — and the warning notes in
-`guide.sp` and `docs.sp` shrink the day those land; a status page of the
-checkers' output; and dan's question — whether the dashboard's markdown
-surfaces are the next dogfood target.
+**Phase 5 is closed (2026-09-09); the round record stands in ROADMAP-0.2.md.**
+Three rounds, each committed, each green on both harnesses — the project
+gate *and* the dashboard's single-process runner (which caught a real defect
+the gate cannot: see round 1).
 
-**The design note the previous session left is now closed.** The runtime
-nodes (`[:word, attrs, children]`) still do not carry line numbers — that
-decision stands: the line is *provenance, not meaning*, and the semantic
-tree stays a description. The seam landed differently, and better: the line
-is threaded from the transform into *evaluation* (`with_line` around every
-compiled sentence, a stack in the Builder), and errors are located at raise
-time, before the stack unwinds. A later validator that must name lines on
-tree nodes will need to say so — but the roth test no longer does.
+1. **The dashboard's health flag caught a lie.** Its runner loads every test
+   file in one process, so every app's words share one registry — and
+   `StudioDocs.implementation_of` assumed every partial is builtin, so the
+   portfolio's `account_card` named `lib/vocabulary/account_card.sp`, which
+   is not its home. A partial now carries its `source_path` from the Library
+   (one glob reads source and path together), the docs payload names the
+   true home, and a partial declared inline says so ("nowhere on disk") —
+   a named state, not a KeyError. The dashboard's flag was right.
+2. **`prose` grew fences, tables and ordered lists** — measured before
+   built: 344 fence lines, 35 pipe tables (0 alignment colons, pipes inside
+   code spans), 61 ordered-list lines, and — what the roadmap's opening
+   measurement missed — 271 indented continuations under bullets, 40 under
+   ordered items, one nested list. `Markdown` now scans lines: fences are
+   extracted first (they win over tables and lists), cells split on pipes
+   outside backticks, lists fold continuations and one level of nesting.
+   Still safe by construction: everything is escaped before any pattern
+   becomes a tag; nothing is ever dropped; no general markdown engine. The
+   styles share one home each (`.prose pre` with `.snippet`, `.prose table`
+   with `.table`); the guide/docs warning notes are gone.
+3. **The status page.** `studio/status.rb` runs the four gate legs live as
+   subprocesses; `/status` serves each leg's output through a prose fence,
+   re-run every visit (~0.9 s) — a status page that remembered its verdict
+   could claim green while red. The studio's pages joined the gate in the
+   same round: `check_grammar`/`check_shape` learn `studio/views` as an app
+   via `Library.from` (the whole of the work the lore had measured). The
+   gate's first catch of the phase was the page built to display it —
+   `each .results` refused (each takes a name, never data) — and the runtime
+   taught the idiom's other half: `each result` reads `results`.
+   **dan's answer, verbatim: "Both the dashboard's md docs and the studio's
+   md docs."** — the dashboard's markdown surfaces are the next dogfood
+   target (read-only, must keep working, untouched), and the studio's
+   curated guides grew README, ROADMAP-0.2, HANDOFF and DAYTRIP.
+
+Named limits, left for a future prose round or Phase 6: headings swallow
+body lines when the author left no blank line (6 places); `---` renders as
+a paragraph; nesting stops at one level; alignment colons render unaligned.
+
+## What is next — Phase 6, subtraction
+
+**Phase 6 is the last phase of roadmap 0.2** — the backward eye's final
+discipline: everything must have a consumer or go. The cut list is already
+drafted in ROADMAP-0.2.md: the three paper pages (half-retired to
+`history/`; their fate is dan's reversible half), `icon`'s circular evidence
+(its only users are on the cut list), `meta` with no sentence in any real
+page, any style rule the checker orphans, any document that duplicates
+another. The measure: usage counted before and after, cut and kept listed
+with reasons, everything still green. Phase 4 parked two vitals rows here —
+`action` at five arguments, and vocabulary coverage (54 of 69 on the table's
+corpus; the checker's wider corpus prints 66 of 69 since the studio joined).
+The prose named-limits above are candidates for the same conversation.
+
+**The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
+process — it serves old code until he restarts it.** The checkers' status
+page at `/status` re-runs the gate live on every visit.
 
 ## How this project works
 
@@ -232,9 +272,12 @@ tree nodes will need to say so — but the roth test no longer does.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-06: 237 tests / 1463 assertions / 0 failures, 820
-  sentences / 0 problems, 99 rules / 0 problems, 69 words / 0 problems, 13
-  pages verified, 25 affordances / 0 missing)
+  (re-measured 2026-09-09: 261 tests / 1459 assertions / 0 failures in one
+  process — the dashboard's harness, which is the stronger one and worth
+  running too: `ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f|
+  require "./#{f}" }'` — plus 886 sentences / 0 problems, 99 rules / 0
+  problems, 69 words / 0 problems, 13 pages verified, 25 affordances /
+  0 missing)
   **Set no environment variable to make this pass.** It used to need
   `RACK_ENV=test`, which switched the prettifier off and made every rendering
   test assert HTML production never emitted. If the suite only passes with

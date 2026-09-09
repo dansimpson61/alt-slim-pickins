@@ -373,6 +373,10 @@ by nothing else, and all three five-argument sentences are `action` in
 precisely the words Phase 4's round record says it landed (`hidden`, `input`,
 `textarea`, `link active:`, `button size:`), so the table was simply measured
 before Phase 4 happened and is updated here rather than treated as drift.
+Note also that the printed vitals measure a wider corpus than this table:
+`check_shape.rb` adds `lib/vocabulary` and, since Phase 5, `studio/` — the
+conversation that corpus owes is held in Phase 5's round record, with
+today's numbers.
 
 Two rows still deserve a look rather than a shrug, and neither is closed:
 `action` at five arguments is the strongest candidate in the language for *a
@@ -800,7 +804,7 @@ partials, triage is re-authored, parity measures behaviour only.
 matches with every difference logged; routing is settled and recorded; dan's
 judgement stands in this file.
 
-### Phase 5 — Eat it yourself
+### Phase 5 — Eat it yourself  ✅ complete (2026-09-09)
 
 Dogfood, prepared by the earlier phases and taken here.
 
@@ -808,10 +812,72 @@ Dogfood, prepared by the earlier phases and taken here.
   language: LORE.md or VOCABULARY.md as a `prose` page, the checkers' output
   as a status page, the Way document as a page. `prose` grows exactly what
   those documents use — fences, tables, ordered lists — and stays safe by
-  construction; no general markdown engine.
+  construction; no general markdown engine. ✅ Done (2026-09-09) — the record
+  below.
 - **The question for dan** `dan` — whether the dashboard's markdown surfaces
   are next, knowing that port is the dogfood with the highest value and the
-  one hard constraint: it must keep working, untouched.
+  one hard constraint: it must keep working, untouched. ✅ Asked and answered
+  (dan, 2026-09-09), recorded below.
+
+*Round record (2026-09-09).* **Measured before built:** the repo's documents
+carry 344 fence lines (172 pairs, 7 languages, 0 nested), 35 pipe tables (0
+alignment colons, 0 escaped pipes, 159 pipes inside code spans), 61
+ordered-list lines all starting at 1 — and, what the roadmap's opening
+measurement missed, **271 indented continuations under unordered bullets, 40
+under ordered items, and one nested list** (the roadmap's own Phase 2 record):
+the old renderer flattened every continuation into a phantom bullet. **Built:**
+`Markdown` scans lines instead of splitting on blanks — fences are extracted
+first (they may hold blank lines, and docs show table separators inside
+fences, so fences win); tables split cells on pipes outside `code` spans,
+pad short rows, keep empty corner cells; lists fold indented continuations
+and one level of nesting, GFM-faithful — a marker must start its block, so a
+numbered line inside a paragraph stays text (LORE's truths, DAYTRIP's
+decided-list: rendered as prose, named not auto-fixed). Still safe by
+construction: everything is escaped before any pattern becomes a tag, and
+nothing is ever dropped. One presentation truth each: `.prose pre` shares
+`.snippet`'s rule, `.prose table` shares `.table`'s. The fence's language
+tag is read and dropped — no document distinguishes languages, and a class
+with no consumer is kruft. Alignment colons are recognised, not rendered —
+no document uses them. The warning notes in `guide.sp` and `docs.sp` died
+the day fences landed.
+
+**The status page.** `/status` runs the four gate legs live — `check_grammar`,
+`check_shape`, `check_styles`, `bin/verify_pages` — as subprocesses from the
+studio (`studio/status.rb`), captures their stdout, and serves each leg
+through a prose fence, with a sidebar link. It runs fresh on every visit
+(~0.9 s measured): a status page that remembered its verdict could claim
+green while red, so it never remembers. The studio's own pages joined the
+gate in the same round — `check_grammar` and `check_shape` learn
+`studio/views` as an app through `Library.from`, which the lore had measured
+as the whole of the work: 886 sentences / 83 words / 0 problems. The gate's
+first catch of the phase was the page built to display it: `each .results`
+was refused (each takes a name, never data) — and then the runtime taught
+the second half of the idiom: `each result` reads `results`, because `each`
+pluralises its name. One defect caught by the gate, one by the runtime,
+both on the dogfood's own page.
+
+**dan's answer, recorded verbatim (2026-09-09):** *"Both the dashboard's md
+docs and the studio's md docs."* — the dashboard's markdown surfaces **are**
+the next dogfood target, with the hard constraint unchanged (read-only, must
+keep working, untouched), and the studio's own markdown documents join the
+curated guides — README, ROADMAP-0.2, HANDOFF and DAYTRIP now sit in
+`StudioDocs::GUIDES` beside the seven that were there. Both halves are the
+next roadmap's business, named here so the connection stays visible.
+
+**Constraint 2's conversation, held here.** The vitals moved because the
+corpus grew, not because the language did: `check_shape.rb` prints 548
+sentences (482 before the studio joined), mean 1.29 args, longest 6, 31
+modifiers (+ `target`, `type` — the editor form's own), 66 of 69 words used
+in real pages (+4: the studio exercises `box`, `form` and friends). The two
+rows Phase 4 parked — `action` at five arguments and vocabulary coverage —
+remain Phase 6's business.
+
+*Named limits, left for a future prose round or Phase 6:* a heading swallows
+the lines under it when the author left no blank line (6 places, pre-existing
+behaviour); a `---` line renders as a paragraph (35 places); nested lists
+stop at one level; alignment colons render unaligned. Each is a form the
+documents almost use — the growth rule ("exactly what the documents use")
+kept them out, and the record keeps them visible.
 
 *Done looks like:* one of this project's own surfaces is served by the
 language that this project built, and the choices that made it possible —

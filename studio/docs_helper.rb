@@ -9,9 +9,13 @@ module StudioDocs
 
   # The documents worth reading end to end, in the order a newcomer should
   # meet them. Curated rather than globbed: not every `.md` at the root is a
-  # guide, and the order is part of the argument.
-  GUIDES = %w[PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
-              design_conventions].freeze
+  # guide, and the order is part of the argument. The working documents —
+  # the roadmap, the handoff, the daytrip — join the guides because dan's
+  # Phase 5 answer names the studio's own md docs a dogfood target: a studio
+  # that cannot show its own resume prompt and its own plan is a studio that
+  # eats someone else's food.
+  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
+              ROADMAP-0.2 HANDOFF DAYTRIP design_conventions].freeze
 
   def self.guides = GUIDES.map { |name| Entry.new(name: name, path: "/guides/#{name}") }
 
