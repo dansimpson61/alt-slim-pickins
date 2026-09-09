@@ -2,13 +2,13 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Phase 5 under way — prose grew fences, tables, ordered lists (the docs' three missing forms); the checkers' status page is next
+status: IMPLEMENTATION - Phase 5 nearly closed — prose grew its three forms, the studio's status page runs the four gate legs live, the studio itself joined the gate; dan's dogfood question is next
 kind: project
 last_touched: 2026-09-09
 next_step: >-
-  Resume ROADMAP-0.2.md Phase 5: the studio's status page of the checkers'
-  output (the checkers already print language-shaped results; a page is a
-  page), then dan's question about the dashboard's markdown surfaces
+  Ask dan whether the dashboard's markdown surfaces are the next dogfood
+  target, then close ROADMAP-0.2.md Phase 5: the round record, PROJECT.md
+  next_step to Phase 6 (subtraction), HANDOFF and lore.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -48,7 +48,11 @@ notes: >-
   and ordered lists, still safe by construction — escaping first, no
   markdown engine; lists fold indented continuations and one level of
   nesting, GFM-faithful; the styles share the .snippet and .table rules;
-  the guide/docs warning notes are gone.
+  the guide/docs warning notes are gone. The status page landed
+  (2026-09-09): /status runs the four gate legs live as subprocesses and
+  serves their output through prose fences; the studio's pages joined the
+  checker corpora (the furniture partials learned as an app), so the page
+  the gate describes is held by the gate it describes.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

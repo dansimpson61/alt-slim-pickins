@@ -24,7 +24,7 @@ DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md
             history/ROADMAP-0.1.md history/PORTFOLIO.md history/CONTENT.md
             history/FIGURES.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +
-         Dir[File.join(__dir__, '{pages,examples,lib/vocabulary}', '**', '*.sp')]
+         Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')]
            .map { |f| f.sub("#{__dir__}/", '') }).freeze
 
 here = File.expand_path(__dir__)
@@ -50,6 +50,10 @@ app_words |= Dir[File.join(here, 'lib', 'vocabulary', '*.sp')].map { |f| File.ba
 Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
   app_words |= SlimPickins::Library.from(dir).partials.keys.map(&:to_s)
 end
+# The studio is an app like the others — its furniture partials are words
+# defined through Library, and the checker must know it, or every studio
+# page reads as full of UNDEFINED words.
+app_words |= SlimPickins::Library.from(File.join(here, 'studio', 'views')).partials.keys.map(&:to_s)
 
 # The `end` that closes the module is the one at the module's own indentation.
 # Anchoring on `^end` instead read straight past a nested module and counted

@@ -3,6 +3,8 @@ aside
     list
       item
         link "Playground", to: "/"
+      item
+        link "Status", to: "/status"
   group "Guides"
     list
       each guide

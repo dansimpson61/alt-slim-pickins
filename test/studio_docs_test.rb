@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/slim_pickins'
 require_relative '../studio/docs_helper'
+require_relative '../studio/status'
 
 SlimPickins::Library.builtin
 
@@ -58,5 +59,27 @@ class StudioDocsTest < Minitest::Test
   def test_no_payload_falls_back_to_an_unknown_location
     unknown = entries.values.map { |e| e[:implementation] }.select { |i| i.include?('Unknown location') }
     assert_empty unknown, "payloads without a home: #{unknown.size}"
+  end
+
+  # --- the status page -----------------------------------------------------
+
+  # The page's seam is its locals: results arrive as Structs with name and
+  # fenced, the overview as a line of prose. Canned results pin that the
+  # page renders for the shape the route gives it, without running the
+  # checkers inside the suite.
+  def test_status_page_renders_canned_results
+    results = [
+      StudioStatus::Result.new(name: 'Grammar', output: "0 problems\n", ok: true),
+      StudioStatus::Result.new(name: 'Shape', output: "1 problem\n", ok: false)
+    ]
+    library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__))
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'status.sp')),
+                              path: 'status.sp',
+                              locals: { title: 'Status', overview: '1 of 2 legs red.',
+                                        results: results, words: [], guides: [] },
+                              library: library)
+    assert_includes html, '1 of 2 legs red.'
+    assert_includes html, 'Grammar'
+    assert_includes html, '<pre><code>0 problems', 'the leg output renders as a fence'
   end
 end

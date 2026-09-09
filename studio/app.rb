@@ -2,8 +2,9 @@ require 'sinatra'
 require 'cgi'
 require_relative '../lib/slim_pickins'
 require_relative 'docs_helper'
+require_relative 'status'
 
-set :port, 4580
+set :port, ENV.fetch('STUDIO_PORT', '4580').to_i
 set :views, File.join(__dir__, 'views')
 
 STUDIO_LIBRARY = SlimPickins::Library.from(File.expand_path('views', __dir__))
@@ -47,6 +48,19 @@ get '/guides/:name' do
   SlimPickins.render(File.read(File.join(settings.views, 'guide.sp')),
                      path: 'guide.sp',
                      locals: { title: "Guide: #{name}", content: File.read(document), **SIDEBAR },
+                     library: STUDIO_LIBRARY)
+end
+
+# The checkers' output, served through the language rather than pasted into
+# a shell. Each leg runs live — `StudioStatus.run` shells the four gate
+# scripts and captures their stdout — so the page can never claim a green
+# that the repo no longer has. The page itself is held by check_grammar
+# like every other page: the studio joined the corpus when this page did.
+get '/status' do
+  results = StudioStatus.run
+  SlimPickins.render(File.read(File.join(settings.views, 'status.sp')), path: 'status.sp',
+                     locals: { title: 'Status', overview: StudioStatus.overview(results),
+                               results: results, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 
