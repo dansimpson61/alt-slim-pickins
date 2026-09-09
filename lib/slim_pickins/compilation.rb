@@ -19,10 +19,11 @@ module SlimPickins
   # will not parse raises during the first build, is not cached, and so
   # names the path of every render that tries it.
   class Compilation
-def self.compile_partial(word, source, is_builtin)
+def self.compile_partial(word, source, is_builtin, path)
   klass = Class.new(PartialWord)
   klass.partial_name = word
   klass.is_builtin = is_builtin
+  klass.source_path = path
   klass.source_lines = source.lines
   klass.compilation = of(source, "partials/#{word}.sp")
   

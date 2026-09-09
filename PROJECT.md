@@ -2,10 +2,14 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Phase 4 closed (the exam, judged); studio docs pages render their payloads
+status: IMPLEMENTATION - Phase 5 under way — docs payloads name every partial's true home, the dashboard's tests-fail flag caught it; prose growth is next
 kind: project
-last_touched: 2026-09-06
-next_step: Resume ROADMAP-0.2.md Phase 5 (prose grows fences, tables, ordered lists; then the checkers' status page)
+last_touched: 2026-09-09
+next_step: >-
+  Resume ROADMAP-0.2.md Phase 5: prose grows fences, tables, ordered lists
+  (measured 2026-09-09: 344 fences, 35 tables, 61 ordered-list lines across
+  the repo's docs — flat lists, plain separators, 0 alignment colons), then
+  the checkers' status page
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -36,6 +40,12 @@ notes: >-
   Round D. The studio's docs links now render truthful payloads server-side
   (StudioDocs.entries is a plain hash, so word names never dispatch on an
   OpenStruct) with the fence warning note; the playground is unchanged.
+  Phase 5 opened 2026-09-09 with a catch the dashboard's single-process test
+  runner made: the docs payload assumed every partial is builtin, so the
+  portfolio's account_card named a lib/vocabulary file that is not its own.
+  A partial now carries its source_path from the Library (one glob, source
+  and path together), the docs name the true home, and a partial declared
+  inline says so. The prose measurement is recorded in next_step.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

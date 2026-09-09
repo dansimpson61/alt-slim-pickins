@@ -22,10 +22,15 @@ module SlimPickins
     def self.from(dir, words: nil)
       dir = File.expand_path(dir)
       layout_path = File.join(dir, 'layout.sp')
-      partials = Dir[File.join(dir, 'partials', '*.sp')].to_h do |path|
-        [File.basename(path, '.sp').to_sym, File.read(path)]
+      partials = {}
+      partial_paths = {}
+      Dir[File.join(dir, 'partials', '*.sp')].each do |path|
+        name = File.basename(path, '.sp').to_sym
+        partials[name] = File.read(path)
+        partial_paths[name] = path
       end
-      new(layout: (File.read(layout_path) if File.exist?(layout_path)), partials: partials, words: words)
+      new(layout: (File.read(layout_path) if File.exist?(layout_path)),
+          partials: partials, partial_paths: partial_paths, words: words)
     end
 
     # `words:` is the escape hatch: one module whose methods become words —
@@ -33,7 +38,7 @@ module SlimPickins
     # delegate to each other — written in Ruby because the thing they render
     # has no word yet. See Builder's "escape hatch" section for the surface
     # they may use.
-    def initialize(layout: nil, partials: {}, words: nil)
+    def initialize(layout: nil, partials: {}, partial_paths: {}, words: nil)
       @layout = layout
       app_partials = partials.transform_keys(&:to_sym)
       vocabulary = self.class.builtin_partials
@@ -44,20 +49,31 @@ module SlimPickins
 
       @app_partials = app_partials
       @partials = vocabulary.merge(app_partials)
+      # A partial's file is part of what it is — the docs name it, and a
+      # word without its home cannot be documented truthfully. Read in the
+      # same glob that read the source, so path and source can never drift.
+      @partial_paths = self.class.builtin_partial_paths.merge(partial_paths.transform_keys(&:to_sym))
       @words = words.nil? ? [] : Array(words)
       refuse_shadowing!
       
       @partials.each do |word, source|
-        Compilation.compile_partial(word, source, vocabulary.key?(word))
+        # `fetch(word, nil)`: a partial declared inline (Library.new with
+        # bare sources) has no file, and that is a real state — its docs
+        # say so — not a reason to refuse the library.
+        Compilation.compile_partial(word, source, vocabulary.key?(word), @partial_paths[word])
       end
     end
 
     # The vocabulary is built in — a promoted word is a word everywhere, not
     # something an app opts into by loading a library.
-    def self.builtin_partials
-      @builtin_partials ||= Dir[File.join(VOCABULARY_DIR, '*.sp')].to_h do |path|
-        [File.basename(path, '.sp').to_sym, File.read(path)]
+    def self.builtin_partial_paths
+      @builtin_partial_paths ||= Dir[File.join(VOCABULARY_DIR, '*.sp')].to_h do |path|
+        [File.basename(path, '.sp').to_sym, path]
       end
+    end
+
+    def self.builtin_partials
+      @builtin_partials ||= builtin_partial_paths.transform_values { |path| File.read(path) }
     end
 
     # The library every render gets when the app passes none.
@@ -75,7 +91,7 @@ module SlimPickins
     # collision is an error rather than an override. The vocabulary's own
     # partials are words, not app words — they pass the check by right.
     def refuse_shadowing!
-      vocabulary = Dir[File.join(VOCABULARY_DIR, '*.sp')].map { |p| File.basename(p, '.sp').to_sym }
+      vocabulary = self.class.builtin_partial_paths.keys
       app_words = (@partials.keys - vocabulary) + @words.flat_map(&:instance_methods)
       
       app_words.each do |name|

@@ -28,11 +28,15 @@ class StudioDocsTest < Minitest::Test
 
   def test_every_partial_payload_points_at_its_sp_file
     entries.each do |word, entry|
-      next unless entry[:implementation].include?('App Partial')
+      impl = entry[:implementation]
+      next unless impl.include?('App Partial')
 
-      path = entry[:implementation][/`(lib\/vocabulary\/[^`]+\.sp)`/, 1]
-      assert_includes entry[:implementation], "`lib/vocabulary/#{word}.sp`", "#{word} names the wrong file"
-      assert File.file?(File.join(ROOT, path)), "#{word}'s partial file is missing"
+      klass = SlimPickins::Word.registry[word.to_sym]
+      next unless klass.source_path # declared inline — there is no file to point at
+
+      assert_includes impl, "`#{klass.source_path.sub("#{ROOT}/", '')}`",
+                      "#{word} names a file that is not its own"
+      assert File.file?(klass.source_path), "#{word}'s partial file is missing"
     end
   end
 

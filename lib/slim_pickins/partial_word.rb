@@ -5,7 +5,7 @@ require_relative 'word'
 module SlimPickins
   class PartialWord < Word
     class << self
-      attr_accessor :compilation, :source_lines, :is_builtin, :partial_name
+      attr_accessor :compilation, :source_lines, :is_builtin, :partial_name, :source_path
     end
 
     def evaluate

@@ -59,17 +59,22 @@ module StudioDocs
     contract ? SlimPickins::Contracts.bullets(word, contract).join("\n") : 'No explicit contract defined.'
   end
 
-  # A partial's home is its .sp file, read. A Ruby class's home is its
-  # declaration, found by scanning the library for `class <Name>` — never
-  # by trusting a method's source_location: a class that inherits its
-  # `evaluate` (Prose inherits Encloses') would otherwise send the reader to
-  # the base class's line, in the wrong file. The declaration scan is the
-  # one mechanism for all of them.
+  # A partial's home is its .sp file, wherever it lives — the class carries
+  # its own path (the Library read it), so the docs name it rather than
+  # guess it. A Ruby class's home is its declaration, found by scanning the
+  # library for `class <Name>` — never by trusting a method's
+  # source_location: a class that inherits its `evaluate` (Prose inherits
+  # Encloses') would otherwise send the reader to the base class's line, in
+  # the wrong file. The declaration scan is the one mechanism for all of
+  # them.
   def self.implementation_of(word, klass)
     if klass.respond_to?(:partial_name)
-      file = "lib/vocabulary/#{word}.sp"
-      source = File.read(File.join(ROOT, file)) rescue 'Source not found'
-      "**Type:** App Partial\n(`#{word}.sp`)\n\n**Defined in**\n`#{file}`\n\n```sp\n#{source.strip}\n```"
+      if (path = klass.source_path)
+        "**Type:** App Partial\n(`#{word}.sp`)\n\n**Defined in**\n" \
+          "`#{path.sub("#{ROOT}/", '')}`\n\n```sp\n#{File.read(path) rescue 'Source not found'}\n```"
+      else
+        "**Type:** App Partial\n(declared inline)\n\n**Defined in**\nnowhere on disk"
+      end
     else
       file, line = class_declaration(klass)
       if file
