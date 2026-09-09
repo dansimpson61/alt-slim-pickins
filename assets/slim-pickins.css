@@ -190,14 +190,14 @@ details { margin-bottom: var(--gap); }
 summary { cursor: pointer; color: var(--accent); }
 
 /* ---------------------------------------------------------------- table -- */
-.table { width: 100%; border-collapse: collapse; margin-bottom: var(--gap); }
+.table, .prose table { width: 100%; border-collapse: collapse; margin-bottom: var(--gap); }
 .table caption { text-align: left; color: var(--ink-soft); padding-bottom: var(--step); }
-.table th, .table td {
+.table th, .table td, .prose table th, .prose table td {
   text-align: left;
   padding: var(--step) var(--gap) var(--step) 0;
   border-bottom: var(--rule-width) solid var(--rule);
 }
-.table th { color: var(--ink-soft); font-size: var(--size-small); font-weight: var(--weight-strong); }
+.table th, .prose table th { color: var(--ink-soft); font-size: var(--size-small); font-weight: var(--weight-strong); }
 .table tfoot td { font-weight: var(--weight-strong); border-bottom: none; }
 .column--numeric { text-align: right; font-variant-numeric: tabular-nums; }
 
@@ -214,6 +214,9 @@ summary { cursor: pointer; color: var(--accent); }
 .prose { max-width: var(--measure); }
 .prose > :first-child { margin-top: 0; }
 .prose code { font-family: var(--face-mono); font-size: var(--size-code); background: var(--surface-soft); }
+/* A fence's code is the pre's business, not the inline-code rule's: the
+   block already sets the face, the size and its own background. */
+.prose pre code { background: none; font-size: inherit; }
 .prose blockquote {
   margin: 0 0 var(--gap);
   padding-left: var(--gap);
@@ -247,7 +250,7 @@ summary { cursor: pointer; color: var(--accent); }
 .metric-label { margin: 0; color: var(--ink-faint); font-size: var(--size-small); font-weight: var(--weight-plain); }
 .metric-value { font-size: var(--size-large); font-variant-numeric: tabular-nums; }
 
-.snippet {
+.snippet, .prose pre {
   margin: 0 0 var(--step);
   padding: var(--gap);
   overflow-x: auto;

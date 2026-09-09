@@ -2,14 +2,13 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Phase 5 under way — docs payloads name every partial's true home, the dashboard's tests-fail flag caught it; prose growth is next
+status: IMPLEMENTATION - Phase 5 under way — prose grew fences, tables, ordered lists (the docs' three missing forms); the checkers' status page is next
 kind: project
 last_touched: 2026-09-09
 next_step: >-
-  Resume ROADMAP-0.2.md Phase 5: prose grows fences, tables, ordered lists
-  (measured 2026-09-09: 344 fences, 35 tables, 61 ordered-list lines across
-  the repo's docs — flat lists, plain separators, 0 alignment colons), then
-  the checkers' status page
+  Resume ROADMAP-0.2.md Phase 5: the studio's status page of the checkers'
+  output (the checkers already print language-shaped results; a page is a
+  page), then dan's question about the dashboard's markdown surfaces
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -45,7 +44,11 @@ notes: >-
   portfolio's account_card named a lib/vocabulary file that is not its own.
   A partial now carries its source_path from the Library (one glob, source
   and path together), the docs name the true home, and a partial declared
-  inline says so. The prose measurement is recorded in next_step.
+  inline says so. Prose landed its three forms (2026-09-09): fences, tables
+  and ordered lists, still safe by construction — escaping first, no
+  markdown engine; lists fold indented continuations and one level of
+  nesting, GFM-faithful; the styles share the .snippet and .table rules;
+  the guide/docs warning notes are gone.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
