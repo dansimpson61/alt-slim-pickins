@@ -79,6 +79,9 @@ notes: >-
   working-with-dan.md (2026-09-10) is the agents' manual for working with
   dan — candid, dated, evidence-anchored, and part of the per-round
   housekeeping (HANDOFF.md's RIF loop and reading list both name it).
+  Its standing rules, on dan's word: agents' eyes only; no flattery; and an
+  entry dies only when a second session agrees. It carries a banner asking
+  whoever can write outside this workspace to promote it machine-wide.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
