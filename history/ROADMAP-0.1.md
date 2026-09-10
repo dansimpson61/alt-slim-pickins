@@ -213,8 +213,8 @@ The remaining words. Low risk, real work, and the only phase that is mostly
 typing.
 
 - **Every word implemented** `agent`, in the five groups.
-  *Done looks like:* all three test pages render — [PORTFOLIO.md](PORTFOLIO.md),
-  [CONTENT.md](CONTENT.md), [FIGURES.md](FIGURES.md) — and
+  *Done looks like:* all three test pages render — PORTFOLIO.md,
+  CONTENT.md, FIGURES.md — and
   `check_grammar.rb` is green. **Done** — 47 of 47 words, all three pages
   render from `bin/render_pages.rb`, 431 sentences and 0 problems. Results in
   [PHASE4.md](PHASE4.md).

@@ -1076,10 +1076,9 @@ during 0.1; the list is a record, not a to-do.
   entry above.
 - **What the app must promise.** Named in Phase 1, and written down in
   [CONTRACT.md](CONTRACT.md): one sentence plus two optional methods.
-- **Under-tested by this page.** Prose and media were exercised by
-  [CONTENT.md](history/CONTENT.md) and [FIGURES.md](history/FIGURES.md);
-  navigation chrome by the layout; collections nested more than one deep by
-  the portfolio page.
+- **Under-tested by this page.** Prose and media, navigation chrome, and
+  collections nested more than one deep were exercised by the original paper
+  pages (retired in Phase 6).
 
 ### `children`
 

@@ -34,7 +34,7 @@ dashboard_base = { notice: nil, q: '', error_entry: nil,
                    nav_state: { studio: false, library: false, reconcile: false,
                           dispatch: false, ports: false } }.freeze
 PAGES = [
-  *%w[portfolio portfolio_table account_detail content figures roth_form specimen].map do |name|
+  *%w[portfolio_table account_detail roth_form specimen].map do |name|
     ["pages/#{name}.sp", repo, Fixtures.for(name)]
   end,
   ['examples/portfolio/views/index.sp', portfolio, { portfolio: Fixtures.portfolio }],

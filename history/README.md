@@ -20,12 +20,9 @@ architecture.
 
 ## The three paper pages
 
-**[PORTFOLIO.md](PORTFOLIO.md)**, **[CONTENT.md](CONTENT.md)** and
-**[FIGURES.md](FIGURES.md)** were the evidence for the vocabulary *before there
-was code* — three real pages written on paper, each modelled on a view that
-already existed in this workspace. Wall counts across them went 3, 6, 1.
+The original three paper pages (`PORTFOLIO.md`, `CONTENT.md`, `FIGURES.md`) 
+were the evidence for the vocabulary *before there was code*. They were written
+on paper and modeled on views that already existed in this workspace.
 
-They are still held by `check_grammar.rb`, so they are green rather than inert.
-A draft of roadmap 0.2 proposed cutting them; moving them here was the
-reversible half of that decision, and the current roadmap's subtraction phase
-takes the question up again.
+They were moved here in Phase 0 and fully retired and deleted in Phase 6, as 
+their function was completely superseded by the living ports in `examples/`.

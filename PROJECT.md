@@ -6,12 +6,11 @@ status: IMPLEMENTATION - Roadmap 0.2 Phase 5 closed; states are marked by CSS no
 kind: project
 last_touched: 2026-09-10
 next_step: >-
-  Resume ROADMAP-0.2.md Phase 6 (subtraction) in a fresh session: the cut
-  list — meta, icon with its sprite and machinery, the three paper pages,
+  Continue ROADMAP-0.2.md Phase 6 (subtraction): meta and icon are retired.
+  Next on the cut list: the three paper pages (their fate is dan's reversible decision),
   orphaned style rules, duplicated documents — plus the two parked vitals
   rows (action at five arguments, vocabulary coverage) and Phase 5's prose
-  named-limits. HANDOFF.md's "What is next — Phase 6" carries the evidence
-  gathered on 2026-09-10.
+  named-limits.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
