@@ -46,28 +46,21 @@ class Phase4Test < Minitest::Test
 
   # --- content ----------------------------------------------------------
 
-  def test_note_badge_fact_snippet_and_icon
+  def test_note_badge_fact_and_snippet
     html = render(<<~PAGE, thing: { origin: 'dashboard', status: 'ok' })
       page thing
         note warning, "Careful."
         badge .status
         fact origin
         snippet ruby, "puts 1"
-        icon warning
     PAGE
     assert_includes html, '<p class="note note--warning">Careful.</p>'
     assert_includes html, '<span class="badge badge--ok">ok</span>'
     assert_includes html, '<dt>Origin</dt>'
     assert_includes html, '<dd>dashboard</dd>'
     assert_includes html, '<pre class="snippet snippet--ruby"><code>puts 1</code></pre>'
-    assert_includes html, 'class="icon icon--warning"'
   end
 
-  # `icon warning` and `icon .severity` name the same thing two ways.
-  def test_an_icon_may_be_named_or_arrive_as_data
-    html = render("page thing\n  icon .severity\n", thing: { severity: 'blocker' })
-    assert_includes html, 'class="icon icon--blocker"'
-  end
 
   def test_time_renders_machine_readable_alongside_human
     html = render("page thing\n  time .on\n", thing: { on: Date.new(2026, 8, 30) })

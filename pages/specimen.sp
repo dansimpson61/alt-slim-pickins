@@ -65,13 +65,13 @@ page specimen, "slim-pickins — every word"
         title "A compact card"
         list plain
           item
-            icon blocker
+            badge blocker
             text "Blocks the task outright."
           item
-            icon warning
+            badge warning
             text "Works, but costs the reader."
           item
-            icon polish
+            badge polish
             text "Cosmetic."
 
   section "Figures and code"

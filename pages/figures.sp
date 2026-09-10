@@ -22,7 +22,6 @@ page review, "Dashboard UI review"
         list plain
           each finding
             item
-              icon .severity
               badge .severity
               text .summary
               fact surface, surface.name
@@ -33,12 +32,12 @@ page review, "Dashboard UI review"
   section "Reading the severities"
     list plain
       item
-        icon blocker
+        badge blocker
         text "Blocks the task outright."
       item
-        icon warning
+        badge warning
         text "Works, but costs the reader."
       item
-        icon polish
+        badge polish
         text "Cosmetic."
 

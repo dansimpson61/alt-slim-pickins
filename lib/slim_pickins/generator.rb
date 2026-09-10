@@ -4,7 +4,7 @@ require 'cgi'
 require_relative 'inference'
 require_relative 'markdown'
 require_relative 'charting'
-require_relative 'icons'
+
 
 module SlimPickins
   # The HTML interpreter. It walks the tree of semantic nodes the Builder
@@ -202,7 +202,6 @@ end
       attrs[:head].each { |node| emit(node) }
       @out << '</head>'
       open_tag('body')
-      @out << Icons.sprite(attrs[:icons])
       full_tag('h1', attrs[:heading])
       children.each { |node| emit(node) }
       @out << '</body>'
@@ -213,9 +212,6 @@ end
       @out << %(<link rel="stylesheet" href="#{CGI.escapeHTML(attrs[:path])}">)
     end
 
-    def meta(attrs, _children)
-      @out << %(<meta name="#{attrs[:name]}" content="#{CGI.escapeHTML(attrs[:value].to_s)}">)
-    end
 
     def script(attrs, _children)
       @out << %(<script src="#{CGI.escapeHTML(attrs[:path])}"#{attrs[:defer] ? ' defer' : ''}></script>)
@@ -350,10 +346,6 @@ def tabs(attrs, children)
       void_tag('img', src: attrs[:src].to_s, alt: attrs[:alt].to_s, loading: 'lazy')
     end
 
-    def icon(attrs, _children)
-      @out << %(<svg class="icon icon--#{attrs[:name]}" aria-hidden="true">) +
-              %(<use href="#icon-#{attrs[:name]}"></use></svg>)
-    end
 
     def metric(attrs, _children)
       open_tag('div', class: token(:metric))
@@ -371,7 +363,7 @@ def tabs(attrs, children)
     # time. Tag, class and formatting all derive from the word; this is the
     # presentation the promoted words no longer carry in Ruby.
     SPAN_TAGS = { badge: 'span', money: 'span', percent: 'span', number: 'span', time: 'time' }.freeze
-    KNOWN_STATUSES = Icons::SYMBOLS.keys.freeze
+    KNOWN_STATUSES = %i[warning blocker polish ok error pending neutral].freeze
 
     def span(attrs, _children)
       base = attrs[:class_base] || :span

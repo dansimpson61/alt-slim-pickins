@@ -108,9 +108,7 @@ end
     def prune(...) = @builder.prune(...)
     def wrapped_in_layout(&block) = @builder.wrapped_in_layout(&block)
     def head_nodes = @builder.head_nodes
-    def sprite_symbols = @builder.sprite_symbols
     def in_head(node) = @builder.in_head(node)
-    def use_icon(name) = @builder.use_icon(name)
     def collection_for(name) = @builder.collection_for(name)
     def bind(name, value) = @builder.bind(name, value)
     def unbind(name) = @builder.unbind(name)

@@ -24,7 +24,6 @@ module SlimPickins
       @lines = []           # the sentence being evaluated, so an error can name it
       @contents = nil       # the page's own nodes, while a layout renders
       @head_nodes = []      # words that belong in <head>, wherever they are said
-      @icons_used = []      # so the sprite carries only the symbols a page uses
       define_app_words
     end
 
@@ -254,10 +253,8 @@ raise Error, "there is no word `#{name}`"
 
     def empty_active? = @empty_active
     def head_nodes = @head_nodes
-    def sprite_symbols = @icons_used.dup
 
     def in_head(node) = @head_nodes << node
-    def use_icon(name) = @icons_used << name
 
     def bind(name, value) = @bindings[name] = value
     def unbind(name) = @bindings.delete(name)

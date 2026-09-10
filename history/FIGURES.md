@@ -11,7 +11,7 @@ wrong for exactly that reason and nobody noticed until it appeared.
 
 ## The page
 
-```
+```slim
 page review, "Dashboard UI review"
   fact reviewed_on, .reviewed_on
   fact reviewer

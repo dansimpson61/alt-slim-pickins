@@ -96,20 +96,6 @@ Only a layout has one, and a layout must have exactly one. It is the single
 word that reuse needed: the chrome is written once, `contents` says where the
 page goes, and no page mentions the layout at all.
 
-### `meta`
-
-- **name** — a name
-- **content** — text or data, when there is any
-- **modifiers** — none
-- **children** — none
-- **subject** — unchanged
-- **infers** — `charset` and `viewport` are emitted by `page` without being
-  asked; naming them overrides the default
-- **renders** — `<meta>` in the head
-
-```
-meta description, "A directional Roth conversion sketch."
-```
 
 ### `stylesheet`
 
@@ -655,24 +641,6 @@ figure "The studio index, as it stands"
 
 Content is the caption and the child is the subject of it, which is the way
 round that lets a figure hold a chart or a listing rather than only an image.
-
-### `icon`
-
-- **name** — a name
-- **content** — text or data, when there is any
-- **modifiers** — none
-- **children** — none
-- **subject** — unchanged
-- **infers** — that it is decorative and hidden from screen readers unless it
-  is the only content of a control
-- **renders** — inline `<svg>`
-
-```
-icon warning
-```
-
-The names are the seven symbols the vocabulary ships — `warning`, `blocker`,
-`polish`, `ok`, `error`, `pending`, `neutral` — plus any an app adds.
 
 ### `metric`
 

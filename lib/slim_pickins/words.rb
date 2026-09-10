@@ -13,7 +13,7 @@ module SlimPickins
       heading = title || Inference.label(name)
 
       value, empty, body = about(name) { wrapped_in_layout(&@block) }
-      emit_node([:page, { heading: heading, head: head_nodes, icons: sprite_symbols,
+      emit_node([:page, { heading: heading, head: head_nodes,
                           favicon: favicon },
                  prune(body, empty)])
       value
@@ -26,10 +26,6 @@ module SlimPickins
       maps content: :path
     end
 
-    class Meta < Head
-      contract name: :name, content: true, shape: :document, lazy: []
-      maps content: :content
-    end
 
     class Script < Head
       contract content: true, modifiers: [:defer], shape: :document, lazy: []
@@ -225,17 +221,6 @@ def ___dummy
       maps content: :src
     end
 
-    class Icon < Word
-      contract name: :name, content: true, shape: :says, lazy: []
-
-      def evaluate
-      name, data = arguments(@args)
-      name ||= data
-      use_icon(name.to_s.to_sym)
-      emit_node([:icon, { name: name }, []])
-
-      end
-    end
 
     class Metric < Word
       contract name: :attribute, content: true, modifiers: [:as], shape: :says, lazy: []
