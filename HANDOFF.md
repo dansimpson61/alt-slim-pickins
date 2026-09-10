@@ -241,18 +241,39 @@ a paragraph; nesting stops at one level; alignment colons render unaligned.
 **Phase 6 is the last phase of roadmap 0.2** — the backward eye's final
 discipline: everything must have a consumer or go. The cut list is already
 drafted in ROADMAP-0.2.md: the three paper pages (half-retired to
-`history/`; their fate is dan's reversible half), `icon`'s circular evidence
-(its only users are on the cut list), `meta` with no sentence in any real
-page, any style rule the checker orphans, any document that duplicates
-another. The measure: usage counted before and after, cut and kept listed
-with reasons, everything still green. Phase 4 parked two vitals rows here —
-`action` at five arguments, and vocabulary coverage (54 of 69 on the table's
-corpus; the checker's wider corpus prints 66 of 69 since the studio joined).
-The prose named-limits above are candidates for the same conversation.
+`history/`; their fate is dan's reversible half), any style rule the checker
+orphans, any document that duplicates another. The measure: usage counted
+before and after, cut and kept listed with reasons, everything still green.
+Phase 4 parked two vitals rows here — `action` at five arguments, and
+vocabulary coverage (54 of 69 on the table's corpus; the checker's wider
+corpus prints 66 of 69 since the studio joined). The prose named-limits
+above are candidates for the same conversation.
+
+**Two names were audited before the knife, and their evidence is in the
+Phase 6 record (2026-09-10).** `meta` has no consumer in any of the six
+surfaces — `page` already infers the only two metas any real page declares
+(the dashboard's own head is exactly doctype, title, charset, viewport,
+stylesheet). `icon` is **superseded, not merely unused**: every state it
+marked is a class the markup already declares, so the stylesheet draws the
+marks now (`.note--warning`, `.badge--ok`, `.badge--error` — the studio's
+status page authors no glyph and ships no sprite), and with it go
+`Icons::SYMBOLS`, `use_icon`/`sprite_symbols`, `page`'s sprite emission, the
+`.icon` rules and `.item:has(> .icon)`. Two rotten claims retire with it: an
+unshipped symbol renders a silent empty box, and VOCABULARY promises apps may
+add symbols while `Icons::SYMBOLS` is frozen. If the paper pages survive,
+re-author them on the CSS marks.
+
+**The lesson worth carrying into Phase 6:** when a state is already a class
+in the markup, its presentation is CSS's job — reaching for a language
+mechanism there would have been the wrong layer, and the house's own
+precedence (Ruby > CSS > Stimulus > JS) already said so.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
-process — it serves old code until he restarts it.** The checkers' status
-page at `/status` re-runs the gate live on every visit.
+process — it serves whatever code it booted with, so restart it after pulling
+new work.** The checkers' status page at `/status` re-runs the gate live on
+every visit. A session that needs to look at the studio without touching
+dan's process can boot one on another port: `STUDIO_PORT=4581 ruby
+studio/app.rb`.
 
 ## How this project works
 
@@ -272,10 +293,10 @@ page at `/status` re-runs the gate live on every visit.
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-09: 261 tests / 1459 assertions / 0 failures in one
+  (re-measured 2026-09-10: 261 tests / 1506 assertions / 0 failures in one
   process — the dashboard's harness, which is the stronger one and worth
   running too: `ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f|
-  require "./#{f}" }'` — plus 886 sentences / 0 problems, 99 rules / 0
+  require "./#{f}" }'` — plus 887 sentences / 0 problems, 103 rules / 0
   problems, 69 words / 0 problems, 13 pages verified, 25 affordances /
   0 missing)
   **Set no environment variable to make this pass.** It used to need

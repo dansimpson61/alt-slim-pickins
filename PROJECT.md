@@ -2,15 +2,16 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Phase 5 closed (2026-09-09) — prose grew its three forms, the status page runs the gate live, dan's answer names both dashboard and studio md docs the next dogfood; Phase 6 subtraction is all that remains of roadmap 0.2
+status: IMPLEMENTATION - Roadmap 0.2 Phase 5 closed; states are marked by CSS now (the studio authors no glyph), meta and icon are audited and on Phase 6's cut list with evidence; Phase 6 subtraction is all that remains
 kind: project
 last_touched: 2026-09-10
 next_step: >-
-  Resume ROADMAP-0.2.md Phase 6 (subtraction): the cut list — the three
-  paper pages, icon's circular evidence, meta with no sentence in a real
-  page, orphaned style rules, duplicated documents — plus the two parked
-  vitals rows (action at five arguments, vocabulary coverage) and the prose
-  named-limits from Phase 5's record
+  Resume ROADMAP-0.2.md Phase 6 (subtraction) in a fresh session: the cut
+  list — meta, icon with its sprite and machinery, the three paper pages,
+  orphaned style rules, duplicated documents — plus the two parked vitals
+  rows (action at five arguments, vocabulary coverage) and Phase 5's prose
+  named-limits. HANDOFF.md's "What is next — Phase 6" carries the evidence
+  gathered on 2026-09-10.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -67,6 +68,14 @@ notes: >-
   /status now wears `icon .state` + `badge .state` — its first living
   consumer — with the severity palette given one home (badge and icon share
   the rule per severity, and the sprite ships only the symbol used).
+  Then the CSS-mark round (2026-09-10), on dan's call: a state's mark is
+  drawn by the stylesheet off the class the markup already declares, so
+  `note warning` grows its triangle and the status page's legs wear a tick
+  or a dot with no page authoring a glyph and no sprite shipped. That makes
+  `icon` superseded rather than merely unused, and it joins `meta` on
+  Phase 6's cut list with its evidence; the machinery to retire is
+  `Icons::SYMBOLS`, `use_icon`/`sprite_symbols`, `page`'s sprite emission,
+  the `.icon` rules and `.item:has(> .icon)`.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

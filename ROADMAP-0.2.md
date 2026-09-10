@@ -872,6 +872,19 @@ in real pages (+4: the studio exercises `box`, `form` and friends). The two
 rows Phase 4 parked — `action` at five arguments and vocabulary coverage —
 remain Phase 6's business.
 
+*The choices that made it possible, named as this phase asks.* **`prose`**
+grew exactly the three forms the documents use and stayed safe by
+construction. **Navigation** — `link` with `to:` and `active:`, settled
+against the exam's real page in Phase 4 — is what the studio's sidebar and
+every guide's cross-links are built from, and it needed nothing new here.
+**The free contract held:** a studio page passes a flat hash of locals and
+two plain classes answer it — `StudioDocs` for payloads, `StudioStatus` for
+the gate — with no ceremony beyond the app's own methods, because dogfood
+dies the day an app must write ceremony to be renderable. And **the gate**
+now holds the very pages the status page reports on: the studio joined
+`check_grammar`'s and `check_shape`'s corpora in the same round, and the
+status page's first compile was refused by the gate it displays.
+
 *Named limits, left for a future prose round or Phase 6:* a heading swallows
 the lines under it when the author left no blank line (6 places, pre-existing
 behaviour); a `---` line renders as a paragraph (35 places); nested lists
@@ -892,6 +905,36 @@ The backward eye's last discipline. Everything must have a consumer or go.
   of a dan decision), `icon`'s circular evidence (its only users are pages on
   the cut list), `meta` with no sentence in any real page, any style rule the
   checker orphans, any document that duplicates another.
+- **The two names Phase 5's close audited, with their evidence** (2026-09-10)
+  — `meta` and `icon` were asked *what would be the appropriate use of this,
+  in each of the six surfaces?* and the answer is now measured, not assumed:
+
+  **`meta` — no consumer in any surface.** `page` infers `charset` and
+  `viewport`; every real page in this ecosystem declares exactly those two and
+  nothing else (the dashboard's own `layout.slim` is the proof: its whole head
+  is doctype, title, charset, viewport, stylesheet — all inferred). The one
+  sentence `meta` ever had was VOCABULARY's own example, and a doc example is
+  not a consumer. What `meta` is for — a description, an `og:` tag — belongs to
+  a page that is crawled or shared, and none of the six is.
+
+  **`icon`, its sprite and the machinery around it — `Icons::SYMBOLS`,
+  `use_icon`/`sprite_symbols`, `page`'s sprite emission, the `.icon` rules and
+  `.item:has(> .icon)` — superseded, not merely unused.** Its only authored
+  users were the two paper pages (`figures.sp`'s severity rows, `specimen.sp`'s
+  legend), and every state it marked is a class the markup already declares:
+  the stylesheet draws the marks now (`note--warning`, `badge--ok`,
+  `badge--error`, 2026-09-10), so the studio's status page authors no glyph at
+  all and ships no sprite. Two claims the cut retires with it: `icon` renders a
+  **silent empty box** for any name the vocabulary does not ship (including a
+  typo), and VOCABULARY says apps may add symbols while `Icons::SYMBOLS` is
+  frozen with no registration path. If the paper pages survive the knife
+  instead, they must be re-authored on the CSS marks — the vocabulary's own
+  `icon` sentence is the thing being weighed, not the appearance.
+
+  Phase 5's named-limits (a heading swallows the lines under it; `---` renders
+  as a paragraph; nesting stops at one level; alignment colons render
+  unaligned) are candidates for the same conversation — each is a form the
+  documents almost use.
 - **The measure** `agent` — usage counted before and after, cut and kept
   listed with reasons, everything still green.
 

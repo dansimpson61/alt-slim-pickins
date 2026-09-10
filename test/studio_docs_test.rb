@@ -89,9 +89,10 @@ class StudioDocsTest < Minitest::Test
     assert_includes html, '1 of 2 legs red.'
     assert_includes html, 'Grammar'
     assert_includes html, '<pre><code>0 problems', 'the leg output renders as a fence'
-    # The state arrives as data and is said twice: the decorative icon and
-    # the badge a screen reader hears.
-    assert_includes html, 'icon--ok'
+    # The state is a badge whose class the stylesheet marks — the page
+    # authors no glyph at all, which is the whole point of the CSS mark.
+    assert_includes html, 'badge--ok'
     assert_includes html, 'badge--error', 'the red leg wears its state'
+    refute_includes html, 'class="icon', 'the status page authors no icon'
   end
 end

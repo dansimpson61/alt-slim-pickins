@@ -41,9 +41,14 @@
   --gap: calc(var(--step) * 3);
   --gap-loose: calc(var(--step) * 6);
   --radius: calc(var(--step) * 2);
+  --radius-round: 50%;
   --rule-width: 1px;
   --focus-width: 2px;
   --marker-width: 2px;
+  /* A state's mark — the triangle, tick or cross a severity draws for
+     itself. Sized in em so it follows the text it marks. */
+  --mark-size: 0.6em;
+  --mark-weight: 2px;
   --measure: 68ch;
   --sidebar-width: 250px;
   --chrome-height: 120px;
@@ -244,7 +249,47 @@ summary { cursor: pointer; color: var(--accent); }
 .icon--pending, .icon--warning, .icon--polish { color: var(--caution); }
 .badge--error, .badge--blocker, .icon--error, .icon--blocker { color: var(--negative); }
 .badge--neutral, .icon--neutral { color: var(--ink-soft); }
-.badge--neutral { color: var(--ink-soft); }
+
+/* A state's mark is drawn here, off the class the markup already declares —
+   `.note--warning`, `.badge--ok`. No page authors a glyph to say a state,
+   no word needs a variant-to-symbol mechanism, and a state with no rule
+   draws nothing: `note quiet` and a bare `note` are unmarked by
+   construction, and no symbol can be asked for that does not exist. */
+.note--warning::before,
+.badge--ok::before,
+.badge--error::before {
+  content: "";
+  display: inline-block;
+  margin-right: var(--step);
+}
+
+/* warning: a triangle */
+.note--warning::before {
+  width: 0;
+  height: 0;
+  border-left: var(--mark-size) solid transparent;
+  border-right: var(--mark-size) solid transparent;
+  border-bottom: var(--mark-size) solid currentColor;
+}
+
+/* ok: a tick */
+.badge--ok::before {
+  width: var(--mark-size);
+  height: calc(var(--mark-size) / 2);
+  border-left: var(--mark-weight) solid currentColor;
+  border-bottom: var(--mark-weight) solid currentColor;
+  transform: rotate(-45deg);
+}
+
+/* error: a dot — a cross would need two shapes or a second copy of the
+   sprite's path, and the badge already says "error" in words */
+.badge--error::before {
+  width: var(--mark-size);
+  height: var(--mark-size);
+  border-radius: var(--radius-round);
+  background: currentColor;
+  vertical-align: middle;
+}
 
 .fact { display: flex; gap: var(--step); margin: 0 0 var(--step); font-size: var(--size-small); }
 .fact dt { color: var(--ink-faint); }
