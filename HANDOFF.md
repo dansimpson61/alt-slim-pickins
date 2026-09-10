@@ -14,6 +14,9 @@ Resume work on `~/dev/alt-slim-pickins`.
 4. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
 5. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
 6. `LORE.md` — what previous sessions *learned*; the last entries are this session's
+7. `working-with-dan.md` — candid notes on working with him: what his
+   questions mean, what lands, what does not. It is short, it is honest, and
+   **it is yours to keep true** — updating it is part of the round.
 
 Root holds what you read. `history/` is roadmap 0.1, consulted, not maintained;
 `roth/` is notes on a different project. Don't re-derive any of the above in
@@ -307,7 +310,9 @@ studio/app.rb`.
   the numbers live in ROADMAP-0.2.md Phase 3's record.
 - **RIF loop per round**: implement → verify → commit with an intention-revealing
   message → update `PROJECT.md` `next_step` → post lore
-  (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars).
+  (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars) → update
+  `working-with-dan.md` if the round taught you something about working with
+  him.
   **Do this per round, not at the end of the session** — dan restated it
   2026-09-06: *"I don't have another way to know what should be done with
   git."* He is not reading `git status`, so unnamed git state is invisible

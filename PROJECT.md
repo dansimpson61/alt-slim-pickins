@@ -76,6 +76,9 @@ notes: >-
   Phase 6's cut list with its evidence; the machinery to retire is
   `Icons::SYMBOLS`, `use_icon`/`sprite_symbols`, `page`'s sprite emission,
   the `.icon` rules and `.item:has(> .icon)`.
+  working-with-dan.md (2026-09-10) is the agents' manual for working with
+  dan — candid, dated, evidence-anchored, and part of the per-round
+  housekeeping (HANDOFF.md's RIF loop and reading list both name it).
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

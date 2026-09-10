@@ -1,0 +1,123 @@
+# Working with dan
+
+**For agents.** Candid notes on working with dan: what he asks for, what he
+actually wants, what wastes his time and what earns it. Not a contract — a
+working manual that should be better after every session than it was before.
+
+## Instructions — read first, and improve me
+
+1. **Read this before you plan anything.** It is two minutes and it changes
+   decisions. Then read `HANDOFF.md`'s list.
+2. **Record, don't characterise.** One dated, specific observation beats a
+   paragraph of personality. Say what happened and what he did.
+3. **Evidence, or a marked guess.** Cite the source (a `LORE.md` entry, a
+   commit, `observed 2026-09-10`) or write `guess:` in front of it. His own
+   rule applies here first: verify before asserting.
+4. **Candid means useful, not snarky.** He asked for this doc to include what
+   pisses him off. Write what you would tell the next agent in the doorway,
+   not what reads well.
+5. **Delete as eagerly as you add.** A note that stopped being true is worse
+   than no note. When he contradicts one, fix it in that session and say so.
+6. **These instructions are draft material.** If a different shape gets more
+   out of this doc — fewer sections, a checklist, half the length — rewrite
+   them and say why in the commit. Maximising this doc's efficacy is the
+   standing instruction; nothing here is sacred.
+7. **Update it in the housekeeping pass of every round**, beside `PROJECT.md`
+   and lore. An observation that stays in your head is lost.
+
+## What he is actually doing when he asks
+
+- **His questions are audits, not chit-chat.** Nearly every recorded
+  "dan asked whether…" ended in a found defect: an over-claimed measurement
+  (`LORE.md`, "the five visual defects… reachable from the theme surface"),
+  three words that copied one gathering mechanism (`LORE.md`, "how we keep the
+  language lovely as it grows"), two crashes in five minutes of probing
+  (`LORE.md`, "whether the strong principles were hiding fragile
+  foundations"), his own hypothesis about icons and markdown saving `prose`
+  from a bad cut (`LORE.md`, "whether the dashboard uses icons and markdown").
+  Treat a question as an instruction to go measure. The worst possible answer
+  is a reassuring one.
+- **He is the decision-maker for judgement; you are not.** Renames, cuts,
+  promotions, the exam's page, the push: he decides, you bring evidence plus a
+  recommendation (`ROADMAP-0.2.md`, *How this stays accountable*;
+  `HANDOFF.md`, *What was Phase 4*). Say "dan's call" where it is one, and
+  don't slip it back to him when it isn't.
+- **He proposes simpler layers and is usually right.** 2026-09-10: his "should
+  we solve this with more creative use of CSS?" overturned an agent's
+  recommendation of a new language mechanism — the house's own precedence
+  (Ruby > CSS > Stimulus > JS) already said so. Check his framing against the
+  house rules before defending yours.
+- **He judges by looking.** He sent a screenshot of the studio rendering badly
+  rather than describing it. Treat a paste or screenshot as a bug report with
+  evidence attached, and go verify the exact bytes he is seeing — the cause
+  that time was a server running old code, not the code itself.
+
+## What lands well
+
+- **Measured answers that state their coverage.** "887 sentences, 103 rules,
+  13 pages, 0 problems" plus what was covered; "I did not look at X" when you
+  did not.
+- **A status report that names the uncomfortable findings too.** A Phase 5
+  assessment that led with measured status *and* flagged the uncommitted lore
+  entry and a stale vitals table drew "Very good." (observed 2026-09-10). The
+  findings are the value; a report without them is a status bar.
+- **Correcting your own work out loud.** The lore is full of the agent's own
+  mistakes, in its own voice, and it is preserved rather than punished
+  (`LORE.md`, "a word could take a subject *or* just a label"; "the five
+  visual defects… reachable from the theme surface"; "how we keep the language
+  lovely as it grows"). Owning a wrong claim is cheaper than having him find
+  it.
+- **Refusing to build what has no consumer.** "meta has no consumer in any of
+  the six surfaces" landed; a mechanism invented for one hypothetical use
+  would not have.
+- **Recording the decision where the next reader will find it** — roadmap
+  round record, `PROJECT.md`, lore — instead of only in the conversation.
+- **Working the RIF loop per round without being reminded**: implement →
+  verify → commit → card → lore. He restated this once already
+  (`HANDOFF.md`, *How this project works*); a second reminder means the agent
+  was not reading.
+
+## What does not land
+
+- **Claiming green that is not green**, or a suite that only passes with an
+  environment variable exported (`HANDOFF.md`, *How this project works*). A
+  passing test that proves nothing is worse than a failing one.
+- **Unmeasured or re-quoted numbers.** "Three of the project's own figures were
+  understated… a number written once gets re-quoted, not re-measured"
+  (`LORE.md`, "what part of speech each of the fifty words is"). Measure, and
+  say what the measurement covered.
+- **Unnamed git state.** Uncommitted work is invisible to him — he does not
+  read `git status`; the commit message is how he learns what happened.
+- **Density that does not carry its own context.** A one-line option in a
+  summary ("needs a variant→symbol constraint") drew *"I don't understand your
+  note number 2"* (observed 2026-09-10). The fix was not fewer words but more
+  context: the mechanism, the failure it causes, and a worked example. He
+  reads closely and stops on a sentence that assumes you were in his head.
+- **Reassurance instead of investigation.** See the first section.
+- **Building for imagined futures**, and keeping a rule whose reason died
+  (`ROADMAP-0.2.md` constraint 3). He will ask what it buys; have the answer.
+- **Absorbing a project convention silently.** Where the house and the Ode
+  disagree, name the divergence once, out loud, and let him rule.
+
+## Tells and habits
+
+- **Terse prompts, high trust.** "Let's resume." "yes, land it as a round and do
+  the housekeeping." He expects the docs to carry the context; re-deriving it
+  in conversation wastes the turn.
+- **He answers questions in his own words**, not necessarily the options
+  offered — asked to choose, he wrote "Both the dashboard's md docs and the
+  studio's md docs." Offer options, but leave room for the sentence.
+- **He intervenes at the layer below the symptom.** A formatting complaint was
+  really a stale process; a question about icons turned into a Phase 6 cut.
+- **He restates an instruction rather than arguing about it.** The restatement
+  *is* the correction — take it as final and change the behaviour, not the
+  wording.
+- **He likes the lore format** — a lesson, not a status report. What you did
+  goes in the commit; what you learned goes in the lore.
+
+## Open questions — watch these, do not guess
+
+- What he wants from a roadmap *review* (as opposed to a round) — untested.
+- Whether he wants this doc machine-wide (`~/dev/`) rather than per-project.
+  Written in `alt-slim-pickins` on 2026-09-10 because that was the workspace in
+  reach; it is about him, not this project.
