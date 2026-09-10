@@ -236,9 +236,14 @@ summary { cursor: pointer; color: var(--accent); }
   color: var(--ink-soft);
   font-size: var(--size-small);
 }
-.badge--ok { color: var(--positive); }
-.badge--pending, .badge--warning, .badge--polish { color: var(--caution); }
-.badge--error, .badge--blocker { color: var(--negative); }
+/* The severity palette is one scheme, and a badge and its icon wear the
+   same word: .badge--ok beside .icon--ok. One rule per severity, two
+   selectors — the mapping has one home. */
+.badge--ok, .icon--ok { color: var(--positive); }
+.badge--pending, .badge--warning, .badge--polish,
+.icon--pending, .icon--warning, .icon--polish { color: var(--caution); }
+.badge--error, .badge--blocker, .icon--error, .icon--blocker { color: var(--negative); }
+.badge--neutral, .icon--neutral { color: var(--ink-soft); }
 .badge--neutral { color: var(--ink-soft); }
 
 .fact { display: flex; gap: var(--step); margin: 0 0 var(--step); font-size: var(--size-small); }
@@ -270,8 +275,7 @@ summary { cursor: pointer; color: var(--accent); }
 }
 
 .icon { width: var(--icon-size); height: var(--icon-size); vertical-align: var(--icon-shift); fill: currentColor; }
-.icon--warning, .icon--polish { color: var(--caution); }
-.icon--blocker { color: var(--negative); }
+/* The icon's colors live with the badge's, in the severity palette above. */
 
 time { color: var(--ink-soft); }
 

@@ -26,6 +26,11 @@ module StudioStatus
     # The page renders each leg's output through prose, in a fence — the
     # language's own code-block form, grown in this same phase.
     def fenced = "```text\n#{output}```"
+
+    # The leg's state, as data: the page says `icon .state` and
+    # `badge .state`, never a conditional. The icon is decorative by
+    # contract, so the badge is what a screen reader hears.
+    def state = ok ? 'ok' : 'error'
   end
 
   def self.run

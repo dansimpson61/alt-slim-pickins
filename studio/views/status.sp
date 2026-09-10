@@ -6,4 +6,8 @@ page .title
       prose plain, .overview
       each result
         section .name
+          list plain
+            item
+              icon .state
+              badge .state
           prose markdown, .fenced

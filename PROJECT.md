@@ -4,7 +4,7 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: IMPLEMENTATION - Phase 5 closed (2026-09-09) — prose grew its three forms, the status page runs the gate live, dan's answer names both dashboard and studio md docs the next dogfood; Phase 6 subtraction is all that remains of roadmap 0.2
 kind: project
-last_touched: 2026-09-09
+last_touched: 2026-09-10
 next_step: >-
   Resume ROADMAP-0.2.md Phase 6 (subtraction): the cut list — the three
   paper pages, icon's circular evidence, meta with no sentence in a real
@@ -60,6 +60,13 @@ notes: >-
   dogfood target (read-only, untouched), and the studio's curated guides
   grew README, ROADMAP-0.2, HANDOFF and DAYTRIP. Phase 5 is closed; the
   round record stands in ROADMAP-0.2.md.
+  Phase 6 prep (2026-09-10) — the meta/icon audit: `meta` has no consumer in
+  any of the six surfaces (the real dashboard's whole head is the charset
+  and viewport `page` already infers), so it is the first name on the cut
+  list; `icon`'s only consumers were the paper pages, and the studio's
+  /status now wears `icon .state` + `badge .state` — its first living
+  consumer — with the severity palette given one home (badge and icon share
+  the rule per severity, and the sprite ships only the symbol used).
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
