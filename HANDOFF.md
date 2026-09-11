@@ -255,6 +255,22 @@ every visit. A session that needs to look at the studio without touching
 dan's process can boot one on another port: `STUDIO_PORT=4581 ruby
 studio/app.rb`.
 
+## Comprehensive Housekeeping Protocol (The RIF Loop)
+
+This protocol is fragmented across several system rules. **You must execute every step of this loop per round, not at the end of the session.** Unnamed git state is invisible to dan; if you do not do this, he cannot see your work.
+
+1. **Implement & Verify**: Make your changes and ensure the suite is 100% green (see below).
+2. **Commit**: Leave the tree clean. Commit with an intention-revealing message. (Push only when dan says so).
+3. **Update `PROJECT.md`**: Update `status`, `last_touched`, and advance the `next_step` to the current phase.
+4. **Validate `PROJECT.md` YAML**: The dashboard fails silently if the YAML is invalid (like unquoted colon-spaces). You MUST verify the frontmatter parses:
+   `ruby -ryaml -e 'YAML.safe_load(File.read("PROJECT.md")[/\A---\n(.*?)\n---/m, 1], permitted_classes: [Date])'`
+5. **Update the Roadmap**: Record your findings, decisions, and any phase completions in the active `ROADMAP-*.md` document.
+6. **Update `working-with-dan.md`**: If the round taught you *anything* about working with dan (his preferences, tells, strictures), update the agent manual.
+7. **Record Lore**: POST what you *learned* (not just what you did) to the ecosystem's memory: 
+   `curl -X POST http://127.0.0.1:4000/api/lore/alt-slim-pickins -H 'Content-Type: application/json' -d '{"message":"...", "who":"Antigravity"}'`
+8. **Report to Journal**: POST a brief status update to the machine API:
+   `curl -X POST http://127.0.0.1:4000/api/journal -H 'Content-Type: application/json' -d '{"message":"..."}'`
+
 ## How this project works
 
 - **Verify before asserting.** Never state a count without measuring it and
@@ -285,24 +301,6 @@ studio/app.rb`.
   something exported, that is the bug, not the workaround.
 - **The cost, re-measured**: `ruby bin/measure_cost.rb` — the instrument;
   the numbers live in ROADMAP-0.2.md Phase 3's record.
-- **RIF loop per round**: implement → verify → commit with an intention-revealing
-  message → update `PROJECT.md` `next_step` → post lore
-  (`POST /api/lore/alt-slim-pickins`; lore entries max 2000 chars) → update
-  `working-with-dan.md` if the round taught you something about working with
-  him.
-  **Do this per round, not at the end of the session** — dan restated it
-  2026-09-06: *"I don't have another way to know what should be done with
-  git."* He is not reading `git status`, so unnamed git state is invisible
-  state. **Commit per round; push only when dan says so** — the push is his,
-  and it is the one part of the loop that is not the agent's to take.
-- **`PROJECT.md` frontmatter is real YAML, and the dashboard fails silently on
-  it.** If it does not parse, `/brief` returns `Status: unknown` with every
-  field `-`, while health, anatomy, lore and the DIRTY flag keep rendering — so
-  a broken card is indistinguishable from an empty one. This project sat that
-  way for weeks: `notes:` was an unquoted multi-line scalar containing
-  colon-space ("the filter: seam in render"), which Psych refuses. Prose fields
-  are folded block scalars (`>-`) now. After editing the card, check it:
-  `ruby -ryaml -e 'YAML.safe_load(File.read("PROJECT.md")[/\A---\n(.*?)\n---/m, 1], permitted_classes: [Date])'`
 - Report honestly: failures verbatim, limits named, no claim of green that isn't.
 
 ## Standing principles — do not break without saying so
