@@ -127,6 +127,9 @@ working manual that should be better after every session than it was before.
 
 ## Tells and habits
 
+- **He prefers outcome-oriented mandates over prescribed activities.** When proposing a workflow or skill, focus on the required outcomes (e.g., "transparent rationale", "empirical success") rather than dictating the exact mechanical steps or tools (observed 2026-09-10).
+- **In a DSL, elegance *is* correctness.** While standard backend Ruby might tolerate mechanical code if it works, a DSL must read like human prose. He vetoed a functional but ugly refactor because it stuttered, stating: "We make machines understand humans. We don't ask humans to speak to machines in the machine's language." Ugliness here is a defect (observed 2026-09-10).
+
 - **Terse prompts, high trust.** "Let's resume." "yes, land it as a round and do
   the housekeeping." He expects the docs to carry the context; re-deriving it
   in conversation wastes the turn.

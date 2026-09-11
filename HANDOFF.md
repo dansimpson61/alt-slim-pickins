@@ -241,37 +241,12 @@ Named limits, left for a future prose round or Phase 6: headings swallow
 body lines when the author left no blank line (6 places); `---` renders as
 a paragraph; nesting stops at one level; alignment colons render unaligned.
 
-## What is next — Phase 6, subtraction
+## What is next — Roadmap 0.3
 
-**Phase 6 is the last phase of roadmap 0.2** — the backward eye's final
-discipline: everything must have a consumer or go. The cut list is already
-drafted in ROADMAP-0.2.md: the three paper pages (half-retired to
-`history/`; their fate is dan's reversible half), any style rule the checker
-orphans, any document that duplicates another. The measure: usage counted
-before and after, cut and kept listed with reasons, everything still green.
-Phase 4 parked two vitals rows here — `action` at five arguments, and
-vocabulary coverage (54 of 69 on the table's corpus; the checker's wider
-corpus prints 66 of 69 since the studio joined). The prose named-limits
-above are candidates for the same conversation.
+**Phase 6 (Subtraction) is complete, officially closing Roadmap 0.2.**
+The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `action` primitive is refactored, and Phase 5's prose named-limits (`---`, heading boundaries, table alignment colons, and deeply nested lists) are fully natively supported by `prose` (because we discovered they were genuinely needed for structural clarity, validating that we shouldn't strip them).
 
-**Two names were audited before the knife, and their evidence is in the
-Phase 6 record (2026-09-10).** `meta` has no consumer in any of the six
-surfaces — `page` already infers the only two metas any real page declares
-(the dashboard's own head is exactly doctype, title, charset, viewport,
-stylesheet). `icon` is **superseded, not merely unused**: every state it
-marked is a class the markup already declares, so the stylesheet draws the
-marks now (`.note--warning`, `.badge--ok`, `.badge--error` — the studio's
-status page authors no glyph and ships no sprite), and with it go
-`Icons::SYMBOLS`, `use_icon`/`sprite_symbols`, `page`'s sprite emission, the
-`.icon` rules and `.item:has(> .icon)`. Two rotten claims retire with it: an
-unshipped symbol renders a silent empty box, and VOCABULARY promises apps may
-add symbols while `Icons::SYMBOLS` is frozen. If the paper pages survive,
-re-author them on the CSS marks.
-
-**The lesson worth carrying into Phase 6:** when a state is already a class
-in the markup, its presentation is CSS's job — reaching for a language
-mechanism there would have been the wrong layer, and the house's own
-precedence (Ruby > CSS > Stimulus > JS) already said so.
+**The next step is drafting Roadmap 0.3.** Roadmap 0.2 was an even-numbered roadmap (the backward eye); Roadmap 0.3 will be the forward eye. Review `README.md` on "How roadmaps go", consider the discoveries from Phase 6, and propose the next grand question for `alt-slim-pickins`.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
 process — it serves whatever code it booted with, so restart it after pulling
