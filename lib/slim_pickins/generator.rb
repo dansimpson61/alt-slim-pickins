@@ -145,8 +145,7 @@ end
 
     private
 
-    # Elements that may not carry a closing tag — an app word building
-    # `tag(:img, ...)` must get what the built-in `image` word gets.
+    # Elements that may not carry a closing tag.
     VOID = %w[area base br col embed hr img input link meta param source track wbr].freeze
 
     def emit(node)
@@ -342,9 +341,7 @@ def tabs(attrs, children)
       @out << "</iframe>"
     end
 
-    def image(attrs, _children)
-      void_tag('img', src: attrs[:src].to_s, alt: attrs[:alt].to_s, loading: 'lazy')
-    end
+
 
 
     def metric(attrs, _children)

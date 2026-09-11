@@ -216,10 +216,6 @@ def ___dummy
       contract name: :name, modifiers: [:src, :srcdoc, :width, :height], shape: :presents, lazy: []
     end
 
-    class Image < Says
-      contract content: true, modifiers: [:alt], shape: :presents
-      maps content: :src
-    end
 
 
     class Metric < Word

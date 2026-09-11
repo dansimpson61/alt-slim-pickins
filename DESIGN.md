@@ -38,7 +38,7 @@ Every part is optional. The order never varies.
 | `"string"` | literal text | `note "Saved."` |
 | `.property` | the current subject's data | `title .name` |
 | `binding.property` | a local's or helper's data | `note order.number` |
-| `key: value` | modifier | `image .url, alt: .name` |
+| `key: value` | modifier | `badge .state, shape: .type` |
 | *indented block* | children | |
 
 ### Morphology: a dot means data, a bare word is language
@@ -192,7 +192,7 @@ page products
     grid cards
       each product
         card
-          image .image_url, alt: .name
+          text .sku
           title .name
           money .price
           actions

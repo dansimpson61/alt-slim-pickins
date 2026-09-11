@@ -390,8 +390,7 @@ time { color: var(--ink-soft); }
 .paragraph { margin: 0 0 var(--step); }
 .box { display: block; }
 .heading { margin: 0 0 var(--step); }
-.thumbnails { display: grid; gap: var(--gap); }
-.thumb { max-width: 100%; }
+
 .action { display: inline; }
 .flash { margin: 0 0 var(--step); }
 .search { display: block; }

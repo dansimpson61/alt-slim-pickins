@@ -33,7 +33,7 @@ class Phase4Test < Minitest::Test
           item "One"
         aside
           figure "A caption"
-            image "/a.png", alt: "A"
+
     PAGE
     # `columns:` is floored at `--track-min`. A bare `calc(100% / n)` scales
     # with its container, so it yields n columns at every width and the grid
@@ -45,7 +45,7 @@ class Phase4Test < Minitest::Test
     assert_includes html, '<ul class="list list--plain">'
     assert_includes html, '<li class="item">One</li>'
     assert_includes html, '<figcaption>A caption</figcaption>'
-    assert_includes html, '<img src="/a.png" alt="A" loading="lazy">'
+
   end
 
   # --- content ----------------------------------------------------------

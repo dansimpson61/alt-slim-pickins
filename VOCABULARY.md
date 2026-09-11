@@ -610,20 +610,6 @@ time relative, .updated_at
 
 The variants are `date`, `datetime` and `relative`.
 
-### `image`
-
-- **name** — none
-- **content** — text or data, when there is any
-- **modifiers** — `alt:`
-- **children** — none
-- **subject** — unchanged
-- **infers** — lazy loading; dimensions when the app can supply them
-- **renders** — `<img>`
-
-```
-image .image_url, alt: .name
-```
-
 ### `figure`
 
 - **name** — none
@@ -1093,39 +1079,6 @@ that took no children has nothing to splice, and says so.
 
 ```
 children
-```
-
-### `thumbnails`
-
-- **name** — the variant
-- **content** — text or data, when there is any
-- **modifiers** — none
-- **children** — `thumb`
-- **subject** — unchanged
-
-A gallery: the page declares its thumbs, the word gathers them, then lays
-them out in a grid. Written entirely in the language — its file in
-lib/vocabulary is the word, and its preamble is the declaration.
-
-```
-thumbnails
-  thumb .url
-```
-
-### `thumb`
-
-- **name** — none
-- **content** — text or data, when there is any
-- **modifiers** — none
-- **children** — none
-- **subject** — unchanged
-
-One declared image of a `thumbnails`. It registers rather than renders, so
-the gallery can gather every thumb before laying any out.
-
-```
-thumbnails
-  thumb .url
 ```
 
 ### `paragraph`

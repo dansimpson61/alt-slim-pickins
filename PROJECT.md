@@ -6,8 +6,7 @@ status: IMPLEMENTATION - Action primitive 5-arg outlier refactored into scoped a
 kind: project
 last_touched: 2026-09-10
 next_step: >-
-  Review and commit council refactoring of action/actions and COMMUNITY_BULLETIN_BOARD.md;
-  continue ROADMAP-0.2 Phase 6 remaining subtraction (orphaned style rules, duplicated documents).
+  Continue ROADMAP-0.2 Phase 6 remaining subtraction (orphaned style rules checked and clear, design_conventions.md deleted). Next up: vocabulary coverage (thumb/thumbnails) and Phase 5's prose named-limits.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
