@@ -343,7 +343,7 @@ def ___dummy
     end
 
     class Form < Word
-      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea], subject: :shift, shape: :encloses, lazy: []
+      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose], subject: :shift, shape: :encloses, lazy: []
 
       def evaluate
         to = @kwargs.key?(:to) ? @kwargs[:to] : nil

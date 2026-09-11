@@ -47,7 +47,15 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
           target.collect(nodes)
           nodes
         else
-          with_splice(prune(capture(&@block), empty_active?)) do
+          captured =
+            if @kwargs.any?
+              chain.with(@kwargs, described_as: "this #{self.class.partial_name}", overlay: true) do
+                prune(capture(&@block), empty_active?)
+              end
+            else
+              prune(capture(&@block), empty_active?)
+            end
+          with_splice(captured) do
             evaluate_body(evaluate_proc, parameters, self.class.partial_name, push, contract)
           end
         end
@@ -81,11 +89,18 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
 
     def parameters_for(contract, name, content, kwargs)
       return { content: content, name: name }.merge(kwargs) unless contract
+
       declared = {}
-      contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
+      contract.modifiers.each do |modifier|
+        if kwargs.key?(modifier)
+          declared[modifier] = kwargs[modifier]
+        else
+          found, val = chain.container_value(modifier)
+          declared[modifier] = found ? val : nil
+        end
+      end
       declared[:name] = name if contract.name != :none
       declared[:content] = content if contract.content
-      contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
       declared[:id] = @builder.send(:card_id) if contract.id
       declared[:label] = label_for(name, content) if contract.label
       declared

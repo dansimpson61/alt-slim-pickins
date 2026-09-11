@@ -368,3 +368,11 @@ working-with-dan.md created (2026-09-10) at dan's request: a candid, agent-facin
 ## 2026-09-10 — Antigravity
 
 Phase 6 subtraction begins: meta and icon are retired. meta had no consumers in any surface since charset and viewport are inferred. icon was superseded by CSS drawing marks directly on the badge class (.badge--ok, etc), so Icons::SYMBOLS and its machinery are gone. The paper pages were updated to use badge instead.
+
+## 2026-09-10 — Antigravity
+
+Phase 6 subtraction: deleted the original three paper pages (portfolio.sp, content.sp, figures.sp) and their historical documentation. They were foundational for testing the vocabulary, but are now dead weight since the actual apps in examples/ exercise almost the entire vocabulary better and idiomatically with partials.
+
+## 2026-09-10 — Council Sentinel
+
+The 5-argument action outlier was refactored by the Ruby luminaries council into a scoped actions container with generic Subject overlay parameter scoping. Standalone and nested actions now inherit context without leaking into domain models or framework helpers.

@@ -349,8 +349,8 @@ card compact
 
 - **name** — none
 - **content** — none
-- **modifiers** — none
-- **children** — `link`, `button`
+- **modifiers** — `path:`, `return_to:`
+- **children** — anything
 - **subject** — unchanged
 - **infers** — that its children are the operations on the enclosing thing;
   their layout and spacing
@@ -800,7 +800,7 @@ button "Show baseline", to: baseline
 - **name** — the subject this word presents; it must be there
 - **content** — none
 - **modifiers** — `to:`, `method:`, `target:`
-- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`
 - **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`
@@ -1040,7 +1040,7 @@ Predictions from the spec, and what actually happened.
 
 - **name** — none
 - **content** — text or data, when there is any
-- **modifiers** — `to:`, `path:`, `return_to:`, `variant:`
+- **modifiers** — `to:`, `path:`, `return_to:`, `variant:`, `status:`
 - **children** — none
 - **subject** — unchanged
 

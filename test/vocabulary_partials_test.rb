@@ -35,6 +35,41 @@ class VocabularyPartialsTest < Minitest::Test
     end
   end
 
+  def test_action_inherits_path_and_return_to_from_enclosing_actions_container
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          actions path: .name, return_to: "/triage"
+            action "Commit", to: "/actions/commit", variant: primary
+            action "Archive", to: "/actions/archive", variant: neutral
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
+      assert_includes html, '<div class="actions">'
+      assert_includes html, '<form class="form" action="/actions/commit" method="post">'
+      assert_includes html, '<form class="form" action="/actions/archive" method="post">'
+      assert_equal 2, html.scan('<input type="hidden" name="path" value="ode-to-joy">').size
+      assert_equal 2, html.scan('<input type="hidden" name="return_to" value="/triage">').size
+      refute_includes html, 'name="status"'
+    end
+  end
+
+  def test_action_emits_status_when_specified
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          actions path: .name, return_to: "/triage"
+            action "Set dormant", to: "/actions/status", status: "dormant", variant: neutral
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
+      assert_includes html, '<form class="form" action="/actions/status" method="post">'
+      assert_includes html, '<input type="hidden" name="status" value="dormant">'
+      assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
+      assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
+    end
+  end
+
   def test_an_app_may_not_redefine_a_vocabulary_partial
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, 'partials'))
@@ -129,6 +164,107 @@ class VocabularyPartialsTest < Minitest::Test
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { accounts: ['x'] } }, library: library_for(dir))
       refute_includes html, 'empty'
+    end
+  end
+
+  def test_action_standalone_without_contextual_parameters
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Log out", to: "/logout"\n))
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<form class="form" action="/logout" method="post">'
+      assert_includes html, '<button type="submit" class="button">Log out</button>'
+      refute_includes html, 'name="path"'
+      refute_includes html, 'name="return_to"'
+      refute_includes html, 'name="status"'
+    end
+  end
+
+  def test_action_with_only_path_modifier
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Delete", to: "/delete", path: "my-file"\n))
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<input type="hidden" name="path" value="my-file">'
+      refute_includes html, 'name="return_to"'
+    end
+  end
+
+  def test_action_with_only_return_to_modifier
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Back", to: "/back", return_to: "/home"\n))
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<input type="hidden" name="return_to" value="/home">'
+      refute_includes html, 'name="path"'
+    end
+  end
+
+  def test_bare_actions_container_enclosing_action
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          actions
+            action "Log out", to: "/logout"
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<div class="actions">'
+      assert_includes html, '<form class="form" action="/logout" method="post">'
+      refute_includes html, 'name="path"'
+      refute_includes html, 'name="return_to"'
+    end
+  end
+
+  def test_action_does_not_leak_enclosing_model_path
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page article
+          action "Like", to: "/like"
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { article: { title: "Joy", path: "/posts/1" } },
+                                library: library_for(dir))
+      refute_includes html, 'name="path"'
+      refute_includes html, '/posts/1'
+    end
+  end
+
+  def test_action_does_not_leak_sinatra_status_helper
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Save", to: "/save"\n))
+      helpers = Object.new
+      def helpers.status(_val = nil); 200; end
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, helpers: helpers, library: library_for(dir))
+      refute_includes html, 'name="status"'
+      refute_includes html, '200'
+    end
+  end
+
+  def test_generic_custom_container_parameter_inheritance
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, 'partials'))
+      File.write(File.join(dir, 'partials', 'custom_actions.sp'), <<~SP)
+        expects children: any, project_id: true, shape: encloses
+        box
+          children
+      SP
+      File.write(File.join(dir, 'partials', 'custom_action.sp'), <<~SP)
+        expects content: true, project_id: true, shape: encloses
+        box
+          choose
+            when .project_id
+              text .project_id
+          button .content
+      SP
+      code = <<~SP
+        page p
+          custom_actions project_id: "alpha-beta"
+            custom_action "Run"
+      SP
+      html = SlimPickins.render(code, path: 'test.sp', locals: { p: {} }, library: library_for(dir))
+      assert_includes html, 'alpha-beta'
     end
   end
 end

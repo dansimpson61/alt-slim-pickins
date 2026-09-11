@@ -2,15 +2,12 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Roadmap 0.2 Phase 5 closed; states are marked by CSS now (the studio authors no glyph), meta and icon are audited and on Phase 6's cut list with evidence; Phase 6 subtraction is all that remains
+status: IMPLEMENTATION - Action primitive 5-arg outlier refactored into scoped actions block with overlay parameter scoping; full suite green (22 files, 0 errors)
 kind: project
 last_touched: 2026-09-10
 next_step: >-
-  Continue ROADMAP-0.2.md Phase 6 (subtraction): meta and icon are retired.
-  Next on the cut list: the three paper pages (their fate is dan's reversible decision),
-  orphaned style rules, duplicated documents — plus the two parked vitals
-  rows (action at five arguments, vocabulary coverage) and Phase 5's prose
-  named-limits.
+  Review and commit council refactoring of action/actions and COMMUNITY_BULLETIN_BOARD.md;
+  continue ROADMAP-0.2 Phase 6 remaining subtraction (orphaned style rules, duplicated documents).
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

@@ -17,7 +17,9 @@ module SlimPickins
       @fallback = fallback
     end
 
-    attr_reader :object
+    attr_reader :object, :fallback
+
+    def overlay? = !@fallback.nil?
 
     def describe
       return 'nothing' if @object.nil?
@@ -137,5 +139,17 @@ module SlimPickins
     end
 
     def depth = @stack.size
+
+    def container_value(modifier)
+      curr = @stack.last
+      while curr&.fallback
+        if curr.object.is_a?(Hash)
+          return [true, curr.object[modifier]] if curr.object.key?(modifier)
+          return [true, curr.object[modifier.to_s]] if curr.object.key?(modifier.to_s)
+        end
+        curr = curr.fallback
+      end
+      [false, nil]
+    end
   end
 end

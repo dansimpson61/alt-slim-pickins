@@ -444,7 +444,14 @@ end
       declared = {}
       declared[:name] = name if contract.name != :none
       declared[:content] = content if contract.content
-      contract.modifiers.each { |modifier| declared[modifier] = kwargs[modifier] }
+      contract.modifiers.each do |modifier|
+        if kwargs.key?(modifier)
+          declared[modifier] = kwargs[modifier]
+        else
+          found, val = @chain.container_value(modifier)
+          declared[modifier] = found ? val : nil
+        end
+      end
       declared[:id] = card_id if contract.id
       declared[:label] = label_for(name, content) if contract.label
       declared

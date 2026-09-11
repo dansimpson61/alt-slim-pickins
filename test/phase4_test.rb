@@ -7,6 +7,10 @@ require_relative '../lib/slim_pickins'
 # Phase 4: the whole vocabulary. One test per group of words, plus the two
 # collisions with the host language that only surfaced once real pages ran.
 class Phase4Test < Minitest::Test
+  def setup
+    SlimPickins::Library.builtin
+  end
+
   def render(source, **locals)
     SlimPickins.render(source, path: '(test)', locals: locals)
   end
