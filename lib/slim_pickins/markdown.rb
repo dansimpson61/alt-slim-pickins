@@ -72,9 +72,15 @@ module SlimPickins
     # the walk never does. A fence never waits for a blank line.
     def gather_block(lines, i)
       block = []
-      while i < lines.size && !lines[i].strip.empty? && !FENCE.match?(lines[i].chomp)
+      if lines[i].match?(HEADING) || lines[i].chomp.match?(/\A---\s*\z/)
         block << lines[i]
         i += 1
+      else
+        while i < lines.size && !lines[i].strip.empty? && !FENCE.match?(lines[i].chomp)
+          break if lines[i].match?(HEADING) || lines[i].chomp.match?(/\A---\s*\z/)
+          block << lines[i]
+          i += 1
+        end
       end
       i += 1 while i < lines.size && lines[i].strip.empty?
       [block.join.strip, i]
@@ -86,6 +92,7 @@ module SlimPickins
 
     def block_of(block)
       lines = block.split("\n")
+      return '<hr>' if block.match?(/\A---\s*\z/)
       return table(lines) if lines.size > 1 && separator_row?(lines[1])
       return heading(block) if block.match?(HEADING)
       return unordered_list(lines) if block.match?(UNORDERED)
@@ -125,24 +132,24 @@ module SlimPickins
         body = +spans(lines[i].sub(marker, ''))
         i += 1
         continuations = []
-        nested = []
+        nested_lines = []
         while i < lines.size && !lines[i].match?(ITEM_LINE)
           line = lines[i]
           if line.match?(NESTED_ITEM)
-            nested_item = line.lstrip
+            indent = line[/\A\s+/]
+            nested_lines << line.sub(/\A#{indent}/, '')
             i += 1
-            while i < lines.size && lines[i].match?(INDENTED) && !lines[i].match?(NESTED_ITEM)
-              nested_item << ' ' << lines[i].strip
+            while i < lines.size && lines[i].match?(/\A\s/)
+              nested_lines << lines[i].sub(/\A\s{1,#{indent.length}}/, '')
               i += 1
             end
-            nested << nested_item
           else
             continuations << line.strip
             i += 1
           end
         end
         body << " #{spans(continuations.join(' '))}" unless continuations.empty?
-        body << "<ul>#{items(nested, UNORDERED)}</ul>" unless nested.empty?
+        body << "<ul>#{items(nested_lines, UNORDERED)}</ul>" unless nested_lines.empty?
         out << "<li>#{body}</li>"
       end
       out.join
@@ -167,14 +174,28 @@ module SlimPickins
     def table(lines)
       header = cells(lines[0])
       width = header.size
-      head = header.map { |c| "<th>#{spans(c.strip)}</th>" }.join
+      
+      alignments = cells(lines[1]).map do |cell|
+        c = cell.strip
+        if c.start_with?(':') && c.end_with?(':')
+          ' align="center"'
+        elsif c.end_with?(':')
+          ' align="right"'
+        elsif c.start_with?(':')
+          ' align="left"'
+        else
+          ''
+        end
+      end
+
+      head = header.each_with_index.map { |c, col| "<th#{alignments[col] || ''}>#{spans(c.strip)}</th>" }.join
       body = lines.drop(2).map do |row|
         row_cells = cells(row)
         # A short row is padded to the header's width — the header owns the
         # table's shape. An over-long row keeps its extra cells; nothing is
         # dropped. Neither happens in the repo's documents.
         row_cells += [''] * (width - row_cells.size) if row_cells.size < width
-        row_cells.map { |c| "<td>#{spans(c.strip)}</td>" }.join
+        row_cells.each_with_index.map { |c, col| "<td#{alignments[col] || ''}>#{spans(c.strip)}</td>" }.join
       end
       "<table><thead><tr>#{head}</tr></thead><tbody>" \
         "#{body.map { |r| "<tr>#{r}</tr>" }.join}</tbody></table>"

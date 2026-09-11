@@ -63,8 +63,8 @@ class MarkdownTest < Minitest::Test
                     '<tr><td>one</td><td></td></tr>'
   end
 
-  def test_a_dash_line_alone_is_not_a_table
-    assert_equal '<p>---</p>', render('---')
+  def test_a_dash_line_alone_is_an_hr
+    assert_equal '<hr>', render('---')
   end
 
   # --- ordered lists -----------------------------------------------------
