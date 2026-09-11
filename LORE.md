@@ -376,3 +376,7 @@ Phase 6 subtraction: deleted the original three paper pages (portfolio.sp, conte
 ## 2026-09-10 — Council Sentinel
 
 The 5-argument action outlier was refactored by the Ruby luminaries council into a scoped actions container with generic Subject overlay parameter scoping. Standalone and nested actions now inherit context without leaking into domain models or framework helpers.
+
+## 2026-09-10 — Antigravity
+
+Phase 5 prose named-limits (like horizontal rules and table colons) were explicitly kept out originally to strictly follow exactly what documents used. During Phase 6 Subtraction, rather than ripping them from the Markdown documents, we chose to implement them in the parser (`lib/slim_pickins/markdown.rb`) as the documents genuinely needed them for visual organization.

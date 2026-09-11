@@ -9,8 +9,8 @@ Resume work on `~/dev/alt-slim-pickins`.
 **Start by reading**, in this order:
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
-2. `README.md` — what the project is, and **How roadmaps go**, which governs what 0.2 must be
-3. `ROADMAP-0.2.md` — the active roadmap; `PROJECT.md` `next_step` points at its current phase
+2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
+3. `ROADMAP-*.md` — the active roadmap (currently transitioning to 0.3); `PROJECT.md` `next_step` points at its current phase
 4. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
 5. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
 6. `LORE.md` — what previous sessions *learned*; the last entries are this session's
@@ -26,220 +26,14 @@ conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.1 is closed. Roadmap 0.2 is one phase from closed: Phases 0–5
-are complete — the Way, the reviewable word, the un-god-objected Builder,
-the payload, the exam (judged by dan), and now Eat it yourself (closed
-2026-09-09).** Phase 6 — subtraction — is all that remains. The
-2026-09-01 session closed Phases 0–2 (the
-Way rewritten in `PRIMER.md`; the vocabulary reviewed as contracts with
-`check`→`checkbox`, `select`→`choice`; the Builder un-god-objected — four
-gathering copies became one stack, 867 lines/16 ivars became 298/9,
-byte-identical throughout) and then landed all of Phase 3:
+**Roadmap 0.2 is fully closed.** The backward eye's discipline (ataovy dian-tana) has run its course through all six phases:
+- The Way was rewritten (`PRIMER.md`).
+- The Builder was un-god-objected into semantic nodes.
+- The exam was passed (the vocabulary successfully ported `roth` with 0 missing affordances).
+- The ecosystem now eats its own dogfood (the dashboard and studio docs are served by `prose`, `link`, and the gate).
+- Subtraction is complete (`meta`, `icon`, `thumb` are gone, and `action` is refactored).
 
-- **The runtime output model is semantic nodes.** A page evaluates into a
-  tree of `[:word, attrs, children]`; `SlimPickins.evaluate` returns it;
-  `Generator` interprets it as HTML; `SlimPickins.render(..., filter:)`
-  exposes the pipeline's middle stage.
-- **The vocabulary left the Builder.** `words.rb` holds the fifty-three words,
-  `components.rb` the four gatherers, `generator.rb` the presentation,
-  `builder.rb` the evaluation — and the vocabulary is written on the **same
-  public surface an app's words get** (subject, chain, label_for, format_of,
-  register!, with_gatherer, about, capture, prune, tag, element, html, token,
-  arguments, children, evaluate, emit_node). `words_test.rb` forbids `send`
-  and Builder ivars in the vocabulary files; `dogfood_test.rb` re-implements
-  all four gatherers as app words and renders the repo's real pages
-  byte-identically through them.
-- **Both parked decisions are closed** (dan, 2026-09-01): `favicon` is a
-  `page` modifier, landed and tested; the `when`-deferral asymmetry stays as
-  documented in `dogfood_test.rb` — an app word that wants guard-before-read
-  uses a bare name, which the grammar never evaluates.
-- **The lineno seam is landed.** The transform wraps every compiled sentence
-  in `with_line`; the Builder keeps the current sentence's line on a stack
-  while it evaluates, and a runtime error is located *where it is raised* —
-  path, line, and the sentence itself, in the same voice as a syntax error.
-  `test/lineno_test.rb` pins it through nesting, loops, guards, choose
-  branches, partials and the layout; the eleven pages stay byte-identical.
-- **The report half of the payload is landed** — `bin/verify_pages.rb`
-  evaluates all eleven pages (the repo's, both apps' views) against the data
-  the app would serve, and reports each: OK, or BAD ANSWER with the located
-  error verbatim, or RUBY ERROR. It continues past failures and exits
-  non-zero on any, so it can gate a commit. The static half — the word
-  contracts — remains check_grammar's; this checker owns only the evaluation
-  half.
-- **The gate is landed** — every page, partial and layout compiles once
-  through `Compilation`: the parse, the contract walk and the emit run on
-  the first render, and a violating sentence is refused before evaluation
-  in the syntax error's voice (word, line, sentence), each render
-  composing its own path. The gate's first catch was a contract that
-  under-described the runtime — nested `choice` was tested and supported,
-  but the contract said `choice` holds only `option` — so the declaration
-  changed, and `bin/generate_vocabulary.rb` kept its bullet honest.
-  `test/gate_test.rb` pins the holes that used to pass silently;
-  `test/compilation_test.rb` pins the cache.
-- **The boot moment is landed** — `SlimPickins.prove!(dir)` renders every
-  top-level view against the locals the app gives it, before any request
-  can: both apps prove at boot, loudly (`proved controls.sp`), and a view
-  the app answers nothing for is refused too. `test/boot_test.rb` plays the
-  roth test on the real page: a model minus `ss_primary_amount` fails at
-  boot naming `controls.sp`, line 14, and the sentence. The eleven-month
-  silence is a boot error, by construction.
-- **The cost is measured, and the escape is built.** `bin/measure_cost.rb`
-  is the instrument (ruby 4.0.1, specimen.sp, 200 runs): cold render
-  2.75 ms, warm render 1.37 ms — what a request pays — and 0.10 ms per
-  partial-in-`each` row. `Compilation` is the compile-once cache: the
-  gate's verdict and the compiled Ruby, keyed by source, behind a mutex; a
-  source that will not parse is never cached, so every render names its
-  own path. Phase 3 is closed.
-
-## The architecture, in one map
-
-```text
-.sp source  →  Compilation (Transform parses, validates, compiles; the
-                gate's walk runs once and its verdict is cached with the
-                Ruby, keyed by source; each render refuses with its own
-                path)
-            →  Builder (evaluates: chain, bindings, gatherer stack, capture)
-            →  semantic tree [:word, attrs, children]   ← the description
-            →  filter: (optional transform of the tree)
-            →  Generator (interprets: escaping, formatting, tag shape)
-            →  HTML
-```
-
-- `lib/slim_pickins/transform.rb` — the grammar's one home; also exposes
-  `Transform.tree` for the checkers.
-- `contracts.rb` — per-word declarations (name/content/modifiers/children/
-  parents/subject/speech/shape) + the generated vocabulary bullets; the
-  vocabulary's one list, and the gate's walk (`first_violation`).
-- `compilation.rb` — the compile-once cache: the gate's verdict and the
-  compiled Ruby, keyed by source; `clear!` is the instrument's reach.
-- `builder.rb` (333 lines, 12 ivars) — evaluation only. Its public methods are
-  the surface; private are exactly `nest`, `render_partial`,
-  `define_app_words`, and the line stack (`with_line`, `eval_with`,
-  `locate`).
-- `words.rb` — the fifty-three words, node-builders on the public surface.
-- `components.rb` — `Component` + `Table`/`Chart`/`Choose`/`Choice`.
-- `generator.rb` — the HTML interpreter; owns escaping, `format`, tag shape,
-  and the walk's context (depth, form-ness — tree facts, not word state).
-- `check_grammar.rb` / `check_shape.rb` / `check_styles.rb` — the three
-  checkers that hold docs, shapes, and styles to the code.
-
-## What landed next — word is word is word, then the exam
-
-**dan's directive of 2026-09-02, four items, one design — all landed:** lib/vocabulary as the
-single source of what a word is; optional shape declarations a partial
-carries; the dogfood *done* (gatherers as partials, thumbnails promoted);
-the `when` deferral solved by declared shapes; every word first-class.
-
-**Landed for it:** vocabulary partials carry a comment preamble (`# name:`,
-`# content:`, `# modifiers:`, `# children:`, `# gathers:`, `# inside:`,
-`# lazy:`, `# shape:`) and `VocabularyShapes` merges them with the Ruby
-primitives into the one `CONTRACTS` list; a partial without a preamble stays
-unchecked (the preamble is optional kindness). The transform's `when`
-special case is dead — a word whose shape declares `lazy: content` receives
-that argument unevaluated, so laziness is a declared capability any word may
-claim.
-
-**Done since:** partials receive blocks (the `children` splice word), the
-`gathers:`/`inside:` shapes are honored by the runtime, and `thumbnails` +
-`thumb` are the first promoted words — written entirely in the language,
-their preambles their declarations, their VOCABULARY entries generated.
-
-**Name-passing landed too:** a partial declaring `name: variant` receives
-its name through the parameters (`.name`), variant-named words accept a
-derived variant as data, and a name shifts the subject only when the
-declaration says `subject` — preamble-less partials keep the old rule.
-
-**Docs derived landed:** bin/generate_vocabulary.rb creates missing entries
-from the contracts, and the checker holds them, demanding the example
-sentence. The primitives landed too: `paragraph`, `heading`, `box`,
-`span`, `figcaption` and `summary` are the atoms, classes deriving from the
-words, so nothing styleable by hand returns. Root-classing landed (a
-partial emits its own name as the class), the optionality spelling landed
-(dan, 2026-09-02: declared slots materialise, nil when unsaid — `when
-.open` is "was the modifier said"), and with them the promotion pass is
-**complete**: twenty-three vocabulary partials — action, flash, search,
-thumbnails, thumb, note, title, actions, footer, aside, list, item,
-figure, disclosure, empty, text, money, percent, number, badge, time,
-card, section. The atoms carry the box: BOX_TAGS (a promoted footer stays
-a `<footer>`), BOX_DEPTH (card and section deepen), a heading inside a box
-is the box's title (`#{box}-title`, which reproduces `section-title`
-exactly and normalises `card--title`), and the preamble grew `parents:`,
-`empty:`, `id:`, `label:`, `speech:`, `subject:`. The byte-diff over all
-13 pages shows exactly three changes, each the law applying: `text`,
-`time` and `disclosure` gained their class (hook-only rules). What stays
-Ruby, with written verdicts in ROADMAP-0.2: metric, fact (the app
-contract), icon (the sprite registry), snippet (chrome), plus the form
-family, gatherers and subject-flow words. Cost re-measured: cold 6.95 ms,
-warm 3.98 ms, 0.17 ms/row (up from 2.75/1.37/0.10 — the price of every
-word being a composition; the cache's read path is lock-free now).
-
-## What was Phase 4 — the exam, and how it closed
-
-**Phase 4 is closed, judged by dan 2026-09-06 (the judgement stands in
-ROADMAP-0.2.md, Round D).** dan chose `triage.slim`, the smallest of the
-short-list — and the challenges showed up anyway. The port at
-`examples/dashboard/` renders the real `Scan.triage_queue` through the
-language: `layout.sp`, `triage.sp`, `confirm_archive.sp`, the queue,
-unreviewed card and dormant action as partials, `flash`/`action`/`search`
-as vocabulary partials, actions wired to the same `Workspace` calls the
-original makes, boot-proven, held by `test/dashboard_test.rb` and
-`bin/dashboard_parity.rb` — 25 affordances, 0 missing against the live
-dashboard. The exam's harvest is the gap ledger G1–G13 in
-`examples/dashboard/INVENTORY.md`, all disposed: G1–G10 resolved by the
-negotiated primitives (`hidden`, `input`, `textarea`, `form` widened,
-`card` titles, `link active:`, `button size:`) and the partials; G3 and G7
-dissolved with the re-frame (the port wears our look); G11 disposed as
-documented-and-pinned (a test holds the hatch's emit-vs-value contract —
-`tag` emits, `element` returns, the nav renders once); G12 resolved by the
-optionality spelling; G13 (first recorded as G14 — the original numbering
-skipped 13) resolved by the word-free-locals rule. The promotion decision:
-`flash`/`action`/`search` stay partials — promotion is for words that have
-proven themselves across pages, and all three are used by exactly one app.
-`~/dev/dashboard` stayed untouched and working throughout.
-
-## What was Phase 5 — eat it yourself, and how it closed
-
-**Phase 5 is closed (2026-09-09); the round record stands in ROADMAP-0.2.md.**
-Three rounds, each committed, each green on both harnesses — the project
-gate *and* the dashboard's single-process runner (which caught a real defect
-the gate cannot: see round 1).
-
-1. **The dashboard's health flag caught a lie.** Its runner loads every test
-   file in one process, so every app's words share one registry — and
-   `StudioDocs.implementation_of` assumed every partial is builtin, so the
-   portfolio's `account_card` named `lib/vocabulary/account_card.sp`, which
-   is not its home. A partial now carries its `source_path` from the Library
-   (one glob reads source and path together), the docs payload names the
-   true home, and a partial declared inline says so ("nowhere on disk") —
-   a named state, not a KeyError. The dashboard's flag was right.
-2. **`prose` grew fences, tables and ordered lists** — measured before
-   built: 344 fence lines, 35 pipe tables (0 alignment colons, pipes inside
-   code spans), 61 ordered-list lines, and — what the roadmap's opening
-   measurement missed — 271 indented continuations under bullets, 40 under
-   ordered items, one nested list. `Markdown` now scans lines: fences are
-   extracted first (they win over tables and lists), cells split on pipes
-   outside backticks, lists fold continuations and one level of nesting.
-   Still safe by construction: everything is escaped before any pattern
-   becomes a tag; nothing is ever dropped; no general markdown engine. The
-   styles share one home each (`.prose pre` with `.snippet`, `.prose table`
-   with `.table`); the guide/docs warning notes are gone.
-3. **The status page.** `studio/status.rb` runs the four gate legs live as
-   subprocesses; `/status` serves each leg's output through a prose fence,
-   re-run every visit (~0.9 s) — a status page that remembered its verdict
-   could claim green while red. The studio's pages joined the gate in the
-   same round: `check_grammar`/`check_shape` learn `studio/views` as an app
-   via `Library.from` (the whole of the work the lore had measured). The
-   gate's first catch of the phase was the page built to display it —
-   `each .results` refused (each takes a name, never data) — and the runtime
-   taught the idiom's other half: `each result` reads `results`.
-   **dan's answer, verbatim: "Both the dashboard's md docs and the studio's
-   md docs."** — the dashboard's markdown surfaces are the next dogfood
-   target (read-only, must keep working, untouched), and the studio's
-   curated guides grew README, ROADMAP-0.2, HANDOFF and DAYTRIP.
-
-Named limits, left for a future prose round or Phase 6: headings swallow
-body lines when the author left no blank line (6 places); `---` renders as
-a paragraph; nesting stops at one level; alignment colons render unaligned.
+The detailed phase-by-phase record of Roadmap 0.2 remains in `ROADMAP-0.2.md`.
 
 ## What is next — Roadmap 0.3
 
