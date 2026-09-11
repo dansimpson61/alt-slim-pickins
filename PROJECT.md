@@ -2,11 +2,11 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Action primitive 5-arg outlier refactored into scoped actions block with overlay parameter scoping; full suite green (22 files, 0 errors)
+status: IMPLEMENTATION - Phase 6 Subtraction complete (vocabulary coverage achieved, prose named-limits implemented)
 kind: project
 last_touched: 2026-09-10
 next_step: >-
-  Continue ROADMAP-0.2 Phase 6 remaining subtraction (orphaned style rules checked and clear, design_conventions.md deleted). Next up: vocabulary coverage (thumb/thumbnails) and Phase 5's prose named-limits.
+  Review ROADMAP-0.2.md to determine the next Phase.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

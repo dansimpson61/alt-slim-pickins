@@ -941,6 +941,8 @@ The backward eye's last discipline. Everything must have a consumer or go.
 *Done looks like:* the vocabulary and the pages are smaller and honest, and
 the record says what went and why.
 
+*Round E (2026-09-10) — Phase 6 Subtraction is closed.* The cut list is clear: `meta` and `icon` (along with `Icons::SYMBOLS`, `use_icon`, and the `.icon` CSS machinery) were removed entirely, and their authored consumers in the studio were successfully migrated to CSS-drawn marks on `badge` and `note`. `action` at five arguments (the language's longest outlier) was debated by a multi-persona council and refactored into an `actions` container that cascades parameters down the subject chain, fully eliminating the need for `dormant.sp`. The vocabulary coverage audit identified `thumb`, `thumbnails`, and the `image` primitive as orphans with zero remaining consumers; they were removed. Finally, the four Phase 5 prose named-limits (`---`, heading boundaries, table colons, and deeply nested lists) were assessed. Rather than being stripped from the documents, they were implemented natively in the safe-by-construction `prose` parser, as the documents genuinely needed them for structural clarity. Phase 6 is closed.
+
 ---
 
 ## How this stays accountable
