@@ -2,14 +2,12 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PLANNING - Roadmap 0.2 fully closed; drafting Roadmap 0.3 (the forward eye)
+status: PLANNING - Roadmap 0.2 fully closed; Roadmap 0.3 drafted (the forward eye), awaiting dan's review
 kind: project
 last_touched: 2026-09-14
 next_step: >-
-  Draft ROADMAP-0.3.md, the forward eye — begin with the candidate-question
-  appraisal: the dashboard's md surfaces (Phase 5's handoff, read-only), the
-  untested flank (a page by hands that did not write the vocabulary), and the
-  kernel (KERNEL.md).
+  dan reviews ROADMAP-0.3.md — the question, the phases, and Phase 0's
+  stranger rule — then Phase 0 opens: choose the stranger.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -86,6 +84,12 @@ notes: >-
   659 sentences, 93 rules, 64 words all 64 used, 10 pages, 269 runs / 1473
   assertions one-process, 25 affordances — and both files now carry those
   numbers. Roadmap 0.2 is fully closed; 0.3 drafting begins.
+  2026-09-14 — Roadmap 0.3 drafted (ROADMAP-0.3.md). The forward eye's
+  question, chosen by dan ("All three, in one question"): the dashboard's md
+  surfaces untouched (the consumer), a page by hands that did not write the
+  vocabulary (the judge), the kernel grown only by demand (the floor). The
+  draft joins check_grammar's corpus and the studio's guides; Phase 0 is
+  choosing the stranger.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

@@ -15,7 +15,7 @@ module StudioDocs
   # that cannot show its own resume prompt and its own plan is a studio that
   # eats someone else's food.
   GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
-              ROADMAP-0.2 HANDOFF DAYTRIP].freeze
+              ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP].freeze
 
   def self.guides = GUIDES.map { |name| Entry.new(name: name, path: "/guides/#{name}") }
 
