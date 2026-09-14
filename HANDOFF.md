@@ -11,7 +11,7 @@ Resume work on `~/dev/alt-slim-pickins`.
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
 3. `ROADMAP-*.md` — the active roadmap: 0.2 is closed, 0.3 is drafted
-   (the forward eye, three legs in one question); `PROJECT.md` `next_step`
+   (the forward eye, four legs in one question); `PROJECT.md` `next_step`
    points at its current phase
 4. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
 5. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
@@ -43,12 +43,12 @@ The detailed phase-by-phase record of Roadmap 0.2 remains in `ROADMAP-0.2.md`.
 The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `action` primitive is refactored, and Phase 5's prose named-limits (`---`, heading boundaries, table alignment colons, and deeply nested lists) are fully natively supported by `prose` (because we discovered they were genuinely needed for structural clarity, validating that we shouldn't strip them).
 
 **The next step is dan's review of Roadmap 0.3.** Roadmap 0.2 was an
-even-numbered roadmap (the backward eye); Roadmap 0.3 is the forward eye,
-and its question is chosen (dan, 2026-09-14, verbatim): "All three, in one
-question" — the dashboard's markdown untouched as the consumer, a page by
-hands that did not write the vocabulary as the judge, and the kernel grown
-only as those two demand. The draft (ROADMAP-0.3.md) is held by the checker
-and served by the studio; Phase 0 is choosing the stranger.
+even-numbered roadmap (the backward eye); Roadmap 0.3 is the forward eye.
+Its question, chosen and enriched by dan (2026-09-14): can the language
+carry real work — the dashboard's markdown untouched, a garden of real
+apps, the studio made into the workbench, the kernel grown only as the
+work demands. The draft (ROADMAP-0.3.md) is held by the checker and served
+by the studio; Phase 0 is scoping the studio.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
 process — it serves whatever code it booted with, so restart it after pulling

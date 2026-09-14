@@ -2,12 +2,12 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PLANNING - Roadmap 0.2 fully closed; Roadmap 0.3 drafted (the forward eye), awaiting dan's review
+status: PLANNING - Roadmap 0.2 fully closed; Roadmap 0.3 drafted and enriched (four legs — the dashboard's md untouched, the app garden, the studio, the kernel), awaiting dan's review
 kind: project
 last_touched: 2026-09-14
 next_step: >-
-  dan reviews ROADMAP-0.3.md — the question, the phases, and Phase 0's
-  stranger rule — then Phase 0 opens: choose the stranger.
+  dan reviews ROADMAP-0.3.md — the question, the phases, and Phase 0's studio
+  scoping — then Phase 0 opens: scope the studio.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -84,12 +84,16 @@ notes: >-
   659 sentences, 93 rules, 64 words all 64 used, 10 pages, 269 runs / 1473
   assertions one-process, 25 affordances — and both files now carry those
   numbers. Roadmap 0.2 is fully closed; 0.3 drafting begins.
-  2026-09-14 — Roadmap 0.3 drafted (ROADMAP-0.3.md). The forward eye's
-  question, chosen by dan ("All three, in one question"): the dashboard's md
-  surfaces untouched (the consumer), a page by hands that did not write the
-  vocabulary (the judge), the kernel grown only by demand (the floor). The
-  draft joins check_grammar's corpus and the studio's guides; Phase 0 is
-  choosing the stranger.
+  2026-09-14 — Roadmap 0.3 drafted (ROADMAP-0.3.md), then enriched on dan's
+  word the same day: the question is "All three, in one question" broadened —
+  the dashboard's md surfaces untouched (the consumer), the stranger grown
+  into a garden of real apps (the evidence), the studio given its own
+  scoping phase (the workbench; its in-between state is measured: the
+  playground cannot serve real data, its errors are hand-built strings, the
+  Stimulus burr stands), and the kernel grown only by demand (the floor,
+  with the council's R3 recommendations lying there demand-gated — R3P4
+  already resolved). The draft joins check_grammar's corpus and the studio's
+  guides; Phase 0 is scoping the studio.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

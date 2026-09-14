@@ -136,6 +136,12 @@ working manual that should be better after every session than it was before.
 - **He answers questions in his own words**, not necessarily the options
   offered — asked to choose, he wrote "Both the dashboard's md docs and the
   studio's md docs." Offer options, but leave room for the sentence.
+- **He enriches drafts by adding legs, not by cutting them.** Asked to choose
+  among candidate roadmap questions he picked the binding option ("All three,
+  in one question"), and asked to review the draft he broadened it — a studio
+  phase, a garden of apps in place of one stranger, the council's proposals
+  folded onto the route (observed 2026-09-14). Bring him a draft with room to
+  grow.
 - **He intervenes at the layer below the symptom.** A formatting complaint was
   really a stale process; a question about icons turned into a Phase 6 cut.
 - **He restates an instruction rather than arguing about it.** The restatement
