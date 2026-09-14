@@ -267,4 +267,16 @@ class VocabularyPartialsTest < Minitest::Test
       assert_includes html, 'alpha-beta'
     end
   end
+
+  # A partial the Library compiles registers into the shared Word.registry
+  # by class name; the tmpdir it lived in is gone when the test ends, so the
+  # registered words must go with it. Left behind, they poison a suite
+  # sharing one process: StudioDocs memoises its payloads from the live
+  # registry, and depending on which class ran first it could memoise
+  # `custom_action` with a source_path that no longer exists on disk —
+  # "custom_action's partial file is missing", intermittently, by seed.
+  # The test world must leave the registry as it found it.
+  def teardown
+    %i[custom_action custom_actions].each { |word| SlimPickins::Word.registry.delete(word) }
+  end
 end
