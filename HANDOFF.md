@@ -83,12 +83,14 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-10: 261 tests / 1506 assertions / 0 failures in one
-  process — the dashboard's harness, which is the stronger one and worth
-  running too: `ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f|
-  require "./#{f}" }'` — plus 887 sentences / 0 problems, 103 rules / 0
-  problems, 69 words / 0 problems, 13 pages verified, 25 affordances /
-  0 missing)
+  (re-measured 2026-09-14, after Phase 6's final deletions: 269 runs / 1473
+  assertions / 0 failures in one process — the dashboard's harness, which
+  is the stronger one and worth running too: `ruby -Ilib:test -e
+  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 659
+  sentences / 0 problems, 93 rules / 0 problems, 64 words and all 64 used
+  in real pages / 0 problems, 10 pages verified, 25 affordances / 0 missing;
+  the 13-page count retired with the paper pages, the 69-word count with
+  Phase 6's cuts)
   **Set no environment variable to make this pass.** It used to need
   `RACK_ENV=test`, which switched the prettifier off and made every rendering
   test assert HTML production never emitted. If the suite only passes with

@@ -2,11 +2,14 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: IMPLEMENTATION - Phase 6 Subtraction complete (vocabulary coverage achieved, prose named-limits implemented)
+status: PLANNING - Roadmap 0.2 fully closed; drafting Roadmap 0.3 (the forward eye)
 kind: project
-last_touched: 2026-09-10
+last_touched: 2026-09-14
 next_step: >-
-  Review ROADMAP-0.2.md to determine the next Phase.
+  Draft ROADMAP-0.3.md, the forward eye — begin with the candidate-question
+  appraisal: the dashboard's md surfaces (Phase 5's handoff, read-only), the
+  untested flank (a page by hands that did not write the vocabulary), and the
+  kernel (KERNEL.md).
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -77,6 +80,12 @@ notes: >-
   Its standing rules, on dan's word: agents' eyes only; no flattery; and an
   entry dies only when a second session agrees. It carries a banner asking
   whoever can write outside this workspace to promote it machine-wide.
+  2026-09-14 — drift realigned before 0.3 drafting: next_step had lagged
+  HANDOFF.md (0.2 closed 2026-09-11), and HANDOFF's quoted vitals were
+  measured before Phase 6's last deletions; re-measured on the clean tree —
+  659 sentences, 93 rules, 64 words all 64 used, 10 pages, 269 runs / 1473
+  assertions one-process, 25 affordances — and both files now carry those
+  numbers. Roadmap 0.2 is fully closed; 0.3 drafting begins.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
