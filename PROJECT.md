@@ -2,13 +2,15 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PLANNING - Roadmap 0.2 fully closed; Roadmap 0.3 drafted and challenged (three legs — the app garden, the studio won iteratively, the kernel by demand), awaiting dan's review
+status: PHASE 0 — the studio, won iteratively. Win 1 landed 2026-09-15 — the palette, the repo's own pages loadable in the playground, each entry wearing the census verdict of the render the playground will give it. First census — 13 of 13 pages name the data wall. dan rules the next pick.
 kind: project
-last_touched: 2026-09-14
+last_touched: 2026-09-15
 next_step: >-
-  dan reviews ROADMAP-0.3.md — the question, the phases, and the studio-first
-  ordering — then Phase 0 opens: the studio, won iteratively, first victory
-  picked by dan.
+  dan reviews the palette — boot the studio (ruby studio/app.rb) and load a
+  page from it — and rules the cycle-2 pick from the ledger the census
+  named, in demand order — the data wall (all 13 pages), the partial wall
+  (masked behind it), errors in the language's own terms, or the found gap
+  that verify_pages never renders the studio's own views.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

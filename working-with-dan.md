@@ -154,6 +154,16 @@ working manual that should be better after every session than it was before.
 - **He restates an instruction rather than arguing about it.** The restatement
   *is* the correction — take it as final and change the behaviour, not the
   wording.
+- **He opens phases with terrain, not orders — the scoping is the loop.** His
+  Phase 0 opener named the studio "an identity crisis" (playground and
+  document library, "both only partially formed") and set the working rule:
+  "I'll describe something and maybe propose something but that's not me
+  telling you what to do." When the scoping question came back with four
+  candidates he picked the recommended one and glossed it himself: "Let's
+  take on the palette first, even while the identities are still
+  strategically in flux and dynamic." Bring a proposed scope with a
+  recommendation; he rules the pick, and the frame may stay open while the
+  work proceeds (observed 2026-09-15).
 - **He likes the lore format** — a lesson, not a status report. What you did
   goes in the commit; what you learned goes in the lore.
 

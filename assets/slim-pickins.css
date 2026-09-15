@@ -69,6 +69,7 @@
 
   --measure-input: 24rem;
   --wash-faint: 0.05;
+  --palette-cap: 16rem;
   --track: 14rem;
   --track-min: 12rem;
   --indent: 1.25em;
@@ -440,6 +441,14 @@ time { color: var(--ink-soft); }
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+/* The palette is the census column above the editor: capped so the census
+   never crowds the writing it feeds. */
+.palette {
+  max-height: var(--palette-cap);
+  overflow-y: auto;
+  margin-bottom: var(--gap);
 }
 
 .editor_form {

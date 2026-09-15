@@ -160,13 +160,36 @@ No grand scoping gate; the iteration is the scoping. Each round picks the
 next **winnable victory** from the measured menu — the playground learning to
 serve real pages with real data, errors speaking the language's own terms
 instead of hand-built strings, the editor growing a palette of the repo's own
-pages, the Stimulus resolution that obviates the second Render button (with
+pages (landed 2026-09-15, with its census — the wins below), the Stimulus resolution that obviates the second Render button (with
 its *why* preserved beside the fix), the word-graph repair if a consumer asks
 for the picture — scopes it to the size one round can land, dan rules the
 pick, and the round lands it. Roughness that stays is named as deliberate.
 
 *Done looks like:* a sequence of landed wins, each committed and judged, and
 a studio that can be *used* — the workbench the garden phase leans on.
+
+**Wins landed, 2026-09-15:**
+
+- **1 — The palette, with its census** (dan's pick, same day, while the
+  identities stay "strategically in flux"): the editor now offers the repo's
+  own pages as starting points — thirteen of them, across portfolio,
+  dashboard, roth and the studio itself — each a plain link that fills the
+  editor (zero JavaScript; the load is a GET), the loaded page marked
+  `aria-current` and named in the editor's heading. The palette carries the
+  census as it loads: every entry wears the verdict of the same render the
+  playground will give it, run live at page build, the refusal recorded in
+  the language's own words with path and line. Completeness is held by test
+  — a census that skips pages understates the demand. The first census:
+  **13 of 13 pages refuse, and every refusal is the data wall** — no
+  portfolio, no notice, no scenario, no title — because every real page
+  reads its data before it reads its partials, so the missing-app-partials
+  wall stays masked behind the first missing local. The next pick's ledger,
+  in what the census named, in order: the data wall (the one wall all
+  thirteen share), the partial wall (masked behind it), errors in the
+  language's own terms (the `/render` route's refusals still display as
+  hand-built strings), and one found gap carried in — `bin/verify_pages.rb`
+  proves the example apps but never the studio's own views, the only corpus
+  pages the gate does not render.
 
 ### Phase 1 — The garden, planted
 
