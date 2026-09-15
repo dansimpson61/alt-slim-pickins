@@ -192,7 +192,12 @@ working manual that should be better after every session than it was before.
   for handoff to a new session" — treat handoff continuity as part of the
   deliverable, not the afterthought. His empty-option answers are
   directives, not indecision: three times now he has skipped the offered
-  options and written his own next step (observed 2026-09-15).
+  options and written his own next step. And he delegates operational
+  ownership explicitly when the machinery is ready: "I will stop the
+  server now and let you and subsequent agent manage starting and
+  stopping in the future" — once he hands an operation over, own it
+  fully: keep the running state current with the commits, and leave the
+  service up for his browser at round end (observed 2026-09-15).
 - **He wants loose ends as executable options, not prose.** Handed a
   "one thing that is yours" paragraph about an untracked file, his answer
   was a standing instruction: "In the future, when you have things like

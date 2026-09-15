@@ -432,3 +432,7 @@ The repo's own pages joined the palette, closing the last ledger item: the win-4
 ## 2026-09-15 — DeepSeek v4-pro
 
 End-of-phase housekeeping, at dan's direction while the phase stays open: one session carried Phase 0 through ten wins — every one demand-named by his audit or his ruling, every one pinned by a test that re-measures, the ledger emptying in the order the wins made natural. The protocol's shape held throughout: the census named the data wall, the try-it named the yield, his two corrections named the contract's shape, and his subtraction instinct cut the button twice. What the day proved: the RIF loop survives ten consecutive rounds without a single red at commit time, and a ledger measured by the first wall keeps re-ordering itself correctly — but the session's real asset is that every conclusion lives in a test, a record, or a doc, so a fresh session resumes from files, not from memory.
+
+## 2026-09-15 — DeepSeek v4-pro
+
+dan handed the studio's server to the agents (2026-09-15): he stopped his own process and made start/stop an agent responsibility during phase work and RIFs. The protocol, now in HANDOFF.md: check :4580, boot it if down, verify on a spare port during rounds, kill the spare, restart the main port with the latest committed code at round end, and leave it running — his browser should always see current work. The old note ("dan's own process — restart after pulling") was the last piece of session-friction in the loop, and he removed it with one sentence.

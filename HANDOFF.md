@@ -100,12 +100,18 @@ plus the planned read-only markdown rendering. The draft (ROADMAP-0.3.md)
 is held by the checker and served by the studio; KERNEL.md carries its
 re-measured addendum.
 
-**The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
-process — it serves whatever code it booted with, so restart it after pulling
-new work.** The checkers' status page at `/status` re-runs the gate live on
-every visit. A session that needs to look at the studio without touching
-dan's process can boot one on another port: `STUDIO_PORT=4581 ruby
-studio/app.rb`.
+**The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is
+agent-managed** — dan's ruling, 2026-09-15: he stopped his own process and
+handed start/stop to the agents. It serves whatever code it booted with,
+so **after every round, restart it so it runs the latest committed code,
+and leave it running** — dan's browser should always see current work.
+The routine: check the port (`curl -s -m 2 http://127.0.0.1:4580/`); if it
+is down, boot it (`ruby studio/app.rb`, a background job). During a
+round, verify on a spare port (`STUDIO_PORT=4597 ruby studio/app.rb`),
+then kill the spare before the round closes. A new session that finds the
+port down boots it again — the standing state in this file is the
+authority, not whatever the last process left behind. The checkers'
+status page at `/status` re-runs the gate live on every visit.
 
 ## Comprehensive Housekeeping Protocol (The RIF Loop)
 
