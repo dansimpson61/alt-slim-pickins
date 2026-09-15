@@ -615,3 +615,65 @@ cannot say, taken with the kernel in its final shape.
   measured — the box-title branch does fire inside a `figure`, so Round 1 is
   a substitution. The other — that `parameters_for` takes a third derivation
   cleanly — is read from the source and stays unproven until Round 2 lands.
+
+---
+
+## Changes since this spec — re-measured 2026-09-14
+
+The spec above was drafted against the tree at `5d43fe9` (2026-09-03). None
+of its rounds have been built; the codebase has moved under it. Every number
+here is re-measured, not re-quoted.
+
+**The census.** 42 Ruby words / 22 `.sp` partials / **64 total** (the spec
+said 42/23/65). The membership changed and the coincidence of 42 hides both
+moves: `meta`, `icon`, `thumb`, `thumbnails` and `image` were cut in
+Phase 6 (2026-09-10) — the floor list above names `meta` and `icon`, and
+retires with them — and the council's refactor (2026-09-10) added the
+`actions` container beside `action`.
+
+**Claims that hold, verified today.**
+
+- `hidden` is still misdeclared — `name: :name`, and it still calls
+  `subject.fetch`. The spec's exception 2 stands.
+- `parameters_for` still derives only `id` and `label` (builder.rb 441–456);
+  the `value` derivation — the keystone — is still unbuilt.
+- The cache wrinkle holds verbatim: compilation.rb keys by source, carries
+  no path, and composes the refusal at render.
+- `tag` is not a word — now twice over: CONTRACTS refuses `:tag` by name
+  (contracts.rb 238), and still no vocabulary word emits a `:tag` node. The
+  generator's `:tag` path is live and unused by the vocabulary, exactly as
+  measured.
+- The four-copy `<div class=field>` wrapper is still four copies — `field`,
+  `textarea`, `checkbox`, `choice`, generator.rb 465–517. The spec's line
+  numbers have drifted; the duplication has not. `figcaption` and `summary`
+  still sit in words.rb — Tier 1 is intact.
+
+**Claims that dated.**
+
+- "31 node kinds the Generator interprets by name" — the generator has moved
+  past that shape: `emit` special-cases ten kinds (`raw`, `tag`, `each`,
+  `choose`, `contents`, `badge`, `money`, `number`, `percent`, `time`) and
+  dispatches every other kind to its own named method. The tag helpers are
+  still called 76 times (31 `full_tag`, 37 `open_tag`, 8 `void_tag`). The
+  thesis survives: the general `:tag` path exists, and the vocabulary never
+  uses it.
+- The census instrument is vestigial: `PrimitiveShapes.load` scans comment
+  blocks over `def`, but words.rb declares contracts with the `contract`
+  macro — PRIMITIVES is empty, and CONTRACTS reads the registry lazily. The
+  count's one home is now the registry.
+- The graph is broken: `bin/word_graph.rb` requires `bin/word_graph_template`,
+  which was never committed and is gone (LoadError). A picture that cannot
+  be generated cannot drift-proof anything. The repair is to embed the
+  template in the tool; otherwise the section retires.
+- The cost has moved, all upward: cold **6.38 ms** (5.83), warm **4.73 ms**
+  (3.55), per row **0.22 ms** (0.15) — ruby 4.0.1, specimen.sp, 200 runs.
+  The composition tax the spec warned about is compounding; the budget
+  decision is more urgent, not less.
+
+**What this changes for the rounds.** The floor list and the tier tables want
+the Phase 6 removals applied; the keystone and the rounds remain the unbuilt
+proposal. Round 1's privilege discipline is half-anticipated in code (`:tag`
+refused by name) but nothing enforces a path-based privilege yet. The
+ordering question dan put to this pass is answered in ROADMAP-0.3.md: the
+kernel rounds **follow** the studio's winnable victories, demand-gated — and
+the budget decision still precedes any Tier 2 work.

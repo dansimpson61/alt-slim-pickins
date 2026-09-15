@@ -2,12 +2,13 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PLANNING - Roadmap 0.2 fully closed; Roadmap 0.3 drafted and enriched (four legs — the dashboard's md untouched, the app garden, the studio, the kernel), awaiting dan's review
+status: PLANNING - Roadmap 0.2 fully closed; Roadmap 0.3 drafted and challenged (three legs — the app garden, the studio won iteratively, the kernel by demand), awaiting dan's review
 kind: project
 last_touched: 2026-09-14
 next_step: >-
-  dan reviews ROADMAP-0.3.md — the question, the phases, and Phase 0's studio
-  scoping — then Phase 0 opens: scope the studio.
+  dan reviews ROADMAP-0.3.md — the question, the phases, and the studio-first
+  ordering — then Phase 0 opens: the studio, won iteratively, first victory
+  picked by dan.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -94,6 +95,16 @@ notes: >-
   with the council's R3 recommendations lying there demand-gated — R3P4
   already resolved). The draft joins check_grammar's corpus and the studio's
   guides; Phase 0 is scoping the studio.
+  2026-09-14 — Roadmap 0.3 challenged on dan's word, the same day. Three
+  rulings recorded in the draft: the studio advances by winnable victories
+  (no grand scoping gate; the iteration is the scoping); the dashboard is
+  not canonized — verified, sp's entire effect on ~/dev/dashboard is two
+  requires of its pure-Ruby lib plus the planned read-only markdown, and the
+  boundary is scope, not sanctity; and KERNEL.md was re-measured against the
+  tree (addendum added: census 42/22/64, cost now 6.38/4.73/0.22 ms, claims
+  verified one by one, the word-graph tool broken — its template was never
+  committed). Recommendation recorded: studio first, kernel after, demand-
+  gated, budget set before the work.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

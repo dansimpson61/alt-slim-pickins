@@ -142,6 +142,13 @@ working manual that should be better after every session than it was before.
   phase, a garden of apps in place of one stranger, the council's proposals
   folded onto the route (observed 2026-09-14). Bring him a draft with room to
   grow.
+- **He prefers winnable victories over grand scopes**, and audits drafts for
+  canonization. His words (2026-09-14): "an iterative process accumulating
+  winnable victories", and "I fear we have canonized the dashboard
+  unintentionally and undeservedly." Structure phases as a sequence of small,
+  judgeable wins — size the scoping to the win, not the win to the scoping —
+  and check every revered constraint for whether it is actually a scope
+  boundary wearing a halo.
 - **He intervenes at the layer below the symptom.** A formatting complaint was
   really a stale process; a question about icons turned into a Phase 6 cut.
 - **He restates an instruction rather than arguing about it.** The restatement

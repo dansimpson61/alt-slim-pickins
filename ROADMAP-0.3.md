@@ -2,9 +2,9 @@
 
 **An odd-numbered roadmap. It leads with the forward eye.**
 
-Status: **draft for dan — 2026-09-14, enriched on his word.** The question is
-the load-bearing sentence; the phases are the proposal, and they move when the
-work says so.
+Status: **draft for dan — 2026-09-14, enriched and challenged on his word.**
+The question is the load-bearing sentence; the phases are the proposal, and
+they move when the work says so.
 
 > **Ataovy dian-tana: jerena ny aloha, todihana ny afara.**
 > *Walk like the chameleon: watch what is ahead, glance back at what is behind.*
@@ -18,46 +18,27 @@ project cannot yet answer.
 
 ## The question
 
-> **Can the language carry real work — the dashboard's markdown served
-> untouched, a garden of real apps grown in it, and the studio made into the
-> workbench that builds them — growing the kernel only as that work demands?**
+> **Can the language carry real work — a garden of real apps grown in it, the
+> studio won iteratively into the workbench that builds them, and the kernel
+> lowered only as the work demands?**
 
-Four legs, one question. The first ruling (dan, 2026-09-14, verbatim): *"All
-three, in one question."* The second, the same day: make the roadmap richer —
-the studio gets a phase of its own, the stranger broadens into a variety of
-apps, and the council's recommendations lie on the route. Each leg is already
-on the record, with its evidence:
+Three legs, one question — dan's rulings of 2026-09-14, verbatim where they
+matter: *"All three, in one question"*, then *"make the roadmap a bit
+richer"*, then the challenges this draft answers: the studio advances by
+winnable victories, the dashboard is not canonized, and the kernel's work
+waits on the demand ledger.
 
-### Leg 1 — the dashboard's markdown: the consumer
-
-Phase 5 put the question to dan, and he answered it (2026-09-09, recorded
-verbatim in [ROADMAP-0.2.md](ROADMAP-0.2.md)): *"Both the dashboard's md docs
-and the studio's md docs."* The studio half landed — README, ROADMAP-0.2,
-HANDOFF and DAYTRIP are curated guides, and the studio's `/status` re-runs the
-gate live on every visit. The dashboard half was recorded as "the next
-roadmap's business", with the one hard constraint named in the same sentence:
-**the dashboard must keep working, untouched.** `prose` already renders
-everything the dashboard's documents are made of — fences, tables, ordered
-lists, indented continuations — measured against this repo's own documents in
-Phase 5 and completed in Phase 6.
-
-The demand, in the language's own words (an untagged fence, so the checker
-holds it like every example in the checked documents):
-
-```
-prose markdown, .content
-```
-
-### Leg 2 — the garden of apps: the evidence
+### Leg 1 — the garden of apps: the evidence
 
 The standing row in 0.2's risk register was: **nobody outside the project has
 written a page.** One stranger's page would test the language's guessability
 once; dan broadened it (2026-09-14): a variety of real apps, doing interesting
-things, spun up in the language. The judge leg becomes plural: every app is a
-page (or twenty) written by hands that must make the language say something
-real, and the ledger discipline from Phase 4 survives — every refusal logged
-with the sentence that hit it. At least one app is built by hands that did not
-write the vocabulary; a garden that shares one brain is decoration.
+things, spun up in the language. The judge leg is plural: every app is pages
+written by hands that must make the language say something real, and the
+ledger discipline from Phase 4 survives — every refusal logged with the
+sentence that hit it. At least one app is built by hands that did not write
+the vocabulary, and the record names which; a garden that shares one brain is
+decoration.
 
 The page is where the claim lives:
 
@@ -68,40 +49,60 @@ section holdings
     money .market_value
 ```
 
-### Leg 3 — the studio: the workbench
+**One bed in the garden, not a sacred one: the dashboard's markdown.** dan's
+audit of this draft (2026-09-14): much of the dashboard is full of kludges,
+and its views were deliberately never rewritten in slim-pickins — precisely to
+avoid being sidetracked by dashboard maintenance and re-engineering. Verified
+against the tree the same day: slim-pickins' entire effect on `~/dev/dashboard`
+is two `require`s of its pure-Ruby lib (`examples/dashboard/app.rb`,
+`bin/verify_pages.rb`); nothing is ever written, no view has been touched, and
+the only planned interaction is rendering its markdown docs **read-only** — a
+cheap, valuable dogfood item, not yet built. The boundary is scope, not
+sanctity: we do not maintain the dashboard, we do not rewrite its views, we do
+not fix its kludges, and we walk normally — no eggshells. Its markdown is one
+demand among the garden's many.
 
-The studio is the language's own surface and its current in-between state is
+### Leg 2 — the studio: the workbench, won iteratively
+
+The studio is the language's own surface, and its in-between state is
 measured, not imagined (read 2026-09-14): the playground receives only the
 editor's source — its own guide route names the wall: "`/render` receives only
 the editor's `source`, so a page saying `prose markdown, .content` arrives with
-no content to read" — so a real page with real data cannot be written or tested
-there; the playground's errors are hand-built HTML strings with inline styles,
-where everywhere else in the language errors speak the language's own terms;
-the two Render buttons exist because one form can only target one iframe
-natively — the deliberate Stimulus burr, which dan ruled stays until its
-recorded resolution arrives; and the default source is a hardcoded "Hello
-World". The studio is also the first garden app: improving it is dogfood at
-the sharpest, because the workbench is built in the thing it builds with.
+no content to read" — so a real page with real data cannot be written or
+tested there; the playground's errors are hand-built HTML strings with inline
+styles, where everywhere else in the language errors speak the language's own
+terms; the two Render buttons exist because one form can only target one
+iframe natively — the deliberate Stimulus burr, which dan ruled stays until
+its recorded resolution arrives; and the default source is a hardcoded "Hello
+World". dan's method for fixing it (2026-09-14): an iterative process
+accumulating **winnable victories** — each round scopes the next small win,
+lands it, and moves on. No grand scoping gate; the scoping *is* the iteration.
+The studio is also the first garden app: improving it is dogfood at the
+sharpest, because the workbench is built in the thing it builds with.
 
-### Leg 4 — the kernel: the floor
+### Leg 3 — the kernel: the floor, lowered only by demand
 
-[KERNEL.md](KERNEL.md) (draft for dan, never built) asked the Rubinius
-question: what stays Ruby because the language *cannot* say it, and what stays
-because nobody has moved it yet? Its census measured 42 words in Ruby against
-23 in the language, and named the missing primitive — name-directed data
-access — as the thing that pins `field`, `checkbox`, `choice` and their kin to
-Ruby. It owes dan two decisions: the cost budget, and whether it becomes a
-roadmap of its own. This document answers the second: **it becomes the fourth
-leg, and it grows only what the other three demand.**
+[KERNEL.md](KERNEL.md) asked the Rubinius question: what stays Ruby because
+the language *cannot* say it, and what stays because nobody has moved it yet?
+Its keystone — name-directed data access — pins `field`, `checkbox`, `choice`
+and their kin to Ruby, and nothing in it has been built. The spec was
+re-measured against the current tree (2026-09-14, recorded in its addendum):
+the census is 42 Ruby / 22 `.sp` / 64 total; the claims that hold were
+verified one by one; the floor list retires `meta` and `icon` with Phase 6;
+the cost has climbed (warm render 3.55 → 4.73 ms, per row 0.15 → 0.22 ms); and
+the word-graph tool the spec advertises is broken — its template was never
+committed. The kernel's work waits: it grows only what the garden's and the
+dashboard's sentences demand, after the studio's victories, against a budget
+dan sets before the work begins.
 
-### Why the four bind
+### Why the three bind
 
-A consumer without evidence is dogfood that flatters the author. Evidence
-without a consumer is a quiz. A workbench without work is a toy. Kernel work
-without a demand is the 0.2 disease — building what nothing asked for. Each
-leg keeps the others honest: the dashboard is the real demand; the garden is
-the real evidence; the studio is where both get made; the kernel is the floor,
-and only a demand may lower it.
+Evidence without a workbench is friction: every garden app is built through
+the studio, or the studio phase was wrong. A workbench without work is a toy:
+the studio's victories are judged by the garden using them. Kernel work
+without a demand is the 0.2 disease — building what nothing asked for: the
+kernel moves only when a real sentence from the garden or the dashboard names
+what it cannot say. Each leg keeps the other two honest.
 
 ## What the re-read taught
 
@@ -115,38 +116,37 @@ chooses a direction. The pass, and what it yielded:
 - **The grammar and the vocabulary stand** (0.2's verdict), and so does the
   discipline: every word has seven slots, every truth one home, nothing
   verified by a checker alone.
-- **Real pages find real gaps** (Phase 4). The exam's ledger G1–G13 — hidden
-  inputs, two form theories, the class scheme — was found by porting one real
-  page, and every gap was settled as a word or a power, never guessed.
+- **Real pages find real gaps** (Phase 4). The exam's ledger G1–G13 was found
+  by porting one real page, and every gap was settled as a word or a power,
+  never guessed.
 - **Everything must have a consumer or go** (Phase 6). Subtraction is the same
   discipline the kernel leg needs, pointed forward instead of back.
-- **The kernel's cost is measured and unpaid** (KERNEL.md). The promotion pass
-  took warm render from 1.37 ms to 3.55 ms — 2.6× — and the spec warns that the
-  words most likely to move are the ones inside loops. The budget is a
-  decision, not a surprise.
+- **The kernel's spec holds up under re-measurement** (KERNEL.md's addendum,
+  2026-09-14). Its warnings hold too: the cost is compounding, and the budget
+  is a decision, not a surprise.
 - **The council's proposals wait for consumers** (the bulletin board,
   2026-09-10). Payload forwarding in partials, subject-shifting `card`, one
   form with `formaction` buttons. Each is carried in here, and each lands only
-  when a real sentence from the garden or the dashboard demands it. The
-  council's fourth proposal — the dangling `design_conventions` guide — is
-  already resolved (verified 2026-09-14: gone from GUIDES, suite green) and is
-  recorded here so it is not re-proposed.
-- **The garden's seeds already exist in this repo** (KERNEL.md's optional
-  spec, read this pass). The word graph drawn in the language itself is
-  proposed there with its caveat — build it *after* the kernel rounds it
-  depends on, or the port gets re-authored twice. Under this roadmap's
-  demand-gated kernel, it is a candidate garden bed, not a hidden phase.
+  when a real sentence demands it. The council's fourth proposal — the
+  dangling `design_conventions` guide — is already resolved (verified
+  2026-09-14) and is recorded here so it is not re-proposed.
+- **Untracked files rot into broken tools** (lore, twice). The word-graph
+  tool's template was never committed and is gone; a repair embeds the
+  template in the tool, and it earns its round only when a consumer asks for
+  the picture.
 
 ## What dan asked to carry in
 
 | Asked | Lands in |
 |---|---|
 | "All three, in one question" (2026-09-14) | the shape of this document |
-| "Let's make the roadmap a bit richer" — the studio gets a scoping phase, the stranger broadens into a variety of apps, the council's recommendations lie on the route (2026-09-14) | Legs 2 and 3; Phases 0–2 and 4 |
-| "Both the dashboard's md docs and the studio's md docs" (2026-09-09) | Leg 1; Phases 3 and 5 |
-| KERNEL.md's two decisions — the cost budget, and its place | the second is answered above (Leg 4); the first is Phase 4's gate |
-| The council's R3 proposals, demand-gated | Phase 4 |
-| The Stimulus burr's resolution, when it comes | Phase 1 |
+| "Make the roadmap a bit richer" — a studio phase, a garden of apps in place of one stranger, the council's recommendations on the route (2026-09-14) | Legs 1–3; the phases |
+| "Scoping and implementing changes to the studio as an iterative process accumulating winnable victories" (2026-09-14) | Leg 2; Phase 0 |
+| "Do not canonize the dashboard — much of it is full of kludges; sp's only effect is reading its lib and the planned read-only markdown" (2026-09-14) | Leg 1; Phase 2 |
+| "KERNEL.md may be dated — refresh it, and recommend whether kernel work precedes or follows the studio" (2026-09-14) | KERNEL.md's addendum; Phase 3's ordering — the recommendation is **studio first** |
+| "Both the dashboard's md docs and the studio's md docs" (2026-09-09) | Leg 1's one bed; Phase 2 |
+| The council's R3 proposals, demand-gated | Phase 3 |
+| The Stimulus burr's resolution, when it comes | Phase 0 |
 
 ## The phases
 
@@ -154,36 +154,21 @@ The shape of a phase here is the one 0.2 proved: a goal, a ledger of what was
 found, and a *done looks like* that can be verified. Every phase ends green,
 committed, and recorded — the RIF loop, no exceptions.
 
-### Phase 0 — The studio, scoped · (dan)
+### Phase 0 — The studio, won iteratively
 
-The workbench leg's honesty gate: scope before polish. The studio's in-between
-state is measured above; the scoping names which roughness is a burr (the two
-Render buttons, kept on purpose) and which is a defect, and gives every
-improvement a consumer — a real use one of the later phases will make of it.
-Candidates already on the record: the playground learning to serve real pages
-with real data (the guides route's own comment names the wall), errors speaking
-the language's terms instead of hand-built strings, the editor growing a
-palette of the repo's own pages, and the Stimulus resolution that obviates the
-second Render button. dan rules the cut; nothing else is built until he has.
+No grand scoping gate; the iteration is the scoping. Each round picks the
+next **winnable victory** from the measured menu — the playground learning to
+serve real pages with real data, errors speaking the language's own terms
+instead of hand-built strings, the editor growing a palette of the repo's own
+pages, the Stimulus resolution that obviates the second Render button (with
+its *why* preserved beside the fix), the word-graph repair if a consumer asks
+for the picture — scopes it to the size one round can land, dan rules the
+pick, and the round lands it. Roughness that stays is named as deliberate.
 
-*Done looks like:* a scoped list of studio changes, each with its consumer and
-its *done looks like*, recorded in this document — and the roughness that
-stays, named as deliberate.
+*Done looks like:* a sequence of landed wins, each committed and judged, and
+a studio that can be *used* — the workbench the garden phase leans on.
 
-### Phase 1 — The studio, implemented
-
-The scoped changes land, each verified the way the studio already verifies
-itself — the studio's pages are in the checker corpora, so the page the
-workbench becomes is held by the gate it displays. The Stimulus burr resolves
-here exactly as its comment foretold (one form, both iframes), and the reason
-it existed is recorded beside the fix — a rule must outlive its reason, and a
-burr must leave its why behind when it goes.
-
-*Done looks like:* the scoped list is closed; the studio serves it; the gate
-is green with the new pages in the corpus; dan has used it to do something
-real.
-
-### Phase 2 — The garden, planted
+### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising
 a different region of the vocabulary, each with a consumer named. dan rules
@@ -193,50 +178,49 @@ lore reader over LORE.md, an exam on the Way itself, a planner with the
 conditional vocabulary a real page still owes. Every author works through the
 studio — the workbench pays for itself here or it was the wrong phase — and
 every refusal, crash and workaround is logged as a gap with the sentence that
-hit it. Nothing is fixed mid-write; the fixes wait for Phase 4, where they
+hit it. Nothing is fixed mid-write; the fixes wait for Phase 3, where they
 earn their place against the other legs' demand. At least one app is built by
 hands that did not write the vocabulary, and the record names which.
 
 *Done looks like:* the garden renders — N apps, each named with its consumer
 and its region — and the ledger names every gap with its sentence.
 
-### Phase 3 — The dashboard, measured
+### Phase 2 — Measure the demand
 
-Read the dashboard's markdown surfaces the way Phase 4 of 0.2 read
-`triage.slim`: inventory `brief`, `doc` and `pattern` — what prose must
-render, what navigation and links they assume, what the untouched constraint
-forbids. Then a read-only rendering experiment, in this repository, consuming
-the dashboard's real files: the dashboard stays untouched and working
-throughout, and the experiment proves which of the garden's gaps the ecosystem
-actually demands and which the garden invented.
+The garden's ledger is the spine. Beside it, one inventory item, kept at its
+true size: the dashboard's markdown surfaces (`brief`, `doc`, `pattern`) are
+read the way Phase 4 read `triage.slim` — what prose must render, what
+navigation they assume — and a read-only rendering experiment, in this
+repository, consuming the dashboard's real files, proves which of the
+garden's gaps the ecosystem actually demands. The dashboard stays untouched
+because maintaining it is not this project's work — not because it is holy.
 
-*Done looks like:* an inventory in the shape of Phase 4's INVENTORY.md, and a
-rendering experiment that names the demand sentence by sentence.
+*Done looks like:* the merged demand, named sentence by sentence — garden
+gaps and dashboard gaps side by side, each with its consumer.
 
-### Phase 4 — Grow only what the demand named
+### Phase 3 — Grow only what the demand named
 
-The garden's ledger and the dashboard's merge. Each gap is settled as a word
-or a power — the standing question — and each landing names its consumer from
-Phase 2 or Phase 3. The kernel leg moves only what a real sentence demanded:
-name-directed access if the ledgers say so, payload forwarding if the
-dashboard's actions say so, and nothing that they did not. **The council's
-recommendations lie here, demand-gated**: R3P1 (payload forwarding in
-partials) if a real form needs hidden keys it cannot declare; R3P2
-(subject-shifting `card`) if a real page writes the same binding five times;
-R3P3 (`formaction` groups) if a real action group wants one form instead of
-four. KERNEL.md's cost budget is dan's, set here before the work begins, and
-the byte-diff harness is the acceptance test for anything that touches
-rendering.
+Each gap is settled as a word or a power — the standing question — and each
+landing names its consumer from Phase 1 or Phase 2. The kernel leg moves only
+what a real sentence demanded: name-directed access if the ledgers say so,
+payload forwarding if a real form needs keys it cannot declare, and nothing
+that they did not. **The council's recommendations lie here, demand-gated**:
+R3P1 (payload forwarding) if a real form demands it; R3P2 (subject-shifting
+`card`) if a real page writes the same binding five times; R3P3 (`formaction`
+groups) if a real action group wants one form instead of four. KERNEL.md's
+cost budget is dan's, set here before the work begins — the re-measured cost
+(4.73 ms warm, 0.22 ms per row) is the baseline it is set against — and the
+byte-diff harness is the acceptance test for anything that touches rendering.
 
 *Done looks like:* the merged ledger closed or explicitly kept open, cost
 re-measured against the budget, suite and byte-diffs green.
 
-### Phase 5 — Serve, and be judged
+### Phase 4 — Serve, and be judged
 
-The dashboard's markdown renders through the language in its read-only form;
-the garden renders with 0 missing affordances; dan judges both. The record
-names what the language still cannot say — the honest limits a forward eye
-exists to find.
+The garden renders with 0 missing affordances; the dashboard's markdown, if
+the demand was real, renders read-only through the language; dan judges all
+of it. The record names what the language still cannot say — the honest
+limits a forward eye exists to find.
 
 *Done looks like:* the question answered — yes, with the gaps logged; or no,
 with the walls named. Either is a result.
@@ -245,13 +229,12 @@ with the walls named. Either is a result.
 
 | Risk | Severity | Retired by |
 |---|---|---|
-| The dashboard breaks, or is touched | highest | every round verifies it works; experiments live here and read, never write; the standing caveat carries |
+| The dashboard becomes a maintenance sidetrack | high | the scope boundary, stated once: sp reads its lib and may render its markdown read-only; it never edits, never rewrites views, never fixes kludges — and no phase may add one |
 | The garden shares one brain | high | at least one app by hands that did not write the vocabulary, named in the record — a fleet of self-portraits is decoration |
-| The studio phase becomes unbounded polish | high | Phase 0's scoping rule: every change names its consumer; dan rules the cut before anything is built |
-| The Stimulus burr is smoothed over silently | medium | Phase 1 records the reason it existed beside the fix |
-| Kernel work no demand named (the 0.2 disease) | high | Phase 4 lands nothing the merged ledger did not name |
-| The cost budget discovered after the work (KERNEL.md's warning) | high | dan sets it before Phase 4's work begins |
-| The renderer drifts from the dashboard (computed-but-unwired) | medium | it reads live files and never remembers — the /status discipline |
+| The studio's victories become unbounded polish | high | each win names its consumer and its size before it starts; dan rules each pick |
+| The Stimulus burr is smoothed over silently | medium | its *why* is recorded beside the fix when it goes |
+| Kernel work no demand named (the 0.2 disease) | high | Phase 3 lands nothing the merged ledger did not name |
+| The cost budget discovered after the work (KERNEL.md's warning) | high | dan sets it before Phase 3's work begins, against the re-measured baseline |
 | A checker-only pass (eleven defects passed every checker in 0.1) | standing | look, per round: load the garden's pages and the rendered surfaces |
 | The privilege leak, if `tag` becomes a kernel word | high, conditional | KERNEL.md's Round 1 discipline: refused in app pages, by test, before any word depends on it |
 
@@ -260,9 +243,8 @@ with the walls named. Either is a result.
 The machine 0.2 ran on, unchanged: `PROJECT.md`'s `next_step` always points at
 the current phase; every item has a *done looks like*; verify before asserting
 — counts measured, coverage stated; look, don't only check; RIF per round —
-implement, verify, commit, card, lore. The three caveats stand: the
-escape-hatch number stays retired, `~/dev/dashboard` keeps working untouched,
-and roth's defects are roth's backlog.
+implement, verify, commit, card, lore. The caveats stand: the escape-hatch
+number stays retired, and roth's defects are roth's backlog.
 
 ## Honest limits, named now
 
@@ -270,13 +252,13 @@ and roth's defects are roth's backlog.
   Every coverage claim carries that until the garden includes its outside
   author — and the record says which app that was.
 - **The studio's in-between state is partly deliberate.** The burr is a
-  burr; Phase 0's scoping names which roughness is which, and a scoping that
-  cannot tell them apart has failed before the work begins.
+  burr; a victory that cannot tell roughness from defect has failed before
+  the work begins.
 - **Static validation cannot prove the app's values are right** — carried
   from 0.2: it removes silent drift, it does not bless numbers.
-- **The dashboard may demand nothing new.** If Phase 3 finds the language
-  already says everything the surfaces need, that is a finding, not a failure
-  — the answer is "the language already could", and the roadmap records it and
-  stops asking.
+- **The dashboard's markdown may demand nothing new.** If Phase 2 finds the
+  language already says everything the surfaces need, that is a finding, not
+  a failure — the answer is "the language already could", and the roadmap
+  records it and stops asking.
 - **This document is a draft.** The question is the load-bearing sentence; the
   phases are the proposal, and they move when the work says so.

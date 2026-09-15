@@ -11,7 +11,7 @@ Resume work on `~/dev/alt-slim-pickins`.
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
 3. `ROADMAP-*.md` — the active roadmap: 0.2 is closed, 0.3 is drafted
-   (the forward eye, four legs in one question); `PROJECT.md` `next_step`
+   (the forward eye, three legs in one question); `PROJECT.md` `next_step`
    points at its current phase
 4. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
 5. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
@@ -44,11 +44,14 @@ The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `ac
 
 **The next step is dan's review of Roadmap 0.3.** Roadmap 0.2 was an
 even-numbered roadmap (the backward eye); Roadmap 0.3 is the forward eye.
-Its question, chosen and enriched by dan (2026-09-14): can the language
-carry real work — the dashboard's markdown untouched, a garden of real
-apps, the studio made into the workbench, the kernel grown only as the
-work demands. The draft (ROADMAP-0.3.md) is held by the checker and served
-by the studio; Phase 0 is scoping the studio.
+Its question, chosen and challenged by dan (2026-09-14): can the language
+carry real work — a garden of real apps, the studio won iteratively into
+the workbench, the kernel lowered only as the work demands. The dashboard
+is one bed in the garden, not a canon: sp's entire effect on it is two
+requires of its lib plus the planned read-only markdown rendering. The
+draft (ROADMAP-0.3.md) is held by the checker and served by the studio;
+KERNEL.md carries its re-measured addendum; Phase 0 is the studio, won
+iteratively.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
 process — it serves whatever code it booted with, so restart it after pulling
