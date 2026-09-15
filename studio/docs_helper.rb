@@ -121,4 +121,65 @@ module StudioDocs
   end
 
   def self.library_files = Dir[File.join(ROOT, 'lib', '**', '*.rb')].sort
+
+  # --- the examples: real sentences, cited ---------------------------------
+
+  # One real sentence from the repo that uses a word — the docs' "In the
+  # wild" section. The body is the node's own sentence, the citation is the
+  # file and line it stands on, and the try path seeds the try-it pane.
+  Example = Struct.new(:body, :where, :try_path, keyword_init: true)
+
+  EXAMPLES_PER_WORD = 3
+
+  # The try-it's honest limit, said beside the editor: a seed is a sentence,
+  # not its page's data.
+  DATA_NOTE = 'Seeds carry no data yet — a sentence that reads data refuses ' \
+              'here, and that refusal is the data wall the next studio round ' \
+              'builds against.'
+
+  # The corpus every example comes from — the same .sp files check_shape
+  # measures, so an example exists exactly where the language is really used.
+  def self.corpus_files
+    Dir[File.join(ROOT, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')]
+  end
+
+  # Built once per boot: walking the whole corpus per docs page would be a
+  # cost the studio's restart model does not need. The studio serves booted
+  # code, so a new corpus sentence arrives exactly when the process restarts.
+  def self.examples
+    @examples ||= begin
+      index = Hash.new { |h, k| h[k] = [] }
+      corpus_files.each do |file|
+        tree = SlimPickins::Transform.tree(File.read(file), path: File.basename(file))
+        visit = lambda do |nodes|
+          nodes.each do |node|
+            list = index[node.word.to_sym]
+            list << [file.sub("#{ROOT}/", ''), node.lineno, node.body] if list.size < EXAMPLES_PER_WORD
+            visit.call(node.children)
+          end
+        end
+        visit.call(tree)
+      end
+      index
+    end
+  end
+
+  # The examples for one word, shaped for the view: the sentence, its
+  # citation, and the seed path that fills the try-it editor with it.
+  def self.examples_of(word)
+    examples[word.to_sym].each_with_index.map do |(file, line, body), i|
+      Example.new(body: body, where: "#{file}:#{line}", try_path: "/docs/#{word}?try=#{i}")
+    end
+  end
+
+  # The try-it's seed: the example's sentence wrapped in a page of its own,
+  # so the pane is always one honest page — data or no data. `index` 0 is
+  # the default when no `try` is asked for; an index past the list means
+  # nothing to seed.
+  def self.seed_for(word, index)
+    list = examples[word.to_sym]
+    return nil unless index && list[index]
+
+    "page \"Try: #{word}\"\n  #{list[index][2]}\n"
+  end
 end

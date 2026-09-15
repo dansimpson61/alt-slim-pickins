@@ -163,7 +163,12 @@ working manual that should be better after every session than it was before.
   take on the palette first, even while the identities are still
   strategically in flux and dynamic." Bring a proposed scope with a
   recommendation; he rules the pick, and the frame may stay open while the
-  work proceeds (observed 2026-09-15).
+  work proceeds. His feature requests describe the surface he wants (docs
+  pages with usage examples, a try-it window, seed buttons); he expects the
+  agent to reconcile them against the demand ledger and surface the
+  collision as the scoping fork — offered the honest tradeoff (seeds without
+  data refuse in the try-it), he picked the deferred-wall option without
+  argument (observed 2026-09-15).
 - **He likes the lore format** — a lesson, not a status report. What you did
   goes in the commit; what you learned goes in the lore.
 

@@ -2,15 +2,15 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Win 1 landed 2026-09-15 — the palette, the repo's own pages loadable in the playground, each entry wearing the census verdict of the render the playground will give it. First census — 13 of 13 pages name the data wall. dan rules the next pick.
+status: PHASE 0 — the studio, won iteratively. Win 1 (the palette) landed 2026-09-15; win 2 (word docs with real examples, a seeded try-it pane, Visual + HTML side by side) landed the same day. The try-it displays the data wall at the word's own page — the next pick's demand, with its consumer standing on it.
 kind: project
 last_touched: 2026-09-15
 next_step: >-
-  dan reviews the palette — boot the studio (ruby studio/app.rb) and load a
-  page from it — and rules the cycle-2 pick from the ledger the census
-  named, in demand order — the data wall (all 13 pages), the partial wall
-  (masked behind it), errors in the language's own terms, or the found gap
-  that verify_pages never renders the studio's own views.
+  dan reviews the docs page — /docs/money shows the wall, /docs/badge renders
+  live — and rules the cycle-3 pick from the wall the try-it now displays —
+  the data wall (a payload slot), paired naturally with errors in the
+  language's own terms (the try-it's refusals still render as hand-built
+  strings).
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

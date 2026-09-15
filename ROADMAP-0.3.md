@@ -191,6 +191,20 @@ a studio that can be *used* — the workbench the garden phase leans on.
   proves the example apps but never the studio's own views, the only corpus
   pages the gate does not render.
 
+- **2 — The word docs grow teeth** (dan's pick, 2026-09-15; the identity
+  instrument's harmony row, landing): every vocabulary entry now carries an
+  *"In the wild"* section — up to three real sentences from the repo's own
+  corpus, each in the language's fence with its `path:line` — and a **try-it
+  pane** beside the reading: the same editor, form and outputs the
+  playground uses, Visual and HTML side by side, seeded by a Try-it link on
+  each example (a GET, zero JavaScript). All sixty-four words have real
+  examples — held by test against VOCABULARY.md. Seeded pages carry no data:
+  content sentences render live, data sentences refuse — `money .total_value`
+  answers "this page has no total_value" — so the docs page now *displays*
+  the data wall at the exact place the word is documented. That refusal,
+  rendered through the `/render` route's hand-built error string, is the
+  next pick's demand, with a consumer standing on the page.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

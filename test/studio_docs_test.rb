@@ -95,4 +95,53 @@ class StudioDocsTest < Minitest::Test
     assert_includes html, 'badge--error', 'the red leg wears its state'
     refute_includes html, 'class="icon', 'the status page authors no icon'
   end
+
+  # --- the examples: the docs' "In the wild" section -----------------------
+
+  # The vocabulary's one home that survives the shared registry is the
+  # document — VOCABULARY.md, the same source check_grammar reads — so the
+  # drift guard iterates that, not the live Word.registry other tests may
+  # have loaded with their own app words.
+  def test_every_vocabulary_word_has_at_least_one_real_example
+    vocab = File.read(File.join(ROOT, 'VOCABULARY.md')).scan(/^### `([a-z_]+)`/).flatten
+    vocab.each do |word|
+      examples = StudioDocs.examples_of(word)
+      refute_empty examples, "#{word} has no real usage in the corpus"
+      examples.each do |ex|
+        refute_includes ex.body, "\n", "#{word}'s example is not one sentence"
+        assert_match(/\.sp:\d+\z/, ex.where, "#{word}'s example is uncited")
+        assert_equal "/docs/#{word}?try=#{examples.index(ex)}", ex.try_path
+      end
+    end
+  end
+
+  def test_examples_are_capped_at_three
+    assert_operator StudioDocs.examples_of('badge').size, :<=, StudioDocs::EXAMPLES_PER_WORD
+  end
+
+  def test_seed_for_wraps_the_example_in_a_page
+    seed = StudioDocs.seed_for('money', 0)
+    assert_match(/\Apage "Try: money"\n  /, seed)
+    assert_includes seed, 'money'
+    assert_nil StudioDocs.seed_for('money', 99), 'an index past the list seeds nothing'
+  end
+
+  def test_the_docs_page_renders_with_canned_examples
+    examples = [StudioDocs::Example.new(body: "badge ok, \"x\"",
+                                        where: 'pages/specimen.sp:13',
+                                        try_path: '/docs/badge?try=0')]
+    library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__))
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'docs.sp')),
+                              path: 'docs.sp',
+                              locals: { title: 'Docs: badge', contract: 'c', implementation: 'i',
+                                        examples: examples, source: "page \"Try: badge\"\n",
+                                        editor_title: 'Try it: badge',
+                                        data_note: StudioDocs::DATA_NOTE, words: [], guides: [] },
+                              library: library)
+    assert_includes html, 'In the wild'
+    assert_includes html, 'Try it: badge'
+    assert_includes html, 'snippet--sp', 'the example renders in the language’s own fence'
+    assert_includes html, 'Try it</a>', 'each example carries its seed link'
+    assert_includes html, 'grid', 'the two outputs share a row'
+  end
 end

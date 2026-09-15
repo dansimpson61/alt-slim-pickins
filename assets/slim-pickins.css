@@ -451,6 +451,19 @@ time { color: var(--ink-soft); }
   margin-bottom: var(--gap);
 }
 
+/* The docs page's try-it pane: the same column treatment the editor pane
+   uses, with the two outputs sharing the row beneath the form. */
+.try_it {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.try_it .grid {
+  flex-grow: 2;
+  min-height: 0;
+}
+
 .editor_form {
   flex-grow: 1;
   display: flex;

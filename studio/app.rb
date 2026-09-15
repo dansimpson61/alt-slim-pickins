@@ -31,13 +31,23 @@ end
 # The payload comes from `StudioDocs.entries` as a plain hash lookup: a
 # word's name is a string key here, never a method name, so no word name
 # ever has to survive dispatch on the playground's OpenStruct.
+#
+# The page also carries the word's try-it pane: the repo's real sentences
+# using the word, each with a seed link, and the editor itself — the same
+# form and iframes the playground uses. `?try=N` picks the example to seed;
+# without it the first example is seeded, so the pane is never empty.
 get '/docs/:word' do
   entry = StudioDocs.entries[params[:word]]
   halt 404, "There is no word called #{params[:word]}." unless entry
 
+  try_index = params[:try] && params[:try].to_i
   SlimPickins.render(File.read(File.join(settings.views, 'docs.sp')), path: 'docs.sp',
                      locals: { title: "Docs: #{params[:word]}", contract: entry[:contract],
-                               implementation: entry[:implementation], **SIDEBAR },
+                               implementation: entry[:implementation],
+                               examples: StudioDocs.examples_of(params[:word]),
+                               source: StudioDocs.seed_for(params[:word], try_index || 0) || '',
+                               editor_title: "Try it: #{params[:word]}",
+                               data_note: StudioDocs::DATA_NOTE, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 
