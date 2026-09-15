@@ -304,15 +304,6 @@ summary { cursor: pointer; color: var(--accent); }
   font-family: var(--face-mono);
   font-size: var(--size-small);
 }
-.snippet-copy {
-  background: none;
-  border: var(--rule-width) solid var(--rule);
-  border-radius: var(--radius);
-  color: var(--ink-soft);
-  font-size: var(--size-small);
-  padding: 0 calc(var(--step) * 2);
-  cursor: pointer;
-}
 
 
 

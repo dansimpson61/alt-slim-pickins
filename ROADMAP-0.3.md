@@ -333,6 +333,19 @@ a studio that can be *used* — the workbench the garden phase leans on.
   out, as the palette's completeness test names it: a template, not a
   page.
 
+- **9 — The snippet word's dead Copy button, subtracted** (dan's ruling,
+  2026-09-15, "subtract it"): the button went everywhere at once — the
+  generator stopped emitting it and the `.snippet-copy` rule went with it
+  (check_styles counts the removal: 95 rules → 94, no orphan). The scoping
+  named why wiring was never the answer: the button's two homes are the
+  docs page's own fences (wireable) and the try-it's rendered iframes
+  (their documents carry no scripts by design) — the word cannot know
+  which context it renders into, so "wired" could only mean half-wired or
+  output contaminated with studio chrome, and the try-it's whole point is
+  the language's pure output. A fence's text is natively selectable,
+  which is the affordance the button pretended to be; the vocabulary is
+  one button simpler.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

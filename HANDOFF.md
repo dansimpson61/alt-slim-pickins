@@ -77,9 +77,14 @@ verify_pages gap closed: the studio's own four pages joined the gate with
 the shapes their routes serve — status against canned results, because
 its route shells the gate and live results would recurse (named in the
 script). The gate now proves every corpus page: 14 pages verified, 0
-problems. The remaining ledger — the snippet Copy button, pages/*.sp
-outside the palette, or the Phase 0 judgment — waits on dan's picks (see
-`PROJECT.md` `next_step`). Roadmap 0.2 was an even-numbered roadmap (the
+problems. Win 9, the snippet word's dead Copy button subtracted —
+everywhere at once (the generator stopped emitting it, the CSS rule went
+with it: 95 rules → 94); wiring was never the answer, because the
+button's two homes are the docs fences and the try-it's script-less
+iframes, and a fence's text is natively selectable. The remaining ledger
+— pages/*.sp outside the palette, or the Phase 0 judgment — waits on
+dan's picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
+even-numbered roadmap (the
 backward eye); 0.3 is the forward eye. Its question, chosen and
 challenged by dan (2026-09-14): can the language carry real work — a
 garden of real apps, the studio won iteratively into the workbench, the
@@ -130,12 +135,12 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-15, after Phase 0's seventh win — the Stimulus
-  burr: 295 runs / 0 failures in one process, assertions varying with
+  (re-measured 2026-09-15, after Phase 0's ninth win — the Copy button's
+  subtraction: 295 runs / 0 failures in one process, assertions varying with
   class order as recorded in the lore — the dashboard's harness, which
   is the stronger one and worth running too: `ruby -Ilib:test -e
-  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 706
-  sentences / 0 problems, 95 rules / 0 problems, 64 words and all 64 used
+  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 705
+  sentences / 0 problems, 94 rules / 0 problems, 64 words and all 64 used
   in real pages / 0 problems, 14 pages verified, 25 affordances / 0 missing;
   the 13-page count retired with the paper pages, the 69-word count with
   Phase 6's cuts)

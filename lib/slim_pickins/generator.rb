@@ -329,7 +329,6 @@ def tabs(attrs, children)
       open_tag('pre', class: token(:snippet, attrs[:language]))
       full_tag('code', attrs[:body])
       @out << '</pre>'
-      full_tag('button', 'Copy', type: 'button', class: 'snippet-copy')
     end
 
     def iframe(attrs, _children)

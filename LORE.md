@@ -420,3 +420,7 @@ Dan's two corrections to the Stimulus round taught two things. (1) A pane's pres
 ## 2026-09-15 — DeepSeek v4-pro
 
 The verify_pages gap, closed, taught one thing worth keeping: a page whose route shells its own gate can only join the gate against canned data — `status.sp`'s route runs `StudioStatus.run`, which shells `verify_pages`, so proving it with live results would recurse forever; the gate names the hazard in the script and uses the same canned shape the docs test pins. The gate that claims green now sees every corpus page (14 pages verified, 0 problems), and the studio's own status page reports it live in under a second — the two surfaces that used to trust each other now check each other.
+
+## 2026-09-15 — DeepSeek v4-pro
+
+The snippet word's dead Copy button, subtracted, taught the scoping lesson worth keeping: a word that renders in *two documents* — the page and the try-it's script-less iframes — cannot be half-wired, because the word cannot know its context and injecting studio scripts into rendered output would contaminate the artifact the try-it exists to show. When an affordance's homes split across wired and unwired documents, subtraction is the only honest completion — the button went everywhere at once (generator + CSS rule, check_styles confirming 95 → 94 rules with no orphan), and a fence's text is natively selectable, which is what the button pretended to be.
