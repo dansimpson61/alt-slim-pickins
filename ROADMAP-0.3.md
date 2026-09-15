@@ -346,6 +346,15 @@ a studio that can be *used* — the workbench the garden phase leans on.
   which is the affordance the button pretended to be; the vocabulary is
   one button simpler.
 
+- **10 — The repo's own pages joined the palette** (dan's ruling,
+  2026-09-15): `pages/*.sp` — specimen, portfolio_table, account_detail,
+  roth_form and the test_account_card partial — entered the palette, 13
+  entries becoming 18, with specimen leading (it is the whole vocabulary
+  on one page). The census's completeness test widened to `pages/`, and
+  the pages already had ledger providers from the deepening, so loading
+  one pre-fills its data — the found gap from win 4 is closed, and the
+  palette's census now covers every page in the repo, layouts excepted.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

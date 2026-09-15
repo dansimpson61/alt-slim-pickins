@@ -17,20 +17,26 @@ require_relative '../examples/roth/app'
 # renders with the playground's locals and the studio's library; `error`
 # means it named a wall, and the refusal is recorded verbatim, the way the
 # language said it. The palette is curated for order and complete by test:
-# every `.sp` under examples/ (a layout is chrome, not a page) and the
-# studio's own top-level views is in it, because a census that skips pages
-# understates the demand.
+# every `.sp` under pages/ and examples/ (a layout is chrome, not a page)
+# and the studio's own top-level views is in it, because a census that
+# skips pages understates the demand.
 module StudioPages
   ROOT = File.expand_path('..', __dir__)
 
   Entry = Struct.new(:id, :name, :path, :load_path, :status, :refusal, :here,
                      keyword_init: true)
 
-  # Ordered by app — an app's pages before its partials, the studio last —
-  # because the order is part of the argument, exactly as it is for the
-  # guides. A layout and the refusal template are chrome, not pages, so they
-  # are not here.
+  # Ordered as an argument, exactly like the guides: the repo's own pages
+  # first — specimen leads, it is the whole vocabulary on one page — then
+  # the example apps, an app's pages before its partials, the studio last.
+  # A layout and the refusal template are chrome, not pages, so they are
+  # not here.
   PAGES = {
+    'pages/specimen' => 'pages/specimen.sp',
+    'pages/portfolio_table' => 'pages/portfolio_table.sp',
+    'pages/account_detail' => 'pages/account_detail.sp',
+    'pages/roth_form' => 'pages/roth_form.sp',
+    'pages/partials/test_account_card' => 'pages/partials/test_account_card.sp',
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
     'portfolio/partials/account_card' => 'examples/portfolio/views/partials/account_card.sp',

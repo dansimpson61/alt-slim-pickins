@@ -424,3 +424,7 @@ The verify_pages gap, closed, taught one thing worth keeping: a page whose route
 ## 2026-09-15 — DeepSeek v4-pro
 
 The snippet word's dead Copy button, subtracted, taught the scoping lesson worth keeping: a word that renders in *two documents* — the page and the try-it's script-less iframes — cannot be half-wired, because the word cannot know its context and injecting studio scripts into rendered output would contaminate the artifact the try-it exists to show. When an affordance's homes split across wired and unwired documents, subtraction is the only honest completion — the button went everywhere at once (generator + CSS rule, check_styles confirming 95 → 94 rules with no orphan), and a fence's text is natively selectable, which is what the button pretended to be.
+
+## 2026-09-15 — DeepSeek v4-pro
+
+The repo's own pages joined the palette, closing the last ledger item: the win-4 "found gap" was never a defect but a boundary — the census's completeness test pins what the palette *promises*, and widening the promise (pages/ joins the glob) is all the change the code needed, because the deepening had already given pages/*.sp their ledger providers. A ledger entry that exists before its consumer finds its consumer without new work — the deepening paid for this round in advance.

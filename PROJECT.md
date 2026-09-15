@@ -2,13 +2,14 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Wins 1–9 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), the Stimulus burr resolved live (debounced rendering, no button, one JSON contract), the verify_pages gap closed (14 pages verified), and the snippet word's dead Copy button subtracted. dan rules the next pick.
+status: PHASE 0 — the studio, won iteratively. Wins 1–10 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), the Stimulus burr resolved live (debounced rendering, no button, one JSON contract), the verify_pages gap closed (14 pages verified), the snippet word's dead Copy button subtracted, and the repo's own pages joined the palette (18 entries, census complete). The ledger is empty — only dan's judgment on Phase 0 remains.
 kind: project
 last_touched: 2026-09-15
 next_step: >-
-  dan rules the cycle-10 pick from the remaining ledger — pages/*.sp into
-  the palette, or the judgment that Phase 0 is complete and Phase 1 (the
-  garden) opens.
+  dan judges Phase 0 — ten wins, a workbench that loads real pages with
+  real data and renders them live, roughness named as deliberate — and
+  either rules it complete (Phase 1, the garden, opens) or names what the
+  studio still owes.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

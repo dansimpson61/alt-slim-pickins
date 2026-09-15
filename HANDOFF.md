@@ -81,9 +81,13 @@ problems. Win 9, the snippet word's dead Copy button subtracted —
 everywhere at once (the generator stopped emitting it, the CSS rule went
 with it: 95 rules → 94); wiring was never the answer, because the
 button's two homes are the docs fences and the try-it's script-less
-iframes, and a fence's text is natively selectable. The remaining ledger
-— pages/*.sp outside the palette, or the Phase 0 judgment — waits on
-dan's picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
+iframes, and a fence's text is natively selectable. Win 10, the repo's
+own pages joined the palette — 13 entries became 18, specimen leading,
+census completeness widened to pages/, and their ledger providers (from
+the deepening) pre-fill the data on load. The ledger is empty: only
+dan's judgment on Phase 0 remains — ten wins, the workbench usable, and
+either the phase closes and Phase 1 (the garden) opens, or he names what
+the studio still owes (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
 even-numbered roadmap (the
 backward eye); 0.3 is the forward eye. Its question, chosen and
 challenged by dan (2026-09-14): can the language carry real work — a

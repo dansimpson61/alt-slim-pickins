@@ -25,9 +25,12 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_the_census_is_complete
-    expected = Dir[File.join(ROOT, 'examples', '**', 'views', '**', '*.sp')]
+    expected = Dir[File.join(ROOT, 'pages', '**', '*.sp')]
                .reject { |f| File.basename(f) == 'layout.sp' } # chrome, not a page
                .map { |f| f.sub("#{ROOT}/", '') }
+    expected += Dir[File.join(ROOT, 'examples', '**', 'views', '**', '*.sp')]
+                .reject { |f| File.basename(f) == 'layout.sp' } # chrome, not a page
+                .map { |f| f.sub("#{ROOT}/", '') }
     expected += Dir[File.join(ROOT, 'studio', 'views', '*.sp')]
                 .reject { |f| File.basename(f) == 'refusal.sp' } # a template, not a page
                 .map { |f| f.sub("#{ROOT}/", '') }
@@ -107,6 +110,7 @@ class StudioPagesTest < Minitest::Test
     'pages/specimen.sp' => 'Facts, badges, moments',
     'pages/account_detail.sp' => 'Account detail',
     'pages/roth_form.sp' => 'Directional Roth Conversion Sketch',
+    'pages/partials/test_account_card.sp' => 'Roth IRA',
     'examples/portfolio/views/index.sp' => 'Your retirement',
     'examples/portfolio/views/account.sp' => 'Account detail',
     'examples/portfolio/views/partials/account_card.sp' => 'Roth IRA',
