@@ -65,12 +65,15 @@ word's body and its co-registrations, ledger-less examples get synthesized
 payloads, structural words are labeled honestly, and the audit is the
 acceptance test — 62 useful / 2 structural / 2 noted / 0 refusals, pinned
 every round (`test/studio_try_test.rb`). Win 7, the Stimulus burr resolved
-live: one Render button, debounced rendering as you type (dan's ruling —
-the bolder trigger), a vendored @hotwired/stimulus@3.2.2 UMD, one `render`
-controller, and the studio's `wired_form` app word through the escape
-hatch; the `/render.json` contract `{ visual, source }` writes both panes
-from one fetch, and the form's native action stays so no-JS still renders
-the visual pane. The remaining ledger — the verify_pages gap, the snippet
+live: no Render button remains (dan's ruling — live rendering made it
+redundant), debounced rendering as you type, a vendored
+@hotwired/stimulus@3.2.2 UMD, one `render` controller, and the studio's
+`wired_form` app word through the escape hatch; the `/render.json`
+contract `{ visual, source }` writes both panes from one fetch — the
+raw-HTML pane's tidy monospace wrapper lives in the contract, because a
+pane's presentation is part of its payload. Rendering requires
+JavaScript, which the studio says rather than hides. The remaining
+ledger — the verify_pages gap, the snippet
 Copy button, pages/*.sp outside the palette, or the Phase 0 judgment —
 waits on dan's picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
 even-numbered roadmap (the backward eye); 0.3 is the forward eye. Its question, chosen

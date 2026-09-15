@@ -152,6 +152,8 @@ class StudioPagesTest < Minitest::Test
                                       '{"total_value": 120}')
     assert_includes payload[:visual], '<span class="money">$120</span>'
     assert_includes payload[:source], '&lt;span class=&quot;money&quot;&gt;', 'the raw pane is escaped'
+    assert_includes payload[:source], 'white-space: pre-wrap',
+                    'the raw pane keeps its tidy monospace wrapper'
   end
 
   def test_render_json_refuses_in_the_languages_voice

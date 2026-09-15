@@ -196,10 +196,10 @@ class StudioDocsTest < Minitest::Test
     assert_includes html, 'snippet--sp', 'the example renders in the language’s own fence'
     assert_includes html, 'Try it</a>', 'each example carries its seed link'
     assert_includes html, 'grid', 'the two outputs share a row'
-    # The burr's resolution: one wired form, one button, the no-JS action.
+    # The burr's resolution, to its natural end: one wired form, no button.
     assert_includes html, 'data-controller="render"', 'the form is wired'
-    assert_includes html, 'action="/render"', 'the native path stays'
-    assert_equal 1, html.scan('type="submit"').size, 'one Render button, not two'
+    assert_includes html, 'action="/render"', 'the form still names its route'
+    assert_equal 0, html.scan('type="submit"').size, 'live rendering needs no button'
     assert_equal 1, html.scan('class="form editor_form"').size,
                  'the wired form carries its class exactly once'
   end

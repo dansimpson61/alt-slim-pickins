@@ -96,8 +96,7 @@ post '/render' do
 end
 
 post '/render_html' do
-  source = StudioPages.render_json(params[:source].to_s, params[:data])[:source]
-  "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{source}</body></html>"
+  StudioPages.render_json(params[:source].to_s, params[:data])[:source]
 end
 
 # The render contract, as JSON — one request, both panes. The controller

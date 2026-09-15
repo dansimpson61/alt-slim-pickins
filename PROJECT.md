@@ -2,7 +2,7 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Wins 1–7 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), and the Stimulus burr resolved live (one button, debounced, one JSON contract). dan rules the next pick.
+status: PHASE 0 — the studio, won iteratively. Wins 1–7 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), and the Stimulus burr resolved live (debounced rendering, no button — dan's ruling — one JSON contract carrying both panes). dan rules the next pick.
 kind: project
 last_touched: 2026-09-15
 next_step: >-

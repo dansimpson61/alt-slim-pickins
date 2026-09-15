@@ -9,9 +9,10 @@
  * One controller, one contract: the form posts once, the response
  * { visual, source } lands in both iframes — found by the names the
  * language already emits. Rendering is live: debounced on input, and once
- * on connect, so a seeded page appears the moment the page loads. The
- * form's native action stays /render, so without JavaScript the visual
- * pane still renders the old way.
+ * on connect, so a seeded page appears the moment the page loads. No
+ * Render button remains (dan's ruling, 2026-09-15): live rendering made
+ * it redundant, and the studio says so rather than hiding it — rendering
+ * requires JavaScript.
  */
 class RenderController extends Stimulus.Controller {
   static values = { debounce: { type: Number, default: 300 } }

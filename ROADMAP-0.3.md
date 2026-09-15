@@ -313,7 +313,13 @@ a studio that can be *used* — the workbench the garden phase leans on.
   and double-counted `app_class` and the wrapper's copy of it — fixed with
   a one-token dedupe, named in the commit; and `->` in `data-action`
   escapes in raw markup but the DOM decodes it, so the wiring is correct
-  by construction.
+  by construction. Two dan-ruled completions, same day: the raw-HTML
+  pane's tidy monospace wrapper moved *into the contract* (the `source`
+  value is the pane's whole page — a pane's presentation is part of its
+  payload, or the first pane to stop using the shared route loses it);
+  and the Render button was cut — live rendering made it redundant, and
+  what a change makes redundant gets cut. Rendering now requires
+  JavaScript, and the studio says so rather than hides it.
 
 ### Phase 1 — The garden, planted
 

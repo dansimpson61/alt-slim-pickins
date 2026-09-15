@@ -321,9 +321,11 @@ module StudioPages
   end
 
   # The studio's render contract — one response, both panes. The visual is
-  # the rendered page (a refusal is still a page); the source is the same
-  # page escaped, for the raw-HTML pane. This is the client API the
-  # controller grows against: a future pane joins as a key, not a change.
+  # the rendered page (a refusal is still a page); the source is the raw-
+  # HTML pane's own page: the same output escaped, kept tidy by the
+  # pre-wrap monospace the pane has always worn. This is the client API
+  # the controller grows against: a future pane joins as a key, not a
+  # change.
   def self.render_json(source, data = nil)
     visual = begin
       SlimPickins.render(source, path: 'playground.sp',
@@ -331,6 +333,10 @@ module StudioPages
     rescue StandardError => e
       refusal(e)
     end
-    { visual: visual, source: CGI.escapeHTML(visual) }
+    { visual: visual, source: raw_page(visual) }
+  end
+
+  def self.raw_page(html)
+    "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(html)}</body></html>"
   end
 end

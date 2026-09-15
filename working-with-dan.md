@@ -181,7 +181,12 @@ working manual that should be better after every session than it was before.
   (a sandbox), treat it as one candidate to beat, not the spec.
   And given a conservative option beside a bolder one, he takes the bold
   one when the architecture makes it cheap: offered button-click vs live
-  debounced rendering, he picked live (observed 2026-09-15).
+  debounced rendering, he picked live. Then he cuts what the change made
+  redundant — the Render button was gone by his next message ("The Render
+  button is no longer necessary"), the 0.2 subtraction instinct again:
+  after landing a bolder mechanism, expect the superseded affordance to
+  be removed by his word, and cut it before it is asked twice
+  (observed 2026-09-15).
 - **He wants loose ends as executable options, not prose.** Handed a
   "one thing that is yours" paragraph about an untracked file, his answer
   was a standing instruction: "In the future, when you have things like
