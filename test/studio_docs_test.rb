@@ -131,6 +131,8 @@ class StudioDocsTest < Minitest::Test
         refute_includes ex.body, "\n", "#{word}'s example is not one sentence"
         refute_empty ex.context, "#{word}'s example has no context"
         assert_match(/\.sp:\d+\z/, ex.where, "#{word}'s example is uncited")
+        next unless ex.try_path # structural words carry a note, not a link
+
         assert_equal "/docs/#{word}?try=#{examples.index(ex)}", ex.try_path
       end
     end
@@ -166,9 +168,12 @@ class StudioDocsTest < Minitest::Test
     assert_equal 1_284_506, parsed['portfolio']['total_value']
   end
 
-  def test_a_partial_internal_example_carries_no_payload
-    examples = StudioDocs.examples_of('heading') { |path| StudioPages.data_json_for(path) }
-    assert_equal '', examples.first.data, "a partial's slot is not page data"
+  def test_a_partial_internal_example_gets_synthetic_payload
+    examples = StudioDocs.examples_of('heading') { |p, c| StudioPages.data_json_for(p, c) }
+    parsed = JSON.parse(examples.first.data)
+    assert_equal 'Hello world', parsed['content'], 'the slot read gets a synthetic value'
+    assert_nil parsed['name'], 'a nil slot keeps enclosing boxes open for their children'
+    assert_nil examples.first.note, 'a synthetic payload is not a structural note'
   end
 
   def test_the_docs_page_renders_with_canned_examples

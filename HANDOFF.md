@@ -42,7 +42,7 @@ The detailed phase-by-phase record of Roadmap 0.2 remains in `ROADMAP-0.2.md`.
 **Phase 6 (Subtraction) is complete, officially closing Roadmap 0.2.**
 The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `action` primitive is refactored, and Phase 5's prose named-limits (`---`, heading boundaries, table alignment colons, and deeply nested lists) are fully natively supported by `prose` (because we discovered they were genuinely needed for structural clarity, validating that we shouldn't strip them).
 
-**Phase 0 is open — the studio, won iteratively — and five wins have
+**Phase 0 is open — the studio, won iteratively — and six wins have
 landed (2026-09-15).** Win 1, the palette: the playground offers the repo's
 own pages as starting points, thirteen of them, each wearing the census
 verdict of the render the playground will give it — 13 of 13 refuse, every
@@ -59,19 +59,23 @@ reads the language's one home (VOCABULARY.md) instead of the live registry.
 Win 5, the deepening: examples show the word in its real home (the page
 line — the subject's home — and the path down to the sentence), and the
 data slot arrives pre-filled from a data ledger that serves each page the
-locals its own app proves it with, held by a render test that
-round-trips every payload. The remaining ledger — the Stimulus burr's
-resolution, the verify_pages gap, the snippet Copy button, pages/*.sp
-outside the palette, or the Phase 0 judgment — waits on dan's picks (see
-`PROJECT.md` `next_step`). Roadmap 0.2 was an even-numbered roadmap (the
-backward eye); 0.3 is the forward eye. Its question, chosen and challenged
-by dan (2026-09-14): can the language carry real work — a garden of real
-apps, the studio won iteratively into the workbench, the kernel lowered
-only as the work demands. The dashboard is one bed in the garden, not a
-canon: sp's entire effect on it is two requires of its lib plus the planned
-read-only markdown rendering. The draft (ROADMAP-0.3.md) is held by the
-checker and served by the studio; KERNEL.md carries its re-measured
-addendum.
+locals its own app proves it with. Win 6, the try-it yield: dan's audit
+found 34 useful / 16 empty / 14 refused; the context now carries the
+word's body and its co-registrations, ledger-less examples get synthesized
+payloads, structural words are labeled honestly, and the audit is the
+acceptance test — 62 useful / 2 structural / 2 noted / 0 refusals, pinned
+every round (`test/studio_try_test.rb`). The remaining ledger — the
+Stimulus burr's resolution, the verify_pages gap, the snippet Copy button,
+pages/*.sp outside the palette, or the Phase 0 judgment — waits on dan's
+picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an even-numbered
+roadmap (the backward eye); 0.3 is the forward eye. Its question, chosen
+and challenged by dan (2026-09-14): can the language carry real work — a
+garden of real apps, the studio won iteratively into the workbench, the
+kernel lowered only as the work demands. The dashboard is one bed in the
+garden, not a canon: sp's entire effect on it is two requires of its lib
+plus the planned read-only markdown rendering. The draft (ROADMAP-0.3.md)
+is held by the checker and served by the studio; KERNEL.md carries its
+re-measured addendum.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
 process — it serves whatever code it booted with, so restart it after pulling
@@ -114,11 +118,11 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-15, after Phase 0's fifth win — the deepening:
-  292 runs / 0 failures in one process, assertions varying with class order
+  (re-measured 2026-09-15, after Phase 0's sixth win — the try-it yield:
+  293 runs / 0 failures in one process, assertions varying with class order
   as recorded in the lore — the dashboard's harness, which
   is the stronger one and worth running too: `ruby -Ilib:test -e
-  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 698
+  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 703
   sentences / 0 problems, 95 rules / 0 problems, 64 words and all 64 used
   in real pages / 0 problems, 10 pages verified, 25 affordances / 0 missing;
   the 13-page count retired with the paper pages, the 69-word count with

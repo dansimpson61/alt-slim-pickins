@@ -146,12 +146,17 @@ module StudioPages
   # The dashboard's stable first queue item — dan's ruling (2026-09-15): the
   # docs teach a stable shape, so the sandbox answers with a sample rather
   # than the live Scan.triage_queue. The card it renders is held by the
-  # ledger's render test.
+  # ledger's render test. The base is the app's own prove! scaffolding.
   SAMPLE_FIRST_ITEM = {
     'path' => '/triage/example', 'status_variant' => 'warning',
     'status' => 'needs review', 'purpose' => 'A page waiting for its ruling.',
     'next_line' => nil, 'offer_commit' => false
   }.freeze
+
+  DASHBOARD_BASE = { q: '', error_entry: nil,
+                     nav_state: { 'studio' => false, 'library' => false,
+                                  'reconcile' => false, 'dispatch' => false,
+                                  'ports' => false } }.freeze
 
   # The data ledger: what the playground pre-fills for a corpus page — the
   # same locals the page's own app proves it with. One provider per page,
@@ -167,25 +172,37 @@ module StudioPages
       { portfolio: Fixtures.portfolio }
     when 'examples/portfolio/views/account.sp'
       { account: Fixtures.portfolio.accounts.last }
-    when 'examples/portfolio/views/partials/account_card.sp'
+    when 'examples/portfolio/views/partials/account_card.sp',
+         'pages/partials/test_account_card.sp'
       # Rendered standalone, the card's subject is the page — so the
       # account's own fields are the locals, not a wrapper around them.
       Fixtures.portfolio.accounts.last.to_h
+    when 'studio/views/index.sp'
+      { source: "page \"Studio\"\n  heading \"Hello\"\n", palette: [],
+        editor_title: 'Write .sp Code', data: '', words: [], guides: [] }
+    when 'studio/views/docs.sp'
+      { title: 'A word', contract: 'No contract.', implementation: 'No implementation.',
+        examples: [], source: "page \"A word\"\n", editor_title: 'Try it: word',
+        data: '', data_note: StudioDocs::DATA_NOTE, words: [], guides: [] }
+    when 'studio/views/guide.sp'
+      { title: 'A guide', content: 'A **guide** page.', words: [], guides: [] }
+    when 'studio/views/status.sp'
+      { title: 'Status', overview: 'All legs green.', results: [], words: [], guides: [] }
     when 'examples/roth/views/controls.sp', 'examples/roth/views/partials/report.sp'
       roth_locals
     when 'examples/dashboard/views/triage.sp'
-      { notice: nil, unreviewed: nil,
-        first_item: SAMPLE_FIRST_ITEM,
-        queue_intro: 'One item needs attention — this is the first:' }
+      DASHBOARD_BASE.merge(notice: 'A page waiting for its ruling.', unreviewed: nil,
+                           first_item: SAMPLE_FIRST_ITEM,
+                           queue_intro: 'One item needs attention — this is the first:')
     when 'examples/dashboard/views/partials/queue.sp'
-      { first_item: SAMPLE_FIRST_ITEM,
-        queue_intro: 'One item needs attention — this is the first:' }
+      DASHBOARD_BASE.merge(first_item: SAMPLE_FIRST_ITEM,
+                           queue_intro: 'One item needs attention — this is the first:')
     when 'examples/dashboard/views/partials/unreviewed_card.sp'
-      { unreviewed: '1 instruction file awaiting judgment — hand-kept rules ' \
-                    'nobody has ruled canonical or legacy.' }
+      DASHBOARD_BASE.merge(unreviewed: '1 instruction file awaiting judgment — hand-kept rules ' \
+                                       'nobody has ruled canonical or legacy.')
     when 'examples/dashboard/views/confirm_archive.sp'
-      { archive_heading: 'Archive "example"?', archive_path: 'example',
-        archive_return_to: '/triage', reason: '' }
+      DASHBOARD_BASE.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
+                           archive_return_to: '/triage', reason: '')
     else
       {}
     end
@@ -230,15 +247,49 @@ module StudioPages
   end
 
   # The data slot's pre-fill for a page: its ledger payload, as pretty
-  # JSON — or nothing, where the page has no entry. A payload that cannot
-  # be serialized is a ledger defect the render test catches; the route
-  # itself never crashes on it.
-  def self.data_json_for(rel)
+  # JSON — or, for a page with no ledger entry, the chain refs its context
+  # reads answered with plain defaults (the example carries a note that the
+  # values are synthetic) — or nothing, where both are empty. A payload
+  # that cannot be serialized is a ledger defect the render test catches;
+  # the route itself never crashes on it.
+  def self.data_json_for(rel, chain = nil)
     data = data_for(rel)
+    data = synthesized_for(chain) if data.empty? && chain
     return '' if data.empty?
 
     JSON.pretty_generate(plainify(data))
   rescue StandardError
     ''
+  end
+
+  # A page with no ledger entry still owes the try-it a payload: the chain
+  # refs its context reads, answered with plain defaults — the word
+  # demonstrates, and the example's note says the values are synthetic.
+  SYNTH_DEFAULTS = {
+    name: nil, content: 'Hello world', label: 'A label', open: true,
+    q: '', title: 'A title', where: 'a place', body: 'A body',
+    notice: nil, unreviewed: nil, first_item: nil, placeholder: 'Search',
+    nav_state: { 'studio' => false, 'library' => false, 'reconcile' => false,
+                 'dispatch' => false, 'ports' => false }
+  }.freeze
+
+  def self.synthesized_for(chain)
+    refs = []
+    chain.each { |node| refs.concat(refs_of(node)) }
+    walk = lambda do |nodes|
+      nodes.each do |node|
+        refs.concat(refs_of(node))
+        walk.call(node.children)
+      end
+    end
+    walk.call(chain.last.children) if chain.last
+    found = refs.uniq.to_h { |ref| [ref.to_sym, SYNTH_DEFAULTS.fetch(ref.to_sym, 'a value')] }
+    SYNTH_DEFAULTS.merge(found).transform_keys(&:to_s)
+  end
+
+  # The chain refs a sentence reads — `.total_value`, `id: .id`, anywhere
+  # in the args; the first segment is the data key.
+  def self.refs_of(node)
+    node.raw_args.flat_map { |arg| arg.scan(/\.([a-z_]+)/).flatten }.uniq
   end
 end

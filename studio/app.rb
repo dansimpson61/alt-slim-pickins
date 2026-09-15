@@ -42,15 +42,18 @@ get '/docs/:word' do
   halt 404, "There is no word called #{params[:word]}." unless entry
 
   try_index = params[:try] && params[:try].to_i
-  examples = StudioDocs.examples_of(params[:word]) { |path| StudioPages.data_json_for(path) }
+  examples = StudioDocs.examples_of(params[:word]) do |path, chain|
+    StudioPages.data_json_for(path, chain)
+  end
   example = examples[try_index || 0]
+  seedable = example&.try_path
   SlimPickins.render(File.read(File.join(settings.views, 'docs.sp')), path: 'docs.sp',
                      locals: { title: "Docs: #{params[:word]}", contract: entry[:contract],
                                implementation: entry[:implementation],
                                examples: examples,
-                               source: StudioDocs.seed_for(params[:word], try_index || 0) || '',
+                               source: seedable ? (StudioDocs.seed_for(params[:word], try_index || 0) || '') : '',
                                editor_title: "Try it: #{params[:word]}",
-                               data: example ? example.data.to_s : '',
+                               data: seedable ? example.data.to_s : '',
                                data_note: StudioDocs::DATA_NOTE, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end

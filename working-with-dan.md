@@ -72,7 +72,12 @@ working manual that should be better after every session than it was before.
 - **He judges by looking.** He sent a screenshot of the studio rendering badly
   rather than describing it. Treat a paste or screenshot as a bug report with
   evidence attached, and go verify the exact bytes he is seeing — the cause
-  that time was a server running old code, not the code itself.
+  that time was a server running old code, not the code itself. He also
+  reports his own measurements as observations to be confirmed: "sample the
+  outputs of each word's Try me and observe that some provide useful output
+  but many (most?) do not" — his suspicion was right (34/64 useful), and
+  confirming it *and fixing it* in one cycle is the expected answer, never
+  a defense of the current behavior (observed 2026-09-15).
 
 ## What lands well
 

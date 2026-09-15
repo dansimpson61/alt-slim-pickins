@@ -14,5 +14,10 @@ page .title
               item
                 snippet sp, .context
                 note quiet, .where
-                link "Try it", to: .try_path
+                choose
+                  when .try_path
+                    link "Try it", to: .try_path
+                choose
+                  when .note
+                    note quiet, .note
       try_it

@@ -269,6 +269,28 @@ a studio that can be *used* — the workbench the garden phase leans on.
   that, and the language-level answer (per-library word resolution) waits
   for a phase that can size it.
 
+- **6 — The try-it yield, measured and fixed** (dan's audit, 2026-09-15:
+  "sample the outputs of each word's Try me and observe that some provide
+  useful output but many (most?) do not"): the audit measured all
+  sixty-four seeds — **34 useful / 16 rendered-empty / 14 refused**. The
+  causes were structural, and each was fixed: the context now includes the
+  word's own *body* (an enclosing word's demonstration is its body) and,
+  for registering words, up to three sibling co-registrations (a `total`
+  is nothing without its columns); examples rank page-rooted,
+  payload-backed homes first, and seed and data share one ranking so they
+  can never come from different examples; ledger-less examples get
+  **synthesized payloads** — the chain refs their context reads, answered
+  with plain defaults, `name` nil by construction (a truthy name turns an
+  enclosing `box` into a leaf — the generator's body-over-children rule);
+  the dashboard base and the studio pages joined the ledger; and the two
+  words whose whole meaning is machinery — `contents`, `children` — now
+  say so honestly with no dead link. Two words that show themselves only
+  under data the pre-fill does not carry (`empty`, `otherwise`) keep their
+  links beside a note that says how to see them. The audit is now the
+  acceptance test (`test/studio_try_test.rb`), pinning every word's
+  verdict and needle: **62 useful / 2 structural / 2 noted / 0 refusals**,
+  and the suite re-measures it every round.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

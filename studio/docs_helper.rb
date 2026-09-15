@@ -137,15 +137,16 @@ module StudioDocs
   # the file and line it stands on; the try path seeds the try-it pane with
   # the context; the data is the page's own payload, when the ledger has
   # one.
-  Example = Struct.new(:body, :where, :path, :context, :try_path, :data,
+  Example = Struct.new(:body, :where, :path, :context, :try_path, :data, :note,
                        keyword_init: true)
 
   EXAMPLES_PER_WORD = 3
 
   # The try-it's honest limit, said beside the editor: the payload is the
   # page's own, and editing it is steering.
-  DATA_NOTE = 'The data slot carries the page\'s own payload — edit it to ' \
-              'steer the page; a refusal names what is missing.'
+  DATA_NOTE = 'The data slot carries the page\'s payload — synthesized ' \
+              'where the example has no page of its own — edit it to steer ' \
+              'the page; a refusal names what is missing.'
 
   # The corpus every example comes from — the same .sp files check_shape
   # measures, so an example exists exactly where the language is really used.
@@ -166,7 +167,8 @@ module StudioDocs
             list = index[node.word.to_sym]
             if list.size < EXAMPLES_PER_WORD
               list << [file.sub("#{ROOT}/", ''), node.lineno, node.body,
-                       ancestors + [node]]
+                       ancestors + [node],
+                       ancestors.last ? ancestors.last.children : []]
             end
             visit.call(node.children, ancestors + [node])
           end
@@ -179,41 +181,116 @@ module StudioDocs
 
   # The example's context: the real page's own opening — its page line (the
   # subject's home, load-bearing, never decorative) and the path down to
-  # the word, indented as sourced. A partial file has no page line, so its
-  # context is the partial's internals, and the try-it wraps those in a
-  # page of its own.
-  def self.context_of(chain)
+  # the word, indented as sourced — and the word's own body, two levels
+  # deep, because an enclosing word's demonstration *is* its body; deeper
+  # still is elided with a comment, so the block stays one honest seed. A
+  # partial file has no page line, so its context is the partial's
+  # internals, and the try-it wraps those in a page of its own.
+  MAX_CONTEXT_DEPTH = 2
+  MAX_CONTEXT_SIBLINGS = 3
+
+  def self.context_of(chain, siblings = nil)
     page = chain.find { |node| node.word.to_sym == :page }
     below = chain.reject { |node| node.word.to_sym == :page }
     lines = []
     lines << page.body if page
-    lines.concat(below.each_with_index.map { |node, i| "#{'  ' * (i + 1)}#{node.body}" })
+    below.each_with_index { |node, i| lines << "#{'  ' * (i + 1)}#{node.body}" }
+    word = below.last
+    if word
+      word_level = below.size
+      subtree_lines(lines, word.children, word_level + 1, word_level + MAX_CONTEXT_DEPTH)
+      add_siblings(lines, siblings, word, word_level)
+    end
     lines.join("\n")
   end
 
+  # A registering word's demonstration needs its co-registrations — a
+  # `total` is nothing without its columns — so up to three siblings join
+  # the context at the word's level, the rest elided.
+  def self.add_siblings(lines, siblings, word, level)
+    parents = SlimPickins::CONTRACTS.dig(word.word.to_sym, :parents)
+    return unless siblings && parents && parents != :any
+
+    others = siblings.reject { |s| s.equal?(word) }
+    others.first(MAX_CONTEXT_SIBLINGS).each { |s| lines << "#{'  ' * level}#{s.body}" }
+    lines << "#{'  ' * level}# ..." if others.size > MAX_CONTEXT_SIBLINGS
+  end
+
+  def self.subtree_lines(lines, nodes, level, max_level)
+    nodes.each do |node|
+      # Machinery words cannot render in a page — they are not context.
+      next if %i[children contents].include?(node.word.to_sym)
+
+      if level > max_level
+        marker = "#{'  ' * level}# ..."
+        lines << marker unless lines.last == marker
+        return
+      end
+
+      lines << "#{'  ' * level}#{node.body}"
+      subtree_lines(lines, node.children, level + 1, max_level)
+    end
+  end
+
+  # Words whose seed can never work: their whole meaning is machinery the
+  # page context cannot hold. Their examples show context and a note, and
+  # carry no Try-it link.
+  STRUCTURAL_NOTES = {
+    contents: 'lives in a layout — `contents` marks where the page goes, so it has no standalone try.',
+    children: 'lives in a partial — `children` splices the caller\'s body, so it has no standalone try.'
+  }.freeze
+
+  # Words whose seed works but shows itself only under data the pre-fill
+  # does not carry. They keep their Try-it link, beside the note.
+  DEMONSTRATION_NOTES = {
+    empty: 'shows itself only when its collection is empty — set the collection to [] to see it.',
+    otherwise: 'shows itself only when the conditions are false — make the data\'s condition false to see it.'
+  }.freeze
+
   # The examples for one word, shaped for the view: the sentence in its
   # context, its citation, the seed path, and — when the caller supplies a
-  # data lookup — the page's own payload for the data slot.
+  # data lookup — the page's own payload for the data slot. Page-rooted
+  # examples with a payload rank first, so the first Try-it a reader meets
+  # is the one most likely to demonstrate the word; structural words get
+  # their note and no link at all.
   def self.examples_of(word)
-    data_for = block_given? ? proc { |path| yield(path) } : ->(_path) { '' }
-    examples[word.to_sym].each_with_index.map do |(file, line, body, chain), i|
+    data_for = block_given? ? proc { |path, chain| yield(path, chain) } : ->(_p, _c) { '' }
+    structural = STRUCTURAL_NOTES.key?(word.to_sym)
+    note = STRUCTURAL_NOTES[word.to_sym] || DEMONSTRATION_NOTES[word.to_sym]
+    ranked_rows(word, data_for).first(EXAMPLES_PER_WORD).each_with_index.map do |row, i|
+      file, line, body, chain, siblings, payload, = row
       Example.new(body: body, where: "#{file}:#{line}", path: file,
-                  context: context_of(chain), try_path: "/docs/#{word}?try=#{i}",
-                  data: data_for.call(file))
+                  context: context_of(chain, siblings),
+                  try_path: structural ? nil : "/docs/#{word}?try=#{i}",
+                  data: structural ? '' : payload, note: note)
     end
+  end
+
+  # The one ranking the seed and the docs share, so a seed and its data can
+  # never come from different examples: page-rooted first, then payloads,
+  # then file order.
+  def self.ranked_rows(word, data_for)
+    examples[word.to_sym].map do |file, line, body, chain, siblings|
+      payload = data_for.call(file, chain)
+      [file, line, body, chain, siblings, payload,
+       chain.first.word.to_sym == :page ? 0 : 1, payload.empty? ? 1 : 0]
+    end.sort_by { |row| [row[6], row[7], row[0]] }
   end
 
   # The try-it's seed: the example's context. A page-rooted example is the
   # real page's own opening — a complete document, subject shift included —
   # so it seeds verbatim; a partial file's internals get a page of their
   # own. `index` 0 is the default when no `try` is asked for; an index past
-  # the list means nothing to seed.
+  # the list means nothing to seed. The same ranking as `examples_of`, so a
+  # seed and its data never come from different examples.
   def self.seed_for(word, index)
-    list = examples[word.to_sym]
-    return nil unless index && list[index]
+    return nil if STRUCTURAL_NOTES.key?(word.to_sym)
 
-    chain = list[index][3]
-    context = context_of(chain)
+    row = index && ranked_rows(word, ->(_p, _c) { '' })[index]
+    return nil unless row
+
+    chain = row[3]
+    context = context_of(chain, row[4])
     return context if chain.first.word.to_sym == :page
 
     "page \"Try: #{word}\"\n#{context}\n"
