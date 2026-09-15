@@ -126,7 +126,8 @@ class StudioPagesTest < Minitest::Test
     # that owns its registry; this test rebuilds the merged library at use
     # time so it owns its words the same way — last compile wins, and this
     # compile is the studio's.
-    library = StudioPages.merge_libraries(StudioPages::PLAYGROUND_LIBRARY_DIRS, words: AppWords)
+    library = StudioPages.merge_libraries(StudioPages::PLAYGROUND_LIBRARY_DIRS,
+                                          words: [AppWords, StudioWords])
     LEDGER_PAGES.each do |rel, needle|
       json = StudioPages.data_json_for(rel)
       refute_empty json, "#{rel} has no payload"
@@ -142,6 +143,22 @@ class StudioPagesTest < Minitest::Test
     json = StudioPages.data_json_for('pages/portfolio_table.sp')
     locals = StudioPages.data_locals(json)
     assert_equal 1_284_506, locals['portfolio']['total_value']
+  end
+
+  # --- the render contract: one response, both panes ------------------------
+
+  def test_render_json_carries_both_panes
+    payload = StudioPages.render_json("page \"t\"\n  money .total_value\n",
+                                      '{"total_value": 120}')
+    assert_includes payload[:visual], '<span class="money">$120</span>'
+    assert_includes payload[:source], '&lt;span class=&quot;money&quot;&gt;', 'the raw pane is escaped'
+  end
+
+  def test_render_json_refuses_in_the_languages_voice
+    payload = StudioPages.render_json("page \"t\"\n  money .total_value\n", '')
+    assert_includes payload[:visual], 'note--error'
+    assert_includes payload[:visual], 'this page has no total_value'
+    assert_includes payload[:source], 'note--error', 'the raw pane shows the same refusal'
   end
 
   # --- the data wall: the writer's JSON, bound as locals --------------------

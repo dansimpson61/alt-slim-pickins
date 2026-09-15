@@ -1,8 +1,11 @@
-form to: "/render", method: "post", target: "preview"
+# One button, two panes — the recorded burr's resolution (2026-09-15).
+# Its why, preserved: one form can target only one iframe natively, so the
+# studio used to need two Render buttons. A Stimulus controller now
+# intercepts input and submit (live, debounced) and writes one response
+# into both iframes; the form's own action still posts to /render, so
+# without JavaScript the visual pane renders the old way, honestly.
+
+wired_form
   textarea source, rows: 4, required: true
   textarea data, "Data (JSON)", rows: 2
-  button "Render Visual", type: "submit"
-  button "Render HTML", type: "submit", to: "/render_html", target: "html_preview"
-  # Note: A single form can only target one iframe per submission natively.
-  # Future Stimulus.js integration will intercept the post (or provide live updating) and update multiple iframes simultaneously.
-  # This will obviate the need for the two 'Render' buttons.
+  button primary, "Render", type: "submit"

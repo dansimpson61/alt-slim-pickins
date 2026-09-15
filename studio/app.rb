@@ -1,14 +1,16 @@
 require 'sinatra'
 require 'cgi'
+require 'json'
 require_relative '../lib/slim_pickins'
 require_relative 'docs_helper'
 require_relative 'pages'
 require_relative 'status'
+require_relative 'words'
 
 set :port, ENV.fetch('STUDIO_PORT', '4580').to_i
 set :views, File.join(__dir__, 'views')
 
-STUDIO_LIBRARY = SlimPickins::Library.from(File.expand_path('views', __dir__))
+STUDIO_LIBRARY = SlimPickins::Library.from(File.expand_path('views', __dir__), words: StudioWords)
 
 # What the sidebar iterates. Every page that draws it needs both, so they are
 # named once here rather than repeated at each render.
@@ -90,51 +92,31 @@ get '/status' do
 end
 
 post '/render' do
-  source = params[:source].to_s
-  begin
-    SlimPickins.render(source, path: "playground.sp",
-                       locals: StudioPages.playground_locals(params[:data]),
-                       library: StudioPages.library)
-  rescue StandardError => e
-    render_refusal(e)
-  end
+  StudioPages.render_json(params[:source].to_s, params[:data])[:visual]
 end
 
 post '/render_html' do
-  source = params[:source].to_s
-  begin
-    html = SlimPickins.render(source, path: "playground.sp",
-                              locals: StudioPages.playground_locals(params[:data]),
-                              library: StudioPages.library)
-    "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(html)}</body></html>"
-  rescue StandardError => e
-    "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(render_refusal(e))}</body></html>"
-  end
+  source = StudioPages.render_json(params[:source].to_s, params[:data])[:source]
+  "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{source}</body></html>"
 end
 
-# A playground error, rendered through the language — the same voice
-# everywhere else in the language speaks. The complaint is the error's own
-# first line; the location and the sentence join it when the error knows
-# them (a JSON parse error names no sentence). The final string below is
-# the last hand-built error in the studio: it exists only for the refusal
-# page failing, which must not be able to break the studio.
-def render_refusal(error)
-  complaint, where, line =
-    if error.is_a?(SlimPickins::Error)
-      [error.message.lines.first.strip,
-       error.located? ? "#{error.path}, line #{error.lineno}" : nil,
-       error.line]
-    else
-      ["#{error.class}: #{error.message.lines.first.strip}", nil, nil]
-    end
-  SlimPickins.render(File.read(File.join(settings.views, 'refusal.sp')), path: 'refusal.sp',
-                     locals: { title: 'Refusal', complaint: complaint, where: where, line: line },
-                     library: STUDIO_LIBRARY)
-rescue StandardError
-  "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
+# The render contract, as JSON — one request, both panes. The controller
+# on the wired form fetches this; the form's own action stays /render for
+# the no-JavaScript path.
+post '/render.json' do
+  content_type :json
+  JSON.generate(StudioPages.render_json(params[:source].to_s, params[:data]))
 end
 
-get '/assets/slim-pickins.css' do
-  content_type 'text/css'
-  File.read(File.expand_path('../assets/slim-pickins.css', __dir__))
+# The studio's static assets — the stylesheet, the vendored Stimulus, the
+# controller. A whitelist rather than a glob: an asset route must never
+# become a file reader.
+ASSETS = %w[slim-pickins.css stimulus.umd.js studio_controller.js].freeze
+
+get '/assets/:file' do
+  name = File.basename(params[:file])
+  halt 404, "There is no asset called #{name}." unless ASSETS.include?(name)
+
+  content_type name.end_with?('.css') ? 'text/css' : 'text/javascript'
+  File.read(File.expand_path("../assets/#{name}", __dir__))
 end

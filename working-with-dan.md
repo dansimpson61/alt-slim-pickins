@@ -179,7 +179,9 @@ working manual that should be better after every session than it was before.
   with mechanism freedom — "be creative… I am open to other possibilities."
   He rules the what; the how is invited, and when he offers a mechanism
   (a sandbox), treat it as one candidate to beat, not the spec.
-  (observed 2026-09-15).
+  And given a conservative option beside a bolder one, he takes the bold
+  one when the architecture makes it cheap: offered button-click vs live
+  debounced rendering, he picked live (observed 2026-09-15).
 - **He wants loose ends as executable options, not prose.** Handed a
   "one thing that is yours" paragraph about an untracked file, his answer
   was a standing instruction: "In the future, when you have things like

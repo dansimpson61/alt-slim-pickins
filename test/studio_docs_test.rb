@@ -182,7 +182,8 @@ class StudioDocsTest < Minitest::Test
                                         path: 'pages/specimen.sp',
                                         context: "section \"Facts, badges, moments\"\n  badge ok, \"x\"",
                                         try_path: '/docs/badge?try=0', data: '')]
-    library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__))
+    library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__),
+                                        words: StudioWords)
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'docs.sp')),
                               path: 'docs.sp',
                               locals: { title: 'Docs: badge', contract: 'c', implementation: 'i',
@@ -195,5 +196,11 @@ class StudioDocsTest < Minitest::Test
     assert_includes html, 'snippet--sp', 'the example renders in the language’s own fence'
     assert_includes html, 'Try it</a>', 'each example carries its seed link'
     assert_includes html, 'grid', 'the two outputs share a row'
+    # The burr's resolution: one wired form, one button, the no-JS action.
+    assert_includes html, 'data-controller="render"', 'the form is wired'
+    assert_includes html, 'action="/render"', 'the native path stays'
+    assert_equal 1, html.scan('type="submit"').size, 'one Render button, not two'
+    assert_equal 1, html.scan('class="form editor_form"').size,
+                 'the wired form carries its class exactly once'
   end
 end

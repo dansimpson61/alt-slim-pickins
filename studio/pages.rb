@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'cgi'
 require_relative '../lib/slim_pickins'
 require_relative 'docs_helper'
+require_relative 'words'
 # The sandbox: the example apps' own files, required rather than copied —
 # their boot gates prove the pages with the same locals the ledger serves.
 require_relative '../test/fixtures'
@@ -115,9 +117,10 @@ module StudioPages
   ].freeze
 
   def self.library
-    # AppWords is portfolio's own vocabulary — `video` — and the merged
-    # library carries it the same way the app's own does.
-    @library ||= merge_libraries(PLAYGROUND_LIBRARY_DIRS, words: AppWords)
+    # AppWords is portfolio's own vocabulary — `video` — StudioWords the
+    # studio's own — `wired_form` — and the merged library carries both the
+    # same way the apps' own libraries do.
+    @library ||= merge_libraries(PLAYGROUND_LIBRARY_DIRS, words: [AppWords, StudioWords])
   end
 
   # The merge, its own seam so the collision refusal is testable: two apps
@@ -291,5 +294,43 @@ module StudioPages
   # in the args; the first segment is the data key.
   def self.refs_of(node)
     node.raw_args.flat_map { |arg| arg.scan(/\.([a-z_]+)/).flatten }.uniq
+  end
+
+  # --- the render contract --------------------------------------------------
+
+  # A playground error, rendered through the language — the same voice
+  # everywhere else in the language speaks. The complaint is the error's
+  # own first line; the location and the sentence join it when the error
+  # knows them. The final string exists only for the refusal page failing,
+  # which must not be able to break the studio.
+  def self.refusal(error)
+    complaint, where, line =
+      if error.is_a?(SlimPickins::Error)
+        [error.message.lines.first.strip,
+         error.located? ? "#{error.path}, line #{error.lineno}" : nil,
+         error.line]
+      else
+        ["#{error.class}: #{error.message.lines.first.strip}", nil, nil]
+      end
+    SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'refusal.sp')),
+                       path: 'refusal.sp',
+                       locals: { title: 'Refusal', complaint: complaint, where: where, line: line },
+                       library: library)
+  rescue StandardError
+    "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
+  end
+
+  # The studio's render contract — one response, both panes. The visual is
+  # the rendered page (a refusal is still a page); the source is the same
+  # page escaped, for the raw-HTML pane. This is the client API the
+  # controller grows against: a future pane joins as a key, not a change.
+  def self.render_json(source, data = nil)
+    visual = begin
+      SlimPickins.render(source, path: 'playground.sp',
+                         locals: playground_locals(data), library: library)
+    rescue StandardError => e
+      refusal(e)
+    end
+    { visual: visual, source: CGI.escapeHTML(visual) }
   end
 end

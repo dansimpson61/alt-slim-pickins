@@ -57,8 +57,9 @@ app_words |= SlimPickins::Library.from(File.join(here, 'studio', 'views')).parti
 # The `end` that closes the module is the one at the module's own indentation.
 # Anchoring on `^end` instead read straight past a nested module and counted
 # every later method as a word — which would quietly hide a genuinely
-# undefined one.
-Dir[File.join(here, 'examples', '**', '*.rb')].each do |f|
+# undefined one. The studio's Ruby is scanned too: its own words module is
+# the same hatch the example apps use.
+Dir[File.join(here, '{examples,studio}', '**', '*.rb')].each do |f|
   File.read(f).scan(/^([ \t]*)module \w*Words\b(.*?)^\1end/m).each do |_indent, body|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end

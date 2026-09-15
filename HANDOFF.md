@@ -64,11 +64,16 @@ found 34 useful / 16 empty / 14 refused; the context now carries the
 word's body and its co-registrations, ledger-less examples get synthesized
 payloads, structural words are labeled honestly, and the audit is the
 acceptance test — 62 useful / 2 structural / 2 noted / 0 refusals, pinned
-every round (`test/studio_try_test.rb`). The remaining ledger — the
-Stimulus burr's resolution, the verify_pages gap, the snippet Copy button,
-pages/*.sp outside the palette, or the Phase 0 judgment — waits on dan's
-picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an even-numbered
-roadmap (the backward eye); 0.3 is the forward eye. Its question, chosen
+every round (`test/studio_try_test.rb`). Win 7, the Stimulus burr resolved
+live: one Render button, debounced rendering as you type (dan's ruling —
+the bolder trigger), a vendored @hotwired/stimulus@3.2.2 UMD, one `render`
+controller, and the studio's `wired_form` app word through the escape
+hatch; the `/render.json` contract `{ visual, source }` writes both panes
+from one fetch, and the form's native action stays so no-JS still renders
+the visual pane. The remaining ledger — the verify_pages gap, the snippet
+Copy button, pages/*.sp outside the palette, or the Phase 0 judgment —
+waits on dan's picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
+even-numbered roadmap (the backward eye); 0.3 is the forward eye. Its question, chosen
 and challenged by dan (2026-09-14): can the language carry real work — a
 garden of real apps, the studio won iteratively into the workbench, the
 kernel lowered only as the work demands. The dashboard is one bed in the
@@ -118,11 +123,11 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-15, after Phase 0's sixth win — the try-it yield:
-  293 runs / 0 failures in one process, assertions varying with class order
-  as recorded in the lore — the dashboard's harness, which
+  (re-measured 2026-09-15, after Phase 0's seventh win — the Stimulus
+  burr: 295 runs / 0 failures in one process, assertions varying with
+  class order as recorded in the lore — the dashboard's harness, which
   is the stronger one and worth running too: `ruby -Ilib:test -e
-  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 703
+  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 706
   sentences / 0 problems, 95 rules / 0 problems, 64 words and all 64 used
   in real pages / 0 problems, 10 pages verified, 25 affordances / 0 missing;
   the 13-page count retired with the paper pages, the 69-word count with

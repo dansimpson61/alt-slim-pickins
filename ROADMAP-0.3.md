@@ -291,6 +291,30 @@ a studio that can be *used* — the workbench the garden phase leans on.
   verdict and needle: **62 useful / 2 structural / 2 noted / 0 refusals**,
   and the suite re-measures it every round.
 
+- **7 — The Stimulus burr, resolved live** (dan's rulings, 2026-09-15: the
+  hatch word; Stimulus vendored and pinned; **live, debounced** — the
+  bolder trigger). The two Render buttons are one; the editor renders as
+  you type (300 ms debounce) and once on load, so a seeded page appears
+  the moment its page does. The architecture: a vendored
+  `@hotwired/stimulus@3.2.2` UMD (no build step — the repo has none and
+  keeps having none), one `render` controller, and a studio app word
+  `wired_form` — written in Ruby through the escape hatch, because the
+  language's contracts cannot say `data-*` attributes; the fields it
+  encloses stay pure language, and the iframes are reached by the names
+  the language already emits. One fetch to the new `/render.json` —
+  `{ visual, source }`, refusals included — writes both panes; the form's
+  native action stays `/render`, so without JavaScript the visual pane
+  still renders, the old behavior, honestly. The burr's *why* is recorded
+  beside the fix in `editor_form.sp`, as the risk register demands. The
+  contract is the studio's first client API — a future pane joins as a
+  key, not a change — and the trigger is one `data-action` away from any
+  future shape. Two founds along the way: the generator's `:tag` merge
+  read the symbol `:class` while raw-tag authors were documented with it,
+  and double-counted `app_class` and the wrapper's copy of it — fixed with
+  a one-token dedupe, named in the commit; and `->` in `data-action`
+  escapes in raw markup but the DOM decodes it, so the wiring is correct
+  by construction.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

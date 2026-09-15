@@ -2,15 +2,14 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Wins 1–6 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), and the try-it yield (audited 34/16/14, fixed to 62 useful / 2 structural / 2 noted / 0 refusals, pinned by test). dan rules the next pick.
+status: PHASE 0 — the studio, won iteratively. Wins 1–7 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), and the Stimulus burr resolved live (one button, debounced, one JSON contract). dan rules the next pick.
 kind: project
 last_touched: 2026-09-15
 next_step: >-
-  dan rules the cycle-7 pick from the remaining ledger — the Stimulus
-  burr's resolution (one click updates both iframes), the found gap that
-  verify_pages never renders the studio's own views, the snippet word's
-  dead Copy button, pages/*.sp into the palette, or the judgment that
-  Phase 0 is complete and Phase 1 (the garden) opens.
+  dan rules the cycle-8 pick from the remaining ledger — the found gap
+  that verify_pages never renders the studio's own views, the snippet
+  word's dead Copy button, pages/*.sp into the palette, or the judgment
+  that Phase 0 is complete and Phase 1 (the garden) opens.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

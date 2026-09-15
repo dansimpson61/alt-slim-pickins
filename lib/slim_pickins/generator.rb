@@ -160,9 +160,11 @@ end
       when :raw then @out << children.join
 when :tag
   if attrs[:app_class] || @current_app_class
-    # Merge the app class into the tag's explicit classes
+    # Merge the app class into the tag's explicit classes. The wrapper
+    # carries the promoted root's app_class into @current_app_class, so the
+    # two are the same token here — deduped, or the root's class doubled.
     existing = attrs[:attrs][:class]
-    injected = [existing, attrs[:app_class], @current_app_class].compact.join(' ')
+    injected = [existing, attrs[:app_class], @current_app_class].compact.uniq.join(' ')
     attrs[:attrs][:class] = injected unless injected.empty?
   end
   @out << "<#{attrs[:name]}#{attrs_html(attrs[:attrs])}>"

@@ -1,5 +1,7 @@
 page .title
   stylesheet "/assets/slim-pickins.css"
+  script "/assets/stimulus.umd.js"
+  script "/assets/studio_controller.js"
   sidebar_layout
     vocabulary
     split_pane
