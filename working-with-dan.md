@@ -186,7 +186,13 @@ working manual that should be better after every session than it was before.
   button is no longer necessary"), the 0.2 subtraction instinct again:
   after landing a bolder mechanism, expect the superseded affordance to
   be removed by his word, and cut it before it is asked twice
-  (observed 2026-09-15).
+  (observed 2026-09-15). And when a phase's ledger empties, he asks for
+  boundary hygiene before opening the next scoping — "complete
+  housekeeping as though we were at end of phase, and ensure continuity
+  for handoff to a new session" — treat handoff continuity as part of the
+  deliverable, not the afterthought. His empty-option answers are
+  directives, not indecision: three times now he has skipped the offered
+  options and written his own next step (observed 2026-09-15).
 - **He wants loose ends as executable options, not prose.** Handed a
   "one thing that is yours" paragraph about an untracked file, his answer
   was a standing instruction: "In the future, when you have things like

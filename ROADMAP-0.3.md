@@ -355,6 +355,12 @@ a studio that can be *used* — the workbench the garden phase leans on.
   one pre-fills its data — the found gap from win 4 is closed, and the
   palette's census now covers every page in the repo, layouts excepted.
 
+**Standing state (2026-09-15):** the ledger is empty — ten wins landed,
+committed and green, the housekeeping at end-of-phase standard. dan's
+judgment on the phase is pending: before ruling it, he scopes the
+studio's next change — its *playground identity and functionality* (his
+words) — so the phase stays open and the wins list keeps growing.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

@@ -428,3 +428,7 @@ The snippet word's dead Copy button, subtracted, taught the scoping lesson worth
 ## 2026-09-15 — DeepSeek v4-pro
 
 The repo's own pages joined the palette, closing the last ledger item: the win-4 "found gap" was never a defect but a boundary — the census's completeness test pins what the palette *promises*, and widening the promise (pages/ joins the glob) is all the change the code needed, because the deepening had already given pages/*.sp their ledger providers. A ledger entry that exists before its consumer finds its consumer without new work — the deepening paid for this round in advance.
+
+## 2026-09-15 — DeepSeek v4-pro
+
+End-of-phase housekeeping, at dan's direction while the phase stays open: one session carried Phase 0 through ten wins — every one demand-named by his audit or his ruling, every one pinned by a test that re-measures, the ledger emptying in the order the wins made natural. The protocol's shape held throughout: the census named the data wall, the try-it named the yield, his two corrections named the contract's shape, and his subtraction instinct cut the button twice. What the day proved: the RIF loop survives ten consecutive rounds without a single red at commit time, and a ledger measured by the first wall keeps re-ordering itself correctly — but the session's real asset is that every conclusion lives in a test, a record, or a doc, so a fresh session resumes from files, not from memory.

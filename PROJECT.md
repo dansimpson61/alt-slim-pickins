@@ -2,14 +2,15 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Wins 1–10 landed 2026-09-15 — the palette with its census, the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), the Stimulus burr resolved live (debounced rendering, no button, one JSON contract), the verify_pages gap closed (14 pages verified), the snippet word's dead Copy button subtracted, and the repo's own pages joined the palette (18 entries, census complete). The ledger is empty — only dan's judgment on Phase 0 remains.
+status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15, the ledger empty — the palette with its census (now 18 entries), the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), the Stimulus burr resolved live, the verify_pages gap closed, the Copy button subtracted, the repo's pages in the palette. dan's judgment on the phase is pending — next he scopes changes to the studio's playground identity and functionality (his words, 2026-09-15).
 kind: project
 last_touched: 2026-09-15
 next_step: >-
-  dan judges Phase 0 — ten wins, a workbench that loads real pages with
-  real data and renders them live, roughness named as deliberate — and
-  either rules it complete (Phase 1, the garden, opens) or names what the
-  studio still owes.
+  dan scopes changes to the studio's playground identity and functionality
+  — the scoping conversation itself is the next step, starting from the
+  ten wins, the empty ledger, and the standing state recorded in
+  ROADMAP-0.3.md's Phase 0 section. Phase 0 stays open until dan judges
+  it; the housekeeping is at end-of-phase standard.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

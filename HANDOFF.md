@@ -84,10 +84,12 @@ button's two homes are the docs fences and the try-it's script-less
 iframes, and a fence's text is natively selectable. Win 10, the repo's
 own pages joined the palette — 13 entries became 18, specimen leading,
 census completeness widened to pages/, and their ledger providers (from
-the deepening) pre-fill the data on load. The ledger is empty: only
-dan's judgment on Phase 0 remains — ten wins, the workbench usable, and
-either the phase closes and Phase 1 (the garden) opens, or he names what
-the studio still owes (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
+the deepening) pre-fill the data on load. **The Phase 0 ledger is empty,
+the housekeeping at end-of-phase standard.** The phase stays open: dan's
+judgment is pending, and his next move is scoping changes to the
+studio's *playground identity and functionality* (his words,
+2026-09-15) — resume from `PROJECT.md` `next_step`, which names the
+standing state. Roadmap 0.2 was an
 even-numbered roadmap (the
 backward eye); 0.3 is the forward eye. Its question, chosen and
 challenged by dan (2026-09-14): can the language carry real work — a
@@ -139,8 +141,8 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-15, after Phase 0's ninth win — the Copy button's
-  subtraction: 295 runs / 0 failures in one process, assertions varying with
+  (re-measured 2026-09-15, end-of-phase housekeeping after Phase 0's ten
+  wins: 295 runs / 0 failures in one process, assertions varying with
   class order as recorded in the lore — the dashboard's harness, which
   is the stronger one and worth running too: `ruby -Ilib:test -e
   'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 705
