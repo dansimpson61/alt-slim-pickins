@@ -471,6 +471,12 @@ time { color: var(--ink-soft); }
 }
 
 .editor_form .field {
+  flex-grow: 0;
+}
+
+/* The source is the editor's writing — the data slot keeps its own height
+   rather than splitting the pane with it. */
+.editor_form .field:first-of-type {
   flex-grow: 1;
 }
 

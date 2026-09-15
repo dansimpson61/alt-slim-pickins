@@ -205,6 +205,24 @@ a studio that can be *used* — the workbench the garden phase leans on.
   rendered through the `/render` route's hand-built error string, is the
   next pick's demand, with a consumer standing on the page.
 
+- **3 — The data wall, with refusals in the language's own voice** (dan's
+  pick, 2026-09-15, the pairing the win-2 record named): the editor gained a
+  **data slot** — JSON, parsed and bound as the page's locals, plain hashes
+  and arrays, app-level seam, no kernel motion — and the playground's
+  refusals now render as a page the language itself drew: a *"Refusal"*
+  page whose complaint is the error's own first line, with the location and
+  the offending sentence in the language's fence when the error knows them.
+  The money seed renders live with `{"total_value": 120}`; without data it
+  refuses in the one voice every other refusal uses. One hand-built string
+  survives, and only for the refusal page failing — which must not be able
+  to break the studio. The `each holding` teaching survives the wall: the
+  refusal ("this page has no holdings to go through") now names the plural
+  key the JSON must carry. The census is unchanged and still honest — its
+  verdicts are "renders with no data", and the palette keeps saying so.
+  Next in the ledger: the partial wall (a loaded page's own partials are
+  not in the playground's library), the Stimulus burr's resolution, the
+  found verify_pages gap, and the `snippet` word's dead Copy button.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

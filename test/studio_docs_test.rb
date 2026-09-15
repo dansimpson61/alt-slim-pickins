@@ -135,7 +135,7 @@ class StudioDocsTest < Minitest::Test
                               path: 'docs.sp',
                               locals: { title: 'Docs: badge', contract: 'c', implementation: 'i',
                                         examples: examples, source: "page \"Try: badge\"\n",
-                                        editor_title: 'Try it: badge',
+                                        editor_title: 'Try it: badge', data: '',
                                         data_note: StudioDocs::DATA_NOTE, words: [], guides: [] },
                               library: library)
     assert_includes html, 'In the wild'

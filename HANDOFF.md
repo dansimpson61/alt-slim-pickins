@@ -42,26 +42,28 @@ The detailed phase-by-phase record of Roadmap 0.2 remains in `ROADMAP-0.2.md`.
 **Phase 6 (Subtraction) is complete, officially closing Roadmap 0.2.**
 The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `action` primitive is refactored, and Phase 5's prose named-limits (`---`, heading boundaries, table alignment colons, and deeply nested lists) are fully natively supported by `prose` (because we discovered they were genuinely needed for structural clarity, validating that we shouldn't strip them).
 
-**Phase 0 is open — the studio, won iteratively — and two wins have landed
-(2026-09-15).** Win 1, the palette: the playground offers the repo's own
-pages as starting points, thirteen of them across portfolio, dashboard,
-roth and the studio itself, each entry wearing the census verdict of the
-render the playground will give it — 13 of 13 refuse, every one of them the
-data wall. Win 2, the word docs grow teeth: every vocabulary entry carries
-an *"In the wild"* section — real sentences from the repo's corpus, cited,
-each with a Try-it link — and a try-it pane beside the reading (the
-playground's editor and outputs, Visual and HTML side by side, zero
-JavaScript). Seeded pages carry no data yet, so the docs page now displays
-the data wall at the exact place the word is documented — cycle 3's demand,
-with its consumer standing on it; dan rules the pick (see `PROJECT.md`
-`next_step`). Roadmap 0.2 was an even-numbered roadmap (the backward eye);
-0.3 is the forward eye. Its question, chosen and challenged by dan
-(2026-09-14): can the language carry real work — a garden of real apps, the
-studio won iteratively into the workbench, the kernel lowered only as the
-work demands. The dashboard is one bed in the garden, not a canon: sp's
-entire effect on it is two requires of its lib plus the planned read-only
-markdown rendering. The draft (ROADMAP-0.3.md) is held by the checker and
-served by the studio; KERNEL.md carries its re-measured addendum.
+**Phase 0 is open — the studio, won iteratively — and three wins have
+landed (2026-09-15).** Win 1, the palette: the playground offers the repo's
+own pages as starting points, thirteen of them, each wearing the census
+verdict of the render the playground will give it — 13 of 13 refuse, every
+one of them the data wall. Win 2, the word docs grow teeth: every
+vocabulary entry carries an *"In the wild"* section — real sentences from
+the repo's corpus, cited, each with a Try-it link — and a try-it pane
+beside the reading (the playground's editor and outputs, Visual and HTML
+side by side, zero JavaScript). Win 3, the data wall with refusals in the
+language's own voice: a JSON data slot bound as locals, and playground
+errors render as a "Refusal" page the language itself drew. The remaining
+ledger — the partial wall, the Stimulus burr's resolution, the
+verify_pages gap, the snippet Copy button — waits on dan's picks (see
+`PROJECT.md` `next_step`). Roadmap 0.2 was an even-numbered roadmap (the
+backward eye); 0.3 is the forward eye. Its question, chosen and challenged
+by dan (2026-09-14): can the language carry real work — a garden of real
+apps, the studio won iteratively into the workbench, the kernel lowered
+only as the work demands. The dashboard is one bed in the garden, not a
+canon: sp's entire effect on it is two requires of its lib plus the planned
+read-only markdown rendering. The draft (ROADMAP-0.3.md) is held by the
+checker and served by the studio; KERNEL.md carries its re-measured
+addendum.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is dan's own
 process — it serves whatever code it booted with, so restart it after pulling
@@ -104,11 +106,11 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-15, after Phase 0's second win — the docs try-it:
-  278 runs / 0 failures in one process, assertions varying with class order
+  (re-measured 2026-09-15, after Phase 0's third win — the data wall:
+  283 runs / 0 failures in one process, assertions varying with class order
   as recorded in the lore — the dashboard's harness, which
   is the stronger one and worth running too: `ruby -Ilib:test -e
-  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 688
+  'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 698
   sentences / 0 problems, 95 rules / 0 problems, 64 words and all 64 used
   in real pages / 0 problems, 10 pages verified, 25 affordances / 0 missing;
   the 13-page count retired with the paper pages, the 69-word count with

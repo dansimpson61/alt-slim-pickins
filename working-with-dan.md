@@ -169,6 +169,12 @@ working manual that should be better after every session than it was before.
   collision as the scoping fork — offered the honest tradeoff (seeds without
   data refuse in the try-it), he picked the deferred-wall option without
   argument (observed 2026-09-15).
+- **He wants loose ends as executable options, not prose.** Handed a
+  "one thing that is yours" paragraph about an untracked file, his answer
+  was a standing instruction: "In the future, when you have things like
+  that, provide it as a clickable option that you can execute." Surface
+  pending decisions as options he can pick with one word — and have the
+  action ready to run on the pick (observed 2026-09-15).
 - **He likes the lore format** — a lesson, not a status report. What you did
   goes in the commit; what you learned goes in the lore.
 

@@ -22,7 +22,7 @@ get '/' do
                      locals: { source: source,
                                palette: StudioPages.entries(library: STUDIO_LIBRARY, loaded: loaded_id),
                                editor_title: StudioPages.title_for(loaded_id),
-                               docs: StudioDocs.build, **SIDEBAR },
+                               data: '', docs: StudioDocs.build, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 
@@ -47,7 +47,7 @@ get '/docs/:word' do
                                examples: StudioDocs.examples_of(params[:word]),
                                source: StudioDocs.seed_for(params[:word], try_index || 0) || '',
                                editor_title: "Try it: #{params[:word]}",
-                               data_note: StudioDocs::DATA_NOTE, **SIDEBAR },
+                               data: '', data_note: StudioDocs::DATA_NOTE, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 
@@ -85,20 +85,46 @@ end
 post '/render' do
   source = params[:source].to_s
   begin
-    SlimPickins.render(source, path: "playground.sp", locals: StudioPages.playground_locals, library: STUDIO_LIBRARY)
-  rescue => e
-    "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{e.message}</div>"
+    SlimPickins.render(source, path: "playground.sp",
+                       locals: StudioPages.playground_locals(params[:data]),
+                       library: STUDIO_LIBRARY)
+  rescue StandardError => e
+    render_refusal(e)
   end
 end
 
 post '/render_html' do
   source = params[:source].to_s
   begin
-    html = SlimPickins.render(source, path: "playground.sp", locals: StudioPages.playground_locals, library: STUDIO_LIBRARY)
+    html = SlimPickins.render(source, path: "playground.sp",
+                              locals: StudioPages.playground_locals(params[:data]),
+                              library: STUDIO_LIBRARY)
     "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(html)}</body></html>"
-  rescue => e
-    "<!DOCTYPE html><html><head><style>body { font-family: sans-serif; padding: 1rem; color: red; }</style></head><body><strong>Error:</strong> #{CGI.escapeHTML(e.message)}</body></html>"
+  rescue StandardError => e
+    "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(render_refusal(e))}</body></html>"
   end
+end
+
+# A playground error, rendered through the language — the same voice
+# everywhere else in the language speaks. The complaint is the error's own
+# first line; the location and the sentence join it when the error knows
+# them (a JSON parse error names no sentence). The final string below is
+# the last hand-built error in the studio: it exists only for the refusal
+# page failing, which must not be able to break the studio.
+def render_refusal(error)
+  complaint, where, line =
+    if error.is_a?(SlimPickins::Error)
+      [error.message.lines.first.strip,
+       error.located? ? "#{error.path}, line #{error.lineno}" : nil,
+       error.line]
+    else
+      ["#{error.class}: #{error.message.lines.first.strip}", nil, nil]
+    end
+  SlimPickins.render(File.read(File.join(settings.views, 'refusal.sp')), path: 'refusal.sp',
+                     locals: { title: 'Refusal', complaint: complaint, where: where, line: line },
+                     library: STUDIO_LIBRARY)
+rescue StandardError
+  "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
 end
 
 get '/assets/slim-pickins.css' do

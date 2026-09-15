@@ -132,10 +132,10 @@ module StudioDocs
   EXAMPLES_PER_WORD = 3
 
   # The try-it's honest limit, said beside the editor: a seed is a sentence,
-  # not its page's data.
-  DATA_NOTE = 'Seeds carry no data yet — a sentence that reads data refuses ' \
-              'here, and that refusal is the data wall the next studio round ' \
-              'builds against.'
+  # not its page's data — and the slot is right there to receive it.
+  DATA_NOTE = 'Seeds carry no data — if the page reads data, give it JSON ' \
+              'in the slot above and render again; the refusal names what ' \
+              'is missing.'
 
   # The corpus every example comes from — the same .sp files check_shape
   # measures, so an example exists exactly where the language is really used.

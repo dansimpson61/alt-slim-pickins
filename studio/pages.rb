@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 require_relative '../lib/slim_pickins'
 require_relative 'docs_helper'
 
@@ -20,7 +21,8 @@ module StudioPages
 
   # Ordered by app — an app's pages before its partials, the studio last —
   # because the order is part of the argument, exactly as it is for the
-  # guides.
+  # guides. A layout and the refusal template are chrome, not pages, so they
+  # are not here.
   PAGES = {
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
@@ -37,9 +39,27 @@ module StudioPages
     'studio/status' => 'studio/views/status.sp'
   }.freeze
 
-  # The playground's own locals — one home, used by the route and by the
-  # census, so a verdict and the real render can never drift apart.
-  def self.playground_locals = { docs: StudioDocs.build }
+  # The playground's own locals — one home, used by the routes and by the
+  # census, so a verdict and the real render can never drift apart. `data`
+  # is the writer's JSON payload, parsed and bound as the page's locals —
+  # the data wall, landed at app level: plain hashes and arrays, no kernel
+  # motion.
+  def self.playground_locals(data = nil)
+    { docs: StudioDocs.build }.merge(data_locals(data))
+  end
+
+  # The writer's data, as locals. Empty means no data; anything else must
+  # parse as JSON, and a refusal to parse speaks the language's own terms —
+  # every playground refusal speaks the same voice.
+  def self.data_locals(data)
+    text = data.to_s.strip
+    return {} if text.empty?
+
+    JSON.parse(text)
+  rescue JSON::ParserError => e
+    raise SlimPickins::Error,
+          "the data does not parse as JSON — #{e.message.lines.first.strip}"
+  end
 
   # The census, run the way the playground will run the page: the studio's
   # library, the playground's locals. A refusal is the page naming a wall in
