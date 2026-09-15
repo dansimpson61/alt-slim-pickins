@@ -242,6 +242,33 @@ a studio that can be *used* — the workbench the garden phase leans on.
   palette — the palette promised examples + studio, and the test pins that
   promise, but the garden's census would want them.
 
+- **5 — The docs deepen: context and the apps' own payloads** (dan's
+  request, 2026-09-15, "so far, so good, but a bit shallow"): each *"In the
+  wild"* example now shows the word in its real home — the page's own
+  opening, the load-bearing page line (the subject's home) and the path
+  down to the sentence, indented as sourced — and the Try-it seeds the
+  **same block verbatim**, so the try-it always shows the word working in
+  its surroundings. The data slot arrives pre-filled from a **data
+  ledger**: one provider per corpus page, serving the same locals the
+  page's own app proves it with — `Fixtures.for` for the repo's pages,
+  `Fixtures.portfolio` for portfolio, roth's scenario values and its
+  projection serialized field-by-field (its JSON-endpoint `to_h` is not
+  the page's shape — the fields are named and held by a render test), and
+  a stable sample first_item for the dashboard (dan's ruling: the docs
+  teach a stable shape, so the sandbox answers stable rather than live).
+  A recursive plainify (Struct → hash, Date → iso8601) turns payloads into
+  the slot's JSON; the ledger's render test round-trips every payload
+  through the slot and renders its page — it caught three wrong provider
+  shapes on the day it landed. Partial-internal examples (`heading` inside
+  `card`) stay honest: context shown, payload empty, the refusal teaches.
+  The sandbox is the apps themselves, required not copied — their boot
+  gates prove the pages with these very locals. Carried in: the registry
+  is last-compile-wins, so in a shared process another library's poisoned
+  `test_account_card` can shadow the real file — the studio's own boot
+  owns its registry; the test rebuilds the library at use time to mirror
+  that, and the language-level answer (per-library word resolution) waits
+  for a phase that can size it.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

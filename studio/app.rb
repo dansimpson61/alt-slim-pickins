@@ -22,7 +22,8 @@ get '/' do
                      locals: { source: source,
                                palette: StudioPages.entries(library: StudioPages.library, loaded: loaded_id),
                                editor_title: StudioPages.title_for(loaded_id),
-                               data: '', docs: StudioDocs.build, **SIDEBAR },
+                               data: loaded_id ? StudioPages.data_json_for(StudioPages::PAGES[loaded_id]) : '',
+                               docs: StudioDocs.build, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 
@@ -41,13 +42,16 @@ get '/docs/:word' do
   halt 404, "There is no word called #{params[:word]}." unless entry
 
   try_index = params[:try] && params[:try].to_i
+  examples = StudioDocs.examples_of(params[:word]) { |path| StudioPages.data_json_for(path) }
+  example = examples[try_index || 0]
   SlimPickins.render(File.read(File.join(settings.views, 'docs.sp')), path: 'docs.sp',
                      locals: { title: "Docs: #{params[:word]}", contract: entry[:contract],
                                implementation: entry[:implementation],
-                               examples: StudioDocs.examples_of(params[:word]),
+                               examples: examples,
                                source: StudioDocs.seed_for(params[:word], try_index || 0) || '',
                                editor_title: "Try it: #{params[:word]}",
-                               data: '', data_note: StudioDocs::DATA_NOTE, **SIDEBAR },
+                               data: example ? example.data.to_s : '',
+                               data_note: StudioDocs::DATA_NOTE, **SIDEBAR },
                      library: STUDIO_LIBRARY)
 end
 

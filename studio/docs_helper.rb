@@ -132,17 +132,20 @@ module StudioDocs
   # --- the examples: real sentences, cited ---------------------------------
 
   # One real sentence from the repo that uses a word — the docs' "In the
-  # wild" section. The body is the node's own sentence, the citation is the
-  # file and line it stands on, and the try path seeds the try-it pane.
-  Example = Struct.new(:body, :where, :try_path, keyword_init: true)
+  # wild" section. The body is the node's own sentence; the context is the
+  # sentence nested in its ancestors, indented as sourced; the citation is
+  # the file and line it stands on; the try path seeds the try-it pane with
+  # the context; the data is the page's own payload, when the ledger has
+  # one.
+  Example = Struct.new(:body, :where, :path, :context, :try_path, :data,
+                       keyword_init: true)
 
   EXAMPLES_PER_WORD = 3
 
-  # The try-it's honest limit, said beside the editor: a seed is a sentence,
-  # not its page's data — and the slot is right there to receive it.
-  DATA_NOTE = 'Seeds carry no data — if the page reads data, give it JSON ' \
-              'in the slot above and render again; the refusal names what ' \
-              'is missing.'
+  # The try-it's honest limit, said beside the editor: the payload is the
+  # page's own, and editing it is steering.
+  DATA_NOTE = 'The data slot carries the page\'s own payload — edit it to ' \
+              'steer the page; a refusal names what is missing.'
 
   # The corpus every example comes from — the same .sp files check_shape
   # measures, so an example exists exactly where the language is really used.
@@ -158,35 +161,61 @@ module StudioDocs
       index = Hash.new { |h, k| h[k] = [] }
       corpus_files.each do |file|
         tree = SlimPickins::Transform.tree(File.read(file), path: File.basename(file))
-        visit = lambda do |nodes|
+        visit = lambda do |nodes, ancestors|
           nodes.each do |node|
             list = index[node.word.to_sym]
-            list << [file.sub("#{ROOT}/", ''), node.lineno, node.body] if list.size < EXAMPLES_PER_WORD
-            visit.call(node.children)
+            if list.size < EXAMPLES_PER_WORD
+              list << [file.sub("#{ROOT}/", ''), node.lineno, node.body,
+                       ancestors + [node]]
+            end
+            visit.call(node.children, ancestors + [node])
           end
         end
-        visit.call(tree)
+        visit.call(tree, [])
       end
       index
     end
   end
 
-  # The examples for one word, shaped for the view: the sentence, its
-  # citation, and the seed path that fills the try-it editor with it.
+  # The example's context: the real page's own opening — its page line (the
+  # subject's home, load-bearing, never decorative) and the path down to
+  # the word, indented as sourced. A partial file has no page line, so its
+  # context is the partial's internals, and the try-it wraps those in a
+  # page of its own.
+  def self.context_of(chain)
+    page = chain.find { |node| node.word.to_sym == :page }
+    below = chain.reject { |node| node.word.to_sym == :page }
+    lines = []
+    lines << page.body if page
+    lines.concat(below.each_with_index.map { |node, i| "#{'  ' * (i + 1)}#{node.body}" })
+    lines.join("\n")
+  end
+
+  # The examples for one word, shaped for the view: the sentence in its
+  # context, its citation, the seed path, and — when the caller supplies a
+  # data lookup — the page's own payload for the data slot.
   def self.examples_of(word)
-    examples[word.to_sym].each_with_index.map do |(file, line, body), i|
-      Example.new(body: body, where: "#{file}:#{line}", try_path: "/docs/#{word}?try=#{i}")
+    data_for = block_given? ? proc { |path| yield(path) } : ->(_path) { '' }
+    examples[word.to_sym].each_with_index.map do |(file, line, body, chain), i|
+      Example.new(body: body, where: "#{file}:#{line}", path: file,
+                  context: context_of(chain), try_path: "/docs/#{word}?try=#{i}",
+                  data: data_for.call(file))
     end
   end
 
-  # The try-it's seed: the example's sentence wrapped in a page of its own,
-  # so the pane is always one honest page — data or no data. `index` 0 is
-  # the default when no `try` is asked for; an index past the list means
-  # nothing to seed.
+  # The try-it's seed: the example's context. A page-rooted example is the
+  # real page's own opening — a complete document, subject shift included —
+  # so it seeds verbatim; a partial file's internals get a page of their
+  # own. `index` 0 is the default when no `try` is asked for; an index past
+  # the list means nothing to seed.
   def self.seed_for(word, index)
     list = examples[word.to_sym]
     return nil unless index && list[index]
 
-    "page \"Try: #{word}\"\n  #{list[index][2]}\n"
+    chain = list[index][3]
+    context = context_of(chain)
+    return context if chain.first.word.to_sym == :page
+
+    "page \"Try: #{word}\"\n#{context}\n"
   end
 end

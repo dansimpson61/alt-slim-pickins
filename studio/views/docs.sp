@@ -12,7 +12,7 @@ page .title
           list
             each example, from: .examples
               item
-                snippet sp, .body
+                snippet sp, .context
                 note quiet, .where
                 link "Try it", to: .try_path
       try_it

@@ -96,6 +96,54 @@ class StudioPagesTest < Minitest::Test
     end
   end
 
+  # --- the data ledger: every provider's promise ----------------------------
+
+  # One needle per provider page: the pre-filled JSON, round-tripped through
+  # the data slot, must render the page with the playground's library — the
+  # ledger's promise, held so a rotted payload is a red test, not a quietly
+  # empty slot.
+  LEDGER_PAGES = {
+    'pages/portfolio_table.sp' => 'Where you stand',
+    'pages/specimen.sp' => 'Facts, badges, moments',
+    'pages/account_detail.sp' => 'Account detail',
+    'pages/roth_form.sp' => 'Directional Roth Conversion Sketch',
+    'examples/portfolio/views/index.sp' => 'Your retirement',
+    'examples/portfolio/views/account.sp' => 'Account detail',
+    'examples/portfolio/views/partials/account_card.sp' => 'Roth IRA',
+    'examples/roth/views/controls.sp' => 'Directional Roth Conversion Sketch',
+    'examples/roth/views/partials/report.sp' => 'Your projection',
+    'examples/dashboard/views/triage.sp' => 'needs attention',
+    'examples/dashboard/views/confirm_archive.sp' => 'Moves the project into archive',
+    'examples/dashboard/views/partials/queue.sp' => 'needs attention',
+    'examples/dashboard/views/partials/unreviewed_card.sp' => 'awaiting judgment'
+  }.freeze
+
+  def test_every_ledger_page_renders_with_its_prefilled_data
+    # The one-process suite shares one Word.registry, and a partial's class
+    # there is whichever library compiled it last — gate_test inline-registers
+    # a deliberately invalid `test_account_card`, and the memoised constant
+    # above was compiled before it. The studio's own boot is a clean process
+    # that owns its registry; this test rebuilds the merged library at use
+    # time so it owns its words the same way — last compile wins, and this
+    # compile is the studio's.
+    library = StudioPages.merge_libraries(StudioPages::PLAYGROUND_LIBRARY_DIRS, words: AppWords)
+    LEDGER_PAGES.each do |rel, needle|
+      json = StudioPages.data_json_for(rel)
+      refute_empty json, "#{rel} has no payload"
+      html = SlimPickins.render(File.read(File.join(ROOT, rel)), path: rel,
+                                locals: StudioPages.playground_locals(json),
+                                library: library)
+      refute_includes html, 'note--error', "#{rel} refuses its own payload"
+      assert_includes html, needle, "#{rel} rendered without its needle"
+    end
+  end
+
+  def test_the_prefilled_json_parses_back_into_locals
+    json = StudioPages.data_json_for('pages/portfolio_table.sp')
+    locals = StudioPages.data_locals(json)
+    assert_equal 1_284_506, locals['portfolio']['total_value']
+  end
+
   # --- the data wall: the writer's JSON, bound as locals --------------------
 
   def test_data_locals_parse_json_for_the_playground

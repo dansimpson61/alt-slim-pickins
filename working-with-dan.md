@@ -168,7 +168,13 @@ working manual that should be better after every session than it was before.
   agent to reconcile them against the demand ledger and surface the
   collision as the scoping fork — offered the honest tradeoff (seeds without
   data refuse in the try-it), he picked the deferred-wall option without
-  argument (observed 2026-09-15).
+  argument (observed 2026-09-15). He also judges the *service's depth* by
+  using it: after five landed wins came "So far, so good, but a bit
+  shallow" and two deepening demands (broader context, pre-filled data)
+  with mechanism freedom — "be creative… I am open to other possibilities."
+  He rules the what; the how is invited, and when he offers a mechanism
+  (a sandbox), treat it as one candidate to beat, not the spec.
+  (observed 2026-09-15).
 - **He wants loose ends as executable options, not prose.** Handed a
   "one thing that is yours" paragraph about an untracked file, his answer
   was a standing instruction: "In the future, when you have things like

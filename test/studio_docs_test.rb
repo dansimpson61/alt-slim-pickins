@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 require 'minitest/autorun'
 require_relative '../lib/slim_pickins'
 require_relative '../studio/docs_helper'
@@ -128,6 +129,7 @@ class StudioDocsTest < Minitest::Test
       refute_empty examples, "#{word} has no real usage in the corpus"
       examples.each do |ex|
         refute_includes ex.body, "\n", "#{word}'s example is not one sentence"
+        refute_empty ex.context, "#{word}'s example has no context"
         assert_match(/\.sp:\d+\z/, ex.where, "#{word}'s example is uncited")
         assert_equal "/docs/#{word}?try=#{examples.index(ex)}", ex.try_path
       end
@@ -140,15 +142,41 @@ class StudioDocsTest < Minitest::Test
 
   def test_seed_for_wraps_the_example_in_a_page
     seed = StudioDocs.seed_for('money', 0)
-    assert_match(/\Apage "Try: money"\n  /, seed)
+    assert_match(/\Apage portfolio, "Your retirement"\n/, seed,
+                 'a page-rooted example seeds the real opening, subject included')
+    assert_includes seed, 'section "Where you stand"'
     assert_includes seed, 'money'
     assert_nil StudioDocs.seed_for('money', 99), 'an index past the list seeds nothing'
+  end
+
+  def test_a_partial_internal_seed_gets_a_page_of_its_own
+    seed = StudioDocs.seed_for('heading', 0)
+    assert_match(/\Apage "Try: heading"\n/, seed)
+    assert_includes seed, 'heading .content'
+  end
+
+  def test_examples_carry_context_and_the_pages_payload
+    examples = StudioDocs.examples_of('money') { |path| StudioPages.data_json_for(path) }
+    first = examples.first
+    assert_includes first.context, 'page portfolio, "Your retirement"'
+    assert_includes first.context, 'section "Where you stand"'
+    assert_includes first.context, 'money .total_value'
+    assert_equal 'pages/portfolio_table.sp', first.path
+    parsed = JSON.parse(first.data)
+    assert_equal 1_284_506, parsed['portfolio']['total_value']
+  end
+
+  def test_a_partial_internal_example_carries_no_payload
+    examples = StudioDocs.examples_of('heading') { |path| StudioPages.data_json_for(path) }
+    assert_equal '', examples.first.data, "a partial's slot is not page data"
   end
 
   def test_the_docs_page_renders_with_canned_examples
     examples = [StudioDocs::Example.new(body: "badge ok, \"x\"",
                                         where: 'pages/specimen.sp:13',
-                                        try_path: '/docs/badge?try=0')]
+                                        path: 'pages/specimen.sp',
+                                        context: "section \"Facts, badges, moments\"\n  badge ok, \"x\"",
+                                        try_path: '/docs/badge?try=0', data: '')]
     library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__))
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'docs.sp')),
                               path: 'docs.sp',

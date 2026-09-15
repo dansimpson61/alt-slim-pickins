@@ -3,6 +3,11 @@
 require 'json'
 require_relative '../lib/slim_pickins'
 require_relative 'docs_helper'
+# The sandbox: the example apps' own files, required rather than copied —
+# their boot gates prove the pages with the same locals the ledger serves.
+require_relative '../test/fixtures'
+require_relative '../examples/portfolio/app'
+require_relative '../examples/roth/app'
 
 # The palette: the repo's own real pages, offered to the playground as
 # starting points, each carrying its census verdict — the same render the
@@ -99,9 +104,10 @@ module StudioPages
   # The studio's own furniture plus every example app's partials, merged —
   # a loaded page and its data now render end-to-end. A name shared by two
   # apps refuses loudly here rather than rendering one app's word in
-  # another's place. `pages/partials` is excluded: its one file is the cost
-  # instrument's fixture, not a page's partial.
+  # another's place. pages/partials is included: its test_account_card is a
+  # real partial — account_detail renders it — whatever else uses it.
   PLAYGROUND_LIBRARY_DIRS = [
+    File.join(ROOT, 'pages'),
     File.join(ROOT, 'studio', 'views'),
     File.join(ROOT, 'examples', 'portfolio', 'views'),
     File.join(ROOT, 'examples', 'dashboard', 'views'),
@@ -109,13 +115,15 @@ module StudioPages
   ].freeze
 
   def self.library
-    @library ||= merge_libraries(PLAYGROUND_LIBRARY_DIRS)
+    # AppWords is portfolio's own vocabulary — `video` — and the merged
+    # library carries it the same way the app's own does.
+    @library ||= merge_libraries(PLAYGROUND_LIBRARY_DIRS, words: AppWords)
   end
 
   # The merge, its own seam so the collision refusal is testable: two apps
   # naming the same partial would otherwise render one app's word in
   # another's place, silently.
-  def self.merge_libraries(dirs)
+  def self.merge_libraries(dirs, words: nil)
     partials = {}
     partial_paths = {}
     dirs.each do |dir|
@@ -130,6 +138,107 @@ module StudioPages
         partial_paths[name] = path
       end
     end
-    SlimPickins::Library.new(partials: partials, partial_paths: partial_paths)
+    SlimPickins::Library.new(partials: partials, partial_paths: partial_paths, words: words)
+  end
+
+  # --- the data ledger: what the playground pre-fills ------------------------
+
+  # The dashboard's stable first queue item — dan's ruling (2026-09-15): the
+  # docs teach a stable shape, so the sandbox answers with a sample rather
+  # than the live Scan.triage_queue. The card it renders is held by the
+  # ledger's render test.
+  SAMPLE_FIRST_ITEM = {
+    'path' => '/triage/example', 'status_variant' => 'warning',
+    'status' => 'needs review', 'purpose' => 'A page waiting for its ruling.',
+    'next_line' => nil, 'offer_commit' => false
+  }.freeze
+
+  # The data ledger: what the playground pre-fills for a corpus page — the
+  # same locals the page's own app proves it with. One provider per page,
+  # and the ledger's render test holds every provider to its promise: the
+  # pre-filled data renders the page. Pages with no entry have no payload,
+  # and that is itself a true answer, not a crash.
+  def self.data_for(rel)
+    case rel
+    when 'pages/portfolio_table.sp', 'pages/specimen.sp',
+         'pages/account_detail.sp', 'pages/roth_form.sp'
+      Fixtures.for(File.basename(rel, '.sp')) || {}
+    when 'examples/portfolio/views/index.sp'
+      { portfolio: Fixtures.portfolio }
+    when 'examples/portfolio/views/account.sp'
+      { account: Fixtures.portfolio.accounts.last }
+    when 'examples/portfolio/views/partials/account_card.sp'
+      # Rendered standalone, the card's subject is the page — so the
+      # account's own fields are the locals, not a wrapper around them.
+      Fixtures.portfolio.accounts.last.to_h
+    when 'examples/roth/views/controls.sp', 'examples/roth/views/partials/report.sp'
+      roth_locals
+    when 'examples/dashboard/views/triage.sp'
+      { notice: nil, unreviewed: nil,
+        first_item: SAMPLE_FIRST_ITEM,
+        queue_intro: 'One item needs attention — this is the first:' }
+    when 'examples/dashboard/views/partials/queue.sp'
+      { first_item: SAMPLE_FIRST_ITEM,
+        queue_intro: 'One item needs attention — this is the first:' }
+    when 'examples/dashboard/views/partials/unreviewed_card.sp'
+      { unreviewed: '1 instruction file awaiting judgment — hand-kept rules ' \
+                    'nobody has ruled canonical or legacy.' }
+    when 'examples/dashboard/views/confirm_archive.sp'
+      { archive_heading: 'Archive "example"?', archive_path: 'example',
+        archive_return_to: '/triage', reason: '' }
+    else
+      {}
+    end
+  end
+
+  # roth's payload, serialized field by field: Scenario's values are the
+  # form's inputs, and the projection answers the report's named figures.
+  # `Projection#to_h` is roth's JSON-endpoint shape, not the page's — so
+  # the fields are named here, and the ledger's render test holds them.
+  def self.roth_locals
+    scenario = Roth::Scenario.defaults
+    projection = Roth::Projection.of(scenario)
+    { scenario: scenario.instance_variable_get(:@values),
+      projection: {
+        'lifetime_taxes_primary' => projection.lifetime_taxes_primary,
+        'lifetime_taxes_baseline' => projection.lifetime_taxes_baseline,
+        'tax_delta' => projection.tax_delta,
+        'final_roth_primary' => projection.final_roth_primary,
+        'final_roth_baseline' => projection.final_roth_baseline,
+        'roth_delta' => projection.roth_delta,
+        'years' => projection.years.map(&:to_h),
+        'baseline_years' => projection.baseline_years.map(&:to_h),
+        'standard_deduction' => projection.standard_deduction,
+        'brackets' => projection.brackets.map(&:to_h),
+        'complaints' => projection.complaints.map(&:description),
+        'defects' => projection.defects.map(&:to_h)
+      } }
+  end
+
+  # A payload's plain shape: Structs become hashes, dates their iso8601,
+  # keys their strings — the JSON the data slot parses back into the same
+  # locals. Anything with no plain shape becomes nothing rather than a
+  # disguise.
+  def self.plainify(value)
+    case value
+    when Hash then value.to_h { |k, v| [k.to_s, plainify(v)] }
+    when Array then value.map { |v| plainify(v) }
+    when Struct then plainify(value.to_h)
+    when Date, Time then value.iso8601
+    when String, Numeric, TrueClass, FalseClass, NilClass then value
+    end
+  end
+
+  # The data slot's pre-fill for a page: its ledger payload, as pretty
+  # JSON — or nothing, where the page has no entry. A payload that cannot
+  # be serialized is a ledger defect the render test catches; the route
+  # itself never crashes on it.
+  def self.data_json_for(rel)
+    data = data_for(rel)
+    return '' if data.empty?
+
+    JSON.pretty_generate(plainify(data))
+  rescue StandardError
+    ''
   end
 end
