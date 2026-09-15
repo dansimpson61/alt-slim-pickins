@@ -72,12 +72,16 @@ redundant), debounced rendering as you type, a vendored
 contract `{ visual, source }` writes both panes from one fetch — the
 raw-HTML pane's tidy monospace wrapper lives in the contract, because a
 pane's presentation is part of its payload. Rendering requires
-JavaScript, which the studio says rather than hides. The remaining
-ledger — the verify_pages gap, the snippet
-Copy button, pages/*.sp outside the palette, or the Phase 0 judgment —
-waits on dan's picks (see `PROJECT.md` `next_step`). Roadmap 0.2 was an
-even-numbered roadmap (the backward eye); 0.3 is the forward eye. Its question, chosen
-and challenged by dan (2026-09-14): can the language carry real work — a
+JavaScript, which the studio says rather than hides. Win 8, the
+verify_pages gap closed: the studio's own four pages joined the gate with
+the shapes their routes serve — status against canned results, because
+its route shells the gate and live results would recurse (named in the
+script). The gate now proves every corpus page: 14 pages verified, 0
+problems. The remaining ledger — the snippet Copy button, pages/*.sp
+outside the palette, or the Phase 0 judgment — waits on dan's picks (see
+`PROJECT.md` `next_step`). Roadmap 0.2 was an even-numbered roadmap (the
+backward eye); 0.3 is the forward eye. Its question, chosen and
+challenged by dan (2026-09-14): can the language carry real work — a
 garden of real apps, the studio won iteratively into the workbench, the
 kernel lowered only as the work demands. The dashboard is one bed in the
 garden, not a canon: sp's entire effect on it is two requires of its lib
@@ -132,7 +136,7 @@ This protocol is fragmented across several system rules. **You must execute ever
   is the stronger one and worth running too: `ruby -Ilib:test -e
   'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 706
   sentences / 0 problems, 95 rules / 0 problems, 64 words and all 64 used
-  in real pages / 0 problems, 10 pages verified, 25 affordances / 0 missing;
+  in real pages / 0 problems, 14 pages verified, 25 affordances / 0 missing;
   the 13-page count retired with the paper pages, the 69-word count with
   Phase 6's cuts)
   **Set no environment variable to make this pass.** It used to need

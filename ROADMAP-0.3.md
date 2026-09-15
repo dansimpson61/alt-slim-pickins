@@ -321,6 +321,18 @@ a studio that can be *used* — the workbench the garden phase leans on.
   what a change makes redundant gets cut. Rendering now requires
   JavaScript, and the studio says so rather than hides it.
 
+- **8 — The verify_pages gap, closed** (dan's pick, 2026-09-15): the
+  studio's own four pages joined the gate with the shapes their routes
+  serve — `index` with the live palette census, `docs` with a canned
+  word, `guide` with a document, and `status` against **canned results**:
+  its route shells this very gate, so proving it with live results would
+  recurse — the hazard is named in the script, and the shape is the same
+  one `studio_docs_test` pins. The gate that claims green now sees every
+  corpus page: 14 pages verified, 0 problems — and the studio's own
+  status page says so live, in under a second. The refusal template stays
+  out, as the palette's completeness test names it: a template, not a
+  page.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

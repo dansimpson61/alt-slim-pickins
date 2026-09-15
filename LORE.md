@@ -416,3 +416,7 @@ Phase 0 win 7 — the Stimulus burr, resolved live — taught six things. (1) Ap
 ## 2026-09-15 — DeepSeek v4-pro
 
 Dan's two corrections to the Stimulus round taught two things. (1) A pane's presentation is part of its payload: the raw-HTML pane's monospace pre-wrap wrapper lived in the `/render_html` route, so the controller's direct write of the escaped `source` lost it — the wrapper now lives inside the contract's `source` value, and the route is a one-liner over the contract; the moment two consumers share a payload, every consumer's presentation belongs in it. (2) Live rendering obsoleted the submit affordance entirely — dan cut the Render button the day it landed, and the no-JS degradation story retired with it: rendering now requires JavaScript, which the studio says rather than hides (the honest end of progressive enhancement is naming where it stops).
+
+## 2026-09-15 — DeepSeek v4-pro
+
+The verify_pages gap, closed, taught one thing worth keeping: a page whose route shells its own gate can only join the gate against canned data — `status.sp`'s route runs `StudioStatus.run`, which shells `verify_pages`, so proving it with live results would recurse forever; the gate names the hazard in the script and uses the same canned shape the docs test pins. The gate that claims green now sees every corpus page (14 pages verified, 0 problems), and the studio's own status page reports it live in under a second — the two surfaces that used to trust each other now check each other.
