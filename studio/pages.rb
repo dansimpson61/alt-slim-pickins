@@ -61,9 +61,10 @@ module StudioPages
           "the data does not parse as JSON — #{e.message.lines.first.strip}"
   end
 
-  # The census, run the way the playground will run the page: the studio's
-  # library, the playground's locals. A refusal is the page naming a wall in
-  # the language's own voice; an error outside the language says so.
+  # The census, run the way the playground will run the page: the
+  # playground's merged library, the playground's locals. A refusal is the
+  # page naming a wall in the language's own voice; an error outside the
+  # language says so.
   def self.entries(library:, loaded: nil)
     PAGES.map do |id, rel|
       status, refusal =
@@ -91,5 +92,44 @@ module StudioPages
   # The editor's heading: the page being edited, or the invitation.
   def self.title_for(id)
     PAGES.key?(id) ? "Editing: #{PAGES[id]}" : 'Write .sp Code'
+  end
+
+  # --- the playground's library: the partial wall, landed -------------------
+
+  # The studio's own furniture plus every example app's partials, merged —
+  # a loaded page and its data now render end-to-end. A name shared by two
+  # apps refuses loudly here rather than rendering one app's word in
+  # another's place. `pages/partials` is excluded: its one file is the cost
+  # instrument's fixture, not a page's partial.
+  PLAYGROUND_LIBRARY_DIRS = [
+    File.join(ROOT, 'studio', 'views'),
+    File.join(ROOT, 'examples', 'portfolio', 'views'),
+    File.join(ROOT, 'examples', 'dashboard', 'views'),
+    File.join(ROOT, 'examples', 'roth', 'views')
+  ].freeze
+
+  def self.library
+    @library ||= merge_libraries(PLAYGROUND_LIBRARY_DIRS)
+  end
+
+  # The merge, its own seam so the collision refusal is testable: two apps
+  # naming the same partial would otherwise render one app's word in
+  # another's place, silently.
+  def self.merge_libraries(dirs)
+    partials = {}
+    partial_paths = {}
+    dirs.each do |dir|
+      Dir[File.join(dir, 'partials', '*.sp')].each do |path|
+        name = File.basename(path, '.sp').to_sym
+        if partials.key?(name)
+          raise SlimPickins::Error,
+                "`#{name}` is a partial in two apps — the playground refuses to guess which one a page means"
+        end
+
+        partials[name] = File.read(path)
+        partial_paths[name] = path
+      end
+    end
+    SlimPickins::Library.new(partials: partials, partial_paths: partial_paths)
   end
 end

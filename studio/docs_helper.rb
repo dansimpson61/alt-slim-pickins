@@ -1,4 +1,5 @@
 require 'ostruct'
+require 'set'
 module StudioDocs
   # One link in the sidebar. A plain Struct is the app contract satisfied with
   # no ceremony, which is the point — `each word` binds one of these and the
@@ -19,21 +20,23 @@ module StudioDocs
 
   def self.guides = GUIDES.map { |name| Entry.new(name: name, path: "/guides/#{name}") }
 
-  # The studio's own partials register as words too — `editor`, `preview`,
-  # `split_pane`. They are this app's furniture, not the language, so the
-  # sidebar leaves them out. Named explicitly rather than relying on being
-  # read before the studio's library loads, which would be true today and
-  # silently false the first time a line moved.
-  FURNITURE = Dir[File.join(__dir__, 'views', 'partials', '*.sp')]
-              .map { |f| File.basename(f, '.sp') }.freeze
+  # The language's words, as the document lists them — the same scan
+  # check_grammar uses. The registry is global and any library may register
+  # an app's own words into it (the playground's merged library does), so
+  # "registry minus the studio's furniture" is no longer enough: the docs
+  # document the language, and the language's one home is VOCABULARY.md.
+  def self.vocabulary
+    @vocabulary ||= File.read(File.join(ROOT, 'VOCABULARY.md'))
+                        .scan(/^### `([a-z_]+)`/).flatten.to_set
+  end
 
-  # Every word the language actually knows. The sidebar used to be 77
-  # hand-written `link` sentences, which could disagree with the vocabulary
-  # and had no way to say so. Read from the registry, it cannot.
+  # Every word the language actually knows, from the document — so an app's
+  # words, however many libraries register them, never leak into the
+  # sidebar.
   def self.words
     require_relative '../lib/slim_pickins'
     SlimPickins::Library.builtin
-    (SlimPickins::Word.registry.keys.map(&:to_s) - FURNITURE).sort
+    vocabulary.select { |word| SlimPickins::Word.registry.key?(word.to_sym) }.sort
       .map { |word| Entry.new(name: word, path: "/docs/#{word}") }
   end
 
@@ -43,16 +46,20 @@ module StudioDocs
   # survive being dispatched on an OpenStruct whose real methods (`each`,
   # `map`, `send`, `class`...) it might collide with. `build` is the same
   # payloads as an OpenStruct, kept for the playground, where the reader
-  # writes `docs.word.contract` by hand and owns the dispatch.
+  # writes `docs.word.contract` by hand and owns the dispatch. The payloads
+  # cover the language as the document lists it, so app words registered by
+  # other libraries never earn a docs page.
   def self.entries
     @entries ||= begin
       require_relative '../lib/slim_pickins'
       SlimPickins::Library.builtin
-      SlimPickins::Word.registry.keys.sort.to_h do |name|
-        word = name.to_s
+      vocabulary.filter_map do |word|
+        klass = SlimPickins::Word.registry[word.to_sym]
+        next unless klass
+
         [word, { contract: contract_of(word),
-                 implementation: implementation_of(word, SlimPickins::Word.registry[name]) }]
-      end
+                 implementation: implementation_of(word, klass) }]
+      end.to_h
     end
   end
 

@@ -20,7 +20,7 @@ get '/' do
            "page \"Slim-Pickins Studio\"\n  heading \"Hello World\"\n"
   SlimPickins.render(File.read(File.join(settings.views, 'index.sp')), path: 'index.sp',
                      locals: { source: source,
-                               palette: StudioPages.entries(library: STUDIO_LIBRARY, loaded: loaded_id),
+                               palette: StudioPages.entries(library: StudioPages.library, loaded: loaded_id),
                                editor_title: StudioPages.title_for(loaded_id),
                                data: '', docs: StudioDocs.build, **SIDEBAR },
                      library: STUDIO_LIBRARY)
@@ -87,7 +87,7 @@ post '/render' do
   begin
     SlimPickins.render(source, path: "playground.sp",
                        locals: StudioPages.playground_locals(params[:data]),
-                       library: STUDIO_LIBRARY)
+                       library: StudioPages.library)
   rescue StandardError => e
     render_refusal(e)
   end
@@ -98,7 +98,7 @@ post '/render_html' do
   begin
     html = SlimPickins.render(source, path: "playground.sp",
                               locals: StudioPages.playground_locals(params[:data]),
-                              library: STUDIO_LIBRARY)
+                              library: StudioPages.library)
     "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(html)}</body></html>"
   rescue StandardError => e
     "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(render_refusal(e))}</body></html>"

@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/slim_pickins'
 require_relative '../studio/docs_helper'
+require_relative '../studio/pages'
 require_relative '../studio/status'
 
 SlimPickins::Library.builtin
@@ -67,6 +68,24 @@ class StudioDocsTest < Minitest::Test
     StudioDocs::GUIDES.each do |name|
       assert File.file?(File.join(ROOT, "#{name}.md")), "guide #{name} has no document"
     end
+  end
+
+  # --- the docs document the language, not the apps --------------------------
+
+  def test_the_sidebar_lists_the_language_not_the_apps
+    StudioPages.library # the merged library registers app words globally
+    words = StudioDocs.words.map(&:name)
+    assert_includes words, 'badge'
+    assert_includes words, 'page'
+    refute_includes words, 'queue', 'an app partial is not a vocabulary word'
+    refute_includes words, 'editor', 'studio furniture is not a vocabulary word'
+  end
+
+  def test_the_docs_payloads_cover_the_language_not_the_apps
+    keys = StudioDocs.entries.keys
+    assert_includes keys, 'money'
+    refute_includes keys, 'queue', 'an app partial earns no docs page'
+    refute_includes keys, 'editor', 'studio furniture earns no docs page'
   end
 
   # --- the status page -----------------------------------------------------

@@ -223,6 +223,25 @@ a studio that can be *used* — the workbench the garden phase leans on.
   not in the playground's library), the Stimulus burr's resolution, the
   found verify_pages gap, and the `snippet` word's dead Copy button.
 
+- **4 — The partial wall** (dan's pick, 2026-09-15): the playground's
+  library now merges the studio's furniture with every example app's
+  partials — a loaded page and its data render end-to-end; the dashboard's
+  `triage` renders inside the playground from a JSON payload, card, badge
+  and action forms included. A partial name shared by two apps refuses
+  loudly at the merge, by test, rather than rendering one app's word in
+  another's place; `pages/partials` stays out (its one file is the cost
+  instrument's fixture). The census was re-run against the merged library
+  and its verdicts did not move — measured proof that the partial wall was
+  fully masked behind the data wall, exactly as the win-1 census said.
+  Registering the app partials globally exposed a real leak: the docs
+  sidebar read the live registry, so app words would have appeared as
+  vocabulary — the sidebar and the docs payloads now read the language's
+  one home (VOCABULARY.md, the same scan check_grammar uses), which makes
+  them pollution-proof for every future garden app, by test. A found gap
+  carried in: `pages/*.sp` (the repo's own demo pages) are not in the
+  palette — the palette promised examples + studio, and the test pins that
+  promise, but the garden's census would want them.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising

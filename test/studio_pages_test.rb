@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'tmpdir'
 require 'minitest/autorun'
 require_relative '../lib/slim_pickins'
 require_relative '../studio/docs_helper'
@@ -15,7 +16,7 @@ SlimPickins::Library.builtin
 # the census itself can never raise.
 class StudioPagesTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
-  LIBRARY = SlimPickins::Library.from(File.join(ROOT, 'studio', 'views'))
+  LIBRARY = StudioPages.library
 
   def test_every_palette_page_exists
     StudioPages::PAGES.each do |id, rel|
@@ -64,6 +65,35 @@ class StudioPagesTest < Minitest::Test
     assert_includes html, 'Start from a real page'
     assert_includes html, entries.first.name
     assert_includes html, 'class="link', 'the palette loads through links, not a form'
+  end
+
+  def test_the_playground_library_renders_an_app_page_with_its_partials
+    # triage is the dashboard's page: its partials (queue, unreviewed_card)
+    # were the wall the census masked. The playground's library now knows
+    # them, so with the page's own data it renders end-to-end.
+    locals = { notice: nil, q: '', error_entry: nil,
+               nav_state: { studio: false, library: false, reconcile: false,
+                            dispatch: false, ports: false },
+               first_item: nil, queue_intro: '', unreviewed: nil }
+    html = SlimPickins.render(File.read(File.join(ROOT, 'examples', 'dashboard', 'views', 'triage.sp')),
+                              path: 'examples/dashboard/views/triage.sp',
+                              locals: locals, library: LIBRARY)
+    assert_includes html, 'Triage'
+    assert_includes html, 'All caught up', 'the queue partial rendered through the wall'
+    refute_includes html, 'no word', 'the partial wall is down'
+  end
+
+  def test_the_merge_refuses_a_partial_name_shared_by_two_apps
+    Dir.mktmpdir do |a|
+      Dir.mktmpdir do |b|
+        Dir.mkdir(File.join(a, 'partials'))
+        Dir.mkdir(File.join(b, 'partials'))
+        File.write(File.join(a, 'partials', 'clash.sp'), "title \"a\"\n")
+        File.write(File.join(b, 'partials', 'clash.sp'), "title \"b\"\n")
+        error = assert_raises(SlimPickins::Error) { StudioPages.merge_libraries([a, b]) }
+        assert_includes error.message, 'clash'
+      end
+    end
   end
 
   # --- the data wall: the writer's JSON, bound as locals --------------------
