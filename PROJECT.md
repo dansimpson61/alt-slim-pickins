@@ -2,17 +2,17 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15. A 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row — up from KERNEL.md's 4.73 / 0.22) in ROADMAP-0.3.md's session-start section, and proposed three playground wins (W1 the census tells the truth about the render the load gives — recommended; W2 /status runs the suite HANDOFF's gate names; W3 a tree pane showing what a page means). Nothing was fixed — dan ruled "record your findings where the next session will find them, and then back to Phase 0 to scope the playground improvements". The pick is his.
+status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15. A 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row — up from KERNEL.md's 4.73 / 0.22) in ROADMAP-0.3.md's session-start section. dan then ruled the three proposed playground wins parked for later and asked for creative scoping instead — "bluesky head work, not coding" — which landed as BLUESKY.md (the studio's measured landscape, the playground as a workbench, four candidate shapes for a style language, the four grades of inference and the missing axiomatic one). Nothing was fixed and nothing was built; the findings and the designs wait on their own demand.
 kind: project
 last_touched: 2026-09-16
 next_step: >-
-  dan rules the playground pick from the three proposed wins in
-  ROADMAP-0.3.md's "Scoping the playground" section — W1 (the census
-  measures the load's render, not the empty-data one; recommended first),
-  W2 (/status runs the suite the gate names), or W3 (the tree pane). The
-  round then lands as one winnable victory: implement, verify green,
-  commit, card, lore. Phase 0 stays open until dan judges it; the seven
-  recorded findings wait on their own demand, not on this phase.
+  dan reads BLUESKY.md and rules the next move — W1/W2/W3 stay parked in
+  ROADMAP-0.3.md with their consumers named, and the bluesky's own open
+  questions (Part 5) are the alternative: whether a page says style at all,
+  whether `tag` closes before a designed style language exists, whether the
+  studio becomes one surface or stays two. The round then lands as one
+  winnable victory: implement, verify green, commit, card, lore. Phase 0
+  stays open until dan judges it.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

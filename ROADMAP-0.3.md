@@ -451,17 +451,23 @@ with nothing to load.
   ROADMAP-0.2's Phase 6 heading carries no closure mark though Round E and
   PROJECT.md both treat it as closed.
 
-### The scoping — the proposed wins (2026-09-16)
+### The scoping (2026-09-16) — three wins parked, and the bluesky brief
 
 Phase 0's original roughness list is fully retired: the playground serves real
 pages with real data, its refusals speak the language, the partial wall is
 gone, the Stimulus burr is resolved, and the default source is no longer a
 hardcoded greeting. So the next scope cannot be read off the original audit; it
-comes from what the work now shows. Three candidates, each with its consumer
-named and sized to one round, offered for dan's pick.
+comes from what the work now shows.
 
-**W1 — the census tells the truth about the render you get** *(recommended
-first)*. Run the census through the same path the load takes, payload and all:
+**dan's ruling on receipt (2026-09-16):** *"Record these very worthy proposed
+wins for later; and then let's do some creative scoping."* The three wins are
+therefore **parked, not picked** — each keeps its consumer, its size and its
+done-looks-like, and any of them may be taken up when a round wants it. The
+scoping that follows them is the bluesky brief, recorded below and worked out
+in [BLUESKY.md](BLUESKY.md).
+
+**W1 — the census tells the truth about the render you get.** Run the census
+through the same path the load takes, payload and all:
 `StudioPages.entries` measures `playground_locals(StudioPages.data_json_for(rel))`
 instead of the empty-data locals. Eighteen `error` badges become their true
 verdicts, and the badge's promise changes with them — from "renders with no
@@ -508,6 +514,38 @@ it is the cheapest honesty in the repo. W3 third because it is the boldest and
 the only one that needs a design decision of its own. A fourth candidate was
 considered and refused for want of a consumer: no permalink for hand-written
 source, since nothing yet demands that a scratch page be shareable.
+
+#### The bluesky brief (2026-09-16)
+
+dan then opened the wider ground himself, in seven instructions, recorded
+because the *brief* is the scoping artifact this phase has been waiting for:
+record the wins for later; brainstorm before planning, with the internet's help
+("use your eyes to see how other people on the internet approach the creative
+and technical issues that we face"); **use your eyes** for a thorough visual
+and aesthetic inventory of the studio and the playground; think of the
+playground as a UI/UX IDE — "layout, landscape, and real estate that is
+conducive to fruitful creative work"; and two questions to think with, keeping
+simplicity and elegance foremost —
+
+- **the style language:** "sp works preferentially through html and css. We
+  need to bring to visual design a dsl of style, a language for human beings
+  to fluently describe the styling of the ui/ux they create with sp without
+  having to speak the machine code of css. What might this mean and what might
+  this look like?"
+- **the magic:** "In sp, we lean into inference and convention because these
+  are what enable language to be magical. Language achieves intent because of
+  convention and that is magical. What might this mean for sp?"
+
+**Worked out in [BLUESKY.md](BLUESKY.md)** — the measured landscape, the
+workbench reading, four candidate shapes for a style language with the one to
+refuse, the four grades of inference and the missing fourth, and what the
+studio would have to be able to show. It is head work: nothing in it is
+scheduled, and its own limits are named in its Part 5. Its two load-bearing
+observations, for a reader who reads nothing else: the language has **64 words
+for *what* and 53 theme roles for *how it looks*, and no way to say one in
+terms of the other**; and the local-styling gap is already filled — by an
+undesigned escape, `tag span, style: "color: red"`, which a page can say today
+and no checker refuses.
 
 ### Phase 1 — The garden, planted
 

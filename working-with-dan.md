@@ -159,7 +159,20 @@ working manual that should be better after every session than it was before.
   unintentionally and undeservedly." Structure phases as a sequence of small,
   judgeable wins — size the scoping to the win, not the win to the scoping —
   and check every revered constraint for whether it is actually a scope
-  boundary wearing a halo.
+  boundary wearing a halo. He also separates the two modes explicitly when he
+  wants to: handed a recommended pick he answered "record these very worthy
+  proposed wins **for later**; and then let's do some creative scoping — this
+  is bluesky head work right now, **not coding**" (observed 2026-09-16). So
+  "park the wins and dream" is a legitimate answer to a proposal, and a
+  brainstorming turn is a deliverable in its own right — but it is *not* a
+  licence to implement: he expects a plan-shaped thing to stay a plan.
+- **For design work he prescribes a method, not an answer**: look at the real
+  thing with your own eyes, look at how others have solved it, and brainstorm
+  *before* planning — "use your eyes… to see and smell the roses before
+  toiling in the dirt" (observed 2026-09-16). The prescribed order is
+  observation → outside inspiration → design, and skipping to a plan is the
+  failure. Handed six screenshots and a DOM geometry readout he can act on; a
+  prose opinion about whitespace he cannot.
 - **He intervenes at the layer below the symptom.** A formatting complaint was
   really a stale process; a question about icons turned into a Phase 6 cut.
 - **He restates an instruction rather than arguing about it.** The restatement
