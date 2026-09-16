@@ -2,15 +2,17 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15, the ledger empty — the palette with its census (now 18 entries), the word docs with examples and a seeded try-it, the data wall with refusals in the language's own voice, the partial wall, the deepening (real context and pre-filled payloads), the try-it yield (62 useful / 2 structural / 2 noted / 0 refusals, pinned by test), the Stimulus burr resolved live, the verify_pages gap closed, the Copy button subtracted, the repo's pages in the palette. dan's judgment on the phase is pending — next he scopes changes to the studio's playground identity and functionality (his words, 2026-09-15).
+status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15. A 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row — up from KERNEL.md's 4.73 / 0.22) in ROADMAP-0.3.md's session-start section, and proposed three playground wins (W1 the census tells the truth about the render the load gives — recommended; W2 /status runs the suite HANDOFF's gate names; W3 a tree pane showing what a page means). Nothing was fixed — dan ruled "record your findings where the next session will find them, and then back to Phase 0 to scope the playground improvements". The pick is his.
 kind: project
-last_touched: 2026-09-15
+last_touched: 2026-09-16
 next_step: >-
-  dan scopes changes to the studio's playground identity and functionality
-  — the scoping conversation itself is the next step, starting from the
-  ten wins, the empty ledger, and the standing state recorded in
-  ROADMAP-0.3.md's Phase 0 section. Phase 0 stays open until dan judges
-  it; the housekeeping is at end-of-phase standard.
+  dan rules the playground pick from the three proposed wins in
+  ROADMAP-0.3.md's "Scoping the playground" section — W1 (the census
+  measures the load's render, not the empty-data one; recommended first),
+  W2 (/status runs the suite the gate names), or W3 (the tree pane). The
+  round then lands as one winnable victory: implement, verify green,
+  commit, card, lore. Phase 0 stays open until dan judges it; the seven
+  recorded findings wait on their own demand, not on this phase.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

@@ -99,6 +99,12 @@ working manual that should be better after every session than it was before.
   would not have.
 - **Recording the decision where the next reader will find it** — roadmap
   round record, `PROJECT.md`, lore — instead of only in the conversation.
+  Same for findings: handed a verified inventory of seven defects and two
+  drifted measurements at the top of a session, his ruling was *"record your
+  findings where the next session will find them, and then back to Phase 0 to
+  scope the playground improvements"* — write them into the demand ledger, do
+  not fix them mid-phase (observed 2026-09-16). A finding that arrives without
+  a fix is not an unfinished job; it is evidence the phase has not spent yet.
 - **Working the RIF loop per round without being reminded**: implement →
   verify → commit → card → lore. He restated this once already
   (`HANDOFF.md`, *How this project works*); a second reminder means the agent
@@ -191,8 +197,12 @@ working manual that should be better after every session than it was before.
   housekeeping as though we were at end of phase, and ensure continuity
   for handoff to a new session" — treat handoff continuity as part of the
   deliverable, not the afterthought. His empty-option answers are
-  directives, not indecision: three times now he has skipped the offered
-  options and written his own next step. And he delegates operational
+  directives, not indecision: four times now he has skipped the offered
+  options and written his own next step — and the fourth was a *composite* of
+  two of them, in order: offered "record only, then scope" and "back to Phase
+  0" as separate picks, he answered "option 1 ... and then option 4". Read his
+  sentence as a sequence of rounds, not a single pick (observed 2026-09-16).
+  And he delegates operational
   ownership explicitly when the machinery is ready: "I will stop the
   server now and let you and subsequent agent manage starting and
   stopping in the future" — once he hands an operation over, own it

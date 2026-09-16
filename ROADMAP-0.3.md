@@ -361,6 +361,154 @@ judgment on the phase is pending: before ruling it, he scopes the
 studio's next change — its *playground identity and functionality* (his
 words) — so the phase stays open and the wins list keeps growing.
 
+### The session-start record (2026-09-16) — findings, no code motion
+
+An orientation round: a fresh session read the project, re-measured it, and
+wrote down what it found. **Nothing was fixed** — dan's ruling on receipt of
+this list was "record your findings where the next session will find them, and
+then back to Phase 0 to scope the playground improvements" — so every item
+below is ledger evidence, not a work order. The gate is green at `095609b`:
+705 sentences, 64 words (all 64 used), 94 rules, 14 pages, 295 runs / 0
+failures one-process, 25 affordances / 0 missing.
+
+**The cost moved again** (`bin/measure_cost.rb`, ruby 4.0.1, `specimen.sp`,
+200 runs): cold **7.71 ms**, warm **5.65 ms**, **0.26 ms/row** — against
+KERNEL.md's 2026-09-14 addendum of 6.38 / 4.73 / 0.22. The composition tax is
+compounding faster than the feature work pauses, and Phase 3's budget decision
+has no current number under it.
+
+**The findings, worst first.** Three of them are the same failure in different
+clothes: *a name and its consumer parted company, and nothing noticed* — a
+permission without a mechanism, a claim without the path it claims, a loader
+with nothing to load.
+
+- **F1 — `if:` is documented and unimplemented.** `lib/slim_pickins/contracts.rb:16`
+  is the only mention of it in `lib/`; no code consults it. Live: `note
+  "MARKER", if: .show` renders the marker identically with `show` false and
+  true. The gate *permits* it (`contracts.rb:242` whitelists `%i[if class id]`),
+  so `check_grammar` is silent, and the one test that names it
+  (`test/contracts_test.rb:98`) asserts only that the gate permits it. It is
+  documented as working in DESIGN.md:200,265,283, VOCABULARY.md:52-55 and
+  PRIMER.md:209, and LORE.md's 81%-of-branches measurement leans on it. A page
+  saying `button primary, "Add to cart", if: .in_stock?` gets an unconditional
+  button and no complaint. **Consumer named:** DESIGN.md's own guessability
+  fences. A contract that says "allowed" is not a mechanism that says "works".
+- **F2 — the palette's census measures a render the playground never gives.**
+  All 18 entries wear `error`; all 18 render once loaded, because the load
+  pre-fills the ledger payload the census omits (`StudioPages.entries` calls
+  `playground_locals` with no data; the `/?load=` path calls
+  `data_json_for`). Measured entry by entry: 18 of 18 render with their own
+  payload, and `pages/specimen`'s badge says "this page has no specimen" while
+  loading it renders. Win 1's recorded claim — "the verdict of the same render
+  the playground will give it" — was never true. **This is scoping candidate
+  W1 below.**
+- **F3 — there is no boolean literal, so `false` means true.** `Transform`'s
+  `NAME` pattern matches bare `true`/`false`/`nil`, so they arrive as the
+  symbols `:true`/`:false`, both truthy. Live: `field name, required: false`
+  emits `required="required"`; `tab "A", active: false` marks the tab active.
+  The corpus survives by luck — it writes only `active: true` and
+  `required: true` (studio/views/index.sp:10, editor_form.sp:10,
+  confirm_archive.sp:7), and data-driven modifiers use real booleans
+  (`.here`, `.open`). Flagged by the 2026-09-10 swarm (`auditor_2`,
+  `challenger_3/4`, `worker_2`, `explorer_remediation_2`) and never recorded
+  here. Same root as F1: `if: false` could not be spoken even if the guard
+  existed.
+- **F4 — the word census in the prose is stale.** The measured count is 64
+  (42 Ruby classes + 22 `.sp`). README.md:5,103, DESIGN.md:6,302 and
+  PRIMER.md:21,125,367 say *fifty-three*; VOCABULARY.md:3 says *"Fifty words"*;
+  check_shape.rb:7 says *"(45 of 50)"*. README.md:5 also says "two Sinatra
+  apps" (three example apps plus the studio). HANDOFF.md:45 says "six wins have
+  landed" and then enumerates ten. No checker holds prose numbers — they hold
+  fenced sentences and generated bullets — so these rot in place.
+- **F5 — dead machinery and committed cruft.** `lib/slim_pickins/contracts.rb:49-80`
+  (`PrimitiveShapes` / `PRIMITIVES`) is dead and **provably empty**
+  (`SlimPickins::PRIMITIVES == {}`), superseded when `words.rb` moved from
+  `# key: value` comment preambles to the `contract` macro — yet its comment
+  still calls itself "the primitives' home", and nothing else references it.
+  Also committed: a leftover probe in `builder.rb:62-65` that `puts`es instead
+  of raising for `tabs`; three `def ___dummy` stubs (`words.rb:156,278,489`);
+  and unindented method bodies across `words.rb`, `word.rb:13-21`,
+  `compilation.rb:22-46`, `partial_word.rb`, `library.rb`, `generator.rb`, all
+  from the 2026-09-05 unification. The project's own constraint 2 says it must
+  stay lovely to read, and no checker reads formatting.
+- **F6 — comments describing superseded states.** `studio/views/partials/try_it.sp:1-5`
+  still says the two Render buttons are deliberate and that the burr's
+  resolution "when it lands" will obviate them; win 7 landed it and cut them,
+  and editor_form.sp was updated while this file was not. `markdown.rb:166-167`
+  says table alignment colons are "recognised but not rendered" while
+  lines 178-189 render `align="…"`, and Phase 6 records the native support as
+  landed.
+- **F7 — records that contradict themselves.** `VOCABULARY.md` breaks its own
+  rule 1 ("No blank slots") in 14 tail entries — `action`, `flash`, `search`,
+  `children`, `paragraph`, `box`, `heading`, `span`, `figcaption`, `summary`,
+  `iframe`, `tabs`, `tab`, `scroll` omit `infers` and `renders`. `:501` still
+  says "and `icon` draws each" (`icon` was cut in Phase 6 and exists nowhere);
+  `:420` says `heading` "has been cut" while `:1117` documents it as live;
+  `:1051`'s "What the drafts left open" self-answers, flagged in 0.2 Phase 0.
+  `bin/word_graph.rb` is broken (`LoadError: bin/word_graph_template`, never
+  committed — KERNEL.md names it). `.agents/worker_1/report.md` still carries
+  the fabricated evidence a swarm auditor vetoed: a record that lies, kept.
+  ROADMAP-0.2's Phase 6 heading carries no closure mark though Round E and
+  PROJECT.md both treat it as closed.
+
+### The scoping — the proposed wins (2026-09-16)
+
+Phase 0's original roughness list is fully retired: the playground serves real
+pages with real data, its refusals speak the language, the partial wall is
+gone, the Stimulus burr is resolved, and the default source is no longer a
+hardcoded greeting. So the next scope cannot be read off the original audit; it
+comes from what the work now shows. Three candidates, each with its consumer
+named and sized to one round, offered for dan's pick.
+
+**W1 — the census tells the truth about the render you get** *(recommended
+first)*. Run the census through the same path the load takes, payload and all:
+`StudioPages.entries` measures `playground_locals(StudioPages.data_json_for(rel))`
+instead of the empty-data locals. Eighteen `error` badges become their true
+verdicts, and the badge's promise changes with them — from "renders with no
+data" to "renders when you load it", which is the render the writer actually
+meets. *Consumer:* every writer who reads the palette, and win 1's own recorded
+claim. *Sized:* one line of the census, the completeness test's promise
+restated, and the win-1 record corrected in place. *Done looks like:* the
+palette's verdicts equal the load-time renders, pinned by a test that re-runs
+both paths; the refusal record shrinks to the pages that genuinely refuse with
+their own payload, and any that do are named as the demand.
+
+**W2 — `/status` runs the gate HANDOFF names.** The page's whole claim is that
+it cannot report a green the repo does not have, but its four legs are the four
+checkers: the test suite — 295 runs, the leg HANDOFF's standing command
+includes — is not among them, so the page can say "All 4 legs green" over a red
+suite. *Consumer:* the page's own claim, and every reader who trusts it.
+*Sized:* one leg added (`ruby -Ilib:test -e …`, measured 1.37 s, taking the
+page from 0.89 s to ~2.3 s); parity (5.0 s, needs :4000) and the cost
+instrument (3.4 s) stay out and are named as instruments rather than gate legs,
+with the reason. *Done looks like:* the status page's leg list equals the gate
+the project quotes, and the omission of the two instruments is stated on the
+page.
+
+**W3 — the studio shows what a page *means*, not only what it emits** *(the
+bold one)*. ROADMAP-0.3's first re-read finding is that the durable asset is
+not the HTML: "a `.sp` file is a parsed, checkable description of what a page
+means, and 0.1 spent it entirely on emitting HTML." `SlimPickins.evaluate`
+already returns that description — measured on `pages/specimen.sp`: one `page`
+node, 9.4 KB of tree — but nothing in the studio can show it. `/render.json`
+gains a `tree` key and the playground a third pane beside Visual and HTML,
+which is the join LORE's win-7 record already predicted ("a future pane joins
+as a key, not a change"). *Consumer:* the roadmap's own thesis, and the reader
+who wants to know what a page means rather than what it printed. *Sized:* the
+largest of the three — a readable tree formatter (JSON is not a readout), a
+third pane, a contract key, and a test; the presentation question (a word, or
+an app word through the hatch) is the round's own design work. *Done looks
+like:* the same page, the same data, three panes, and the tree pane's claim
+held by a test that re-evaluates what it shows.
+
+**Recommendation: W1, then W2, then W3.** W1 first because it is a lie in the
+surface and it re-orders the ledger for free — until the census measures the
+load's render, every other verdict it prints is unreadable. W2 second because
+it is the cheapest honesty in the repo. W3 third because it is the boldest and
+the only one that needs a design decision of its own. A fourth candidate was
+considered and refused for want of a consumer: no permalink for hand-written
+source, since nothing yet demands that a scratch page be shareable.
+
 ### Phase 1 — The garden, planted
 
 A variety of small real apps, each doing an interesting thing, each exercising
@@ -401,9 +549,13 @@ that they did not. **The council's recommendations lie here, demand-gated**:
 R3P1 (payload forwarding) if a real form demands it; R3P2 (subject-shifting
 `card`) if a real page writes the same binding five times; R3P3 (`formaction`
 groups) if a real action group wants one form instead of four. KERNEL.md's
-cost budget is dan's, set here before the work begins — the re-measured cost
-(4.73 ms warm, 0.22 ms per row) is the baseline it is set against — and the
-byte-diff harness is the acceptance test for anything that touches rendering.
+cost budget is dan's, set here before the work begins — the baseline is the
+**latest** re-measurement, not this draft's: 2026-09-14 read 4.73 ms warm and
+0.22 ms per row, and 2026-09-16 reads **5.65 ms warm and 0.26 ms per row**
+(`bin/measure_cost.rb`, recorded in Phase 0's session-start section). Re-run
+the instrument on the day the budget is set; a baseline quoted from this
+document will be older than the tree — and the byte-diff harness is the
+acceptance test for anything that touches rendering.
 
 *Done looks like:* the merged ledger closed or explicitly kept open, cost
 re-measured against the budget, suite and byte-diffs green.
