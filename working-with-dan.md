@@ -130,6 +130,19 @@ working manual that should be better after every session than it was before.
   note number 2"* (observed 2026-09-10). The fix was not fewer words but more
   context: the mechanism, the failure it causes, and a worked example. He
   reads closely and stops on a sentence that assumes you were in his head.
+  **Repeated 2026-09-16, which is why this entry now carries two dates.** An
+  outline described two instruments in prose and asked which should land
+  first; his answer was *"Why not both? I swear to God I don't remember what
+  each one does and how they differ from each other."* The cause was not
+  brevity but **one name doing four jobs**: the document used "register" for a
+  list of criteria, a map of sources of truth, an instrument, and a work list.
+  The repair that worked — and the shape to reach for next time — was a table
+  of *four names, four jobs*, each with what it answers and who reads it, plus
+  a **worked row** from each instrument so the difference is visible rather
+  than described. A document that names four things alike has not been
+  misunderstood; it has been written twice. Worth noting for its own sake:
+  the outline was arguing that transparency is the criterion for what lands
+  when the reader could not tell its own parts apart.
 - **Reassurance instead of investigation.** See the first section.
 - **Building for imagined futures**, and keeping a rule whose reason died
   (`ROADMAP-0.2.md` constraint 3). He will ask what it buys; have the answer.

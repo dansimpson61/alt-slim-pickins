@@ -1,8 +1,10 @@
-# DAYTRIP-0.3.0b — outline, revision 2, for discussion
+# DAYTRIP-0.3.0b — revision 3, ready to open on dan's word
 
-**Status: an outline only. Not opened.** Revision 1 answered dan's first two
-observations; this revision folds in his five answers of 2026-09-16 and the
-analysis they asked for. Nothing here is taken.
+**Status: all five discussion questions ruled (2026-09-16). Not yet opened —
+that is his word alone, and the only thing still pending.** Revision 1 answered
+his first two observations; revision 2 folded in his five answers and ran the
+analysis; this revision records his five rulings and repairs a failure of its
+own.
 
 Proposed name: **The Accent** — then made to serve a larger subject, which his
 fourth answer named: **transparency, and the managed sources of truth of sp's
@@ -55,9 +57,27 @@ conventions and inferences.** Rename at will.
 5. On `0.3.0a`: *"Let's hold 0.3.0a to see what's still useful after
    `0.3.0b`."*
 
+**His rulings (2026-09-16), on the five questions revision 2 asked:**
+
+| # | Question | Ruling |
+|---|---|---|
+| 1 | Is cause D distinct enough from cause B to stand alone? | **Yes.** D stands as its own cause |
+| 2 | The 28 claims: taken here, or listed? | **Take the mechanical ones; leave anything arguable** |
+| 3 | Which register lands first? | **Both.** — and: *"I swear to God I don't remember what each one does and how they differ from each other."* Which is a finding about revision 2, answered below |
+| 4 | Is Stop 5 worth a stop? | **It lands** — *"else we act on the basis of our vague impressions (or most recent impressions)"* |
+| 5 | A third criterion? | **Two is enough for now, knowing this is a dynamic process** |
+
+**Ruling 3's second half is the most useful thing in this round.** A document
+arguing that transparency is the criterion for what lands was itself
+untransparent: it named two instruments in prose and left the reader to tell
+them apart. `working-with-dan.md` already records this failure mode — *the fix
+is not fewer words but more context: the mechanism, the failure it causes, and a
+worked example* — and revision 2 ignored it. The next section exists so that no
+reader ever has to remember.
+
 **Answer 4 is the one that moved this document's centre.** An accent audit is
-an inventory; a register of sources of truth is an instrument. The audit is now
-the *means*, and the register is the *end*.
+an inventory; the sources-of-truth map is a diagnosis; the two instruments are
+the thing built. The audit is the *means*, and the instruments are the *end*.
 
 ## The one argument
 
@@ -90,6 +110,58 @@ cheap.
 A finding must say which criterion it scores against, and a finding that scores
 against none is welcome rather than suppressed — that is how a third criterion
 arrives.
+
+---
+
+## Four names, four jobs — the repair for ruling 3
+
+Revision 2 used the word "register" for four different things, which is why its
+reader could not tell them apart. That is not a wording problem; it is the
+disease this daytrip is about — **one name, four homes.** So the vocabulary is
+fixed first, and everything after this section uses these names and no others.
+
+| Name | What it is | What it answers | Who reads it |
+|---|---|---|---|
+| **The criterion register** | the *tests* a finding or an instrument must pass | "what makes this count as good?" | whoever proposes work |
+| **The sources-of-truth map** | the *diagnosis*: every truth the language holds, its home, and its grade (apparent / manageable / managed) | "where is the language's knowledge kept, and is it kept?" | whoever changes the language |
+| **The promise ledger** | an *instrument*: every permission, claim and loader, with its reader | **"does it actually do anything?"** | the build, on every commit |
+| **The convention register** | an *instrument*: every convention and inference, with its source of truth and its override | **"what will this do when I stay silent, and who decided?"** | a person writing a page |
+
+**The two instruments are the pair that matters, and they catch opposite
+failures.**
+
+**The promise ledger** is about what the language *says it can do*. A promise
+is a permission the gate grants, a declaration a word makes, or a claim a
+document makes, whose effect on a page is **nothing**. The ledger finds the
+reader — or records that there is none. It is mechanical, it is a checker, and
+it fails the build.
+
+| Named | Where it is permitted | What reads it | Verdict |
+|---|---|---|---|
+| `if:` | `contracts.rb:242`, universal | nothing | a page renders its guarded sentence anyway |
+| `class:` | `contracts.rb:242`, universal | nothing — every word drops it | a page's class silently disappears |
+| `PrimitiveShapes` | `contracts.rb:49` | nothing (`PRIMITIVES == {}`) | a loader that has loaded nothing since the day it was written |
+
+**The convention register** is about what the language *decides when you are
+silent*. An inference is a decision the page never states. The register names
+each one, where its source of truth lives, and the sentence that overrides it.
+It is a map a person reads, and a checker holds it against the code so it
+cannot rot.
+
+| When the page is silent | The language decides | Its source of truth | The sentence that overrides |
+|---|---|---|---|
+| `field base_income` | label "Base income", input name `base_income`, its value, and type `number` | `Inference.label`, `Inference.input_type`, `Builder#label_for` | `field base_income, "Base income", type: number` |
+| `money .market_value` | money formatting | the word itself (`lib/vocabulary/money.sp`) | nothing to override — the word said it |
+| `column market_value` in a table | *nothing* — this is cause A2, the inference that must **ask** | the app's `format_for` | `column market_value, as: money` |
+
+Read the second and third rows together and the whole document is in them: the
+page that says the word needs no app answer; the page that infers must ask one,
+by name. That is why the convention register and the promise ledger are two
+instruments and not one — **the ledger asks whether a permission works, the
+register asks who decided** — and it is why ruling 3's "why not both" is right:
+they catch different failures, and a language can have a working permission that
+decides something nobody can find, or a registered convention behind a
+permission that does nothing.
 
 ---
 
@@ -151,12 +223,12 @@ the abstraction is wrong.
 ### Provisionality, per his third answer
 
 The four causes are the best rational account this session can produce, and the
-register below is a picture of what we currently think is important. The world
+map below is a picture of what we currently think is important. The world
 this language is for — human intent, perception, preference — is neither
 deterministic nor consistent, and preferences change, sometimes irrationally.
 So: each cause carries its evidence, each entry carries a date, and the test of
 a cause is that it can be *refuted by a case*, not that it feels right. If a
-fifth cause emerges, or a cause stops earning its place, the register changes
+fifth cause emerges, or a cause stops earning its place, the map changes
 and we change with it.
 
 ---
@@ -183,8 +255,8 @@ All three failure modes are failures of the same thing: **an unmanaged source of
 truth.** A convention that lives in one place, is enumerated, is checked, and
 shows its override cannot be superstition (it can be looked up), cannot fire
 invisibly (it is registered), and cannot be a trap (its override is documented
-beside it). That is the whole argument that the *register* is the instrument,
-and the accent audit is just how we find what belongs in it.
+beside it). That is the whole argument for the two instruments: what is
+enumerated and held cannot quietly stop being true.
 
 And the last row carries the surprise that ties this document to BLUESKY's
 style question: **the axiomatic grade's source of truth already exists and is
@@ -196,9 +268,9 @@ words the theme owns rather than symbols and numbers a page holds.
 
 ---
 
-## The evidence: two registers this daytrip would complete
+## The map and the work list
 
-**Register 1 — the sources of truth, graded.** The table above is the start.
+**The sources-of-truth map.** The table above is the start.
 The stop completes it for every truth the language holds: grammar, vocabulary,
 contracts, presentation, theme, conventions, app contract, and the documents'
 claims about the code. Each graded **apparent** (can a person find it?),
@@ -215,7 +287,7 @@ Measured today, the contrast is stark and is the argument:
   register; no checker reads a convention; 50 of 64 `infers` bullets; the slot
   itself unchecked prose.
 
-**Register 2 — claims the documents make that the tree contradicts: 28.** His
+**The claim corrections: 28.** His
 fourth answer names this as working *against* us: an outdated primer is an
 unmanaged source of truth, and it is worse than a missing one because it is
 believed. Counted today: 8 stale census mentions (53/50 against a measured 64),
@@ -230,7 +302,7 @@ a list of ten, and 1 phase heading marked closed everywhere but in itself.
 
 **In scope** — evidence, and instruments:
 
-- the audit and the two registers, with counts and coverage stated;
+- the audit, the map, and the two instruments, with counts and coverage stated;
 - measurements of what a *page author* meets, as distinct from the runtime's
   internals;
 - paper alternatives: what a human spelling of a remnant would read like,
@@ -286,7 +358,7 @@ the internal node IR; `tag`/`html` as the page's door to raw HTML and CSS.
 *Artifact:* the classified table, with the **inside/outside split** answering
 "how far can we grow now" — every page-facing remnant either on a grow-now list
 with its cost or on a waiting list with its reason.
-*Feeds:* every register and decision below.
+*Feeds:* every instrument and decision below.
 
 ### Stop 2 — The three suspects  `agent` — paper only
 
@@ -316,36 +388,41 @@ dan's explicit questions, each interrogated through cause A1/A2.
 
 *Feeds:* E1, E2, E3.
 
-### Stop 3 — The register of sources of truth  `agent`, dan rules any landings
+### Stop 3 — The map, and the two instruments  `agent`, lands both by ruling 3
 
 **The stop answer 4 asked for.** For every truth the language holds, name its
-home and grade it **apparent / manageable / managed**, then complete the two
-registers: the graded sources, and the 28 claims the documents make that the
-tree contradicts.
+home and grade it **apparent / manageable / managed** — that is the map. Then
+land the two instruments, which ruling 3 says are both taken, and work the
+claim corrections, which ruling 2 says are taken where they are mechanical.
 
-The instruments fall out of the gaps rather than being invented. The candidates
-the analysis already predicts:
+**Lands — the promise ledger.** A checker: every universally-permitted modifier
+read by some word; no word declaring a modifier it ignores; every loader and
+documented feature with a consumer. *Retro-catches:* `if:`, `class:`, `id:`, and
+the dead `PrimitiveShapes`. **Lands — the convention register.** The conventions
+and inferences enumerated in one place, each with its source of truth, its
+override, and its grade, held against the code so it cannot rot. *Retro-catches:*
+why 50 of 64 `infers` bullets, why 58 convention sites across 7 files with no
+register, and the `label_of`/`format_of` asymmetry LORE records.
 
-1. **The convention register** — the conventions and inferences enumerated in
-   one place, each with its source of truth, its override, and its grade.
-   *Retroactively catches:* why 50 of 64 `infers` bullets, why 58 sites in 7
-   files, and the `label_of`/`format_of` asymmetry LORE records.
-2. **The promise ledger, as a checker** — every universally-permitted modifier
-   read by some word; no word declaring a modifier it ignores; every documented
-   feature with a consumer. *Retroactively catches:* `if:`, `class:`, `id:`,
-   and the dead `PrimitiveShapes` loader.
-3. **The claim checker** — the numbers and present-tense claims the documents
-   make about the tree, re-measured. *Retroactively catches:* all 28.
-4. **The inference ledger** — every rendered value attributed to page, app,
-   theme or inference, with the **residue** named. *Retroactively catches:* the
-   table that read its headers off the wrong subject. Stays a **spike** unless
-   dan rules otherwise; it is the studio's fourth pane and the precondition for
-   any style vocabulary.
+**Worked, not landed — the claim corrections.** Ruling 2 takes the mechanical
+ones (a re-measured number, a comment the code beside it contradicts) and leaves
+anything arguable for its own ruling. The arguable ones, named now rather than
+quietly fixed: whether `VOCABULARY.md`'s 14 slot-incomplete tail entries get
+`infers`/`renders` written for them or are re-homed; whether `HANDOFF.md`'s
+"six wins" is corrected or the file is allowed to be a historical prompt; and
+whether `heading`'s self-contradiction is resolved by deleting the older
+sentence or by dating it.
 
-*Artifact:* both registers complete, and the instrument table — assertion,
-retro-catch, cost, and whether it can exist today.
-*Done looks like:* each candidate is either demonstrably landable with its test,
-or explicitly named as waiting; and dan has ruled which (if any) land.
+**Stays a spike — the inference ledger.** Every rendered value attributed to
+page, app, theme or inference, with the **residue** named. *Retro-catches:* the
+table that read its headers off the wrong subject. It is the studio's fourth
+pane and the precondition for any style vocabulary, and it is not ruled in.
+
+*Artifact:* the map complete; both instruments landed with their tests; the
+mechanical corrections made and the arguable ones listed.
+*Done looks like:* the promise ledger fails the build today on the four known
+promises; the convention register enumerates every inference site in the code
+and holds; and a second run of the gate is green.
 
 ### Stop 4 — The duplication map  `agent` — evidence only
 
@@ -389,11 +466,11 @@ convention-heavy word that is *worse*) are named rather than smoothed over.
 | E2 | Where the app answers by name | keep the channel and design it · value-shaped · word-carried · domain-noun | Stop 2's priced alternatives | dan |
 | E3 | Is `key: value` the right human form for configuration? | keep · a different form · numbers to the theme | Stop 1's modifier census and Stop 5's transparency split | dan |
 | E4 | `#` as a comment marker | respect quotes · a different comment rule · no page comments | the damage list | dan |
-| E5 | **Which sources of truth get registered and managed** | the convention register · the promise ledger · the claim checker · the inference ledger · none yet | Stop 3's graded register and instrument table | dan |
+| E5 | **Which sources of truth get registered and managed** | ~~the convention register · the promise ledger · …~~ **RULED (3): both instruments land, and both are held by a test** | — | ruled |
 | E6 | **When inference takes a decision from the page, who owns it and where do they speak?** | the app answers by name (today) · the value answers · the theme owns it · the page says the word | Stop 2 + Stop 3; cause A2's whole cost | dan |
 | E7 | Does `tag` close, and in what order | close first · design first · together · leave it and stop calling it a leak | its blast radius, absorbed from `0.3.0a` Stop 5 | dan |
 | E8 | Would a style vocabulary be more machine language, or the axiomatic grade's voice? | it would be more (refuse it) · it can be fluent if scoped to roles the theme owns · undecidable until a page tries | the style round's own drafting — **not this daytrip** | dan |
-| E9 | *(new, from the criteria register)* Is there a third criterion? | C1 alone · C1 + C2 · + something the audit surfaces | any finding that scores against none | dan |
+| E9 | Is there a third criterion? | **RULED (5): two is enough for now, and the process is dynamic** — a third may emerge or be added | — | ruled |
 
 **E6 and E8 remain the deep two**, and the analysis has now connected them: an
 inference that must ask speaks in names (A2), and the axiomatic grade is the one
@@ -429,7 +506,7 @@ against what we learned.
 |---|---|---|
 | "Machine language" becomes an aesthetic complaint | **High** | the criterion register; every finding carries a count, and judgement is marked as judgement |
 | The audit becomes a refactor | **High** | the border: nothing is fixed except a claim that lies |
-| The registers become another unmanaged source of truth | **High** | they are graded *managed* or they are not finished; the claim checker exists to hold the counted ones |
+| The instruments become another unmanaged source of truth | **High** | they are graded *managed* or they are not finished: the promise ledger is a checker that fails the build, and the convention register is held against the code |
 | An instrument lands that decides a question | **High** | the five tests, ruled on by dan the day it lands |
 | Correcting 28 claims becomes a documentation project | Medium | the corrections are mechanical and each is a re-measurement, not a rewrite |
 | The analysis is believed because it is tidy | Medium | each cause carries a refuting case; a cause that cannot be refuted is a cause we cannot test |
@@ -448,22 +525,20 @@ Today: 705 sentences, 64 words, 94 rules, 14 pages, 295 runs / 0 failures, 25
 affordances / 0 missing. A daytrip that closes with a moved vital has decided
 something.
 
-## Questions for dan — the discussion
+## Questions for dan — one left
 
-1. **Is the fourth cause (unmanaged sources of truth) distinct enough from the
-   third (the abstraction is wrong) to stand alone?** My argument for yes: B is
-   two homes *by design* and is fixed by re-abstracting; D is a second home
-   *nobody maintains* and is fixed by a register. If you read them as one, the
-   register is still the answer but the daytrip is smaller.
-2. **Should the claim corrections (the 28) be taken *in* this daytrip**, or
-   listed and left? Answer 4 puts them in scope as failures of transparency; I
-   would take the mechanical ones and leave anything arguable.
-3. **Which register comes first if only one lands** — the convention register
-   (the heart of your answer 4) or the promise ledger (the cheapest and the one
-   that would have caught four known defects)?
-4. **Is Stop 5 worth a stop?** "Some words are better than others" is a real
-   question, but it is the closest thing here to taste, and I would rather cut
-   it than let it dilute the evidence.
-5. **A third criterion** — is there one you already hold that C1 and C2 do not
-   capture? Answer 1 invited it, and it would be better named now than
-   discovered late.
+All five questions revision 2 asked are ruled (2026-09-16) and recorded above:
+cause D stands alone; the mechanical claim corrections are taken and the
+arguable ones listed; **both** instruments land; Stop 5 lands, *"else we act on
+the basis of our vague impressions (or most recent impressions)"*; two criteria
+are enough for now.
+
+What remains is not a question about the work — it is the gate on it:
+
+**Open it?** The daytrip runs when you say so. On opening, revision 3 stops
+being an outline and becomes the record the stops are written into, and the two
+ruled instruments are the first things that land.
+
+And one thing that is yours alone and no stop can settle: **the name.** *The
+Accent* was mine; your answers have made it about transparency and the managed
+sources of truth, which the name does not carry.
