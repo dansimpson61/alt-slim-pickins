@@ -1,4 +1,4 @@
-expects empty: true, content: true, speech: adjective, shape: says
+expects takes: empty, takes: content, speech: adjective, shape: says
 
 
 paragraph .content

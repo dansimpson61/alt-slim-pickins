@@ -1,4 +1,4 @@
-expects variant, content: true, children: any, id: true, shape: encloses
+expects variant, takes: content, children: any, takes: id, shape: encloses
 
 
 box .name, id: .id

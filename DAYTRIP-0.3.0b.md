@@ -967,37 +967,103 @@ derivation would be partial and the partiality would have to be declared
 anyway. **Recommendation on record: the reference shape.** It is a round's work
 and it is not next.
 
-### Option 3, described exactly — the declarations' accent
+#### The reference shape, proposed concretely *(dan asked to hear it)*
 
-What it is, measured: the vocabulary's *own* files speak a flag language.
-`expects content: true, children: any, shape: encloses` is what a word author
-writes; across the 22 partials that is **68 keyword arguments, 33 of them
-booleans** (`content`, `gathers`, `empty`, `id`, `label`), and the 42 Ruby words
-say the same thing again as `contract …` calls. The `true` half carries no
-information a name would not.
+1. **The register stays the one home of convention prose** — one entry per
+   convention, keyed by name, as it is today.
+2. **A word's own declaration names the conventions it uses.** A new contract
+   slot, spelled like the one this round landed: `infers: label`, `infers:
+   plural`, repeatable, in the preamble and in `words.rb`'s `contract` calls.
+   It is a reference — a name, never prose.
+3. **`VOCABULARY.md`'s `infers` bullets are generated** from those names plus
+   the register, exactly as the five checkable bullets are generated today by
+   `bin/generate_vocabulary.rb` and held by `check_grammar.rb`. The 14 entries
+   that are missing the slot today become impossible, because the generator
+   demands them.
+4. **The checker holds it in both directions** — every name a word declares
+   exists in the register; every register entry is used by at least one word (a
+   convention with no user is the promise ledger's question asked of prose);
+   and the document matches what the generator produces.
 
-What I would propose, in three graded steps, smallest first:
+**The subtlety that makes this a round rather than an hour:** not every
+convention is triggered by a word. `document`, `layout`, `theme_roles`,
+`first_truthy_branch` and `partial_slot_forwarding` are page-level or
+runtime-level decisions — no single word owns them. So the register needs a
+`trigger` that is a word, a set of words, or `page`/`runtime`, and the
+per-word reference exists only where a word is the trigger. That is precisely
+why the per-word-prose model dan challenged fails and a reference model does
+not: the truth is sometimes shared, and a shared truth wants one home and many
+pointers, not many homes.
 
-1. **Let the shape absorb the flags that repeat it.** The seven shapes already
-   imply most of the booleans — `gathers: true` *is* `shape: gathers`,
-   `empty: true` is a guard a shape could carry, and `id:`/`label:` are the two
-   derived slots. Removing the flag that restates a shape deletes the
-   duplication without inventing a spelling.
-2. **A `takes …` phrasing for what remains** — `takes content`, `takes
-   children` — in place of `content: true, children: any`.
-3. **One declaration spelling.** The `# key: value` comment preamble is dead
-   but its ghost survives in two studio partials (`# children: any`,
-   `# shape: encloses`) where nothing parses it; a word declares itself one way.
+**The acceptance test is the one this round used for the spelling change** —
+the generated entries must be byte-identical to the prose that is already
+written, so the move is provably a relocation of meaning rather than a rewrite
+of it, and the gate green.
 
-What it touches: `VocabularyShapes.parse`, `Contract`, all 22 `.sp` preambles,
-all 42 `contract` calls, and the two checkers that read them. Mechanical, wide,
-and it is *declaration* language rather than page language — the reader it
-serves is a word author, not a page author, which is why it is third and not
-first. What it buys: a word's file reads as sentences about the word, and the
-last flag language leaves the language's own surface. The risk: it is the same
-files as the register's home, so doing both at once doubles the churn.
+### Option 3 — the declarations' accent *(landed)*
 
-### Next round, chosen: the studio's badges
+A preamble said what a word takes in a flag language: `expects variant, content:
+true, precision: true, children: any, shape: presents`, where the `true` was a
+placeholder carrying no information, and where the same spelling meant two
+different things depending on the key (a flag for `content`, a *modifier
+declaration* for `precision`). The spelling is now one form for one meaning:
+
+```text
+expects variant, takes: content, takes: precision, children: any, shape: presents
+```
+
+Nineteen preambles changed, and the acceptance test was the refactor's own:
+**every one of the 22 parses to a Contract identical to HEAD's** — checked
+per file in one process before writing, and again against `git show HEAD:` after.
+No behavior moved, no vital should have, and `words.rb` was not touched.
+
+**Step 1 had nothing to do, and that is a finding.** I had predicted the flags
+repeat the shapes — `gathers: true` restating `shape: gathers`. Measured across
+all 64 words: `gathers:` is declared by **nobody**, and no shape is restated by
+a flag. The hypothesis was wrong, so the step is empty rather than deferred.
+(`gathers:` and `inside:` are now *unused parser keys* — a mechanism with no
+user, which belongs on the promise ledger's kind of list and is not touched
+here.)
+
+**Step 2's spelling is not what I proposed.** `takes content` cannot be said:
+a preamble argument is one comma-separated token and may not contain a space.
+The grammar-clean form is `takes: content` — one argument, no placeholder, and
+the key lists decide whether the name is a flag or a modifier. What I proposed
+was unspellable; what landed is what the lexer allows. The old form still
+parses, deliberately: a stale file should be read correctly rather than
+silently misread. **The corpus speaks one spelling and `check_grammar.rb` now
+holds it** — a preamble saying `x: true` fails the gate.
+
+**Step 3 turned out to be a finding, not a cleanup.** The two remaining uses of
+the dead `# key: value` form are `studio/views/partials/sidebar_layout.sp` and
+`split_pane.sp`, where nothing parses them. Making them live is not a
+formality: **measured, it changes the render** — a declared partial with
+`name: :none` does not shift the subject, while an undeclared one does, so the
+comment is not an inert placeholder but a *mis-declaration* whose live form
+would alter subject flow through the studio's own chrome. It is recorded here
+and waits on a ruling rather than being fixed under this daytrip's border.
+
+**And the round corrected a checker that had been measuring declarations as
+sentences.** `check_shape.rb` walked the `expects` line as though it were a
+sentence, while `check_grammar.rb` has always recorded the opposite — *"it is
+not a sentence and is not counted as one"*. So its vitals were inflated by every
+declaration key: **sentences 479 → 457, distinct modifiers 25 → 17, app words
+17 → 16** (`expects` itself was being counted as an app word, and `content`,
+`empty`, `label`, `precision` and kin as page modifiers no page writes). No live
+document quoted the inflated figures — they survive only in the `.agents/`
+swarm's dated reports — and the correction is the day's second instance of the
+daytrip's own subject: an instrument measuring something other than what it says
+it measures.
+
+**What is *not* changed, and why.** The 42 Ruby words keep `contract content:
+true, …`. That is Ruby's own keyword syntax rather than a bespoke mini-language,
+and the reader there is a Ruby author; the two files speak two languages and
+each speaks its own. Named here because it is a divergence from "one declaration
+spelling", and because it is the obvious next step if the accent is to leave the
+Ruby side too — `has: [:content]`, or a `takes` helper, at the cost of inventing
+a spelling Ruby already has.
+
+### Next round, chosen: the studio's badges *(landed too)*
 
 **W1** — the palette marks all 18 real pages `error` while all 18 render once
 loaded, because the census measures the empty-data render and the load

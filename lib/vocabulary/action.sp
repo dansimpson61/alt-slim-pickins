@@ -1,4 +1,4 @@
-expects content: true, shape: encloses, to: true, path: true, return_to: true, variant: true, status: true
+expects takes: content, shape: encloses, takes: to, takes: path, takes: return_to, takes: variant, takes: status
 
 form method: post, to: .to
   choose

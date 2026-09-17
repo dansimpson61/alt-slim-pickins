@@ -1,4 +1,4 @@
-expects subject, content: true, children: any, label: true, subject: shift, shape: encloses
+expects subject, takes: content, children: any, takes: label, subject: shift, shape: encloses
 
 
 box .name

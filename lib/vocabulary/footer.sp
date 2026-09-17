@@ -1,4 +1,4 @@
-expects content: true, children: any, shape: encloses
+expects takes: content, children: any, shape: encloses
 
 
 box .content

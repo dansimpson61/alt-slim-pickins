@@ -179,5 +179,24 @@ File.read(File.join(here, 'VOCABULARY.md'))
   end
 end
 
+# A preamble says what a word takes in one spelling: `takes: content`, not
+# `content: true`, where `true` was a placeholder carrying no information
+# (2026-09-17, DAYTRIP-0.3.0b's option 3). The parser still reads the old form
+# so a stale file is read correctly rather than silently misread — which is
+# exactly why the spelling needs holding: two forms that both work are two
+# forms that both get written. The corpus and the tests' phrasebook pages are
+# both scanned, because a test that shows the language is documentation.
+old_spelling = 0
+(Dir[File.join(here, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')] +
+ Dir[File.join(here, 'test', '*.rb')]).each do |path|
+  File.readlines(path).each_with_index do |line, i|
+    next unless line.match?(/^\s*expects\s.*\b[a-z_]+: true\b/)
+
+    puts "  OLD SPELLING  #{path.sub("#{here}/", '')}:#{i + 1}: a preamble says `x: true` — say `takes: x`"
+    old_spelling += 1
+  end
+end
+problems += old_spelling
+
 puts "\n#{checked} sentences checked, #{vocab.size} words defined, #{problems} problems"
 exit(problems.zero? ? 0 : 1)

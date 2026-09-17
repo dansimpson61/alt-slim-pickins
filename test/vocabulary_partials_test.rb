@@ -246,12 +246,12 @@ class VocabularyPartialsTest < Minitest::Test
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, 'partials'))
       File.write(File.join(dir, 'partials', 'custom_actions.sp'), <<~SP)
-        expects children: any, project_id: true, shape: encloses
+        expects children: any, takes: project_id, shape: encloses
         box
           children
       SP
       File.write(File.join(dir, 'partials', 'custom_action.sp'), <<~SP)
-        expects content: true, project_id: true, shape: encloses
+        expects takes: content, takes: project_id, shape: encloses
         box
           choose
             when .project_id

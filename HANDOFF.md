@@ -170,8 +170,16 @@ This protocol is fragmented across several system rules. **You must execute ever
   (the convention register — what will this do when I stay silent, and who
   decided?) and `check_card.rb` (this file's sibling `PROJECT.md`, whose
   frontmatter a colon-space broke four times while the checker was a human
-  remembering). All are green in the gate; `bin/check_promises.rb --strict`
+  remembering — and a fifth time on the day it landed, when the agent
+  committed after reading a piped summary instead of the exit code). All are
+  green in the gate; `bin/check_promises.rb --strict`
   fails on a promise with no reader, and today there is none.
+  **Read the exit codes, not a summary of them.** `cmd | tail -2` prints the
+  *pipeline's* status — the last command's — so a red leg reads as green, and
+  this has bitten twice in one session. Run the legs as a conjunction
+  (`a && b && c`), or check each one's status, and look at the whole output
+  before committing: an instrument that reports into a pipe nobody reads is a
+  decoration.
   **Set no environment variable to make this pass.** It used to need
   `RACK_ENV=test`, which switched the prettifier off and made every rendering
   test assert HTML production never emitted. If the suite only passes with

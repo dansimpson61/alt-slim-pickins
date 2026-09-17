@@ -55,7 +55,14 @@ modifiers = Hash.new(0)
 used = Set.new
 
 files.each do |f|
-  tree = SlimPickins::Transform.tree(File.read(f), path: File.basename(f))
+  # The `expects` line *declares* the word rather than saying anything with it,
+  # so it is not a sentence and is not counted as one — the position
+  # check_grammar already records, and which this checker had not honoured: its
+  # census had been counting declaration keys (`content`, `precision`, and now
+  # `takes`) as page modifiers, inflating the count with words no page writes.
+  # Found 2026-09-17, in the round that changed the preamble's spelling.
+  source = File.read(f).sub(/\Aexpects\b.*$/, '')
+  tree = SlimPickins::Transform.tree(source, path: File.basename(f))
   visit = lambda do |nodes, depth|
     nodes.each do |node|
       sentences += 1

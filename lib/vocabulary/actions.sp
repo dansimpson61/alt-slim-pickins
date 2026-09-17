@@ -1,4 +1,4 @@
-expects children: any, path: true, return_to: true, shape: encloses
+expects children: any, takes: path, takes: return_to, shape: encloses
 
 box
   children

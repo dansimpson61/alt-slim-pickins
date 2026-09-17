@@ -67,6 +67,9 @@ module VocabularyShapes
     end.compact
   end
 
+  # A flag is a fact that is there or not; the preamble names it.
+  FLAGS = %i[content gathers empty id label].freeze
+
   def parse(source)
     tree = SlimPickins::Transform.tree(source)
     expects_node = tree.first
@@ -95,7 +98,20 @@ module VocabularyShapes
                   value_str.to_sym
                 end
 
-if %i[content gathers empty id label].include?(key)
+if key == :takes
+  # `takes: content` — what the word takes, said once (2026-09-17). It replaces
+  # `content: true`, where `true` was a placeholder carrying no information, and
+  # it covers both kinds the preamble can name: a flag (content, empty, id,
+  # label, gathers) and a modifier. FLAGS decides which — and note that `id` is
+  # both, so a modifier called `id` is declared in Ruby, as `box` does.
+  taken = value_str.to_sym
+  if FLAGS.include?(taken)
+    kwargs[taken] = true
+  else
+    kwargs[:modifiers] ||= []
+    kwargs[:modifiers] << taken
+  end
+elsif FLAGS.include?(key)
   kwargs[key] = value == true || value == 'true'
 elsif %i[name inside speech subject shape].include?(key)
   kwargs[key] = value.to_sym
@@ -103,7 +119,8 @@ elsif %i[children parents].include?(key)
   str_val = value_str.gsub(/^"|"$/, '')
   kwargs[key] = str_val == 'any' ? :any : str_val.split.map(&:to_sym)
 else
-  # Unrecognized keys become modifiers!
+  # Any other key is a modifier declared the long way (`open: true`), kept so a
+  # stale file is read correctly rather than silently misread.
   kwargs[:modifiers] ||= []
   kwargs[:modifiers] << key
 end

@@ -105,4 +105,31 @@ end
   def test_a_word_with_no_children_slot_holds_nothing
     assert_complaint("title \"x\"\n  text \"y\"\n", '`title` holds nothing')
   end
+
+  # A preamble says what a word takes in one spelling (2026-09-17): `takes:
+  # content`, not `content: true`, where `true` was a placeholder carrying no
+  # information. The parser still reads the old form — a stale file should be
+  # read correctly rather than silently misread — and this is the proof the two
+  # mean the same thing, which is why rewriting 19 preambles was safe.
+  def test_takes_and_the_old_true_spelling_agree
+    new = SlimPickins::VocabularyShapes.parse(
+      "expects variant, takes: content, takes: precision, children: any, shape: presents\n"
+    )
+    old = SlimPickins::VocabularyShapes.parse(
+      "expects variant, content: true, precision: true, children: any, shape: presents\n"
+    )
+
+    assert_equal old.to_h, new.to_h
+  end
+
+  def test_takes_names_a_flag_or_a_modifier_by_what_it_names
+    parsed = SlimPickins::VocabularyShapes.parse(
+      "expects subject, takes: content, takes: empty, takes: precision, shape: encloses\n"
+    )
+
+    assert_predicate parsed, :content
+    assert_predicate parsed, :empty
+    assert_equal [:precision], parsed.modifiers
+    refute_predicate parsed, :label, 'a flag nobody named stays off'
+  end
 end

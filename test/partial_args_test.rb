@@ -72,7 +72,7 @@ class PartialArgsTest < Minitest::Test
   # own conditional.
   def test_a_declared_modifier_reads_nil_when_unsaid
     badge = <<~PART
-      expects content: true, tone: true
+      expects takes: content, takes: tone
 
       paragraph .tone, .content
     PART
@@ -83,7 +83,7 @@ class PartialArgsTest < Minitest::Test
 
   def test_when_a_modifier_is_said_is_the_languages_own_conditional
     toggle = <<~PART
-      expects content: true, open: true
+      expects takes: content, takes: open
 
       choose
         when .open
@@ -101,7 +101,7 @@ class PartialArgsTest < Minitest::Test
 
   def test_when_a_variant_is_named_is_the_languages_own_conditional
     test_chip = <<~PART
-      expects variant, content: true
+      expects variant, takes: content
 
       choose
         when .name
@@ -121,7 +121,7 @@ class PartialArgsTest < Minitest::Test
   # the partial was invoked against.
   def test_a_declared_partial_still_reads_the_subject_it_was_invoked_against
     card = <<~PART
-      expects content: true
+      expects takes: content
 
       title .name
       money .balance
@@ -138,7 +138,7 @@ class PartialArgsTest < Minitest::Test
   # its own file says it does not take.
   def test_a_declared_partial_refuses_an_undeclared_modifier
     badge = <<~PART
-      expects content: true, tone: true
+      expects takes: content, takes: tone
 
       paragraph .content
     PART

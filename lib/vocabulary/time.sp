@@ -1,4 +1,4 @@
-expects variant, content: true, shape: presents
+expects variant, takes: content, shape: presents
 
 
 span .name, .content

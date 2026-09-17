@@ -1,4 +1,4 @@
-expects shape: encloses, q: true, placeholder: true
+expects shape: encloses, takes: q, takes: placeholder
 
 
 form method: get, to: "/search"

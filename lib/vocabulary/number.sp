@@ -1,4 +1,4 @@
-expects content: true, shape: presents, precision: true
+expects takes: content, shape: presents, takes: precision
 
 
 span .content, precision: .precision
