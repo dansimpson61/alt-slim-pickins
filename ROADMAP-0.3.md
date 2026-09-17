@@ -183,7 +183,13 @@ a studio that can be *used* — the workbench the garden phase leans on.
   **13 of 13 pages refuse, and every refusal is the data wall** — no
   portfolio, no notice, no scenario, no title — because every real page
   reads its data before it reads its partials, so the missing-app-partials
-  wall stays masked behind the first missing local. The next pick's ledger,
+  wall stays masked behind the first missing local. **W1 (2026-09-17) closed
+  the gap between this census and the load:** it measured the empty-data
+  render while the palette pre-filled each page's payload, so all 18 entries
+  wore `error` and all 18 rendered once clicked. The census now runs the
+  load's own path and reads 18 of 18 `ok`; this paragraph stands as the first
+  measurement, which was right about the data wall and wrong about what a
+  visitor would see. The next pick's ledger,
   in what the census named, in order: the data wall (the one wall all
   thirteen share), the partial wall (masked behind it), errors in the
   language's own terms (the `/render` route's refusals still display as
@@ -219,6 +225,10 @@ a studio that can be *used* — the workbench the garden phase leans on.
   refusal ("this page has no holdings to go through") now names the plural
   key the JSON must carry. The census is unchanged and still honest — its
   verdicts are "renders with no data", and the palette keeps saying so.
+  **Overtaken by W1 (2026-09-17):** the verdicts were honest about a render no
+  visitor ever saw. The census now measures the load's own render — payload and
+  all — and reads 18 of 18 `ok`; the record above stands as what was true on
+  the day it was measured.
   Next in the ledger: the partial wall (a loaded page's own partials are
   not in the playground's library), the Stimulus burr's resolution, the
   found verify_pages gap, and the `snippet` word's dead Copy button.
@@ -401,11 +411,14 @@ with nothing to load.
   payload, and `pages/specimen`'s badge says "this page has no specimen" while
   loading it renders. Win 1's recorded claim — "the verdict of the same render
   the playground will give it" — was never true. **This is scoping candidate
-  W1 below.**
+  W1 below, and it was landed 2026-09-17** — the census now measures the load's
+  render and reads 18 of 18 `ok`.
 - **F3 — there is no boolean literal, so `false` means true.** `Transform`'s
   `NAME` pattern matches bare `true`/`false`/`nil`, so they arrive as the
   symbols `:true`/`:false`, both truthy. Live: `field name, required: false`
   emits `required="required"`; `tab "A", active: false` marks the tab active.
+  **Resolved 2026-09-17 (E3)** — a boolean literal in modifier position; the
+  finding stays as the record of what was true on the day it was measured.
   The corpus survives by luck — it writes only `active: true` and
   `required: true` (studio/views/index.sp:10, editor_form.sp:10,
   confirm_archive.sp:7), and data-driven modifiers use real booleans
@@ -468,7 +481,8 @@ done-looks-like, and any of them may be taken up when a round wants it. The
 scoping that follows them is the bluesky brief, recorded below and worked out
 in [BLUESKY.md](BLUESKY.md).
 
-**W1 — the census tells the truth about the render you get.** Run the census
+**W1 — the census tells the truth about the render you get.** *Landed
+2026-09-17.* Run the census
 through the same path the load takes, payload and all:
 `StudioPages.entries` measures `playground_locals(StudioPages.data_json_for(rel))`
 instead of the empty-data locals. Eighteen `error` badges become their true

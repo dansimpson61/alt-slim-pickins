@@ -908,34 +908,108 @@ none without a reader**; the register holds 38 conventions, every one with its
 home and its override; the gate is seven legs and the studio's status page shows
 all seven.
 
-**What is left is dan's, and it is four things.**
+### E1 — a variant nothing can style is refused *(landed)*
 
-1. **The `not` question — answered, no.** Recorded above with the reason: `not`
-   is syntax, not vocabulary; it is the top of the slope that ends in `and`,
-   `or` and `>`; and the doctrine already assigns negation to the app
-   (`if: .unpaid?` compiles today). If the answer is wrong, the argument is
-   there to be refuted rather than the decision assumed.
-2. **E1 — what a variant is.** Verdict in Stop 2: a variant is a word, and one
-   the stylesheet cannot style should be refused rather than rendered unstyled.
-3. **E2 — where the app answers by name.** Verdict in Stop 2: keep
-   `label_for`/`format_for`, with the register as the visibility fix; the
-   value-shaped path is the only one that removes cause A2, and it is priced.
-4. **E3 — the shape of a modifier's value.** The `if:` work narrowed it: the
-   remaining question is not `if:` itself but the *literal* — `if: false` is not
-   a sentence a page can write, and neither is `required: false`, which silently
-   means required. That is the boolean in a `key: value`, and it is a grammar
-   question rather than a word.
+The refusal lives in `check_styles.rb`, which already owns the class-to-rule
+question, and it walks the whole corpus rather than only what one script
+renders. **It is a gate refusal and not a runtime one, and that is not a
+compromise**: the rule that decides it lives in the stylesheet, and the runtime
+never reads the stylesheet. A page's variant is therefore refused at the gate
+and not as you type — named here as the limit it is, with the follow-up it
+implies: the studio *does* serve the stylesheet, so the playground could refuse
+one live, and that is a round's work rather than this day's.
 
-**Two pieces are named as the next daytrip-sized work rather than this one's**:
-the register's real home (an `infers:` slot in each word's own file, generating
-the document as the five checkable bullets already are), and the accent that
-lives in the contract declarations — 68 keyword arguments, 33 of them booleans.
+It found two on its first run, both real and both recorded rather than fixed,
+because styling them is a design decision and dropping them is a page change:
+**`grid--cards`** (said in `pages/specimen.sp`) and **`grid--metrics`** (said in
+`specimen.sp`, portfolio's `index.sp` and roth's `report.sp`) are variants the
+stylesheet cannot style — so three real pages say a word that means nothing
+visual. They are printed on every gate run until ruled; a third one, injected to
+prove the check, fails the gate.
 
-**One unresolved operational fact:** the studio on :4580 is running a boot from
-before this round — its status page shows the old leg list — because the process
-is outside this session's sandbox and cannot be signalled. One command from
-outside (`pkill -f studio/app.rb`, then the detached boot `HANDOFF.md` names)
-brings it current; everything else, including the guides, is live already.
+### E2 — the app's answers stay *(ruled, no code)*
+
+`label_for` and `format_for` keep their place, with the register as the
+visibility fix: it now names which words need an answer and the sentence that
+overrides it. The value-shaped path — the only one that removes cause A2 rather
+than managing it — stays priced in Stop 2 and unbuilt.
+
+### E3 — literals in a modifier's value *(landed)*
+
+`true`, `false` and `nil` are literals where a modifier's value goes, and names
+everywhere else. The justification is the project's own recorded division and
+not a new one: **a modifier's value is configuration, a positional argument is
+content, and content belongs to the app** — which is exactly why a bare number
+was already legal there and illegal as content. It closed two silent
+wrongnesses: `required: false` meant *required*, and `open: false` rendered
+`open="open"`. It also gave the `if:` guard its false. Seven tests in
+`test/literal_test.rb`, one of them pinning that `note true, "x"` still compiles
+to the *name* `:true`.
+
+### The register's real home — why my option 1 was an un-DRY mess
+
+dan asked, and he is right as I stated it. Putting `infers:` prose in each
+word's own file would copy *one* convention into every word that triggers it:
+`plural` is one rule that `each`, `table` and `chart` all use, `presentation`
+is one rule that `table`, `chart` and `metric` all use. Four copies of *a
+number is right-aligned* is the disease this daytrip is about, wearing the cure's
+clothes. **Withdrawn as proposed.**
+
+The DRY shape is a reference, not a copy: the convention is declared **once
+where it is implemented** — the register is already that — and a word's file
+declares **which conventions it uses, by name**. `VOCABULARY.md`'s `infers`
+bullets are then generated by joining each word's names to the register's prose.
+One home, N references, and the checker already proves the names resolve. The
+cheaper alternative is to derive the links from the code — the partition check
+already does this for `Inference`'s functions — but a word can trigger a
+convention inline in its own `evaluate`, which is most of the 58 sites, so the
+derivation would be partial and the partiality would have to be declared
+anyway. **Recommendation on record: the reference shape.** It is a round's work
+and it is not next.
+
+### Option 3, described exactly — the declarations' accent
+
+What it is, measured: the vocabulary's *own* files speak a flag language.
+`expects content: true, children: any, shape: encloses` is what a word author
+writes; across the 22 partials that is **68 keyword arguments, 33 of them
+booleans** (`content`, `gathers`, `empty`, `id`, `label`), and the 42 Ruby words
+say the same thing again as `contract …` calls. The `true` half carries no
+information a name would not.
+
+What I would propose, in three graded steps, smallest first:
+
+1. **Let the shape absorb the flags that repeat it.** The seven shapes already
+   imply most of the booleans — `gathers: true` *is* `shape: gathers`,
+   `empty: true` is a guard a shape could carry, and `id:`/`label:` are the two
+   derived slots. Removing the flag that restates a shape deletes the
+   duplication without inventing a spelling.
+2. **A `takes …` phrasing for what remains** — `takes content`, `takes
+   children` — in place of `content: true, children: any`.
+3. **One declaration spelling.** The `# key: value` comment preamble is dead
+   but its ghost survives in two studio partials (`# children: any`,
+   `# shape: encloses`) where nothing parses it; a word declares itself one way.
+
+What it touches: `VocabularyShapes.parse`, `Contract`, all 22 `.sp` preambles,
+all 42 `contract` calls, and the two checkers that read them. Mechanical, wide,
+and it is *declaration* language rather than page language — the reader it
+serves is a word author, not a page author, which is why it is third and not
+first. What it buys: a word's file reads as sentences about the word, and the
+last flag language leaves the language's own surface. The risk: it is the same
+files as the register's home, so doing both at once doubles the churn.
+
+### Next round, chosen: the studio's badges
+
+**W1** — the palette marks all 18 real pages `error` while all 18 render once
+loaded, because the census measures the empty-data render and the load
+pre-fills the payload. One line, the most visible lie in the surface dan
+actually uses.
+
+**One unresolved operational fact, now resolved:** the studio on :4580 was
+running an old boot and could not be reached from this session's sandbox. With
+dan's approval of a wider sandbox it was found by port (it runs as **`puma`**,
+not `ruby studio/app.rb` — which is why name-based discovery missed it), killed,
+and rebooted detached per `HANDOFF.md`. Its status page now shows all seven
+legs.
 
 And **the name.** *The Accent* was mine; the work became about transparency and
 managed sources of truth, which the name only half carries.

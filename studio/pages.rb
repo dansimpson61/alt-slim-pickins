@@ -75,15 +75,19 @@ module StudioPages
   end
 
   # The census, run the way the playground will run the page: the
-  # playground's merged library, the playground's locals. A refusal is the
-  # page naming a wall in the language's own voice; an error outside the
-  # language says so.
+  # playground's merged library, the playground's locals — **and the page's own
+  # payload**, because that is what loading it gives you (2026-09-17, W1).
+  # Before this, the census measured the empty-data render while the load
+  # pre-filled the ledger, so all 18 entries wore `error` and all 18 rendered:
+  # the badge described a state no visitor ever saw. A refusal is the page
+  # naming a wall in the language's own voice; an error outside the language
+  # says so.
   def self.entries(library:, loaded: nil)
     PAGES.map do |id, rel|
       status, refusal =
         begin
           SlimPickins.render(File.read(File.join(ROOT, rel)), path: rel,
-                             locals: playground_locals, library: library)
+                             locals: playground_locals(data_json_for(rel)), library: library)
           ['ok', nil]
         rescue SlimPickins::Error => e
           ['error', e.message]

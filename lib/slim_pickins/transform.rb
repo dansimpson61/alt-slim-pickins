@@ -174,7 +174,11 @@ def emit(nodes, depth = 0)
     # A bare number has one legal home: a modifier's value, where it is
     # configuration (`columns: 3`, `step: 0.01`) rather than content. As a
     # positional argument it has nowhere to stand — a figure belongs to the
-    # app.
+    # app. `true`, `false` and `nil` join the numbers there (2026-09-17): the
+    # same division decides it — a modifier's value is configuration and a
+    # positional argument is content — and it closes a silent wrongness, since
+    # `required: false` used to arrive as the truthy *name* `:false` and saying
+    # false meant saying true.
     def argument(arg, sentence, as_modifier: false)
       case arg
       when MODIFIER
@@ -187,6 +191,7 @@ def emit(nodes, depth = 0)
         method.include?('-') ? "subject.public_send(:'#{method}')" : "subject.#{method}"
       when BINDING
         arg.split('.').map { |p| p.include?('-') ? "public_send(:'#{p}')" : p }.join('.')
+      when /\A(true|false|nil)\z/ then as_modifier ? arg : ":#{arg}"
       when NAME then ":#{arg}"
       when /\A-?\d+(\.\d+)?\z/
         return arg if as_modifier

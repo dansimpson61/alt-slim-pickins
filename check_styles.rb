@@ -123,6 +123,53 @@ end
   problems += 1
 end
 
+# --- 2b. every variant a page says must be stylable -------------------------
+# A variant is open to apps — but open is not the same as silent. `badge
+# banana` emits `badge--banana`, a class no rule defines, so the element
+# renders unstyled and nothing says so, where an unknown *word* fails loudly on
+# its line. dan's ruling (2026-09-17, DAYTRIP-0.3.0b's E1): a variant the
+# stylesheet cannot style is refused.
+#
+# The refusal lives here rather than in the runtime, and that is not a
+# compromise: the rule that decides it is in the stylesheet, and the runtime
+# never reads the stylesheet. A page's variant can therefore be refused at the
+# gate and not at render — named as a limit in the daytrip.
+#
+# Two variants the corpus says are recorded rather than fixed: styling them is
+# a design decision and dropping them is a page change, so they wait on a
+# ruling and are printed on every run until they get one.
+UNSTYLED_BY_RULING = {
+  'grid--cards' => 'said at pages/specimen.sp:57',
+  'grid--metrics' => 'said at pages/specimen.sp:20, examples/portfolio/views/index.sp:3, ' \
+                     'examples/roth/views/partials/report.sp:5'
+}.freeze
+
+said_variants = Hash.new { |h, k| h[k] = [] }
+Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].each do |path|
+  walk = lambda do |nodes|
+    nodes.each do |node|
+      contract = SlimPickins::CONTRACTS[node.word.to_sym]
+      if contract&.name == :variant
+        variant = node.raw_args.zip(node.ranks).find { |_, rank| rank.zero? }&.first
+        said_variants["#{node.word}--#{variant}"] << "#{path.sub("#{__dir__}/", '')}:#{node.lineno}" if variant
+      end
+      walk.call(node.children)
+    end
+  end
+  walk.call(SlimPickins::Transform.tree(File.read(path), path: path))
+end
+
+(said_variants.keys - defined.to_a - UNSTYLED_BY_RULING.keys).sort.each do |klass|
+  fail!("UNSTYLED VARIANT  `#{klass}` is said at #{said_variants[klass].uniq.join(', ')} " \
+        'and no rule defines it — a variant nothing can style is refused')
+  problems += 1
+end
+UNSTYLED_BY_RULING.each_key do |klass|
+  next unless said_variants.key?(klass)
+
+  puts "  RECORDED    `#{klass}` is said and unstyled — #{UNSTYLED_BY_RULING[klass]}"
+end
+
 # --- 3. every rule corresponds to a word -----------------------------------
 (defined - emitted).sort.each do |klass|
   base = base_of(klass)

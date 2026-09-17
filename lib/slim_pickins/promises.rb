@@ -103,8 +103,10 @@ module SlimPickins
       Promise.new(name: :required, kind: :modifier, declared_by: %i[field textarea],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/slim_pickins/words.rb'], verdict: :read,
-                  note: '`required: false` means required — no boolean literal, so ' \
-                        '`false` arrives as the truthy symbol `:false`'),
+                  note: 'read where it is said; until 2026-09-17 the trap was that ' \
+                        '`required: false` meant required — `false` arrived as the ' \
+                        'truthy name `:false`. A boolean literal in modifier ' \
+                        'position closed it (E3)'),
       Promise.new(name: :return_to, kind: :modifier, declared_by: %i[action actions],
                   read_by: ['lib/vocabulary/action.sp'], verdict: :forwarded,
                   note: 'as `path:` — the forwarding mechanism, found by reading ' \

@@ -109,7 +109,12 @@ The routine: check the port (`curl -s -m 2 http://127.0.0.1:4580/`); if it
 is down, boot it **detached** — `nohup ruby studio/app.rb
 >/tmp/studio.log 2>&1 & disown` — because a session-tracked background job
 gets a graceful SIGTERM (exit 143) when the turn's machinery reaps it,
-while a detached process survives the session. During a
+while a detached process survives the session. **To restart it, kill the old
+one first — and it runs as `puma`, not `ruby studio/app.rb`,** so a search by
+name finds nothing and the restart looks like it worked while the old process
+goes on serving: the port is the handle
+(`ss -ltnp | grep :4580`, then kill that pid, then boot detached and curl to
+confirm the leg list grew). During a
 round, verify on a spare port (`STUDIO_PORT=4597 ruby studio/app.rb`),
 then kill the spare before the round closes. A new session that finds the
 port down boots it again — the standing state in this file is the

@@ -37,14 +37,41 @@ class StudioPagesTest < Minitest::Test
     assert_equal expected.sort, StudioPages::PAGES.values.sort
   end
 
+  # The name is the promise, and until 2026-09-17 the test only checked that the
+  # verdict agreed with itself: the census measured the *empty-data* render
+  # while loading a page pre-fills its payload, so every entry wore `error` and
+  # every entry rendered. (DAYTRIP-0.3.0b, W1.) It now asserts the promise in
+  # both directions — an `ok` verdict is a render that succeeds with the page's
+  # own payload, and an `error` verdict is the complaint that render raises.
   def test_every_verdict_is_a_render_the_playground_would_give
     entries = StudioPages.entries(library: LIBRARY)
     assert_equal StudioPages::PAGES.size, entries.size
+
     entries.each do |entry|
       assert_includes %w[ok error], entry.status, "#{entry.id} has no verdict"
       assert_equal entry.status == 'error', !entry.refusal.nil?,
                    "#{entry.id}: verdict and refusal disagree"
       assert_equal "/?load=#{entry.id}", entry.load_path
+
+      # The render the load gives — the same locals the route builds.
+      complaint =
+        begin
+          SlimPickins.render(File.read(File.join(ROOT, entry.path)), path: entry.path,
+                             locals: StudioPages.playground_locals(
+                               StudioPages.data_json_for(entry.path)
+                             ),
+                             library: LIBRARY)
+          nil
+        rescue SlimPickins::Error => e
+          e.message
+        end
+
+      if entry.status == 'ok'
+        assert_nil complaint, "#{entry.id} wears `ok` and the load refuses it — #{complaint}"
+      else
+        assert_equal entry.refusal, complaint,
+                     "#{entry.id} wears `error` and does not record what the load raises"
+      end
     end
   end
 
