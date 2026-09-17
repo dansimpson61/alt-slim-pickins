@@ -98,7 +98,7 @@ class Phase6Test < Minitest::Test
        register! with_gatherer emit_node about prune evaluate capture].each do |m|
       assert_respond_to builder, m
     end
-    %i[nest render_partial define_app_words with_line eval_with locate].each do |m|
+    %i[nest define_app_words with_line eval_with locate].each do |m|
       refute_respond_to builder, m, "#{m} is evaluation plumbing, not a word's surface"
     end
   end

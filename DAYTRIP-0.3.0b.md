@@ -1151,6 +1151,44 @@ needs a stable spelling (the render's own counter, or the tab's index within the
 page) and a ruling, because it changes emitted HTML.
 
 
+### The two repairs *(landed)*
+
+**The tabs ids are stable.** `Generator#tabs` numbered its radio group from
+`object_id`; it now numbers from a counter that is per render and per group, so
+a page is a pure function of its source again — the studio index renders
+identically twice, its ids are `tabs-1` and `tab-1-0`, and two groups in one page
+stay distinct. And the reason this survived until a measurement tripped over it:
+**`tabs` had no test at all.** It is used by the studio's own playground and
+nowhere else, and `check_grammar`/`check_shape` hold its *usage* while nothing
+held its *output*. `test/tabs_test.rb` now holds purity, the ids, the radio
+group, the active default and the two-group case.
+
+**The gathering road is open.** Three things, under dan's ruling to repair and
+pin:
+
+- **`Builder#render_partial` deleted** — ninety-one lines, a second
+  implementation of partial rendering, called by nothing, constructing
+  `PartialGatherer`, a constant defined nowhere.
+- **`Word#word` added** — the hinge. `open_gatherer_named` matches `g.word`, and
+  no word instance answered it, so its candidate list was empty by construction.
+  The subtlety worth keeping: a *partial's* class is anonymous
+  (`Class.new(PartialWord)`), so it cannot derive a name from its class and
+  answers with the name the Library gave it instead.
+- **The road walked and pinned** (`test/gathering_road_test.rb`): a `.sp` partial
+  that gathers collects the `.sp` partials that register into it and splices them
+  where it says `children`; a registrar outside its gatherer still refuses; and
+  the built-in Ruby gathering — `table`/`column`, `chart`/`line`,
+  `choose`/`when`, `choice`/`option` — is untouched, which the same file asserts.
+
+**The semantics, named because the dead method's comment was wrong about them:**
+a gatherer collects what *registers* (a child declaring `inside:`), not its
+plain children. A plain child of a gatherer renders where it stands, as it always
+did. Collecting everything would put a stray `note` inside a table's cells; the
+road's contract is registration, and the comment that promised otherwise died
+with the method.
+
+### W1 — the studio's badges *(landed too)*
+
 **W1** — the palette marks all 18 real pages `error` while all 18 render once
 loaded, because the census measures the empty-data render and the load
 pre-fills the payload. One line, the most visible lie in the surface dan

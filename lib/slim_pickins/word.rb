@@ -52,6 +52,17 @@ end
       @collected = []
     end
 
+    # The word's own name, as the other side of the gathering road asks for it:
+    # `open_gatherer_named` matches `g.word`, and until 2026-09-17 no Word
+    # instance answered it, so its candidate list was empty by construction and
+    # a partial declaring `inside:` could never find its gatherer. A partial's
+    # class is anonymous — `Class.new(PartialWord)` — so it answers with the
+    # name the Library gave it rather than deriving one from a class name it
+    # does not have.
+    def word
+      self.class.respond_to?(:partial_name) ? self.class.partial_name : self.class.word_name
+    end
+
 def unpack_arguments
   name_val, content_val = arguments(@args)
   c = self.class.get_contract

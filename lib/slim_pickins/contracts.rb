@@ -226,7 +226,7 @@ end
     end
 
     # The name/content/modifier half of a violation, in the language's voice.
-    # The gate calls it walking the tree; render_partial calls it for a
+    # The gate calls it walking the tree; `PartialWord#evaluate` calls it for a
     # partial's own preamble, so an app partial's declaration is consumed by
     # the runtime too — one complaint machine, two consumers.
     def call_complaint(contract, word, names, data, modifiers)

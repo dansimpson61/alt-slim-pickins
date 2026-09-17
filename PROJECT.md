@@ -11,16 +11,14 @@ next_step: >-
   word's declaration names the conventions it uses (a new `infers:` slot,
   spelled like `takes:`), VOCABULARY.md's bullets are generated from the
   join, and the checker holds it both ways, with a `trigger` on each entry
-  because not every convention is owned by a word. Three defects are
-  recorded and awaiting rulings rather than fixes. `Generator#tabs` derives
-  its ids from `object_id`, so a page with tabs is not a pure function of its
-  source and the byte-diff harness is unreliable on it. The declaration road
-  for writing a gatherer in the language is closed in two places: `inside:`
-  can never resolve, because no Word instance answers `word`, and
-  `Builder#render_partial` is dead code containing a reference to
-  `PartialGatherer`, a constant defined nowhere. And the 42 Ruby `contract`
-  calls keep `content: true`, named as a divergence from one declaration
-  spelling.
+  because not every convention is owned by a word. Two defect repairs landed
+  the same day: the tabs ids are numbered per render instead of from
+  `object_id`, so a page is a pure function of its source and the byte-diff
+  harness works on it again; and the gathering road is open — `Word#word`
+  lets `inside:` find its gatherer, the dead `render_partial` is gone, and
+  the road is pinned by `test/gathering_road_test.rb`. Left as recorded
+  divergences: the 42 Ruby `contract` calls keep `content: true`, and
+  HANDOFF and README each carry a current copy of the gate command.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

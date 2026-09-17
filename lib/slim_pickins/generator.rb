@@ -121,6 +121,7 @@ end
       @in_form = false
       @box_base = nil
       @box_level = nil
+      @tab_group = 0
       nodes.each { |node| emit(node) }
       self.class.prettify(@out)
     end
@@ -227,14 +228,25 @@ end
 
 def tabs(attrs, children)
       open_tag('div', class: token(:tabs, attrs[:variant]))
-      
-      # Extract tab labels from children to build the nav using radio buttons
+
+      # Extract tab labels from children to build the nav using radio buttons.
       tabs = children.select { |c| c && c[0] == :tab }
-      
+
+      # The radio group's name and each tab's id are numbered from the render,
+      # not from the object (2026-09-17). `object_id` made the ids unique and
+      # *unstable*: the same page rendered twice differed in exactly these
+      # attributes, so rendered HTML was not a pure function of its source and
+      # the byte-diff harness — the project's acceptance test for refactors —
+      # could not be used on any page holding tabs. A counter is per render and
+      # per group, which is unique within the document and identical between
+      # renders, which is all a radio group needs.
+      @tab_group += 1
+      group = @tab_group
+
       tabs.each_with_index do |child, index|
         tab_attrs = child[1]
         is_active = tab_attrs[:active] || (index == 0 && !tabs.any? { |t| t[1][:active] })
-        open_tag('input', type: 'radio', name: "tabs-#{object_id}", id: "tab-#{object_id}-#{index}", checked: (is_active ? 'checked' : nil))
+        open_tag('input', type: 'radio', name: "tabs-#{group}", id: "tab-#{group}-#{index}", checked: (is_active ? 'checked' : nil))
       end
       
       open_tag('nav', class: 'tabs-nav', role: 'tablist')
@@ -242,7 +254,7 @@ def tabs(attrs, children)
         tab_attrs = child[1]
         label = tab_attrs[:label] || "Tab #{index + 1}"
         classes = ['tab-button']
-        full_tag('label', label, class: classes.join(' '), for: "tab-#{object_id}-#{index}", role: 'tab')
+        full_tag('label', label, class: classes.join(' '), for: "tab-#{group}-#{index}", role: 'tab')
       end
       @out << '</nav>'
       

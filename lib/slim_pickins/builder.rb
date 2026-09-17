@@ -90,7 +90,7 @@ raise Error, "there is no word `#{name}`"
     # the built-in vocabulary (words.rb) and an app's own words alike. There
     # is no other surface; this is the dogfood made true: the vocabulary is
     # written with exactly what apps get. What remains private is the
-    # evaluation plumbing no word needs: nest, render_partial,
+    # evaluation plumbing no word needs: nest,
     # define_app_words, and the line stack (with_line, eval_with, locate).
 
     # Every word hands its node to the current collection — the body's, or the
@@ -337,97 +337,14 @@ raise Error, "there is no word `#{name}`"
       root
     end
 
-    # A partial takes the current subject, like any word that names none, and
-    # shifts it when it names one — the same rule as `section`. Its
-    # arguments are its scope: the content and the modifiers it was said
-    # with become its own innermost subject, read as `.content`, `.to`, … —
-    # pushed only when the call said any, so a bare partial still reads the
-    # subject it was invoked against.
-    #
-    # A partial WITH a preamble declares its scope: its declared slots are
-    # keys of that subject, materialised as nil when the call did not say
-    # them — `when .open` is "was the modifier said" — and everything else
-    # falls through to the subject beneath. Its own file is the single
-    # source of the declaration, read here so the runtime consumes it.
-    def render_partial(word, args, **kwargs, &block)
-      name, content = name_and_content(args)
-      source = @library.source_for(word)
-      compilation = Compilation.of(source, "partials/#{word}.sp")
-      compilation.refuse!("partials/#{word}.sp")
-      # The vocabulary's shapes are merged into CONTRACTS; an app partial's
-      # preamble is parsed at the call — one declaration, one home, consumed
-      # by gate (vocabulary) and runtime (every partial).
-      contract = CONTRACTS[word.to_sym] || VocabularyShapes.parse(source)
-      if contract
-        complaint = Contracts.call_complaint(contract, word,
-                                             name.nil? ? [] : [name],
-                                             content.nil? ? [] : [content],
-                                             kwargs.keys)
-        raise Error, complaint if complaint
-      end
-      parameters = parameters_for(contract, name, content, kwargs)
-      evaluate = -> { capture { eval_with(compilation.ruby, "partials/#{word}.sp", source.lines) } }
-      # Decided before the lambda below, because a local assigned only after
-      # a lambda is parsed is a method call inside it — Ruby's locals run
-      # forward from their first assignment.
-      shifts = contract.nil? || contract.name == :subject
-      push = !contract.nil? || kwargs.any? || !content.nil? || (!shifts && !name.nil?)
-      body_block = lambda do
-        if contract&.gathers
-            # Collect the caller's children as declarations, then let the
-            # body splice them at `children` — the gatherer as a partial.
-            gatherer = SlimPickins::PartialGatherer.new(self, word)
-            with_gatherer(gatherer) { nest(&block) }
-            with_splice(gatherer.collected.flatten(1)) { evaluate_body(evaluate, parameters, word, push, contract) }
-          elsif contract&.inside && contract.inside != :any
-            # A child that registers: render, then hand the nodes to the
-            # gatherer named in the declaration instead of emitting them.
-            target = open_gatherer_named(contract.inside)
-            raise Error, "#{word} belongs inside a #{contract.inside}" unless target
+    # `render_partial` lived here until 2026-09-17: a second implementation
+    # of partial rendering, superseded by `PartialWord#evaluate` and called by
+    # nothing — its only mentions were two comments and a test asserting it
+    # stayed private. It built `PartialGatherer`, a constant defined nowhere,
+    # so it could not have run. Deleted under dan's ruling that the
+    # partial-gatherer road be repaired rather than left half-built; what the
+    # road needed instead was `Word#word`, so `inside:` can find its gatherer.
 
-            nodes = evaluate_body(evaluate, parameters, word, push, contract)
-            target.collect(nodes)
-            nodes
-          else
-            # The caller's children splice into the body at `children` —
-            # established even when the call took none, so a partial whose
-            # body says `children` splices nothing instead of raising. The
-            # same capture is where the old words pruned: an empty named
-            # collection keeps only the `empty` node that names it, the
-            # box's own parts untouched.
-            with_splice(prune(capture(&block), @empty_active)) do
-              evaluate_body(evaluate, parameters, word, push, contract)
-            end
-          end
-        end
-      value, empty, body =
-        # A name is a subject unless the word's declaration says otherwise —
-        # a preamble-less partial keeps the old rule, and `name: variant`
-        # passes the name through the parameters without shifting. A word
-        # declared `empty:` renders only while the enclosing subject is an
-        # empty collection — its body is not even evaluated, the guard the
-        # promoted `empty` word carries.
-        if shifts
-          about(name, &body_block)
-        elsif contract&.empty && !@empty_active
-          [nil, false, []]
-        else
-          [nil, false, body_block.call]
-        end
-      # Root-classing: a promoted vocabulary word owns its box — its single
-      # root node carries the word's own name as the class base. An app's
-      # partials keep the classes of the words they compose.
-if body.size == 1 && body.first.is_a?(Array)
-  box = self.class.box_root(body)[1]
-  if Library.builtin_partials.key?(word)
-    box[:class_base] = word.to_sym
-  else
-    box[:app_class] = word.to_sym
-  end
-end
-      @nodes.concat(body) unless contract&.inside && contract.inside != :any
-      value
-    end
 
     # The optionality spelling (dan, 2026-09-02): slots a preamble declares —
     # name, content, each modifier — are keys of the parameters subject, nil
