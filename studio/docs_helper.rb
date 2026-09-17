@@ -1,5 +1,6 @@
 require 'ostruct'
 require 'set'
+require_relative 'uis'
 module StudioDocs
   # One link in the sidebar. A plain Struct is the app contract satisfied with
   # no ceremony, which is the point — `each word` binds one of these and the
@@ -18,7 +19,9 @@ module StudioDocs
   GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
               ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY].freeze
 
-  def self.guides = GUIDES.map { |name| Entry.new(name: name, path: "/guides/#{name}") }
+  def self.guides(ui = Uis.default_ui)
+    GUIDES.map { |name| Entry.new(name: name, path: ui.path(ui.paths[:guide], name: name)) }
+  end
 
   # The language's words, as the document lists them — the same scan
   # check_grammar uses. The registry is global and any library may register
@@ -32,12 +35,12 @@ module StudioDocs
 
   # Every word the language actually knows, from the document — so an app's
   # words, however many libraries register them, never leak into the
-  # sidebar.
-  def self.words
+  # sidebar. Each word's path is minted by the UI that will serve it.
+  def self.words(ui = Uis.default_ui)
     require_relative '../lib/slim_pickins'
     SlimPickins::Library.builtin
     vocabulary.select { |word| SlimPickins::Word.registry.key?(word.to_sym) }.sort
-      .map { |word| Entry.new(name: word, path: "/docs/#{word}") }
+      .map { |word| Entry.new(name: word, path: ui.path(ui.paths[:word], word: word)) }
   end
 
   # The payloads, with one home: a plain hash of word name to its contract
@@ -253,7 +256,7 @@ module StudioDocs
   # examples with a payload rank first, so the first Try-it a reader meets
   # is the one most likely to demonstrate the word; structural words get
   # their note and no link at all.
-  def self.examples_of(word)
+  def self.examples_of(word, ui: Uis.default_ui)
     data_for = block_given? ? proc { |path, chain| yield(path, chain) } : ->(_p, _c) { '' }
     structural = STRUCTURAL_NOTES.key?(word.to_sym)
     note = STRUCTURAL_NOTES[word.to_sym] || DEMONSTRATION_NOTES[word.to_sym]
@@ -261,7 +264,7 @@ module StudioDocs
       file, line, body, chain, siblings, payload, = row
       Example.new(body: body, where: "#{file}:#{line}", path: file,
                   context: context_of(chain, siblings),
-                  try_path: structural ? nil : "/docs/#{word}?try=#{i}",
+                  try_path: structural ? nil : ui.path(ui.paths[:try], word: word, n: i),
                   data: structural ? '' : payload, note: note)
     end
   end

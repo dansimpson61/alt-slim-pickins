@@ -55,8 +55,8 @@ class StudioTryTest < Minitest::Test
     # The studio's own boot is a clean process that owns its registry; in
     # this shared suite, rebuilding the merged library at use time is what
     # makes the studio's words the studio's words (last compile wins).
-    library = StudioPages.merge_libraries(StudioPages::PLAYGROUND_LIBRARY_DIRS,
-                                          words: [AppWords, StudioWords])
+    library = StudioPages.merge_libraries(StudioPages.library_dirs,
+                                          words: [AppWords, ClassicWords])
     assert_equal 62, vocabulary.size - STRUCTURAL.size, 'the yield moved — re-measure'
 
     vocabulary.each do |word|

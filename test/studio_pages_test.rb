@@ -16,7 +16,12 @@ SlimPickins::Library.builtin
 # the census itself can never raise.
 class StudioPagesTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
-  LIBRARY = StudioPages.library
+  # The classic UI's library, because these tests render the classic UI's
+  # pages: a UI's pages need that UI's own partials, and `StudioPages.library`
+  # is deliberately the sandbox without any UI's. The layout rides along, so a
+  # UI page that says `contents` is wrapped exactly as the studio wraps it.
+  CLASSIC = Uis['classic']
+  LIBRARY = StudioPages.ui_library(CLASSIC)
 
   def test_every_palette_page_exists
     StudioPages::PAGES.each do |id, rel|
@@ -31,8 +36,11 @@ class StudioPagesTest < Minitest::Test
     expected += Dir[File.join(ROOT, 'examples', '**', 'views', '**', '*.sp')]
                 .reject { |f| File.basename(f) == 'layout.sp' } # chrome, not a page
                 .map { |f| f.sub("#{ROOT}/", '') }
-    expected += Dir[File.join(ROOT, 'studio', 'views', '*.sp')]
-                .reject { |f| File.basename(f) == 'refusal.sp' } # a template, not a page
+    # Every UI's pages are in the census, discovered the way the registry
+    # discovers them: a UI's page that is missing from the palette is a page
+    # the gate never proves. The refusal template is shared chrome, not a page.
+    expected += Dir[File.join(ROOT, 'studio', 'uis', '*', 'views', '*.sp')]
+                .reject { |f| File.basename(f) == 'refusal.sp' }
                 .map { |f| f.sub("#{ROOT}/", '') }
     assert_equal expected.sort, StudioPages::PAGES.values.sort
   end
@@ -51,15 +59,17 @@ class StudioPagesTest < Minitest::Test
       assert_includes %w[ok error], entry.status, "#{entry.id} has no verdict"
       assert_equal entry.status == 'error', !entry.refusal.nil?,
                    "#{entry.id}: verdict and refusal disagree"
-      assert_equal "/?load=#{entry.id}", entry.load_path
+      # The load path is a template the serving UI mints, not a URL: the
+      # `:ui` and `:id` are filled by `link_to`, so the census cannot bake in
+      # one UI's name — and `:ui` in the palette must never be substituted by
+      # the census itself, or a second UI's palette would link into this one.
+      assert_equal '/?load=:id&ui=:ui', entry.load_path
 
       # The render the load gives — the same locals the route builds.
       complaint =
         begin
           SlimPickins.render(File.read(File.join(ROOT, entry.path)), path: entry.path,
-                             locals: StudioPages.playground_locals(
-                               StudioPages.data_json_for(entry.path)
-                             ),
+                             locals: StudioPages.load_locals(entry.path),
                              library: LIBRARY)
           nil
         rescue SlimPickins::Error => e
@@ -75,22 +85,35 @@ class StudioPagesTest < Minitest::Test
     end
   end
 
+  # The palette's ids, never a raw path: a load parameter cannot read what
+  # PAGES did not name. With several UIs a page also belongs to the UI that
+  # serves it, so the refusal is held in both directions — the page's own UI
+  # reads it, another UI's is refused rather than rendered against the wrong
+  # partials.
   def test_source_for_reads_only_palette_pages
-    StudioPages::PAGES.each_key do |id|
-      assert_equal File.read(File.join(ROOT, StudioPages::PAGES[id])),
-                   StudioPages.source_for(id)
+    StudioPages::PAGES.each do |id, rel|
+      ui = Uis[id.start_with?('studio/') ? id.split('/')[1] : nil] || Uis.default_ui
+      assert_equal File.read(File.join(ROOT, rel)), StudioPages.source_for(id, ui: ui)
     end
     assert_nil StudioPages.source_for('../../etc/passwd')
     assert_nil StudioPages.source_for(nil)
+
+    classic = Uis['classic']
+    other = Uis.all.find { |u| u.name != classic.name }
+    if other
+      assert_nil StudioPages.source_for("studio/#{other.name}/index", ui: classic),
+                 "another UI's page must not load into this one"
+    end
   end
 
   def test_the_playground_page_renders_with_a_canned_palette
     entries = StudioPages.entries(library: LIBRARY).first(2)
-    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'index.sp')),
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'index.sp')),
                               path: 'index.sp',
                               locals: { source: "page \"x\"\n", palette: entries,
                                         editor_title: 'Write .sp Code', data: '',
-                                        docs: StudioDocs.build, words: [], guides: [] },
+                                        docs: StudioDocs.build, words: [], guides: [],
+                                        ui_names: [], words_count: 64, pages_count: 22 },
                               library: LIBRARY)
     assert_includes html, 'Start from a real page'
     assert_includes html, entries.first.name
@@ -157,8 +180,8 @@ class StudioPagesTest < Minitest::Test
     # that owns its registry; this test rebuilds the merged library at use
     # time so it owns its words the same way — last compile wins, and this
     # compile is the studio's.
-    library = StudioPages.merge_libraries(StudioPages::PLAYGROUND_LIBRARY_DIRS,
-                                          words: [AppWords, StudioWords])
+    library = StudioPages.merge_libraries(StudioPages.library_dirs,
+                                          words: [AppWords, ClassicWords])
     LEDGER_PAGES.each do |rel, needle|
       json = StudioPages.data_json_for(rel)
       refute_empty json, "#{rel} has no payload"
@@ -224,7 +247,7 @@ class StudioPagesTest < Minitest::Test
   # --- the refusal page: errors in the language's own voice ------------------
 
   def test_the_refusal_page_speaks_the_language
-    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'refusal.sp')),
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'shared', 'refusal.sp')),
                               path: 'refusal.sp',
                               locals: { title: 'Refusal', complaint: 'this page has no total_value',
                                         where: 'playground.sp, line 2',
@@ -237,7 +260,7 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_the_refusal_page_renders_without_a_sentence
-    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'refusal.sp')),
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'shared', 'refusal.sp')),
                               path: 'refusal.sp',
                               locals: { title: 'Refusal',
                                         complaint: 'the data does not parse as JSON — x',

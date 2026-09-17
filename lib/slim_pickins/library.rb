@@ -92,7 +92,7 @@ module SlimPickins
     # partials are words, not app words — they pass the check by right.
     def refuse_shadowing!
       vocabulary = self.class.builtin_partial_paths.keys
-      app_words = (@partials.keys - vocabulary) + @words.flat_map(&:instance_methods)
+      app_words = (@partials.keys - vocabulary) + word_names
       
       app_words.each do |name|
         primitive_keys = SlimPickins::Words.constants.map do |c|
@@ -105,11 +105,47 @@ module SlimPickins
           raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it"
         end
       end
-      
+
       duplicated = app_words.tally.select { |_, n| n > 1 }.keys
       return if duplicated.empty?
 
       raise Error, "`#{duplicated.first}` is defined twice — as a partial and in Ruby"
+    end
+
+    # The names the app's own word modules declare.
+    #
+    # Each module in the ancestry is read for *its own* instance methods,
+    # never `instance_methods`, which answers with everything the module
+    # inherited as well. That difference is not academic: a module which
+    # includes a shared one would otherwise offer `Kernel#format` and
+    # `Object#hash` as words, and this check would refuse the language's own
+    # `format` as a duplicate.
+    #
+    # The same word declared once through two modules that share an ancestor
+    # is *one* word, not two: an interface kata is exactly that shape. Two
+    # different implementations of one name are the alias problem, and are
+    # still refused — the name's home must be one module, or the app cannot
+    # say which of them a page means.
+    def word_names
+      declared = @words.each_with_object({}) do |mod, out|
+        next unless mod.is_a?(Module)
+
+        mod.ancestors.each do |ancestor|
+          next unless ancestor.is_a?(Module)
+
+          ancestor.public_instance_methods(false).each { |name| (out[name] ||= []) << ancestor }
+        end
+      end
+
+      declared.each_with_object([]) do |(name, homes), names|
+        implementations = homes.uniq
+        if implementations.size > 1
+          raise Error, "`#{name}` is declared by two apps' words in one library — " \
+                       "one name must have one home"
+        end
+
+        names << name
+      end
     end
   end
 end

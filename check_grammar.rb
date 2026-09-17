@@ -51,18 +51,26 @@ app_words |= Dir[File.join(here, 'lib', 'vocabulary', '*.sp')].map { |f| File.ba
 Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
   app_words |= SlimPickins::Library.from(dir).partials.keys.map(&:to_s)
 end
-# The studio is an app like the others — its furniture partials are words
-# defined through Library, and the checker must know it, or every studio
-# page reads as full of UNDEFINED words.
-app_words |= SlimPickins::Library.from(File.join(here, 'studio', 'views')).partials.keys.map(&:to_s)
+# The studio is apps like the others — each UI is its own directory of
+# furniture partials, and the shared directory holds what every UI draws on.
+# The checker asks the registry rather than listing directories, so a UI added
+# tomorrow is checked the moment it exists; a hardcoded list is how the studio
+# read as full of UNDEFINED words the first time.
+require_relative 'studio/uis'
+Uis.all.each do |ui|
+  app_words |= SlimPickins::Library.from(ui.views).partials.keys.map(&:to_s)
+end
+app_words |= SlimPickins::Library.from(File.join(here, 'studio', 'shared')).partials.keys.map(&:to_s)
 
 # The `end` that closes the module is the one at the module's own indentation.
 # Anchoring on `^end` instead read straight past a nested module and counted
 # every later method as a word — which would quietly hide a genuinely
 # undefined one. The studio's Ruby is scanned too: its own words module is
-# the same hatch the example apps use.
+# the same hatch the example apps use — and so is `StudioUI`, the shared
+# interface kata every UI includes, which is written in Ruby and therefore has
+# no partial to be read from.
 Dir[File.join(here, '{examples,studio}', '**', '*.rb')].each do |f|
-  File.read(f).scan(/^([ \t]*)module \w*Words\b(.*?)^\1end/m).each do |_indent, body|
+  File.read(f).scan(/^([ \t]*)module (\w*Words|StudioUI)\b(.*?)^\1end/m).each do |_indent, _name, body|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end

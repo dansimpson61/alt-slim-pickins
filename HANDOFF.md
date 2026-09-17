@@ -48,8 +48,9 @@ The detailed phase-by-phase record of Roadmap 0.2 remains in `ROADMAP-0.2.md`.
 **Phase 6 (Subtraction) is complete, officially closing Roadmap 0.2.**
 The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `action` primitive is refactored, and Phase 5's prose named-limits (`---`, heading boundaries, table alignment colons, and deeply nested lists) are fully natively supported by `prose` (because we discovered they were genuinely needed for structural clarity, validating that we shouldn't strip them).
 
-**Phase 0 is open — the studio, won iteratively — and six wins have
-landed (2026-09-15).** Win 1, the palette: the playground offers the repo's
+**Phase 0 is open — the studio, won iteratively — and eleven wins have
+landed.** Ten on 2026-09-15, and **Win 11 on 2026-09-17: the multi-UI trunk,
+and the workbench.** Win 1, the palette: the playground offers the repo's
 own pages as starting points, thirteen of them, each wearing the census
 verdict of the render the playground will give it — 13 of 13 refuse, every
 one of them the data wall. Win 2, the word docs grow teeth: every
@@ -90,12 +91,43 @@ button's two homes are the docs fences and the try-it's script-less
 iframes, and a fence's text is natively selectable. Win 10, the repo's
 own pages joined the palette — 13 entries became 18, specimen leading,
 census completeness widened to pages/, and their ledger providers (from
-the deepening) pre-fill the data on load. **The Phase 0 ledger is empty,
-the housekeeping at end-of-phase standard.** The phase stays open: dan's
-judgment is pending, and his next move is scoping changes to the
-studio's *playground identity and functionality* (his words,
-2026-09-15) — resume from `PROJECT.md` `next_step`, which names the
-standing state. Roadmap 0.2 was an
+the deepening) pre-fill the data on load.
+
+**Win 11 (2026-09-17) — the studio holds several UIs, and picking one is a
+word.** dan rewrote the identity ruling into "manage multiple UIs from which we
+can pick… an exploration before we update guides and turn agents loose to build
+some new garden apps." So:
+
+- **A UI is a directory** under `studio/uis/`: `layout.sp` (the frame `page`
+  infers), `views/` (+ `views/partials/`), `words.rb` (a module that
+  `include`s — never `extend`s — the shared interface kata `StudioUI`), and
+  `about.rb` (`TITLE`, `DESIGN`, and `paths`).
+- **`?ui=` selects, a cookie remembers, `/ui/:name` switches**, and the picker
+  is a partial each UI draws. `studio/uis.rb` is the registry; it asks a UI
+  directory for its API rather than listing them anywhere.
+- **The seam is `paths`.** A UI declares the templates it mints URLs from;
+  `StudioUI#link_to` substitutes `:ui` for the UI that is *speaking*, so no view
+  holds a route and one UI cannot link into another. A word one UI needs is that
+  UI's business; a word two UIs need is evidence for the language — that is the
+  exploration's point, and neither UI has asked for anything yet.
+- **The workbench** is `main_menu` / `library` / `panes` / `foot`; its
+  `layout.sp` carries the assets, the menu, the frame and the footer, and its
+  shelf holds the words, the repo's pages with their census, and the guides.
+  `/docs/:word` is a **state of the shelf**, not a page — so there is one editor
+  and `try_it.sp` is gone.
+- **The classic UI is kept whole as the control.** Both read **18 of 18 `ok`**
+  in their own shelves, verified in Chromium as well as by the gate.
+- **A loaded page is not a page of this UI**: it renders with the sandbox
+  library (no UI's layout), which is why `StudioPages.load_locals` is one home
+  and `entries` takes both a `library` and a `pages_library`.
+
+Eight previously invisible defects were fixed in the landing; the honest list is
+in `ROADMAP-0.3.md` under Win 11 (the largest: `page` read its head before the
+layout ran, so a layout's assets never reached `<head>`).
+
+**The Phase 0 ledger is empty, the housekeeping at end-of-phase standard.** The
+phase stays open, and the pick after Win 11 is dan's — resume from `PROJECT.md`
+`next_step`, which names the standing state. Roadmap 0.2 was an
 even-numbered roadmap (the
 backward eye); 0.3 is the forward eye. Its question, chosen and
 challenged by dan (2026-09-14): can the language carry real work — a
@@ -161,13 +193,15 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-17, at the close of DAYTRIP-0.3.0b and again after the
-  register's reference shape: **339 runs / 3,682 assertions / 0 failures
-  across 29 test files**, per-file exit codes all 0 — the dashboard's
-  harness over the same files is the stronger run and worth doing too: `ruby
+  (re-measured 2026-09-17, at the close of DAYTRIP-0.3.0b, again after the
+  register's reference shape, and again at Win 11: **339 runs / 3,753
+  assertions / 0 failures across 29 test files**, per-file exit codes all 0 —
+  the dashboard's harness over the same files is the stronger run and worth
+  doing too: `ruby
   -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
-  — plus 705 sentences / 0 problems, 96 rules / 0 problems, 64 words and
-  all 64 used in real pages / 0 problems, 14 pages verified, 25
+  — plus 807 sentences / 0 problems, 96 rules / 0 problems, 64 words and
+  all 64 used in real pages / 0 problems, **18 pages verified** (every UI's
+  pages now, not only the classic UI's), 25
   affordances / 0 missing, 32 promises and **none without a reader**, 38
   conventions / 0 problems, 39 words declaring the conventions they trigger;
   the 13-page count retired with the paper

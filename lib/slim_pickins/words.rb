@@ -9,15 +9,18 @@ module SlimPickins
 
       def evaluate
         favicon = @kwargs.key?(:favicon) ? @kwargs[:favicon] : nil
-      name, title = arguments(@args)
-      heading = title || Inference.label(name)
+        name, title = arguments(@args)
+        heading = title || Inference.label(name)
 
-      value, empty, body = about(name) { wrapped_in_layout(&@block) }
-      emit_node([:page, { heading: heading, head: head_nodes,
-                          favicon: favicon },
-                 prune(body, empty)])
-      value
-
+        # The layout runs first, because it may contribute to the head — its
+        # stylesheet and its scripts. Reading `head_nodes` before it ran meant
+        # a layout's assets never reached the document, which is the one thing
+        # a layout exists to hold.
+        value, empty, body = about(name) { wrapped_in_layout(&@block) }
+        emit_node([:page, { heading: heading, head: head_nodes,
+                            favicon: favicon },
+                   prune(body, empty)])
+        value
       end
     end
 
@@ -32,8 +35,14 @@ module SlimPickins
       maps content: :path
     end
 
+    # `link_to` is an app word — the studio's, and any app's — standing in for
+    # `link` where the destination is not a literal the page can spell:
+    # `link`'s `to:` takes a string, and a URL only the app can mint is not
+    # one. It renders an anchor exactly as `link` does, so `nav` accepts it as
+    # a child; allowing it here is the language admitting a named sibling
+    # rather than pretending a nav cannot hold a link.
     class Nav < Encloses
-      contract name: :variant, children: [:link, :input, :search], shape: :encloses, lazy: []
+      contract name: :variant, children: [:link, :link_to, :input, :search], shape: :encloses, lazy: []
     end
 
     class Link < Says

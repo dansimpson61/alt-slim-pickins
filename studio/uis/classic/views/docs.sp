@@ -1,7 +1,4 @@
 page .title
-  stylesheet "/assets/slim-pickins.css"
-  script "/assets/stimulus.umd.js"
-  script "/assets/studio_controller.js"
   sidebar_layout
     vocabulary
     split_pane
@@ -18,7 +15,7 @@ page .title
                 note quiet, .where
                 choose
                   when .try_path
-                    link "Try it", to: .try_path
+                    link_to "Try it", to: try, path: .try_path
                 choose
                   when .note
                     note quiet, .note

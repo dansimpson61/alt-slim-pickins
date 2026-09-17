@@ -313,8 +313,19 @@ a studio that can be *used* — the workbench the garden phase leans on.
   encloses stay pure language, and the iframes are reached by the names
   the language already emits. One fetch to the new `/render.json` —
   `{ visual, source }`, refusals included — writes both panes; the form's
-  native action stays `/render`, so without JavaScript the visual pane
-  still renders, the old behavior, honestly. The burr's *why* is recorded
+  native action stays `/render`, which this record first read as a
+  no-JavaScript fallback in which "the visual pane still renders". **That
+  claim was false, and dan ruled it dropped rather than built (2026-09-17).**
+  Measured: `wired_form` emits no `target`, and neither iframe carries a
+  `src`, so with JavaScript off the form POSTs the page and `/render` hands
+  the visual document back as the browser's next page, leaving both panes
+  empty. The route and the comment that promised the fallback
+  (`studio/app.rb`'s `/render` comment) are corrected where the identity
+  round that touches this code lands; rendering requires JavaScript, which
+  the studio says rather than hides. **The rule dan attached to the ruling,
+  and it governs every future pane: any JavaScript stays encapsulated as
+  Stimulus and is reached through an sp word — `wired_form` is the
+  precedent — never hand-written at a call site.** The burr's *why* is recorded
   beside the fix in `editor_form.sp`, as the risk register demands. The
   contract is the studio's first client API — a future pane joins as a
   key, not a change — and the trigger is one `data-action` away from any
@@ -370,6 +381,152 @@ committed and green, the housekeeping at end-of-phase standard. dan's
 judgment on the phase is pending: before ruling it, he scopes the
 studio's next change — its *playground identity and functionality* (his
 words) — so the phase stays open and the wins list keeps growing.
+
+### The identity fork, settled (2026-09-17) — dan's ruling
+
+The scoping dan called for on 2026-09-15 was held behind the daytrip and the
+bluesky brief; with `DAYTRIP-0.3.0b` closed, it was put to him as a fork and
+ruled the same day. **The studio is one workbench, and the library is a
+movable shelf.**
+
+The measured case, which is why the fork was smaller than its name: the two
+surfaces were never two tools. `/` and `/docs/:word` render **the same**
+`editor_form`, wired by **the same** `render` Stimulus controller, posting to
+**the same** `/render.json`, into **the same** two iframes (`preview`,
+`html_preview`), reached by the names the language emits. Raskin's monotony
+test was already passed; what differed was the chrome — `/` framed by the
+census palette above the editor, `/docs/:word` framed by contract,
+implementation and "In the wild" prose above a `try_it` pane that
+re-implements `editor_form` + the two previews. So the real question was never
+"one tool or two"; it was **where a word's documentation lives.**
+
+Ruled: **`/docs/:word` stops being a page and becomes a state of the
+workbench.** The consequences, named now so the round inherits them rather
+than discovers them:
+
+- **The gutter and the inference pane land in one place.** The strongest
+  argument for this shape: bluesky's Part 2 fixes (errors on the line the
+  language already carries `path`/`lineno` for; the pane that shows *who
+  decided* each value) each cost one implementation here and two under the
+  alternative.
+- **The shelf must be sized by intent, not fraction** — it holds a word's
+  contract, implementation and examples, which will not fit the current
+  `250px` sidebar. This is bluesky Part 2's own finding arriving as a
+  requirement rather than a preference.
+- **The duplicated-view cost is already paid once and visible:**
+  `try_it.sp` re-implements its siblings, and its comment drifted from
+  `editor_form.sp`'s and needed a repair of its own (2026-09-17).
+- **`VOCABULARY.md` keeps the reference role.** Per-word pages are not
+  recreated as a second reading home; the language's one home for a word's
+  facts stays the document the checkers read.
+
+The adjacent ruling, on the same day: **the no-JavaScript fallback is dropped,
+not built**, and the false claim is corrected in win 7's record above. The
+requirement stands as a rule — rendering may require JavaScript, provided the
+JavaScript stays encapsulated as Stimulus and is reached through an sp word
+(`wired_form` is the precedent), never hand-written at a call site.
+
+The landing round is **Win 11**, scoped from this ruling; the phase stays
+open, and dan judges each pick.
+
+### Win 11 — the multi-UI trunk, and the workbench (landed 2026-09-17)
+
+dan's instruction rewrote the win before it started: *"Let's build that but
+manage multiple UIs from which we can pick. This is an exploration of what we
+can do before we update guides and turn agents loose to build some new garden
+apps."* So the studio learned to hold several UIs, and the workbench became the
+first new one — a UI as an object, the classic kept whole as the control.
+
+**The architecture, and it is small:** a UI is a directory under `studio/uis/`
+holding `layout.sp` (the frame), `views/` (pages and `views/partials/`),
+`words.rb` (a module `include`-ing `StudioUI`), and `about.rb` (a module API:
+`TITLE`, `DESIGN`, and `paths` — how this UI mints its own URLs). `studio/uis.rb`
+is the registry; `?ui=` selects, a cookie remembers, `/ui/:name` switches, and
+the picker is a partial each UI may draw.
+
+**The one seam that makes several UIs possible** is `paths`. Every link a UI
+offers is minted in Ruby — the palette's load paths, the docs' word paths — so
+a literal `/` would send a visitor from one UI into another. A UI declares its
+route templates, `StudioUI#link_to` substitutes `:ui` from the UI that is
+speaking, and no view holds a route. `StudioPages::PAGES` values are frozen:
+they were being mutated in place by something in the suite, and freezing both
+fixed it and made the data immutable by design.
+
+**The workbench UI**, from dan's own outline — `main_menu`, `library`, `editor`,
+`studio_footer`:
+
+- `layout.sp` carries the assets, the menu, the two-column frame and the footer,
+  and no page mentions any of them: `page` infers the layout, which is what the
+  feature was built for and what this round finally exercised.
+- The shelf holds the words, the repo's pages with their census and the guides;
+  the work area holds the writing and the artifact, half each; `/docs/:word` is
+  the shelf's word state rather than a page. One editor, and `try_it.sp` — a
+  second copy of the editor that had already cost a repair when its comment
+  drifted — is gone.
+- The frame's vitals live in `studio/vitals.rb` as the record's numbers, dated,
+  with the note that the instruments measure them and a session that changes one
+  re-reads them.
+
+**The dogfood assessment dan's lens asked for, and what it found.** The
+repetition that actually costs is repetition *in sp*: the studio declared its
+stylesheet in five files and its scripts in two, and the language already had
+the answer — `Library.from` reads `layout.sp` and `page` infers it. Under dan's
+DRY correction (*the machine may repeat itself; we may not*), the fix was to use
+the seam the language already had rather than to invent vocabulary that would
+have existed only to shorten the DOM.
+
+**Defects the round found, each of which had been invisible.** The list is the
+value; several were years-old and none was caught by a checker:
+
+- **`page` read its head before the layout ran** (`words.rb`), so a layout's
+  stylesheet and scripts never reached `<head>` — the one thing a layout exists
+  to hold. The order is now layout-first, then head.
+- **`Library#refuse_shadowing!` harvested inherited methods** (`@words.flat_map
+  (&:instance_methods)`), so a module including a shared one offered
+  `Kernel#format` and `Object#hash` as words and the language's own `format` was
+  refused as a duplicate. It now reads each module in the ancestry for its *own*
+  public instance methods, and distinguishes one word declared through two
+  modules sharing an ancestor (one word) from two implementations of one name
+  (the alias problem, still refused).
+- **`StudioUI` defined its words as module singleton methods**, so `extend
+  StudioUI` never carried them to a Builder; `include` is the word, because only
+  an ancestor travels that road.
+- **`plainify` laundered unnameable values into `nil`**, and `JSON.pretty_generate`
+  then raised on the nil, so `data_json_for` returned `''` and *the whole
+  payload* vanished — a page reported "this page has no title" with the title in
+  its provider. It now names Symbol and anything answering `to_h`, and raises
+  for the rest rather than lying. It was also hiding the roth payloads' Symbols.
+- **A UI page and a loaded page need different libraries.** A UI's own page
+  renders with that UI's library (its frame, its partials, canned locals
+  carrying real objects); a *loaded* page renders with the sandbox, which has no
+  UI's layout. Measuring a loaded page inside the workbench's frame turned all
+  18 entries red asking a specimen for `words_count`.
+- **A partial that says its own name calls itself**: `studio_footer.sp` began
+  `studio_footer`, and overflowed the stack until the fragment was renamed
+  `foot`.
+- **The census and the load had drifted again**, in a new place: the census
+  passed a UI's library where the load passed the sandbox. `StudioPages.load_locals`
+  is now the one home both read.
+- **`nav` did not know `link_to`** — an app word standing in for `link` where the
+  destination is not a literal. The language admits the named sibling, and
+  VOCABULARY.md was regenerated from the contract.
+- **`check_grammar` did not know `StudioUI`**, so the shared kata's words read as
+  UNDEFINED; it now asks the registry for every UI rather than naming one
+  directory.
+
+**Verified by looking, not only by checking.** Both UIs were rendered in
+Chromium at 1440×950 on every route: both read **18 of 18 `ok`** in their own
+shelves, the workbench's frame fills the viewport (352px shelf, 1028px work
+area, 508/508 panes), the loaded portfolio page seeds the editor and renders in
+the artifact, and the classic UI is untouched by the new CSS — its rules live
+under a `:has()` selector that only the workbench's frame matches.
+
+**What is deliberately not here.** The workbench does not yet show a page's
+*meaning* (the parked W3), it has no error gutter, and it does not know which
+example you are editing. The shelf's search field is a real `search` word with
+no behaviour wired — honest, and a demand the next round may take.
+
+The phase stays open, and the pick after this one is dan's.
 
 ### The session-start record (2026-09-16) — findings, no code motion
 

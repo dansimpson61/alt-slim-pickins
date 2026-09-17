@@ -588,3 +588,81 @@ Two tool traps, both mine. Splitting a markdown document on a section header and
 ## 2026-09-17 — DeepSeek v4-flash
 
 Built the reference shape: a word declares the conventions it triggers, the register keeps the prose once, and the join is generated. What the instrument proves is existence, never reachability — it saw neither of the two words that reached label_for without declaring label, nor can it see a declaration with no path. Also: removing a bullet made fifteen blank slots, and the register's rule 1 says write `none`, not nothing. Learned in LORE.md.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+Settling the studio identity fork was cheap because the measurement dissolved it. The two surfaces were never two tools: / and /docs/:word render the same editor_form, wired by the same render Stimulus controller, posting to the same /render.json, into the same two iframes (preview, html_preview) found by the names the language emits. Raskin monotony was already passed; what differed was the chrome, so the real question was never one tool or two but where a words documentation lives. Lesson: before weighing a fork, check whether the two branches are the same mechanism wearing different scaffolding — a fork that dissolves under measurement cannot be settled by argument, only by looking.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+A false claim survived a daytrip because it was the reason for a design, not a description of it. The roadmaps win-7 record said the forms native action stays /render so without JavaScript the visual pane still renders. Nothing fills the panes with JS off: wired_form emits no target and no iframe has a src, so the form POSTs the page and the visual document becomes the browsers next page while the panes stay empty. Found while scoping the identity fork, because the fork lands in the code the claim describes. Lesson: claims about a fallback path are claims no test walks, and a reason recorded as prose reads as a fact within a week.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+A layout's assets never reached the head, and nothing could see it. `page` read
+`head_nodes` *before* running `wrapped_in_layout`, so a layout's `stylesheet` and
+`script` — the one thing a layout exists to hold — accumulated into a list that
+had already been read and were dropped. Every word worked, every checker passed,
+and the page rendered with no CSS at all. The fix is one line of ordering. The
+lesson is not "test the layout": it is that a mechanism can be documented,
+demonstrated in a fixture, and still not be exercised by the code path that
+matters — the fixture called `Library.from(dir)` (which reads `layout.sp` beside
+`partials/`), while the app read `File.join(ui.views, 'layout.sp')` (one level
+down, where it did not exist), and a missing layout is silent by design.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+Two ways to make a JSON payload disappear, both of them quiet. `plainify` had no
+`else`, so an unnameable value became `nil`; `JSON.pretty_generate` then raised on
+the nil; and `data_json_for`'s `rescue StandardError` returned `''` — the *whole*
+payload gone because one value was an OpenStruct. A page reported "this page has
+no title" while its provider sat there holding the title. Naming every shape and
+raising for the rest is what turned it from a lie into a message. The second way
+was subtler: `plainify` did not know `Symbol`, so the roth payloads — the one
+real page with symbols in it — had been silently empty since the ledger was
+written, and the census reported the pages as refusing.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+A partial that says its own name calls itself. `studio_footer.sp` opened with
+`studio_footer`, so the word resolved to its own partial and recursed until the
+stack died; the fragment is now `foot`. Two names, two collisions, one lesson: a
+word and a fragment may not share a spelling anywhere in a library, and a crash
+is the worse way to learn it. The second collision was not a fragment at all —
+`link_to`'s first name was `links`, and with two UI modules in one library the
+duplicate check saw the *same* word arriving from two shared ancestors and called
+it "defined twice". That was the check being too blunt, and the fix was to
+distinguish one word reached through two modules from two implementations of one
+name. (The first draft of this entry blamed a `links.sp` partial; there is none
+in the repository, and the record is corrected here rather than left standing.)
+
+## 2026-09-17 — DeepSeek v4-flash
+
+`extend` does not carry instance methods down an ancestor chain, and an app word
+module is the place it bites. `StudioUI` held the shared words; a UI module did
+`extend StudioUI`, which put it in the *singleton* chain; the Builder `extend`s
+the UI module, and an extend can only see ancestors — so the page reported "there
+is no word `links`" while both modules plainly defined it. `include` is the word.
+The related find, one layer down: `Library#refuse_shadowing!` read
+`@words.flat_map(&:instance_methods)`, which answers with everything the module
+inherited, so a module including a shared one offered `Kernel#format` and
+`Object#hash` as vocabulary and the language's own `format` was refused as a
+duplicate. Reading each module in the ancestry for its own methods is the fix;
+distinguishing "one word declared through two modules that share an ancestor"
+(one word) from "two implementations of one name" (the alias problem) is what
+keeps the refusal honest.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+dan's DRY correction, and what it deleted from my plan. I read the Ode's DRY as a
+reason to hunt for a word that would let a page say layout without a class,
+hoisting the relation out of the stylesheet so the box would not need one. He
+corrected it: *we do not need to repeat ourselves in sp, but the rendered html
+and css will be full of repetition; we do not care because we do not need to look
+at it. The machine needs the repetition. We need space and unique names and
+kindness.* So DRY binds the language, never the output, and the duplication that
+costs is duplication *in sp* — which this round found in plenty: the studio
+declared its stylesheet in five files and its scripts in two, when `Library.from`
+reads `layout.sp` and `page` infers it. The answer was the seam the language
+already had, not new vocabulary whose only job would have been to shorten a DOM
+nobody reads.

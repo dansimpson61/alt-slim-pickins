@@ -17,6 +17,11 @@ SlimPickins::Library.builtin
 # on the word's own declaration, or there is no pointer at all.
 class StudioDocsTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
+  # The classic UI's library — the same one the studio serves those pages
+  # with. Building one by hand here was how this test drifted from the app the
+  # first time: the library carries the UI's partials, the layout and the
+  # shared furniture, and only the app knows the whole list.
+  LIBRARY = StudioPages.ui_library(Uis['classic'])
 
   def entries = StudioDocs.entries
 
@@ -96,12 +101,11 @@ class StudioDocsTest < Minitest::Test
   # page renders for the shape the route gives it, without running the
   # checkers inside the suite.
   def test_status_page_renders_canned_results
-    library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__))
-    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'status.sp')),
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'status.sp')),
                               path: 'status.sp',
-                              locals: { title: 'Status', words: [], guides: [],
+                              locals: { title: 'Status', words: [], guides: [], ui_names: [],
                                         **StudioStatus.canned_locals },
-                              library: library)
+                              library: LIBRARY)
     assert_includes html, '1 of 7 legs red'
     assert_includes html, 'Grammar'
     assert_includes html, '<pre><code>0 problems', 'the leg output renders as a fence'
@@ -129,7 +133,7 @@ class StudioDocsTest < Minitest::Test
         assert_match(/\.sp:\d+\z/, ex.where, "#{word}'s example is uncited")
         next unless ex.try_path # structural words carry a note, not a link
 
-        assert_equal "/docs/#{word}?try=#{examples.index(ex)}", ex.try_path
+        assert_equal "/docs/#{word}?try=#{examples.index(ex)}&ui=classic", ex.try_path
       end
     end
   end
@@ -178,15 +182,14 @@ class StudioDocsTest < Minitest::Test
                                         path: 'pages/specimen.sp',
                                         context: "section \"Facts, badges, moments\"\n  badge ok, \"x\"",
                                         try_path: '/docs/badge?try=0', data: '')]
-    library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__),
-                                        words: StudioWords)
-    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'docs.sp')),
+    html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'docs.sp')),
                               path: 'docs.sp',
                               locals: { title: 'Docs: badge', contract: 'c', implementation: 'i',
                                         examples: examples, source: "page \"Try: badge\"\n",
                                         editor_title: 'Try it: badge', data: '',
-                                        data_note: StudioDocs::DATA_NOTE, words: [], guides: [] },
-                              library: library)
+                                        data_note: StudioDocs::DATA_NOTE, words: [], guides: [],
+                                        ui_names: [] },
+                              library: LIBRARY)
     assert_includes html, 'In the wild'
     assert_includes html, 'Try it: badge'
     assert_includes html, 'snippet--sp', 'the example renders in the language’s own fence'

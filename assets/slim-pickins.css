@@ -52,6 +52,13 @@
   --measure: 68ch;
   --sidebar-width: 250px;
   --chrome-height: 120px;
+  /* The workbench's own real estate: a shelf wide enough for a word's
+     contract, and the two bars the frame carries — the menu above the work
+     and the footer below it. A `calc` needs all three named, or the page
+     grows a scrollbar it did not ask for. */
+  --library-width: 22rem;
+  --menu-height: 3.5rem;
+  --footer-height: 2.5rem;
   --lift: 0 1px 2px rgb(0 0 0 / 0.05);
 
   --face: ui-sans-serif, system-ui, sans-serif;
@@ -585,4 +592,95 @@ time { color: var(--ink-soft); }
 .tabs > input[type="radio"]:nth-of-type(3):checked ~ .tabs-content .tab-panel:nth-of-type(3) {
   display: flex;
   flex-direction: column;
+}
+
+/* --- The workbench UI (studio/uis/workbench) ------------------------------
+
+   The second studio UI, and the one whose name says what it is. Its rules are
+   scoped by the id its pages carry, so a UI is a design rather than a set of
+   global edits: the classic UI's layout above is untouched by everything here.
+
+   Three intents, three treatments — the shelf is a column that never competes,
+   the writing wants height, the artifact wants area. That is `box` plus a
+   class doing what the house says it is for: managing display real estate,
+   said once in the stylesheet instead of in a page. */
+
+/* The frame: the shelf is a column that never competes, and the work takes
+   what is left — the same two-column idea `.sidebar_layout` already means,
+   with this UI's own shelf width. The id is on the layout element by design
+   and the workbench is the layout that holds a `.library`, so that is what
+   the selector asks. */
+.sidebar_layout:has(> .library) {
+  grid-template-columns: var(--library-width) 1fr;
+  height: calc(100vh - var(--chrome-height) - var(--menu-height) - var(--footer-height));
+}
+
+/* The work area: the writing and the artifact, half each. Guide and status
+   pages have one pane, so they span the row instead. */
+.sidebar_layout:has(> .library) > .panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  min-height: 0;
+}
+
+/* The shelf: the words, the repo's pages, the guides — one column, its own
+   scroll, and never the first thing a visitor reads as failure. */
+.sidebar_layout:has(> .library) > .library {
+  display: flex;
+  flex-direction: column;
+  gap: var(--step);
+  border-right: var(--rule-width) solid var(--rule);
+  padding-right: var(--gap);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.ui_picker { border-top: var(--rule-width) solid var(--rule); padding-top: var(--step); }
+
+/* A word's own sheet: its contract, its implementation, its real sentences,
+   and the workbench beside them — one editor, seeded by whichever example the
+   writer picked. */
+.sidebar_layout:has(> .library) > .panes > .word_docs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  min-height: 0;
+  overflow-y: auto;
+}
+.sidebar_layout:has(> .library) > .panes > .word_docs > .editor, .sidebar_layout:has(> .library) > .panes > .word_docs > .output { grid-column: 2; }
+.sidebar_layout:has(> .library) > .panes > .word_docs > section, .sidebar_layout:has(> .library) > .panes > .word_docs > .list { grid-column: 1; }
+
+/* The writing is the tall pane: the source takes the height and the data slot
+   keeps its own, so the two texts never split the pane evenly. */
+.editor, .output { display: flex; flex-direction: column; min-height: 0; }
+.editor_form { flex-grow: 1; }
+.editor_form .field:first-of-type { flex-grow: 1; }
+
+/* The artifact: framed and quieter than the tool around it — a rendered page
+   should not compete with the studio's own heading. */
+.output { border: var(--rule-width) solid var(--rule); }
+
+/* A guide or the gate's output is one pane, so it takes the whole work area:
+   the two columns are for the writing and the artifact. */
+.sidebar_layout:has(> .library) > .panes > .scroll { grid-column: 1 / -1; min-height: 0; }
+
+/* The frame: a menu that says where you are, a footer that says what you are
+   working in. */
+.main_menu {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap);
+  padding-bottom: var(--step);
+  border-bottom: var(--rule-width) solid var(--rule);
+}
+.main_menu .nav { display: flex; gap: var(--step); }
+
+.footer {
+  display: flex;
+  align-items: baseline;
+  gap: var(--step);
+  padding-top: var(--step);
+  border-top: var(--rule-width) solid var(--rule);
+  color: var(--ink-soft);
 }

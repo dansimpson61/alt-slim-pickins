@@ -3,8 +3,10 @@
 require 'json'
 require 'cgi'
 require_relative '../lib/slim_pickins'
+require_relative 'uis'
+require_relative 'status'
 require_relative 'docs_helper'
-require_relative 'words'
+require_relative 'uis/words'
 # The sandbox: the example apps' own files, required rather than copied —
 # their boot gates prove the pages with the same locals the ledger serves.
 require_relative '../test/fixtures'
@@ -31,6 +33,18 @@ module StudioPages
   # the example apps, an app's pages before its partials, the studio last.
   # A layout and the refusal template are chrome, not pages, so they are
   # not here.
+  # Every UI's own pages join the census, discovered rather than listed: a
+  # new UI's pages must appear in the palette the moment the UI does, or the
+  # census is understating the demand for exactly the surfaces most likely to
+  # be broken. `refusal.sp` is a template, not a page, and stays out.
+  def self.ui_pages
+    Uis.all.flat_map do |ui|
+      Dir[File.join(ui.views, '*.sp')]
+        .reject { |path| File.basename(path) == 'refusal.sp' }
+        .map { |path| ["studio/#{ui.name}/#{File.basename(path, '.sp')}", path.sub("#{ROOT}/", '')] }
+    end
+  end
+
   PAGES = {
     'pages/specimen' => 'pages/specimen.sp',
     'pages/portfolio_table' => 'pages/portfolio_table.sp',
@@ -45,12 +59,8 @@ module StudioPages
     'dashboard/partials/queue' => 'examples/dashboard/views/partials/queue.sp',
     'dashboard/partials/unreviewed_card' => 'examples/dashboard/views/partials/unreviewed_card.sp',
     'roth/controls' => 'examples/roth/views/controls.sp',
-    'roth/partials/report' => 'examples/roth/views/partials/report.sp',
-    'studio/index' => 'studio/views/index.sp',
-    'studio/docs' => 'studio/views/docs.sp',
-    'studio/guide' => 'studio/views/guide.sp',
-    'studio/status' => 'studio/views/status.sp'
-  }.freeze
+    'roth/partials/report' => 'examples/roth/views/partials/report.sp'
+  }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
   # The playground's own locals — one home, used by the routes and by the
   # census, so a verdict and the real render can never drift apart. `data`
@@ -82,28 +92,65 @@ module StudioPages
   # the badge described a state no visitor ever saw. A refusal is the page
   # naming a wall in the language's own voice; an error outside the language
   # says so.
-  def self.entries(library:, loaded: nil)
-    PAGES.map do |id, rel|
+  # The locals the *load* gives a page — one home, used by the census, the
+  # route and the gate, so a verdict can never describe a render nobody gets.
+  #
+  # A UI's own page is answered directly: its canned locals carry real objects
+  # (a `StudioStatus::Result` answers `state` and `fenced`; a parsed hash would
+  # not), and the route hands over the same objects. Every other page takes the
+  # JSON slot, because that is exactly what the playground gives it.
+  def self.load_locals(rel)
+    return ui_locals(File.basename(rel, '.sp')) if rel.start_with?('studio/uis/')
+
+    playground_locals(data_json_for(rel))
+  end
+
+  # `library` is what a *UI's own* page renders with — its frame, its partials.
+  # `pages_library` is what a *loaded* page renders with: the sandbox, with no
+  # UI's layout. The distinction is the whole reason a palette page cannot be
+  # rendered inside the workbench's chrome, and it was invisible until the
+  # census started measuring the load — every entry went red with "this
+  # specimen has no word_count", which is a frame asking a page for its own
+  # locals.
+  def self.entries(library:, loaded: nil, paths: nil, ui: nil, pages_library: nil)
+    paths ||= Uis.default_ui
+    # A UI's shelf lists *its own* pages: another UI's page cannot render
+    # against this one's partials, and offering it would be a link to a
+    # refusal. The repo's pages and the examples belong to every shelf.
+    pages = PAGES.reject do |id, _|
+      id.start_with?('studio/') && ui && !id.start_with?("studio/#{ui.name}/")
+    end
+    pages.map do |id, rel|
+      # A UI's own page renders with that UI's library; a *loaded* page renders
+      # with the sandbox, which carries no UI's layout — because that is what
+      # the load gives it. Measuring a loaded page inside the workbench's frame
+      # is how every entry went red asking a specimen for `words_count`.
+      engine = rel.start_with?('studio/uis/') ? library : (pages_library || library)
       status, refusal =
         begin
           SlimPickins.render(File.read(File.join(ROOT, rel)), path: rel,
-                             locals: playground_locals(data_json_for(rel)), library: library)
+                             locals: load_locals(rel), library: engine)
           ['ok', nil]
         rescue SlimPickins::Error => e
           ['error', e.message]
         rescue StandardError => e
           ['error', "#{e.class}: #{e.message}"]
         end
-      Entry.new(id: id, name: "#{id}.sp", path: rel, load_path: "/?load=#{id}",
-                status: status, refusal: refusal, here: id == loaded)
+      Entry.new(id: id, name: "#{id}.sp", path: rel, load_path: paths.paths[:load],                status: status, refusal: refusal, here: id == loaded)
     end
   end
 
   # The source behind a palette id — the palette's ids, never a raw path, so
-  # a load parameter cannot read anything PAGES did not already name.
-  def self.source_for(id)
+  # a load parameter cannot read anything PAGES did not already name. A UI's
+  # own page is refused when the UI serving the request is not the one the id
+  # names: the palette lists every UI's pages, and loading another UI's page
+  # into this workbench would render it against the wrong library.
+  def self.source_for(id, ui: Uis.default_ui)
     rel = PAGES[id]
-    rel && File.read(File.join(ROOT, rel))
+    return nil unless rel
+    return nil if id.to_s.start_with?('studio/') && !id.to_s.start_with?("studio/#{ui.name}/")
+
+    File.read(File.join(ROOT, rel))
   end
 
   # The editor's heading: the page being edited, or the invitation.
@@ -118,25 +165,34 @@ module StudioPages
   # apps refuses loudly here rather than rendering one app's word in
   # another's place. pages/partials is included: its test_account_card is a
   # real partial — account_detail renders it — whatever else uses it.
-  PLAYGROUND_LIBRARY_DIRS = [
+  #
+  # The sandbox library: the repo's pages, the shared furniture and the
+  # example apps' partials — but *no UI's* partials, because a UI's fragments
+  # are its own. This is the library the playground renders a writer's source
+  # against, and a UI's own library is this one plus that UI's directory.
+  #
+  # Several UIs means several `editor` fragments, quite legitimately: two UIs
+  # are two designs, and a shared name across them is not an alias problem,
+  # it is the point. What must not happen is one UI's page rendering against
+  # another UI's partials, which is why the merge is per UI and the refusal
+  # below still fires for the two cases that *are* ambiguity: one name from
+  # two example apps, or two words in one library.
+  def self.library_dirs = [
     File.join(ROOT, 'pages'),
-    File.join(ROOT, 'studio', 'views'),
+    File.join(ROOT, 'studio', 'shared'),
     File.join(ROOT, 'examples', 'portfolio', 'views'),
     File.join(ROOT, 'examples', 'dashboard', 'views'),
     File.join(ROOT, 'examples', 'roth', 'views')
   ].freeze
 
   def self.library
-    # AppWords is portfolio's own vocabulary — `video` — StudioWords the
-    # studio's own — `wired_form` — and the merged library carries both the
-    # same way the apps' own libraries do.
-    @library ||= merge_libraries(PLAYGROUND_LIBRARY_DIRS, words: [AppWords, StudioWords])
+    @library ||= merge_libraries(library_dirs, words: [AppWords, *Uis.all.map(&:words)])
   end
 
   # The merge, its own seam so the collision refusal is testable: two apps
   # naming the same partial would otherwise render one app's word in
   # another's place, silently.
-  def self.merge_libraries(dirs, words: nil)
+  def self.merge_libraries(dirs, words: nil, layout: nil)
     partials = {}
     partial_paths = {}
     dirs.each do |dir|
@@ -151,10 +207,67 @@ module StudioPages
         partial_paths[name] = path
       end
     end
-    SlimPickins::Library.new(partials: partials, partial_paths: partial_paths, words: words)
+    SlimPickins::Library.new(layout: layout, partials: partials, partial_paths: partial_paths, words: words)
+  end
+
+  # A UI's own library: its layout (so `page` infers the frame), its partials,
+  # the shared furniture, the example apps' partials so a loaded page renders
+  # end-to-end, and every UI's words. Built per UI because the layout is part
+  # of the library — the page word wraps itself in it — so a UI's frame cannot
+  # be borrowed from another UI by accident.
+  #
+  # The layout sits at the UI's *root*, not in `views/`: `Library.from` reads a
+  # directory's `layout.sp` beside its `partials/`, and a UI's views are one
+  # level down, so the frame is read here rather than left to be missed. A
+  # missing layout is silent — the pages simply render unframed — which is how
+  # this cost a round.
+  def self.ui_library(ui)
+    layout_path = File.join(ui.dir, 'layout.sp')
+    merge_libraries([*library_dirs, ui.views],
+                    words: [AppWords, *Uis.all.map(&:words)],
+                    layout: (File.read(layout_path) if File.exist?(layout_path)))
   end
 
   # --- the data ledger: what the playground pre-fills ------------------------
+
+  # What a UI's own page needs, canned: its frame's locals and the page's
+  # answer. Used by the census and by `bin/verify_pages.rb`, so a UI page is
+  # measured by the same shape in both — the drift this replaces was two
+  # copies of the same canned payload, one of which had gone stale.
+  #
+  # The shelf is two canned entries rather than the real census: a UI page
+  # rendered *by* the census cannot take the census again without recursing.
+  def self.ui_locals(page)
+    base = {
+      docs: StudioDocs.build,
+      words: StudioDocs.words,
+      guides: StudioDocs.guides,
+      palette: [Entry.new(id: 'pages/specimen', name: 'pages/specimen.sp', path: 'pages/specimen.sp',
+                          load_path: '/?load=:id&ui=:ui', status: 'ok', refusal: nil, here: false)],
+      ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == Uis.default } },
+      ui: Uis.default,
+      word_count: 64, convention_count: 38, promise_count: 32, measured: '2026-09-17',
+      words_count: 64, pages_count: PAGES.size
+    }
+    case page
+    when 'index'
+      base.merge(title: 'Studio', source: "page \"Studio\"\n  heading \"Hello\"\n",
+                 editor_title: 'Write .sp Code', data: '', loaded: nil,
+                 data_note: StudioDocs::DATA_NOTE)
+    when 'docs'
+      base.merge(title: 'Docs: badge', contract: 'No contract.',
+                 implementation: 'No implementation.', examples: [],
+                 source: "page \"Try: badge\"\n", editor_title: 'Try it: badge',
+                 data: '', data_note: StudioDocs::DATA_NOTE)
+    when 'guide'
+      base.merge(title: 'Guide: PRIMER', content: 'A **guide** page.')
+    else
+      # `StudioStatus.canned` builds real `Result`s: the page asks each for
+      # `name`, `state` and `fenced`, so a plain hash would not answer — and
+      # inventing a second shape here is the drift this method exists to stop.
+      base.merge(title: 'Status', **StudioStatus.canned_locals)
+    end
+  end
 
   # The dashboard's stable first queue item — dan's ruling (2026-09-15): the
   # docs teach a stable shape, so the sandbox answers with a sample rather
@@ -190,17 +303,22 @@ module StudioPages
       # Rendered standalone, the card's subject is the page — so the
       # account's own fields are the locals, not a wrapper around them.
       Fixtures.portfolio.accounts.last.to_h
-    when 'studio/views/index.sp'
-      { source: "page \"Studio\"\n  heading \"Hello\"\n", palette: [],
-        editor_title: 'Write .sp Code', data: '', words: [], guides: [] }
-    when 'studio/views/docs.sp'
-      { title: 'A word', contract: 'No contract.', implementation: 'No implementation.',
-        examples: [], source: "page \"A word\"\n", editor_title: 'Try it: word',
-        data: '', data_note: StudioDocs::DATA_NOTE, words: [], guides: [] }
-    when 'studio/views/guide.sp'
-      { title: 'A guide', content: 'A **guide** page.', words: [], guides: [] }
-    when 'studio/views/status.sp'
-      { title: 'Status', overview: 'All legs green.', results: [], words: [], guides: [] }
+    # Every UI's own pages answer the same canned locals: a UI added tomorrow
+    # joins the census without a provider of its own, which is what keeps the
+    # census complete rather than merely long. The studio's pages are each
+    # UI's own sandbox, so one provider answers them all.
+    #
+    # The payload is plain — strings, arrays, nil — because it round-trips
+    # through JSON before the page sees it. `docs` is deliberately *not* here:
+    # it is an OpenStruct the render path supplies, and `plainify` would turn
+    # it into nil and take the whole payload down with it.
+    # A UI's own pages answer the locals that UI's frame draws on: the shelf
+    # (a canned pair of entries, so the census does not recurse into the census
+    # it is taking), the vocabulary and the guides, and the vitals. One home
+    # for these, because the census and the gate both render UI pages and a
+    # second copy is where the two would drift.
+    when %r{\Astudio/uis/(?<ui>[a-z]+)/views/(?<page>[a-z_]+)\.sp\z}
+      ui_locals(Regexp.last_match(:page))
     when 'examples/roth/views/controls.sp', 'examples/roth/views/partials/report.sp'
       roth_locals
     when 'examples/dashboard/views/triage.sp'
@@ -249,13 +367,28 @@ module StudioPages
   # keys their strings — the JSON the data slot parses back into the same
   # locals. Anything with no plain shape becomes nothing rather than a
   # disguise.
+  # A value as plain data, for the JSON slot. Every branch that can be
+  # serialized is named; an unnameable value is a defect in the ledger, not
+  # something to launder into `nil` — nil used to take the *whole* payload
+  # down with it, because `JSON.pretty_generate` then raised and the rescue
+  # returned an empty string. A page would report "this page has no title"
+  # while its provider sat right there with the title in it.
   def self.plainify(value)
     case value
     when Hash then value.to_h { |k, v| [k.to_s, plainify(v)] }
     when Array then value.map { |v| plainify(v) }
     when Struct then plainify(value.to_h)
     when Date, Time then value.iso8601
+    when Symbol then value.to_s
     when String, Numeric, TrueClass, FalseClass, NilClass then value
+    else
+      # An OpenStruct, or anything else that answers `to_h` — the docs payload
+      # is one, and it rides in the ledger's canned answers.
+      if value.respond_to?(:to_h)
+        plainify(value.to_h)
+      else
+        raise ArgumentError, "#{value.class} is not plain data — the ledger must name a shape JSON can carry"
+      end
     end
   end
 
@@ -318,7 +451,7 @@ module StudioPages
   # own first line; the location and the sentence join it when the error
   # knows them. The final string exists only for the refusal page failing,
   # which must not be able to break the studio.
-  def self.refusal(error)
+  def self.refusal(error, library: nil)
     complaint, where, line =
       if error.is_a?(SlimPickins::Error)
         [error.message.lines.first.strip,
@@ -327,10 +460,10 @@ module StudioPages
       else
         ["#{error.class}: #{error.message.lines.first.strip}", nil, nil]
       end
-    SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'refusal.sp')),
+    SlimPickins.render(File.read(File.join(ROOT, 'studio', 'shared', 'refusal.sp')),
                        path: 'refusal.sp',
                        locals: { title: 'Refusal', complaint: complaint, where: where, line: line },
-                       library: library)
+                       library: library || self.library)
   rescue StandardError
     "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
   end
@@ -341,12 +474,13 @@ module StudioPages
   # pre-wrap monospace the pane has always worn. This is the client API
   # the controller grows against: a future pane joins as a key, not a
   # change.
-  def self.render_json(source, data = nil)
+  def self.render_json(source, data = nil, library: nil)
+    library ||= StudioPages.library
     visual = begin
       SlimPickins.render(source, path: 'playground.sp',
                          locals: playground_locals(data), library: library)
     rescue StandardError => e
-      refusal(e)
+      refusal(e, library: library)
     end
     { visual: visual, source: raw_page(visual) }
   end
