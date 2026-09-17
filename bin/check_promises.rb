@@ -29,7 +29,7 @@ SlimPickins::Library.builtin
 
 # --- what the living vocabulary declares -------------------------------------
 live_declared = Hash.new { |h, k| h[k] = [] }
-SlimPickins::Word.registry.each do |word, _klass|
+SlimPickins::Promises.language_words.each do |word|
   contract = SlimPickins::CONTRACTS[word]
   next unless contract
 

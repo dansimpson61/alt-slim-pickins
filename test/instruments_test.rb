@@ -21,9 +21,10 @@ class InstrumentsTest < Minitest::Test
   # --- the promise ledger -----------------------------------------------------
 
   # The debt is pinned deliberately. When a ruling lands — `if:` implemented, or
-  # `PrimitiveShapes` deleted — this list changes *on purpose* and the change is
-  # the record that a promise gained a reader or stopped being made.
-  KNOWN_UNREAD = %i[if PrimitiveShapes boolean?].freeze
+  # `boolean?` deleted — this list changes *on purpose* and the change is the
+  # record that a promise gained a reader or stopped being made. It held three
+  # until 2026-09-17, when dan ruled `PrimitiveShapes` deleted.
+  KNOWN_UNREAD = %i[if boolean?].freeze
 
   def test_the_ledger_records_exactly_the_promises_we_know_are_unread
     assert_equal KNOWN_UNREAD.sort, SlimPickins::Promises.outstanding.map(&:name).sort,
@@ -39,7 +40,7 @@ class InstrumentsTest < Minitest::Test
   end
 
   def test_the_ledger_covers_every_live_declared_modifier
-    live = SlimPickins::Word.registry.flat_map do |word, _klass|
+    live = SlimPickins::Promises.language_words.flat_map do |word|
       SlimPickins::CONTRACTS[word]&.modifiers.to_a
     end.uniq
     ledgered = SlimPickins::Promises::ALL.map(&:name)
@@ -111,11 +112,11 @@ class InstrumentsTest < Minitest::Test
   end
 
   def test_a_word_that_declares_an_inference_is_registered
-    declaring = SlimPickins::Word.registry.select do |word, _klass|
+    declaring = SlimPickins::Promises.language_words.select do |word|
       contract = SlimPickins::CONTRACTS[word]
 
       contract && (contract.id || contract.label)
-    end.keys.sort
+    end.sort
 
     assert_equal %i[card section], declaring,
                  'the words declaring an inference changed; the register was written for card and section'

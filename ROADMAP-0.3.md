@@ -425,12 +425,14 @@ with nothing to load.
   (`SlimPickins::PRIMITIVES == {}`), superseded when `words.rb` moved from
   `# key: value` comment preambles to the `contract` macro — yet its comment
   still calls itself "the primitives' home", and nothing else references it.
-  Also committed: a leftover probe in `builder.rb:62-65` that `puts`es instead
+  **Disposed 2026-09-17:** the promise ledger found it and dan ruled it deleted;
+  the finding below is the record, not the state. The rest of F5 — the leftover
+  probe in `builder.rb:62-65` that `puts`es instead
   of raising for `tabs`; three `def ___dummy` stubs (`words.rb:156,278,489`);
   and unindented method bodies across `words.rb`, `word.rb:13-21`,
   `compilation.rb:22-46`, `partial_word.rb`, `library.rb`, `generator.rb`, all
-  from the 2026-09-05 unification. The project's own constraint 2 says it must
-  stay lovely to read, and no checker reads formatting.
+  from the 2026-09-05 unification — stands. The project's own constraint 2 says
+  it must stay lovely to read, and no checker reads formatting.
 - **F6 — comments describing superseded states.** `studio/views/partials/try_it.sp:1-5`
   still says the two Render buttons are deliberate and that the burr's
   resolution "when it lands" will obviate them; win 7 landed it and cut them,

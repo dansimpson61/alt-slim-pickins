@@ -460,8 +460,10 @@ convention-heavy word that is *worse*) are named rather than smoothed over.
 
 ## Round record (2026-09-17)
 
-**Stops 1, 3 and 4 taken. Stops 2 and 5 not taken, and named as owing.** The
-gate is green before and after, with no vital moved.
+**All five stops taken**, in two sittings on the same day: the instruments and
+the audit first, then the three suspects, the transparency measure, the `if:`
+decision aid, and one ruled subtraction. The gate is green before and after and
+no vital moved.
 
 ### What landed — the two instruments, as ruled
 
@@ -578,20 +580,153 @@ fault is an unmanaged list. So repetition is a reliable sign of a wrong
 abstraction, and *silence* is the sign of cause D. Two different tells for two
 different causes; the map found both.
 
-### Stops 2 and 5 — not taken
+### Stop 2 — the three suspects, interrogated
 
-Named as owing, not quietly dropped.
+**Variant: it is a word, and the language should refuse one it cannot style.**
+The concept is linguistic — a specifier, an adjective on a noun ("a *warning*
+note"). What is machine-shaped is not the variant but its **openness**: the
+contract declares that a name slot exists (`name: :variant`) and never which
+names are legal, so `badge banana` renders `class="badge badge--banana"` — an
+element with no rule, silently unstyled — while a misspelled *word* fails
+loudly on its line. The stylesheet already knows which variants exist
+(`check_styles` computes every class a rule defines), so the honest rule is
+available and cheap: **a variant a page says must be one the stylesheet can
+style.** That keeps the set open to apps — an app that adds a variant adds its
+rule in the same breath — and closes the silent case. Verdict: cause D, not
+cause C; a source of truth (which variants exist) that nothing manages.
 
-- **Stop 2, the three suspects.** Its evidence is ready and its verdicts are
-  half-written: `format_for` is needed *only* where a word stopped being said
-  (measured), the variant question turns on `badge banana`, and the three
-  attribute hashes are distinguishable. What is missing is the paper work —
-  pricing the alternatives for `label_for`/`format_for` and the verdict per
-  hash — and that is judgement work that deserves a clear head, not the end of
-  a long round.
-- **Stop 5, transparency measured.** Needs a sampling design (which words, what
-  counts as convention vs declaration vs escape) before it can produce a
-  number. Not started.
+**`label_for` / `format_for`: keep them, and let the register say when they are
+needed.** The mechanism is sound — three levels of precedence, each owned by
+whoever knows most — and the measurement explains rather than condemns it: the
+app's dictionary exists *only* where a word stopped being said (`money
+.market_value` needs no answer; `column market_value` needs one). Four
+alternatives, priced on paper:
+
+| Alternative | Costs the app | Buys the page | Removes cause A2? |
+|---|---|---|---|
+| keep the name-keyed table (today) | a parallel dictionary keyed by attribute name | nothing to learn; a plain Struct still works | no |
+| **value-shaped** — the value knows it is money | a type per concept, wrapping at the boundary | the language asks the *thing*, never a table | **yes** |
+| **word-carried** — the page says `money` | nothing | already works (`as: money` is this) | partly — it moves the choice to a symbol enum (cause C) |
+| **domain-noun** — the app's own noun presents itself | a presenter per domain noun | the app's vocabulary does the talking | yes, at a higher price |
+
+The evidence does not contradict dan's 2026-08-30 ruling that `label_for` is
+*not onerous*; it explains why the seam exists at all. The register now records
+which words need an answer, which is the visibility fix available today. The
+value-shaped path is the only one that removes cause A2 rather than managing it,
+and it is priced here rather than recommended.
+
+**The three attribute hashes, separated:**
+
+| Hash | What it is | Verdict |
+|---|---|---|
+| the **node attrs hash** (`[:metric, {name:, label:, …}, []]`) | the IR a second interpreter would walk | **legitimate interface** — LORE already argues a word must not carry what the tree can show. Undeclared keys, but a schema per node kind would be a second home for the contract |
+| the **kwargs hash** (23 × `@kwargs.key?(x) ? @kwargs[x] : nil`) | the word's own arguments, delivered as a hash | **plumbing** — 23 copies of one mechanism is cause B, not a language question; the fix is a helper in `words.rb`, not a page-facing feature |
+| the **contract's keyword declaration** (68 arguments, 33 booleans) | the word declaring itself | **accent** — a flag language (`content: true`) for what means "this word takes content". Real, and *not* worth rewriting now: it is read by word authors, not pages, and the register's better home touches the same files for more |
+
+### Stop 5 — transparency measured
+
+The design, chosen so that the numbers mean something: every word is classified
+by **how it is written**, which is the one thing about transparency that can be
+counted without taste.
+
+| How it is written | Words | Declared modifiers | Corpus uses |
+|---|---|---|---|
+| **composed** — written in the language (`.sp`) | 22 (34%) | 13 — **0.59 each** | 134 — 6.09 each |
+| **shaped** — Ruby, but only declarative inheritance (`Encloses`, `Says`, …) | 15 (23%) | 9 — **0.60 each** | 84 — 5.60 each |
+| **bespoke** — Ruby with its own `evaluate` doing real work | 27 (42%) | 23 — **0.85 each** | 211 — **7.81 each** |
+
+Two readings, and the second is the one the evidence supports.
+
+**The hypothesis holds on flags:** the words written in the language declare
+**42% fewer modifiers each** than the bespoke ones (0.59 against 0.85). A word
+that leans on convention asks less of the page. That is dan's first reading,
+measured.
+
+**But the corpus leans hardest on the bespoke words.** Of the twelve most-used
+words, seven carry Ruby (`field` 28 uses, `column` 25, `when` 15, `choose` 15,
+`page` 14, `box` 14, `metric` 13) and four are composed (`section`, `text`,
+`note`, `item`). So the escapes are not hacks sitting where a convention should
+be — they are load-bearing, and the most-used word in the whole language is
+`field`, whose four inferences and three modifiers are exactly where the Ruby
+is. dan's hedge — *"or it may be that better words make better use of escape
+hatches and exceptions"* — is the better reading of this measurement, and the
+naive conclusion ("promote everything to `.sp`") is refuted by the same table.
+
+Honest limits: this counts *structure* — origin, declared flags, uses — not
+quality. It cannot say a word is well named, well shaped or pleasant, and it
+does not try.
+
+### The `if:` decision aid — precisely how `if:` and `when` differ
+
+dan asked to see the difference before ruling. Here it is, with a prototype
+rather than an opinion.
+
+**What each is for.** They are not two spellings of one thing; they answer
+different questions.
+
+| | `if:` | `choose` / `when` / `otherwise` |
+|---|---|---|
+| the question | *should this one sentence exist?* | *which of these alternative contents is the true one?* |
+| shape | a modifier on a sentence | a word whose children are branches |
+| the silent case | nothing — the sentence simply is not there | `otherwise`, which has its own children |
+| cost in the page | none; it rides the existing line | a block and a level of indentation |
+| picks | one sentence | exactly one branch — the first truthy `when`, else `otherwise` |
+| renders | the sentence, or nothing | the chosen branch's children, in the choose's place |
+
+**The rule for choosing:** *does the case where it is false have something to
+say?* If no, `if:`. If yes, `choose`. And `empty` is the third: when the
+situation is "the collection I name has nothing in it", neither is written at
+all — the situation is named.
+
+```text
+section accounts
+  empty "No accounts linked yet."          # the situation, named
+  each account
+    button primary, "Archive", if: .idle?  # one sentence, no alternative
+    choose                                 # the false case has content
+      when .archived?
+        note quiet, "Archived."
+      otherwise
+        note quiet, "Active."
+```
+
+**The prototype, measured in a throwaway process** (a single guard in the word
+dispatch; nothing on disk): `if: .show` renders with `show` true and suppresses
+with `show` false; a guarded word with children suppresses the **whole subtree**
+and the children never run; inside `each` the guard is **per row**, which is
+exactly the shape `choose` cannot express — LORE's win-3 record shows two
+independent rows needing two sequential `choose`s today.
+
+**What it would cost, and the trap it inherits.** Cost: one guard where words
+are dispatched. Trap: there is **no boolean literal**, so `if: false` is not a
+sentence a page can write — `false` arrives as the truthy symbol `:false` and
+the guard is skipped. `if:` therefore takes data (`.paid?`) or an app helper,
+never a literal. That is consistent with the language's morphology (a bare word
+is language, a dot is data) and it is still a trap worth naming.
+
+**The state today:** `when` works; `if:` does not, so every `if:` in
+`DESIGN.md`'s guessability fences renders its sentence unconditionally. The
+ruling (E4) is dan's and is still open.
+
+### The helper and the loader
+
+**The loader is deleted** (dan's ruling, 2026-09-17): `PrimitiveShapes` and
+`PRIMITIVES` are gone, the ledger is 32 promises rather than 33, and the record
+of what it was keeps its place in the code comment, this document, KERNEL.md's
+addendum and the ledger's own comment. What replaces it is what had already
+replaced it — the `contract` macro and the `expects` preamble, read by
+`CONTRACTS`.
+
+**`boolean?` — where it would be helpful, asked and answered.** It asks
+"is this value true or false?". The only place that question is live is
+`Inference.input_type`, which maps `true`/`false`/`nil` to `:text` — **inline,
+without calling the helper** — so `field done` over a boolean renders
+`<input type="text" value="true">`. The one use that would earn the helper its
+keep is a feature, not a fix: *a `field` over a boolean could infer a checkbox*
+— and that is not a call to the helper, it is a decision that `field` should
+render checkbox-shaped markup, which the `checkbox` word already owns. My honest
+answer to "where would it be helpful": **nowhere today.** It is recorded and
+waiting on its ruling rather than deleted.
 
 ### The round's own defect: a date measured once and re-quoted
 
@@ -632,8 +767,8 @@ rots in place, and a date is such a truth.
 
 | # | Decision | Options on the table | What would settle it | Who |
 |---|---|---|---|---|
-| E1 | What *is* a variant? | a word (closed; unknown refused) · an open enum (as today) · a word with a styled fallback | Stop 2's verdict; `badge banana` | dan |
-| E2 | Where the app answers by name | keep the channel and design it · value-shaped · word-carried · domain-noun | Stop 2's priced alternatives | dan |
+| E1 | What *is* a variant? | a word (closed; unknown refused) · an open enum (as today) · **a word the stylesheet can style — a variant with no rule is refused** | Stop 2's verdict: the defect is the silent fallback, not the variant | dan |
+| E2 | Where the app answers by name | **keep the channel, and let the register say when it is needed** · value-shaped (the only path that removes cause A2, priced in Stop 2) · word-carried · domain-noun | Stop 2's priced alternatives | dan |
 | E3 | Is `key: value` the right human form for configuration? | keep · a different form · numbers to the theme | Stop 1's modifier census and Stop 5's transparency split | dan |
 | E4 | `#` as a comment marker | respect quotes · a different comment rule · no page comments | the damage list | dan |
 | E5 | **Which sources of truth get registered and managed** | ~~the convention register · the promise ledger · …~~ **RULED (3): both instruments land, and both are held by a test** | — | ruled |
@@ -695,20 +830,44 @@ Today: 705 sentences, 64 words, 94 rules, 14 pages, 295 runs / 0 failures, 25
 affordances / 0 missing. A daytrip that closes with a moved vital has decided
 something.
 
-## Questions for dan — one left
+## The daytrip closes open — what is left for dan
 
-All five questions revision 2 asked are ruled (2026-09-17) and recorded above:
-cause D stands alone; the mechanical claim corrections are taken and the
-arguable ones listed; **both** instruments land; Stop 5 lands, *"else we act on
-the basis of our vague impressions (or most recent impressions)"*; two criteria
-are enough for now.
+All five stops are taken. Three questions are still his, and each now has its
+evidence in hand rather than its outline:
 
-What remains is not a question about the work — it is the gate on it:
+1. **`if:` — give it a reader, or strike it from the documents.** The decision
+   aid above shows precisely how it differs from `when`, proves the guard works,
+   and names the trap (no boolean literal). Today every `if:` in `DESIGN.md`'s
+   examples is a promise the language does not keep.
+2. **`Inference.boolean?` — delete it, or make `field` infer a checkbox.** The
+   second is a feature, not a use of the helper; asked where the helper would be
+   helpful, the honest answer is nowhere today.
+3. **E1 and E2**, whose verdicts and prices are in Stop 2 — a variant the
+   stylesheet cannot style should be refused; `label_for`/`format_for` should
+   stay, with the register as the visibility fix, unless the value-shaped path
+   is worth its ceremony.
 
-**Open it?** The daytrip runs when you say so. On opening, revision 3 stops
-being an outline and becomes the record the stops are written into, and the two
-ruled instruments are the first things that land.
+Two things are named but not ruled, and both are the *next* daytrip-sized piece
+rather than this one's: the register's real home (an `infers:` slot in each
+word's own file, generating the document as the five checkable bullets already
+are), and the accent that lives in the contract declarations — 68 keyword
+arguments, 33 of them booleans.
 
-And one thing that is yours alone and no stop can settle: **the name.** *The
-Accent* was mine; your answers have made it about transparency and the managed
-sources of truth, which the name does not carry.
+**Two proposals the round produced, each needing only a yes.**
+
+1. **`bin/check_card.rb` — the resume card's frontmatter, held by the gate.**
+   The colon-space that breaks `PROJECT.md`'s YAML bit again today, for the
+   **fourth** time; each previous time the "checker" was a human following RIF
+   step 4 from memory. A twelve-line leg that parses the frontmatter and names
+   the field it failed on would have caught all four, and it is exactly the
+   shape this daytrip is about — a truth that is currently held by remembering.
+2. **A one-line teardown in `test/partial_args_test.rb`.** That test registers a
+   temporary word declaring `tone:` and never removes it, so the shared registry
+   carries a modifier no vocabulary word declares for the rest of the process.
+   The suite is green either way, but it is order-dependent — which is how this
+   instrument went red on a modifier that exists in no page and no vocabulary.
+   The class was found and fixed once before (`vocabulary_partials_test`, LORE
+   2026-09-14); this is the second instance, so the fix belongs in the test.
+
+And **the name.** *The Accent* was mine; the work became about transparency and
+managed sources of truth, which the name only half carries.

@@ -43,42 +43,14 @@ module SlimPickins
     end
   end
 
-  # The Ruby primitives. The full vocabulary merges these with the shapes
-  # declared in lib/vocabulary's partials — each word's definition and its
-  # declaration live in one file, and this hash is the primitives' home.
-    module PrimitiveShapes
-    module_function
-
-    def load
-      source = File.read(File.expand_path('words.rb', __dir__))
-      blocks = source.scan(/((?:^[ 	]*#[^
-]*
-)+)[ 	]*def ([a-z_]+)/)
-      
-      blocks.to_h do |comment_block, word|
-        kwargs = {}
-        comment_block.lines.each do |line|
-          if line =~ /^[ 	]*#\s*([a-z_]+):\s*(.+?)\s*$/
-            key = $1.to_sym
-            value = $2
-            kwargs[key] = case key
-                          when :name, :inside, :speech, :subject then value.to_sym
-                          when :content, :gathers, :empty, :id, :label then value == 'true'
-                          when :shape then value.to_sym
-                          when :children, :parents then value == 'any' ? :any : value.split.map(&:to_sym)
-                          else value.split.map(&:to_sym)
-                          end
-          end
-        end
-        next nil if kwargs.empty?
-        kwargs[:parents] = [kwargs[:inside]] if kwargs[:inside] && !kwargs[:parents]
-        [word.to_sym, Contract.new(**kwargs)]
-      end.compact
-    end
-  end
-
-  PRIMITIVES = PrimitiveShapes.load.freeze
-
+  # The Ruby primitives' loader lived here until 2026-09-17. It read `# key:
+  # value` comment preambles above each `def` in words.rb; when words.rb moved
+  # to the `contract` macro, the loader kept reading the old spelling and
+  # returned an empty hash — silently, for as long as nobody looked. The promise
+  # ledger found it (`PRIMITIVES` had no reader, and could not have had one),
+  # and dan ruled the deletion rather than the revival. What replaces it is the
+  # registry: a word's contract is set by its own `contract` call or by its
+  # partial's `expects` preamble, and `CONTRACTS` reads whichever is there.
 
   # The shapes a vocabulary partial declares, as comment preambles at the top
   # of its file — the word's own file is the single source of what it is, and

@@ -140,12 +140,12 @@ module SlimPickins
                   read_by: ['lib/slim_pickins/generator.rb'], verdict: :read, note: nil),
 
       # --- the loaders: a declaration reader that may read nothing ------------
-      Promise.new(name: :PrimitiveShapes, kind: :loader, declared_by: [],
-                  read_by: [], verdict: :none,
-                  note: 'superseded when words.rb moved from `# key: value` ' \
-                        'comment preambles to the `contract` macro; the loader ' \
-                        'still reads the old convention and returns {} — ' \
-                        'PRIMITIVES is empty and nothing referenced it'),
+      # `PrimitiveShapes` was here until 2026-09-17. This ledger found it — a
+      # loader reading a comment convention that had moved, returning {} and
+      # referenced by nothing — and dan ruled it deleted. It is kept in the
+      # record rather than in the data: a promise that has been withdrawn is
+      # not a promise the language makes, and a ledger that went on listing it
+      # would be lying in the other direction.
       Promise.new(name: :VocabularyShapes, kind: :loader, declared_by: [],
                   read_by: ['lib/slim_pickins/contracts.rb',
                             'lib/slim_pickins/compilation.rb'], verdict: :read,
@@ -156,9 +156,12 @@ module SlimPickins
                   read_by: [], verdict: :none,
                   note: '`Inference.boolean?` is defined and called nowhere in the ' \
                         'repo — found while partitioning `Inference` for the ' \
-                        'convention register, and recorded here rather than ' \
-                        'deleted, because a helper with no caller is a finding ' \
-                        'and the daytrip does not get to fix findings')
+                        'convention register. Asked where it would be helpful ' \
+                        '(dan, 2026-09-17), the honest answer is nowhere today: ' \
+                        '`input_type` maps true/false to :text inline. The one use ' \
+                        'that would earn it is a feature — `field` inferring a ' \
+                        'checkbox — which the `checkbox` word already owns. ' \
+                        'Recorded, awaiting its ruling')
     ].freeze
 
     # The promises this ledger has no reader for. Named here so that "we know"
@@ -169,5 +172,19 @@ module SlimPickins
     def self.declared_modifiers = ALL.select { |p| p.kind == :modifier }.map(&:name)
 
     def self.universal = ALL.select { |p| p.kind == :universal }.map(&:name)
+
+    # The words that are the language's own: a vocabulary partial, or a class
+    # under `SlimPickins::Words`. **Not simply the registry** — in the
+    # one-process suite another test's temporary word is registered there
+    # (`test/partial_args_test.rb`'s `tone:`, found 2026-09-17 when this
+    # instrument went red for a modifier no vocabulary word declares), and the
+    # ledger's job is the language, not the process it happens to run in.
+    def self.language_words
+      partials = SlimPickins::Library.builtin.partials.keys.map(&:to_sym)
+      primitives = SlimPickins::Word.registry.select do |_word, klass|
+        klass.name.to_s.start_with?('SlimPickins::Words::')
+      end.keys
+      (partials + primitives).uniq
+    end
   end
 end

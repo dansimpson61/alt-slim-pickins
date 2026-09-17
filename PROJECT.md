@@ -2,21 +2,26 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened 2026-09-17 on dan's word. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row); BLUESKY.md followed on his ask for creative scoping; and his fourth answer set the deeper subject — transparency, and the managed sources of truth of sp's conventions and inferences. The daytrip's first round landed both instruments he ruled in. The promise ledger (33 promises, 3 with no reader — `if:`, `PrimitiveShapes`, `boolean?`) and the convention register (37 conventions across the four grades, the axiomatic one recording an absence), both green in the gate, both legs of the studio's status page (now six), both pinned by 11 new tests. Twelve mechanical claim corrections were taken; the arguable ones are named. Stops 2 and 5 are owing.
+status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened 2026-09-17 on dan's word and all five of its stops now taken. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on his ask for creative scoping; and his fourth answer set the deeper subject — transparency, and the managed sources of truth of sp's conventions and inferences. Landed since — the two instruments he ruled in (the promise ledger, 32 promises with 2 unread, and the convention register, 37 conventions across the four grades), both gate legs and both pinned by tests; the studio's status page now runs six legs; twelve mechanical claim corrections; one ruled subtraction (`PrimitiveShapes` deleted); and the analysis behind the remaining questions — the accent audit, the three suspects, the transparency measure, and a tested `if:` decision aid.
 kind: project
 last_touched: 2026-09-17
 next_step: >-
-  Stops 2 and 5 of DAYTRIP-0.3.0b are owing. Stop 2 (the three suspects —
-  variants, `label_for`/`format_for`, the attribute hashes) has its evidence
-  ready and needs paper work and dan's judgement; Stop 5 (transparency
-  measured) needs a sampling design before it can produce a number. Three
-  rulings are queued from the round: E4 (`if:` — give it a reader or strike it
-  from the docs), the dead `Inference.boolean?`, and `PrimitiveShapes`'
-  disposition. The register's better home — an `infers:` slot in each word's
-  contract, generating the document as the five checkable bullets already are
-  — is named in the daytrip's limits as the next step. And the studio on :4580
-  is running a four-leg boot; one restart from outside this session's sandbox
-  shows the six-leg status page.
+  Two rulings are dan's and are the only thing blocking the daytrip's
+  close. E4, `if:` — the decision aid in DAYTRIP-0.3.0b shows how it
+  differs from `when`, proves the guard works, and names the trap (no
+  boolean literal); the choice is to give it a reader or strike it from
+  the documents. And `Inference.boolean?` — delete it, or make `field`
+  infer a checkbox, which is a feature rather than a use of the helper.
+  Also worth his ruling, with evidence now in hand: E1 (a variant the
+  stylesheet cannot style should be refused) and E2 (`label_for` and
+  `format_for` stay, with the register as the visibility fix, unless the
+  value-shaped path is worth its ceremony). Two pieces are named as the
+  next daytrip-sized work rather than this one's: the register's real
+  home (an `infers:` slot in each word's own file, generating the
+  document), and the accent in the contract declarations (68 keyword
+  arguments, 33 of them booleans). The studio on :4580 still runs a
+  four-leg boot and needs one restart from outside this session's
+  sandbox.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

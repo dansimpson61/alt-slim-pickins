@@ -18,6 +18,10 @@
 
 require_relative '../lib/slim_pickins'
 require_relative '../lib/slim_pickins/conventions'
+# `Promises.language_words` — which words are the language's own rather than
+# whatever a test happened to register in this process. One home for that
+# question, shared with the promise ledger's checker.
+require_relative '../lib/slim_pickins/promises'
 
 here = File.expand_path('..', __dir__)
 problems = 0
@@ -63,11 +67,9 @@ end
 # --- 3. declared inferences are all registered ------------------------------
 # A word's contract can declare an inference: `id:` (the subject's id) or
 # `label:` (the app contract's label). Both are registered by name here.
-declared_inferences = SlimPickins::Word.registry.filter_map do |word, _klass|
+declared_inferences = SlimPickins::Promises.language_words.select do |word|
   contract = SlimPickins::CONTRACTS[word]
-  next unless contract
-
-  word if contract.id || contract.label
+  contract && (contract.id || contract.label)
 end.sort
 missing = declared_inferences - %i[card section]
 unless missing.empty?

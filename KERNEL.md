@@ -660,7 +660,10 @@ retires with them — and the council's refactor (2026-09-10) added the
 - The census instrument is vestigial: `PrimitiveShapes.load` scans comment
   blocks over `def`, but words.rb declares contracts with the `contract`
   macro — PRIMITIVES is empty, and CONTRACTS reads the registry lazily. The
-  count's one home is now the registry.
+  count's one home is now the registry. **Resolved 2026-09-17:** the promise
+  ledger found it — a loader with no reader, and no way to have one — and dan
+  ruled it deleted; `PrimitiveShapes` and `PRIMITIVES` are gone, and this line
+  is the record. See `DAYTRIP-0.3.0b`.
 - The graph is broken: `bin/word_graph.rb` requires `bin/word_graph_template`,
   which was never committed and is gone (LoadError). A picture that cannot
   be generated cannot drift-proof anything. The repair is to embed the
