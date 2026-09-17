@@ -2,17 +2,19 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15. A 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row — up from KERNEL.md's 4.73 / 0.22) in ROADMAP-0.3.md's session-start section. dan then ruled the three proposed playground wins parked for later and asked for creative scoping instead — "bluesky head work, not coding" — which landed as BLUESKY.md (the studio's measured landscape, the playground as a workbench, four candidate shapes for a style language, the four grades of inference and the missing axiomatic one). Nothing was fixed and nothing was built; the findings and the designs wait on their own demand.
+status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15, then a 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row — up from KERNEL.md's 4.73 / 0.22). dan then parked the three proposed wins and asked for creative scoping, not coding — BLUESKY.md (the studio's measured landscape, four candidate shapes for a style language, the four grades of inference) — and then, on reading it, set the deeper subject. That subject is human language, convention and inference as sp's reason to exist, machine language's remnants persisting in sp, transparency as the criterion for what lands, and the sources of truth of the conventions and inferences as the most important tools for shaping sp's future. Two daytrip outlines await his ruling — DAYTRIP-0.3.0b (revision 2, leading; its analysis has run and found a fourth cause) and DAYTRIP-0.3.0a (held, per his word). Nothing built, nothing fixed.
 kind: project
 last_touched: 2026-09-16
 next_step: >-
-  dan reads BLUESKY.md and rules the next move — W1/W2/W3 stay parked in
-  ROADMAP-0.3.md with their consumers named, and the bluesky's own open
-  questions (Part 5) are the alternative: whether a page says style at all,
-  whether `tag` closes before a designed style language exists, whether the
-  studio becomes one surface or stays two. The round then lands as one
-  winnable victory: implement, verify green, commit, card, lore. Phase 0
-  stays open until dan judges it.
+  dan rules on DAYTRIP-0.3.0b: whether the fourth cause (an unmanaged
+  source of truth) stands apart from the third (a wrong abstraction);
+  whether the 28 claims the documents make against the tree are
+  corrected in this daytrip or only listed; which register lands first
+  (the convention register or the promise ledger); whether Stop 5
+  (measuring transparency in words) is worth a stop or is taste; and
+  whether a third criterion exists beyond human shape (C1) and
+  transparency (C2). Until he rules, the daytrip is an outline and
+  nothing is taken; 0.3.0a stays held for reading afterwards.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

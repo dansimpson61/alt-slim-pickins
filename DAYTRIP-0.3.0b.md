@@ -1,24 +1,25 @@
-# DAYTRIP-0.3.0b — outline, for discussion
+# DAYTRIP-0.3.0b — outline, revision 2, for discussion
 
-**Status: an outline only. Not opened.** dan's two observations of 2026-09-16,
-after reading BLUESKY.md, and the outline they ask for. It becomes a daytrip on
-his word, and it moves when he does. Nothing here is taken.
+**Status: an outline only. Not opened.** Revision 1 answered dan's first two
+observations; this revision folds in his five answers of 2026-09-16 and the
+analysis they asked for. Nothing here is taken.
 
-Proposed name: **The Accent** — the machine language a speaker of a human
-language still carries. His phrase for the goal is fluency, not purity. Rename
-at will; the file follows the house convention (roadmap 0.3, Phase 0, second
-jaunt).
+Proposed name: **The Accent** — then made to serve a larger subject, which his
+fourth answer named: **transparency, and the managed sources of truth of sp's
+conventions and inferences.** Rename at will.
 
 ---
 
-## The brief, in his terms
+## The brief
+
+**His observations (2026-09-16):**
 
 > **1.** Human language and its roots in magic, conventions and inference are
 > the central truths that distinguish sp — that *determined the need for sp*,
 > because Slim (and all the others) and Tailwind (and all the others) have
-> other priorities. I began to identify things we could make real **right now**
-> that would be helpful not just for the current roadmap but **essential for
-> working with sp forever**.
+> other priorities. I began to identify things we could make real **right
+> now** that would be helpful not just for the current roadmap but **essential
+> for working with sp forever**.
 >
 > **2.** We observe — and despise — machine language creeping through tools
 > intended for humans to use proficiently and fluently. We see it in HTML and
@@ -28,320 +29,416 @@ jaunt).
 > grow beyond it now. Does that include variants and `label_for`, `format_for`?
 > Does it include our hashes of attributes? What does that include?
 
----
+**His answers (2026-09-16), which this revision is built on:**
 
-## What a daytrip is, and what is new here
+1. On the criterion: *"That sounds correct and should be demonstrable. Is that
+   the sole criterion? Maybe! But we should be aware that there may be more or
+   more may emerge."*
+2. On the three causes: *"Your analysis can answer this, at least for the
+   language in its current state."*
+3. On the suspects: *"We hypothesize rationally and test empirically, aware
+   that our world is not strictly deterministic, rational, or consistent,
+   especially when we are working with human beings, perception, intent, and
+   preference. Things change, sometimes irrationally. We just want to be alert
+   to what we think is important and aware that as things change we may change
+   with them."*
+4. On what lands: *"What lands are things that make the language
+   **transparent**. Some words are better than others and that may be because
+   they rely more on conventions and less on hacks and kludges, escape hatches
+   and exceptions. Or it may be that better words make better use of escape
+   hatches and exceptions. **Transparency is our friend.** Outdated primers and
+   grammars, etc., would work against transparency and against us. **The
+   sources of truth of our conventions and inferences may have emerged as the
+   most important tools we have for shaping the future of sp, so those should
+   be apparent, manageable, and managed.** This is how we avoid your three
+   failure modes and institute your grades of inference."*
+5. On `0.3.0a`: *"Let's hold 0.3.0a to see what's still useful after
+   `0.3.0b`."*
 
-The genre holds: a number from nobody, both eyes on the ground in front of the
-feet, and it does not advance the project's question. Two things differ from
-every daytrip so far.
-
-**It audits rather than repairs.** Stop 1 fixes nothing, by design. What this
-daytrip produces is a classification with counts behind it, a set of paper
-alternatives, and a handful of permanent instruments.
-
-**It is allowed to land instruments — and only instruments.** A daytrip that
-restores a broken gate changes what the project can do (DAYTRIP.md, Stop 1, did
-exactly that). An *instrument* is the same kind of thing: it makes an existing
-claim true or a hidden truth visible, it adds no vocabulary, it does not move a
-vital, and it is itself held by a test. That is the whole of what this daytrip
-may build. Anything that decides a question — a style word, a new spelling, a
-fixed remnant — is out.
+**Answer 4 is the one that moved this document's centre.** An accent audit is
+an inventory; a register of sources of truth is an instrument. The audit is now
+the *means*, and the register is the *end*.
 
 ## The one argument
 
-**sp exists because a page should speak human language about presentation; the
-project is now about to teach it the largest vocabulary it has ever learned —
-style — and a language that cannot hear its own accent will learn the machine's
-again.** The audit is the precondition for that work, and the instruments it
-names are the ones every future session needs whether or not the style language
-ever happens.
+**sp exists because a page should speak human language about presentation; its
+magic is inference and convention; and the truths those conventions rest on are
+today the least managed things in the repository — spread across 58 sites in
+seven files, enumerated nowhere, checked by nothing, while the grammar, the
+contracts, the classes and the theme are each held by a checker in both
+directions.** A language that cannot see its own conventions cannot stay
+transparent as it grows, and it is about to grow its largest vocabulary ever.
 
 ## The question
 
-> **Where does sp still speak machine, what is each remnant doing there and why
-> does it persist — and which instruments, essential to a language of intent
-> forever, can be made real now?**
+> **Where does sp still speak machine, and why — and which of its sources of
+> truth can be made apparent, manageable and managed now, so that its
+> conventions and inferences stay transparent as the language grows?**
 
-## The hypothesis, so it can be argued with
+## The criterion register — plural, and expected to grow
 
-Two claims, both falsifiable, and the stops exist to test them.
+His answer 1 is taken as written: one criterion is not a claim to be the only
+one. So the criteria are held in a register, and adding one is meant to be
+cheap.
 
-> **H1 — Remnants persist for one of three reasons, and the reasons take
-> different work to answer.**
->
-> - **Cause A — inference took over.** The page stopped saying a word, so the
->   app had to answer in the word's place, through a channel keyed by the
->   attribute's identifier. The cost moved off the page, where it would have
->   been visible, and onto the app, where it is not.
-> - **Cause B — the abstraction is wrong.** A composition is wearing a
->   primitive's clothes. The tell is duplication.
-> - **Cause C — the host's grammar leaked.** Ruby, HTML or CSS decided a
->   spelling the language would not have chosen: a hash, a sigil, a boolean
->   flag, a comment marker.
->
-> **H2 — the accent is thickest exactly where the abstraction is wrong.** The
-> places where machine language is repeated are the same places a word is
-> doing two jobs.
+| # | Criterion | Test | Status |
+|---|---|---|---|
+| C1 | **Human shape** | Does the page expose the machine's structure where a speaker would point at a thing? | adopted, provisional |
+| C2 | **Transparency** | Does it make a truth of the language *apparent* to the person using it? (his answer 4 — the criterion for what *lands*) | adopted |
+| C3 | *(expected)* | — | to emerge |
 
-If H1 and H2 hold, the audit is not cosmetic: it is an index of the language's
-real faults, in the language's own handwriting.
+A finding must say which criterion it scores against, and a finding that scores
+against none is welcome rather than suppressed — that is how a third criterion
+arrives.
 
 ---
 
-## The evidence already in hand
+## The analysis — his second answer, answered
 
-Measured 2026-09-16 against the tree at `2cb0520`, so the outline is not a
-guess. Coverage stated: the whole `.sp` corpus (`pages/`, `examples/`,
-`lib/vocabulary/`, `studio/`), the 64 registered words, and the runtime's own
-source.
+The causes were a hypothesis (H1). They have now been run against the
+inventory, and the analysis finds a fourth. This is the demonstration that the
+criterion is demonstrable.
 
-| What | Count | Why it matters |
+### Cause A — inference took over, and it splits in two
+
+| | What it is | Evidence | Accent? |
+|---|---|---|---|
+| **A1 — derivable** | the answer is derivable from what the language can already see: the tree, or the value's shape | heading depth from nesting; `card`'s id from its subject; doctype, head, title and layout from `page`; input type and step from the value's class; numeric alignment | **none.** Nothing must be asked, so no channel is needed. These are pure wins |
+| **A2 — must be asked** | the answer is *not* derivable, so it must be asked — and the only channel the language has for asking is **a name** | `format_for(attribute)`: `money .market_value` → `$1,284,506` with no app answer; `column market_value` → `$1,284,506` with it, `1,284,506` without. Same shape for `label_for`, and for the `as:`/`type:` overrides that exist only because a word did not say it | **yes — this is where the accent enters** |
+
+> **The rule the split yields:** inference is transparent while it can *derive*
+> its answer; it becomes machine language the moment it must *ask* — because
+> asking means naming. A1 is invisible and free. A2 is the whole of cause A's
+> cost, and it is why an app keeps a dictionary keyed by attribute name.
+
+### Cause B — the abstraction is wrong (a composition wearing a primitive's clothes)
+
+The tell is duplication, exactly as KERNEL.md found in the Generator.
+
+| Site | Count | What it says |
 |---|---|---|
-| Words taking `name: :attribute` (an identifier passed as *data*) | **11 of 64** | the single largest machine-ism in the vocabulary; each is `subject.fetch(name)` in Ruby, unsayable in the language — KERNEL.md's keystone |
-| `@kwargs.key?(x) ? @kwargs[x] : nil` in `words.rb` | **23** | a hash interrogated by key, 23 times in 528 lines; the Ode's "boilerplate that buries the one line that differs" |
-| `maps content: :body` declarations | **8 identical** | one decision with eight homes — and the eight are exactly KERNEL.md's non-orthogonal atoms |
-| `expects` keyword arguments across the 22 vocabulary partials | **68**, of which **33 booleans** | the language's own declaration files half-speak flags: `content: true` |
-| Modifier arguments a page writes, by kind | **134** — 89 bare names, 20 quoted, 17 data, **8 numbers** | the page surface is mostly linguistic; numbers are rare but real (`columns: 3`, `step: 0.01`, `rows: 4`) |
-| Parenthesised argument handling in `Transform#split_args` | **0 consumers** (the 4 corpus `(`s are inside strings) | machine machinery in the lexer carried for nobody |
-| Node kinds the Generator special-cases | **9**, plus ~30 named methods | the internal IR — machine language a page never says |
-| `label_for` / `format_for` needed | **only where the word is not said** | `money .market_value` → `$1,284,506` with no app answer; `column market_value` → `$1,284,506` with `format_for`, `1,284,506` without |
-| An unknown *variant* | **silently accepted and unstyled** | `badge banana` renders `class="badge badge--banana"`; an unknown *word* fails loudly — the asymmetry is the finding |
-| `#` inside a quoted string | **destroys the sentence** | `note "Total # 1"` is a `SyntaxError`; the comment stripper eats the author's text |
+| `@kwargs.key?(x) ? @kwargs[x] : nil` in `words.rb` | **23** in 528 lines | every word hand-plucks its own arguments; the abstraction has no declared-argument mechanism |
+| `maps content: :body`, written out | **8 identical** | one decision, eight homes — and the eight are KERNEL's non-orthogonal atoms |
+| Words that pass an identifier as data | **11 of 64** | each one calls `subject.fetch(name)` by hand; a missing primitive, not a missing word |
+| `<div class="field">` in the Generator | **4 copies** | KERNEL's own example of a composition wearing a primitive's clothes |
 
-Two of those rows are the daytrip in miniature. `format_for` exists *because*
-inference replaced the word — the page stopped saying `money`, so the app had to
-answer by name. And `#` is the machine's comment marker destroying what a human
-wrote.
+### Cause C — the host's grammar leaked
+
+`key: value` (a Ruby hash, and the language's only colon); bare `true`/`false`/
+`nil` arriving as truthy symbols (so `required: false` means required); `#` as a
+comment marker that **eats the author's text** (`note "Total # 1"` is a
+`SyntaxError`); the paren machinery in `split_args` with **zero consumers**;
+`expects content: true` (33 of its 68 keyword arguments are booleans); the
+`@kwargs` idiom; symbol enums (`as: money`, `type: email`).
+
+### Cause D — the source of truth is unmanaged *(found by this analysis)*
+
+His second answer asked whether there was a fourth cause. There is, and his
+fourth answer had already named it. **D is a truth with a second home that
+nobody maintains** — distinct from B, where two homes exist *by design* because
+the abstraction is wrong.
+
+| Site | The truth | Its unmanaged second home |
+|---|---|---|
+| `PrimitiveShapes` / `PRIMITIVES == {}` | what a primitive word declares | a loader still reading a comment convention that moved to `contract` macros |
+| `%i[if class id]` in `contracts.rb:242` | which modifiers are universal | three permissions, zero readers |
+| the word census | how many words the language has (**64**) | five documents saying 53 or 50 — **8 mentions** |
+| `try_it.sp`'s burr comment | why the editor once had two buttons | a second copy of a decision that `editor_form.sp` already records |
+| `markdown.rb:166` | whether alignment colons render | a comment the code beside it contradicts |
+| `VOCABULARY.md`'s `infers` slot | what each word infers | **50 bullets for 64 words**, prose, read by no checker |
+| the conventions themselves | what the language decides when a page is silent | **58 sites across 7 Ruby files** — enumerated nowhere |
+
+### Provisionality, per his third answer
+
+The four causes are the best rational account this session can produce, and the
+register below is a picture of what we currently think is important. The world
+this language is for — human intent, perception, preference — is neither
+deterministic nor consistent, and preferences change, sometimes irrationally.
+So: each cause carries its evidence, each entry carries a date, and the test of
+a cause is that it can be *refuted by a case*, not that it feels right. If a
+fifth cause emerges, or a cause stops earning its place, the register changes
+and we change with it.
+
+---
+
+## Why D is the one that matters
+
+dan's fourth answer, made operational. The three failure modes BLUESKY named:
+
+1. **A convention the reader does not share** is not magic, it is superstition.
+2. **A convention that fires invisibly** cannot be corrected, because nobody
+   knows it fired.
+3. **A convention that cannot be overridden** is a trap.
+
+And the four grades of inference:
+
+| Grade | Source of truth | Managed today |
+|---|---|---|
+| **structural** — the tree | `Transform`, `Builder`, `Generator` | mostly (check_grammar, check_styles) |
+| **shape** — the value's class | `Inference` | yes (tests) |
+| **domain** — the app | `CONTRACT.md`, `label_for`/`format_for` | partly (contract_test; *which* words need an answer is not held) |
+| **axiomatic** — the design | `:root`, 53 roles | the *source* is managed superbly (no unthemed literal) — and it has **no voice at all** |
+
+All three failure modes are failures of the same thing: **an unmanaged source of
+truth.** A convention that lives in one place, is enumerated, is checked, and
+shows its override cannot be superstition (it can be looked up), cannot fire
+invisibly (it is registered), and cannot be a trap (its override is documented
+beside it). That is the whole argument that the *register* is the instrument,
+and the accent audit is just how we find what belongs in it.
+
+And the last row carries the surprise that ties this document to BLUESKY's
+style question: **the axiomatic grade's source of truth already exists and is
+the best-managed thing in the repository — and nothing can speak it.** A style
+language, on this reading, is not a new vocabulary bolted onto sp. It is
+**giving the axiomatic grade its voice** — and per cause A2, a voice that says
+*a name* is exactly the wrong voice, which is why a role vocabulary must be
+words the theme owns rather than symbols and numbers a page holds.
+
+---
+
+## The evidence: two registers this daytrip would complete
+
+**Register 1 — the sources of truth, graded.** The table above is the start.
+The stop completes it for every truth the language holds: grammar, vocabulary,
+contracts, presentation, theme, conventions, app contract, and the documents'
+claims about the code. Each graded **apparent** (can a person find it?),
+**manageable** (is there one place to change it?) and **managed** (does
+something hold it true?).
+
+Measured today, the contrast is stark and is the argument:
+
+- **Structural truths: managed, every one.** Grammar — `check_grammar` holds
+  every fenced sentence. Contracts — the word's own file, held by
+  `check_grammar` and `check_shape`. Presentation — `check_styles`, in both
+  directions. Theme — 53 roles, no unthemed literal escapes.
+- **Conventional truths: managed not at all.** 58 sites in 7 files; no
+  register; no checker reads a convention; 50 of 64 `infers` bullets; the slot
+  itself unchecked prose.
+
+**Register 2 — claims the documents make that the tree contradicts: 28.** His
+fourth answer names this as working *against* us: an outdated primer is an
+unmanaged source of truth, and it is worse than a missing one because it is
+believed. Counted today: 8 stale census mentions (53/50 against a measured 64),
+14 `VOCABULARY.md` entries missing their `infers` and `renders` slots, 1
+reference to the cut word `icon`, 1 self-contradiction about `heading`, 2 stale
+comments (`try_it.sp`, `markdown.rb`), 1 `HANDOFF.md` claim of "six wins" above
+a list of ten, and 1 phase heading marked closed everywhere but in itself.
 
 ---
 
 ## The border, drawn first
 
-**In scope:**
+**In scope** — evidence, and instruments:
 
-- the audit: inventories, classifications, counts, with coverage stated;
-- measurements of where a page's writing is affected rather than the runtime's
+- the audit and the two registers, with counts and coverage stated;
+- measurements of what a *page author* meets, as distinct from the runtime's
   internals;
-- paper alternatives: what a human spelling of a remnant would read like, never
-  entered into `lib/vocabulary/`;
-- throwaway spikes for the instruments, deleted or marked;
-- **landing an instrument** that (a) makes an existing claim true or checkable,
-  (b) adds no vocabulary, (c) moves no vital, (d) is itself tested, and (e) is
-  ruled in by dan on the day.
+- paper alternatives: what a human spelling of a remnant would read like,
+  never entered into `lib/vocabulary/`;
+- throwaway spikes, deleted or marked;
+- **corrections to a claim that lies** — a document or comment asserting
+  something the tree contradicts. Answer 4 puts this in scope on purpose:
+  transparency is the criterion, and a primer that miscounts the vocabulary is
+  a failure of transparency, not a cosmetic drift. The corrections are
+  mechanical (re-measure, restate) and decide nothing;
+- **landing an instrument** that passes all five tests below.
+
+**The five tests a landable instrument must pass** — answer 4 added the first:
+
+1. it makes a truth **apparent** to a person using the language;
+2. it adds no vocabulary and no page-facing spelling;
+3. it moves no vital;
+4. it is itself held by a test;
+5. dan rules it in on the day.
 
 **Out of scope, named so it is not taken by accident:**
 
-- **No new vocabulary or spelling.** A style word, a `false` literal, a new
-  modifier form — each is a decision, and decisions are what this daytrip
-  leaves open. Fixing `#` in the lexer looks small; it is a grammar change and
-  it waits for its ruling.
-- **No kernel motion.** The 11 name-directed words, the 23 hash
-  interrogations, the eight `maps` — the audit *maps* them; Phase 3 grows only
-  what a real sentence demands, and this daytrip does not get to be that
-  sentence.
-- **No restyle of the studio**, no shipping layout change, no new pane.
-- **`~/dev/dashboard` stays read-only**, as 0.3's risk register requires.
-- **W1–W3 stay parked**, and `DAYTRIP-0.3.0a` is not taken up by a side door.
+- **No new vocabulary or syntax.** Fixing `#` looks small; it is a grammar
+  change, and it waits for E4's ruling.
+- **No kernel motion.** The 23 interrogations, the 8 `maps`, the 11
+  name-directed words are *mapped*, and Phase 3 grows only what a real sentence
+  demands. This daytrip does not get to be that sentence.
+- **No restyle of the studio**, and no new pane.
+- **`~/dev/dashboard` stays read-only.**
+- **W1–W3 stay parked**; **`DAYTRIP-0.3.0a` stays held**, per his fifth answer.
+- **No rewriting of history.** A record that describes the language as it was
+  is not a lie — `history/` and the phase records stay as written. Only
+  present-tense claims about the current tree are corrected.
 
 ---
 
 ## The stops
 
-Five. Each names what it feeds; none names an answer.
-
 ### Stop 1 — The accent audit  `agent` — evidence only
 
-*The centrepiece, and the answer to "what is it doing in sp".*
+The centrepiece, now with the analysis above as its spine rather than its
+hypothesis. Walk both surfaces — **on the page** (what an author writes) and
+**inside** (what the language says to itself) — and classify every
+machine-shaped spelling: what it is, what it is doing, its cause (A1, A2, B, C,
+D), and the count that makes the claim inarguable. Nominees to interrogate:
+the `key: value` form and its four value kinds (134 arguments: 89 bare names,
+20 quoted, 17 data, 8 numbers); `.property` and `binding.property`; the 11
+identifier-passing words; `expects` and its 68 keyword arguments; `maps`; the
+23 `@kwargs` interrogations; symbol enums; the `#` marker; the paren machinery;
+silent fallbacks (an unknown variant degrades, an unknown word fails loudly);
+the internal node IR; `tag`/`html` as the page's door to raw HTML and CSS.
 
-- **Method.** Walk both surfaces — **on the page** (what an author writes) and
-  **inside** (what the language says to itself) — and list every spelling that
-  is machine-shaped rather than human-shaped. For each: what it is, what it is
-  doing (configuration, dispatch, identity, declaration, interface), **the
-  cause** (A / B / C from H1), and the count that makes the claim inarguable.
-  Nominees to interrogate, not to assume: the `key: value` modifier form and
-  its four value kinds; `.property` and `binding.property` (are these
-  morphology or a path into a data structure?); identifiers passed as data
-  (11 words); the `expects` keyword hash (68 arguments, 33 booleans); `maps`;
-  the `@kwargs` idiom (23); symbol enums (`as: money`, `type: email`); the
-  `#` comment marker; the paren machinery with no consumer; silent fallbacks
-  (unknown variant, dropped `class:`/`id:`); the internal node IR; `tag` and
-  `html` as the page's door to raw HTML/CSS.
-- **Artifact.** The table, with a cause column and a count column, in this
-  document.
-- **Feeds.** Everything below; E1–E8.
-- **Done looks like.** Every nominee appears with a cause and a count, the
-  causes are argued rather than asserted, and anything that could not be
-  classified is listed as unclassified rather than forced.
+*Artifact:* the classified table, with the **inside/outside split** answering
+"how far can we grow now" — every page-facing remnant either on a grow-now list
+with its cost or on a waiting list with its reason.
+*Feeds:* every register and decision below.
 
 ### Stop 2 — The three suspects  `agent` — paper only
 
-*dan's explicit questions, interrogated one at a time.*
+dan's explicit questions, each interrogated through cause A1/A2.
 
-- **Variants** (`note warning`, `card compact`, `field bio, long`). Test: is a
-  variant a *word* — a name the speaker means, which the language refuses when
-  it does not know — or a *property value*, an open enum that degrades
-  silently? The evidence is already ugly: `badge banana` renders an unstyled
-  chip while `badge` (typo'd word) would fail loudly. Deliver a verdict and the
-  paper alternative.
-- **`label_for` / `format_for`.** Test H1's cause A directly. The measurement
-  above shows they are needed *only* where a word stopped being said. Draft the
-  three alternatives on paper: **value-shaped** (the app returns a `Money`), so
-  the language asks the thing and never a table; **word-carried** (the page
-  says `money`, which it already can); **domain-noun** (the app's own
-  vocabulary names its figures). For each: what it costs the app, what it buys
-  the page, and what it does to the three-level precedence.
-- **The attribute hashes.** Separate the three that are called by one name:
-  the **node attrs hash** (the IR a second interpreter would walk — a
-  legitimate interface, and the LORE already argues a word must not carry what
-  the tree can show); the **kwargs hash** (runtime plumbing: 23 interrogations
-  that conceptually are "the word's arguments"); and the **contract's keyword
-  declaration** (the word's own file declaring itself in 68 keyword arguments,
-  33 of them booleans). Verdict per hash: interface, plumbing, or accent.
-- **Artifact.** Three verdicts, each with its evidence and its paper
-  alternatives. No decisions.
-- **Feeds.** E1, E2, E3.
+- **Variants.** Test: is a variant a *word* — a name a speaker means, which the
+  language refuses when it does not know it — or a *property value*, an open
+  enum that degrades silently? The evidence is already sharp: `badge banana`
+  renders an unstyled chip while a misspelled *word* fails loudly. Verdict plus
+  the paper alternatives.
+- **`label_for` / `format_for`.** Cause A2's paradigm case. Draft the
+  alternatives on paper — **value-shaped** (the app returns something that
+  knows it is money, so the language asks the thing and never a table),
+  **word-carried** (the page says `money`, which it already can), **domain-noun**
+  (the app's own vocabulary names its figures) — each priced in what it costs
+  the app, what it buys the page, and what it does to the three-level
+  precedence. Note for honesty: dan judged `label_for` *not onerous* on
+  2026-08-30, and that ruling stands unless the evidence contradicts it; this
+  stop prices alternatives, it does not re-open a decision.
+- **The attribute hashes.** Three things wear one name: the **node attrs
+  hash** (the IR a second interpreter would walk — a legitimate interface);
+  the **kwargs hash** (23 interrogations of what are conceptually the word's
+  arguments — plumbing); and the **contract's keyword declaration** (the word's
+  own file, 68 keyword arguments, 33 booleans — accent). Verdict per hash.
+  A fourth nominee from revision 1, for dan's ruling: **the silent-fallback
+  family**, of which `badge banana` is one instance.
 
-### Stop 3 — Inside, or on the page?  `agent` — measurement
+*Feeds:* E1, E2, E3.
 
-*"The extent to which we can grow beyond it now."*
+### Stop 3 — The register of sources of truth  `agent`, dan rules any landings
 
-- **Method.** Split Stop 1's findings by whether a page author ever meets them.
-  Count the page-facing residue and weigh it: of the page surface's 134
-  modifier arguments, how many are machine-shaped? Which remnants *damage what
-  a human writes today* rather than merely looking machine-ish? The `#` case is
-  the exemplar — a lexer convention that eats the author's text — and the
-  audit should find its siblings or report that it has none. Then name the
-  page-facing items that could be grown beyond **now**, independently of any
-  roadmap decision, and those that cannot.
-- **Artifact.** The inside/outside split, the "grow now" list with its costs,
-  and the residue that must wait.
-- **Feeds.** E4, E5; and the honest answer to dan's "how far can we grow now".
-- **Done looks like.** Every page-facing remnant is either on the grow-now list
-  with a cost or on the waiting list with a reason.
+**The stop answer 4 asked for.** For every truth the language holds, name its
+home and grade it **apparent / manageable / managed**, then complete the two
+registers: the graded sources, and the 28 claims the documents make that the
+tree contradicts.
 
-### Stop 4 — The instruments a language of intent must own forever  `agent`, dan rules the landings
+The instruments fall out of the gaps rather than being invented. The candidates
+the analysis already predicts:
 
-*Observation 1, made concrete.*
+1. **The convention register** — the conventions and inferences enumerated in
+   one place, each with its source of truth, its override, and its grade.
+   *Retroactively catches:* why 50 of 64 `infers` bullets, why 58 sites in 7
+   files, and the `label_of`/`format_of` asymmetry LORE records.
+2. **The promise ledger, as a checker** — every universally-permitted modifier
+   read by some word; no word declaring a modifier it ignores; every documented
+   feature with a consumer. *Retroactively catches:* `if:`, `class:`, `id:`,
+   and the dead `PrimitiveShapes` loader.
+3. **The claim checker** — the numbers and present-tense claims the documents
+   make about the tree, re-measured. *Retroactively catches:* all 28.
+4. **The inference ledger** — every rendered value attributed to page, app,
+   theme or inference, with the **residue** named. *Retroactively catches:* the
+   table that read its headers off the wrong subject. Stays a **spike** unless
+   dan rules otherwise; it is the studio's fourth pane and the precondition for
+   any style vocabulary.
 
-Four candidates, each to be written as *what it would assert*, *what it would
-have caught retroactively*, and *what it costs*:
+*Artifact:* both registers complete, and the instrument table — assertion,
+retro-catch, cost, and whether it can exist today.
+*Done looks like:* each candidate is either demonstrably landable with its test,
+or explicitly named as waiting; and dan has ruled which (if any) land.
 
-1. **The promise ledger, as a checker.** Every universally-permitted modifier
-   must be read by some word; no word may declare a modifier it ignores; every
-   documented feature must have a consumer. *Retroactively catches:* `if:`,
-   `class:`, `id:`, and the dead `PrimitiveShapes` loader — the project's
-   characteristic failure, made impossible to leave behind. Mechanical, cheap,
-   permanent.
-2. **The inference ledger.** Every rendered value attributed to page, app,
-   theme, or inference, with the **residue** named. *Retroactively catches:*
-   the `label_of`/`format_of` asymmetry LORE records, where a table read its
-   headers off the Projection that merely held them. This is the studio's
-   natural fourth pane, and the precondition for any style vocabulary — and it
-   stays a **spike** here, landed only if dan wants it.
-3. **The convention's home.** Every inference documented *with its override
-   beside it*, because a convention a reader cannot look up is superstition.
-   *Retroactively catches:* `page pattern, .title`, which reads perfectly and
-   cannot work. Documentation-shaped, cheap, permanent.
-4. **The accent register** *(the speculative one)*. A written rule — or a
-   checker — that no new member of the page surface may be a hash, an enum, a
-   number or a sigil without an argued reason. Honest note: this may be a
-   constitution rather than an instrument, and the daytrip should say which it
-   turned out to be.
-- **Artifact.** The instrument table: assertion, retro-catch, cost, and whether
-  it can exist today.
-- **Feeds.** E5, and the "essential forever" set.
-- **Done looks like.** Each candidate is either demonstrably landable today
-  (with its test) or explicitly named as waiting, and dan has ruled which two
-  (if any) land.
+### Stop 4 — The duplication map  `agent` — evidence only
 
-### Stop 5 — The duplication map  `agent` — evidence only
+H2's test: *is the accent thickest exactly where the abstraction is wrong?*
+Map every duplication site — the 23 interrogations, the 8 identical `maps`,
+the 11 name-directed words, the four-copy field wrapper, the dead
+`PrimitiveShapes` — and say what each is evidence *of*. KERNEL.md's rule
+generalises: duplication in the Generator is the reliable signal that a word is
+a composition wearing a primitive's clothes; this stop asks whether duplication
+anywhere is the reliable signal that a spelling is a mechanism wearing a word's
+clothes.
 
-*H2's test: is the accent thickest where the abstraction is wrong?*
+*Artifact:* the map, with H2 declared supported, refuted, or partly — and the
+cause-B findings handed to Phase 3's demand ledger.
+*Done looks like:* H2 has a verdict backed by counts.
 
-- **Method.** Map every duplication site the audit found — the 23 hash
-  interrogations, the 8 identical `maps`, the 11 name-directed words, the
-  four-copy `<div class="field">` in the Generator, the dead `PrimitiveShapes`
-  — and say what each is evidence *of*. KERNEL.md's own rule generalises here:
-  duplication in the Generator is the reliable signal that a word is a
-  composition wearing a primitive's clothes; this stop asks whether duplication
-  anywhere is the reliable signal that a *spelling* is a mechanism wearing a
-  word's clothes.
-- **Artifact.** The map, with each site's verdict, and H2 declared supported,
-  refuted, or partly.
-- **Feeds.** E6; and Phase 3's demand ledger, which is where any repair waits.
-- **Done looks like.** H2 has a verdict backed by counts.
+### Stop 5 — Transparency, measured  `agent` — evidence only
+
+The daytrip's second criterion, given its own instrument, because answer 4 made
+it the criterion for what lands and it should not be allowed to remain a
+feeling. For a sample of the language's words — the best and the worst by
+inspection — measure the three things transparency seems to mean in practice:
+how much of the word's behaviour is **convention** (derived), how much is
+**declared** in its own file, and how much is **escaped** to Ruby, a modifier,
+or the app. dan's own hedge is the point: a word may be *better* because it
+leans on convention, or because it uses its escape hatch well. The measurement
+is what tells us which.
+
+*Artifact:* the sample's three-way split per word, and a first answer to "some
+words are better than others".
+*Done looks like:* the claim has numbers, and the counter-examples (a
+convention-heavy word that is *worse*) are named rather than smoothed over.
 
 ---
 
 ## The space this leaves for decisions
 
-Each with its options intact. The daytrip makes the choice cheap; it does not
-make it.
-
 | # | Decision | Options on the table | What would settle it | Who |
 |---|---|---|---|---|
-| E1 | What *is* a variant? | a word (closed; unknown refused) · an open enum (accepted, unstyled) · a word with a styled fallback | Stop 2's verdict; the `badge banana` behaviour | dan |
-| E2 | Where the app answers by name | keep `label_for`/`format_for` and design the channel · value-shaped (`Money`) · word-carried · domain-noun | Stop 2's alternatives, priced | dan |
-| E3 | Is `key: value` the right human form for configuration? | keep · a different form · numbers to the theme | Stop 1's modifier census (8 numbers of 134) and Stop 3's page-facing split | dan |
-| E4 | `#` as a comment marker | fix the stripper to respect quotes · a different comment rule · no page comments | Stop 3's damage list | dan |
-| E5 | Which permanent instruments land | promise checker · inference ledger · convention's home · accent register · none yet | Stop 4's table | dan |
-| E6 | **When inference takes a decision from the page, who owns it and where do they speak?** | the app answers by name (today) · the value answers (typed) · the theme owns it (axiom) · the page must say the word | Stop 2 and Stop 4 together; this is cause A's real question | dan |
-| E7 | Does `tag` close, and in what order | close first · design first · together · leave it and stop calling it a leak | the blast radius, absorbed from `DAYTRIP-0.3.0a` Stop 5 | dan |
-| E8 | Would a style vocabulary be more machine language, or the first fluent design language? | it would be more (refuse it) · it can be fluent if scoped to roles · undecidable until a page tries | the style round's own drafting — **not this daytrip** | dan |
+| E1 | What *is* a variant? | a word (closed; unknown refused) · an open enum (as today) · a word with a styled fallback | Stop 2's verdict; `badge banana` | dan |
+| E2 | Where the app answers by name | keep the channel and design it · value-shaped · word-carried · domain-noun | Stop 2's priced alternatives | dan |
+| E3 | Is `key: value` the right human form for configuration? | keep · a different form · numbers to the theme | Stop 1's modifier census and Stop 5's transparency split | dan |
+| E4 | `#` as a comment marker | respect quotes · a different comment rule · no page comments | the damage list | dan |
+| E5 | **Which sources of truth get registered and managed** | the convention register · the promise ledger · the claim checker · the inference ledger · none yet | Stop 3's graded register and instrument table | dan |
+| E6 | **When inference takes a decision from the page, who owns it and where do they speak?** | the app answers by name (today) · the value answers · the theme owns it · the page says the word | Stop 2 + Stop 3; cause A2's whole cost | dan |
+| E7 | Does `tag` close, and in what order | close first · design first · together · leave it and stop calling it a leak | its blast radius, absorbed from `0.3.0a` Stop 5 | dan |
+| E8 | Would a style vocabulary be more machine language, or the axiomatic grade's voice? | it would be more (refuse it) · it can be fluent if scoped to roles the theme owns · undecidable until a page tries | the style round's own drafting — **not this daytrip** | dan |
+| E9 | *(new, from the criteria register)* Is there a third criterion? | C1 alone · C1 + C2 · + something the audit surfaces | any finding that scores against none | dan |
 
-**E6 and E8 are the deep ones.** E6 is the mechanism behind dan's first
-observation: inference is the magic, and *every inference relocates a decision*
-— the question is whether the new owner has a human channel or only a table
-keyed by an identifier. E8 is the test of the whole enterprise: the style
-language is the largest vocabulary sp will ever learn, and if it arrives as
-symbols and numbers it is Tailwind with better manners.
+**E6 and E8 remain the deep two**, and the analysis has now connected them: an
+inference that must ask speaks in names (A2), and the axiomatic grade is the one
+grade whose source of truth is already managed and has no voice. If sp learns
+to speak the theme as *words*, the accent retreats; if it learns to speak it as
+*symbols and numbers*, the style language becomes the accent's biggest
+beachhead.
 
-## Relationship to `DAYTRIP-0.3.0a`
+## Relationship to `DAYTRIP-0.3.0a` — held
 
-This outline **supersedes `0.3.0a` as the leading proposal** — his two
-observations set a deeper subject than the eight decisions did — and two of its
-stops are absorbed: `0.3.0a` Stop 5 (the `tag` blast radius) becomes E7 here,
-and its Stop 4 (the ownership spike) becomes instrument 2 of Stop 4.
-
-**Not absorbed: `0.3.0a` Stop 3, drafting the theme's sayability.** That is
-decision-shaped work — it *is* the style round's opening — and folding it into
-an audit would break this daytrip's border. It stays available, and it is the
-natural first round after E8 is ruled.
-
-Whether `0.3.0a` is withdrawn, kept as a fallback, or folded in is dan's call;
-its file is untouched.
+His fifth answer: held, to see what is still useful after this one. It is not
+superseded and not withdrawn. Two of its stops are absorbed here (the `tag`
+blast radius as E7; the ownership spike as instrument 4). Its style drafting —
+Stop 3, *can the theme be said?* — is deliberately **not** absorbed: that is
+decision-shaped work and belongs to the style round this daytrip is meant to
+prepare. Its file is untouched, and after this daytrip closes we read it again
+against what we learned.
 
 ## What this would deliberately not answer
 
 - **Whether a stranger hears the same accent.** No one outside the project has
-  written a page. Every accent judgement here is made by a speaker of the
-  language, and the garden (Phase 1) is the only honest test.
-- **Whether "human language" is the right frame at all.** The daytrip adopts
-  one criterion — *does the page expose the machine's structure where a
-  speaker would point at a thing?* — and should say plainly that this is a
-  chosen criterion, not a law of linguistics, so it can be argued with.
+  written a page; every judgement here is made by a speaker of the language.
+- **Whether C1 and C2 are the right criteria** — only whether they are
+  demonstrable, which is what his first answer asked for.
 - **Whether any of it is affordable.** The cost instrument last read 7.71 /
-  5.65 ms / 0.26 per row on 2026-09-16 and drops nothing.
+  5.65 ms / 0.26 ms per row, and the budget Phase 3 waits on is still unset.
 - **Where the repairs go.** Every cause-B finding belongs to Phase 3 and waits
-  for a real sentence to demand it.
+  for a real sentence.
 
 ## Risk register
 
 | Unknown | Risk | Retired by |
 |---|---|---|
-| "Machine language" becomes an aesthetic complaint with no test | **High** | the criterion stated in the question and repeated in the limits; every finding carries a count, and the judgement parts are marked as judgement |
-| The audit becomes a refactor | **High** | the border: nothing is fixed; cause-B findings are *mapped* and handed to Phase 3 |
-| An instrument lands that decides a question | **High** | the five-part test for a landable instrument, ruled on by dan on the day |
-| The audit is done by the same brain that wrote the accent | Medium | stated as a limit; the dashboard and the corpus at least differ from the audit's author |
-| Stop 2 relitigates `label_for`, which dan already judged not onerous | Low | the stop prices *alternatives*, it does not re-open a ruling; the 2026-08-30 judgement stands unless the evidence contradicts it |
+| "Machine language" becomes an aesthetic complaint | **High** | the criterion register; every finding carries a count, and judgement is marked as judgement |
+| The audit becomes a refactor | **High** | the border: nothing is fixed except a claim that lies |
+| The registers become another unmanaged source of truth | **High** | they are graded *managed* or they are not finished; the claim checker exists to hold the counted ones |
+| An instrument lands that decides a question | **High** | the five tests, ruled on by dan the day it lands |
+| Correcting 28 claims becomes a documentation project | Medium | the corrections are mechanical and each is a re-measurement, not a rewrite |
+| The analysis is believed because it is tidy | Medium | each cause carries a refuting case; a cause that cannot be refuted is a cause we cannot test |
 | The daytrip grows into the style round | Medium | E8 is explicitly not this daytrip's to answer |
 
 ## How this stays accountable
 
-The gate, unchanged, in its stronger form: it must be exactly as green at the
-end as at the start, and `git status` must show documents and instruments, never
-vocabulary.
+The gate, unchanged, in its stronger form: as green at the end as at the start,
+with the day's artifacts showing as documents and instruments, never vocabulary.
 
 ```bash
 ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby "$f"; done
@@ -353,19 +450,20 @@ something.
 
 ## Questions for dan — the discussion
 
-1. **Is the criterion right?** *Does the page expose the machine's structure
-   where a speaker would point at a thing?* If the test is wrong, every
-   finding inherits the error.
-2. **Does H1's three-way cause hold?** A (inference took over), B (the
-   abstraction is wrong), C (the host leaked). If there is a fourth cause, the
-   audit should hunt it rather than file everything under three.
-3. **Are the three suspects the right three** — variants, `label_for`/
-   `format_for`, the attribute hashes — or is there a fourth you can already
-   name? (My nominee for a fourth: the **silent fallbacks** family, of which
-   `badge banana` is one instance.)
-4. **Which instruments land, if any?** My recommendation, for the record: the
-   **promise ledger as a checker** and the **convention's home**, because both
-   are permanent, mechanical, and provable today; the inference ledger stays a
-   spike.
-5. **Is `0.3.0a` withdrawn, or kept beside this one?**
-6. **The name** — *The Accent* is mine; the goal is yours: fluency.
+1. **Is the fourth cause (unmanaged sources of truth) distinct enough from the
+   third (the abstraction is wrong) to stand alone?** My argument for yes: B is
+   two homes *by design* and is fixed by re-abstracting; D is a second home
+   *nobody maintains* and is fixed by a register. If you read them as one, the
+   register is still the answer but the daytrip is smaller.
+2. **Should the claim corrections (the 28) be taken *in* this daytrip**, or
+   listed and left? Answer 4 puts them in scope as failures of transparency; I
+   would take the mechanical ones and leave anything arguable.
+3. **Which register comes first if only one lands** — the convention register
+   (the heart of your answer 4) or the promise ledger (the cheapest and the one
+   that would have caught four known defects)?
+4. **Is Stop 5 worth a stop?** "Some words are better than others" is a real
+   question, but it is the closest thing here to taste, and I would rather cut
+   it than let it dilute the evidence.
+5. **A third criterion** — is there one you already hold that C1 and C2 do not
+   capture? Answer 1 invited it, and it would be better named now than
+   discovered late.
