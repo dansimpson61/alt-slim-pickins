@@ -34,12 +34,16 @@ module SlimPickins
                          keyword_init: true)
 
     ALL = [
-      # --- the universal three: what contracts.rb:242 permits on every word ---
+      # --- the universal three: what Contracts::UNIVERSAL_MODIFIERS permits ---
       Promise.new(name: :if, kind: :universal, declared_by: [],
-                  read_by: [], verdict: :none,
-                  note: 'the gate permits `if:` on every sentence and no code ' \
-                        'consults it; `note "x", if: .show` renders with show ' \
-                        'false — the finding recorded as E4'),
+                  read_by: ['lib/slim_pickins/transform.rb'], verdict: :read,
+                  note: 'permitted on every sentence and read by nothing until ' \
+                        '2026-09-17, when dan ruled it into life. The transform ' \
+                        'hoists it into a guard rather than leaving it to the ' \
+                        'words, because a hatch word never passes through their ' \
+                        'dispatch — and hoisting it runs the guard before the ' \
+                        'sentence\'s other arguments, the choice `when` already ' \
+                        'makes'),
       Promise.new(name: :class, kind: :universal, declared_by: [],
                   read_by: ['lib/slim_pickins/generator.rb'], verdict: :read,
                   note: 'read only by the raw-tag path (`:tag`), so an app word ' \
@@ -153,15 +157,13 @@ module SlimPickins
 
       # --- a helper that claims to help --------------------------------------
       Promise.new(name: :boolean?, kind: :helper, declared_by: [],
-                  read_by: [], verdict: :none,
-                  note: '`Inference.boolean?` is defined and called nowhere in the ' \
-                        'repo — found while partitioning `Inference` for the ' \
-                        'convention register. Asked where it would be helpful ' \
-                        '(dan, 2026-09-17), the honest answer is nowhere today: ' \
-                        '`input_type` maps true/false to :text inline. The one use ' \
-                        'that would earn it is a feature — `field` inferring a ' \
-                        'checkbox — which the `checkbox` word already owns. ' \
-                        'Recorded, awaiting its ruling')
+                  read_by: ['lib/slim_pickins/words.rb',
+                            'lib/slim_pickins/generator.rb'], verdict: :read,
+                  note: 'defined and called nowhere until 2026-09-17, when dan ' \
+                        'ruled the feature it was written for — a `field` over a ' \
+                        'true/false value infers the checkbox shape. The helper ' \
+                        'now decides the kind, and `Generator#checkbox_field` is ' \
+                        'the one home for the shape `checkbox` and `field` share')
     ].freeze
 
     # The promises this ledger has no reader for. Named here so that "we know"

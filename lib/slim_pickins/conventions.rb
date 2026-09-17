@@ -199,6 +199,11 @@ module SlimPickins
                      file: 'lib/slim_pickins/inference.rb', marker: 'def moment',
                      inference: :moment, override: '`time relative, .stamp`',
                      grade: :shape),
+      Convention.new(name: :boolean_field, when_silent: '`field x` over a true/false value',
+                     decides: 'that the field is a checkbox, because a value that is already true or false knows the shape it wants',
+                     file: 'lib/slim_pickins/inference.rb', marker: 'def boolean?',
+                     inference: :boolean?, override: '`type: text`',
+                     grade: :shape),
       Convention.new(name: :leaf_tag, when_silent: '`money`, `percent`, `badge`, `time`',
                      decides: 'the element — a span, or a time',
                      file: 'lib/slim_pickins/generator.rb', marker: 'SPAN_TAGS',
@@ -233,14 +238,14 @@ module SlimPickins
                      grade: :axiomatic)
     ].freeze
 
-    # `Inference`'s public functions that no page meets: live inside the runtime
-    # (`relative` is reached by `moment`, `separated` by `money` and `number`)
-    # or dead (`boolean?`, which has no caller anywhere — recorded as a promise
-    # with no reader in the promise ledger).
+    # `Inference`'s public functions that no page meets directly: live inside
+    # the runtime (`relative` is reached by `moment`, `separated` by `money`
+    # and `number`). `boolean?` was here until 2026-09-17, when dan ruled the
+    # feature it was written for and it became `boolean_field` above — the
+    # partition check is what noticed it had been claimed twice.
     INTERNAL = {
       relative: 'reached only by `moment`, through the `relative` variant',
-      separated: 'the digit grouping `money` and `number` share',
-      boolean?: 'no caller anywhere in the repo — see the promise ledger'
+      separated: 'the digit grouping `money` and `number` share'
     }.freeze
 
     def self.by_grade(grade) = ALL.select { |c| c.grade == grade }

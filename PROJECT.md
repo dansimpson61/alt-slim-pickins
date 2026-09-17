@@ -2,26 +2,26 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened 2026-09-17 on dan's word and all five of its stops now taken. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on his ask for creative scoping; and his fourth answer set the deeper subject — transparency, and the managed sources of truth of sp's conventions and inferences. Landed since — the two instruments he ruled in (the promise ledger, 32 promises with 2 unread, and the convention register, 37 conventions across the four grades), both gate legs and both pinned by tests; the studio's status page now runs six legs; twelve mechanical claim corrections; one ruled subtraction (`PrimitiveShapes` deleted); and the analysis behind the remaining questions — the accent audit, the three suspects, the transparency measure, and a tested `if:` decision aid.
+status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened and all five of its stops taken 2026-09-17. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping; and his fourth answer set the deeper subject — transparency, and the managed sources of truth of sp's conventions and inferences. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the studio's status page now running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox from a boolean value, and a test teardown. The promise ledger holds 32 promises and **none without a reader**; the convention register holds 38 conventions, every one with its home and its override; the gate is 317 runs / 3586 assertions green across three seeds.
 kind: project
 last_touched: 2026-09-17
 next_step: >-
-  Two rulings are dan's and are the only thing blocking the daytrip's
-  close. E4, `if:` — the decision aid in DAYTRIP-0.3.0b shows how it
-  differs from `when`, proves the guard works, and names the trap (no
-  boolean literal); the choice is to give it a reader or strike it from
-  the documents. And `Inference.boolean?` — delete it, or make `field`
-  infer a checkbox, which is a feature rather than a use of the helper.
-  Also worth his ruling, with evidence now in hand: E1 (a variant the
-  stylesheet cannot style should be refused) and E2 (`label_for` and
-  `format_for` stay, with the register as the visibility fix, unless the
-  value-shaped path is worth its ceremony). Two pieces are named as the
-  next daytrip-sized work rather than this one's: the register's real
-  home (an `infers:` slot in each word's own file, generating the
-  document), and the accent in the contract declarations (68 keyword
-  arguments, 33 of them booleans). The studio on :4580 still runs a
-  four-leg boot and needs one restart from outside this session's
-  sandbox.
+  Four rulings are dan's. E1, what a variant is — the verdict on record is
+  that a variant the stylesheet cannot style should be refused rather than
+  rendered unstyled. E2, where the app answers by name — the verdict is to
+  keep `label_for` and `format_for`, with the register as the visibility
+  fix; the value-shaped path is the only one that removes the cause, and
+  it is the more expensive. E3, the literal in a `key: value` — now that
+  `if:` has landed, what remains is that `if: false` and
+  `required: false` are not sentences a page can write, and
+  `required: false` silently means required. And the `not` question,
+  answered no in DAYTRIP-0.3.0b with its reason on record. Two pieces are
+  named as the next daytrip-sized work rather than this one's — the
+  register's real home (an `infers:` slot in each word's own file,
+  generating the document as the five checkable bullets already are) and
+  the accent in the contract declarations (68 keyword arguments, 33 of
+  them booleans). The studio on :4580 needs one restart from outside this
+  session's sandbox to show the seven-leg status page.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

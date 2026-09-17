@@ -42,7 +42,16 @@ module SlimPickins
     # Ruby. `word` is the leading word, `raw_args` the arguments as written,
     # `ranks` each argument's kind (0 name, 1 content or data, 2 modifier) and
     # `compiled` the Ruby each argument becomes.
-    Node = Struct.new(:indent, :body, :lineno, :word, :raw_args, :ranks, :compiled, :children,
+    #
+    # `guard` is the Ruby an `if:` modifier carried, hoisted out of the
+    # arguments. `if:` is universal, and it is the transform that honours it
+    # rather than the words, because a word does not always get a say: an app
+    # word added through the hatch is `extend`ed onto the builder and never
+    # passes through the dispatch a registry word does. Hoisting it also means
+    # the guard runs *before* the sentence's other arguments, and before a
+    # word's children — so a guarded sentence costs nothing and evaluates
+    # nothing, which is the same choice `when` makes for its condition.
+    Node = Struct.new(:indent, :body, :lineno, :word, :raw_args, :ranks, :compiled, :guard, :children,
                       keyword_init: true)
 
     def self.call(source, path: '(page)')
@@ -91,13 +100,17 @@ def emit(nodes, depth = 0)
                  "#{n.word}(#{n.compiled.join(', ')})"
                end
         pad = '  ' * depth
+        # The guard sits inside `with_line`, before the word and its children:
+        # `next` leaves the block, so the word never runs and neither does
+        # anything nested under it.
+        guard = n.guard ? ["#{pad}  next unless (#{n.guard})"] : []
         # Children nest two levels deeper than their sentence — one for
         # with_line's block, one for the word's own.
         if n.children.any?
-          ["#{pad}with_line(#{n.lineno}) do", "#{pad}  #{ruby} do",
+          ["#{pad}with_line(#{n.lineno}) do", *guard, "#{pad}  #{ruby} do",
            *emit(n.children, depth + 2), "#{pad}  end", "#{pad}end"]
         else
-          ["#{pad}with_line(#{n.lineno}) do", "#{pad}  #{ruby}", "#{pad}end"]
+          ["#{pad}with_line(#{n.lineno}) do", *guard, "#{pad}  #{ruby}", "#{pad}end"]
         end
       end
     end
@@ -127,8 +140,25 @@ def emit(nodes, depth = 0)
         )
       end
 
+      # `if:` is hoisted out of the arguments and into a guard. It is universal,
+      # so no word declares it and no word needs to read it; and a word cannot
+      # be the place it is honoured, because a hatch word never passes through
+      # the dispatch. Removing it from the arguments also means the predicate is
+      # evaluated once, by the guard, rather than twice.
+      guard = nil
+      raw.each_with_index do |arg, i|
+        next unless ranks[i] == 2 && arg.match?(/\Aif:\s*.+\z/m)
+
+        guard = compiled[i].sub(/\Aif:\s*/, '')
+        raw = raw.reject.with_index { |_, j| j == i }
+        ranks = ranks.reject.with_index { |_, j| j == i }
+        compiled = compiled.reject.with_index { |_, j| j == i }
+        break
+      end
+
       Node.new(indent: sentence.indent, body: sentence.body, lineno: sentence.lineno,
-               word: word, raw_args: raw, ranks: ranks, compiled: compiled, children: [])
+               word: word, raw_args: raw, ranks: ranks, compiled: compiled, guard: guard,
+               children: [])
     end
 
     def sentences

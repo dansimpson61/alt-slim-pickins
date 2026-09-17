@@ -20,11 +20,12 @@ class InstrumentsTest < Minitest::Test
 
   # --- the promise ledger -----------------------------------------------------
 
-  # The debt is pinned deliberately. When a ruling lands — `if:` implemented, or
-  # `boolean?` deleted — this list changes *on purpose* and the change is the
-  # record that a promise gained a reader or stopped being made. It held three
-  # until 2026-09-17, when dan ruled `PrimitiveShapes` deleted.
-  KNOWN_UNREAD = %i[if boolean?].freeze
+  # The debt is pinned deliberately. When a ruling lands this list changes *on
+  # purpose* and the change is the record that a promise gained a reader or
+  # stopped being made. It has been three (`if:`, `PrimitiveShapes`,
+  # `boolean?`), then two, and **empty since 2026-09-17** — every promise the
+  # language makes now has somewhere that reads it.
+  KNOWN_UNREAD = [].freeze
 
   def test_the_ledger_records_exactly_the_promises_we_know_are_unread
     assert_equal KNOWN_UNREAD.sort, SlimPickins::Promises.outstanding.map(&:name).sort,
@@ -63,11 +64,17 @@ class InstrumentsTest < Minitest::Test
     end
   end
 
-  def test_a_promise_the_gate_permits_and_nothing_reads_is_not_hidden
-    if_promise = SlimPickins::Promises::ALL.find { |p| p.name == :if }
+  # The two promises that had no reader and now have one. Pinned by name,
+  # because "the ledger is empty" is only good news if we know what emptied it.
+  def test_the_promises_that_had_no_reader_now_have_one
+    %i[if boolean?].each do |name|
+      promise = SlimPickins::Promises::ALL.find { |p| p.name == name }
 
-    refute_nil if_promise, 'the ledger no longer records `if:`'
-    assert_equal :none, if_promise.verdict
+      refute_nil promise, "the ledger no longer records `#{name}`"
+      assert_equal :read, promise.verdict, "`#{name}` should have gained a reader"
+      refute_empty promise.read_by, "`#{name}` is read by nothing"
+    end
+
     assert_includes SlimPickins::Contracts::UNIVERSAL_MODIFIERS, :if
   end
 

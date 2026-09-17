@@ -464,6 +464,11 @@ def form(attrs, children)
     end
 
     def field(attrs, _children)
+      # A field over a true/false value is a checkbox — the shape the
+      # `checkbox` word draws, because a page should not have to say which
+      # word to use for a value that already knows. `type:` still overrides.
+      return checkbox_field(attrs) if attrs[:kind] == :checkbox
+
       open_tag('div', class: token(:field))
       full_tag('label', attrs[:label], for: attrs[:name].to_s)
       void_tag('input',
@@ -499,6 +504,13 @@ def form(attrs, children)
     end
 
     def checkbox(attrs, _children)
+      checkbox_field(attrs)
+    end
+
+    # One home for the checkbox shape, because two words now draw it: `checkbox`
+    # says it outright, and a `field` over a boolean infers it (dan's ruling,
+    # 2026-09-17 — the reader that `Inference.boolean?` was written for).
+    def checkbox_field(attrs)
       open_tag('div', class: token(:field, :checkbox))
       open_tag('label', for: attrs[:name].to_s)
       void_tag('input', id: attrs[:name].to_s, name: attrs[:name].to_s, type: 'checkbox',

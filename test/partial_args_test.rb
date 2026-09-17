@@ -16,6 +16,22 @@ class PartialArgsTest < Minitest::Test
                        library: SlimPickins::Library.new(layout: nil, partials: partials))
   end
 
+  # Compiling a partial registers its word globally (`Compilation.compile_partial`),
+  # and every word here is a throwaway. Nothing removed them, so the registry
+  # carried `tone:` — a modifier no vocabulary word declares — for the rest of
+  # the process, and the promise ledger found it a whole suite later
+  # (DAYTRIP-0.3.0b). Snapshot and restore, so the process this suite runs in
+  # holds no word that exists in no page.
+  def setup
+    @registry_before = SlimPickins::Word.registry.keys
+  end
+
+  def teardown
+    (SlimPickins::Word.registry.keys - @registry_before).each do |word|
+      SlimPickins::Word.registry.delete(word)
+    end
+  end
+
   def test_a_partial_reads_its_content
     html = render("page account\n  test_test_shout \"hello\"\n",
                   partials: { test_test_shout: "title .content\n" },

@@ -12,8 +12,8 @@ require 'timeout'
 module StudioStatus
   ROOT = File.expand_path('..', __dir__)
 
-  # The gate's legs, in the order the gate runs them. Promises and Conventions
-  # are the two instruments DAYTRIP-0.3.0b landed — they are gate legs because
+  # The gate's legs, in the order the gate runs them. Promises, Conventions and
+  # Card are the instruments DAYTRIP-0.3.0b landed — they are gate legs because
   # an instrument nothing runs is not an instrument.
   LEGS = [
     ['Grammar', 'check_grammar.rb'],
@@ -21,6 +21,7 @@ module StudioStatus
     ['Styles', 'check_styles.rb'],
     ['Promises', 'bin/check_promises.rb'],
     ['Conventions', 'bin/check_conventions.rb'],
+    ['Card', 'bin/check_card.rb'],
     ['Pages', 'bin/verify_pages.rb'],
   ].freeze
 

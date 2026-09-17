@@ -297,9 +297,14 @@ module StudioPages
   end
 
   # The chain refs a sentence reads — `.total_value`, `id: .id`, anywhere
-  # in the args; the first segment is the data key.
+  # in the args; the first segment is the data key. `guard` is included
+  # because `if:` no longer travels in the arguments: the transform hoists it
+  # into a guard, so a guarded sentence's predicate is still a local the page
+  # has to be given, and the synthesized payload must carry it.
   def self.refs_of(node)
-    node.raw_args.flat_map { |arg| arg.scan(/\.([a-z_]+)/).flatten }.uniq
+    args = node.raw_args.dup
+    args << node.guard if node.respond_to?(:guard) && node.guard
+    args.flat_map { |arg| arg.scan(/\.([a-z_]+)/).flatten }.uniq
   end
 
   # --- the render contract --------------------------------------------------

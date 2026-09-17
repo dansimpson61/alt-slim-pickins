@@ -739,6 +739,75 @@ place, and the timeline is in git for anyone who wants it. It is the cheapest
 possible demonstration of the thesis: a truth with one home and no checker
 rots in place, and a date is such a truth.
 
+### The second sitting — the rulings that closed it
+
+**dan's question: why not make `if:` work *and* give the language a `not`?**
+Asked as a question, answered as one, and the answer is no — with the reason
+that decides it.
+
+- **`not` is syntax, not vocabulary.** Verified: `if: not .paid?` is refused
+  today with *"not .paid?" is not an argument*, because the language has no
+  expression grammar — an argument is a name, text, data or a modifier, and
+  nothing composes. Admitting `not` means teaching the grammar a unary operator,
+  which is the one thing the founding sentence forbids (*extending the language
+  adds vocabulary, never syntax*).
+- **It is the top of a slippery and well-known slope.** A language with `not`
+  has a reader asking for `and`, `or`, `==`, `>` — the expression language CSS
+  and Tailwind are made of, and the thing dan's second observation despises.
+- **The doctrine already assigns negation to the app.** *Facts encoding a human
+  judgement about the domain belong to the app* — and "is this paid?" and "is
+  this unpaid?" are the same judgement. `if: .unpaid?` compiles **today** and
+  costs the app one method; `choose / when .paid? / otherwise` covers the case
+  where the false branch has content of its own.
+- **`unless:` is not a middle way.** It would compile as a modifier and alias
+  `if: not` — two spellings for one meaning, which rule 4 exists to refuse.
+
+**So `if:` landed and `not` did not.** What remains of the gap is the missing
+boolean *literal* — `if: false` is not a sentence a page can write — and that is
+E3's question about `key: value` values, not a reason to add an operator.
+
+**`if:` landed, honoured by the transform.** The guard is hoisted out of the
+arguments at compile time rather than left for the words, for two reasons: a
+hatch word is `extend`ed onto the builder and never passes through the dispatch,
+so the words cannot be the place; and hoisting runs the guard *before* the
+sentence's other arguments and before a word's children, which is the same
+choice `when` already makes for its condition. The modifier no longer reaches
+the word, so a predicate is evaluated once. Nine tests in
+`test/guard_test.rb` — true, false, children taken along, per-row inside
+`each`, guard-before-arguments, a hatch word, the hoist in the compiled Ruby,
+the gate still permitting it, and `style:` still refused. One consequence is
+closed with it: `StudioPages.refs_of` now reads the guard, or the studio's
+synthesized payload would stop carrying a guarded sentence's predicate.
+
+**The checkbox landed** (dan's ruling), and `Inference.boolean?` — dead since it
+was written — is the helper that decides it. A `field` over a true/false value
+now renders the shape the `checkbox` word draws; `type:` overrides, as every
+inference is overridable by saying the thing; a bare `input` is unchanged. The
+shape itself got one home (`Generator#checkbox_field`), because two words now
+draw it. Registered as the `boolean_field` convention, shape grade, with its
+override.
+
+**And the ledger is empty.** 32 promises, **none without a reader**, and
+`bin/check_promises.rb --strict` green for the first time since it was written —
+which is what "a promise with no reader is a finding" was for.
+
+**`bin/check_card.rb` landed** (dan's ruling): the resume card's frontmatter
+held by the gate, naming the field and the line when it breaks. It reproduces
+the historical failure on demand — reintroduce the colon-space and it says
+*"a colon followed by a space inside an unquoted value is the usual cause"*.
+The gate is seven legs now, and the status page shows all seven.
+
+**The teardown landed — and my earlier proposal about it was wrong.** I had
+written that `compilation_test`, `phase3_test` and `phase6_test` leak the same
+way and wanted the same fix. Measured after the whole suite: the registry holds
+78 words, and the ones that are not the language are 14 **app words**
+(`account_card`, `editor`, `queue`, …) registered by `Library` because the
+registry is global by design — **not one declares a novel modifier**, which was
+the only thing that ever hurt. The `tone:` leak in `partial_args_test` is fixed
+and was the only instance that mattered; the general property is already
+recorded in ROADMAP-0.3 as a Phase-3-sized change awaited. A proposal withdrawn
+is worth as much as one made.
+
 ### Honest limits
 
 - The classification is **judgement wherever it is not a count**. The counts in
@@ -754,12 +823,11 @@ rots in place, and a date is such a truth.
   word declares; it would not catch a promise expressed inline somewhere else.
 - Two sample sets are small: the transparency split is 134 arguments and the
   H2 map is five sites.
-- The studio on :4580 is running a four-leg boot from before this round and
-  **could not be restarted from this session** — its process is outside the
-  sandbox's PID namespace, so it cannot be signalled and its port cannot be
-  rebound. The new code was verified on a spare port and the spare killed.
-  `/guides/DAYTRIP-0.3.0b` and `/guides/BLUESKY` are live either way, since
-  guides are read from disk.
+- The studio on :4580 is running a boot from before this round — its status page
+  shows the old leg list — because the process is outside this session's sandbox
+  and cannot be signalled. The new code was verified on a spare port and the
+  spare killed. `/guides/DAYTRIP-0.3.0b` and `/guides/BLUESKY` are live either
+  way, since guides are read from disk.
 
 ---
 
@@ -830,44 +898,44 @@ Today: 705 sentences, 64 words, 94 rules, 14 pages, 295 runs / 0 failures, 25
 affordances / 0 missing. A daytrip that closes with a moved vital has decided
 something.
 
-## The daytrip closes open — what is left for dan
+## Where the daytrip closes
 
-All five stops are taken. Three questions are still his, and each now has its
-evidence in hand rather than its outline:
+All five stops are taken, and everything it named as landable has landed: the
+promise ledger and the convention register (ruled in), the mechanical claim
+corrections, the loader deleted, `if:` honoured, `field` inferring a checkbox,
+`bin/check_card.rb`, and the test teardown. **The ledger holds 32 promises and
+none without a reader**; the register holds 38 conventions, every one with its
+home and its override; the gate is seven legs and the studio's status page shows
+all seven.
 
-1. **`if:` — give it a reader, or strike it from the documents.** The decision
-   aid above shows precisely how it differs from `when`, proves the guard works,
-   and names the trap (no boolean literal). Today every `if:` in `DESIGN.md`'s
-   examples is a promise the language does not keep.
-2. **`Inference.boolean?` — delete it, or make `field` infer a checkbox.** The
-   second is a feature, not a use of the helper; asked where the helper would be
-   helpful, the honest answer is nowhere today.
-3. **E1 and E2**, whose verdicts and prices are in Stop 2 — a variant the
-   stylesheet cannot style should be refused; `label_for`/`format_for` should
-   stay, with the register as the visibility fix, unless the value-shaped path
-   is worth its ceremony.
+**What is left is dan's, and it is four things.**
 
-Two things are named but not ruled, and both are the *next* daytrip-sized piece
-rather than this one's: the register's real home (an `infers:` slot in each
-word's own file, generating the document as the five checkable bullets already
-are), and the accent that lives in the contract declarations — 68 keyword
-arguments, 33 of them booleans.
+1. **The `not` question — answered, no.** Recorded above with the reason: `not`
+   is syntax, not vocabulary; it is the top of the slope that ends in `and`,
+   `or` and `>`; and the doctrine already assigns negation to the app
+   (`if: .unpaid?` compiles today). If the answer is wrong, the argument is
+   there to be refuted rather than the decision assumed.
+2. **E1 — what a variant is.** Verdict in Stop 2: a variant is a word, and one
+   the stylesheet cannot style should be refused rather than rendered unstyled.
+3. **E2 — where the app answers by name.** Verdict in Stop 2: keep
+   `label_for`/`format_for`, with the register as the visibility fix; the
+   value-shaped path is the only one that removes cause A2, and it is priced.
+4. **E3 — the shape of a modifier's value.** The `if:` work narrowed it: the
+   remaining question is not `if:` itself but the *literal* — `if: false` is not
+   a sentence a page can write, and neither is `required: false`, which silently
+   means required. That is the boolean in a `key: value`, and it is a grammar
+   question rather than a word.
 
-**Two proposals the round produced, each needing only a yes.**
+**Two pieces are named as the next daytrip-sized work rather than this one's**:
+the register's real home (an `infers:` slot in each word's own file, generating
+the document as the five checkable bullets already are), and the accent that
+lives in the contract declarations — 68 keyword arguments, 33 of them booleans.
 
-1. **`bin/check_card.rb` — the resume card's frontmatter, held by the gate.**
-   The colon-space that breaks `PROJECT.md`'s YAML bit again today, for the
-   **fourth** time; each previous time the "checker" was a human following RIF
-   step 4 from memory. A twelve-line leg that parses the frontmatter and names
-   the field it failed on would have caught all four, and it is exactly the
-   shape this daytrip is about — a truth that is currently held by remembering.
-2. **A one-line teardown in `test/partial_args_test.rb`.** That test registers a
-   temporary word declaring `tone:` and never removes it, so the shared registry
-   carries a modifier no vocabulary word declares for the rest of the process.
-   The suite is green either way, but it is order-dependent — which is how this
-   instrument went red on a modifier that exists in no page and no vocabulary.
-   The class was found and fixed once before (`vocabulary_partials_test`, LORE
-   2026-09-14); this is the second instance, so the fix belongs in the test.
+**One unresolved operational fact:** the studio on :4580 is running a boot from
+before this round — its status page shows the old leg list — because the process
+is outside this session's sandbox and cannot be signalled. One command from
+outside (`pkill -f studio/app.rb`, then the detached boot `HANDOFF.md` names)
+brings it current; everything else, including the guides, is live already.
 
 And **the name.** *The Accent* was mine; the work became about transparency and
 managed sources of truth, which the name only half carries.

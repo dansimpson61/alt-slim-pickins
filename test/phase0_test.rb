@@ -6,7 +6,7 @@ require_relative '../lib/slim_pickins'
 # Phase 0's done-conditions, as tests. The bodies double as a phrasebook:
 # every page here is exemplary usage of the language.
 class Phase0Test < Minitest::Test
-  Account = Struct.new(:name, :balance, :holdings, keyword_init: true)
+  Account = Struct.new(:name, :balance, :holdings, :active, keyword_init: true)
   Holding = Struct.new(:symbol, :shares, keyword_init: true)
 
   def render(source, **locals)
@@ -103,6 +103,29 @@ class Phase0Test < Minitest::Test
     assert_equal :date,   SlimPickins::Inference.input_type(Date.today)
     assert_equal 0.01,    SlimPickins::Inference.step_for(0.05)
     assert_nil            SlimPickins::Inference.step_for(30)
+  end
+
+  # A value that is already true or false knows the shape it wants (dan's
+  # ruling, 2026-09-17). This is the reader `Inference.boolean?` was written
+  # for and did not have until then.
+  def test_a_boolean_value_derives_the_checkbox_shape
+    html = render("page account\n  form\n    field active\n",
+                  account: Account.new(name: 'Roth', active: true))
+    assert_includes html, '<div class="field field--checkbox">'
+    assert_includes html, 'type="checkbox"'
+    assert_includes html, 'checked="checked"'
+    assert_includes html, '>Active</label>'
+
+    unchecked = render("page account\n  form\n    field active\n",
+                       account: Account.new(name: 'Roth', active: false))
+    refute_includes unchecked, 'checked="checked"'
+  end
+
+  def test_the_page_may_override_the_checkbox_inference
+    html = render("page account\n  form\n    field active, type: text\n",
+                  account: Account.new(name: 'Roth', active: true))
+    assert_includes html, 'type="text"'
+    assert_includes html, 'value="true"'
   end
 
   def test_labels_humanise_the_attribute_name

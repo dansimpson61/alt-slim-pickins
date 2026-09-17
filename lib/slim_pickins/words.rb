@@ -367,9 +367,13 @@ def ___dummy
         required = @kwargs.key?(:required) ? @kwargs[:required] : nil
       name, label = arguments(@args)
       value = subject.fetch(name)
+      # A value that is already true or false knows what shape it wants; the
+      # page says `field done` and gets a checkbox (dan's ruling, 2026-09-17).
+      # `type:` overrides, as every inference is overridable by saying the thing.
+      kind = type || (Inference.boolean?(value) ? :checkbox : Inference.input_type(value))
       emit_node([:field, { name: name, label: label_for(name, label),
                            value: value,
-                           kind: type || Inference.input_type(value),
+                           kind: kind,
                            step: (step || Inference.step_for(value))&.to_s,
                            required: required }, []])
 

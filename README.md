@@ -195,5 +195,5 @@ file here the escape hatch stands at **1 use in 356 sentences**.
 Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
 Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
 ruby check_styles.rb && ruby bin/check_promises.rb &&
-ruby bin/check_conventions.rb && ruby bin/verify_pages.rb &&
-for f in test/*_test.rb; do ruby $f; done`
+ruby bin/check_conventions.rb && ruby bin/check_card.rb &&
+ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
