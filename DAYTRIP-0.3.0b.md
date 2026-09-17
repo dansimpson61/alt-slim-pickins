@@ -1257,10 +1257,11 @@ convention applies, not what it yields for this word: eight words declare
 `box_tag`, whose `decides` sentence lists examples, so no entry tells a reader
 that `disclosure` becomes a `<details>`. The value is in `BOX_TAGS`, so a
 generator that read it could show it — that is a change to the generated bullet,
-and a decision. And two words disagree about what triggers `label`: `chart`
-declares it for reading a row's `label_for`, `column` does not though its header
-comes the same way. One of the two is wrong; which convention the *app's*
-`label_for` counts as is dan's call.
+and a decision. And two conventions name the same three levels: `chart` declares
+`label` while the path it walks is `table_header`'s (both `Builder#label_of`, per
+F9 in `ROADMAP-0.3.md`). Adding `label` to `column` to match was tried and
+reverted — one value described by two conventions is worse than the asymmetry.
+The tidy is a rename, and it is not this round's.
 
 **The acceptance test, corrected.** Byte-identity was the right test for the
 register and the wrong test for the per-word bullets: their existing prose never

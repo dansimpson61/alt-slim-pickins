@@ -487,6 +487,24 @@ with nothing to load.
   **No ruling.** Each claim is either false prose to correct or a feature to
   build, and that choice is dan's. The prose was deleted in the reference-shape
   round, so `VOCABULARY.md` no longer lies; the five behaviours are still absent.
+- **F9 — two conventions name the same three levels, and one word declares the
+  wrong one.** Measured 2026-09-17 while checking the reference-shape join.
+  `table_header`'s marker is `Builder#label_of` (`builder.rb:147`), whose own
+  comment says it is "the same three levels as everywhere else — the page said
+  it, or the app said it, or English — except that here 'the app' is the row".
+  `Chart#resolve` calls that same `label_of` for its series labels
+  (`words.rb`, `label: label_of({ name:, header: series[:label] }, sample)`) —
+  so `chart` declares `label`, whose marker is a *different* method
+  (`Builder#label_for`), while the path it walks is `table_header`'s. And
+  `column`, which walks the identical path, declares `table_header`. Adding
+  `label` to `column` was tried and reverted: the entry then carried both
+  conventions describing one value in two sentences, which is worse than the
+  asymmetry. The honest state: row-oriented labels want one name, and
+  `table_header` is table-scoped although its helper is not. The cheap fix is a
+  rename (`table_header` → a name covering a table's header *and* a chart's
+  series) declared by `column` and `chart`, with `label` dropped from `chart`;
+  the generator would rewrite the affected bullets. **Not done** — a naming
+  round nobody asked for, inside a round that had already landed its scope.
 
 ### The scoping (2026-09-16) — three wins parked, and the bluesky brief
 

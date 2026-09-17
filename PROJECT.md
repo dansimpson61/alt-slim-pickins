@@ -11,26 +11,26 @@ next_step: >-
   via the new `infers:` slot, `VOCABULARY.md`'s `conventions` bullets are
   generated from the join and held by `check_grammar.rb`, and
   `bin/check_conventions.rb` holds both directions — 34 conventions named by
-  a declaration, 4 owned by the page or the runtime. What is open, in the
-  order it wants dan: (1) **F8 in ROADMAP-0.3.md** — five claims no code kept
-  (`page`'s flash, `money`'s currency and locale, `number`'s separators,
-  `time`'s locale format, `link`'s subject-derived path); the prose is gone
-  so the register no longer lies, but fix-the-claim versus build-the-feature
-  is his call. (2) Whether the app's `label_for` counts as the `label`
-  convention — `chart` declares it, `column` does not, and one is wrong.
-  (3) Whether the generated `conventions` bullet should show what a
-  convention *yields* for the word (eight words declare `box_tag` and no
-  entry says which element), which the generator could read from `BOX_TAGS`.
-  (4) A cheap reachability leg, unbuilt: nothing checks that a declaring word
-  reaches the home it names, nor that a word reaching a home declared it —
-  the hand audit held, and hand audits are not measurements. Two defect
-  repairs landed the same day: the tabs ids are numbered per render instead
-  of from `object_id`, so a page is a pure function of its source and the
-  byte-diff harness works on it again; and the gathering road is open —
-  `Word#word` lets `inside:` find its gatherer, the dead `render_partial` is
-  gone, and the road is pinned by `test/gathering_road_test.rb`. Left as
-  recorded divergences: the 42 Ruby `contract` calls keep `content: true`,
-  and HANDOFF and README each carry a current copy of the gate command.
+  a declaration, 4 owned by the page or the runtime. **One thing wants dan:
+  F8 in `ROADMAP-0.3.md`** — five claims no code ever kept (`page`'s flash,
+  `money`'s currency and locale, `number`'s separators, `time`'s locale
+  format, `link`'s subject-derived path), each re-measured with its evidence.
+  The lying prose is gone, so the register is honest either way; what is his
+  is whether the language owes those behaviours or the prose was simply
+  wrong. Recorded as findings, not waiting on him: F9 (two conventions name
+  the same three levels — `chart` declares `label` while it walks
+  `table_header`'s path; the tidy is a rename, not done), that the generated
+  bullet cannot show what a convention yields (eight words declare
+  `box_tag`; no entry says which element), and that no leg proves a
+  declaring word reaches the home it names — the hand audit held, and a hand
+  audit is not a measurement. Two defect repairs landed the same day: the
+  tabs ids are numbered per render instead of from `object_id`, so a page is
+  a pure function of its source and the byte-diff harness works on it again;
+  and the gathering road is open — `Word#word` lets `inside:` find its
+  gatherer, the dead `render_partial` is gone, and the road is pinned by
+  `test/gathering_road_test.rb`. Left as recorded divergences: the 42 Ruby
+  `contract` calls keep `content: true`, and HANDOFF and README each carry a
+  current copy of the gate command.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
