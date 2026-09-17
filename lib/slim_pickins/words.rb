@@ -5,7 +5,7 @@ require_relative 'word'
 module SlimPickins
   module Words
     class Page < Word
-      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: []
+      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: [], infers: [:document, :title, :layout]
 
       def evaluate
         favicon = @kwargs.key?(:favicon) ? @kwargs[:favicon] : nil
@@ -37,7 +37,7 @@ module SlimPickins
     end
 
     class Link < Says
-      contract name: :destination, content: true, modifiers: [:to, :active], shape: :says, lazy: []
+      contract name: :destination, content: true, modifiers: [:to, :active], shape: :says, lazy: [], infers: [:link_href, :label]
       maps name: :name, content: :label
     end
 
@@ -47,7 +47,7 @@ module SlimPickins
     end
 
     class Box < Word
-      contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: []
+      contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: [], infers: [:box_body_over_children]
 
       def evaluate
         open = @kwargs.key?(:open) ? @kwargs[:open] : nil
@@ -59,7 +59,7 @@ module SlimPickins
     end
 
     class Heading < Encloses
-      contract content: true, shape: :presents, lazy: []
+      contract content: true, shape: :presents, lazy: [], infers: [:heading_level, :box_title]
       maps content: :body
     end
 
@@ -79,7 +79,7 @@ end
     end
 
     class Each < Word
-      contract name: :binding, modifiers: [:from], children: :any, subject: :each, speech: :determiner, shape: :iterates, lazy: []
+      contract name: :binding, modifiers: [:from], children: :any, subject: :each, speech: :determiner, shape: :iterates, lazy: [], infers: [:plural_collection, :singular_binding, :subject_or_collection]
 
       def evaluate
 from = @kwargs.key?(:from) ? @kwargs[:from] : nil
@@ -102,7 +102,7 @@ emit_node([:each, { name: name }, collected])
     end
 
     class Table < Word
-      contract name: :subject, content: true, children: [:column, :total, :choose, :each], subject: :shift, shape: :gathers, lazy: []
+      contract name: :subject, content: true, children: [:column, :total, :choose, :each], subject: :shift, shape: :gathers, lazy: [], infers: [:table_rows]
 
       def evaluate
   name, caption = arguments(@args)
@@ -159,7 +159,7 @@ def ___dummy
     end
 
     class Column < Word
-      contract name: :attribute, content: true, modifiers: [:as], parents: [:table], subject: :row, shape: :registers, lazy: []
+      contract name: :attribute, content: true, modifiers: [:as], parents: [:table], subject: :row, shape: :registers, lazy: [], infers: [:column_registration, :table_header, :numeric_alignment, :format]
 
       def evaluate
         as = @kwargs.key?(:as) ? @kwargs[:as] : nil
@@ -170,7 +170,7 @@ def ___dummy
     end
 
     class Total < Word
-      contract name: :attribute, content: true, parents: [:table], shape: :registers, lazy: []
+      contract name: :attribute, content: true, parents: [:table], shape: :registers, lazy: [], infers: [:column_registration, :format]
 
       def evaluate
       name, label = arguments(@args)
@@ -196,7 +196,7 @@ def ___dummy
     end
 
     class Fact < Word
-      contract name: :attribute, content: true, shape: :presents, lazy: []
+      contract name: :attribute, content: true, shape: :presents, lazy: [], infers: [:label, :format]
 
       def evaluate
       name, value = arguments(@args)
@@ -219,7 +219,7 @@ def ___dummy
 
 
     class Metric < Word
-      contract name: :attribute, content: true, modifiers: [:as], shape: :says, lazy: []
+      contract name: :attribute, content: true, modifiers: [:as], shape: :says, lazy: [], infers: [:label, :format]
 
       def evaluate
         as = @kwargs.key?(:as) ? @kwargs[:as] : nil
@@ -232,7 +232,7 @@ def ___dummy
     end
 
     class Chart < Word
-      contract name: :subject, content: true, modifiers: [:over], children: [:band, :line, :level, :each, :choose], subject: :shift, shape: :gathers, lazy: []
+      contract name: :subject, content: true, modifiers: [:over], children: [:band, :line, :level, :each, :choose], subject: :shift, shape: :gathers, lazy: [], infers: [:chart_axis, :format_family, :label]
 
       def evaluate
   over = @kwargs.key?(:over) ? @kwargs[:over] : nil
@@ -281,7 +281,7 @@ def ___dummy
     end
 
     class Band < Word
-      contract name: :attribute, content: true, parents: [:chart], shape: :registers, lazy: []
+      contract name: :attribute, content: true, parents: [:chart], shape: :registers, lazy: [], infers: [:column_registration]
 
       def evaluate
       name, label = arguments(@args)
@@ -291,7 +291,7 @@ def ___dummy
     end
 
     class Line < Word
-      contract name: :attribute, content: true, modifiers: [:from], parents: [:chart], shape: :registers, lazy: []
+      contract name: :attribute, content: true, modifiers: [:from], parents: [:chart], shape: :registers, lazy: [], infers: [:column_registration]
 
       def evaluate
         from = @kwargs.key?(:from) ? @kwargs[:from] : nil
@@ -302,7 +302,7 @@ def ___dummy
     end
 
     class Level < Word
-      contract content: true, parents: [:chart], shape: :registers, lazy: []
+      contract content: true, parents: [:chart], shape: :registers, lazy: [], infers: [:column_registration]
 
       def evaluate
       register!(SlimPickins::Words::Chart,
@@ -334,7 +334,7 @@ def ___dummy
     end
 
     class Tab < Encloses
-      contract content: true, children: :any, modifiers: [:active], shape: :encloses
+      contract content: true, children: :any, modifiers: [:active], shape: :encloses, lazy: [], infers: [:label]
       maps content: :label
     end
 
@@ -354,12 +354,12 @@ def ___dummy
     end
 
     class Group < Encloses
-      contract name: :topic, content: true, children: :any, shape: :encloses, lazy: []
+      contract name: :topic, content: true, children: :any, shape: :encloses, lazy: [], infers: [:group_shape, :label]
       maps content: :legend
     end
 
     class Field < Word
-      contract name: :attribute, content: true, modifiers: [:type, :step, :required], shape: :says, lazy: []
+      contract name: :attribute, content: true, modifiers: [:type, :step, :required], shape: :says, lazy: [], infers: [:label, :input_type, :input_step, :boolean_field]
 
       def evaluate
         type = @kwargs.key?(:type) ? @kwargs[:type] : nil
@@ -381,7 +381,7 @@ def ___dummy
     end
 
     class Input < Word
-      contract name: :attribute, content: true, modifiers: [:type, :placeholder], shape: :says, lazy: []
+      contract name: :attribute, content: true, modifiers: [:type, :placeholder], shape: :says, lazy: [], infers: [:input_type]
 
       def evaluate
         type = @kwargs.key?(:type) ? @kwargs[:type] : nil
@@ -396,7 +396,7 @@ def ___dummy
     end
 
     class Textarea < Word
-      contract name: :attribute, content: true, modifiers: [:rows, :required], shape: :says, lazy: []
+      contract name: :attribute, content: true, modifiers: [:rows, :required], shape: :says, lazy: [], infers: [:label]
 
       def evaluate
         rows = @kwargs.key?(:rows) ? @kwargs[:rows] : nil
@@ -422,7 +422,7 @@ def ___dummy
     end
 
     class Checkbox < Word
-      contract name: :attribute, content: true, shape: :says, lazy: []
+      contract name: :attribute, content: true, shape: :says, lazy: [], infers: [:label]
 
       def evaluate
       name, label = arguments(@args)
@@ -433,7 +433,7 @@ def ___dummy
     end
 
     class Choice < Word
-      contract name: :attribute, content: true, children: [:option, :choice], shape: :gathers, lazy: []
+      contract name: :attribute, content: true, children: [:option, :choice], shape: :gathers, lazy: [], infers: [:label, :option_selected]
 
       def evaluate
 name, label = arguments(@args)
@@ -462,7 +462,7 @@ emit_node([:choice, { name: @name, label: label_for(@name, @label), selected: @s
     end
 
     class Button < Word
-      contract name: :variant, content: true, modifiers: [:to, :target, :type, :size], shape: :says, lazy: []
+      contract name: :variant, content: true, modifiers: [:to, :target, :type, :size], shape: :says, lazy: [], infers: [:button_type]
 
       def evaluate
         to = @kwargs.key?(:to) ? @kwargs[:to] : nil
@@ -478,7 +478,7 @@ emit_node([:choice, { name: @name, label: label_for(@name, @label), selected: @s
     end
 
     class Choose < Word
-      contract children: [:when, :otherwise], speech: :verb, shape: :gathers, lazy: []
+      contract children: [:when, :otherwise], speech: :verb, shape: :gathers, lazy: [], infers: [:first_truthy_branch]
 
       def evaluate
   with_open

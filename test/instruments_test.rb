@@ -128,4 +128,44 @@ class InstrumentsTest < Minitest::Test
     assert_equal %i[card section], declaring,
                  'the words declaring an inference changed; the register was written for card and section'
   end
+
+  # --- the reference shape (2026-09-17) ---------------------------------------
+  #
+  # A convention's prose has one home — the register — and a word names the ones
+  # it triggers in its own declaration. The document's `conventions` bullet is
+  # generated from the join, so an entry shows the register's prose instead of
+  # restating it. These four tests hold the mechanism; `check_grammar.rb` holds
+  # the document against it, and `bin/check_conventions.rb` holds the link.
+
+  def test_a_word_declares_the_conventions_it_triggers
+    field = SlimPickins::CONTRACTS[:field]
+
+    assert_includes field.infers, :label
+    assert_includes field.infers, :input_type
+    assert_includes field.infers, :boolean_field
+  end
+
+  def test_the_conventions_bullet_is_generated_from_the_declaration
+    bullet = SlimPickins::Conventions.bullet(SlimPickins::CONTRACTS[:field])
+
+    assert_match(/\A- \*\*conventions\*\* — /, bullet)
+    assert_includes bullet, '`label` — the human label'
+    assert_includes bullet, '`boolean_field`'
+  end
+
+  def test_a_word_that_declares_nothing_gets_no_bullet
+    assert_nil SlimPickins::Conventions.bullet(SlimPickins::CONTRACTS[:note])
+  end
+
+  def test_the_link_holds_both_ways
+    names = SlimPickins::Promises.language_words
+                               .flat_map { |word| Array(SlimPickins::CONTRACTS[word]&.infers) }.uniq
+    entries = SlimPickins::Conventions::ALL.map(&:name)
+
+    assert_empty names - entries, 'a word declares a convention the register does not hold'
+    unowned = SlimPickins::Conventions::ALL.reject { |c| names.include?(c.name) }
+    assert_equal 4, unowned.size,
+                 "a convention is named by no word and does not say who owns it: #{unowned.map(&:name).inspect}"
+    unowned.each { |convention| refute_nil convention.owned_by, "`#{convention.name}` has no owner" }
+  end
 end

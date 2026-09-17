@@ -10,6 +10,7 @@
 # this script is the only way to edit them: change the contract, run this.
 
 require_relative '../lib/slim_pickins'
+require_relative '../lib/slim_pickins/conventions'
 
 path = File.join(__dir__, '..', 'VOCABULARY.md')
 source = File.read(path)
@@ -39,6 +40,32 @@ parts.each_slice(2) do |header, body|
     next if old == bullet
 
     body = body.sub(old, bullet)
+    changed += 1
+  end
+
+  # The reference shape (2026-09-17): the conventions a word triggers are
+  # generated from its own `infers:` declaration, so the register's prose is
+  # shown here rather than restated. Placed after the five checkable bullets,
+  # before the prose half.
+  conventions = SlimPickins::Conventions.bullet(contract)
+  existing = body[/^- \*\*conventions\*\* —.*$/, 0]
+  if conventions
+    if existing
+      unless existing == conventions
+        body = body.sub(existing, conventions)
+        changed += 1
+      end
+    else
+      subject_line = body[/^- \*\*subject\*\* —.*$/, 0]
+      if subject_line
+        body = body.sub(subject_line, "#{subject_line}\n#{conventions}")
+        changed += 1
+      else
+        puts "#{word} has no subject bullet to put its conventions after — skipped"
+      end
+    end
+  elsif existing
+    body = body.sub("#{existing}\n", '')
     changed += 1
   end
   out << body

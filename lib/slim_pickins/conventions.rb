@@ -27,9 +27,12 @@ module SlimPickins
     # name, when the page is silent, what is decided, where that lives (file +
     # a marker string in it), which Inference functions it owns (one entry may
     # own several — `money`, `percent` and `number` are three forms of one
-    # convention), the sentence that overrides it, and its grade.
+    # convention), the sentence that overrides it, its grade, and who triggers
+    # it: a word declares `infers: <name>`, so `owned_by` is only set for a
+    # convention no word can declare — one the page or the runtime decides.
     Convention = Struct.new(:name, :when_silent, :decides, :file, :marker,
-                            :inference, :override, :grade, keyword_init: true)
+                            :inference, :override, :grade, :owned_by,
+                            keyword_init: true)
 
     ALL = [
       # --- structural: the tree decides -------------------------------------
@@ -118,17 +121,17 @@ module SlimPickins
                      decides: 'that it is a collection and not a hash',
                      file: 'lib/slim_pickins/inference.rb', marker: 'def collection?',
                      inference: :collection?, override: 'nothing',
-                     grade: :structural),
+                     grade: :structural, owned_by: :runtime),
       Convention.new(name: :nothing_detection, when_silent: 'a collection with nothing in it',
                      decides: 'that "nothing" is the situation, not a false value',
                      file: 'lib/slim_pickins/inference.rb', marker: 'def nothing_in?',
                      inference: :nothing_in?, override: 'nothing',
-                     grade: :structural),
+                     grade: :structural, owned_by: :runtime),
       Convention.new(name: :root_class, when_silent: 'a promoted word with a single root',
                      decides: 'that the root node carries the word\'s own class',
                      file: 'lib/slim_pickins/builder.rb', marker: 'class_base',
                      inference: nil, override: 'nothing',
-                     grade: :structural),
+                     grade: :structural, owned_by: :runtime),
       Convention.new(name: :link_href, when_silent: '`link show`',
                      decides: '`href="/show"`',
                      file: 'lib/slim_pickins/generator.rb', marker: 'def link',
@@ -235,7 +238,7 @@ module SlimPickins
                      file: 'assets/slim-pickins.css', marker: '--measure',
                      inference: nil,
                      override: 'none exists — a word must carry it, or an app word through the hatch',
-                     grade: :axiomatic)
+                     grade: :axiomatic, owned_by: :page)
     ].freeze
 
     # `Inference`'s public functions that no page meets directly: live inside
@@ -249,5 +252,24 @@ module SlimPickins
     }.freeze
 
     def self.by_grade(grade) = ALL.select { |c| c.grade == grade }
+
+    # The `conventions` bullet of a word's vocabulary entry, generated from the
+    # word's own declaration (2026-09-17). This is the reference shape's payoff:
+    # the prose below lives once, in the register, and a word's entry *shows* the
+    # conventions it triggers instead of restating them. A word that declares
+    # none gets no bullet, which is a fact worth being able to see.
+    def self.bullet(contract)
+      names = Array(contract.infers)
+      return nil if names.empty?
+
+      entries = names.filter_map { |name| ALL.find { |c| c.name == name } }
+      text = entries.map do |convention|
+        clause = "`#{convention.name}` — #{convention.decides}"
+        override = convention.override.to_s
+        clause += " (override: #{override})" unless override.start_with?('nothing') || override.empty?
+        clause
+      end.join('; ')
+      "- **conventions** — #{text}"
+    end
   end
 end

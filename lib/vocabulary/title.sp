@@ -1,4 +1,4 @@
-expects takes: content, shape: presents
+expects takes: content, shape: presents, infers: heading_level
 
 
 heading .content

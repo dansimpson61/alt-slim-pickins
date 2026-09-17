@@ -1,4 +1,4 @@
-expects takes: content, children: any, shape: encloses
+expects takes: content, children: any, shape: encloses, infers: box_tag
 
 
 box .content

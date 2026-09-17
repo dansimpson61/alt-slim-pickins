@@ -465,6 +465,28 @@ with nothing to load.
   the fabricated evidence a swarm auditor vetoed: a record that lies, kept.
   ROADMAP-0.2's Phase 6 heading carries no closure mark though Round E and
   PROJECT.md both treat it as closed.
+- **F8 — five claims the register made that no code keeps.** Found 2026-09-17
+  while landing the reference shape: each was prose in a word's `infers` bullet
+  describing an inference no code makes, so a reader of `VOCABULARY.md` would
+  believe a feature exists. Re-measured 2026-09-17, evidence verbatim:
+  - **`page` — "any pending flash message, rendered in a conventional place."**
+    No code reads a flash: `grep -rn flash lib/slim_pickins/ studio/` returns
+    nothing. `flash` is a partial a page must write by hand.
+  - **`money` — "the currency and locale from the app."** `Inference.money`
+    hardcodes `"$"` (`inference.rb:117`), and `Generator#span` never calls
+    `format_for`. Rendered: `money .amount` → `<span class="money">$1,234</span>`.
+  - **`number` — "thousands separators from the locale."** `Inference.separated`
+    hardcodes `,` (`inference.rb:110`). Rendered: `<span class="number">1,234</span>`.
+  - **`time` — "the date format from the app's locale."** `Inference.moment`
+    hardcodes `'%-d %B %Y'` (`inference.rb:81`). Rendered:
+    `<time datetime="2026-09-17T09:30:00-04:00">17 September 2026</time>` — the
+    machine-readable attribute half of the claim *is* true, and is `time_text`'s.
+  - **`link` — "the path from the name and the subject (`show` on a holding
+    gives that holding's page)."** Rendered: `each holding` + `link show` →
+    `<a href="/show" class="link">Show</a>` — the subject never enters the path.
+  **No ruling.** Each claim is either false prose to correct or a feature to
+  build, and that choice is dan's. The prose was deleted in the reference-shape
+  round, so `VOCABULARY.md` no longer lies; the five behaviours are still absent.
 
 ### The scoping (2026-09-16) — three wins parked, and the bluesky brief
 

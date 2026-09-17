@@ -32,14 +32,20 @@ module SlimPickins
   # id        — the word's id derives from the subject (`card`).
   # label     — the word's content is labelled by the app contract
   #             (`section`'s heading).
+  # infers    — the conventions this word triggers, by name, into
+  #             `Conventions::ALL`. A convention's prose has one home — the
+  #             register — and a word names the ones it uses; the document's
+  #             `conventions` bullet is generated from the join, so a word entry
+  #             can no longer restate a rule the register already states.
   Contract = Struct.new(:name, :content, :modifiers, :children, :parents, :subject,
                         :speech, :shape, :gathers, :inside, :lazy, :empty, :id, :label,
+                        :infers,
                         keyword_init: true) do
     def initialize(**kw)
       super(**{ name: :none, content: false, modifiers: [], children: :none,
                 parents: :any, subject: :keep, speech: :noun, shape: nil,
                 gathers: false, inside: :any, lazy: [], empty: false, id: false,
-                label: false }.merge(kw))
+                label: false, infers: [] }.merge(kw))
     end
   end
 
@@ -111,6 +117,10 @@ if key == :takes
     kwargs[:modifiers] ||= []
     kwargs[:modifiers] << taken
   end
+elsif key == :infers
+  # `infers: label` — the convention this word triggers, by name. Repeatable,
+  # and only a name: the prose lives once, in the register.
+  (kwargs[:infers] ||= []) << value_str.to_sym
 elsif FLAGS.include?(key)
   kwargs[key] = value == true || value == 'true'
 elsif %i[name inside speech subject shape].include?(key)

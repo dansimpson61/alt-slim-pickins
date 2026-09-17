@@ -19,6 +19,7 @@
 
 require 'set'
 require_relative 'lib/slim_pickins'
+require_relative 'lib/slim_pickins/conventions'
 
 DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md ROADMAP-0.3.md
             BLUESKY.md
@@ -175,6 +176,22 @@ File.read(File.join(here, 'VOCABULARY.md'))
     next if actual == bullet
 
     puts "  UNGENERATED   VOCABULARY.md `#{word}`: expected #{bullet.inspect}, got #{actual.inspect}"
+    problems += 1
+  end
+
+  # The `conventions` bullet is generated from the word's own `infers:`
+  # declaration (2026-09-17), so it is held the same way the five are: the
+  # register's prose has one home and the entry shows it, cannot restate it
+  # differently, and cannot carry one for a word that declares nothing.
+  expected = SlimPickins::Conventions.bullet(contract)
+  # No `/m`: with it `.` matches newlines and `.*$` swallows the rest of the
+  # entry. The bullet is one line, and the check must compare one line.
+  actual = body[/^- \*\*conventions\*\* —.*$/, 0]
+  if expected && actual != expected
+    puts "  UNGENERATED   VOCABULARY.md `#{word}`: expected #{expected.inspect}, got #{actual.inspect}"
+    problems += 1
+  elsif expected.nil? && actual
+    puts "  UNGENERATED   VOCABULARY.md `#{word}` shows a conventions bullet and declares none"
     problems += 1
   end
 end

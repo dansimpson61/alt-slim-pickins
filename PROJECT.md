@@ -2,23 +2,35 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened and all five of its stops taken 2026-09-17, and its ruled work landed the same day — E1, E2, E3, option 3, W1, the two variant rules and the two studio declarations. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the status page running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox, boolean literals in modifier position, a variant the stylesheet cannot style refused, the preamble spelling reduced to one form for what a word takes, `grid cards` and `grid metrics` given intent-named rules, and W1 (the census now measures the load's render — 18 of 18 `ok`). The ledger holds 32 promises and none without a reader; the register holds 38 conventions; the gate is 96 rules and 326 runs green on three seeds.
+status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened and all five of its stops taken 2026-09-17, and its ruled work landed the same day — E1, E2, E3, option 3, W1, the two variant rules, the two studio declarations, and the register's reference shape (the `infers:` slot, 39 words declaring, a two-way checker, generated `conventions` bullets, the per-word prose relocated where it was shared and left where it was local). Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the status page running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox, boolean literals in modifier position, a variant the stylesheet cannot style refused, the preamble spelling reduced to one form for what a word takes, `grid cards` and `grid metrics` given intent-named rules, and W1 (the census now measures the load's render — 18 of 18 `ok`). The ledger holds 32 promises and none without a reader; the register holds 38 conventions; the gate is 96 rules and 339 runs green, seven legs and 29 test files, all exit 0.
 kind: project
 last_touched: 2026-09-17
 next_step: >-
-  The next round, chosen by dan, is the register's reference shape — proposed
-  in full in DAYTRIP-0.3.0b: the register keeps the convention prose, a
-  word's declaration names the conventions it uses (a new `infers:` slot,
-  spelled like `takes:`), VOCABULARY.md's bullets are generated from the
-  join, and the checker holds it both ways, with a `trigger` on each entry
-  because not every convention is owned by a word. Two defect repairs landed
-  the same day: the tabs ids are numbered per render instead of from
-  `object_id`, so a page is a pure function of its source and the byte-diff
-  harness works on it again; and the gathering road is open — `Word#word`
-  lets `inside:` find its gatherer, the dead `render_partial` is gone, and
-  the road is pinned by `test/gathering_road_test.rb`. Left as recorded
-  divergences: the 42 Ruby `contract` calls keep `content: true`, and
-  HANDOFF and README each carry a current copy of the gate command.
+  The register's reference shape landed 2026-09-17 (DAYTRIP-0.3.0b, "The
+  register's reference shape"): a word declares the conventions it triggers
+  via the new `infers:` slot, `VOCABULARY.md`'s `conventions` bullets are
+  generated from the join and held by `check_grammar.rb`, and
+  `bin/check_conventions.rb` holds both directions — 34 conventions named by
+  a declaration, 4 owned by the page or the runtime. What is open, in the
+  order it wants dan: (1) **F8 in ROADMAP-0.3.md** — five claims no code kept
+  (`page`'s flash, `money`'s currency and locale, `number`'s separators,
+  `time`'s locale format, `link`'s subject-derived path); the prose is gone
+  so the register no longer lies, but fix-the-claim versus build-the-feature
+  is his call. (2) Whether the app's `label_for` counts as the `label`
+  convention — `chart` declares it, `column` does not, and one is wrong.
+  (3) Whether the generated `conventions` bullet should show what a
+  convention *yields* for the word (eight words declare `box_tag` and no
+  entry says which element), which the generator could read from `BOX_TAGS`.
+  (4) A cheap reachability leg, unbuilt: nothing checks that a declaring word
+  reaches the home it names, nor that a word reaching a home declared it —
+  the hand audit held, and hand audits are not measurements. Two defect
+  repairs landed the same day: the tabs ids are numbered per render instead
+  of from `object_id`, so a page is a pure function of its source and the
+  byte-diff harness works on it again; and the gathering road is open —
+  `Word#word` lets `inside:` find its gatherer, the dead `render_partial` is
+  gone, and the road is pinned by `test/gathering_road_test.rb`. Left as
+  recorded divergences: the 42 Ruby `contract` calls keep `content: true`,
+  and HANDOFF and README each carry a current copy of the gate command.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

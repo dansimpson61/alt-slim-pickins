@@ -68,9 +68,8 @@ condition holds. It is not repeated in the entries below.
 - **modifiers** — `favicon:`
 - **children** — anything
 - **subject** — the named thing
-- **infers** — the `<title>` and the top heading from the name; the doctype,
-  `<html>`, `<head>` and `<body>` entirely; and any pending flash message,
-  rendered in a conventional place. Override the title with content
+- **conventions** — `document` — the doctype, html/head/body, the charset and the viewport; `title` — the `<title>` and the top heading, humanised from the name (override: `page portfolio, "Your retirement"`); `layout` — the chrome every page wears, with `contents` marking the hole (override: delete the layout, or move the page)
+- **infers** — none
 - **renders** — the whole document
 
 ```
@@ -154,6 +153,7 @@ and bit immediately, because every real page has navigation.
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
+- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
 - **infers** — its position as the last thing in the page
 - **renders** — `<footer>`
 
@@ -172,8 +172,7 @@ footer "Approximate directional estimates. Not tax advice."
 - **modifiers** — none
 - **children** — anything
 - **subject** — the named thing
-- **infers** — the heading from the name (`holdings` → "Holdings"); the class
-  from the name. Override the heading with content
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…; `box_depth` — the depth their children's headings start at
 - **renders** — `<section class="holdings"><h2>Holdings</h2>…</section>`
 
 ```
@@ -201,8 +200,8 @@ change an untouched page. See the rule in [DESIGN.md](DESIGN.md).
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **infers** — the label from the name; renders as a `fieldset` with a
-  `legend` inside a form, and a labelled `div` outside one
+- **conventions** — `group_shape` — fieldset and legend; outside one, a div and an h2; `label` — the human label — the page, then the app, then English (override: say the label in the page)
+- **infers** — none
 - **renders** — `<fieldset><legend>…</legend>…</fieldset>`
 
 ```
@@ -253,7 +252,8 @@ The name says what the cells are: `grid cards`, `grid metrics`.
 - **modifiers** — none
 - **children** — `item`, `each`
 - **subject** — unchanged
-- **infers** — an unordered list
+- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **infers** — none
 - **renders** — `<ul>`
 
 ```
@@ -271,7 +271,8 @@ ordinary case. `list` governs `item` instead.
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **infers** — nothing
+- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **infers** — none
 - **renders** — `<li>`
 
 ```
@@ -287,8 +288,8 @@ list plain
 - **modifiers** — none
 - **children** — `column`, `total`, `choose`, `each`
 - **subject** — the named thing
-- **infers** — one row per element, in the collection's order. The loop is
-  never written
+- **conventions** — `table_rows` — the rows, so no page writes a loop
+- **infers** — none
 - **renders** — `<table>` with head and body
 
 ```
@@ -303,10 +304,8 @@ table holdings, "As of today"
 - **modifiers** — `as:`
 - **children** — none
 - **subject** — unchanged; the enclosing word supplies each row in turn
-- **infers** — the header from the name (`due_on` → "Due on"); each cell's
-  value from that attribute; the cell's presentation and alignment from the
-  value's type, so money is formatted and right-aligned without being asked.
-  Override the header with content, the presentation with `as:`
+- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row; `table_header` — the header — the row, then the enclosing subject, then English (override: say the header on the column); `numeric_alignment` — right alignment; `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
+- **infers** — each cell's value from that attribute
 - **renders** — one `<th>` in the head, one `<td>` per row
 
 ```
@@ -323,8 +322,8 @@ table holdings
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — the sum over the table's collection; the same presentation the
-  column uses. Override the label with content
+- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row; `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
+- **infers** — the sum over the table's collection
 - **renders** — a `<tfoot>` row
 
 ```
@@ -340,7 +339,8 @@ table holdings
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **infers** — its DOM id from the subject, so `id` is never written
+- **conventions** — `card_id` — the DOM id, as `word-id` (override: say `id:` yourself); `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…; `box_depth` — the depth their children's headings start at
+- **infers** — none
 - **renders** — `<article class="card">`
 
 ```
@@ -355,6 +355,7 @@ card compact
 - **modifiers** — `path:`, `return_to:`
 - **children** — anything
 - **subject** — unchanged
+- **conventions** — `partial_slot_forwarding` — that the value is sought up the chain — how `actions path:` reaches `action` (override: say it on the child instead)
 - **infers** — that its children are the operations on the enclosing thing;
   their layout and spacing
 - **renders** — `<div class="actions">`
@@ -370,6 +371,7 @@ actions
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
+- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
 - **infers** — that everything *not* in an `aside` is the main column, so no
   `main` word is needed; the column split and its collapse on small screens
 - **renders** — `<aside>`
@@ -388,8 +390,8 @@ Replaces the CSS arithmetic — a three-column grid whose body spans two — tha
 - **modifiers** — `open:`
 - **children** — anything
 - **subject** — unchanged
-- **infers** — closed until opened; the toggle control and its state, so no
-  script is written. Override with `open:`
+- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **infers** — none
 - **renders** — `<details><summary>…</summary>…</details>`
 
 ```
@@ -411,8 +413,8 @@ button, an id, a data attribute, a CSS class and a JavaScript handler on it.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — its heading level from how deep it sits, so `h2` versus `h3` is
-  never chosen by hand
+- **conventions** — `heading_level` — its level, from how deep it sits (override: nest it differently; no page says a level)
+- **infers** — none
 - **renders** — `<h2>`, `<h3>` …
 
 ```
@@ -491,8 +493,8 @@ already exists and renders something else.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — the label from the value when content is omitted; the variant
-  from the value when it is a known status
+- **conventions** — `badge_status` — the variant class, when the body names a known status (override: name the variant: `badge ok`); `leaf_tag` — the element — a span, or a time
+- **infers** — the label from the value when content is omitted
 - **renders** — `<span class="badge badge--ok">`
 
 ```
@@ -512,8 +514,8 @@ it was cut in 0.2 Phase 6, and this line went on naming it).
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — the label from the name (`origin_project` → "Origin project");
-  the value from that attribute when content is omitted
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
+- **infers** — the value from that attribute when content is omitted
 - **renders** — a `<dt>`/`<dd>` pair
 
 ```
@@ -553,8 +555,9 @@ snippet ruby, .example
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — the currency and locale from the app; whole dollars unless
-  cents matter; a class on negatives so red is CSS's job, not the template's
+- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the element — a span, or a time
+- **infers** — whole dollars unless cents matter; a class on negatives so
+  red is CSS's job, not the template's
 - **renders** — `<span class="money money--negative">−$1,234</span>`
 
 ```
@@ -574,8 +577,8 @@ currency" — not a domain noun. A portfolio has balances, not prices, and
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — that the value is a fraction and multiplies it; one decimal
-  place
+- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the element — a span, or a time
+- **infers** — one decimal place
 - **renders** — `<span class="percent">4.5%</span>`
 
 ```
@@ -590,7 +593,8 @@ percent .weight, precision: 2
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — thousands separators from the locale
+- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the element — a span, or a time
+- **infers** — none
 - **renders** — `<span class="number">750,000</span>`
 
 ```
@@ -604,8 +608,8 @@ number .shares
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — the date format from the app's locale; a machine-readable
-  attribute alongside the human text
+- **conventions** — `time_text` — the rendered date, and the machine `datetime` attribute (override: `time relative, .stamp`); `leaf_tag` — the element — a span, or a time
+- **infers** — none
 - **renders** — `<time datetime="2026-08-30">30 August 2026</time>`
 
 ```
@@ -622,6 +626,7 @@ The variants are `date`, `datetime` and `relative`.
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
+- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
 - **infers** — that the caption belongs to the child, and associates them for
   screen readers
 - **renders** — `<figure>` with a `<figcaption>`
@@ -640,9 +645,8 @@ round that lets a figure hold a chart or a listing rather than only an image.
 - **modifiers** — `as:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — the label from the name; the value from that attribute of the
-  subject; the presentation from the value's type. Override the label with
-  content, the presentation with `as:`
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
+- **infers** — the value from that attribute of the subject
 - **renders** — a stat tile: `<div class="metric"><h3>…</h3><div
   class="metric-value">…</div></div>`
 
@@ -661,9 +665,9 @@ Found by reading a real page, not by imagining one. `#metrics` in
 - **modifiers** — `over:`
 - **children** — `band`, `line`, `level`, `each`, `choose`
 - **subject** — the named thing
-- **infers** — the scale, the axes and their ticks, the x labels from the
-  singular of the name, every series label from the row's `label_for`, every
-  value's formatting from the row's `format_for`, and the key from the series
+- **conventions** — `chart_axis` — the axis labels, from each row's singular (override: `over:` names the attribute); `format_family` — number, percent or money, from the value (override: `as:`); `label` — the human label — the page, then the app, then English (override: say the label in the page)
+- **infers** — the scale, the axes and their ticks, and the key from the
+  series
 - **renders** — inline `<svg>`
 
 ```
@@ -691,6 +695,7 @@ counts.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
+- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row
 - **infers** — its label and its number formatting from the row
 - **renders** — a filled `<path>`, stacked on the bands before it
 
@@ -712,6 +717,7 @@ chart of four bands is a stacked area and the top of the stack is the total.
 - **modifiers** — `from:`
 - **children** — none
 - **subject** — unchanged
+- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row
 - **infers** — as `band`
 - **renders** — a stroked `<path>`, over the bands rather than added to them
 
@@ -734,6 +740,7 @@ laid over a chart without a second chart.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
+- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row
 - **infers** — nothing; both its parts are said
 - **renders** — a horizontal rule across the plot, labelled where it sits
 
@@ -761,8 +768,8 @@ tells a reader nothing and flattens everything that would have.
 - **modifiers** — `to:`, `active:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — the path from the name and the subject (`show` on a holding
-  gives that holding's page); the label from the name when content is omitted
+- **conventions** — `link_href` — `href="/show"` (override: `to:`); `label` — the human label — the page, then the app, then English (override: say the label in the page)
+- **infers** — none
 - **renders** — `<a href>`
 
 ```
@@ -777,8 +784,8 @@ link show, "View holding"
 - **modifiers** — `to:`, `target:`, `type:`, `size:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — `type="submit"` inside a `form`, `type="button"` outside one.
-  Override with `type:`
+- **conventions** — `button_type` — `type="submit"`; outside one, `type="button"` (override: `type:`)
+- **infers** — none
 - **renders** — `<button class="button button--primary">`
 
 ```
@@ -813,11 +820,9 @@ alone.
 - **modifiers** — `type:`, `step:`, `required:`
 - **children** — none
 - **subject** — unchanged
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `input_type` — the input type, from the value's class (override: `type:`); `input_step` — `step="0.01"` (override: `step:`); `boolean_field` — that the field is a checkbox, because a value that is already true or false knows the shape it wants (override: `type: text`)
 - **infers** — the input name from the attribute; the current value from the
-  subject; the input type from the *value's class*, so a number is a number
-  without being told. The label is inferred from the name only when that name
-  already reads as English — acronyms, abbreviations and domain phrasing are
-  not derivable and must be said. Override any of them
+  subject
 - **renders** — `<label>` plus `<input>`
 
 ```
@@ -842,9 +847,9 @@ every time; the label was right about three times in ten, which is why the
 - **modifiers** — `type:`, `placeholder:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — the current value from the subject; the input type from the
-  value's class, like `field`. Unlike `field`, it says no label — a search
-  box names nothing, it just sits there.
+- **conventions** — `input_type` — the input type, from the value's class (override: `type:`)
+- **infers** — the current value from the subject. Unlike `field`,
+  it says no label — a search box names nothing, it just sits there.
 - **renders** — a bare `<input>`
 
 ```
@@ -858,8 +863,9 @@ input q, placeholder: "search…"
 - **modifiers** — `rows:`, `required:`
 - **children** — none
 - **subject** — unchanged
-- **infers** — the same as `field`: the name, the current value from the
-  subject, and the label with the same three levels of precedence.
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page)
+- **infers** — the name and the current value from the subject, as
+  `field` reads them.
 - **renders** — `<label>` plus `<textarea>`
 
 ```
@@ -877,7 +883,8 @@ rather than the widget, and this is a noun language.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — the label from the name; checked state from the subject
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page)
+- **infers** — the checked state from the subject
 - **renders** — `<label>` plus `<input type="checkbox">`
 
 ```
@@ -894,9 +901,9 @@ outside HTML, and its children — `option` — already read as nouns.
 - **modifiers** — none
 - **children** — `option`, `choice`
 - **subject** — unchanged
-- **infers** — the label from the name; the selected option from the subject.
-  When it has no `option` children, the choices come from the attribute's own
-  domain
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `option_selected` — which option is selected, by comparing value to value
+- **infers** — the choices from the attribute's own domain when it has no
+  `option` children
 - **renders** — `<label>` plus `<select>`
 
 ```
@@ -930,8 +937,8 @@ choice conversion_strategy
 - **modifiers** — `from:`
 - **children** — anything
 - **subject** — each element in turn
-- **infers** — the collection by pluralising the name (`holding` →
-  `holdings`). Override with `from:`
+- **conventions** — `plural_collection` — which collection to read — `y`→`ies`, otherwise `+s` (override: `from:` on the collection word); `singular_binding` — that the bound name is `holding`, reachable from inside (override: name it something else and say `from:`); `subject_or_collection` — that the subject *is* the collection, so it iterates itself
+- **infers** — none
 - **renders** — nothing of its own; the children repeat
 
 ```
@@ -946,8 +953,8 @@ each holding, from: .taxable
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — the condition: it renders when the enclosing subject has
-  nothing in it, and suppresses its siblings when it does
+- **conventions** — `empty_situation` — that `empty` renders and its siblings do not
+- **infers** — none
 - **renders** — `<p class="empty">`
 
 ```
@@ -965,8 +972,8 @@ situation instead of writing the branch, and the enclosing `section` or
 - **modifiers** — none
 - **children** — `when`, `otherwise`
 - **subject** — unchanged
-- **infers** — that the first `when` whose condition holds wins, and that
-  `otherwise` is last
+- **conventions** — `first_truthy_branch` — that exactly one branch renders — the first that holds (override: two sequential `choose`s for two independent rows)
+- **infers** — none
 - **renders** — nothing of its own
 
 ```
@@ -1109,6 +1116,7 @@ paragraph quiet, "A quieter line."
 - **modifiers** — `open:`, `id:`
 - **children** — anything
 - **subject** — unchanged
+- **conventions** — `box_body_over_children` — that the body renders *instead of* the children (override: give the box children and no content)
 
 The atom under the wrappers — the box a word owns. Classes still derive
 from the word, so nothing a human could style by hand comes back.
@@ -1126,6 +1134,7 @@ box shelf
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
+- **conventions** — `heading_level` — its level, from how deep it sits (override: nest it differently; no page says a level); `box_title` — that it is the box's title, at the box's own level (override: use `title` or `text` instead)
 
 The atom under `title` — the heading level derives from where it sits,
 which is a tree fact the interpreter reads.
@@ -1209,6 +1218,7 @@ many there are.
 - **modifiers** — `active:`
 - **children** — anything
 - **subject** — unchanged
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page)
 
 ```
 tab "Raw HTML"

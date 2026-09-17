@@ -1,4 +1,4 @@
-expects variant, children: any, shape: encloses
+expects variant, children: any, shape: encloses, infers: box_tag
 
 
 box .name

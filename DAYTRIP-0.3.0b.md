@@ -1203,3 +1203,71 @@ legs.
 
 And **the name.** *The Accent* was mine; the work became about transparency and
 managed sources of truth, which the name only half carries.
+
+### The register's reference shape *(landed 2026-09-17)*
+
+**Taken** — the shape proposed above, with one correction found while building
+it, one acceptance test that could not survive contact, and two declarations the
+building itself caught missing.
+
+**What landed.** `infers:` is a contract slot, spelled like the preamble's other
+declarations: repeatable, a name and never prose. In `words.rb` it reads
+`infers: [:label, :format]`; in a `.sp` preamble, `infers: label`. Thirty-nine
+words now declare — 23 Ruby, 16 partials — and the four conventions no word can
+declare carry `owned_by:` instead: `collection_detection`, `nothing_detection`
+and `root_class` are the runtime's, `theme_roles` is the page's. `bin/check_conventions.rb`
+holds the join in both directions — every declared name exists in the register,
+its home still contains its marker, and no entry is left without a trigger.
+`Conventions.bullet` turns a declaration into a word's `conventions` line,
+`bin/generate_vocabulary.rb` writes all thirty-eight of them, and `check_grammar.rb`
+holds them: a hand-edit fails, the regenerated file passes. Four tests pin it.
+
+**The correction — the prose is not all shared.** The proposal said a word's
+`infers` prose would be *replaced* by the generated reference. Building it showed
+two kinds of fact living in one bullet: the conventions a word triggers, which
+are shared and now live once in the register, and rules that are the word's own
+and can never be shared. So the relocation is partial by design, and the split is
+the doctrine: a word's `infers` line keeps what only it knows and names what the
+register knows. `section`'s "the class from the name" turned out to be
+`root_class` — true of every promoted word, which is exactly why no single word
+should carry it.
+
+**The consequence rule 1 forced.** Cutting the bullet from the fifteen words
+whose facts were entirely shared left fifteen *blank slots*, and the register's
+own rule 1 says an unanswered slot is a gap in the language, not a default: write
+`none`. They now read `- **infers** — none` under a `conventions` line that names
+what they trigger. An entry saying `none` beside three conventions is the
+reference shape working — it is visibly a word that decides nothing itself.
+
+**Two declarations were missing, and building this found them.** `group` derives
+its legend and `tab` its label through `Builder#label_for` — the `label`
+convention, page then app then English — and neither declared it. Both do now.
+This is the failure mode the instruments cannot see: the checker proves a
+declared name exists and its home is still there; it cannot prove the declaring
+word *reaches* that home, nor that a word reaching a home has declared it. Both
+directions were audited by hand this round and hold — the eight words declaring
+`box_tag` are exactly `BOX_TAGS`' keys, the five declaring `leaf_tag` are exactly
+`SPAN_TAGS`, `field` reaches all four helpers it declares, and the four `format`
+declarers each call `format_of` or the subject's `format_for` — but the audit is
+a reading, not a measurement. A leg checking those two tables by membership is
+cheap; it is not built.
+
+**Two gaps left open, named rather than papered over.** The join shows *that* a
+convention applies, not what it yields for this word: eight words declare
+`box_tag`, whose `decides` sentence lists examples, so no entry tells a reader
+that `disclosure` becomes a `<details>`. The value is in `BOX_TAGS`, so a
+generator that read it could show it — that is a change to the generated bullet,
+and a decision. And two words disagree about what triggers `label`: `chart`
+declares it for reading a row's `label_for`, `column` does not though its header
+comes the same way. One of the two is wrong; which convention the *app's*
+`label_for` counts as is dan's call.
+
+**The acceptance test, corrected.** Byte-identity was the right test for the
+register and the wrong test for the per-word bullets: their existing prose never
+was the register's prose, so demanding identity would have preserved the false
+claims F8 records. What held instead is what "a relocation, not a rewrite"
+actually required — the register's thirty-eight entries are unchanged, the diff
+touching no prose field (it adds `owned_by` and a method), the generated bullets
+are byte-identical to what the generator produces, and the gate is green: seven
+legs, 29 test files, 339 runs, 3,682 assertions, every exit 0.
+

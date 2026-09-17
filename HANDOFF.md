@@ -155,15 +155,16 @@ This protocol is fragmented across several system rules. **You must execute ever
   `Projection.of`).
 - **Everything green before committing:**
   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-17, at the close of DAYTRIP-0.3.0b, which added
-  three of these legs: 306 runs / 0 failures in one process, assertions
-  varying with class order as recorded in the lore — the dashboard's
-  harness, which is the stronger one and worth running too: `ruby
+  (re-measured 2026-09-17, at the close of DAYTRIP-0.3.0b and again after the
+  register's reference shape: **339 runs / 3,682 assertions / 0 failures
+  across 29 test files**, per-file exit codes all 0 — the dashboard's
+  harness over the same files is the stronger run and worth doing too: `ruby
   -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
-  — plus 705 sentences / 0 problems, 94 rules / 0 problems, 64 words and
+  — plus 705 sentences / 0 problems, 96 rules / 0 problems, 64 words and
   all 64 used in real pages / 0 problems, 14 pages verified, 25
   affordances / 0 missing, 32 promises and **none without a reader**, 38
-  conventions / 0 problems; the 13-page count retired with the paper
+  conventions / 0 problems, 39 words declaring the conventions they trigger;
+  the 13-page count retired with the paper
   pages, the 69-word count with Phase 6's cuts)
   **The three instruments DAYTRIP-0.3.0b landed:** `check_promises.rb` (the
   promise ledger — does a permission actually do anything?), `check_conventions.rb`

@@ -90,9 +90,49 @@ end
   problems += 1
 end
 
+# --- 5. the word link, both ways (2026-09-17) --------------------------------
+# This is the reference shape: a convention's prose has one home — the register —
+# and a word names the ones it triggers (`infers: label`), so the document's
+# `conventions` bullet is generated from the join and a word entry can no longer
+# restate a rule the register already states. Held in both directions: a name a
+# word declares must exist, and a convention no word declares must say who owns
+# it — the page or the runtime — or it is a rule with no trigger, which is the
+# promise ledger's question asked of prose.
+named = Hash.new { |h, k| h[k] = [] }
+SlimPickins::Promises.language_words.each do |word|
+  contract = SlimPickins::CONTRACTS[word]
+  next unless contract
+
+  Array(contract.infers).each { |convention| named[convention] << word }
+end
+by_name = entries.to_h { |c| [c.name, c] }
+
+(named.keys - by_name.keys).sort.each do |convention|
+  puts "  UNREGISTERED `#{convention}` is declared by #{named[convention].join(', ')} and is no convention"
+  problems += 1
+end
+entries.each do |convention|
+  next if named.key?(convention.name) || convention.owned_by
+
+  puts "  NO TRIGGER   `#{convention.name}` is named by no word and says no owner — " \
+       'add `owned_by: :page` or `:runtime`, or declare it from the word that triggers it'
+  problems += 1
+end
+(named.keys & by_name.keys).each do |name|
+  next unless by_name[name].owned_by
+
+  puts "  BOTH         `#{name}` says it is owned by #{by_name[name].owned_by} and " \
+       "#{named[name].join(', ')} declares it"
+  problems += 1
+end
+
 # --- the report --------------------------------------------------------------
 puts
 puts "convention register — #{entries.size} conventions, every one with its home and its override"
+named_count = entries.count { |c| named.key?(c.name) }
+owned = entries.count { |c| c.owned_by }
+puts "  the word link: #{named_count} named by a word's own `infers:` declaration " \
+     "(#{named.values.flatten.uniq.size} words declaring), #{owned} owned by the page or the runtime"
 %i[structural shape domain axiomatic].each do |grade|
   names = SlimPickins::Conventions.by_grade(grade).map(&:name)
   puts "  #{grade.to_s.ljust(10)} #{names.size.to_s.rjust(2)}  #{names.join(' ')}"

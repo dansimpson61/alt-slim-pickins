@@ -243,6 +243,18 @@ working manual that should be better after every session than it was before.
 - **He likes the lore format** — a lesson, not a status report. What you did
   goes in the commit; what you learned goes in the lore.
 
+- **"Take it" takes the shape, not the internals.** He answers a poll by
+  naming an option — "The name is good. Open it.", "take it." — and that is a
+  ruling on the *shape* on offer, not a promise that the shape survives being
+  built. When building the register's reference shape showed its own
+  acceptance test could not hold (per-word byte-identity) and that its central
+  move over-reached (one slot replacing prose that held word-local facts too),
+  the right response was to build the corrected shape and bring the correction
+  back in the record — not to widen scope, not to quietly force the proposal
+  through. He rules on shapes; the internals are the round's to get right,
+  and a proposal that turns out wrong in a detail is a finding for the record
+  (observed 2026-09-17).
+
 ## Proposed deletions — nothing here yet
 
 Entries judged stale by one session wait here, struck through, dated, with a
