@@ -106,7 +106,10 @@ handed start/stop to the agents. It serves whatever code it booted with,
 so **after every round, restart it so it runs the latest committed code,
 and leave it running** — dan's browser should always see current work.
 The routine: check the port (`curl -s -m 2 http://127.0.0.1:4580/`); if it
-is down, boot it (`ruby studio/app.rb`, a background job). During a
+is down, boot it **detached** — `nohup ruby studio/app.rb
+>/tmp/studio.log 2>&1 & disown` — because a session-tracked background job
+gets a graceful SIGTERM (exit 143) when the turn's machinery reaps it,
+while a detached process survives the session. During a
 round, verify on a spare port (`STUDIO_PORT=4597 ruby studio/app.rb`),
 then kill the spare before the round closes. A new session that finds the
 port down boots it again — the standing state in this file is the
