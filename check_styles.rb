@@ -135,15 +135,11 @@ end
 # never reads the stylesheet. A page's variant can therefore be refused at the
 # gate and not at render — named as a limit in the daytrip.
 #
-# Two variants the corpus says are recorded rather than fixed: styling them is
-# a design decision and dropping them is a page change, so they wait on a
-# ruling and are printed on every run until they get one.
-UNSTYLED_BY_RULING = {
-  'grid--cards' => 'said at pages/specimen.sp:57',
-  'grid--metrics' => 'said at pages/specimen.sp:20, examples/portfolio/views/index.sp:3, ' \
-                     'examples/roth/views/partials/report.sp:5'
-}.freeze
-
+# There was a recorded exception list here for one day: `grid--cards` and
+# `grid--metrics` were said in three real pages and styled nowhere, and they
+# waited on a ruling. They got rules (2026-09-17), so the list is gone rather
+# than left empty — an exemption mechanism with nothing to exempt is a rule
+# quietly weakened, and the next unstylable variant should simply fail.
 said_variants = Hash.new { |h, k| h[k] = [] }
 Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].each do |path|
   walk = lambda do |nodes|
@@ -159,15 +155,10 @@ Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].
   walk.call(SlimPickins::Transform.tree(File.read(path), path: path))
 end
 
-(said_variants.keys - defined.to_a - UNSTYLED_BY_RULING.keys).sort.each do |klass|
+(said_variants.keys - defined.to_a).sort.each do |klass|
   fail!("UNSTYLED VARIANT  `#{klass}` is said at #{said_variants[klass].uniq.join(', ')} " \
         'and no rule defines it — a variant nothing can style is refused')
   problems += 1
-end
-UNSTYLED_BY_RULING.each_key do |klass|
-  next unless said_variants.key?(klass)
-
-  puts "  RECORDED    `#{klass}` is said and unstyled — #{UNSTYLED_BY_RULING[klass]}"
 end
 
 # --- 3. every rule corresponds to a word -----------------------------------

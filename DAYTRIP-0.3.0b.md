@@ -1050,14 +1050,16 @@ parses, deliberately: a stale file should be read correctly rather than
 silently misread. **The corpus speaks one spelling and `check_grammar.rb` now
 holds it** — a preamble saying `x: true` fails the gate.
 
-**Step 3 turned out to be a finding, not a cleanup.** The two remaining uses of
-the dead `# key: value` form are `studio/views/partials/sidebar_layout.sp` and
-`split_pane.sp`, where nothing parses them. Making them live is not a
-formality: **measured, it changes the render** — a declared partial with
-`name: :none` does not shift the subject, while an undeclared one does, so the
-comment is not an inert placeholder but a *mis-declaration* whose live form
-would alter subject flow through the studio's own chrome. It is recorded here
-and waits on a ruling rather than being fixed under this daytrip's border.
+**Step 3 turned out to be a finding, not a cleanup — and then the finding was
+wrong.** The two remaining uses of the dead `# key: value` form are
+`studio/views/partials/sidebar_layout.sp` and `split_pane.sp`, where nothing
+parses them. I first recorded, as measured, that making them live changes the
+render. It does not: that measurement was contaminated by `object_id` in the
+tabs generator, and with the ids normalised the two forms are identical across
+all four studio pages — so dan's ruling ("declare them for real, and chase the
+flow change") was executed and the flow change was nil. The correction is in
+*The last three rulings* below, including the defect the contamination exposed;
+the paragraph above stands as the record of what I believed for an hour.
 
 **And the round corrected a checker that had been measuring declarations as
 sentences.** `check_shape.rb` walked the `expects` line as though it were a
@@ -1079,7 +1081,75 @@ spelling", and because it is the obvious next step if the accent is to leave the
 Ruby side too — `has: [:content]`, or a `takes` helper, at the cost of inventing
 a spelling Ruby already has.
 
-### Next round, chosen: the studio's badges *(landed too)*
+### The last three rulings — and a question that found two defects
+
+**1. `gathers` — dan asked whether it is used by tables, lists and collections,
+and he is right; my record was wrong.** The *mechanism* is central: `shape:
+:gathers` is declared by four words (`table`, `chart`, `choose`, `choice`), and
+the gathering runtime — `register!`, `open_gatherer`, `with_gatherer`, the
+`Registers` subclasses — is what `column`, `total`, `band`, `line`, `level`,
+`when`, `otherwise` and `option` all use. What I had found unused is the
+*preamble key*, and calling it "a mechanism with no user" conflated two things.
+The honest statement is narrower and worse:
+
+> **`gathers:` and `inside:` are the road by which an app writes a gatherer in
+> the language, and the road is closed — not unused, broken.**
+
+Two reasons, both measured:
+
+- **`inside:` can never resolve.** It asks `open_gatherer_named` for a gatherer
+  answering to a word name, and that finder matches `g.word` — and **no `Word`
+  instance answers `word`** (checked: `Words::Table` and `PartialWord` both
+  return false). The finder's list of possible targets is empty, so a partial
+  declaring `inside: table` raises *"belongs inside a table"* against a table
+  that is right there. (It never even reaches that: the gate refuses first,
+  because a Ruby gatherer's children list is closed — so the road is shut in two
+  places.)
+- **`Builder#render_partial` is dead code with a broken reference.** The live
+  path for a partial is `PartialWord#evaluate`; `Builder#render_partial` — some
+  eighty lines, a *second* implementation of partial rendering — is called
+  nowhere. Its only mentions are two comments and a test that asserts it stays
+  **private**, and it constructs `SlimPickins::PartialGatherer`, **a constant
+  defined nowhere in the repository**. Nothing has noticed because nothing calls
+  it.
+
+So the answer to his question is: the shape and the runtime are load-bearing,
+and the *partial* road — the one the kernel's work would walk — never worked.
+Recorded, not repaired; the three repairs are each a ruling.
+
+**2. Two variants got rules** (his ruling). `grid cards` and `grid metrics` were
+said in three real pages and styled nowhere. The theme now names two *intents* —
+`--track-roomy` (a track that must hold a card) and `--track-tight` (a figure) —
+and each variant picks one, so the variant says what its tracks must hold rather
+than carrying a number. Measured, they bind where it matters: at 420px wide,
+`grid cards` collapses to **1 track of 372px** while `grid metrics` keeps **2 of
+180px**; at 1100px the inline `columns:` dominates both, as it should. The
+exception list in `check_styles.rb` is **gone rather than left empty** — an
+exemption mechanism with nothing to exempt is a rule quietly weakened, and the
+next unstylable variant now simply fails.
+
+**3. The two studio partials are declared for real — and the flow change I
+warned about was my own error.** I had recorded, as measured, that making the
+comments live changes the render, because a declared partial with no name slot
+does not shift the subject. That measurement was **contaminated**: the `tabs`
+generator derives its radio `name` and `id` from `object_id`, so *the same page
+renders different HTML on every render in a process* — my control (same source,
+twice) differed at exactly those attributes. With both id forms normalised,
+`sidebar_layout.sp` and `split_pane.sp` declared for real render **identically
+across all four studio pages** (index, docs, guide, status), so the declarations
+are written. The rule to keep: a suspicion that has not survived its control is
+not a measurement — and this is the second time in this daytrip that a
+byte-difference turned out to be something other than what I said it was.
+
+**And the contamination left a finding of its own.** `Generator#tabs` derives
+`name="tabs-#{object_id}"` and `id="tab-#{object_id}-#{index}"`, so a page with
+tabs is **not a pure function of its source**: two renders of one page differ.
+That breaks the byte-diff harness the project names as *"the acceptance test for
+refactors"* on any page containing tabs — it broke exactly that for me an hour
+ago — and it would break any caching or comparison built on rendered HTML. It
+needs a stable spelling (the render's own counter, or the tab's index within the
+page) and a ruling, because it changes emitted HTML.
+
 
 **W1** — the palette marks all 18 real pages `error` while all 18 render once
 loaded, because the census measures the empty-data render and the load

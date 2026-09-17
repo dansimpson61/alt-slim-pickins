@@ -1,5 +1,4 @@
-# children: any
-# shape: encloses
+expects children: any, shape: encloses
 
 box
   children

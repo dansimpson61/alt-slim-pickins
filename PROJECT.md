@@ -2,22 +2,25 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened and all five of its stops taken 2026-09-17, and its ruled work landed the same day — E1, E2, E3, option 3 and W1. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the status page running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox, boolean literals in modifier position, a variant the stylesheet cannot style refused, the preamble spelling reduced to one form for what a word takes (dan's option 3), and W1 (the census now measures the load's render — 18 of 18 `ok`). The ledger holds 32 promises and none without a reader; the register holds 38 conventions; the gate is 326 runs / 3628 assertions green on three seeds.
+status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened and all five of its stops taken 2026-09-17, and its ruled work landed the same day — E1, E2, E3, option 3, W1, the two variant rules and the two studio declarations. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the status page running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox, boolean literals in modifier position, a variant the stylesheet cannot style refused, the preamble spelling reduced to one form for what a word takes, `grid cards` and `grid metrics` given intent-named rules, and W1 (the census now measures the load's render — 18 of 18 `ok`). The ledger holds 32 promises and none without a reader; the register holds 38 conventions; the gate is 96 rules and 326 runs green on three seeds.
 kind: project
 last_touched: 2026-09-17
 next_step: >-
-  One piece is proposed in full and not started — the register's reference
-  shape, written out in DAYTRIP-0.3.0b: the register keeps the convention
-  prose, a word's declaration names the conventions it uses (a new `infers:`
-  slot, spelled like `takes:`), VOCABULARY.md's bullets are generated from
-  the join, and the checker holds it both ways — with a `trigger` on each
-  entry because not every convention is owned by a word. Three small things
-  wait on rulings. Two studio partials carry an inert `# children: any`
-  comment preamble whose live form would change subject flow (measured), so
-  it is recorded rather than fixed. Two variants the corpus says are unstyled
-  (`grid--cards`, `grid--metrics`) print on every gate run. And the 42 Ruby
-  `contract` calls keep `content: true` — named as a divergence from one
-  declaration spelling, since Ruby kwargs are Ruby's own idiom.
+  The next round, chosen by dan, is the register's reference shape — proposed
+  in full in DAYTRIP-0.3.0b: the register keeps the convention prose, a
+  word's declaration names the conventions it uses (a new `infers:` slot,
+  spelled like `takes:`), VOCABULARY.md's bullets are generated from the
+  join, and the checker holds it both ways, with a `trigger` on each entry
+  because not every convention is owned by a word. Three defects are
+  recorded and awaiting rulings rather than fixes. `Generator#tabs` derives
+  its ids from `object_id`, so a page with tabs is not a pure function of its
+  source and the byte-diff harness is unreliable on it. The declaration road
+  for writing a gatherer in the language is closed in two places: `inside:`
+  can never resolve, because no Word instance answers `word`, and
+  `Builder#render_partial` is dead code containing a reference to
+  `PartialGatherer`, a constant defined nowhere. And the 42 Ruby `contract`
+  calls keep `content: true`, named as a divergence from one declaration
+  spelling.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

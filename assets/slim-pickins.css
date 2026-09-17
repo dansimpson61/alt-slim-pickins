@@ -72,6 +72,11 @@
   --palette-cap: 16rem;
   --track: 14rem;
   --track-min: 12rem;
+  /* The two intents a grid's floor serves: a track that must hold a card, and
+     one that holds a figure. Named for the intent rather than the word, which
+     is why `grid cards` and `grid metrics` can each pick one. */
+  --track-roomy: 16rem;
+  --track-tight: 9rem;
   --indent: 1.25em;
   --stroke: 2;
   --dash: 6 3;
@@ -156,6 +161,14 @@ a { color: var(--accent); }
   gap: var(--gap);
   grid-template-columns: repeat(auto-fit, minmax(min(var(--track), 100%), 1fr));
 }
+
+/* A grid's variant says what its tracks must hold (2026-09-17): `grid cards`
+   raises the floor so a card has room, `grid metrics` lowers it so a figure is
+   not swamped. Both are named intents in the theme, above. Until this they
+   were said in three real pages and styled nowhere — the refusal that found
+   them is in check_styles.rb. */
+.grid--cards { --track-min: var(--track-roomy); }
+.grid--metrics { --track-min: var(--track-tight); }
 
 .list { margin: 0 0 var(--gap); padding-left: var(--indent); }
 .list--plain { list-style: none; padding-left: 0; }
