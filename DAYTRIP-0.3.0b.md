@@ -1,10 +1,12 @@
 # DAYTRIP-0.3.0b — The Accent
 
-**Opened 2026-09-17, on dan's word.** Findings measured the same day, not
-quoted. Revision 1 answered his first two observations; revision 2 folded in his
-five answers and ran the analysis; revision 3 recorded his five rulings and
-repaired a failure of its own naming; this opening turns it into the record the
-stops are written into.
+**Opened 2026-09-17, on dan's word. Closed the same day.** Findings measured the
+same day, not quoted. Revision 1 answered his first two observations; revision 2
+folded in his five answers and ran the analysis; revision 3 recorded his five
+rulings and repaired a failure of its own naming; the opening turned it into the
+record the stops are written into; the last round landed the reference shape his
+*take it* ruled in and recorded the claims it exposed; and the closing section
+names what it leaves behind.
 
 The subject his fourth answer named: **transparency, and the managed sources of
 truth of sp's conventions and inferences.** The accent audit is the means; the
@@ -908,21 +910,24 @@ check had been piped. Run the legs as a conjunction, or check each status, and
 read the whole output before committing.
 
 Closed: 705 sentences (the checker's, which never counted declarations), 64
-words, 94 rules, 14 pages, 326 runs / 0 failures across three seeds, 25
-affordances / 0 missing, **32 promises and none without a reader**, 38
-conventions. And the shape checker's own vitals moved — 479 → 457 sentences,
-25 → 17 distinct modifiers — because it had been counting declarations as
-sentences; that is a conversation, and it is recorded above.
+words, 96 rules, 14 pages, 339 runs / 3,682 assertions across 29 test files and
+seven legs, 25 affordances / 0 missing, **32 promises and none without a
+reader**, 38 conventions, 39 words declaring them. And the shape checker's own
+vitals moved — 479 → 457 sentences, 25 → 17 distinct modifiers — because it had
+been counting declarations as sentences; that is a conversation, and it is
+recorded above.
 
 ## Where the daytrip closes
 
 All five stops are taken, and everything it named as landable has landed: the
 promise ledger and the convention register (ruled in), the mechanical claim
 corrections, the loader deleted, `if:` honoured, `field` inferring a checkbox,
-`bin/check_card.rb`, and the test teardown. **The ledger holds 32 promises and
-none without a reader**; the register holds 38 conventions, every one with its
-home and its override; the gate is seven legs and the studio's status page shows
-all seven.
+`bin/check_card.rb`, the test teardown, and — last, on his *take it* — the
+reference shape the register's prose was waiting for. **The ledger holds 32
+promises and none without a reader**; the register holds 38 conventions, every
+one with its home and its override, and 39 words declare the ones they trigger;
+the gate is seven legs, 29 test files, 339 runs / 3,682 assertions, every exit 0,
+and the studio's status page shows all seven.
 
 ### E1 — a variant nothing can style is refused *(landed)*
 
@@ -1272,3 +1277,39 @@ touching no prose field (it adds `owned_by` and a method), the generated bullets
 are byte-identical to what the generator produces, and the gate is green: seven
 legs, 29 test files, 339 runs, 3,682 assertions, every exit 0.
 
+
+### What the daytrip leaves behind — and closes
+
+**Five claims no code kept (F8, `ROADMAP-0.3.md`).** Recorded, and on dan's
+ruling the same day, nothing built: *"Record the finding and keep this daytrip
+moving toward closure."* The word list is corrected, so the register is honest;
+the behaviours stay absent until a real page demands one.
+
+**The join's two limits.** The generated `conventions` bullet names a convention
+and cannot show what it yields for the word (eight words declare `box_tag`; no
+entry says `disclosure` becomes a `<details>`, though `BOX_TAGS` knows). And no
+leg proves a declaring word reaches the home it names, nor that a word reaching
+a home declared it — both directions were audited by hand and held, and a hand
+audit is not a measurement.
+
+**The rename F9 describes.** `chart` declares `label` while walking
+`table_header`'s path; matching them by adding `label` to `column` was tried and
+reverted, because one value described by two conventions is worse than the
+asymmetry. A naming round, not this one.
+
+**E4, E6, E7 and E8 stay open, and they were never this daytrip's to answer** —
+what a comment is, what owns an inference the page cannot see, whether `tag`
+closes, and whether a style vocabulary is the axiomatic grade's voice or more
+machine language. The last is the one the style round this daytrip prepared will
+have to face.
+
+**`DAYTRIP-0.3.0a` waits for the reading his fifth answer promised** — held, not
+withdrawn, to be read again against what this one learned once this one closed.
+That reading is now due.
+
+**The repairs (cause B) belong to Phase 3** and wait for a real sentence.
+
+The daytrip is closed. What it built is held by the gate it is a leg of; what it
+found is in the ledger, with the one decision that was dan's ruled and recorded;
+and the register now says, for every convention, what happens when the page stays
+silent, who decided, and which words trigger it.

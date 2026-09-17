@@ -484,9 +484,11 @@ with nothing to load.
   - **`link` — "the path from the name and the subject (`show` on a holding
     gives that holding's page)."** Rendered: `each holding` + `link show` →
     `<a href="/show" class="link">Show</a>` — the subject never enters the path.
-  **No ruling.** Each claim is either false prose to correct or a feature to
-  build, and that choice is dan's. The prose was deleted in the reference-shape
-  round, so `VOCABULARY.md` no longer lies; the five behaviours are still absent.
+  **Ruled 2026-09-17 (dan): record it, build nothing.** *"Record the finding and
+  keep this daytrip moving toward closure."* The word list is corrected, so the
+  register no longer lies; the five behaviours stay absent until a real page
+  demands one, and the two that could be built without new syntax (`money` /
+  `number` / `time` reading the app's `format_for`) stay shut with them.
 - **F9 — two conventions name the same three levels, and one word declares the
   wrong one.** Measured 2026-09-17 while checking the reference-shape join.
   `table_header`'s marker is `Builder#label_of` (`builder.rb:147`), whose own

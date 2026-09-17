@@ -2,30 +2,25 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened and all five of its stops taken 2026-09-17, and its ruled work landed the same day — E1, E2, E3, option 3, W1, the two variant rules, the two studio declarations, and the register's reference shape (the `infers:` slot, 39 words declaring, a two-way checker, generated `conventions` bullets, the per-word prose relocated where it was shared and left where it was local). Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the status page running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox, boolean literals in modifier position, a variant the stylesheet cannot style refused, the preamble spelling reduced to one form for what a word takes, `grid cards` and `grid metrics` given intent-named rules, and W1 (the census now measures the load's render — 18 of 18 `ok`). The ledger holds 32 promises and none without a reader; the register holds 38 conventions; the gate is 96 rules and 339 runs green, seven legs and 29 test files, all exit 0.
+status: PHASE 0 — the studio, won iteratively. DAYTRIP-0.3.0b (The Accent) opened and closed 2026-09-17, with all five stops taken, and everything it named as landable landed the same day — E1, E2, E3, option 3, W1, the two variant rules, the two studio declarations, and the register's reference shape (the `infers:` slot, 39 words declaring, a two-way checker, generated `conventions` bullets, the per-word prose relocated where it was shared and `none` where there was nothing of its own). Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost; BLUESKY.md followed on dan's ask for creative scoping. Landed since — three instruments (`bin/check_promises.rb`, `bin/check_conventions.rb`, `bin/check_card.rb`, all gate legs, the status page running seven), twelve mechanical claim corrections, one ruled subtraction (`PrimitiveShapes` deleted), `if:` honoured by the transform, `field` inferring a checkbox, boolean literals in modifier position, a variant the stylesheet cannot style refused, the preamble spelling reduced to one form for what a word takes, `grid cards` and `grid metrics` given intent-named rules, and W1 (the census now measures the load's render — 18 of 18 `ok`). The ledger holds 32 promises and none without a reader; the register holds 38 conventions; the gate is 96 rules and 339 runs green, seven legs and 29 test files, all exit 0.
 kind: project
 last_touched: 2026-09-17
 next_step: >-
-  The register's reference shape landed 2026-09-17 (DAYTRIP-0.3.0b, "The
-  register's reference shape"): a word declares the conventions it triggers
-  via the new `infers:` slot, `VOCABULARY.md`'s `conventions` bullets are
-  generated from the join and held by `check_grammar.rb`, and
-  `bin/check_conventions.rb` holds both directions — 34 conventions named by
-  a declaration, 4 owned by the page or the runtime. **One thing wants dan:
-  F8 in `ROADMAP-0.3.md`** — five claims no code ever kept (`page`'s flash,
-  `money`'s currency and locale, `number`'s separators, `time`'s locale
-  format, `link`'s subject-derived path), each re-measured with its evidence.
-  The lying prose is gone, so the register is honest either way; what is his
-  is whether the language owes those behaviours or the prose was simply
-  wrong. Recorded as findings, not waiting on him: F9 (two conventions name
-  the same three levels — `chart` declares `label` while it walks
-  `table_header`'s path; the tidy is a rename, not done), that the generated
-  bullet cannot show what a convention yields (eight words declare
-  `box_tag`; no entry says which element), and that no leg proves a
-  declaring word reaches the home it names — the hand audit held, and a hand
-  audit is not a measurement. Two defect repairs landed the same day: the
-  tabs ids are numbered per render instead of from `object_id`, so a page is
-  a pure function of its source and the byte-diff harness works on it again;
+  DAYTRIP-0.3.0b is closed — the account and what it leaves behind are in its
+  closing section. What is open, and none of it wants dan before he says so:
+  **F8** (five claims no code ever kept — `page`'s flash, `money`'s currency
+  and locale, `number`'s separators, `time`'s locale format, `link`'s
+  subject-derived path; each re-measured with evidence, ruled 2026-09-17 as
+  *record it, build nothing*); **F9** (two conventions name the same three
+  levels — `chart` declares `label` while it walks `table_header`'s path; the
+  tidy is a rename, not done); that the generated bullet cannot show what a
+  convention yields (eight words declare `box_tag`; no entry says which
+  element); and that no leg proves a declaring word reaches the home it names.
+  The daytrip's own reading list for after it closes: `DAYTRIP-0.3.0a` is held
+  and due a re-reading; causes B's repairs wait in Phase 3 for a real sentence;
+  E4/E6/E7/E8 stay dan's. Two defect repairs landed the same day as the rest:
+  the tabs ids are numbered per render instead of from `object_id`, so a page
+  is a pure function of its source and the byte-diff harness works on it again;
   and the gathering road is open — `Word#word` lets `inside:` find its
   gatherer, the dead `render_partial` is gone, and the road is pinned by
   `test/gathering_road_test.rb`. Left as recorded divergences: the 42 Ruby

@@ -11,12 +11,18 @@ Resume work on `~/dev/alt-slim-pickins`.
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
 3. `ROADMAP-*.md` — the active roadmap: 0.2 is closed; 0.3 (the forward eye,
-   three legs in one question) is in Phase 0 — the studio, won iteratively,
-   win 1 (the palette) landed; `PROJECT.md` `next_step` points at the pick
-4. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
-5. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
-6. `LORE.md` — what previous sessions *learned*; the last entries are this session's
-7. `working-with-dan.md` — candid notes on working with him: what his
+   three legs in one question) is in Phase 0 — the studio, won iteratively;
+   ten wins landed 2026-09-15; `PROJECT.md` `next_step` points at the pick
+4. `DAYTRIP-0.3.0b.md` — *The Accent*, opened and closed 2026-09-17: the two
+   instruments, the mechanical claim corrections, and the register's reference
+   shape (a word declares the conventions it triggers). Its closing section
+   names what it leaves behind, including F8 (five claims no code kept —
+   recorded, on dan's ruling nothing built) and F9. `DAYTRIP-0.3.0a.md` is
+   held, not withdrawn, and is due the re-reading dan's fifth answer promised.
+5. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
+6. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`), and so are the `conventions` bullets of the 39 words that declare one
+7. `LORE.md` — what previous sessions *learned*; the last entries are this session's
+8. `working-with-dan.md` — candid notes on working with him: what his
    questions mean, what lands, what does not. It is short, it is honest, and
    **it is yours to keep true** — updating it is part of the round. Its top
    note says dan asked for it to be promoted machine-wide; whoever can write
