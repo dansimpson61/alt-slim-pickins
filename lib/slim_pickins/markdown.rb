@@ -162,9 +162,10 @@ module SlimPickins
     # --- tables ---------------------------------------------------------------
 
     # A separator row is pipes and dash runs, nothing else. The dash run
-    # carries the table's shape; alignment colons are recognised but not
-    # rendered — no document uses them (measured 2026-09-09), and a form
-    # with no consumer is not grown.
+    # carries the table's shape, and the alignment colons are rendered — `table`
+    # below reads them into `align="…"`. (This comment said the opposite until
+    # 2026-09-17, and the code beside it was right: a comment is a second home
+    # for a truth, and this one had drifted.)
     def separator_row?(line)
       return false unless line.include?('|')
 

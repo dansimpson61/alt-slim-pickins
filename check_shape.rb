@@ -4,7 +4,7 @@
 # The third checker: a word is reviewable.
 #
 #   - every word declares a part of speech and a structural shape, in its
-#     contract — the language is a noun language (45 of 50), and the five
+#     contract — the language is a noun language (59 of 64), and the five
 #     non-nouns are the control flow
 #   - the vitals are printed, measured over the real .sp corpus
 #

@@ -149,16 +149,23 @@ This protocol is fragmented across several system rules. **You must execute ever
   `video` AppWord), `examples/roth/views/*` (via `Scenario.defaults` +
   `Projection.of`).
 - **Everything green before committing:**
-  `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
-  (re-measured 2026-09-15, end-of-phase housekeeping after Phase 0's ten
-  wins: 295 runs / 0 failures in one process, assertions varying with
+  `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
+  (re-measured 2026-09-17, on the daytrip that added the last two legs:
+  306 runs / 0 failures in one process, assertions varying with
   class order as recorded in the lore — the dashboard's harness, which
   is the stronger one and worth running too: `ruby -Ilib:test -e
   'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'` — plus 705
   sentences / 0 problems, 94 rules / 0 problems, 64 words and all 64 used
-  in real pages / 0 problems, 14 pages verified, 25 affordances / 0 missing;
+  in real pages / 0 problems, 14 pages verified, 25 affordances / 0 missing,
+  33 promises / 3 with no reader, 37 conventions / 0 problems;
   the 13-page count retired with the paper pages, the 69-word count with
   Phase 6's cuts)
+  **`check_promises.rb` and `check_conventions.rb` are the two instruments
+  DAYTRIP-0.3.0b landed** — the promise ledger (does a permission actually do
+  anything?) and the convention register (what will this do when I stay
+  silent, and who decided?). Both are green in the gate and report their debt;
+  `bin/check_promises.rb --strict` fails on the three promises with no reader,
+  which is the evidence, not the gate.
   **Set no environment variable to make this pass.** It used to need
   `RACK_ENV=test`, which switched the prettifier off and made every rendering
   test assert HTML production never emitted. If the suite only passes with

@@ -2,8 +2,8 @@
 
 A view language whose grammar stays describable all the way down. It began as
 paper — the first question was what we were building *on* — and it now runs:
-one sentence, fifty-three words, its own stylesheet, and two Sinatra apps that
-speak it.
+one sentence, sixty-four words, its own stylesheet, and a studio plus three
+example apps that speak it.
 
 `slim-pickins` is a helper vocabulary layered on Slim. This is the other
 experiment: what a view language looks like if the grammar itself is the
@@ -100,7 +100,7 @@ this as money* and the formatting belongs to the word.
 
 - **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
   no open questions.
-- **[VOCABULARY.md](VOCABULARY.md)** — fifty-three words, seven slots each.
+- **[VOCABULARY.md](VOCABULARY.md)** — sixty-four words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
 - **[ROADMAP-0.1.md](history/ROADMAP-0.1.md)** — closed, and kept as the record
@@ -194,5 +194,6 @@ file here the escape hatch stands at **1 use in 356 sentences**.
 
 Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
 Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
-ruby check_styles.rb && ruby bin/verify_pages.rb &&
+ruby check_styles.rb && ruby bin/check_promises.rb &&
+ruby bin/check_conventions.rb && ruby bin/verify_pages.rb &&
 for f in test/*_test.rb; do ruby $f; done`

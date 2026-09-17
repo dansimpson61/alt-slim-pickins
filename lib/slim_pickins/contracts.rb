@@ -193,6 +193,12 @@ end
   # A node is Transform's; ancestry is the stack of words above it. Errors
   # speak the language, naming the word and what it may or may not do.
   module Contracts
+    # The modifiers every word accepts, whether or not it declares them. Named
+    # once, because a permit list living inside a method body is a source of
+    # truth no checker can read — and this one has three entries of which one
+    # is read by nothing (`DAYTRIP-0.3.0b`, the promise ledger).
+    UNIVERSAL_MODIFIERS = %i[if class id].freeze
+
     NAME_TEXT = {
       none: 'none', subject: 'the subject this word presents; it must be there',
       binding: 'the singular of the collection; also binds that name',
@@ -239,7 +245,7 @@ end
       return "`#{word}` takes no name — #{names.join(', ')}" if contract.name == :none && names.any?
       return "`#{word}` takes no content or data — #{data.join(', ')}" if !contract.content && data.any?
 
-      unknown = modifiers - (contract.modifiers + %i[if class id])
+      unknown = modifiers - (contract.modifiers + UNIVERSAL_MODIFIERS)
       "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?
     end
 

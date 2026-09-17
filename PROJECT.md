@@ -2,19 +2,21 @@
 schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
-status: PHASE 0 — the studio, won iteratively. Ten wins landed 2026-09-15, then a 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row — up from KERNEL.md's 4.73 / 0.22). dan then parked the three proposed wins and asked for creative scoping, not coding — BLUESKY.md (the studio's measured landscape, four candidate shapes for a style language, the four grades of inference) — and then, on reading it, set the deeper subject. That subject is human language, convention and inference as sp's reason to exist, machine language's remnants persisting in sp, transparency as the criterion for what lands, and the sources of truth of the conventions and inferences as the most important tools for shaping sp's future. Two daytrip outlines await his ruling — DAYTRIP-0.3.0b (revision 2, leading; its analysis has run and found a fourth cause) and DAYTRIP-0.3.0a (held, per his word). Nothing built, nothing fixed.
+status: PHASE 0 — the studio, won iteratively, with DAYTRIP-0.3.0b (The Accent) opened 2026-09-17 on dan's word. Ten studio wins landed 2026-09-15; a 2026-09-16 orientation round recorded seven findings and re-measured the cost (warm 5.65 ms, 0.26 ms/row); BLUESKY.md followed on his ask for creative scoping; and his fourth answer set the deeper subject — transparency, and the managed sources of truth of sp's conventions and inferences. The daytrip's first round landed both instruments he ruled in. The promise ledger (33 promises, 3 with no reader — `if:`, `PrimitiveShapes`, `boolean?`) and the convention register (37 conventions across the four grades, the axiomatic one recording an absence), both green in the gate, both legs of the studio's status page (now six), both pinned by 11 new tests. Twelve mechanical claim corrections were taken; the arguable ones are named. Stops 2 and 5 are owing.
 kind: project
-last_touched: 2026-09-16
+last_touched: 2026-09-17
 next_step: >-
-  dan rules on DAYTRIP-0.3.0b: whether the fourth cause (an unmanaged
-  source of truth) stands apart from the third (a wrong abstraction);
-  whether the 28 claims the documents make against the tree are
-  corrected in this daytrip or only listed; which register lands first
-  (the convention register or the promise ledger); whether Stop 5
-  (measuring transparency in words) is worth a stop or is taste; and
-  whether a third criterion exists beyond human shape (C1) and
-  transparency (C2). Until he rules, the daytrip is an outline and
-  nothing is taken; 0.3.0a stays held for reading afterwards.
+  Stops 2 and 5 of DAYTRIP-0.3.0b are owing. Stop 2 (the three suspects —
+  variants, `label_for`/`format_for`, the attribute hashes) has its evidence
+  ready and needs paper work and dan's judgement; Stop 5 (transparency
+  measured) needs a sampling design before it can produce a number. Three
+  rulings are queued from the round: E4 (`if:` — give it a reader or strike it
+  from the docs), the dead `Inference.boolean?`, and `PrimitiveShapes`'
+  disposition. The register's better home — an `infers:` slot in each word's
+  contract, generating the document as the five checkable bullets already are
+  — is named in the daytrip's limits as the next step. And the studio on :4580
+  is running a four-leg boot; one restart from outside this session's sandbox
+  shows the six-leg status page.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

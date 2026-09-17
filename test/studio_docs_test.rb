@@ -96,17 +96,13 @@ class StudioDocsTest < Minitest::Test
   # page renders for the shape the route gives it, without running the
   # checkers inside the suite.
   def test_status_page_renders_canned_results
-    results = [
-      StudioStatus::Result.new(name: 'Grammar', output: "0 problems\n", ok: true),
-      StudioStatus::Result.new(name: 'Shape', output: "1 problem\n", ok: false)
-    ]
     library = SlimPickins::Library.from(File.expand_path('../studio/views', __dir__))
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'views', 'status.sp')),
                               path: 'status.sp',
-                              locals: { title: 'Status', overview: '1 of 2 legs red.',
-                                        results: results, words: [], guides: [] },
+                              locals: { title: 'Status', words: [], guides: [],
+                                        **StudioStatus.canned_locals },
                               library: library)
-    assert_includes html, '1 of 2 legs red.'
+    assert_includes html, '1 of 6 legs red'
     assert_includes html, 'Grammar'
     assert_includes html, '<pre><code>0 problems', 'the leg output renders as a fence'
     # The state is a badge whose class the stylesheet marks — the page

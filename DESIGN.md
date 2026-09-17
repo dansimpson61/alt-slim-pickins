@@ -3,7 +3,7 @@
 Status: **settled and implemented.** This was written as a wish, before any
 code existed, so that every later extension could be reviewed against it. It
 has not needed to change: the grammar below is the grammar the transform
-implements, and the phases added fifty-three words without adding a rule.
+implements, and the phases added sixty-four words without adding a rule.
 
 Everything here is exercised — `check_grammar.rb` holds every sentence in this
 document and every `.sp` file in the repo to the table in it.
@@ -299,7 +299,7 @@ irregularity and the grammar is what gets fixed.
 ## What the open questions turned out to be
 
 - **The vocabulary itself.** The estimate was "roughly forty". It settled at
-  **fifty-three**, across the phases, and every entry was drafted against a real
+  **sixty-four**, across the phases, and every entry was drafted against a real
   page — `chart` last and most reluctantly, in Phase 8. The bet held: the
   grammar never changed to accommodate a word.
 - **`doctype`.** Solved by absorption rather than by a keyword: it is something

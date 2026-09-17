@@ -1,7 +1,7 @@
 # DAYTRIP-0.3.0a — outline, for discussion
 
 **Status: an outline only. Not opened, not a daytrip yet.** This is the
-proposal dan asked for on 2026-09-16 ("outline a daytrip that would elaborate
+proposal dan asked for on 2026-09-17 ("outline a daytrip that would elaborate
 those premises, leaving space for the decisions that they will support"). It
 becomes a daytrip on his word, and it will move when he does. Nothing here is
 taken.

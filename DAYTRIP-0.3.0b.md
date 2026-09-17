@@ -1,14 +1,14 @@
-# DAYTRIP-0.3.0b — revision 3, ready to open on dan's word
+# DAYTRIP-0.3.0b — The Accent
 
-**Status: all five discussion questions ruled (2026-09-16). Not yet opened —
-that is his word alone, and the only thing still pending.** Revision 1 answered
-his first two observations; revision 2 folded in his five answers and ran the
-analysis; this revision records his five rulings and repairs a failure of its
-own.
+**Opened 2026-09-17, on dan's word.** Findings measured the same day, not
+quoted. Revision 1 answered his first two observations; revision 2 folded in his
+five answers and ran the analysis; revision 3 recorded his five rulings and
+repaired a failure of its own naming; this opening turns it into the record the
+stops are written into.
 
-Proposed name: **The Accent** — then made to serve a larger subject, which his
-fourth answer named: **transparency, and the managed sources of truth of sp's
-conventions and inferences.** Rename at will.
+The subject his fourth answer named: **transparency, and the managed sources of
+truth of sp's conventions and inferences.** The accent audit is the means; the
+two instruments are the thing built.
 
 ---
 
@@ -31,7 +31,7 @@ conventions and inferences.** Rename at will.
 > grow beyond it now. Does that include variants and `label_for`, `format_for`?
 > Does it include our hashes of attributes? What does that include?
 
-**His answers (2026-09-16), which this revision is built on:**
+**His answers (2026-09-17), which revision 2 was built on:**
 
 1. On the criterion: *"That sounds correct and should be demonstrable. Is that
    the sole criterion? Maybe! But we should be aware that there may be more or
@@ -57,7 +57,7 @@ conventions and inferences.** Rename at will.
 5. On `0.3.0a`: *"Let's hold 0.3.0a to see what's still useful after
    `0.3.0b`."*
 
-**His rulings (2026-09-16), on the five questions revision 2 asked:**
+**His rulings (2026-09-17), on the five questions revision 2 asked:**
 
 | # | Question | Ruling |
 |---|---|---|
@@ -458,6 +458,176 @@ convention-heavy word that is *worse*) are named rather than smoothed over.
 
 ---
 
+## Round record (2026-09-17)
+
+**Stops 1, 3 and 4 taken. Stops 2 and 5 not taken, and named as owing.** The
+gate is green before and after, with no vital moved.
+
+### What landed — the two instruments, as ruled
+
+**The promise ledger** (`lib/slim_pickins/promises.rb`, `bin/check_promises.rb`).
+**33 promises**: 27 modifiers declared by words, the 3 the gate permits
+universally, 2 loaders, and 1 helper. Every one names its reader — except
+**three that have none**, recorded rather than hidden:
+
+| No reader | What it is | Disposed by |
+|---|---|---|
+| `if:` | the gate permits it on every sentence, no code consults it; the page renders anyway | E4 |
+| `PrimitiveShapes` | a loader still reading a comment convention that moved to the `contract` macro; `PRIMITIVES` is `{}` | E7's territory |
+| `boolean?` | `Inference.boolean?` is defined and called nowhere in the repo | new — needs a ruling |
+
+It is green in the gate and `--strict` names the three, which is the difference
+between an instrument and a decoration. It caught two things in its first hour:
+that `id:` is *both* gate-universal *and* declared by `box` (a modelling error
+in my own ledger), and the dead helper above. And it documents what nothing
+documented: `actions path:` reaches a descendant `action` through
+`Chain#container_value`, while `tab active:` is read by its *parent*,
+`Generator#tabs` — the two readers a name-search would have got wrong.
+
+**The convention register** (`lib/slim_pickins/conventions.rb`,
+`bin/check_conventions.rb`). **37 conventions**, each with the situation, the
+decision, its home (file + marker), the sentence that overrides it, and its
+grade:
+
+| Grade | Count | Examples |
+|---|---|---|
+| structural | 26 | the document, the layout, heading depth, the plural, `empty`, the box's element |
+| shape | 7 | input type, step, numeric alignment, the format family |
+| domain | 3 | the label, the format, the table header — each asking page, then app, then English |
+| **axiomatic** | **1** | **the theme's 53 roles — an entry that records an absence** |
+
+It holds in both directions: every entry's home must still exist, `Inference`'s
+15 public functions must be exactly partitioned between the register and a named
+internal list, and every word whose contract declares an inference (`card`,
+`section`) must be registered. It caught `Inference.number` and
+`Inference.percent` unclaimed on its first run.
+
+Both are pinned by `test/instruments_test.rb` (11 runs, 225 assertions), both
+are gate legs in `HANDOFF.md` and `README.md`, and both are legs 4 and 5 of the
+studio's status page — which now runs **six** legs, so the page that claims the
+gate is green claims the whole gate.
+
+Two smaller repairs fell out of the wiring, both instances of the daytrip's own
+subject: the universal modifier list moved out of a method body into
+`Contracts::UNIVERSAL_MODIFIERS` so a checker can read it, and the canned status
+shape became `StudioStatus.canned_locals` — it had been written out twice, once
+in `bin/verify_pages.rb` and once in `studio_docs_test`, and both copies would
+have gone stale the moment two legs were added.
+
+**The mechanical claim corrections: 12 taken.** The census in `README.md` (×2),
+`DESIGN.md` (×2), `PRIMER.md` (×3), `VOCABULARY.md` (×1) and `check_shape.rb`'s
+own header — 53 and 50 and 45-of-50 against a measured **64 words, 59 of them
+carrying the noun register**; the `icon` reference in `VOCABULARY.md`, a word cut
+in 0.2 Phase 6; and the two stale comments (`try_it.sp`'s burr, `markdown.rb`'s
+alignment colons, where the code beside the comment was right). Each corrected
+line says in place what it used to claim and why that was wrong — a correction
+that hides itself teaches nothing.
+
+**The arguable ones are named and left**, per ruling 2: `VOCABULARY.md`'s 14
+entries still missing `infers` and `renders`; `HANDOFF.md`'s "six wins" above a
+list of ten; `VOCABULARY.md`'s `heading` self-contradiction; `ROADMAP-0.2.md`'s
+Phase 6 heading unmarked as closed.
+
+### Stop 1 — the accent audit
+
+The inventory, classified by cause and counted. The split that mattered is
+**on the page** (what an author writes) against **inside** (what the language
+says to itself), and it produced the day's most useful number.
+
+| Where | What | Count | Cause |
+|---|---|---|---|
+| page | dot-paths — `.market_value`, `binding.property` | the morphology itself | — (linguistic: possession) |
+| page | `key: value` modifiers | **134**, of which 89 bare names, 20 quoted, 17 data, **8 numbers** | C (a Ruby hash), and the 8 are the machine's share |
+| page | quotes | — | — (linguistic: quotation) |
+| page | `#` starts a comment | 1 rule | **C — and it eats the text**: `note "Total # 1"` is a `SyntaxError` |
+| page | a variant is an open enum | any string accepted | A2/D — `badge banana` renders unstyled where an unknown *word* fails loudly |
+| inside | `expects` keyword arguments | **68** across 22 declarations, **33 booleans** | C |
+| inside | `@kwargs.key?(x) ? @kwargs[x] : nil` | **23** in 528 lines | B |
+| inside | `maps content: :body`, identical | **8** | B |
+| inside | words passing an identifier as data | **11 of 64** | B |
+| inside | `<div class="field">` in the Generator | 4 copies | B |
+| inside | node kinds the Generator special-cases | 9, plus ~30 named methods | — (the internal IR; a page never says one) |
+| inside | parenthesised arguments in `split_args` | 0 consumers | C |
+| inside | symbol enums (`as: money`, `type: email`) | — | C |
+| gate | universal modifiers with no reader | `if:` of 3 | **D** |
+
+**How far the language can grow beyond the accent now**, which is what dan
+asked: the page surface is **mostly already fluent**. 89 of its 134 modifier
+arguments are bare names and 37 are data or quoted text; only **8 numbers** and
+one comment rule are machine-shaped, and the vocabulary itself is clean — every
+declared modifier has a located reader. The accent is concentrated *inside*: 23
+hash interrogations, 8 duplicated slot-renamings, 11 name-directed words. That
+is a much better position than the essay assumed, and it is the opposite of what
+I expected to find.
+
+### Stop 4 — the duplication map, and H2
+
+| Duplication | Count | What it is evidence of |
+|---|---|---|
+| `@kwargs.key?(x) ? …` | 23 | the word abstraction has no declared-argument mechanism |
+| `maps content: :body` | 8 | KERNEL's non-orthogonal atoms: eight words that are one shape |
+| `subject.fetch(name)` written by hand | 11 | a missing primitive (name-directed access), not a missing word |
+| `<div class="field">` | 4 | KERNEL's own case: a composition wearing a primitive's clothes |
+| the canned status shape | 2 | found *today*, in this round's own wiring |
+
+**H2 is partly supported, and the counterexample is the more interesting half.**
+It holds where a *name* repeats: every duplication site is a place a word is
+doing two jobs. It fails where a *permission* repeats: `if:`/`class:`/`id:` sit
+in a whitelist with no reader at all, and no abstraction is wrong there — the
+fault is an unmanaged list. So repetition is a reliable sign of a wrong
+abstraction, and *silence* is the sign of cause D. Two different tells for two
+different causes; the map found both.
+
+### Stops 2 and 5 — not taken
+
+Named as owing, not quietly dropped.
+
+- **Stop 2, the three suspects.** Its evidence is ready and its verdicts are
+  half-written: `format_for` is needed *only* where a word stopped being said
+  (measured), the variant question turns on `badge banana`, and the three
+  attribute hashes are distinguishable. What is missing is the paper work —
+  pricing the alternatives for `label_for`/`format_for` and the verdict per
+  hash — and that is judgement work that deserves a clear head, not the end of
+  a long round.
+- **Stop 5, transparency measured.** Needs a sampling design (which words, what
+  counts as convention vs declaration vs escape) before it can produce a
+  number. Not started.
+
+### The round's own defect: a date measured once and re-quoted
+
+Every date in this document said **2026-09-16** for work committed on
+**2026-09-17**. I read the clock once at the session's start and re-used the
+answer for three rounds — in a daytrip about unmanaged sources of truth, whose
+own first rule is *verify before asserting*, and whose lore already says *a
+number written once gets re-quoted, not re-measured*. The correction is in
+place, and the timeline is in git for anyone who wants it. It is the cheapest
+possible demonstration of the thesis: a truth with one home and no checker
+rots in place, and a date is such a truth.
+
+### Honest limits
+
+- The classification is **judgement wherever it is not a count**. The counts in
+  the table are measured; the assignment of a cause is argued, and a reader
+  should be able to refute one case at a time.
+- **The register is a second home, and it knows it.** Its 37 entries are
+  hand-authored prose held to the code by a checker that verifies the *homes*,
+  not the prose. The better home is the word's own declaration — an `infers:`
+  slot in the contract, generating the document as the five checkable bullets
+  already are. That is a vocabulary-file change and it is named here as the
+  next step, not taken.
+- The ledger's discovery is a scan for *declared* modifiers. It catches what a
+  word declares; it would not catch a promise expressed inline somewhere else.
+- Two sample sets are small: the transparency split is 134 arguments and the
+  H2 map is five sites.
+- The studio on :4580 is running a four-leg boot from before this round and
+  **could not be restarted from this session** — its process is outside the
+  sandbox's PID namespace, so it cannot be signalled and its port cannot be
+  rebound. The new code was verified on a spare port and the spare killed.
+  `/guides/DAYTRIP-0.3.0b` and `/guides/BLUESKY` are live either way, since
+  guides are read from disk.
+
+---
+
 ## The space this leaves for decisions
 
 | # | Decision | Options on the table | What would settle it | Who |
@@ -527,7 +697,7 @@ something.
 
 ## Questions for dan — one left
 
-All five questions revision 2 asked are ruled (2026-09-16) and recorded above:
+All five questions revision 2 asked are ruled (2026-09-17) and recorded above:
 cause D stands alone; the mechanical claim corrections are taken and the
 arguable ones listed; **both** instruments land; Stop 5 lands, *"else we act on
 the basis of our vague impressions (or most recent impressions)"*; two criteria

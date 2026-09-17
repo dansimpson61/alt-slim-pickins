@@ -43,12 +43,9 @@ dashboard_base = { notice: nil, q: '', error_entry: nil,
 # The studio's own pages — the found gap, closed: they were the only corpus
 # pages this gate never rendered. `/status` is the one exception in shape:
 # its route shells this very gate, so proving it with live results would
-# recurse — it renders against canned results, the same shape
-# studio_docs_test pins, and the recursion hazard is named here.
-studio_status_results = [
-  StudioStatus::Result.new(name: 'Grammar', output: "0 problems\n", ok: true),
-  StudioStatus::Result.new(name: 'Shape', output: "0 problems\n", ok: false)
-].freeze
+# recurse — it renders against the canned shape `StudioStatus.canned_locals`
+# holds (one home, shared with `studio_docs_test`), and the recursion hazard is
+# named here.
 studio_base = { words: StudioDocs.words, guides: StudioDocs.guides }.freeze
 
 PAGES = [
@@ -76,8 +73,7 @@ PAGES = [
   ['studio/views/guide.sp', studio,
    studio_base.merge(title: 'Guide: PRIMER', content: 'A **guide** page.')],
   ['studio/views/status.sp', studio,
-   studio_base.merge(title: 'Status', overview: '1 of 4 legs red.',
-                     results: studio_status_results)]
+   studio_base.merge(title: 'Status', **StudioStatus.canned_locals)]
 ].freeze
 
 problems = 0

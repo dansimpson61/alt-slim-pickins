@@ -1,8 +1,11 @@
 # Vocabulary — draft 3
 
-Status: **implemented.** Fifty words, every one of them a real method on
-`Builder` and every one exercised by a sentence somewhere in the repo —
-`check_grammar.rb` fails if either stops being true.
+Status: **implemented.** Sixty-four words — 42 declared as Ruby classes and 22
+written in the language — every one of them declared in its own file and every
+one exercised by a sentence somewhere in the repo, which `check_grammar.rb`
+fails if either stops being true. (The count is measured, not remembered: this
+line said *fifty* for a fortnight after the vocabulary had grown to 64, which
+is the drift the promise ledger and this daytrip exist to stop.)
 
 Every entry has now been drafted against a real page. `chart` was the last
 holdout — written on paper, unevidenced, and claiming inferences it did not
@@ -498,7 +501,9 @@ badge .status
 ```
 
 The known variants are the statuses the vocabulary names — `ok`, `pending`,
-`neutral`, `warning`, `error`, `blocker`, `polish` — and `icon` draws each.
+`neutral`, `warning`, `error`, `blocker`, `polish` — and the stylesheet draws
+each one's mark off the class the badge already wears (there is no `icon` word;
+it was cut in 0.2 Phase 6, and this line went on naming it).
 
 ### `fact`
 

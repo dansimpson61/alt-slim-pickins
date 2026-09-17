@@ -12,11 +12,15 @@ require 'timeout'
 module StudioStatus
   ROOT = File.expand_path('..', __dir__)
 
-  # The gate's four legs, in the order the gate runs them.
+  # The gate's legs, in the order the gate runs them. Promises and Conventions
+  # are the two instruments DAYTRIP-0.3.0b landed — they are gate legs because
+  # an instrument nothing runs is not an instrument.
   LEGS = [
     ['Grammar', 'check_grammar.rb'],
     ['Shape', 'check_shape.rb'],
     ['Styles', 'check_styles.rb'],
+    ['Promises', 'bin/check_promises.rb'],
+    ['Conventions', 'bin/check_conventions.rb'],
     ['Pages', 'bin/verify_pages.rb'],
   ].freeze
 
@@ -51,4 +55,18 @@ module StudioStatus
     bad.zero? ? "All #{results.size} legs green, run live at #{when_run}." \
               : "#{bad} of #{results.size} legs red, run live at #{when_run}."
   end
+
+  # The canned shape, for proving this page without recursing: its route shells
+  # this very gate, so live results would run the gate inside the gate. One home
+  # for it, because `bin/verify_pages.rb` and `studio_docs_test` each kept their
+  # own copy and the two would drift the moment a leg was added — which two legs
+  # just were. One leg is red on purpose: a page that cannot render a red leg
+  # cannot report one.
+  def self.canned
+    LEGS.map.with_index do |(name, _script), index|
+      Result.new(name: name, output: index == 1 ? "1 problem\n" : "0 problems\n", ok: index != 1)
+    end
+  end
+
+  def self.canned_locals = { results: canned, overview: overview(canned) }
 end
