@@ -887,16 +887,32 @@ against what we learned.
 
 ## How this stays accountable
 
-The gate, unchanged, in its stronger form: as green at the end as at the start,
-with the day's artifacts showing as documents and instruments, never vocabulary.
+The gate, in its stronger form: as green at the end as at the start, with the
+day's artifacts showing as documents and instruments, never vocabulary.
+
+**The command is not the one this section first carried, and that is the
+daytrip's own doing.** It opened with four legs and closes with seven: the three
+instruments it landed are legs of the gate they are held by — an instrument
+nothing runs is not an instrument. So "unchanged" was the wrong word to freeze,
+and the honest form is the command plus the two rules that came out of the round:
 
 ```bash
-ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby "$f"; done
+ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby "$f"; done
 ```
 
-Today: 705 sentences, 64 words, 94 rules, 14 pages, 295 runs / 0 failures, 25
-affordances / 0 missing. A daytrip that closes with a moved vital has decided
-something.
+**Read the exit codes, not a summary of them.** Running a leg as `… | tail -2`
+reports the *pipeline's* status — the last command's — so a red leg reads as
+green. That bit twice in this round, once fatally: `check_card.rb` printed
+`1 problems` on the day it landed and the commit went in anyway, because the
+check had been piped. Run the legs as a conjunction, or check each status, and
+read the whole output before committing.
+
+Closed: 705 sentences (the checker's, which never counted declarations), 64
+words, 94 rules, 14 pages, 326 runs / 0 failures across three seeds, 25
+affordances / 0 missing, **32 promises and none without a reader**, 38
+conventions. And the shape checker's own vitals moved — 479 → 457 sentences,
+25 → 17 distinct modifiers — because it had been counting declarations as
+sentences; that is a conversation, and it is recorded above.
 
 ## Where the daytrip closes
 

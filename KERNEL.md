@@ -465,11 +465,13 @@ difference is either a defect or a change dan has ratified in writing before
 it lands — the promotion pass ended with exactly three, each of them a
 hook-only class the law required.
 
-Plus the standing gate, unchanged:
-
-```bash
-ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done
-```
+Plus the standing gate. **It is not copied here any more** (2026-09-17): this
+document, `DAYTRIP.md`, `ROADMAP-0.2.md` and `DAYTRIP-0.3.0a.md` each carried
+their own copy of the command, and copies drift — the one home is `HANDOFF.md`'s
+*Everything green before committing*, and the live form is the studio's
+`/status`, which lists the same legs from `StudioStatus::LEGS` and runs them on
+every visit. The copies that remain are closed records: correct on the day they
+were written, and left as the records they are.
 
 ## The one real risk, named
 

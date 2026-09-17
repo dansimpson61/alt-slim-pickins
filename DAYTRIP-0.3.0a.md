@@ -276,14 +276,14 @@ intact**; the daytrip's job is to make the choice cheap, not to make it.
 
 ## How this stays accountable
 
-The usual command, unchanged — and for a daytrip that ships nothing, the
-stronger form of it: **the gate must be exactly as green at the end as at the
-start**, and `git status` must show the day's artifacts as documents rather
-than code.
+The usual command — and for a daytrip that ships nothing, the stronger form of
+it: **the gate must be exactly as green at the end as at the start**, and
+`git status` must show the day's artifacts as documents rather than code.
 
-```bash
-ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby "$f"; done
-```
+**The command itself is not copied here** (2026-09-17): it has one home,
+`HANDOFF.md`'s *Everything green before committing*, and one live form, the
+studio's `/status`. When this outline is opened, run whatever that home names —
+by then it will have grown, as it did between this outline and its sibling.
 
 If a stop's prototype has to touch `lib/` to be tested, it is tested on a
 branch, or in a scratch copy, and never committed. A daytrip that closes with a
