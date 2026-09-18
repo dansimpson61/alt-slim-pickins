@@ -143,17 +143,41 @@ agent-managed** — dan's ruling, 2026-09-15: he stopped his own process and
 handed start/stop to the agents. It serves whatever code it booted with,
 so **after every round, restart it so it runs the latest committed code,
 and leave it running** — dan's browser should always see current work.
-The routine: check the port (`curl -s -m 2 http://127.0.0.1:4580/`); if it
-is down, boot it **detached** — `nohup ruby studio/app.rb
->/tmp/studio.log 2>&1 & disown` — because a session-tracked background job
-gets a graceful SIGTERM (exit 143) when the turn's machinery reaps it,
-while a detached process survives the session. **To restart it, kill the old
-one first — and it runs as `puma`, not `ruby studio/app.rb`,** so a search by
-name finds nothing and the restart looks like it worked while the old process
-goes on serving: the port is the handle
-(`ss -ltnp | grep :4580`, then kill that pid, then boot detached and curl to
-confirm the leg list grew). During a
-round, verify on a spare port (`STUDIO_PORT=4597 ruby studio/app.rb`),
+
+**The routine, corrected 2026-09-17 from measurement.** Check the port
+(`curl -s -m 2 http://127.0.0.1:4580/`). If it is down, start it as a
+**managed background job** — in this harness that means `run_in_background`
+with `exec` so the server replaces the shell and owns the PID:
+
+```bash
+cd ~/dev/alt-slim-pickins && exec ruby studio/app.rb
+```
+
+**`nohup … & disown` does not survive this sandbox, and this file used to
+recommend it.** Measured on 2026-09-17: a detached process is reaped when
+the tool call's scope is torn down, so it served within its own call and was
+gone by the next one — `curl` returned 000 one call later, twice. The managed
+job has now been confirmed alive across separate calls. What the old note said
+about session-tracked jobs being SIGTERMed is true of *its* machinery and not
+of this one; the file is the authority, so it says what was measured.
+
+**To restart it, kill the old one first — it runs as `ruby`, and the port is
+the handle** (`ss -ltnp | grep :4580`, then kill that pid). A stale studio
+serving moved files is the failure mode to expect: on 2026-09-17 a process
+booted before `studio/views` moved into `studio/uis/classic/views` answered
+every route with `Errno::ENOENT … studio/views/index.sp`, which is exactly
+what "serves whatever code it booted with" looks like from the outside.
+
+**One wall worth knowing before you spend a round on it:** a process started
+in an *earlier* session lives in a different sandbox, and **no signal from
+this session reaches it** — `kill`, `pkill` and `ss -p` all come up empty
+because the process is not in this namespace, though its socket still
+answers. Verify it by the cgroup on the socket
+(`ss -ltnep | grep :4580`): a scope other than this call's own is not
+yours to kill. That is dan's to clear, and asking him costs one message
+while hunting it costs a round. It happened once, on 2026-09-17.
+
+During a round, verify on a spare port (`STUDIO_PORT=4597 ruby studio/app.rb`),
 then kill the spare before the round closes. A new session that finds the
 port down boots it again — the standing state in this file is the
 authority, not whatever the last process left behind. The checkers'

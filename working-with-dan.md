@@ -109,6 +109,24 @@ working manual that should be better after every session than it was before.
   verify → commit → card → lore. He restated this once already
   (`HANDOFF.md`, *How this project works*); a second reminder means the agent
   was not reading.
+- **Treating his "explore" work as a preamble to real work.** 2026-09-17, on
+  a UI build he had already ruled on: *"Let's build that but manage multiple
+  UIs from which we can pick. This is an exploration of what we can do before
+  we update guides and turn agents loose to build some new garden apps. We may
+  try generating a few different UIs just for the sake of exercising ourselves
+  and the language."* The exploration *is* the deliverable; "for the sake of
+  exercising ourselves" is a reason, not a hedge. Build for that — several
+  UIs, a picker, a seam each can mint its own links through — rather than
+  building one end state and calling the alternatives future work.
+- **Answering a hint with an argument.** Twice on 2026-09-17 a vague reply
+  was the whole correction. "Hint: the answer is in the Ode, and it has to do
+  with what we can do in our dsl that we cannot do in html and css" meant *go
+  re-read the document you are already bound by*; and "the hint is Ruby 101:
+  DRY" meant *your reading of it was backwards*. Both times the right move was
+  to re-read the source and restate the correction in the round's record, not
+  to defend the analysis. He gives the pointer, not the answer, because the
+  pointer is the lesson — and a wrong answer owned in writing lands (see
+  *Correcting your own work out loud* above).
 
 ## What does not land
 
@@ -148,6 +166,18 @@ working manual that should be better after every session than it was before.
   (`ROADMAP-0.2.md` constraint 3). He will ask what it buys; have the answer.
 - **Absorbing a project convention silently.** Where the house and the Ode
   disagree, name the divergence once, out loud, and let him rule.
+- **Optimising the machine's output instead of the language's.** 2026-09-17: an
+  argument was built for a word that would hoist a layout relation out of the
+  stylesheet so a `box` would not need a class — DRY pointed at the rendered
+  HTML. His correction: *"We don't need to repeat ourselves in sp, but the
+  rendered html/css will be full of repetition. We don't care because we don't
+  need to look at it. The machine needs the repetition. We need space and
+  unique names and kindness."* DRY binds the language, never the artifact. The
+  tell that you are about to make this mistake: you are proposing vocabulary
+  whose only beneficiary is a document nobody reads. The duplication that costs
+  is a truth living in two places *in sp* — which is what the round then found,
+  five files declaring one stylesheet, and fixed with a seam the language
+  already had.
 
 ## Tells and habits
 
