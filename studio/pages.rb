@@ -61,6 +61,9 @@ module StudioPages
     'portfolio/partials/account_card' => 'examples/portfolio/views/partials/account_card.sp',
     'dashboard/triage' => 'examples/dashboard/views/triage.sp',
     'dashboard/confirm_archive' => 'examples/dashboard/views/confirm_archive.sp',
+    'dashboard/brief' => 'examples/dashboard/views/brief.sp',
+    'dashboard/doc' => 'examples/dashboard/views/doc.sp',
+    'dashboard/pattern' => 'examples/dashboard/views/pattern.sp',
     'dashboard/partials/queue' => 'examples/dashboard/views/partials/queue.sp',
     'dashboard/partials/unreviewed_card' => 'examples/dashboard/views/partials/unreviewed_card.sp',
     'roth/controls' => 'examples/roth/views/controls.sp',
@@ -362,6 +365,27 @@ module StudioPages
     when 'examples/dashboard/views/confirm_archive.sp'
       DASHBOARD_BASE.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
                            archive_return_to: '/triage', reason: '')
+    when 'examples/dashboard/views/brief.sp'
+      DASHBOARD_BASE.merge(notice: 'A page waiting for its ruling.',
+                           page_title: 'alt-slim-pickins — Brief',
+                           project_href: '/projects/alt-slim-pickins',
+                           raw_href: '/brief/alt-slim-pickins?format=text',
+                           brief_markdown: "# alt-slim-pickins\n\n> **Purpose:** View DSL\n")
+    when 'examples/dashboard/views/doc.sp'
+      DASHBOARD_BASE.merge(notice: 'A page waiting for its ruling.',
+                           page_title: 'README.md',
+                           project_href: '/projects/alt-slim-pickins',
+                           doc_path: 'README.md',
+                           content: "# alt-slim-pickins\n\nA working view language.\n")
+    when 'examples/dashboard/views/pattern.sp'
+      DASHBOARD_BASE.merge(notice: 'A page waiting for its ruling.',
+                           title: 'Contract Validation Pipeline',
+                           category_name: 'architecture', emerging: false,
+                           origin_line: 'Origin: alt-slim-pickins / SPEC.md',
+                           content: "# Specification\n\nPipeline details...\n",
+                           has_projects: true,
+                           projects: [{ 'path' => 'alt-slim-pickins', 'purpose' => 'Exploring a view DSL' }],
+                           lore: 'Be clear and kind.')
     when 'examples/lore_reader/views/index.sp'
       lore = LoreReader::Lore.load
       { 'stats' => lore.stats, 'entries' => lore.all.first(5).map(&:to_h), 'q' => '' }

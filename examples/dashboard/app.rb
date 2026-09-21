@@ -9,10 +9,14 @@
 
 require 'sinatra/base'
 require 'uri'
+require 'ostruct'
 require_relative '../../lib/slim_pickins/template'
 
 require '/home/dan/dev/dashboard/lib/workspace'
 require '/home/dan/dev/dashboard/lib/scan'
+require '/home/dan/dev/dashboard/lib/library'
+require '/home/dan/dev/dashboard/lib/architecture'
+require '/home/dan/dev/dashboard/lib/health'
 
 module DashboardPort
   class App < Sinatra::Base
@@ -36,6 +40,16 @@ module DashboardPort
       when 'confirm_archive'
         base.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
                    archive_return_to: '/triage', reason: '')
+      when 'brief'
+        base.merge(page_title: 'example — Brief', project_href: '/projects/example',
+                   raw_href: '/brief/example?format=text', brief_markdown: '# Example')
+      when 'doc'
+        base.merge(page_title: 'example — Doc', project_href: '/projects/example',
+                   doc_path: 'docs/SPEC.md', content: '# Specification')
+      when 'pattern'
+        base.merge(title: 'Example Pattern', category_name: 'architecture',
+                   emerging: false, origin_line: 'Origin: example / SPEC.md',
+                   content: '# Pattern', has_projects: false, projects: [], lore: 'Lore')
       end
     end
 
@@ -86,6 +100,63 @@ module DashboardPort
         "#{n} instruction file#{'s' if n > 1} awaiting judgment — hand-kept rules nobody has ruled canonical or legacy."
       end
 
+      def brief_text(p)
+        out = []
+        out << "# #{p[:path]}"
+        stale_text = p[:stale_days] ? "#{p[:stale_days]}d" : 'n/a'
+        out << "**Status:** `#{p[:status]}` · **Last Touched:** `#{p[:last_touched] || '-'}` · **Stale:** `#{stale_text}`"
+        out << ''
+        out << "> **Purpose:** #{p[:purpose]}"
+        out << "> **Next Horizon:** #{p[:next_step]}"
+        out << ''
+        out << "- **Run Command:** `#{p[:run] || '-'}`"
+        out << "- **Documentation:** `#{p[:docs] || '-'}`"
+        out << "- **Related Projects:** #{Array(p[:related]).empty? ? 'none' : Array(p[:related]).join(', ')}"
+        out << "- **Domain Patterns:** #{Array(p[:patterns]).join(', ')}" if p[:patterns] && !p[:patterns].empty?
+        out << ''
+        if (p[:notes] && !p[:notes].to_s.strip.empty?) || (p[:conventions] && !p[:conventions].to_s.strip.empty?) || (p[:gotchas] && !p[:gotchas].to_s.strip.empty?)
+          out << '### Lore & Conventions'
+          out << "- **Conventions:** #{p[:conventions]}" if p[:conventions] && !p[:conventions].to_s.strip.empty?
+          out << "- **Gotchas:** #{p[:gotchas]}" if p[:gotchas] && !p[:gotchas].to_s.strip.empty?
+          out << "- **Notes:** #{p[:notes]}" if p[:notes] && !p[:notes].to_s.strip.empty?
+          out << ''
+        end
+        lore = Scan.lore_entries(p[:path]) rescue []
+        unless lore.empty?
+          out << '### Lore (latest)'
+          lore.each { |e| out << "- **#{e[:date]} — #{e[:who]}:** #{e[:text].gsub("\n", ' ')[0, 240]}" }
+          out << ''
+        end
+        anatomy = Architecture.anatomy(p[:path]) rescue {}
+        unless Architecture.anatomy_empty?(anatomy)
+          out << '### Anatomy'
+          { 'Routes' => anatomy[:routes], 'Classes' => Architecture.class_labels(anatomy),
+            'Views' => anatomy[:views], 'Configs' => anatomy[:configs] }.each do |label, list|
+            next if list.nil? || list.empty?
+
+            shown = list.first(15).join(', ')
+            more = list.size > 15 ? " (+#{list.size - 15} more)" : ''
+            out << "- **#{label} (#{list.size}):** #{shown}#{more}"
+          end
+          out << "- **Vocabulary:** #{anatomy[:tokens].first(12).join(', ')}" if anatomy[:tokens] && !anatomy[:tokens].empty?
+          out << "- **Layers:** #{Architecture.layer_line(anatomy)}"
+          out << ''
+        end
+        if (h = Health.for(p[:path]) rescue nil)
+          boot_note = h['boot'] == 'fail' ? " (#{h['boot_note']})" : ''
+          tests_note = h['tests'] == 'fail' ? " (#{h['tests_note']})" : ''
+          out << "- **Health:** boot #{h['boot']}#{boot_note} · tests #{h['tests']}#{tests_note} · checked #{h['checked_at']}"
+        end
+        out << "- **Flags:** #{p[:flags].join(' ')}" if p[:flags] && !p[:flags].empty?
+        out << "- **Last Commit:** #{p[:last_commit] || '-'}"
+        if p[:recent_commits] && !p[:recent_commits].empty?
+          out << ''
+          out << '### Recent Commits'
+          p[:recent_commits].each { |c| out << "- #{c}" }
+        end
+        out.join("\n") + "\n"
+      end
+
       def error_entry
         err = Workspace.recent_error
         return unless err && !err[:log].to_s.strip.empty?
@@ -113,6 +184,75 @@ module DashboardPort
         first_item: (decorate(queue.first) if queue.first),
         queue_intro: "#{queue.size} item(s) need attention — this is the first:",
         unreviewed: unreviewed_sentence,
+        notice: params['notice'], q: params['q'].to_s,
+        error_entry: error_entry, nav_state: nav_map
+      }
+    end
+
+    get '/brief/:project' do
+      project = params['project']
+      halt 404, "Project #{project} not found" unless File.directory?(File.join(Scan::ROOT, project))
+      p = Scan.brief(project)
+      halt 404, "Project #{project} not found" unless p
+
+      brief_md = brief_text(p)
+      if params['format'] == 'text'
+        content_type 'text/plain'
+        return brief_md
+      end
+
+      @view = 'brief'
+      sp :brief, locals: {
+        page_title: "#{project} — Brief",
+        project_href: "/projects/#{project}",
+        raw_href: "/brief/#{project}?format=text",
+        brief_markdown: brief_md,
+        notice: params['notice'], q: params['q'].to_s,
+        error_entry: error_entry, nav_state: nav_map
+      }
+    end
+
+    get '/projects/*/docs/*' do
+      splats = params['splat'].to_a
+      project = splats.first.to_s
+      doc_path = splats.last.to_s
+      halt 404, 'not found' if project.include?('..') || doc_path.include?('..')
+
+      full_path = File.join(Scan::ROOT, project, doc_path)
+      halt 404, 'doc not found' unless File.file?(full_path)
+
+      title = File.foreach(full_path).first(10).find { |l| l.start_with?('# ') }&.sub(/\A#\s*/, '')&.strip || File.basename(doc_path)
+      content = File.read(full_path)
+
+      @view = 'studio'
+      sp :doc, locals: {
+        page_title: title,
+        project_href: "/projects/#{project}",
+        doc_path: "#{project}/#{doc_path}",
+        content: content,
+        notice: params['notice'], q: params['q'].to_s,
+        error_entry: error_entry, nav_state: nav_map
+      }
+    end
+
+    get '/patterns/:id' do
+      pattern = Library.find_pattern(params['id'])
+      halt 404, 'Pattern not found' unless pattern
+
+      content = Library.pattern_content(pattern)
+      projects = Library.projects_for_pattern(pattern)
+      lore = Library.prompt_lore_for_pattern(pattern)
+
+      @view = 'library'
+      sp :pattern, locals: {
+        title: pattern[:title],
+        category_name: pattern[:category].to_s,
+        emerging: pattern[:emerging] || false,
+        origin_line: "Origin: #{pattern[:origin_project]} / #{pattern[:origin_file]}",
+        content: content,
+        has_projects: !projects.empty?,
+        projects: projects.map { |pr| OpenStruct.new(path: pr[:path], purpose: pr[:purpose]) },
+        lore: lore,
         notice: params['notice'], q: params['q'].to_s,
         error_entry: error_entry, nav_state: nav_map
       }
@@ -150,7 +290,12 @@ module DashboardPort
 
     get '/assets/stylesheets/slim-pickins.css' do
       content_type 'text/css'
-      File.read('/home/dan/dev/slim-pickins/slim-pickins/assets/stylesheets/slim-pickins.css')
+      File.read(File.expand_path('../../assets/slim-pickins.css', __dir__))
+    end
+
+    get '/assets/slim-pickins.css' do
+      content_type 'text/css'
+      File.read(File.expand_path('../../assets/slim-pickins.css', __dir__))
     end
 
     run! if app_file == $PROGRAM_NAME

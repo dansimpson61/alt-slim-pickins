@@ -1,3 +1,4 @@
+stylesheet "/assets/slim-pickins.css"
 nav
   link home, "~/dev", to: "/"
   link studio, to: "/", active: nav_state.studio

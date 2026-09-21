@@ -148,3 +148,66 @@ These logged gaps form the demand evidence that gates Phase 3's vocabulary and k
 - **Refusal**: `UNSTYLED VARIANT: grid--words is said and no rule defines it — a variant nothing can style is refused (check_styles.rb)`
 - **Obstacle**: `grid` treats its first identifier as a CSS modifier variant (`.grid--#{name}`). Unlike generic layout containers, `check_styles.rb` audits all emitted classes against CSS rules, and the stylesheet only declares `.grid--cards` and `.grid--metrics`.
 - **Workaround**: Used `grid cards, columns: 2` or `grid cards, columns: 3`.
+
+---
+
+## Phase 2 Additions — Markdown Surfaces & Ecosystem Inventory
+
+### G20 — Indented code fences are unparsed as code blocks
+- **Consumer**: `foresight/README.md`, `rmd/README.md`, `foresight/docs/AI_Agent_Onboarding.md`.
+- **Desired Expression**: Indented code fences (e.g. `   ```bash` or `    ``` `) inside list item continuations or indented sections.
+- **Refusal**: Silently unparsed as code blocks. Emitted as standard paragraphs with inner code quotes: `<p>``<code>bash bundle install </code>``</p>`.
+- **Obstacle**: `SlimPickins::Markdown::FENCE = %r{\A```[^\n`]*\z}` strictly requires backticks to begin at column 0. Any indented fence is treated as prose text, mangling the code block completely.
+- **Workaround**: Authors must de-indent all code blocks to column 0.
+
+### G21 — YAML frontmatter leaks into prose as horizontal rule and paragraphs
+- **Consumer**: 22 ecosystem files with frontmatter (`PROJECT.md`).
+- **Desired Expression**: Clean document reader rendering of `PROJECT.md` or markdown files with metadata headers.
+- **Refusal**: `---` is rendered as `<hr>`, and the raw YAML keys (`schema_version: 1`, `status: >-`) are rendered as plain-text paragraphs at the top of the article.
+- **Obstacle**: `SlimPickins::Markdown` has no frontmatter detection; it parses `---` unconditionally as an `<hr>`.
+- **Workaround**: Outer applications must strip YAML frontmatter before passing strings to `prose markdown`.
+
+### G22 — Markdown image syntax renders as broken link
+- **Consumer**: Ecosystem documentation with diagrams (`![Architecture](/assets/arch.png)`).
+- **Desired Expression**: `![Alt text](url)` rendering as `<img src="url" alt="Alt text">`.
+- **Refusal**: Rendered as literal exclamation mark followed by a link: `!<a href="url">Alt text</a>`.
+- **Obstacle**: `spans` matches `\[([^\]]+)\]\(([^)\s]+)\)` without checking for a leading `!`.
+- **Workaround**: None within markdown prose; must use raw image words outside markdown if supported.
+
+### G23 — Multi-line blockquotes collapse into a single run-on sentence
+- **Consumer**: Dashboard `/brief` surface (`brief_text(p)`).
+- **Desired Expression**: Adjacent blockquote lines (`> **Purpose:** ...\n> **Next Horizon:** ...`) rendering as separate lines or paragraphs.
+- **Refusal**: `<blockquote><strong>Purpose:</strong> View DSL <strong>Next Horizon:</strong> Phase 2...</blockquote>`.
+- **Obstacle**: `spans` replaces `\n` with a space `' '`, collapsing adjacent quote lines into a single sentence unless an empty line separates them.
+- **Workaround**: Required inserting explicit blank lines between blockquote lines in the markdown source.
+
+### G24 — `grid` lacks column spanning or asymmetric ratios for sidebar layouts
+- **Consumer**: `examples/dashboard/views/pattern.sp`.
+- **Desired Expression**: Asymmetric split layouts (e.g. 2:1 column ratio for specification body vs sidebar, or `span: 2`).
+- **Refusal**: `grid` divides tracks evenly across `columns: N` (`calc((100% - (N - 1) * var(--gap)) / N)`). There is no word or modifier to span multiple tracks or configure fractional ratios.
+- **Workaround**: Used equal 50/50 2-column grid (`grid cards, columns: 2`), placing the spec in column 1 and stacking the sidebar cards in column 2.
+
+### G25 — `textarea` cannot be marked readonly and always requires form/attribute context
+- **Consumer**: `examples/dashboard/views/pattern.sp` (Agent Lore Snippet).
+- **Desired Expression**: Readonly copyable text area for prompt/lore snippets (`textarea lore, readonly: true`).
+- **Refusal**: `Textarea` always emits `<div class="field"><label>...</label><textarea>` tied to form inputs, and refuses `readonly`.
+- **Workaround**: Used `snippet .lore`, rendering `<pre class="snippet"><code>...`.
+
+### G26 — Layout chrome requires explicit stylesheet declaration
+- **Consumer**: `examples/dashboard/views/layout.sp` and `examples/word_graph/views/`.
+- **Desired Expression**: Automatic stylesheet inclusion by `page`.
+- **Refusal**: `page` generates `<!DOCTYPE html>`, `<head>`, and `<title>`, but omits `<link rel="stylesheet">` unless `stylesheet "/assets/slim-pickins.css"` is explicitly written in `layout.sp`.
+- **Workaround**: Explicitly declared `stylesheet "/assets/slim-pickins.css"` in layout.
+
+---
+
+## The Merged Demand Ledger (Phases 1 & 2 Synthesis)
+
+Across 4 garden applications and 3 dashboard markdown surfaces, 26 distinct gaps were cataloged. They partition into three clear categories for Phase 3:
+
+| Category | Gaps | Nature of Demand | Phase 3 Candidacy |
+|---|---|---|---|
+| **Markdown Engine Gaps** | G20, G21, G22, G23 | Defects in `SlimPickins::Markdown` when consuming real ecosystem documents | **High**. Pure parser fixes in `lib/slim_pickins/markdown.rb` (indented fences, frontmatter stripping, image syntax, blockquote linebreaks). Zero vocabulary additions required. |
+| **Ergonomics & Bindings** | G1, G2, G3, G5, G6, G8, G12, G14, G15, G16, G17 | Friction in Ruby data resolution (dotted vs bare, collection inference, `Subject#to_s`, method predicate mapping) | **High**. Corroborated across both Garden apps and Dashboard surfaces. Candidate for kernel refinement (e.g. name-directed access, predicate handling on hashes). |
+| **Vocabulary & Morphology** | G4 (`article`), G7 (`search` route), G9 (`radio`), G10 (`form` sections), G11 (`choice` each), G13 (`progress`), G18 (`badge` variants), G19/G24 (`grid` variants & spanning), G25 (`textarea` readonly), G26 (`stylesheet` inference) | New words or structural power additions | **Selective / Demand-Gated**. Must be judged against the Ode: solve via app words/composition where possible, admit to the 64-word kernel only where an inexpressible structural floor exists. |
+

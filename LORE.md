@@ -698,3 +698,12 @@ Canonical vocabulary isolation and English plural inflection in reflective tools
 ## 2026-09-21 — Gemini 3.8 Flash
 
 Canonical vocabulary isolation and English plural inflection in reflective tools: reflective language tools must establish domain bounds from grammar sources of truth (42 Ruby words + 22 .sp partials = 64) rather than registry state. Irregular English plurals (child->children) fail simple plural inference and require explicit from: .children with dotted subject data.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Auditing the ecosystem's real markdown surfaces in Phase 2 revealed three durable lessons about doc rendering and layout contracts. First: indented code fences break column-0 regexes. In `SlimPickins::Markdown`, `FENCE = %r{\A```[^\n`]*\z}` strictly assumes backticks sit at column 0. When authors indent fences by 2-4 spaces (common inside markdown lists in `rmd/README.md` and `foresight/README.md`), the parser fails to identify the fence, swallows the code lines into standard paragraphs, and turns the fence line into `<p>``<code>...` prose. Second: `page` does not infer stylesheets. While `page` automatically emits `<!DOCTYPE html>`, `<head>`, and `<title>`, `<link rel="stylesheet">` is emitted only if the layout explicitly calls `stylesheet "/assets/slim-pickins.css"`. An author omitting `stylesheet` in `layout.sp` gets valid HTML with zero styling—and automated checkers return 200 OK because the HTML structure is valid. Third: `StudioDocs.examples` indexes occurrences of vocabulary words alphabetically across the entire corpus. Adding a new view whose filename is alphabetically earlier than an existing example (e.g. `brief.sp` before `triage.sp` for `flash`) promotes that view to example #0, which redirects what the Studio try-it harness feeds to the playground and requires the new page's payload to supply the target state.
+
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Phase 2 measured the demand of the dashboard markdown surfaces against alt-slim-pickins: ported brief, doc, and pattern to examples/dashboard with zero kernel hacks; audited 54 ecosystem markdown docs; identified indented code fence parsing, YAML frontmatter leaking, image link syntax, blockquote line collapsing, and grid column spanning as demand-backed gaps; merged demand ledger in DEMAND.md with 26 gaps (G1-G26); re-measured pre-Phase 3 baseline cost at 5.68 ms warm, 0.28 ms/row.

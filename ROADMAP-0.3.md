@@ -846,8 +846,6 @@ and its region — and the ledger names every gap with its sentence.
 
 ### Phase 2 — Measure the demand
 
-
-
 The garden's ledger is the spine. Beside it, one inventory item, kept at its
 true size: the dashboard's markdown surfaces (`brief`, `doc`, `pattern`) are
 read the way Phase 4 read `triage.slim` — what prose must render, what
@@ -858,6 +856,14 @@ because maintaining it is not this project's work — not because it is holy.
 
 *Done looks like:* the merged demand, named sentence by sentence — garden
 gaps and dashboard gaps side by side, each with its consumer.
+
+- **Phase 2 Outcome (COMPLETED 2026-09-21)**:
+  - **Read-only surfaces ported in `examples/dashboard/`**: `views/brief.sp`, `views/doc.sp`, and `views/pattern.sp` authored with zero kernel modifications.
+  - **Ecosystem markdown scan (54 files)**: Identified key markdown syntax edge cases in the wild (indented code fences, YAML frontmatter, image links, and multi-line blockquotes).
+  - **Demand Ledger Merged**: Gaps G20 through G26 recorded in `DEMAND.md` alongside Phase 1's G1–G19, classified by layer (Markdown Engine, Ergonomics & Bindings, Vocabulary & Morphology).
+  - **Visual verification**: All three surfaces verified live on `:4578` via headless Chromium screenshots (`dashboard_brief.png`, `dashboard_doc.png`, `dashboard_pattern.png`).
+  - **Suite & Gate Status**: 393 runs, 4,445 assertions, 0 failures. `verify_pages.rb` checks 31 pages, 0 problems.
+  - **Pre-Phase 3 Baseline Cost Re-measured**: Cold 8.21 ms, Warm 5.68 ms, Per row 0.28 ms (`bin/measure_cost.rb`). Ready for Dan's budget ruling.
 
 ### Phase 3 — Grow only what the demand named
 

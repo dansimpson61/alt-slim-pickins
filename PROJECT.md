@@ -3,17 +3,17 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  PHASE 1 — the garden, planted. COMPLETED 2026-09-21: All 4 garden apps landed:
-  The Lore Reader, The Way Exam, The Milestone Planner, and The Word Graph (`examples/word_graph`).
-  Word Graph visualizes the 64 words, shapes distribution via live SVG `chart`, and
-  tabular connection matrix. Gaps G1–G19 recorded in DEMAND.md with zero kernel hacks.
-  Studio palette holds 37 pages, verify_pages checks 28 pages. Full suite: 384 runs,
-  4,371 assertions, 0 failures. Studio live on port 4580 (all 7 legs green).
+  PHASE 2 — Measure the demand. COMPLETED 2026-09-21: The dashboard's three
+  markdown surfaces (`brief`, `doc`, `pattern`) ported to `examples/dashboard/views/`
+  with zero kernel changes. Ecosystem markdown audited across 54 files.
+  Demand ledger merged in DEMAND.md with 26 gaps (G1–G26). Visually verified
+  via screenshots. Pre-Phase 3 baseline cost measured (Cold 8.21 ms, Warm 5.68 ms,
+  0.28 ms/row). Full suite: 393 runs, 4,445 assertions, 0 failures. verify_pages: 31.
 kind: project
 last_touched: 2026-09-21
 next_step: >-
-  Phase 2 — Measure the demand: inventory markdown surfaces (brief, doc, pattern)
-  against the frozen runtime and demand ledger.
+  Phase 3 — Dan sets the KERNEL cost budget against the baseline (5.68 ms warm,
+  0.28 ms/row), then settle merged demand ledger (G1–G26) as words or powers.
 
 
 run: ruby examples/roth/app.rb
