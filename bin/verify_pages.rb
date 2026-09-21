@@ -28,6 +28,9 @@ portfolio = SlimPickins::Library.from(File.expand_path('../examples/portfolio/vi
                                       words: AppWords)
 roth = SlimPickins::Library.from(File.expand_path('../examples/roth/views', __dir__))
 dashboard = SlimPickins::Library.from(File.expand_path('../examples/dashboard/views', __dir__))
+lore_reader = SlimPickins::Library.from(File.expand_path('../examples/lore_reader/views', __dir__))
+lore = LoreReader::Lore.load
+lore_sample = lore.all.first
 studio = StudioPages.ui_library(Uis['classic'])
 scenario = Roth::Scenario.defaults
 projection = Roth::Projection.of(scenario)
@@ -92,6 +95,10 @@ PAGES = [
   ['examples/dashboard/views/confirm_archive.sp', dashboard,
    dashboard_base.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
                         archive_return_to: '/triage', reason: '')],
+  ['examples/lore_reader/views/index.sp', lore_reader,
+   { lore: lore, entries: lore.all.first(5), stats: lore.stats, q: '', current_author: '' }],
+  ['examples/lore_reader/views/entry.sp', lore_reader,
+   { entry: lore_sample }],
   *STUDIO_PAGES
 ].freeze
 

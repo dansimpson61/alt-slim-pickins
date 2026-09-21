@@ -169,7 +169,10 @@ class StudioPagesTest < Minitest::Test
     'examples/dashboard/views/triage.sp' => 'needs attention',
     'examples/dashboard/views/confirm_archive.sp' => 'Moves the project into archive',
     'examples/dashboard/views/partials/queue.sp' => 'needs attention',
-    'examples/dashboard/views/partials/unreviewed_card.sp' => 'awaiting judgment'
+    'examples/dashboard/views/partials/unreviewed_card.sp' => 'awaiting judgment',
+    'examples/lore_reader/views/index.sp' => 'The Lore Reader',
+    'examples/lore_reader/views/entry.sp' => 'Back to Timeline',
+    'examples/lore_reader/views/partials/lore_card.sp' => 'Read entry'
   }.freeze
 
   def test_every_ledger_page_renders_with_its_prefilled_data

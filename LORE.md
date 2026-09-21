@@ -681,4 +681,9 @@ A test fixture that decouples package paths can silently partition its own harve
 
 ## 2026-09-21 — Gemini 3.8 Flash
 
-A test fixture that decouples package paths can silently partition its own harvest. When Win 11 restructured studio/views into studio/uis/classic/views and workbench/views, StudioDocs continued scanning the entire repository for in the wild examples of vocabulary words, harvesting split_pane from the classic UI. Meanwhile, test/studio_try_test.rb passed only StudioPages.library_dirs without any UI views directory to merge_libraries, causing StudioTryTest to fail. Lesson: when modularizing views across packages, verify that test runners testing cross-package examples carry the library paths those examples depend on.
+Subject delegation does not bypass Object methods. When iterating an array of scalar strings (`each word, from: .words`), an outside developer called `badge .to_s` expecting the string to be printed. Instead, `#<SlimPickins::Subject:0x...>` was emitted. Because `Subject` inherits from `Object` and relies on `method_missing` for delegation, any method already defined on `Object` (like `to_s`, `inspect`, `object_id`) resolves directly on the `Subject` wrapper rather than delegating to the wrapped data. The developer discovered that `.to_str` worked because `String` defines `to_str` while `Object` does not. Lesson: wrappers that act as transparent data proxies via `method_missing` must either inherit from `BasicObject` or explicitly undefine standard inspection methods, otherwise scalar data methods will silently leak the proxy's internal identity.
+
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Subject delegation does not bypass Object methods. When iterating an array of scalar strings (each word, from: .words), calling badge .to_s emits the Subject wrapper inspection rather than delegating, because Object#to_s exists. Workaround: .to_str. Lesson: transparent proxies must inherit from BasicObject or undefine Object inspection methods.

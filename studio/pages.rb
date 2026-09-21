@@ -12,6 +12,7 @@ require_relative 'uis/words'
 require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
+require_relative '../examples/lore_reader/lib/lore'
 
 # The palette: the repo's own real pages, offered to the playground as
 # starting points, each carrying its census verdict — the same render the
@@ -59,7 +60,10 @@ module StudioPages
     'dashboard/partials/queue' => 'examples/dashboard/views/partials/queue.sp',
     'dashboard/partials/unreviewed_card' => 'examples/dashboard/views/partials/unreviewed_card.sp',
     'roth/controls' => 'examples/roth/views/controls.sp',
-    'roth/partials/report' => 'examples/roth/views/partials/report.sp'
+    'roth/partials/report' => 'examples/roth/views/partials/report.sp',
+    'lore_reader/index' => 'examples/lore_reader/views/index.sp',
+    'lore_reader/entry' => 'examples/lore_reader/views/entry.sp',
+    'lore_reader/partials/lore_card' => 'examples/lore_reader/views/partials/lore_card.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
   # The playground's own locals — one home, used by the routes and by the
@@ -182,7 +186,8 @@ module StudioPages
     File.join(ROOT, 'studio', 'shared'),
     File.join(ROOT, 'examples', 'portfolio', 'views'),
     File.join(ROOT, 'examples', 'dashboard', 'views'),
-    File.join(ROOT, 'examples', 'roth', 'views')
+    File.join(ROOT, 'examples', 'roth', 'views'),
+    File.join(ROOT, 'examples', 'lore_reader', 'views')
   ].freeze
 
   def self.library
@@ -334,6 +339,16 @@ module StudioPages
     when 'examples/dashboard/views/confirm_archive.sp'
       DASHBOARD_BASE.merge(archive_heading: 'Archive "example"?', archive_path: 'example',
                            archive_return_to: '/triage', reason: '')
+    when 'examples/lore_reader/views/index.sp'
+      lore = LoreReader::Lore.load
+      { 'stats' => lore.stats, 'entries' => lore.all.first(5).map(&:to_h), 'q' => '' }
+    when 'examples/lore_reader/views/entry.sp'
+      lore = LoreReader::Lore.load
+      { 'entry' => lore.all.first.to_h }
+    when 'examples/lore_reader/views/partials/lore_card.sp'
+      lore = LoreReader::Lore.load
+      entry = lore.all.first.to_h
+      entry.merge('entry' => entry)
     else
       {}
     end

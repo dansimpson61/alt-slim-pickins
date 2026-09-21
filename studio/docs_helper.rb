@@ -273,11 +273,11 @@ module StudioDocs
   # never come from different examples: page-rooted first, then payloads,
   # then file order.
   def self.ranked_rows(word, data_for)
-    examples[word.to_sym].map do |file, line, body, chain, siblings|
+    examples[word.to_sym].each_with_index.map do |(file, line, body, chain, siblings), index|
       payload = data_for.call(file, chain)
       [file, line, body, chain, siblings, payload,
-       chain.first.word.to_sym == :page ? 0 : 1, payload.empty? ? 1 : 0]
-    end.sort_by { |row| [row[6], row[7], row[0]] }
+       chain.first.word.to_sym == :page ? 0 : 1, payload.empty? ? 1 : 0, index]
+    end.sort_by { |row| [row[6], row[7], row[8]] }
   end
 
   # The try-it's seed: the example's context. A page-rooted example is the

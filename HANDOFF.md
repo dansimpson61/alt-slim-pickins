@@ -125,19 +125,13 @@ Eight previously invisible defects were fixed in the landing; the honest list is
 in `ROADMAP-0.3.md` under Win 11 (the largest: `page` read its head before the
 layout ran, so a layout's assets never reached `<head>`).
 
-**Phase 0 is fully closed.** Win 11 landed 2026-09-17, followed by Phase 0 mop-up
-on 2026-09-21 (resolved the `split_pane` try-it test regression, removed the
-`builder.rb` puts probe and `words.rb` dummy stubs, updated `PRIMER.md` with
-explicit styling discipline and workbench guide, aligned word counts to 64). The
-gate is 100% green across all 7 legs and 29 test files (339 runs, 3,753 assertions,
-0 failures, 0 unread promises). Resume from `PROJECT.md` `next_step`: **Phase 1 —
-The garden, planted**. Roadmap 0.2 was an even-numbered roadmap (the backward eye);
-0.3 is the forward eye. Its question, chosen and challenged by dan (2026-09-14): can
-the language carry real work — a garden of real apps, the studio won iteratively
-into the workbench, the kernel lowered only as the work demands. The dashboard is
-one bed in the garden, not a canon: sp's entire effect on it is two requires of its
-lib plus the planned read-only markdown rendering. The draft (ROADMAP-0.3.md) is held
-by the checker and served by the studio; KERNEL.md carries its re-measured addendum.
+**Phase 1 — The garden, planted is active.** Round 1 landed 2026-09-21:
+- **The Lore Reader (`examples/lore_reader`)** planted: dynamically extracts 150 entries across 10 authors from `LORE.md` at runtime.
+- **Outside hands requirement met**: View templates authored by an independent subagent (`outside_author`) with only `PRIMER.md` and the Studio workbench (:4580).
+- **Demand Ledger opened (`DEMAND.md`)**: G1–G8 surfaced and logged without touching `lib/slim_pickins/`.
+- **Studio integration**: `StudioPages::PAGES` grew to 25 entries; `bin/verify_pages.rb` proves 20 pages with 0 problems.
+- **Gate status**: 100% green across all 7 legs and 31 test files (355 runs, 3,802 assertions, 0 failures, 0 unread promises).
+- Resume from `PROJECT.md` `next_step`: **Phase 1, Round 2 — The Way Exam (`examples/way_exam`)**.
 
 **The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is
 agent-managed** — dan's ruling, 2026-09-15: he stopped his own process and

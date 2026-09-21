@@ -789,6 +789,24 @@ hands that did not write the vocabulary, and the record names which.
 *Done looks like:* the garden renders — N apps, each named with its consumer
 and its region — and the ledger names every gap with its sentence.
 
+**Round 1 — The Lore Reader (`examples/lore_reader`) planted (2026-09-21):**
+- **Consumer**: Anyone (agents, humans) browsing, searching, and learning from the ecosystem's living design lore and architectural lessons.
+- **Region exercised**: `page`, `section`, `card`, `grid`, `metric`, `form`, `input`, `button`, `empty`, `each`, `badge`, `time`, `link`, `prose markdown`.
+- **Dynamic extraction**: `LoreReader::Lore` dynamically parses `LORE.md` at runtime (150 entries across 10 distinct authors and 24 days), extracting structured metadata (date, author, lesson headline, markdown body, and mentioned vocabulary words).
+- **Outside hands requirement met**: All view templates (`layout.sp`, `index.sp`, `entry.sp`, `partials/lore_card.sp`) were authored by an independent subagent (`outside_author`) given only `PRIMER.md` and the Studio workbench (`:4580`), with zero compiler internal knowledge.
+- **Demand Ledger opened (`DEMAND.md`)**: The outside author surfaced eight real gaps and layout frictions, recorded verbatim without modifying `lib/slim_pickins/`:
+  - **G1**: `Library#render` not implemented on template library instances.
+  - **G2**: `metric` crashes with `TypeError` when passed an evaluated integer rather than an attribute symbol on the subject.
+  - **G3**: `Subject#to_s` emits `#<SlimPickins::Subject:...>` wrapper inspection instead of delegating to data; workaround was `.to_str`.
+  - **G4**: Missing semantic `article` word (workaround: `card`).
+  - **G5**: Leading dot syntax in string interpolation (`#{.id}`) causes Ruby syntax errors.
+  - **G6**: `empty` is ignored inside `section` with only a string title because the section has a nil subject.
+  - **G7**: Built-in `search` word hardcodes `to: "/search"` destination form attribute.
+  - **G8**: Empty strings `""` are truthy in `choose` / `when` branches.
+- **Studio integration**: `StudioPages::PAGES` grew to 25 entries; `StudioPages.data_for` supplies realistic pre-filled payloads; `bin/verify_pages.rb` grew to 20 verified pages with 0 problems.
+- **StudioDocs ranking fix**: `StudioDocs.ranked_rows` was sorting by `row[0]` (the filename path string) rather than preserving file order as its documentation promised, causing alphabetical paths under `examples/` to displace curated reference pages under `pages/`. Fixed to sort by file order index, keeping Try-It seeds stable and 100% green.
+- **Gate status**: All 7 legs and 31 test files pass cleanly (355 runs, 3,802 assertions, 0 failures). Studio server refreshed on port 4580.
+
 ### Phase 2 — Measure the demand
 
 The garden's ledger is the spine. Beside it, one inventory item, kept at its

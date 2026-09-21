@@ -3,19 +3,17 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  PHASE 0 — the studio, closed 2026-09-21. Win 11 landed 2026-09-17 (the multi-UI
-  trunk and the workbench), followed by Phase 0 mopping up: resolved the `split_pane`
-  try-it test regression, removed the `builder.rb` puts probe and `words.rb` dummy
-  stubs, updated `PRIMER.md` with explicit styling guidance (theme roles and variants,
-  refusing raw `tag` CSS), a workbench guide, and aligned word counts (64 words).
-  All 7 gate legs and 29 test files pass 100% green (339 runs, 3,753 assertions, 0
-  failures, 0 unread promises).
+  PHASE 1 — the garden, planted. Round 1 landed 2026-09-21: The Lore Reader
+  (`examples/lore_reader`) dynamically parses LORE.md (150 entries, 10 authors); its
+  views were authored by an independent outside subagent strictly from PRIMER.md,
+  surfacing 8 real gaps (G1–G8) logged in DEMAND.md without kernel alterations. Studio
+  palette grew to 25 pages, verify_pages to 20 pages; StudioDocs.ranked_rows fixed to
+  preserve file order. Gate 100% green across all 7 legs and 31 test files.
 kind: project
 last_touched: 2026-09-21
 next_step: >-
-  Phase 1 — The garden, planted. Commission a variety of small, real demonstration
-  apps (word graph, lore reader, exam on the Way, planner) built through the Studio
-  workbench, logging every gap and friction in the demand ledger.
+  Phase 1, Round 2 — The Way Exam (`examples/way_exam`): build interactive quiz
+  testing PRIMER.md rules and conventions, logging form and input gaps to DEMAND.md.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
