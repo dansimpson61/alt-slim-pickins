@@ -828,7 +828,21 @@ and its region — and the ledger names every gap with its sentence.
   - **G12**: Predicate methods (`when .done?`) fail on Hash/JSON deserialized subjects in `Subject#fetch` because hash keys do not carry `?` and method dispatch is bypassed. Workaround: un-predicated aliases (`done`, `blocked`, `completed`).
   - **G13**: No `progress` or `meter` word in vocabulary for visual progress bars. Workaround: numerical metric tiles and status badges.
 - **Studio integration**: `StudioPages::PAGES` grew to 32 entries; `StudioPages.library_dirs` grew to include `examples/milestone_planner/views`; `bin/verify_pages.rb` grew to 24 verified pages with 0 problems.
-- **Gate status**: 100% green across all 7 legs live on port 4580 and full test suite (369 runs, 4,093 assertions, 0 failures).
+**Round 4 — The Word Graph (`examples/word_graph`) planted (2026-09-21) — PHASE 1 COMPLETE:**
+- **Consumer**: Authors, reviewers, educators, and language designers exploring the 64 words of alt-slim-pickins, structural shape distribution, and grammar connectivity.
+- **Region exercised**: `chart` (with `line` over categorical `name`), `table` (with `column` registering headers and numeric alignments), `card`, `grid`, `metric`, `badge`, `fact`, `choose`, `when`, `otherwise`, `empty`, `each` (with `from: .children`), `form`, `input`, `button`, `actions`, `link`.
+- **Domain model & Graph Engine**: `WordGraph::Graph` and `WordGraph::Node` establish canonical vocabulary boundaries (42 Ruby classes + 22 vocabulary partials = exactly 64 words). Computes in-degree, out-degree, structural degree metrics, shape clustering, and bidirectional containment edges. `ShapePoint` models the 7 structural shapes with distribution metrics.
+- **Sinatra App & Boot Gate**: `examples/word_graph/app.rb` running on port 4588 with `SlimPickins.prove!` verifying `:index`, `:word`, `:shapes`, and `:matrix` at startup. Full integration suite in `examples/word_graph/test/app_test.rb` (9 runs, 97 assertions, 0 failures) and unit suite in `test/graph_test.rb` (6 runs, 109 assertions, 0 failures).
+- **Demand Ledger updated (`DEMAND.md`)**:
+  - **G14**: Irregular English plurals (`child` -> `children`) fail automatic plural inference in `each child` (`this page has no childs to go through`). Workaround: explicit `from: .children`.
+  - **G15**: Bare modifier values in `from:` (`from: children`) parse as Symbols rather than subject data, crashing on `to_a`. Workaround: dotted data `from: .children`.
+  - **G16**: Dotted data in `metric` and `fact` attribute position crashes with `TypeError: nil is not a symbol nor a string`. Workaround: bare attribute symbols.
+  - **G17**: `title` refuses bare identifiers as content (`title takes no name`). Workaround: dotted data `title .word_name` or quoted string.
+  - **G18**: `badge` has no `info` or `accent` variant; `check_styles.rb` refuses unstyled variants. Workaround: `badge neutral`.
+  - **G19**: `grid` variants are constrained to stylesheet declarations (`.grid--cards`, `.grid--metrics`). Workaround: `grid cards, columns: ...`.
+- **Studio integration**: `StudioPages::PAGES` grew to 37 entries; `StudioPages.library_dirs` grew to include `examples/word_graph/views`; `bin/verify_pages.rb` grew to 28 verified pages with 0 problems.
+- **Gate status**: 100% green across all 7 legs live on port 4580 and full test suite (384 runs, 4,371 assertions, 0 failures).
+- **Phase 1 Outcome**: All four planned garden applications (The Lore Reader, The Way Exam, The Milestone Planner, The Word Graph) planted in `examples/`. Demand ledger contains 19 recorded gaps (G1–G19) derived entirely from real outside-hands template authoring against the frozen runtime. Phase 1 is complete.
 
 ### Phase 2 — Measure the demand
 

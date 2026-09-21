@@ -179,7 +179,12 @@ class StudioPagesTest < Minitest::Test
     'examples/milestone_planner/views/index.sp' => 'Milestone Planner',
     'examples/milestone_planner/views/milestone.sp' => 'Milestone Detail',
     'examples/milestone_planner/views/partials/milestone_card.sp' => 'Phase 0: Scope the Studio Workbench',
-    'examples/milestone_planner/views/partials/task_card.sp' => 'Build palette census'
+    'examples/milestone_planner/views/partials/task_card.sp' => 'Build palette census',
+    'examples/word_graph/views/index.sp' => 'The Word Graph',
+    'examples/word_graph/views/word.sp' => 'table',
+    'examples/word_graph/views/shapes.sp' => 'Structural Shapes of alt-slim-pickins',
+    'examples/word_graph/views/matrix.sp' => 'Vocabulary Connection Matrix',
+    'examples/word_graph/views/partials/word_card.sp' => 'table'
   }.freeze
 
 

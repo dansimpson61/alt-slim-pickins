@@ -15,6 +15,7 @@ require_relative '../examples/roth/app'
 require_relative '../examples/lore_reader/lib/lore'
 require_relative '../examples/way_exam/lib/exam'
 require_relative '../examples/milestone_planner/lib/planner'
+require_relative '../examples/word_graph/lib/graph'
 
 
 # The palette: the repo's own real pages, offered to the playground as
@@ -73,7 +74,12 @@ module StudioPages
     'milestone_planner/index' => 'examples/milestone_planner/views/index.sp',
     'milestone_planner/milestone' => 'examples/milestone_planner/views/milestone.sp',
     'milestone_planner/partials/milestone_card' => 'examples/milestone_planner/views/partials/milestone_card.sp',
-    'milestone_planner/partials/task_card' => 'examples/milestone_planner/views/partials/task_card.sp'
+    'milestone_planner/partials/task_card' => 'examples/milestone_planner/views/partials/task_card.sp',
+    'word_graph/index' => 'examples/word_graph/views/index.sp',
+    'word_graph/word' => 'examples/word_graph/views/word.sp',
+    'word_graph/shapes' => 'examples/word_graph/views/shapes.sp',
+    'word_graph/matrix' => 'examples/word_graph/views/matrix.sp',
+    'word_graph/partials/word_card' => 'examples/word_graph/views/partials/word_card.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
 
@@ -201,7 +207,8 @@ module StudioPages
     File.join(ROOT, 'examples', 'roth', 'views'),
     File.join(ROOT, 'examples', 'lore_reader', 'views'),
     File.join(ROOT, 'examples', 'way_exam', 'views'),
-    File.join(ROOT, 'examples', 'milestone_planner', 'views')
+    File.join(ROOT, 'examples', 'milestone_planner', 'views'),
+    File.join(ROOT, 'examples', 'word_graph', 'views')
   ].freeze
 
 
@@ -389,6 +396,31 @@ module StudioPages
       planner = MilestonePlanner::Planner.new
       t = planner.find('m1').tasks.first.to_h
       t.merge('task' => t)
+    when 'examples/word_graph/views/index.sp'
+      graph = WordGraph::Graph.instance
+      { 'q' => '', 'words' => graph.all.map(&:to_h) }.merge(graph.stats)
+    when 'examples/word_graph/views/word.sp'
+      graph = WordGraph::Graph.instance
+      w = graph.find('table')
+      peers = graph.by_shape(w.shape).reject { |item| item.name == w.name }
+      parents = w.explicit_parents.map { |p| graph.find(p) }.compact
+      children = w.explicit_children.map { |c| graph.find(c) }.compact
+      {
+        'word' => w.to_h,
+        'parents' => parents.map(&:to_h),
+        'children' => children.map(&:to_h),
+        'peers' => peers.map(&:to_h)
+      }.merge(w.to_h)
+    when 'examples/word_graph/views/shapes.sp'
+      graph = WordGraph::Graph.instance
+      { 'shapes' => graph.shapes.map(&:to_h) }
+    when 'examples/word_graph/views/matrix.sp'
+      graph = WordGraph::Graph.instance
+      { 'words' => graph.all.map(&:to_h) }
+    when 'examples/word_graph/views/partials/word_card.sp'
+      graph = WordGraph::Graph.instance
+      w = graph.find('table')
+      w.to_h.merge('word' => w.to_h)
     else
       {}
     end

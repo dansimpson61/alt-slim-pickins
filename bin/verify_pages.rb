@@ -36,6 +36,12 @@ way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
 milestone_planner = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
 planner = MilestonePlanner::Planner.new
 m1_sample = planner.find('m1')
+word_graph = SlimPickins::Library.from(File.expand_path('../examples/word_graph/views', __dir__))
+graph = WordGraph::Graph.instance
+w_sample = graph.find('table')
+w_peers = graph.by_shape(w_sample.shape).reject { |w| w.name == w_sample.name }
+w_parents = w_sample.explicit_parents.map { |p| graph.find(p) }.compact
+w_children = w_sample.explicit_children.map { |c| graph.find(c) }.compact
 studio = StudioPages.ui_library(Uis['classic'])
 
 
@@ -116,6 +122,14 @@ PAGES = [
    { stats: planner.stats, milestones: planner.all }],
   ['examples/milestone_planner/views/milestone.sp', milestone_planner,
    { milestone: m1_sample, tasks: m1_sample.tasks, title: nil, owner: :dan }.merge(m1_sample.to_h)],
+  ['examples/word_graph/views/index.sp', word_graph,
+   { words: graph.all, q: '' }.merge(graph.stats)],
+  ['examples/word_graph/views/word.sp', word_graph,
+   { word: w_sample, parents: w_parents, children: w_children, peers: w_peers }.merge(w_sample.to_h)],
+  ['examples/word_graph/views/shapes.sp', word_graph,
+   { shapes: graph.shapes }],
+  ['examples/word_graph/views/matrix.sp', word_graph,
+   { words: graph.all }],
   *STUDIO_PAGES
 ].freeze
 

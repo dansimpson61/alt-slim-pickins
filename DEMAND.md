@@ -107,5 +107,44 @@ These logged gaps form the demand evidence that gates Phase 3's vocabulary and k
 - **Obstacle**: The 64-word vocabulary has no widget word for visual completion bars (semantic `<progress>` or `<meter>`).
 - **Workaround**: Displayed progress numerically using `metric progress, "Progress %"` and categorically using status badges (`badge ok, "Complete"`).
 
+### G14 — Irregular English plural inference in `each`
+- **Consumer**: `examples/word_graph/views/word.sp`
+- **Desired Expression**: `each child` expecting to infer and iterate over `children` on the subject.
+- **Refusal**: `this page has no childs to go through (SlimPickins::Error)`
+- **Obstacle**: `Inference.plural(name)` applies simple regular inflection (`"#{s}s"` or `y -> ies`). Irregular English plurals like `child` -> `children` fail inference and look for `childs`.
+- **Workaround**: Explicitly specified the source collection using the `from:` modifier with dotted data: `each child, from: .children`.
 
+### G15 — Bare modifier value in `from:` evaluates to Symbol instead of subject data
+- **Consumer**: `examples/word_graph/views/word.sp`
+- **Desired Expression**: `each child, from: children` expecting `children` to resolve the `children` collection on the subject.
+- **Refusal**: `undefined method 'to_a' for an instance of Symbol (NoMethodError)`
+- **Obstacle**: In modifier argument position, a bare identifier `from: children` is parsed as a Symbol literal (`:children`). In the language's morphology, access to data on the enclosing subject requires a leading dot (`.children`). Passing a bare symbol causes `items.to_a` to crash on the Symbol.
+- **Workaround**: Wrote `from: .children` with the leading dot to resolve data from the subject.
 
+### G16 — Dotted data in `metric` and `fact` attribute position crashes with TypeError
+- **Consumer**: `examples/word_graph/views/partials/word_card.sp` and `views/word.sp`
+- **Desired Expression**: `metric .connections_count, "Connections"`
+- **Refusal**: `TypeError: nil is not a symbol nor a string` at `subject.rb:75:in 'Kernel#respond_to?'`
+- **Obstacle**: `Metric` and `Fact` declare `name: :attribute`. When passed a dotted identifier `.connections_count`, `arguments(@args)` treats dotted values as content/value, leaving `name` as `nil`. `subject.fetch(nil)` then attempts `respond_to?(nil)` which raises a Ruby TypeError rather than a language syntax complaint.
+- **Workaround**: Wrote bare attribute names (`metric connections_count, "Connections"`, `fact speech_name`).
+
+### G17 — `title` refuses bare identifier as content
+- **Consumer**: `examples/word_graph/views/word.sp`
+- **Desired Expression**: `title word_name`
+- **Refusal**: `title takes no name — word_name (SlimPickins::SyntaxError)`
+- **Obstacle**: `title` declares `name: :none, content: true`. A bare identifier is interpreted as a name argument rather than content, causing the contract check to reject it.
+- **Workaround**: Wrote dotted data `title .word_name` or string content `title "Title"`.
+
+### G18 — `badge` has no `info` or `accent` status variant
+- **Consumer**: `examples/word_graph/views/partials/word_card.sp`, `views/word.sp`, and `views/shapes.sp`
+- **Desired Expression**: `badge info, "Register"` or `badge accent, "Iterates"` for non-binary or neutral informative states.
+- **Refusal**: `UNSTYLED VARIANT: badge--info is said and no rule defines it — a variant nothing can style is refused (check_styles.rb)`
+- **Obstacle**: The theme stylesheet defines only seven badge states: `ok`, `pending`, `warning`, `polish`, `error`, `blocker`, and `neutral`. There is no dedicated `info` or `accent` role.
+- **Workaround**: Mapped informative tags to `badge neutral` and highlighted control flow states with `badge ok` and `badge warning`.
+
+### G19 — `grid` variant names are constrained to declared theme classes
+- **Consumer**: `examples/word_graph/views/index.sp`, `views/word.sp`, and `views/shapes.sp`
+- **Desired Expression**: Semantic grid naming such as `grid words, columns: 2` or `grid shapes, columns: 2`.
+- **Refusal**: `UNSTYLED VARIANT: grid--words is said and no rule defines it — a variant nothing can style is refused (check_styles.rb)`
+- **Obstacle**: `grid` treats its first identifier as a CSS modifier variant (`.grid--#{name}`). Unlike generic layout containers, `check_styles.rb` audits all emitted classes against CSS rules, and the stylesheet only declares `.grid--cards` and `.grid--metrics`.
+- **Workaround**: Used `grid cards, columns: 2` or `grid cards, columns: 3`.
