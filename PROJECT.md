@@ -3,56 +3,19 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  PHASE 0 — the studio, won iteratively. **Win 11 landed 2026-09-17: the studio
-  holds multiple UIs, and the workbench is the first new one.** dan's ruling —
-  the studio is one workbench and the library a movable shelf — was rewritten by
-  his next instruction into "manage multiple UIs from which we can pick", an
-  exploration before guides are updated and agents are turned loose on garden
-  apps. A UI is now a directory: `layout.sp` (the frame the `page` word infers),
-  `views/`, `words.rb` (a module `include`-ing the shared interface kata
-  `StudioUI`), and `about.rb` (its title, its design, and its route templates).
-  `studio/uis.rb` is the registry; `?ui=` selects, a cookie remembers, `/ui/:name`
-  switches, and the picker is a partial each UI draws. The seam that makes
-  several UIs possible is `paths`: every link is minted by the UI that is
-  speaking, via `link_to`, so no view holds a route and one UI cannot link into
-  another. The classic UI is kept whole as the control; the workbench is
-  `main_menu` / `library` / `panes` / `footer`, its shelf holding the words, the
-  repo's pages with their census, and the guides, and `/docs/:word` is a state of
-  the shelf rather than a page — so there is one editor and `try_it.sp` is gone.
-  Both UIs read **18 of 18 `ok`** in their own shelves, verified by looking in
-  Chromium as well as by the gate. The round also fixed eight defects that had
-  been invisible, including `page` reading its head before the layout ran (so a
-  layout's assets never reached `<head>`), `Library` harvesting inherited
-  methods and so refusing the language's own `format`, and `plainify` laundering
-  unnameable values into nil and destroying whole payloads. Landed earlier:
-  DAYTRIP-0.3.0b (The Accent) closed the same day, ten studio wins before it, the
-  three instruments, the register's reference shape. The gate is 96 rules, 339
-  runs and seven legs, all exit 0.
+  PHASE 0 — the studio, closed 2026-09-21. Win 11 landed 2026-09-17 (the multi-UI
+  trunk and the workbench), followed by Phase 0 mopping up: resolved the `split_pane`
+  try-it test regression, removed the `builder.rb` puts probe and `words.rb` dummy
+  stubs, updated `PRIMER.md` with explicit styling guidance (theme roles and variants,
+  refusing raw `tag` CSS), a workbench guide, and aligned word counts (64 words).
+  All 7 gate legs and 29 test files pass 100% green (339 runs, 3,753 assertions, 0
+  failures, 0 unread promises).
 kind: project
-last_touched: 2026-09-17
+last_touched: 2026-09-21
 next_step: >-
-  The multi-UI trunk is landed and green; **the pick after it is dan's**. The
-  live candidates, each with its consumer: **more UIs** — dan's own words were
-  "we may try generating a few different UIs just for the sake of exercising
-  ourselves and the language", and the vocabulary question is the point (a word
-  one UI needs is that UI's business; a word two UIs need is evidence for the
-  language; a word neither needs is evidence for the vocabulary — neither UI has
-  asked for anything yet); **the gutter** — errors belong on the line the
-  language already carries `path`/`lineno` for, and under the one-workbench
-  shape that lands in one file instead of two; **the inference/ownership pane**
-  (ROADMAP-0.3's parked W3, and BLUESKY Part 4's deepest job) — the studio
-  showing *who decided* each value, which the conventions register half-built
-  already; and **the shelf's search**, a real `search` word with no behaviour
-  wired. Held for the end-of-phase mopping up, on dan's instruction, unless one
-  bites: F8 (five claims no code kept, ruled *record it, build nothing*), F9 (the
-  `table_header`/`label` rename), `bin/word_graph.rb`'s broken template, the
-  `puts` probe in `builder.rb:62-65`, `words.rb`'s three `___dummy` stubs, the
-  vetoed `.agents/worker_1/report.md`, `studio/app.rb`'s consumer-less
-  `/render_html` route, and the stale word counts in prose (`README.md:138`,
-  `PRIMER.md:366`). `DAYTRIP-0.3.0a` is held and due a re-reading; causes B's
-  repairs wait in Phase 3; E4/E6/E7/E8 stay dan's. Left as recorded divergences:
-  the 42 Ruby `contract` calls keep `content: true`, and HANDOFF and README each
-  carry a current copy of the gate command.
+  Phase 1 — The garden, planted. Commission a variety of small, real demonstration
+  apps (word graph, lore reader, exam on the Way, planner) built through the Studio
+  workbench, logging every gap and friction in the demand ledger.
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -159,6 +122,6 @@ conventions: >-
 A working view language: one-sentence grammar, 64 words, its own stylesheet,
 and three example apps plus the studio that speak it. See [README.md](README.md)
 — its *How roadmaps go* section governs how roadmaps work, and
-[ROADMAP-0.3.md](ROADMAP-0.3.md) is the active one (the forward eye, in
-Phase 0: the studio, won iteratively). [ROADMAP-0.2.md](ROADMAP-0.2.md) is
+[ROADMAP-0.3.md](ROADMAP-0.3.md) is the active one (the forward eye, entering
+Phase 1: the garden, planted). [ROADMAP-0.2.md](ROADMAP-0.2.md) is
 closed; it began with the rewrite of the Slim-Pickins Way.

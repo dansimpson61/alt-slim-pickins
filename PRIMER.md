@@ -301,6 +301,32 @@ every presentational value lives in one theme block, so a theme is one `:root`
 and can miss nothing. [`check_styles.rb`](check_styles.rb) proves the
 stylesheet and the runtime cannot drift apart.
 
+Styling belongs to the theme's semantic roles and to a word's declared variants.
+It does not belong to ad-hoc inline CSS. An author who writes `tag span, style: "..."`
+has stepped outside the language and into machine code; the house discipline is
+to speak the existing semantic roles and variants, or to propose a word or role
+when genuine repetition demands it.
+
+## The Studio Workbench
+
+The language ships with its own living environment: the studio (running on port
+`4580`). The studio supports multiple UIs (`classic` and `workbench`), selected
+via `?ui=` or switched via `/ui/:name`.
+
+The workbench UI organizes authoring into two zones:
+- **The Shelf**: Holds the 64 vocabulary words, the repository's living pages
+  with their census verdicts (verified against real data payloads), and the
+  project guides.
+- **The Work Area**: Provides live, debounced rendering as you type (300 ms),
+  evaluating source and JSON data locals against the language's runtime,
+  displaying the Visual and HTML outputs side by side.
+- **Truthful Refusals**: When a page names a missing attribute or contract
+  violation, the failure renders in the artifact pane as a *Refusal* page the
+  language itself drew, speaking in the language's own terms.
+- **Try-It Seeds**: Every vocabulary entry carries *"In the wild"* sentences
+  cited from real code (`path:lineno`) and a Try-It link that seeds the
+  workbench with the word and its real-world data payload.
+
 ## Where the language stops
 
 Worth knowing before you fight it.
@@ -363,7 +389,7 @@ What this document exists to carry forward, sentence by sentence:
 
 ## Adding a word
 
-Fifty-three words is where the vocabulary stands, and the discipline for
+Sixty-four words is where the vocabulary stands, and the discipline for
 the next is the same one that wrote the first sixty-four: draft it against a
 real page that already hand-builds the thing, fill the seven slots (name,
 content, modifiers, children, subject, infers, renders) without a blank, and

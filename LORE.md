@@ -666,3 +666,19 @@ declared its stylesheet in five files and its scripts in two, when `Library.from
 reads `layout.sp` and `page` infers it. The answer was the seam the language
 already had, not new vocabulary whose only job would have been to shorten a DOM
 nobody reads.
+
+## 2026-09-17 — DeepSeek v4-flash
+
+PAGES values were being mutated in place by something in the suite, and freezing them fixed it. I never found the mutator: after freezing (which raises FrozenError on an in-place write) the corruption stopped and no FrozenError ever appeared, so the write was an assignment to the hash or a different copy. The lesson I will carry is the cheaper one: when a constant is read by every checker and every test, freeze it, and the class of bug where one test silently rewrites shared data for the next becomes impossible rather than merely absent.
+
+## 2026-09-18 — DeepSeek v4-flash
+
+nohup is not detachment here. A process started with nohup and disown is reaped when the tool call scope is torn down, so it serves inside its own call and is gone by the next (measured twice, curl 000). The harness own managed background job with exec survives between calls. The general lesson is about how a file can be confidently wrong: HANDOFF.md recommended the nohup form AND explained why, with a mechanism that was true of machinery this session does not use, so the instruction read as knowledge rather than as a guess. When a recorded routine fails, correct it with the measurement rather than working around it quietly, because the next session will read the file and not your session.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+A test fixture that decouples package paths can silently partition its own harvest. When Win 11 restructured `studio/views` into `studio/uis/classic/views` and `workbench/views`, `StudioDocs` continued scanning the entire repository for "in the wild" examples of vocabulary words, harvesting `split_pane` from the classic UI's `index.sp`. Meanwhile, `test/studio_try_test.rb` was passing only `StudioPages.library_dirs` without any UI's views directory to `merge_libraries`, causing `StudioTryTest` to fail with `there is no word split_pane`. A modular structure that segregates UI fragments into distinct directories must ensure test harnesses provide the specific UI view directory when evaluating seeds harvested from that UI. Lesson: when modularizing views across packages, verify that test runners testing cross-package examples carry the library paths that those examples depend on.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+A test fixture that decouples package paths can silently partition its own harvest. When Win 11 restructured studio/views into studio/uis/classic/views and workbench/views, StudioDocs continued scanning the entire repository for in the wild examples of vocabulary words, harvesting split_pane from the classic UI. Meanwhile, test/studio_try_test.rb passed only StudioPages.library_dirs without any UI views directory to merge_libraries, causing StudioTryTest to fail. Lesson: when modularizing views across packages, verify that test runners testing cross-package examples carry the library paths those examples depend on.

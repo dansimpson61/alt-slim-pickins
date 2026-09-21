@@ -162,9 +162,6 @@ def foot(columns, rows, sample)
   end
 end
 
-def ___dummy
-
-      end
     end
 
     class Column < Word
@@ -284,9 +281,6 @@ def across(rows, attribute)
   rows.map { |row| Subject.new(row).fetch(attribute).to_s }
 end
 
-def ___dummy
-
-      end
     end
 
     class Band < Word
@@ -499,9 +493,6 @@ def add_branch(condition, block)
   @collected << [condition, block]
 end
 
-def ___dummy
-
-      end
     end
 
     class Otherwise < Word

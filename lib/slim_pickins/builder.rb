@@ -59,12 +59,7 @@ private :define_app_words
         return Subject.new(subject.fetch(name), described_as: "this #{name}") if subject.has?(name)
       end
 
-if name == :tabs
-  puts "SELF CLASS: #{self.class.name}"
-  puts "METHODS: #{methods.grep(/tabs/)}"
-end
-raise Error, "there is no word `#{name}`"
-
+      raise Error, "there is no word `#{name}`"
     end
 
     def respond_to_missing?(name, include_private = false)

@@ -285,6 +285,12 @@ working manual that should be better after every session than it was before.
   and a proposal that turns out wrong in a detail is a finding for the record
   (observed 2026-09-17).
 
+- **He uses roadmap reviews to test orientation, drift, and sequencing before opening a phase.** (observed 2026-09-21).
+  Asked to audit status across roadmap/daytrips/bluesky, whether intent drifted or evolved, and whether to commission apps before or after rectifying pedagogical materials, his goal was to test whether the agent distinguishes incomplete preconditions (fixing test regressions, aligning guides) from the forward march of the roadmap. Handed the four-step sequence, he confirmed: *"Am i correct that 1 and 2 are incomplete items from previous work that need to be taken care of before we procede, and the rest in a resumtion of the roadmap03?"* A review tests your mental model, your honesty about what is broken, and your sequencing discipline.
+
+- **End-of-phase housekeeping is the complete cycle**: `working-with-dan.md`, commit, and push. His reminder (2026-09-21):
+  *"End-of-Phase housekeeping also includes working_with_dan, commiting, and pushing."* Closing a phase is not just code green and card updated; it is the full clean exit — lore, manual, clean tree, and remote updated.
+
 ## Proposed deletions — nothing here yet
 
 Entries judged stale by one session wait here, struck through, dated, with a
@@ -293,4 +299,4 @@ commit) or returns them to the body. See instruction 6.
 
 ## Open questions — watch these, do not guess
 
-- What he wants from a roadmap *review* (as opposed to a round) — untested.
+- None currently open. (What he wants from a roadmap review tested and answered 2026-09-21).

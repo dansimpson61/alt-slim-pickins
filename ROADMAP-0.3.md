@@ -528,6 +528,16 @@ no behaviour wired — honest, and a demand the next round may take.
 
 The phase stays open, and the pick after this one is dan's.
 
+### Phase 0 Mop-up & Closure (2026-09-21) — dan's ruling
+
+dan approved addressing the floor repairs and pedagogical reconciliation before commissioning the garden apps:
+- **`split_pane` test regression resolved**: `test/studio_try_test.rb` was updated to merge `Uis['classic'].views` alongside `StudioPages.library_dirs`, resolving the missing `split_pane` partial when evaluating seeds harvested from classic UI pages. The test suite is 100% green (257 assertions in `StudioTryTest`).
+- **Code cruft cleaned**: The leftover `:tabs` `puts` probe in `lib/slim_pickins/builder.rb` and the three `def ___dummy` stubs in `lib/slim_pickins/words.rb` were deleted.
+- **Pedagogical reconciliation**: `PRIMER.md` updated with explicit styling discipline (relying on theme roles and variants rather than ad-hoc `tag` inline CSS), an orientation guide to the Studio Workbench, and the corrected 64-word count.
+- **Gate state**: All seven legs and 29 test files pass cleanly with zero failures and zero unread promises.
+
+**Phase 0 is closed.** The roadmap advances to **Phase 1 — The garden, planted**.
+
 ### The session-start record (2026-09-16) — findings, no code motion
 
 An orientation round: a fresh session read the project, re-measured it, and
