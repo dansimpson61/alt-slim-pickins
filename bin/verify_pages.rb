@@ -31,7 +31,11 @@ dashboard = SlimPickins::Library.from(File.expand_path('../examples/dashboard/vi
 lore_reader = SlimPickins::Library.from(File.expand_path('../examples/lore_reader/views', __dir__))
 lore = LoreReader::Lore.load
 lore_sample = lore.all.first
+way_exam = SlimPickins::Library.from(File.expand_path('../examples/way_exam/views', __dir__))
+way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
 studio = StudioPages.ui_library(Uis['classic'])
+
+
 scenario = Roth::Scenario.defaults
 projection = Roth::Projection.of(scenario)
 
@@ -99,8 +103,14 @@ PAGES = [
    { lore: lore, entries: lore.all.first(5), stats: lore.stats, q: '', current_author: '' }],
   ['examples/lore_reader/views/entry.sp', lore_reader,
    { entry: lore_sample }],
+  ['examples/way_exam/views/index.sp', way_exam,
+   { overview: { questions_count: 5, passing_score: '80%' },
+     q1: nil, q2: nil, q3: nil, q4: nil, q5: nil }],
+  ['examples/way_exam/views/results.sp', way_exam,
+   { result: way_result, reviews: way_result.reviews }],
   *STUDIO_PAGES
 ].freeze
+
 
 problems = 0
 

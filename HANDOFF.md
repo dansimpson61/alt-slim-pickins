@@ -11,8 +11,10 @@ Resume work on `~/dev/alt-slim-pickins`.
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
 3. `ROADMAP-*.md` — the active roadmap: 0.2 is closed; 0.3 (the forward eye,
-   three legs in one question) is in Phase 0 — the studio, won iteratively;
-   ten wins landed 2026-09-15; `PROJECT.md` `next_step` points at the pick
+   three legs in one question) is in Phase 1 — The garden, planted. Round 1
+   (The Lore Reader) and Round 2 (The Way Exam) landed; `PROJECT.md` `next_step`
+   points at Round 3 (The Milestone Planner).
+
 4. `DAYTRIP-0.3.0b.md` — *The Accent*, opened and closed 2026-09-17: the two
    instruments, the mechanical claim corrections, and the register's reference
    shape (a word declares the conventions it triggers). Its closing section
@@ -45,12 +47,12 @@ The detailed phase-by-phase record of Roadmap 0.2 remains in `ROADMAP-0.2.md`.
 
 ## What is next — Roadmap 0.3
 
-**Phase 6 (Subtraction) is complete, officially closing Roadmap 0.2.**
-The vocabulary is clean (`meta`, `icon`, `thumb`, `thumbnails` removed), the `action` primitive is refactored, and Phase 5's prose named-limits (`---`, heading boundaries, table alignment colons, and deeply nested lists) are fully natively supported by `prose` (because we discovered they were genuinely needed for structural clarity, validating that we shouldn't strip them).
+Phase 0 (the studio, won iteratively) is closed with Win 11.
+Phase 1 (The garden, planted) is active:
+- **Round 1 (The Lore Reader, `examples/lore_reader`)**: Landed. 150 entries dynamically parsed from `LORE.md`, authored by outside hands, logging G1–G8 in `DEMAND.md`.
+- **Round 2 (The Way Exam, `examples/way_exam`)**: Landed. 5-question authentic interactive exam testing PRIMER.md rules, scored dynamically with full review cards, logging G9–G11 in `DEMAND.md`.
+- **Next up**: Phase 1, Round 3 — The Milestone Planner (`examples/milestone_planner`).
 
-**Phase 0 is open — the studio, won iteratively — and eleven wins have
-landed.** Ten on 2026-09-15, and **Win 11 on 2026-09-17: the multi-UI trunk,
-and the workbench.** Win 1, the palette: the playground offers the repo's
 own pages as starting points, thirteen of them, each wearing the census
 verdict of the render the playground will give it — 13 of 13 refuse, every
 one of them the data wall. Win 2, the word docs grow teeth: every

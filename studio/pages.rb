@@ -13,6 +13,7 @@ require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
 require_relative '../examples/lore_reader/lib/lore'
+require_relative '../examples/way_exam/lib/exam'
 
 # The palette: the repo's own real pages, offered to the playground as
 # starting points, each carrying its census verdict — the same render the
@@ -63,8 +64,12 @@ module StudioPages
     'roth/partials/report' => 'examples/roth/views/partials/report.sp',
     'lore_reader/index' => 'examples/lore_reader/views/index.sp',
     'lore_reader/entry' => 'examples/lore_reader/views/entry.sp',
-    'lore_reader/partials/lore_card' => 'examples/lore_reader/views/partials/lore_card.sp'
+    'lore_reader/partials/lore_card' => 'examples/lore_reader/views/partials/lore_card.sp',
+    'way_exam/index' => 'examples/way_exam/views/index.sp',
+    'way_exam/results' => 'examples/way_exam/views/results.sp',
+    'way_exam/partials/question_card' => 'examples/way_exam/views/partials/question_card.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
+
 
   # The playground's own locals — one home, used by the routes and by the
   # census, so a verdict and the real render can never drift apart. `data`
@@ -187,8 +192,10 @@ module StudioPages
     File.join(ROOT, 'examples', 'portfolio', 'views'),
     File.join(ROOT, 'examples', 'dashboard', 'views'),
     File.join(ROOT, 'examples', 'roth', 'views'),
-    File.join(ROOT, 'examples', 'lore_reader', 'views')
+    File.join(ROOT, 'examples', 'lore_reader', 'views'),
+    File.join(ROOT, 'examples', 'way_exam', 'views')
   ].freeze
+
 
   def self.library
     @library ||= merge_libraries(library_dirs, words: [AppWords, *Uis.all.map(&:words)])
@@ -349,9 +356,19 @@ module StudioPages
       lore = LoreReader::Lore.load
       entry = lore.all.first.to_h
       entry.merge('entry' => entry)
+    when 'examples/way_exam/views/index.sp'
+      { 'overview' => { 'questions_count' => 5, 'passing_score' => '80%' },
+        'q1' => nil, 'q2' => nil, 'q3' => nil, 'q4' => nil, 'q5' => nil }
+    when 'examples/way_exam/views/results.sp'
+      result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
+      { 'result' => result.to_h, 'reviews' => result.reviews.map(&:to_h) }
+    when 'examples/way_exam/views/partials/question_card.sp'
+      result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
+      result.reviews.first.to_h
     else
       {}
     end
+
   end
 
   # roth's payload, serialized field by field: Scenario's values are the

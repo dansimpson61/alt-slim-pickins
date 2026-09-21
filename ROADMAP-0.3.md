@@ -807,7 +807,20 @@ and its region — and the ledger names every gap with its sentence.
 - **StudioDocs ranking fix**: `StudioDocs.ranked_rows` was sorting by `row[0]` (the filename path string) rather than preserving file order as its documentation promised, causing alphabetical paths under `examples/` to displace curated reference pages under `pages/`. Fixed to sort by file order index, keeping Try-It seeds stable and 100% green.
 - **Gate status**: All 7 legs and 31 test files pass cleanly (355 runs, 3,802 assertions, 0 failures). Studio server refreshed on port 4580.
 
+**Round 2 — The Way Exam (`examples/way_exam`) planted (2026-09-21):**
+- **Consumer**: Students, developers, and agents seeking to verify and solidify their mastery of the Slim-Pickins Way (morphology, conditionals, subject shifting, design discipline, and the 64-word frozen vocabulary).
+- **Region exercised**: `choice`, `option`, `group`, `actions`, `button`, `fact`, `choose`, `when`, `otherwise`, `badge` status variants (`ok`, `warning`, `error`), `note`, `title`, `card`, `grid`, `metric`, `link`.
+- **Domain model & Interactive Quiz**: `WayExam::Exam` evaluates 5 authentic multiple-choice questions with full explanations drawn directly from `PRIMER.md` and `VOCABULARY.md`. Computes scores, percentages, passing thresholds (80%), and verdicts ("Master of the Way", "Apprentice of the Way", "Needs Re-reading"). Flexible grading engine accepts both option keys (`a`, `b`, `c`) and exact text answers.
+- **Sinatra App & Boot Gate**: `examples/way_exam/app.rb` running on port 4586, with `SlimPickins.prove!` verifying `:index` and `:results` at startup. Full integration suite in `examples/way_exam/test/app_test.rb` (5 runs, 50 assertions, 0 failures).
+- **Demand Ledger updated (`DEMAND.md`)**:
+  - **G9**: No dedicated `radio` or radio group word for multiple-choice selections (`choice` with `option` is the single-selection control).
+  - **G10**: `form` refuses `section` (`form may not hold section (SlimPickins::SyntaxError)`); workaround: `group` (rendering `<fieldset><legend>`).
+  - **G11**: `choice` refuses `each` for dynamic options (`choice may not hold each`); options must be statically declared with symbol identifiers.
+- **Studio integration**: `StudioPages::PAGES` grew to 28 entries; `StudioPages.library_dirs` grew to include `examples/way_exam/views`; `bin/verify_pages.rb` grew to 22 verified pages with 0 problems.
+- **Gate status**: 100% green across all 7 legs live on port 4580 and full test suite (357 runs, 3,973 assertions, 0 failures).
+
 ### Phase 2 — Measure the demand
+
 
 The garden's ledger is the spine. Beside it, one inventory item, kept at its
 true size: the dashboard's markdown surfaces (`brief`, `doc`, `pattern`) are

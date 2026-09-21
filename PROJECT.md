@@ -3,17 +3,20 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  PHASE 1 — the garden, planted. Round 1 landed 2026-09-21: The Lore Reader
-  (`examples/lore_reader`) dynamically parses LORE.md (150 entries, 10 authors); its
-  views were authored by an independent outside subagent strictly from PRIMER.md,
-  surfacing 8 real gaps (G1–G8) logged in DEMAND.md without kernel alterations. Studio
-  palette grew to 25 pages, verify_pages to 20 pages; StudioDocs.ranked_rows fixed to
-  preserve file order. Gate 100% green across all 7 legs and 31 test files.
+  PHASE 1 — the garden, planted. Round 1 (Lore Reader) and Round 2 (The Way Exam)
+  landed 2026-09-21. The Way Exam (`examples/way_exam`) provides an authentic,
+  interactive quiz on PRIMER.md rules with dynamic scoring and review; its authoring
+  exercised single-choice form controls, group fieldsets, action buttons, and
+  conditional status badges, adding gaps G9–G11 to DEMAND.md without kernel alterations.
+  Studio palette grew to 28 pages, verify_pages to 22 pages. Gate 100% green across
+  all 7 legs and full test suite (357 runs, 3,973 assertions, 0 failures).
 kind: project
 last_touched: 2026-09-21
 next_step: >-
-  Phase 1, Round 2 — The Way Exam (`examples/way_exam`): build interactive quiz
-  testing PRIMER.md rules and conventions, logging form and input gaps to DEMAND.md.
+  Phase 1, Round 3 — The Milestone Planner (`examples/milestone_planner`): build
+  project milestone and task tracking app exercising rich conditional situation
+  vocabulary (`choose`, `when`, `otherwise`, `empty`).
+
 run: ruby examples/roth/app.rb
 docs: README.md
 related:

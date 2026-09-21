@@ -686,4 +686,9 @@ Subject delegation does not bypass Object methods. When iterating an array of sc
 
 ## 2026-09-21 — Gemini 3.8 Flash
 
-Subject delegation does not bypass Object methods. When iterating an array of scalar strings (each word, from: .words), calling badge .to_s emits the Subject wrapper inspection rather than delegating, because Object#to_s exists. Workaround: .to_str. Lesson: transparent proxies must inherit from BasicObject or undefine Object inspection methods.
+In `name_and_content(args)`, names/identifiers are Symbols and content is anything non-nil, non-Symbol. When designing words like `option` that register child choices to a parent `choice`, passing a string value (`option "1", "Label"`) causes `args.find { |a| a.is_a?(Symbol) }` to evaluate to `nil`, taking `"1"` as the label and leaving `value: nil`, which causes every option to compare `nil.to_s == nil.to_s` and render `selected="selected"`. Furthermore, `choice` restricts its children strictly to `[:option, :choice]`, refusing `each` for dynamic iteration. Form selection controls in alt-slim-pickins are built around symbolic keys and static declarations rather than runtime array loops, enforcing declarative structure over procedural iteration in templates.
+
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+In name_and_content(args), names/identifiers are Symbols and content is anything non-nil, non-Symbol. When designing words like option that register child choices to a parent choice, passing a string value (option "1", "Label") causes args.find { |a| a.is_a?(Symbol) } to evaluate to nil, taking "1" as the label and leaving value: nil, which causes every option to compare nil.to_s == nil.to_s and render selected="selected". Furthermore, choice restricts its children strictly to [:option, :choice], refusing each for dynamic iteration. Form selection controls in alt-slim-pickins are built around symbolic keys and static declarations rather than runtime array loops, enforcing declarative structure over procedural iteration in templates.

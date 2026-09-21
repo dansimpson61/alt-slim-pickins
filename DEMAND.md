@@ -71,3 +71,26 @@ These logged gaps form the demand evidence that gates Phase 3's vocabulary and k
 - **Refusal**: `when .q` evaluated as true when `q == ""`.
 - **Obstacle**: In Ruby, empty strings `""` are truthy.
 - **Workaround**: Left `input q` to display the search value in the input field without conditional branching.
+
+### G9 — No `radio` or radio group word for multiple-choice selections
+- **Consumer**: `examples/way_exam/views/index.sp`
+- **Desired Expression**: `radio name: .id, value: option, label: option` or a radio list for multiple choice questions.
+- **Refusal**: `there is no word 'radio' (SlimPickins::Error)`
+- **Obstacle**: The vocabulary has no `radio` word. While `field` accepts `type: radio`, it emits `<div class="field"><label for="...">Label</label><input type="radio"></div>` tied to the subject's attribute name, without a way to render a group of distinct options sharing one field name where each option has its own label.
+- **Workaround**: Used `choice` with child `option` words (rendering `<select>` with `<option>` elements), which is the vocabulary's built-in single-selection form control.
+
+### G10 — `form` refuses `section`
+- **Consumer**: `examples/way_exam/views/index.sp`
+- **Desired Expression**: `form to: "/grade", method: post` containing `section "Question 1"` for dividing form sections visually and semantically.
+- **Refusal**: `form may not hold section (SlimPickins::SyntaxError)`
+- **Obstacle**: `Form` contract restricts children strictly to `[:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose]`. Even though HTML `<form>` can contain `<section>`, the slim-pickins morphology enforces form-specific partitioning.
+- **Workaround**: Used `group "Question 1"`, which renders `<fieldset class="group"><legend>Question 1</legend>`.
+
+### G11 — `choice` refuses `each` for dynamic option lists
+- **Consumer**: `examples/way_exam/views/index.sp`
+- **Desired Expression**: `choice .id, .prompt` enclosing `each opt, from: .options` to dynamically render `<option>` tags from a collection.
+- **Refusal**: `choice may not hold each (SlimPickins::SyntaxError)`
+- **Obstacle**: `Choice` contract restricts its children strictly to `[:option, :choice]`. Dynamic generation of options from data collections via `each` is refused by the compiler. Furthermore, `Option` expects its identifier/value to be a Symbol (via `name_and_content`); passing string values leaves `value: nil`.
+- **Workaround**: Statically authored question choices with symbol keys (`option a, "..."`, `option b, "..."`, `option c, "..."`).
+
+

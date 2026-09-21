@@ -172,8 +172,12 @@ class StudioPagesTest < Minitest::Test
     'examples/dashboard/views/partials/unreviewed_card.sp' => 'awaiting judgment',
     'examples/lore_reader/views/index.sp' => 'The Lore Reader',
     'examples/lore_reader/views/entry.sp' => 'Back to Timeline',
-    'examples/lore_reader/views/partials/lore_card.sp' => 'Read entry'
+    'examples/lore_reader/views/partials/lore_card.sp' => 'Read entry',
+    'examples/way_exam/views/index.sp' => 'The Way Exam',
+    'examples/way_exam/views/results.sp' => 'Exam Results',
+    'examples/way_exam/views/partials/question_card.sp' => 'Correct'
   }.freeze
+
 
   def test_every_ledger_page_renders_with_its_prefilled_data
     # The one-process suite shares one Word.registry, and a partial's class
