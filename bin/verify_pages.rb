@@ -33,7 +33,11 @@ lore = LoreReader::Lore.load
 lore_sample = lore.all.first
 way_exam = SlimPickins::Library.from(File.expand_path('../examples/way_exam/views', __dir__))
 way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
+milestone_planner = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
+planner = MilestonePlanner::Planner.new
+m1_sample = planner.find('m1')
 studio = StudioPages.ui_library(Uis['classic'])
+
 
 
 scenario = Roth::Scenario.defaults
@@ -108,8 +112,13 @@ PAGES = [
      q1: nil, q2: nil, q3: nil, q4: nil, q5: nil }],
   ['examples/way_exam/views/results.sp', way_exam,
    { result: way_result, reviews: way_result.reviews }],
+  ['examples/milestone_planner/views/index.sp', milestone_planner,
+   { stats: planner.stats, milestones: planner.all }],
+  ['examples/milestone_planner/views/milestone.sp', milestone_planner,
+   { milestone: m1_sample, tasks: m1_sample.tasks, title: nil, owner: :dan }.merge(m1_sample.to_h)],
   *STUDIO_PAGES
 ].freeze
+
 
 
 problems = 0

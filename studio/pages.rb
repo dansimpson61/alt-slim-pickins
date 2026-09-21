@@ -14,6 +14,8 @@ require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
 require_relative '../examples/lore_reader/lib/lore'
 require_relative '../examples/way_exam/lib/exam'
+require_relative '../examples/milestone_planner/lib/planner'
+
 
 # The palette: the repo's own real pages, offered to the playground as
 # starting points, each carrying its census verdict — the same render the
@@ -67,8 +69,13 @@ module StudioPages
     'lore_reader/partials/lore_card' => 'examples/lore_reader/views/partials/lore_card.sp',
     'way_exam/index' => 'examples/way_exam/views/index.sp',
     'way_exam/results' => 'examples/way_exam/views/results.sp',
-    'way_exam/partials/question_card' => 'examples/way_exam/views/partials/question_card.sp'
+    'way_exam/partials/question_card' => 'examples/way_exam/views/partials/question_card.sp',
+    'milestone_planner/index' => 'examples/milestone_planner/views/index.sp',
+    'milestone_planner/milestone' => 'examples/milestone_planner/views/milestone.sp',
+    'milestone_planner/partials/milestone_card' => 'examples/milestone_planner/views/partials/milestone_card.sp',
+    'milestone_planner/partials/task_card' => 'examples/milestone_planner/views/partials/task_card.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
+
 
 
   # The playground's own locals — one home, used by the routes and by the
@@ -193,8 +200,10 @@ module StudioPages
     File.join(ROOT, 'examples', 'dashboard', 'views'),
     File.join(ROOT, 'examples', 'roth', 'views'),
     File.join(ROOT, 'examples', 'lore_reader', 'views'),
-    File.join(ROOT, 'examples', 'way_exam', 'views')
+    File.join(ROOT, 'examples', 'way_exam', 'views'),
+    File.join(ROOT, 'examples', 'milestone_planner', 'views')
   ].freeze
+
 
 
   def self.library
@@ -365,9 +374,25 @@ module StudioPages
     when 'examples/way_exam/views/partials/question_card.sp'
       result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
       result.reviews.first.to_h
+    when 'examples/milestone_planner/views/index.sp'
+      planner = MilestonePlanner::Planner.new
+      { 'stats' => planner.stats, 'milestones' => planner.all.map(&:to_h) }
+    when 'examples/milestone_planner/views/milestone.sp'
+      planner = MilestonePlanner::Planner.new
+      m = planner.find('m1')
+      m.to_h.merge('milestone' => m.to_h, 'title' => '', 'owner' => 'dan', 'tasks' => m.tasks.map(&:to_h))
+    when 'examples/milestone_planner/views/partials/milestone_card.sp'
+      planner = MilestonePlanner::Planner.new
+      m = planner.find('m1').to_h
+      m.merge('milestone' => m)
+    when 'examples/milestone_planner/views/partials/task_card.sp'
+      planner = MilestonePlanner::Planner.new
+      t = planner.find('m1').tasks.first.to_h
+      t.merge('task' => t)
     else
       {}
     end
+
 
   end
 

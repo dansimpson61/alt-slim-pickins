@@ -175,8 +175,13 @@ class StudioPagesTest < Minitest::Test
     'examples/lore_reader/views/partials/lore_card.sp' => 'Read entry',
     'examples/way_exam/views/index.sp' => 'The Way Exam',
     'examples/way_exam/views/results.sp' => 'Exam Results',
-    'examples/way_exam/views/partials/question_card.sp' => 'Correct'
+    'examples/way_exam/views/partials/question_card.sp' => 'Correct',
+    'examples/milestone_planner/views/index.sp' => 'Milestone Planner',
+    'examples/milestone_planner/views/milestone.sp' => 'Milestone Detail',
+    'examples/milestone_planner/views/partials/milestone_card.sp' => 'Phase 0: Scope the Studio Workbench',
+    'examples/milestone_planner/views/partials/task_card.sp' => 'Build palette census'
   }.freeze
+
 
 
   def test_every_ledger_page_renders_with_its_prefilled_data

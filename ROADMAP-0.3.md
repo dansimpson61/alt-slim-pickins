@@ -819,7 +819,19 @@ and its region — and the ledger names every gap with its sentence.
 - **Studio integration**: `StudioPages::PAGES` grew to 28 entries; `StudioPages.library_dirs` grew to include `examples/way_exam/views`; `bin/verify_pages.rb` grew to 22 verified pages with 0 problems.
 - **Gate status**: 100% green across all 7 legs live on port 4580 and full test suite (357 runs, 3,973 assertions, 0 failures).
 
+**Round 3 — The Milestone Planner (`examples/milestone_planner`) planted (2026-09-21):**
+- **Consumer**: Project maintainers, developers, and agents tracking roadmap milestones, deliverables, task completions, and blockers.
+- **Region exercised**: `choose`, `when`, `otherwise`, `empty`, `each`, `card`, `grid`, `metric`, `badge` (all status variants), `time`, `link`, `form`, `input`, `choice`, `option`, `button`, `actions`, `group`.
+- **Domain model**: `MilestonePlanner::Planner` holding authentic Roadmap 0.3 phases as milestones and tasks. Dynamic calculation of milestone status, completion percentage, task counts, and global progress statistics. Supports adding new tasks and toggling completion state.
+- **Sinatra App & Boot Gate**: `examples/milestone_planner/app.rb` running on port 4587 with `SlimPickins.prove!` verifying `:index` and `:milestone` at boot. Integration test suite in `examples/milestone_planner/test/app_test.rb` (6 runs, 34 assertions, 0 failures).
+- **Demand Ledger updated (`DEMAND.md`)**:
+  - **G12**: Predicate methods (`when .done?`) fail on Hash/JSON deserialized subjects in `Subject#fetch` because hash keys do not carry `?` and method dispatch is bypassed. Workaround: un-predicated aliases (`done`, `blocked`, `completed`).
+  - **G13**: No `progress` or `meter` word in vocabulary for visual progress bars. Workaround: numerical metric tiles and status badges.
+- **Studio integration**: `StudioPages::PAGES` grew to 32 entries; `StudioPages.library_dirs` grew to include `examples/milestone_planner/views`; `bin/verify_pages.rb` grew to 24 verified pages with 0 problems.
+- **Gate status**: 100% green across all 7 legs live on port 4580 and full test suite (369 runs, 4,093 assertions, 0 failures).
+
 ### Phase 2 — Measure the demand
+
 
 
 The garden's ledger is the spine. Beside it, one inventory item, kept at its

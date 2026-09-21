@@ -11,9 +11,10 @@ Resume work on `~/dev/alt-slim-pickins`.
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
 3. `ROADMAP-*.md` — the active roadmap: 0.2 is closed; 0.3 (the forward eye,
-   three legs in one question) is in Phase 1 — The garden, planted. Round 1
-   (The Lore Reader) and Round 2 (The Way Exam) landed; `PROJECT.md` `next_step`
-   points at Round 3 (The Milestone Planner).
+   three legs in one question) is in Phase 1 — The garden, planted. Rounds 1-3
+   (Lore Reader, Way Exam, Milestone Planner) landed; `PROJECT.md` `next_step`
+   points at Round 4 (The Word Graph).
+
 
 4. `DAYTRIP-0.3.0b.md` — *The Accent*, opened and closed 2026-09-17: the two
    instruments, the mechanical claim corrections, and the register's reference
@@ -51,7 +52,9 @@ Phase 0 (the studio, won iteratively) is closed with Win 11.
 Phase 1 (The garden, planted) is active:
 - **Round 1 (The Lore Reader, `examples/lore_reader`)**: Landed. 150 entries dynamically parsed from `LORE.md`, authored by outside hands, logging G1–G8 in `DEMAND.md`.
 - **Round 2 (The Way Exam, `examples/way_exam`)**: Landed. 5-question authentic interactive exam testing PRIMER.md rules, scored dynamically with full review cards, logging G9–G11 in `DEMAND.md`.
-- **Next up**: Phase 1, Round 3 — The Milestone Planner (`examples/milestone_planner`).
+- **Round 3 (The Milestone Planner, `examples/milestone_planner`)**: Landed. Interactive project roadmap and task planner exercising conditional situations (`choose`, `when`, `otherwise`, `empty`) and collections (`each`), logging G12–G13 in `DEMAND.md`.
+- **Next up**: Phase 1, Round 4 — The Word Graph (`examples/word_graph`).
+
 
 own pages as starting points, thirteen of them, each wearing the census
 verdict of the render the playground will give it — 13 of 13 refuse, every

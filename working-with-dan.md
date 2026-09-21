@@ -292,7 +292,7 @@ working manual that should be better after every session than it was before.
   *"End-of-Phase housekeeping also includes working_with_dan, commiting, and pushing."* Closing a phase is not just code green and card updated; it is the full clean exit — lore, manual, clean tree, and remote updated.
 
 - **He approves sequentially when the trajectory is aligned.** (observed 2026-09-21):
-  Prompt: *"6. Excellent. procede"* after ruling on app candidates, sequencing, and locations. When the sequence and constraints are settled, he steps back to let the loop run. Deliver the complete round — domain model, views, tests, demand gaps, studio integration, verification, and housekeeping — cleanly without creating artificial pause points or asking trivial questions.
+  Prompt: *"6. Excellent. procede"* and *"7. So far, so good. Procede."* after ruling on app candidates, sequencing, and locations. When the sequence and constraints are settled, he steps back to let the loop run. Deliver the complete round — domain model, views, tests, demand gaps, studio integration, verification, housekeeping, commit, and push — cleanly without creating artificial pause points or asking trivial questions.
 
 ## Proposed deletions — nothing here yet
 

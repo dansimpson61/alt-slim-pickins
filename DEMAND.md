@@ -93,4 +93,19 @@ These logged gaps form the demand evidence that gates Phase 3's vocabulary and k
 - **Obstacle**: `Choice` contract restricts its children strictly to `[:option, :choice]`. Dynamic generation of options from data collections via `each` is refused by the compiler. Furthermore, `Option` expects its identifier/value to be a Symbol (via `name_and_content`); passing string values leaves `value: nil`.
 - **Workaround**: Statically authored question choices with symbol keys (`option a, "..."`, `option b, "..."`, `option c, "..."`).
 
+### G12 — Predicate methods in `when` fail on Hash/JSON subjects
+- **Consumer**: `examples/milestone_planner/views/partials/task_card.sp` and `views/milestone.sp`
+- **Desired Expression**: `choose` with `when .done?` or `when .blocked?`
+- **Refusal**: `this task has no done? (SlimPickins::UnknownAttribute)`
+- **Obstacle**: Ruby domain models idiomatically use question-mark predicate methods (`done?`, `blocked?`). However, when models are serialized to JSON (for persistence or Studio playground data slots) and deserialized into hashes, keys are plain symbols/strings without `?` (`:done => true`). `Subject#fetch` checks exact hash keys and does not strip trailing `?` or map predicates on Hash objects.
+- **Workaround**: Defined un-predicated aliases (`done`, `blocked`, `completed`, `at_risk`) on domain structs and hash serializers, authoring template conditions without question marks (`when .done`, `when .blocked`).
+
+### G13 — No `progress` or `meter` word in vocabulary
+- **Consumer**: `examples/milestone_planner/views/index.sp` and `views/milestone.sp`
+- **Desired Expression**: `progress .progress, max: 100` or `meter .completion_ratio` to render native semantic HTML `<progress>` or `<meter>` elements for milestone completion.
+- **Refusal**: `there is no word 'progress' (SlimPickins::Error)`
+- **Obstacle**: The 64-word vocabulary has no widget word for visual completion bars (semantic `<progress>` or `<meter>`).
+- **Workaround**: Displayed progress numerically using `metric progress, "Progress %"` and categorically using status badges (`badge ok, "Complete"`).
+
+
 
