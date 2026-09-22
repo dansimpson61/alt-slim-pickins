@@ -3,17 +3,16 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  PHASE 3 — Grow only what the demand named. COMPLETED 2026-09-21: The 26 gaps
-  in DEMAND.md settled (17 landed in core/runtime/markdown, 9 resolved as intentional
-  boundaries or app space). choice radio variant grammar, hash predicate mapping,
-  Subject#to_s, Inference.truthy?, markdown engine repairs (indented fences, frontmatter,
-  images, blockquotes), textarea readonly. Cost measured: 6.62 ms warm (< 10 ms),
-  0.26 ms/row (< 0.5 ms). Suite: 418 runs, 4,554 assertions, 0 failures. All gates green.
+  Roadmap 0.3 COMPLETED 2026-09-21: The forward eye's question answered (Yes).
+  The garden renders with 0 missing affordances across 4 apps (lore_reader, way_exam,
+  milestone_planner, word_graph) and dashboard markdown surfaces. Demand ledger (26 gaps)
+  settled. Candidate packages A-D (Council, Studio Why Pane, Kernel, Honesty) prepared for handoff.
+  Suite: 418 runs, 4,561 assertions, 0 failures. All gates green.
 kind: project
 last_touched: 2026-09-21
 next_step: >-
-  Phase 4 — Serve, and be judged: The garden renders with 0 missing affordances,
-  dashboard markdown surfaces serve read-only through the language, Dan judges all of it.
+  Prioritize and plan candidate packages A-D (Council Affordances, Studio Why Pane & Workbench,
+  Elemental Kernel, House Honesty) for the next roadmap.
 
 
 run: ruby examples/roth/app.rb

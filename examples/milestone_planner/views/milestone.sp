@@ -4,11 +4,11 @@ page "Milestone Detail"
   card
     title .title
     choose
-      when .completed
+      when .completed?
         badge ok, "Complete"
-      when .blocked
+      when .blocked?
         badge blocker, "Blocked"
-      when .at_risk
+      when .at_risk?
         badge warning, "At Risk"
       otherwise
         badge pending, "In Progress"

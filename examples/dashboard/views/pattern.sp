@@ -32,4 +32,4 @@ page .title
       card
         title "Agent Lore Snippet"
         paragraph "Feed this conceptual lore to any AI agent before beginning development:"
-        snippet .lore
+        textarea lore, readonly: true

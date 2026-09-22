@@ -902,6 +902,12 @@ limits a forward eye exists to find.
 *Done looks like:* the question answered — yes, with the gaps logged; or no,
 with the walls named. Either is a result.
 
+- **Phase 4 Outcome (COMPLETED 2026-09-21)**:
+  - **Garden Rendered with 0 Missing Affordances**: All 4 garden applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`) and dashboard surfaces upgraded to first-class affordances. Workarounds removed: `lore_reader` uses `search placeholder: "...", to: "/"` and `badge .to_s`; `way_exam` renders radio inputs via natural `choice radio, q1`; `milestone_planner` uses idiomatic predicate methods `when .done?`, `when .blocked?`, `when .at_risk?`, `when .completed?`; `dashboard/views/pattern.sp` uses `textarea lore, readonly: true`.
+  - **Dashboard Markdown Surfaces**: Served read-only with repaired markdown engine (`SlimPickins::Markdown`), successfully parsing real ecosystem documents (stripping frontmatter from `PROJECT.md`, de-indenting code fences in `rmd/README.md`, preserving blockquote linebreaks, and parsing images).
+  - **All Gates and Tests Green**: 418 runs, 4,561 assertions, 0 failures. All 4 gates green. 31/31 pages verified.
+  - **The Question Answered**: **Yes.** The language carries real work across 4 distinct apps, the studio workbench, and dashboard markdown surfaces, with 64 vocabulary words, 0 missing affordances, and warm render cost of 6.65 ms.
+
 ## The risk register
 
 | Risk | Severity | Retired by |

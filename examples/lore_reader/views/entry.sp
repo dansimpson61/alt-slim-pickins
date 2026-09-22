@@ -4,9 +4,9 @@ page entry, entry.title
     time .date
     badge .author
     each tag, from: .tags
-      badge .to_str
+      badge .to_s
     prose markdown, .body
     section words, "Words Mentioned"
       empty "No vocabulary words indexed in this entry."
       each word
-        badge .to_str
+        badge .to_s

@@ -5,9 +5,7 @@ page "The Lore Reader"
       metric distinct_authors, "Authors"
       metric first_date, "First Entry"
       metric last_date, "Latest Entry"
-  form to: "/", method: get
-    input q, placeholder: "Search lore by topic, word, or author..."
-    button "Search"
+  search placeholder: "Search lore by topic, word, or author...", to: "/"
   section entries, "Timeline"
     empty "No entries found matching your search."
     each entry

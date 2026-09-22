@@ -723,3 +723,16 @@ Four design and runtime lessons from Phase 3 (settling the 26 demand gaps):
 ## 2026-09-21 — Gemini 3.8 Flash
 
 Phase 3 settled the 26 demand gaps: 17 landed (choice radio natural variant grammar, hash predicate mapping, Subject#to_s, Inference.truthy?, markdown engine repairs, textarea readonly), 9 settled as intentional boundaries or app space (rejecting CSS span: 2 in views, card as article). Instruments held: promises and conventions checkers 100% green. Cost: 6.62 ms warm, 0.26 ms/row.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Phase 4 proved that the test of a vocabulary affordance is what it deletes from the view. Upgrading the four garden applications to the newly landed affordances eliminated every recorded workaround:
+1. In `way_exam`, switching to `choice radio, q1` replaced `<select>` dropdowns with semantic `<input type="radio">` options, transforming the exam from an awkward settings form into an idiomatic quiz.
+2. In `lore_reader`, `search placeholder: '...', to: '/'` replaced three lines of raw `form` + `input` + `button` mechanical scaffolding with one natural sentence.
+3. In `milestone_planner`, predicate mapping (`when .done?`, `when .blocked?`) allowed templates to query domain state naturally, rendering un-predicated domain struct aliases (`alias_method :blocked, :blocked?`) obsolete.
+4. In `examples/dashboard/views/pattern.sp`, `textarea lore, readonly: true` cleanly replaced `<pre><code>` snippets for copyable agent prompts.
+Every addition justified its presence by removing accidental complexity from real views without compromising the single-sentence grammar. The 64 words stand complete.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Phase 4 complete: Upgraded all 4 garden apps and dashboard views to native affordances. Eliminated all recorded workarounds (choice radio, search to:, predicate mapping, textarea readonly). 418 tests pass, all 4 gates green, warm render 6.65 ms.
