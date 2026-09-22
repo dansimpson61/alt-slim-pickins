@@ -9,3 +9,5 @@ box
       iframe preview
     tab "HTML"
       iframe html_preview
+    tab "Inspect"
+      iframe inspect_preview

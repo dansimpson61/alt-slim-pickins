@@ -3,14 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  DAYTRIP-0.4.0b (Volet 2: Expressive View Composition) landed 2026-09-22.
-  Delivered R3P2 (subject-shifting card), R3P3 (single-form formaction button
-  groups in actions), and R3P1 (partial payload forwarding via open: true /
-  takes: payload). All 7 gates green, 373 in-process tests pass (0 failures).
+  DAYTRIP-0.4.0c (Volet 3: Studio & Workbench Wins) landed 2026-09-22.
+  Delivered W2 (live test suite 8th leg on /status) and W3 (combined Inspect
+  surface uniting Semantic Tree AST and The Why Pane / inference provenance).
+  All 7 gates green, 376 in-process tests pass (0 failures), 42 test files.
 kind: project
 last_touched: 2026-09-22
 next_step: >-
-  Plan and execute Volet 3: Studio & Workbench Wins (W2 full test suite leg on /status, W3 The Why Pane / inference provenance inspector).
+  Plan and execute Volet 4: 5-tier vocabulary taxonomy on Studio shelf and in PRIMER (Pain Point 1).
 
 
 run: ruby examples/roth/app.rb
@@ -111,11 +111,13 @@ notes: >-
   gated, budget set before the work.
   2026-09-22 — Roadmap 0.4 planning progression: Volet 1 (The Truthful Floor,
   DAYTRIP-0.4.0a.md) landed. Volet 2 (Expressive View Composition,
-  DAYTRIP-0.4.0b.md) executes R3P1-3. Authoring pain points noted on dan's
-  word: Pain Point 1 (5-tier vocabulary taxonomy) assigned to Volet 4 (Studio
-  shelf) and PRIMER; Pain Point 2 (Studio partial minting / OOP bite-sized,
-  locally scoped domain words to combat long, unDRY views) reserved for
-  dedicated discussion as Volet 4b.
+  DAYTRIP-0.4.0b.md) executes R3P1-3. Volet 3 (Studio & Workbench Wins,
+  DAYTRIP-0.4.0c.md) lands W2 (live test suite leg on /status) and W3
+  (combined Inspect surface uniting Semantic Tree AST and The Why Pane).
+  Authoring pain points noted on dan's word: Pain Point 1 (5-tier vocabulary
+  taxonomy) assigned to Volet 4 (Studio shelf) and PRIMER; Pain Point 2
+  (Studio partial minting / OOP bite-sized, locally scoped domain words to combat
+  long, unDRY views) reserved for dedicated discussion as Volet 4b.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

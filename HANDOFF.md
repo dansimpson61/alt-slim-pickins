@@ -27,16 +27,16 @@ conversation; it is all written down.
 **Roadmap 0.4 is underway as an iterative sequence of winnable daytrip victories:**
 - **Volet 1 (The Truthful Floor, `DAYTRIP-0.4.0a.md`)**: Landed 2026-09-22. Established `SlimPickins::Census` (`bin/census.rb`) as the living SSOT; settled F9 (`Chart` declares `table_header`); enriched `Conventions.bullet` with concrete element yields.
 - **Volet 2 (Expressive View Composition, `DAYTRIP-0.4.0b.md`)**: Landed 2026-09-22. Delivered R3P2 (subject-shifting `card`, eliminating 7 repeated bindings in `queue.sp`), R3P3 (single-form `formaction` button groups in `actions.sp`), and R3P1 (open partial payload forwarding via `takes: payload` / `open: true`).
-- **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: **ACTIVE NEXT STEP**. W2: Full test suite leg on Studio `/status`; W3: The Why Pane / inference provenance inspector.
-- **Volet 4 & 4b (The Studio Shelf & Authoring Deductive Structure)**:
+- **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: Landed 2026-09-22. Delivered W2 (live test suite 8th leg on `/status`) and W3 (combined `Inspect` surface uniting Semantic Tree AST and The Why Pane / inference provenance inspector).
+- **Volet 4 & 4b (The Studio Shelf & Authoring Deductive Structure)**: **ACTIVE NEXT STEP**.
   - Volet 4: 5-tier vocabulary taxonomy (Structural, Semantic, Interactive, Behavioral, Visual) on the Studio shelf and in `PRIMER.md` (Pain Point 1).
   - Volet 4b: Studio partial minting / bite-sized, locally scoped domain words to eliminate long unDRY views (Pain Point 2).
 
 ### Current Vitals (measured 2026-09-22)
-- **Census SSOT (`bin/census.rb`)**: 64 canonical words (42 Ruby primitives + 22 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 41 test files.
-- **Full Suite**: 373 runs, 4,175 assertions, 0 failures, 0 errors, 0 skips in one process.
-- **Check Grammar**: 1,226 sentences checked, 94 words defined, 0 problems.
-- **Check Shape**: 64 canonical words, 978 sentences, 0 problems.
+- **Census SSOT (`bin/census.rb`)**: 64 canonical words (42 Ruby primitives + 22 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 42 test files.
+- **Full Suite**: 376 runs, 4,204 assertions, 0 failures, 0 errors, 0 skips in one process.
+- **Check Grammar**: 1,228 sentences checked, 94 words defined, 0 problems.
+- **Check Shape**: 64 canonical words, 980 sentences, 0 problems.
 - **Check Styles**: 26 emitted classes, 59 rendering, 105 rules, 0 problems.
 - **Verify Pages**: 31 pages verified, 0 problems.
 - **Promise Ledger**: 35 promises (32 read, 3 forwarded, 0 unread), 0 problems.
@@ -57,17 +57,16 @@ conversation; it is all written down.
 - **R3P3**: Single-form `formaction` button groups in `actions` (collapsing 4 separate forms into 1).
 - **R3P1**: Partial payload forwarding (`open: true` / `takes: payload`).
 
-### [NEXT] Volet 3: Studio & Workbench Wins (`DAYTRIP-0.4.0c.md`)
-*Focus: Turning the Studio into a moldable development environment with total runtime transparency.*
-1. **Win W2: Test Suite Leg on `/status`**:
-   - Run the full test suite as a 5th live leg on the Studio `/status` page alongside `check_grammar`, `check_shape`, `check_styles`, and `verify_pages`.
-2. **Win W3: "The Why Pane" / Inference Provenance Inspector**:
-   - Inspired by Bret Victor's visible state and Tudor Gîrba's moldable development (`BLUESKY.md` Part 4).
-   - In the Studio Workbench, an interactive inspector pane that annotates every `.sp` sentence with:
-     - **What was decided**: the exact computed inference (e.g., `text-align: right`, `input type="number"`, `label: "Gross Margin"`, `format: currency`).
-     - **Who owned the decision**: the 4-tier ownership provenance (`page`, `app`, `language`, `theme`).
-     - **Which convention fired**: links to one of the 38 registered conventions in `SlimPickins::Conventions::ALL`.
-     - **How to override it**: shows the view author the exact idiom to take back control.
+### [COMPLETED] Volet 3: Studio & Workbench Wins (`DAYTRIP-0.4.0c.md`)
+- **W2**: Live test suite integrated as 8th leg in `StudioStatus::LEGS` on Studio `/status`.
+- **W3**: Combined `Inspect` surface in Workbench output tabs (`Visual` | `HTML` | `Inspect`), uniting collapsible Semantic Tree AST with synchronized Why provenance cards, 4-tier ownership, and convention links.
+
+### [NEXT] Volet 4 & 4b: The Studio Shelf & Authoring Deductive Structure
+*Focus: Resolving the two foundational authoring pain points.*
+1. **Volet 4 (5-Tier Vocabulary Taxonomy — Pain Point 1)**:
+   - Organize vocabulary into a 5-tier deductive hierarchy: Structural, Semantic, Interactive, Behavioral, and Visual on the Studio shelf and in `PRIMER.md`.
+2. **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words — Pain Point 2)**:
+   - Provide Studio-driven authoring of locally scoped, bite-sized `.sp` partials to eliminate long, unDRY view scripts.
 3. **Unified Workbench (Collapsible Shelf)**:
    - Fold the docs try-it pane and the vocabulary palette into one cohesive, collapsible library shelf.
 

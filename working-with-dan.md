@@ -314,6 +314,9 @@ working manual that should be better after every session than it was before.
   9. `working-with-dan.md` updated with operational observations.
   10. Named git state, finished work distinguished from in-flight work, commit and push offered.
 
+- **Combined inspection surface over modal tab proliferation**: (observed 2026-09-22).
+  When considering inspecting the evaluated semantic AST alongside inference provenance, dan preferred a single unified 'Inspect' surface over proliferating disconnected tabs (Visual | HTML | Tree | Why). Uniting the Tree (the physical scaffolding of What) and the Why Pane (the provenance of Why) into a master-detail inspection surface eliminates mode-switching, aligns with Raskin's modelessness, and lets the structure and its causal receipts explain each other.
+
 ## Proposed deletions — nothing here yet
 
 

@@ -765,3 +765,18 @@ DAYTRIP-0.4.0b: Volet 2 (Expressive View Composition) landed. Delivered the thre
 ## 2026-09-22 — Antigravity
 
 Volet 2 (Expressive View Composition) delivered R3P1-3: subject-shifting card, single-form formaction button groups, and open partial payload forwarding. All 7 gates green, 373 tests pass.
+
+## 2026-09-22 — Antigravity
+
+DAYTRIP-0.4.0c: Volet 3 (Studio & Workbench Wins) landed. Two durable architecture and workbench lessons:
+1. **The Combined Inspection Surface vs. Modal Tab Proliferation**: In moldable development, structure (What) and decision provenance (Why) are not independent tools; they are the artifact and its receipt. Rather than splitting the workbench into four disconnected tabs (Visual, HTML, Tree, Why), uniting the parsed AST hierarchy (`SlimPickins.evaluate`) with the convention register (`SlimPickins::Conventions::ALL`) into a single master-detail `Inspect` tab preserves Raskin's modelessness and Bret Victor's visible state. Native HTML `<details><summary>` provides zero-JS collapsible tree folding, while the synchronized detail pane maps node attributes directly to their 4-tier provenance (`page`, `app`, `language`, `theme`).
+2. **The 8th Leg Closes the Status Seam**: Running checkers alone on `/status` left a silent regression vulnerability where the page could declare "All 7 legs green" over a red test suite. Integrating the full test suite (`ruby -Ilib:test -e ...`) as the 8th live leg in `StudioStatus::LEGS` takes the live status run from ~0.9s to ~2.8s—a trivial cost for complete truthfulness.
+
+## 2026-09-22 — Antigravity
+
+Volet 3 (Studio & Workbench Wins) delivered W2 (live test suite 8th leg on /status) and W3 (combined Inspect surface uniting Semantic Tree AST and The Why Pane). All 7 gates green, 376 tests pass.
+
+
+## 2026-09-22 — Antigravity
+
+Volet 3 (Studio & Workbench Wins) delivered W2 (live test suite 8th leg on /status) and W3 (combined Inspect surface uniting Semantic Tree AST and The Why Pane). All 7 gates green, 376 tests pass.

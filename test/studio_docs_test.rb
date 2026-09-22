@@ -106,7 +106,7 @@ class StudioDocsTest < Minitest::Test
                               locals: { title: 'Status', words: [], guides: [], ui_names: [],
                                         **StudioStatus.canned_locals },
                               library: LIBRARY)
-    assert_includes html, '1 of 7 legs red'
+    assert_includes html, '1 of 8 legs red'
     assert_includes html, 'Grammar'
     assert_includes html, '<pre><code>0 problems', 'the leg output renders as a fence'
     # The state is a badge whose class the stylesheet marks — the page

@@ -589,13 +589,23 @@ module StudioPages
   # change.
   def self.render_json(source, data = nil, library: nil)
     library ||= StudioPages.library
+    locals = playground_locals(data)
     visual = begin
       SlimPickins.render(source, path: 'playground.sp',
-                         locals: playground_locals(data), library: library)
+                         locals: locals, library: library)
     rescue StandardError => e
       refusal(e, library: library)
     end
-    { visual: visual, source: raw_page(visual) }
+    inspect_html = begin
+      tree = SlimPickins.evaluate(source, path: 'playground.sp',
+                                  locals: locals, library: library)
+      require_relative 'inspector'
+      StudioInspector.page_for(tree, source: source)
+    rescue StandardError => e
+      require_relative 'inspector'
+      StudioInspector.error_page_for(e)
+    end
+    { visual: visual, source: raw_page(visual), inspect: inspect_html }
   end
 
   def self.raw_page(html)

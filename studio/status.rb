@@ -23,6 +23,7 @@ module StudioStatus
     ['Conventions', 'bin/check_conventions.rb'],
     ['Card', 'bin/check_card.rb'],
     ['Pages', 'bin/verify_pages.rb'],
+    ['Suite', ['-Ilib:test', '-e', 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }']],
   ].freeze
 
   SECONDS = 60
@@ -41,7 +42,8 @@ module StudioStatus
     LEGS.map do |name, script|
       output = nil
       ok = Timeout.timeout(SECONDS) do
-        output = Dir.chdir(ROOT) { IO.popen(['ruby', script], err: %i[child out], &:read) }
+        args = script.is_a?(Array) ? script : [script]
+        output = Dir.chdir(ROOT) { IO.popen(['ruby', *args], err: %i[child out], &:read) }
         $?.success?
       end
       Result.new(name: name, output: output || '', ok: ok)
