@@ -736,3 +736,16 @@ Every addition justified its presence by removing accidental complexity from rea
 ## 2026-09-21 — Gemini 3.8 Flash
 
 Phase 4 complete: Upgraded all 4 garden apps and dashboard views to native affordances. Eliminated all recorded workarounds (choice radio, search to:, predicate mapping, textarea readonly). 418 tests pass, all 4 gates green, warm render 6.65 ms.
+
+## 2026-09-22 — Gemini 3.8 Flash
+
+Four design and architectural lessons on daytrips, conventions, partial purity, and SSOT:
+
+1. **The Vector and the Volume (Roadmaps vs. Daytrips)**: dan's insight clarifies how an even-numbered roadmap stays animated rather than bureaucratic: *the itinerary is just a vector; the daytrips give it volume.* A linear roadmap vector alone risks rigid path dependency, preserving past demo accidents as sacred scripture. Daytrips provide orthogonal depth—stepping sideways into the soil to measure ground truth, discard phantom baggage, and explore premises before committing to execution.
+
+2. **Conventions: Tacit in the Template, Declared in the Contract**: Answering why `sp` words declare conventions when conventions are by definition implicit: *a convention must be tacit in the template, but explicit in the contract.* Tacit in the view frees the human author from boilerplate configuration. But if a convention is also tacit in the word definition, it becomes superstition—undocumented magic buried in compiler conditionals. Declaring `infers:` on words enables dynamic self-documentation, powers Why Pane provenance inspection, and establishes a bidirectional lock in `check_conventions.rb` that prevents "magic creep."
+
+3. **The Machine Language Trap in View Partials**: Auditing `lib/vocabulary/*.sp` revealed how machine language quietly infected our view partials: line-1 `expects` compiler pragmas (which checkers literally have to regex-strip to parse grammar), argument-bag dot abuse (`.to`, `.precision`), HTTP POST wire marshalling (`hidden path, .path`), and procedural branching to emulate defaults. Partials were given the responsibilities of first-class words without their expressive capabilities (payload forwarding, default values, formaction buttons), forcing authors to emulate compiler macros in template space.
+
+4. **Discarding Ghost Baggage via SSOT Instruments**: Auditing the handoff's proposed chores against live code exposed speculative debt: the "14 blank slots in VOCABULARY.md" was an illusion (words without inferences declare no conventions), and "dead stubs in builder.rb" were nonexistent. Furthermore, perpetually editing perishable counts in timeless specs (`DESIGN.md`, `CONTRACT.md`) is an architectural smell. Moving repository vitals into an executable Single Source of Truth (`SlimPickins::Census`) establishes honest ground without manual maintenance.
+

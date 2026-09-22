@@ -191,7 +191,7 @@ File.read(File.join(here, 'VOCABULARY.md'))
   # declaration (2026-09-17), so it is held the same way the five are: the
   # register's prose has one home and the entry shows it, cannot restate it
   # differently, and cannot carry one for a word that declares nothing.
-  expected = SlimPickins::Conventions.bullet(contract)
+  expected = SlimPickins::Conventions.bullet(contract, word: word)
   # No `/m`: with it `.` matches newlines and `.*$` swallows the rest of the
   # entry. The bullet is one line, and the check must compare one line.
   actual = body[/^- \*\*conventions\*\* —.*$/, 0]

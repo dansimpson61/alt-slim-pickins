@@ -258,7 +258,7 @@ end
     end
 
     class Chart < Word
-      contract name: :subject, content: true, modifiers: [:over], children: [:band, :line, :level, :each, :choose], subject: :shift, shape: :gathers, lazy: [], infers: [:chart_axis, :format_family, :label]
+      contract name: :subject, content: true, modifiers: [:over], children: [:band, :line, :level, :each, :choose], subject: :shift, shape: :gathers, lazy: [], infers: [:chart_axis, :format_family, :table_header]
 
       def evaluate
   over = @kwargs.key?(:over) ? @kwargs[:over] : nil

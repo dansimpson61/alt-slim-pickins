@@ -47,7 +47,7 @@ parts.each_slice(2) do |header, body|
   # generated from its own `infers:` declaration, so the register's prose is
   # shown here rather than restated. Placed after the five checkable bullets,
   # before the prose half.
-  conventions = SlimPickins::Conventions.bullet(contract)
+  conventions = SlimPickins::Conventions.bullet(contract, word: word)
   existing = body[/^- \*\*conventions\*\* —.*$/, 0]
   if conventions
     if existing

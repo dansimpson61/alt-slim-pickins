@@ -224,10 +224,10 @@ module SlimPickins
                      file: 'lib/slim_pickins/builder.rb', marker: 'def format_of',
                      inference: nil, override: '`as:`',
                      grade: :domain),
-      Convention.new(name: :table_header, when_silent: 'a table\'s header row',
-                     decides: 'the header — the row, then the enclosing subject, then English',
+      Convention.new(name: :table_header, when_silent: 'a table header or chart series',
+                     decides: 'the header or series label — the row, then the enclosing subject, then English',
                      file: 'lib/slim_pickins/builder.rb', marker: 'def label_of',
-                     inference: nil, override: 'say the header on the column',
+                     inference: nil, override: 'say the header on the column or label on the series',
                      grade: :domain),
 
       # --- axiomatic: the design's own standing decisions --------------------
@@ -259,13 +259,21 @@ module SlimPickins
     # the prose below lives once, in the register, and a word's entry *shows* the
     # conventions it triggers instead of restating them. A word that declares
     # none gets no bullet, which is a fact worth being able to see.
-    def self.bullet(contract)
+    def self.bullet(contract, word: nil)
       names = Array(contract.infers)
       return nil if names.empty?
 
       entries = names.filter_map { |name| ALL.find { |c| c.name == name } }
       text = entries.map do |convention|
-        clause = "`#{convention.name}` — #{convention.decides}"
+        decides = convention.decides
+        if word && defined?(SlimPickins::Generator)
+          if convention.name == :box_tag && (tag = SlimPickins::Generator::BOX_TAGS[word.to_sym])
+            decides = "the `<#{tag}>` element"
+          elsif convention.name == :leaf_tag && (tag = SlimPickins::Generator::SPAN_TAGS[word.to_sym])
+            decides = "the `<#{tag}>` element"
+          end
+        end
+        clause = "`#{convention.name}` — #{decides}"
         override = convention.override.to_s
         clause += " (override: #{override})" unless override.start_with?('nothing') || override.empty?
         clause

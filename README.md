@@ -2,8 +2,8 @@
 
 A view language whose grammar stays describable all the way down. It began as
 paper — the first question was what we were building *on* — and it now runs:
-one sentence, sixty-four words, its own stylesheet, and a studio plus three
-example apps that speak it.
+one sentence, sixty-four words, its own stylesheet, and a studio plus a
+garden of demonstration apps that speak it (vitals reported live by `ruby bin/census.rb`).
 
 `slim-pickins` is a helper vocabulary layered on Slim. This is the other
 experiment: what a view language looks like if the grammar itself is the
@@ -166,34 +166,19 @@ is a beautifully organised runtime for the wrong language.
 
 ## Status
 
-**Roadmap 0.1 is finished** — all eight phases, closed in
-[ROADMAP-0.1.md](history/ROADMAP-0.1.md). **Roadmap 0.2 is under way** —
-[ROADMAP-0.2.md](ROADMAP-0.2.md). Its backward look is done: Phases 0–2 are
-closed (the Way rewritten, the vocabulary reviewed and re-registered as
-contracts, the Builder un-god-objected), and Phase 3 has landed its first
-half — the runtime now evaluates pages into **semantic nodes**, the Generator
-interprets them, the vocabulary lives in `words.rb` on the same public
-surface app words get, and the dogfood test re-implements the gatherers as
-app words, byte for byte. What remains is the payload: a page may not render
-until the app has been proved able to answer it.
+**Roadmaps 0.1, 0.2, and 0.3 are completed.**
+- [ROADMAP-0.1.md](history/ROADMAP-0.1.md) proved the one-sentence grammar.
+- [ROADMAP-0.2.md](ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
+- [ROADMAP-0.3.md](ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
 
-The bet the paper could not settle was **inference** — whether `field
-base_income` can really derive a label, an input name, a value and an input
-type from one word. Phase 0 measured it and it holds: on roth's form of
-fourteen labelled controls, humanising alone got eleven labels right, and with
-`label_for` on the app the page states none of them.
+**Roadmap 0.4 planning is underway**, opening with [DAYTRIP-0.4.0a.md](DAYTRIP-0.4.0a.md) (Volet 1: The Truthful Floor).
 
-Phases 7 and 8 ported a real app — `~/dev/roth` — including its results, which
-render on the server. Its 88-line page and 249-line script became 71 sentences
-and 25 lines, and it uses **no Ruby-defined words at all**. Across every `.sp`
-file here the escape hatch stands at **1 use in 356 sentences**.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words, 7 apps, 31 verified pages, 38 conventions, 33 promises, and 105 style rules.
 
-- [PHASE7.md](history/PHASE7.md) — the port, and its architecture
-- [PHASE8.md](history/PHASE8.md) — `chart`, redrafted as the same shape as `table`
-- [ROTH_STUDY.md](roth/ROTH_STUDY.md) — what reading a real app closely found
+Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
-Run one: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb`.
 Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
 ruby check_styles.rb && ruby bin/check_promises.rb &&
 ruby bin/check_conventions.rb && ruby bin/check_card.rb &&
-ruby bin/verify_pages.rb && for f in test/*_test.rb; do ruby $f; done`
+ruby bin/verify_pages.rb && ruby bin/census.rb &&
+for f in test/*_test.rb; do ruby $f; done`

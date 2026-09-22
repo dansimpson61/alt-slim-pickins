@@ -294,6 +294,9 @@ working manual that should be better after every session than it was before.
 - **He approves sequentially when the trajectory is aligned.** (observed 2026-09-21):
   Prompt: *"6. Excellent. procede"* and *"7. So far, so good. Procede."* after ruling on app candidates, sequencing, and locations. When the sequence and constraints are settled, he steps back to let the loop run. Deliver the complete round — domain model, views, tests, demand gaps, studio integration, verification, housekeeping, commit, and push — cleanly without creating artificial pause points or asking trivial questions.
 
+- **He distinguishes the itinerary from its volume: Daytrips give orthogonal depth to the roadmap's vector.** (observed 2026-09-22).
+  A roadmap is an itinerary (a 1D vector); daytrips step orthogonally off that vector to explore, measure ground truth, discard phantom baggage, and give the journey volume. He expects us not to become rigid or dogmatic about historical path dependency (*Ataovy dian-tana* is wisdom, not dogma), to audit proposed work ruthlessly against *current and future purpose*, and to apply DRY, SSOT, and dynamic self-documentation instead of manual bookkeeping.
+
 ## Proposed deletions — nothing here yet
 
 

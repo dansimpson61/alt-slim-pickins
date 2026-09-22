@@ -153,7 +153,7 @@ and bit immediately, because every real page has navigation.
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **conventions** — `box_tag` — the `<footer>` element
 - **infers** — its position as the last thing in the page
 - **renders** — `<footer>`
 
@@ -172,7 +172,7 @@ footer "Approximate directional estimates. Not tax advice."
 - **modifiers** — none
 - **children** — anything
 - **subject** — the named thing
-- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…; `box_depth` — the depth their children's headings start at
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `box_tag` — the `<section>` element; `box_depth` — the depth their children's headings start at
 - **renders** — `<section class="holdings"><h2>Holdings</h2>…</section>`
 
 ```
@@ -252,7 +252,7 @@ The name says what the cells are: `grid cards`, `grid metrics`.
 - **modifiers** — none
 - **children** — `item`, `each`
 - **subject** — unchanged
-- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **conventions** — `box_tag` — the `<ul>` element
 - **infers** — none
 - **renders** — `<ul>`
 
@@ -271,7 +271,7 @@ ordinary case. `list` governs `item` instead.
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **conventions** — `box_tag` — the `<li>` element
 - **infers** — none
 - **renders** — `<li>`
 
@@ -304,7 +304,7 @@ table holdings, "As of today"
 - **modifiers** — `as:`
 - **children** — none
 - **subject** — unchanged; the enclosing word supplies each row in turn
-- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row; `table_header` — the header — the row, then the enclosing subject, then English (override: say the header on the column); `numeric_alignment` — right alignment; `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
+- **conventions** — `column_registration` — that it registers rather than renders, so the header exists before a row; `table_header` — the header or series label — the row, then the enclosing subject, then English (override: say the header on the column or label on the series); `numeric_alignment` — right alignment; `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
 - **infers** — each cell's value from that attribute
 - **renders** — one `<th>` in the head, one `<td>` per row
 
@@ -339,7 +339,7 @@ table holdings
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `card_id` — the DOM id, as `word-id` (override: say `id:` yourself); `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…; `box_depth` — the depth their children's headings start at
+- **conventions** — `card_id` — the DOM id, as `word-id` (override: say `id:` yourself); `box_tag` — the `<article>` element; `box_depth` — the depth their children's headings start at
 - **infers** — none
 - **renders** — `<article class="card">`
 
@@ -371,7 +371,7 @@ actions
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **conventions** — `box_tag` — the `<aside>` element
 - **infers** — that everything *not* in an `aside` is the main column, so no
   `main` word is needed; the column split and its collapse on small screens
 - **renders** — `<aside>`
@@ -390,7 +390,7 @@ Replaces the CSS arithmetic — a three-column grid whose body spans two — tha
 - **modifiers** — `open:`
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **conventions** — `box_tag` — the `<details>` element
 - **infers** — none
 - **renders** — `<details><summary>…</summary>…</details>`
 
@@ -493,7 +493,7 @@ already exists and renders something else.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `badge_status` — the variant class, when the body names a known status (override: name the variant: `badge ok`); `leaf_tag` — the element — a span, or a time
+- **conventions** — `badge_status` — the variant class, when the body names a known status (override: name the variant: `badge ok`); `leaf_tag` — the `<span>` element
 - **infers** — the label from the value when content is omitted
 - **renders** — `<span class="badge badge--ok">`
 
@@ -555,7 +555,7 @@ snippet ruby, .example
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the element — a span, or a time
+- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the `<span>` element
 - **infers** — whole dollars unless cents matter; a class on negatives so
   red is CSS's job, not the template's
 - **renders** — `<span class="money money--negative">−$1,234</span>`
@@ -577,7 +577,7 @@ currency" — not a domain noun. A portfolio has balances, not prices, and
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the element — a span, or a time
+- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the `<span>` element
 - **infers** — one decimal place
 - **renders** — `<span class="percent">4.5%</span>`
 
@@ -593,7 +593,7 @@ percent .weight, precision: 2
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the element — a span, or a time
+- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the `<span>` element
 - **infers** — none
 - **renders** — `<span class="number">750,000</span>`
 
@@ -608,7 +608,7 @@ number .shares
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `time_text` — the rendered date, and the machine `datetime` attribute (override: `time relative, .stamp`); `leaf_tag` — the element — a span, or a time
+- **conventions** — `time_text` — the rendered date, and the machine `datetime` attribute (override: `time relative, .stamp`); `leaf_tag` — the `<time>` element
 - **infers** — none
 - **renders** — `<time datetime="2026-08-30">30 August 2026</time>`
 
@@ -626,7 +626,7 @@ The variants are `date`, `datetime` and `relative`.
 - **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `box_tag` — which element it becomes — `section`, `article`, `footer`, `li`…
+- **conventions** — `box_tag` — the `<figure>` element
 - **infers** — that the caption belongs to the child, and associates them for
   screen readers
 - **renders** — `<figure>` with a `<figcaption>`
@@ -665,7 +665,7 @@ Found by reading a real page, not by imagining one. `#metrics` in
 - **modifiers** — `over:`
 - **children** — `band`, `line`, `level`, `each`, `choose`
 - **subject** — the named thing
-- **conventions** — `chart_axis` — the axis labels, from each row's singular (override: `over:` names the attribute); `format_family` — number, percent or money, from the value (override: `as:`); `label` — the human label — the page, then the app, then English (override: say the label in the page)
+- **conventions** — `chart_axis` — the axis labels, from each row's singular (override: `over:` names the attribute); `format_family` — number, percent or money, from the value (override: `as:`); `table_header` — the header or series label — the row, then the enclosing subject, then English (override: say the header on the column or label on the series)
 - **infers** — the scale, the axes and their ticks, and the key from the
   series
 - **renders** — inline `<svg>`

@@ -3,16 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.3 COMPLETED 2026-09-21: The forward eye's question answered (Yes).
-  The garden renders with 0 missing affordances across 4 apps (lore_reader, way_exam,
-  milestone_planner, word_graph) and dashboard markdown surfaces. Demand ledger (26 gaps)
-  settled. Candidate packages A-D (Council, Studio Why Pane, Kernel, Honesty) prepared for handoff.
-  Suite: 418 runs, 4,561 assertions, 0 failures. All gates green.
+  DAYTRIP-0.4.0a (Volet 1: The Truthful Floor) landed 2026-09-22. SlimPickins::Census
+  (bin/census.rb) established as live SSOT. F9 settled (Chart declares table_header).
+  Conventions.bullet enriched with concrete element yields in VOCABULARY.md.
+  All 7 gates green, 370 in-process tests pass (0 failures).
 kind: project
-last_touched: 2026-09-21
+last_touched: 2026-09-22
 next_step: >-
-  Prioritize and plan candidate packages A-D (Council Affordances, Studio Why Pane & Workbench,
-  Elemental Kernel, House Honesty) for the next roadmap.
+  Plan and execute Volet 2: Expressive View Composition (subject-shifting card, formaction button groups, partial payload forwarding).
 
 
 run: ruby examples/roth/app.rb
