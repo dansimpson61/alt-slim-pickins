@@ -10,12 +10,13 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
-3. `ROADMAP-0.3.md` — Roadmap 0.3 is completed (all 5 phases 0–4 closed and judged). `PROJECT.md` `next_step` points at candidate package prioritization (Packages A–D) for the next roadmap.
-4. `HANDOFF.md` — this document, specifically the candidate packages menu below
-5. `PRIMER.md` — the Way, as it stands now (the tour replaces the old Slim-Pickins primer)
-6. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s five checkable bullets per entry are generated (`bin/generate_vocabulary.rb`), and so are the `conventions` bullets of the 39 words that declare one
-7. `LORE.md` — what previous sessions *learned*; the last entries are this session's
-8. `working-with-dan.md` — candid notes on working with him: what his questions mean, what lands, what does not. It is short, it is honest, and **it is yours to keep true** — updating it is part of the round.
+3. `PROJECT.md` — `next_step` points at Volet 3: Studio & Workbench Wins (`DAYTRIP-0.4.0c.md`)
+4. `HANDOFF.md` — this document, specifically the active itinerary below
+5. `DAYTRIP-0.4.0a.md` & `DAYTRIP-0.4.0b.md` — outcomes of Volet 1 (Truthful Floor) and Volet 2 (Expressive View Composition)
+6. `PRIMER.md` — the Way, as it stands now
+7. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
+8. `LORE.md` — what previous sessions *learned*; the last entries are this session's
+9. `working-with-dan.md` — candid notes on working with him: what his questions mean, what lands, what does not. It is short, it is honest, and **it is yours to keep true** — updating it is part of the round.
 
 Root holds what you read. `history/` is roadmap 0.1, consulted, not maintained;
 `roth/` is notes on a different project. Don't re-derive any of the above in
@@ -23,58 +24,52 @@ conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.3 is fully closed.** The forward eye's discipline has answered its core question:
-- **Phase 0 (Studio won iteratively)**: Wins 1–11 closed; multi-UI architecture landed with classic and workbench UIs; try-it integration verified live.
-- **Phase 1 (The garden, planted)**: All 4 demonstration applications landed (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), including an outside-author build for `lore_reader`.
-- **Phase 2 (Measure the demand)**: Read-only dashboard surfaces (`brief.sp`, `doc.sp`, `pattern.sp`) ported; 54 ecosystem markdown docs audited; 26 demand gaps ($G_1$–$G_{26}$) logged in `DEMAND.md`.
-- **Phase 3 (Grow only what the demand named)**: All 26 demand gaps settled (17 landed in core/runtime/vocabulary/markdown, 9 resolved via architectural boundaries/app space); live instruments (`check_promises.rb`, `check_conventions.rb`) preserved green.
-- **Phase 4 (Serve, and be judged)**: Upgraded all garden apps and dashboard views to native affordances, eliminating workarounds: `choice radio`, `search to:`, predicate queries, `textarea readonly`; markdown engine repaired.
+**Roadmap 0.4 is underway as an iterative sequence of winnable daytrip victories:**
+- **Volet 1 (The Truthful Floor, `DAYTRIP-0.4.0a.md`)**: Landed 2026-09-22. Established `SlimPickins::Census` (`bin/census.rb`) as the living SSOT; settled F9 (`Chart` declares `table_header`); enriched `Conventions.bullet` with concrete element yields.
+- **Volet 2 (Expressive View Composition, `DAYTRIP-0.4.0b.md`)**: Landed 2026-09-22. Delivered R3P2 (subject-shifting `card`, eliminating 7 repeated bindings in `queue.sp`), R3P3 (single-form `formaction` button groups in `actions.sp`), and R3P1 (open partial payload forwarding via `takes: payload` / `open: true`).
+- **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: **ACTIVE NEXT STEP**. W2: Full test suite leg on Studio `/status`; W3: The Why Pane / inference provenance inspector.
+- **Volet 4 & 4b (The Studio Shelf & Authoring Deductive Structure)**:
+  - Volet 4: 5-tier vocabulary taxonomy (Structural, Semantic, Interactive, Behavioral, Visual) on the Studio shelf and in `PRIMER.md` (Pain Point 1).
+  - Volet 4b: Studio partial minting / bite-sized, locally scoped domain words to eliminate long unDRY views (Pain Point 2).
 
-### Current Vitals (measured 2026-09-21)
-- **Full Suite**: 418 runs, 4,561 assertions, 0 failures, 0 errors, 0 skips across 40 test files (one-process: 364 runs, 4,141 assertions).
-- **Check Grammar**: 1,225 sentences checked, 94 words defined, 0 problems.
-- **Check Shape**: 64 of 64 words used in real pages (plus 29 app words), 977 sentences, 0 problems.
-- **Check Styles**: 26 emitted classes, 60 rendering, 105 rules, 0 problems.
+### Current Vitals (measured 2026-09-22)
+- **Census SSOT (`bin/census.rb`)**: 64 canonical words (42 Ruby primitives + 22 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 41 test files.
+- **Full Suite**: 373 runs, 4,175 assertions, 0 failures, 0 errors, 0 skips in one process.
+- **Check Grammar**: 1,226 sentences checked, 94 words defined, 0 problems.
+- **Check Shape**: 64 canonical words, 978 sentences, 0 problems.
+- **Check Styles**: 26 emitted classes, 59 rendering, 105 rules, 0 problems.
 - **Verify Pages**: 31 pages verified, 0 problems.
-- **Promise Ledger**: 33 promises (30 read, 3 forwarded, 0 unread), 0 problems.
+- **Promise Ledger**: 35 promises (32 read, 3 forwarded, 0 unread), 0 problems.
 - **Convention Register**: 38 conventions, 0 problems.
-- **Cost**: Cold 7.99 ms, Warm 6.10 ms (< 10 ms guardrail), Per row 0.25 ms (< 0.5 ms guardrail).
+- **Resume Card**: 7 fields present, last_touched 2026-09-22, 0 problems.
 
 ---
 
-## The Candidate Packages Menu (Ready for Prioritization & Planning)
+## Active Roadmap Progression
 
-The deferred and blue-sky items from Roadmaps 0.2 and 0.3 have been organized into four coherent, executable candidate packages:
+### [COMPLETED] Volet 1: The Truthful Floor (`DAYTRIP-0.4.0a.md`)
+- Established `SlimPickins::Census` as live executable SSOT.
+- Settled F9 (`Chart` infers `table_header`).
+- Enriched `Conventions.bullet` with concrete HTML tag yields in `VOCABULARY.md`.
 
-### Package A — Council's View Affordances (View DSL & Composition)
-*Focus: Deepening view expressiveness without violating the single-sentence grammar.*
-1. **Subject-shifting `card` (R3P2)**:
-   - Allow `card holding` or `card .subject` to shift the subject context for its inner block, exactly like `section` does.
-   - Solves repeated dotted attribute paths (e.g. `title item.title`, `badge item.status`) within repeated card components.
-2. **`formaction` Button Groups (R3P3)**:
-   - Support multiple submission actions within a single `<form>` using `<button formaction="/...">`.
-   - Eliminates awkward workarounds where multi-action toolbars require multiple independent HTML forms or custom JS.
-3. **Partial Payload Forwarding (R3P1)**:
-   - Support `**payload` or open keyword forwarding into partial calls (`partial "name", **payload`).
-   - Allows wrapper partials and layout decorators to pass undeclared options through without having to hardcode every modifier.
+### [COMPLETED] Volet 2: Expressive View Composition (`DAYTRIP-0.4.0b.md`)
+- **R3P2**: Subject-shifting `card` (eliminating repeated dotted subject paths in card blocks).
+- **R3P3**: Single-form `formaction` button groups in `actions` (collapsing 4 separate forms into 1).
+- **R3P1**: Partial payload forwarding (`open: true` / `takes: payload`).
 
-### Package B — Studio & Workbench Wins (Developer Tooling & Transparency)
+### [NEXT] Volet 3: Studio & Workbench Wins (`DAYTRIP-0.4.0c.md`)
 *Focus: Turning the Studio into a moldable development environment with total runtime transparency.*
 1. **Win W2: Test Suite Leg on `/status`**:
-   - Run the full 418-test suite as a 5th live leg on the Studio `/status` page alongside `check_grammar`, `check_shape`, `check_styles`, and `verify_pages`.
+   - Run the full test suite as a 5th live leg on the Studio `/status` page alongside `check_grammar`, `check_shape`, `check_styles`, and `verify_pages`.
 2. **Win W3: "The Why Pane" / Inference Provenance Inspector**:
    - Inspired by Bret Victor's visible state and Tudor Gîrba's moldable development (`BLUESKY.md` Part 4).
    - In the Studio Workbench, an interactive inspector pane that annotates every `.sp` sentence with:
      - **What was decided**: the exact computed inference (e.g., `text-align: right`, `input type="number"`, `label: "Gross Margin"`, `format: currency`).
-     - **Who owned the decision**: the 4-tier ownership provenance:
-       - `page`: explicit kwargs (`as: money`, `placeholder: "..."`).
-       - `app`: domain methods (`label_for`, `format_for`).
-       - `language`: mechanical shape rules (`Inference.label`, numeric alignment).
-       - `theme`: axiomatic visual tokens (the 53 CSS custom properties; the absent grade in views).
+     - **Who owned the decision**: the 4-tier ownership provenance (`page`, `app`, `language`, `theme`).
      - **Which convention fired**: links to one of the 38 registered conventions in `SlimPickins::Conventions::ALL`.
      - **How to override it**: shows the view author the exact idiom to take back control.
 3. **Unified Workbench (Collapsible Shelf)**:
-   - Fold the docs try-it pane and the vocabulary palette into one cohesive, collapsible library shelf, eliminating cognitive friction between browsing words and exploring templates.
+   - Fold the docs try-it pane and the vocabulary palette into one cohesive, collapsible library shelf.
 
 ### Package C — Lean & Elemental Kernel (Kernel Purity & Primitives)
 *Focus: Shrinking the compiled Ruby core and building words out of simpler, elemental primitives.*
