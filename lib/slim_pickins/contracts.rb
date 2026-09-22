@@ -39,13 +39,13 @@ module SlimPickins
   #             can no longer restate a rule the register already states.
   Contract = Struct.new(:name, :content, :modifiers, :children, :parents, :subject,
                         :speech, :shape, :gathers, :inside, :lazy, :empty, :id, :label,
-                        :infers,
+                        :infers, :open,
                         keyword_init: true) do
     def initialize(**kw)
       super(**{ name: :none, content: false, modifiers: [], children: :none,
                 parents: :any, subject: :keep, speech: :noun, shape: nil,
                 gathers: false, inside: :any, lazy: [], empty: false, id: false,
-                label: false, infers: [] }.merge(kw))
+                label: false, infers: [], open: false }.merge(kw))
     end
   end
 
@@ -74,7 +74,7 @@ module VocabularyShapes
   end
 
   # A flag is a fact that is there or not; the preamble names it.
-  FLAGS = %i[content gathers empty id label].freeze
+  FLAGS = %i[content gathers empty id label payload].freeze
 
   def parse(source)
     tree = SlimPickins::Transform.tree(source)
@@ -108,10 +108,12 @@ if key == :takes
   # `takes: content` — what the word takes, said once (2026-09-17). It replaces
   # `content: true`, where `true` was a placeholder carrying no information, and
   # it covers both kinds the preamble can name: a flag (content, empty, id,
-  # label, gathers) and a modifier. FLAGS decides which — and note that `id` is
+  # label, gathers, payload) and a modifier. FLAGS decides which — and note that `id` is
   # both, so a modifier called `id` is declared in Ruby, as `box` does.
   taken = value_str.to_sym
-  if FLAGS.include?(taken)
+  if taken == :payload
+    kwargs[:open] = true
+  elsif FLAGS.include?(taken)
     kwargs[taken] = true
   else
     kwargs[:modifiers] ||= []
@@ -121,6 +123,8 @@ elsif key == :infers
   # `infers: label` — the convention this word triggers, by name. Repeatable,
   # and only a name: the prose lives once, in the register.
   (kwargs[:infers] ||= []) << value_str.to_sym
+elsif key == :payload || key == :open
+  kwargs[:open] = value == true || value == 'true'
 elsif FLAGS.include?(key)
   kwargs[key] = value == true || value == 'true'
 elsif %i[name inside speech subject shape].include?(key)
@@ -218,10 +222,17 @@ end
     # check_grammar.rb holds the document to them, so the only way to change
     # a bullet is to change the contract.
     def bullets(word, contract)
+      mod_text = if contract.open
+                   contract.modifiers.empty? ? 'any' : (contract.modifiers.map { |m| "`#{m}:`" } + ['any']).join(', ')
+                 elsif contract.modifiers.empty?
+                   'none'
+                 else
+                   contract.modifiers.map { |m| "`#{m}:`" }.join(', ')
+                 end
       [
         "- **name** — #{NAME_TEXT.fetch(contract.name)}",
         "- **content** — #{contract.content ? 'text or data, when there is any' : 'none'}",
-        "- **modifiers** — #{contract.modifiers.empty? ? 'none' : contract.modifiers.map { |m| "`#{m}:`" }.join(', ')}",
+        "- **modifiers** — #{mod_text}",
         "- **children** — #{children_text(contract.children)}",
         "- **subject** — #{SUBJECT_TEXT.fetch(contract.subject)}"
       ]
@@ -243,6 +254,7 @@ end
       return nil if word.to_sym == :tag
       return "`#{word}` takes no name — #{names.join(', ')}" if contract.name == :none && names.any?
       return "`#{word}` takes no content or data — #{data.join(', ')}" if !contract.content && data.any?
+      return nil if contract.open
 
       unknown = modifiers - (contract.modifiers + UNIVERSAL_MODIFIERS)
       "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?

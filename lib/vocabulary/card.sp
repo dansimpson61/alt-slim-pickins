@@ -1,7 +1,7 @@
-expects variant, takes: content, children: any, takes: id, shape: encloses, infers: card_id, infers: box_tag, infers: box_depth
+expects subject, takes: content, children: any, takes: id, takes: variant, subject: shift, shape: encloses, infers: card_id, infers: box_tag, infers: box_depth
 
 
-box .name, id: .id
+box .variant, id: .id
   choose
     when .content
       heading .content

@@ -525,7 +525,7 @@ module StudioPages
   # refs its context reads, answered with plain defaults — the word
   # demonstrates, and the example's note says the values are synthetic.
   SYNTH_DEFAULTS = {
-    name: nil, content: 'Hello world', label: 'A label', open: true,
+    name: nil, variant: nil, content: 'Hello world', label: 'A label', open: true,
     q: '', title: 'A title', where: 'a place', body: 'A body',
     notice: nil, unreviewed: nil, first_item: nil, placeholder: 'Search',
     nav_state: { 'studio' => false, 'library' => false, 'reconcile' => false,

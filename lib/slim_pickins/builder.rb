@@ -229,11 +229,18 @@ private :define_app_words
       # A word that names no subject leaves the chain alone. A word that names
       # one that is not there is an error — skipping quietly would report the
       # missing attribute later, on a line that is not the cause.
-      value = subject.fetch(name)
+      value = name.is_a?(Symbol) || name.is_a?(String) ? subject.fetch(name) : name
       empty = Inference.collection?(value) && Inference.nothing_in?(value)
       was = @empty_active
       @empty_active = empty
-      [value, empty, @chain.with(value, described_as: "this #{name}", &block)]
+      description = if name.is_a?(Symbol) || name.is_a?(String)
+                      "this #{name}"
+                    elsif value.respond_to?(:describe)
+                      value.describe
+                    else
+                      "this #{value.class.name.downcase}"
+                    end
+      [value, empty, @chain.with(value, described_as: description, &block)]
     ensure
       @empty_active = was unless was.nil?
     end

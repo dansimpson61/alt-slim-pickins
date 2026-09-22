@@ -362,7 +362,7 @@ end
     end
 
     class Form < Word
-      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose], subject: :shift, shape: :encloses, lazy: []
+      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :children, :box], subject: :shift, shape: :encloses, lazy: []
 
       def evaluate
         to = @kwargs.key?(:to) ? @kwargs[:to] : nil
@@ -506,17 +506,20 @@ end
     end
 
     class Button < Word
-      contract name: :variant, content: true, modifiers: [:to, :target, :type, :size], shape: :says, lazy: [], infers: [:button_type]
+      contract name: :variant, content: true, modifiers: [:to, :target, :type, :size, :name, :value], shape: :says, lazy: [], infers: [:button_type]
 
       def evaluate
         to = @kwargs.key?(:to) ? @kwargs[:to] : nil
         target = @kwargs.key?(:target) ? @kwargs[:target] : nil
         type = @kwargs.key?(:type) ? @kwargs[:type] : nil
         size = @kwargs.key?(:size) ? @kwargs[:size] : nil
-  variant, label = arguments(@args)
-  emit_node([:button, { variant: variant,
-                        label: label || (variant && Inference.label(variant)),
-                        to: to, target: target, type: type, size: size }, []])
+        name = @kwargs.key?(:name) ? @kwargs[:name] : nil
+        value = @kwargs.key?(:value) ? @kwargs[:value] : nil
+        variant, label = arguments(@args)
+        emit_node([:button, { variant: variant,
+                              label: label || (variant && Inference.label(variant)),
+                              to: to, target: target, type: type, size: size,
+                              name: name, value: value }, []])
 
       end
     end

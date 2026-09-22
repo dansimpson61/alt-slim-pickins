@@ -567,11 +567,13 @@ def form(attrs, children)
     def button(attrs, _children)
       classes = token(:button, attrs[:variant])
       classes += " button--#{attrs[:size]}" if attrs[:size]
-full_tag('button', attrs[:label],
-         type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
-         formaction: attrs[:to]&.to_s,
-         formtarget: attrs[:target]&.to_s,
-         class: classes)
+      full_tag('button', attrs[:label],
+               type: (attrs[:type] || (@in_form ? :submit : :button)).to_s,
+               formaction: attrs[:to]&.to_s,
+               formtarget: attrs[:target]&.to_s,
+               name: attrs[:name]&.to_s,
+               value: attrs[:value]&.to_s,
+               class: classes)
     end
 
         # --- bits -------------------------------------------------------------

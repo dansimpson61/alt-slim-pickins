@@ -297,6 +297,23 @@ working manual that should be better after every session than it was before.
 - **He distinguishes the itinerary from its volume: Daytrips give orthogonal depth to the roadmap's vector.** (observed 2026-09-22).
   A roadmap is an itinerary (a 1D vector); daytrips step orthogonally off that vector to explore, measure ground truth, discard phantom baggage, and give the journey volume. He expects us not to become rigid or dogmatic about historical path dependency (*Ataovy dian-tana* is wisdom, not dogma), to audit proposed work ruthlessly against *current and future purpose*, and to apply DRY, SSOT, and dynamic self-documentation instead of manual bookkeeping.
 
+- **Authoring pain points guide workbench and language scoping (Pain Point 2 as Volet 4b)**: (observed 2026-09-22).
+  dan identified two fundamental authoring pain points: (1) flat, unordered vocabulary lacks deductive authoring structure (remedied via 5-tier taxonomy: Structural, Semantic, Interactive, Behavioral, Visual on the Studio shelf and in PRIMER); and (2) Studio editor lacks partial minting, forcing long, unDRY views even outside the studio. His direction: record Pain Point 2 for dedicated discussion as Volet 4b (locally scoped, bite-sized domain words / Studio partial creation) rather than burying it in unrelated volets.
+
+- **Housekeeping is a full-cycle protocol, attended to after each daytrip/round**: (observed 2026-09-22).
+  Prompt: *"Very good. Have you been attending to all of the housekeeping after each?"*
+  Housekeeping is not an afterthought deferred to the end of a roadmap; it is attended to after *every single daytrip and round*. The full cycle comprises:
+  1. `DAYTRIP-*.md` brief closed, question answered, outcomes recorded.
+  2. `PROJECT.md` updated (`status`, `last_touched`, `next_step`).
+  3. `LORE.md` updated with durable lessons learned.
+  4. Dashboard API updated via `/api/lore` and `/api/journal`.
+  5. Vocabulary regenerated (`bin/generate_vocabulary.rb`).
+  6. All 7 gates verified green (`check_grammar`, `check_shape`, `check_styles`, `check_promises`, `check_conventions`, `check_card`, `verify_pages`).
+  7. Full test suite verified green in single-process and isolated runs.
+  8. Living Census SSOT (`bin/census.rb`) matched and checked.
+  9. `working-with-dan.md` updated with operational observations.
+  10. Named git state, finished work distinguished from in-flight work, commit and push offered.
+
 ## Proposed deletions — nothing here yet
 
 

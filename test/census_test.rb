@@ -30,7 +30,7 @@ class CensusTest < Minitest::Test
 
   def test_conventions_and_promises_match_registers
     assert_equal 38, SlimPickins::Census.conventions_count
-    assert_equal 33, SlimPickins::Census.promises_count
+    assert_equal 35, SlimPickins::Census.promises_count
   end
 
   def test_styles_census_matches_stylesheet_rules

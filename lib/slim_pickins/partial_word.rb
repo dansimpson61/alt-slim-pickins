@@ -21,18 +21,43 @@ module SlimPickins
                                            @kwargs.keys)
       raise Error, complaint if complaint
 
-      parameters = parameters_for(contract, name, content, @kwargs)
-ruby_ast = self.class.compilation.ruby
-p_name = self.class.partial_name
-p_lines = self.class.source_lines
-b_inst = @builder
+      shifts = if contract.nil?
+                 true
+               elsif contract.subject == :shift || contract.name == :subject
+                 if name
+                   if contract.modifiers.include?(:variant)
+                     subject.has?(name)
+                   else
+                     true
+                   end
+                 elsif !content.nil? && !content.is_a?(String) && !content.is_a?(Numeric) && !content.is_a?(TrueClass) && !content.is_a?(FalseClass)
+                   true
+                 else
+                   true
+                 end
+               else
+                 false
+               end
+
+      shift_target = if name
+                       if contract&.modifiers&.include?(:variant)
+                         subject.has?(name) ? name : nil
+                       else
+                         name
+                       end
+                     elsif !content.nil? && !content.is_a?(String) && !content.is_a?(Numeric) && !content.is_a?(TrueClass) && !content.is_a?(FalseClass)
+                       content
+                     end
+
+      parameters = parameters_for(contract, name, content, @kwargs, shift_target)
+      ruby_ast = self.class.compilation.ruby
+      p_name = self.class.partial_name
+      p_lines = self.class.source_lines
+      b_inst = @builder
       evaluate_proc = -> { b_inst.send(:capture) { b_inst.send(:eval_with, ruby_ast, "partials/#{p_name}.sp", p_lines) } }
 
-      
-shifts = contract.nil? ? true : contract.name == :subject
-push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?)
+      push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?)
 
-      
       body_block = lambda do
         if contract&.gathers
           with_open
@@ -63,7 +88,7 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
 
       value, empty, body =
         if shifts
-          about(name, &body_block)
+          about(shift_target, &body_block)
         elsif contract&.empty && !empty_active?
           [nil, false, []]
         else
@@ -87,7 +112,7 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
 
     private
 
-    def parameters_for(contract, name, content, kwargs)
+    def parameters_for(contract, name, content, kwargs, shift_target = nil)
       return { content: content, name: name }.merge(kwargs) unless contract
 
       declared = {}
@@ -99,6 +124,7 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
           declared[modifier] = found ? val : nil
         end
       end
+      declared.merge!(kwargs) if contract.open
       declared[:name] = name if contract.name != :none
       if contract.content
         declared[:content] = if !content.nil?
@@ -109,8 +135,19 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
                                nil
                              end
       end
-      declared[:id] = @builder.send(:card_id) if contract.id
+      declared[:id] = if contract.id
+                        if shift_target && subject.has?(shift_target)
+                          target_obj = subject.fetch(shift_target)
+                          target_subj = target_obj.is_a?(Subject) ? target_obj : Subject.new(target_obj, described_as: "this #{shift_target}")
+                          target_subj.has?(:id) ? "#{target_subj.noun}-#{target_subj.fetch(:id)}" : nil
+                        else
+                          @builder.send(:card_id)
+                        end
+                      end
       declared[:label] = label_for(name, content) if contract.label
+      if contract.modifiers.include?(:variant)
+        declared[:variant] = kwargs[:variant] || (name && !subject.has?(name) ? name : nil)
+      end
       declared
     end
 

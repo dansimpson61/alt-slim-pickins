@@ -43,21 +43,21 @@ class DashboardTest < Minitest::Test
 
   def test_the_four_actions_post_the_original_payloads
     html = render_triage(first_item: item, queue_intro: '1 item(s) need attention — this is the first:')
-    assert_includes html, '<form class="form" action="/actions/commit" method="post">'
-    assert_includes html, '<form class="form" action="/actions/status" method="post">'
-    assert_includes html, '<form class="form" action="/actions/archive" method="post">'
-    assert_includes html, '<form class="form" action="/actions/skip" method="post">'
+    assert_includes html, '<form class="form" method="post">'
+    assert_equal 1, html.scan('<form class="form" method="post">').size
     assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
     assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
-    assert_includes html, '<input type="hidden" name="status" value="dormant">'
-    ['Commit', 'Set dormant', 'Archive', 'Skip 30d'].each { |l| assert_includes html, l }
+    assert_includes html, '<button type="submit" formaction="/actions/commit" class="button button--primary">Commit</button>'
+    assert_includes html, '<button type="submit" formaction="/actions/status" name="status" value="dormant" class="button button--neutral">Set dormant</button>'
+    assert_includes html, '<button type="submit" formaction="/actions/archive" class="button button--neutral">Archive</button>'
+    assert_includes html, '<button type="submit" formaction="/actions/skip" class="button button--neutral">Skip 30d</button>'
   end
 
   def test_commit_is_offered_only_when_the_app_offers_it
     quiet = render_triage(first_item: item(offer_commit: false), queue_intro: '')
-    refute_includes quiet, 'action="/actions/commit"'
+    refute_includes quiet, 'formaction="/actions/commit"'
     assert_includes render_triage(first_item: item(offer_commit: true), queue_intro: ''),
-                    'action="/actions/commit"'
+                    'formaction="/actions/commit"'
   end
 
   def test_the_next_line_is_quiet_when_the_app_says_nothing

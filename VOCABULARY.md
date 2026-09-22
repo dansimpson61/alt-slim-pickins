@@ -334,11 +334,11 @@ table holdings
 
 ### `card`
 
-- **name** — the variant
+- **name** — the subject this word presents; it must be there
 - **content** — text or data, when there is any
-- **modifiers** — none
+- **modifiers** — `variant:`
 - **children** — anything
-- **subject** — unchanged
+- **subject** — the named thing
 - **conventions** — `card_id` — the DOM id, as `word-id` (override: say `id:` yourself); `box_tag` — the `<article>` element; `box_depth` — the depth their children's headings start at
 - **infers** — none
 - **renders** — `<article class="card">`
@@ -781,7 +781,7 @@ link show, "View holding"
 
 - **name** — the variant
 - **content** — text or data, when there is any
-- **modifiers** — `to:`, `target:`, `type:`, `size:`
+- **modifiers** — `to:`, `target:`, `type:`, `size:`, `name:`, `value:`
 - **children** — none
 - **subject** — unchanged
 - **conventions** — `button_type` — `type="submit"`; outside one, `type="button"` (override: `type:`)
@@ -798,7 +798,7 @@ button "Show baseline", to: baseline
 - **name** — the subject this word presents; it must be there
 - **content** — none
 - **modifiers** — `to:`, `method:`, `target:`
-- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`, `children`, `box`
 - **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`

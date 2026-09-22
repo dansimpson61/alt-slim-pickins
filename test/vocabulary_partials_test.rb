@@ -25,13 +25,13 @@ class VocabularyPartialsTest < Minitest::Test
   def test_action_is_the_minimal_post_form
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'),
-                 %(page p\n  action "Commit", to: "/actions/commit", path: .name, return_to: "/triage", variant: primary\n))
+                 %(page p\n  actions path: .name, return_to: "/triage"\n    action "Commit", to: "/actions/commit", variant: primary\n))
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
-      assert_includes html, '<form class="form" action="/actions/commit" method="post">'
+      assert_includes html, '<form class="form" method="post">'
       assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
       assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
-      assert_includes html, '<button type="submit" class="button button--primary">Commit</button>'
+      assert_includes html, '<button type="submit" formaction="/actions/commit" class="button button--primary">Commit</button>'
     end
   end
 
@@ -46,10 +46,12 @@ class VocabularyPartialsTest < Minitest::Test
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
       assert_includes html, '<div class="actions">'
-      assert_includes html, '<form class="form" action="/actions/commit" method="post">'
-      assert_includes html, '<form class="form" action="/actions/archive" method="post">'
-      assert_equal 2, html.scan('<input type="hidden" name="path" value="ode-to-joy">').size
-      assert_equal 2, html.scan('<input type="hidden" name="return_to" value="/triage">').size
+      assert_includes html, '<form class="form" method="post">'
+      assert_equal 1, html.scan('<form class="form" method="post">').size
+      assert_equal 1, html.scan('<input type="hidden" name="path" value="ode-to-joy">').size
+      assert_equal 1, html.scan('<input type="hidden" name="return_to" value="/triage">').size
+      assert_includes html, '<button type="submit" formaction="/actions/commit" class="button button--primary">Commit</button>'
+      assert_includes html, '<button type="submit" formaction="/actions/archive" class="button button--neutral">Archive</button>'
       refute_includes html, 'name="status"'
     end
   end
@@ -63,8 +65,8 @@ class VocabularyPartialsTest < Minitest::Test
       SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
-      assert_includes html, '<form class="form" action="/actions/status" method="post">'
-      assert_includes html, '<input type="hidden" name="status" value="dormant">'
+      assert_includes html, '<form class="form" method="post">'
+      assert_includes html, '<button type="submit" formaction="/actions/status" name="status" value="dormant" class="button button--neutral">Set dormant</button>'
       assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
       assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
     end
@@ -172,8 +174,7 @@ class VocabularyPartialsTest < Minitest::Test
       File.write(File.join(dir, 'one.sp'), %(page p\n  action "Log out", to: "/logout"\n))
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
-      assert_includes html, '<form class="form" action="/logout" method="post">'
-      assert_includes html, '<button type="submit" class="button">Log out</button>'
+      assert_includes html, '<button type="button" formaction="/logout" class="button">Log out</button>'
       refute_includes html, 'name="path"'
       refute_includes html, 'name="return_to"'
       refute_includes html, 'name="status"'
@@ -182,7 +183,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_action_with_only_path_modifier
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Delete", to: "/delete", path: "my-file"\n))
+      File.write(File.join(dir, 'one.sp'), %(page p\n  actions path: "my-file"\n    action "Delete", to: "/delete"\n))
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<input type="hidden" name="path" value="my-file">'
@@ -192,7 +193,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_action_with_only_return_to_modifier
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Back", to: "/back", return_to: "/home"\n))
+      File.write(File.join(dir, 'one.sp'), %(page p\n  actions return_to: "/home"\n    action "Back", to: "/back"\n))
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<input type="hidden" name="return_to" value="/home">'
@@ -210,9 +211,57 @@ class VocabularyPartialsTest < Minitest::Test
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<div class="actions">'
-      assert_includes html, '<form class="form" action="/logout" method="post">'
+      assert_includes html, '<form class="form" method="post">'
+      assert_includes html, '<button type="submit" formaction="/logout" class="button">Log out</button>'
       refute_includes html, 'name="path"'
       refute_includes html, 'name="return_to"'
+    end
+  end
+
+  def test_card_shifts_subject_context
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          card item
+            heading .name
+            text .role
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { item: { name: 'Ada', role: 'Mathematician' } } },
+                                library: library_for(dir))
+      assert_includes html, '<article class="card"><h2 class="card-title">Ada</h2><p class="text">Mathematician</p></article>'
+    end
+  end
+
+  def test_card_with_variant_does_not_shift_if_variant_is_not_attribute
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          card compact
+            text .title
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: { title: 'Overview' } },
+                                library: library_for(dir))
+      assert_includes html, '<article class="card card--compact"><p class="text">Overview</p></article>'
+    end
+  end
+
+  def test_open_partial_forwards_arbitrary_kwargs
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, 'partials'))
+      File.write(File.join(dir, 'partials', 'wrapper.sp'), <<~SP)
+        expects takes: content, takes: payload, shape: encloses
+        box
+          text .content
+      SP
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          wrapper "Hello", custom_opt: "123", extra: "yes"
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<p class="text">Hello</p>'
     end
   end
 

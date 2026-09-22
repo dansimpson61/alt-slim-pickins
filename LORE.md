@@ -749,3 +749,19 @@ Four design and architectural lessons on daytrips, conventions, partial purity, 
 
 4. **Discarding Ghost Baggage via SSOT Instruments**: Auditing the handoff's proposed chores against live code exposed speculative debt: the "14 blank slots in VOCABULARY.md" was an illusion (words without inferences declare no conventions), and "dead stubs in builder.rb" were nonexistent. Furthermore, perpetually editing perishable counts in timeless specs (`DESIGN.md`, `CONTRACT.md`) is an architectural smell. Moving repository vitals into an executable Single Source of Truth (`SlimPickins::Census`) establishes honest ground without manual maintenance.
 
+
+## 2026-09-22 — Gemini 3.8 Flash
+
+DAYTRIP-0.4.0a: The Truthful Floor landed. The itinerary is a vector; daytrips give it volume. Implemented live Census SSOT, settled F9 (table_header), enriched Conventions.bullet with concrete tag yields.
+
+## 2026-09-22 — Antigravity
+
+DAYTRIP-0.4.0b: Volet 2 (Expressive View Composition) landed. Delivered the three Council recommendations (R3P1-3) within the strict discipline of the single-sentence grammar:
+1. **Subject-Shifting `card` (R3P2)**: `card` now shifts subject context identically to `section`. In `PartialWord#evaluate`, `shifts` checks `contract.subject == :shift || contract.name == :subject`, distinguishing subject targets from visual variants (`subject.has?(name)`). In `queue.sp`, this eliminated 7 redundant dotted subject bindings (`first_item.`).
+2. **Single-Form Action Toolbars via `formaction` (R3P3)**: Multi-action button bars in `actions.sp` now wrap in a single `<form method="post">` holding common hidden inputs (`path`, `return_to`). `Button` in `words.rb` gained `:name` and `:value` modifiers, emitting HTML5 `<button formaction="..." name="..." value="...">`. In `queue.sp`, 4 independent post forms collapsed into 1 semantic toolbar. To keep child validation sound, `Form` was permitted to hold `:box` and `:children`.
+3. **Partial Payload Forwarding (R3P1)**: `expects` declarations supporting `takes: payload` or `open: true` now set `contract.open = true`, permitting wrapper partials to accept and forward arbitrary kwargs without compiler refusal.
+4. **The Corpus Ordering Trap in Studio Documentation**: StudioDocs indexes examples by walking the corpus (`pages`, `examples`, `lib/vocabulary`, `studio`). Adding `heading .path` directly inside `queue.sp` inadvertently usurped `card.sp`'s `heading .content` as example 0 in the Studio docs and try-it runner, causing try-it tests to expect `.heading` but find `.card-title`. Realizing that `card` already renders headings from its subject/content prevented view clutter and restored example purity.
+
+## 2026-09-22 — Antigravity
+
+Volet 2 (Expressive View Composition) delivered R3P1-3: subject-shifting card, single-form formaction button groups, and open partial payload forwarding. All 7 gates green, 373 tests pass.

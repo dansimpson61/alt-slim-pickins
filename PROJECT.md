@@ -3,14 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  DAYTRIP-0.4.0a (Volet 1: The Truthful Floor) landed 2026-09-22. SlimPickins::Census
-  (bin/census.rb) established as live SSOT. F9 settled (Chart declares table_header).
-  Conventions.bullet enriched with concrete element yields in VOCABULARY.md.
-  All 7 gates green, 370 in-process tests pass (0 failures).
+  DAYTRIP-0.4.0b (Volet 2: Expressive View Composition) landed 2026-09-22.
+  Delivered R3P2 (subject-shifting card), R3P3 (single-form formaction button
+  groups in actions), and R3P1 (partial payload forwarding via open: true /
+  takes: payload). All 7 gates green, 373 in-process tests pass (0 failures).
 kind: project
 last_touched: 2026-09-22
 next_step: >-
-  Plan and execute Volet 2: Expressive View Composition (subject-shifting card, formaction button groups, partial payload forwarding).
+  Plan and execute Volet 3: Studio & Workbench Wins (W2 full test suite leg on /status, W3 The Why Pane / inference provenance inspector).
 
 
 run: ruby examples/roth/app.rb
@@ -109,6 +109,13 @@ notes: >-
   verified one by one, the word-graph tool broken — its template was never
   committed). Recommendation recorded: studio first, kernel after, demand-
   gated, budget set before the work.
+  2026-09-22 — Roadmap 0.4 planning progression: Volet 1 (The Truthful Floor,
+  DAYTRIP-0.4.0a.md) landed. Volet 2 (Expressive View Composition,
+  DAYTRIP-0.4.0b.md) executes R3P1-3. Authoring pain points noted on dan's
+  word: Pain Point 1 (5-tier vocabulary taxonomy) assigned to Volet 4 (Studio
+  shelf) and PRIMER; Pain Point 2 (Studio partial minting / OOP bite-sized,
+  locally scoped domain words to combat long, unDRY views) reserved for
+  dedicated discussion as Volet 4b.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
