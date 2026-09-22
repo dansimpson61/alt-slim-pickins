@@ -21,7 +21,7 @@ module SlimPickins
     # document distinguishes languages (measured 2026-09-09), and a class
     # with no consumer is kruft. The body is already escaped, so nothing
     # the tag says can matter to safety either.
-    FENCE = %r{\A```[^\n`]*\z}
+    FENCE = %r{\A\s*```[^\n`]*\z}
 
     HEADING = %r{\A\#{1,6}\s+}
     UNORDERED = %r{\A[-*]\s+}
@@ -35,7 +35,8 @@ module SlimPickins
     NESTED_ITEM = %r{\A\s+[-*]\s+}
 
     def render(source)
-      blocks(CGI.escapeHTML(source.to_s)).join
+      stripped = source.to_s.sub(/\A---\s*\n.*?\n---\s*(\n|\z)/m, '')
+      blocks(CGI.escapeHTML(stripped)).join
     end
 
     def blocks(escaped)
@@ -58,10 +59,13 @@ module SlimPickins
     # runs to the end of the document — still escaped, still code, and the
     # only cost is one `<pre>` that never closes.
     def fence_body(lines, i)
+      fence_indent = lines[i][/\A\s*/]
       body = []
       i += 1
       while i < lines.size && !FENCE.match?(lines[i].chomp)
-        body << lines[i]
+        line = lines[i]
+        line = line.sub(/\A\s{1,#{fence_indent.length}}/, '') if fence_indent && !fence_indent.empty?
+        body << line
         i += 1
       end
       [body.join.chomp, i + 1]
@@ -156,7 +160,15 @@ module SlimPickins
     end
 
     def blockquote(block)
-      "<blockquote>#{spans(block.gsub(/^&gt;\s?/, ''))}</blockquote>"
+      content = block.gsub(/^&gt; ?/, '')
+      paras = content.split(/\n\s*\n/)
+      if paras.size > 1
+        "<blockquote>#{paras.map { |p| "<p>#{spans(p)}</p>" }.join}</blockquote>"
+      elsif content.include?("\n") && content.lines.all? { |l| l.strip.match?(/\A\*\*[^*]+(\*\*:|:\*\*)/) }
+        "<blockquote>#{content.lines.map { |l| spans(l.strip) }.join('<br>')}</blockquote>"
+      else
+        "<blockquote>#{spans(content)}</blockquote>"
+      end
     end
 
     # --- tables ---------------------------------------------------------------
@@ -230,13 +242,16 @@ module SlimPickins
       text.gsub(/`([^`]+)`/, '<code>\1</code>')
           .gsub(/\*\*([^*]+)\*\*/, '<strong>\1</strong>')
           .gsub(/(?<!\*)\*([^*]+)\*(?!\*)/, '<em>\1</em>')
+          .gsub(/!\[([^\]]*)\]\(([^)\s]+)\)/) { %(<img src="#{CGI.escapeHTML($2)}" alt="#{CGI.escapeHTML($1)}">) }
           .gsub(/\[([^\]]+)\]\(([^)\s]+)\)/) { %(<a href="#{CGI.escapeHTML($2)}">#{$1}</a>) }
+          .gsub(/  +\n/, '<br>')
           .gsub("\n", ' ')
     end
 
     # `prose plain, .notes` — no markup at all, just paragraphs.
     def plain(source)
-      CGI.escapeHTML(source.to_s).split(/\n{2,}/).filter_map do |b|
+      stripped = source.to_s.sub(/\A---\s*\n.*?\n---\s*(\n|\z)/m, '')
+      CGI.escapeHTML(stripped).split(/\n{2,}/).filter_map do |b|
         b = b.strip
         "<p>#{b.gsub("\n", ' ')}</p>" unless b.empty?
       end.join

@@ -11,7 +11,7 @@ module SlimPickins
   # A layout is the same idea one level up: the chrome every page shares,
   # written once, with `contents` marking where the page goes.
   class Library
-    attr_reader :layout, :partials, :words, :app_partials
+    attr_reader :layout, :partials, :words, :app_partials, :dir
 
     # The language's own vocabulary, written as partials — the dogfood made
     # visible: new words are drafted in the language itself, in
@@ -30,7 +30,8 @@ module SlimPickins
         partial_paths[name] = path
       end
       new(layout: (File.read(layout_path) if File.exist?(layout_path)),
-          partials: partials, partial_paths: partial_paths, words: words)
+          partials: partials, partial_paths: partial_paths, words: words,
+          dir: dir)
     end
 
     # `words:` is the escape hatch: one module whose methods become words —
@@ -38,8 +39,9 @@ module SlimPickins
     # delegate to each other — written in Ruby because the thing they render
     # has no word yet. See Builder's "escape hatch" section for the surface
     # they may use.
-    def initialize(layout: nil, partials: {}, partial_paths: {}, words: nil)
+    def initialize(layout: nil, partials: {}, partial_paths: {}, words: nil, dir: nil)
       @layout = layout
+      @dir = dir
       app_partials = partials.transform_keys(&:to_sym)
       vocabulary = self.class.builtin_partials
       dupes = app_partials.keys & vocabulary.keys
@@ -84,6 +86,25 @@ module SlimPickins
     def word?(name) = @partials.key?(name)
 
     def source_for(name) = @partials.fetch(name)
+
+    # Render a named page or partial directly from this library.
+    def render(name, locals: {}, helpers: nil, filter: nil)
+      path = if @dir
+               File.join(@dir, "#{name}.sp")
+             elsif @partial_paths.key?(name.to_sym)
+               @partial_paths[name.to_sym]
+             end
+
+      source = if path && File.exist?(path)
+                 File.read(path)
+               elsif @partials.key?(name.to_sym)
+                 @partials[name.to_sym]
+               else
+                 raise Error, "template `#{name}` not found in library"
+               end
+
+      SlimPickins.render(source, path: path || "(#{name})", locals: locals, helpers: helpers, library: self, filter: filter)
+    end
 
     private
 

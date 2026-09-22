@@ -408,7 +408,7 @@ button, an id, a data attribute, a CSS class and a JavaScript handler on it.
 
 ### `title`
 
-- **name** — none
+- **name** — the attribute
 - **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — none
@@ -860,7 +860,7 @@ input q, placeholder: "search…"
 
 - **name** — the attribute
 - **content** — text or data, when there is any
-- **modifiers** — `rows:`, `required:`
+- **modifiers** — `rows:`, `required:`, `readonly:`
 - **children** — none
 - **subject** — unchanged
 - **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page)
@@ -899,7 +899,7 @@ outside HTML, and its children — `option` — already read as nouns.
 - **name** — the attribute
 - **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — `option`, `choice`
+- **children** — `option`, `choice`, `each`
 - **subject** — unchanged
 - **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `option_selected` — which option is selected, by comparing value to value
 - **infers** — the choices from the attribute's own domain when it has no
@@ -1056,7 +1056,7 @@ Predictions from the spec, and what actually happened.
 
 - **name** — none
 - **content** — none
-- **modifiers** — `q:`, `placeholder:`
+- **modifiers** — `q:`, `placeholder:`, `to:`
 - **children** — none
 - **subject** — unchanged
 

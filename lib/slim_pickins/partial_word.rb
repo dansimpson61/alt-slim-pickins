@@ -100,7 +100,15 @@ push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?
         end
       end
       declared[:name] = name if contract.name != :none
-      declared[:content] = content if contract.content
+      if contract.content
+        declared[:content] = if !content.nil?
+                               content
+                             elsif name && contract.name == :attribute && subject.has?(name)
+                               subject.fetch(name)
+                             else
+                               nil
+                             end
+      end
       declared[:id] = @builder.send(:card_id) if contract.id
       declared[:label] = label_for(name, content) if contract.label
       declared

@@ -3,17 +3,17 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  PHASE 2 — Measure the demand. COMPLETED 2026-09-21: The dashboard's three
-  markdown surfaces (`brief`, `doc`, `pattern`) ported to `examples/dashboard/views/`
-  with zero kernel changes. Ecosystem markdown audited across 54 files.
-  Demand ledger merged in DEMAND.md with 26 gaps (G1–G26). Visually verified
-  via screenshots. Pre-Phase 3 baseline cost measured (Cold 8.21 ms, Warm 5.68 ms,
-  0.28 ms/row). Full suite: 393 runs, 4,445 assertions, 0 failures. verify_pages: 31.
+  PHASE 3 — Grow only what the demand named. COMPLETED 2026-09-21: The 26 gaps
+  in DEMAND.md settled (17 landed in core/runtime/markdown, 9 resolved as intentional
+  boundaries or app space). choice radio variant grammar, hash predicate mapping,
+  Subject#to_s, Inference.truthy?, markdown engine repairs (indented fences, frontmatter,
+  images, blockquotes), textarea readonly. Cost measured: 6.62 ms warm (< 10 ms),
+  0.26 ms/row (< 0.5 ms). Suite: 418 runs, 4,554 assertions, 0 failures. All gates green.
 kind: project
 last_touched: 2026-09-21
 next_step: >-
-  Phase 3 — Dan sets the KERNEL cost budget against the baseline (5.68 ms warm,
-  0.28 ms/row), then settle merged demand ledger (G1–G26) as words or powers.
+  Phase 4 — Serve, and be judged: The garden renders with 0 missing affordances,
+  dashboard markdown surfaces serve read-only through the language, Dan judges all of it.
 
 
 run: ruby examples/roth/app.rb

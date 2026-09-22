@@ -1,5 +1,10 @@
-expects shape: encloses, takes: q, takes: placeholder
+expects shape: encloses, takes: q, takes: placeholder, takes: to
 
 
-form method: get, to: "/search"
-  input q, .q, placeholder: .placeholder
+choose
+  when .to
+    form method: get, to: .to
+      input q, .q, placeholder: .placeholder
+  otherwise
+    form method: get, to: "/search"
+      input q, .q, placeholder: .placeholder

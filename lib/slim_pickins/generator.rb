@@ -504,9 +504,10 @@ def form(attrs, children)
 
     def textarea(attrs, _children)
       open_tag('div', class: token(:field))
-      full_tag('label', attrs[:label], for: attrs[:name].to_s)
-      open_tag('textarea', id: attrs[:name].to_s, name: attrs[:name].to_s,
-                           rows: attrs[:rows], required: attrs[:required] ? 'required' : nil)
+      full_tag('label', attrs[:label], for: attrs[:name].to_s) if attrs[:label]
+      open_tag('textarea', id: attrs[:name]&.to_s, name: attrs[:name]&.to_s,
+                           rows: attrs[:rows], required: attrs[:required] ? 'required' : nil,
+                           readonly: attrs[:readonly] ? 'readonly' : nil)
       @out << esc(attrs[:value])
       @out << '</textarea></div>'
     end
@@ -533,12 +534,28 @@ def form(attrs, children)
     end
 
     def choice(attrs, children)
-      open_tag('div', class: token(:field, :choice))
-      full_tag('label', attrs[:label], for: attrs[:name].to_s)
-      open_tag('select', id: attrs[:name].to_s, name: attrs[:name].to_s)
-      children.each { |c| emit(c) }
-      @out << '</select>'
-      @out << '</div>'
+      if attrs[:variant] == :radio
+        open_tag('fieldset', class: token(:choice, :radio))
+        full_tag('legend', attrs[:label]) if attrs[:label]
+        children.each do |c|
+          opt_attrs = c[1]
+          val = opt_attrs[:value].to_s
+          checked = (attrs[:selected].to_s == val ? 'checked' : nil)
+          opt_id = "#{attrs[:name]}_#{val}"
+          open_tag('label', class: 'choice-option')
+          void_tag('input', type: 'radio', name: attrs[:name].to_s, id: opt_id, value: val, checked: checked)
+          @out << esc(opt_attrs[:label] || Inference.label(opt_attrs[:value]))
+          @out << '</label>'
+        end
+        @out << '</fieldset>'
+      else
+        open_tag('div', class: token(:field, :choice))
+        full_tag('label', attrs[:label], for: attrs[:name].to_s)
+        open_tag('select', id: attrs[:name].to_s, name: attrs[:name].to_s)
+        children.each { |c| emit(c) }
+        @out << '</select>'
+        @out << '</div>'
+      end
     end
 
     def option(attrs, _children)

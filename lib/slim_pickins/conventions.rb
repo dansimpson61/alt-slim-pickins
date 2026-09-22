@@ -78,7 +78,7 @@ module SlimPickins
                      grade: :structural),
       Convention.new(name: :singular_binding, when_silent: '`each holding`',
                      decides: 'that the bound name is `holding`, reachable from inside',
-                     file: 'lib/slim_pickins/words.rb', marker: 'items = from || collection_for(name)',
+                     file: 'lib/slim_pickins/words.rb', marker: 'collection_for(name)',
                      inference: nil, override: 'name it something else and say `from:`',
                      grade: :structural),
       Convention.new(name: :plural_collection, when_silent: '`each holding`, `table holdings`',
@@ -248,7 +248,8 @@ module SlimPickins
     # partition check is what noticed it had been claimed twice.
     INTERNAL = {
       relative: 'reached only by `moment`, through the `relative` variant',
-      separated: 'the digit grouping `money` and `number` share'
+      separated: 'the digit grouping `money` and `number` share',
+      truthy?: 'internal truthiness check used by sentence guards and when conditions'
     }.freeze
 
     def self.by_grade(grade) = ALL.select { |c| c.grade == grade }

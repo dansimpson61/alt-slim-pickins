@@ -886,6 +886,12 @@ acceptance test for anything that touches rendering.
 *Done looks like:* the merged ledger closed or explicitly kept open, cost
 re-measured against the budget, suite and byte-diffs green.
 
+- **Phase 3 Outcome (COMPLETED 2026-09-21)**:
+  - **Demand Ledger Settled**: All 26 gaps in `DEMAND.md` resolved. 17 landed (G1 `Library#render`, G2/G16 metric/fact expressions, G3 `Subject#to_s`, G7 `search to:`, G8 `Inference.truthy?`, G9 `choice radio`, G11 `choice each`, G12 hash predicate `.done?`, G14 irregular plurals `children`/`people`/`data`, G15 `from: children`, G17 bare attribute `title`, G20 indented fences, G21 YAML frontmatter, G22 images, G23 blockquotes, G25 `textarea readonly`); 9 resolved as intentional boundaries or app-space composition (G4 `card`, G5 `#{.id}`, G6 `empty` subject, G10 `group`, G13 `progress`, G18 badge states, G19/G24 rejecting CSS `span: 2` in views, G26 explicit `stylesheet`).
+  - **Instruments Preserved**: `bin/check_promises.rb` (33 promises, 0 unread) and `bin/check_conventions.rb` (38 conventions) updated and passing with 0 problems.
+  - **Costs Re-measured**: Cold 8.30 ms, Warm 6.62 ms (guardrail < 10 ms), Per row 0.26 ms (guardrail < 0.5 ms).
+  - **Suite & Gates**: 418 runs, 4,554 assertions, 0 failures. All gates green (`check_grammar`, `check_shape`, `check_styles`, `verify_pages` 31/31).
+
 ### Phase 4 — Serve, and be judged
 
 The garden renders with 0 missing affordances; the dashboard's markdown, if

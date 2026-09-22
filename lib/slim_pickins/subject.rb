@@ -19,6 +19,14 @@ module SlimPickins
 
     attr_reader :object, :fallback
 
+    def to_s
+      @object.to_s
+    end
+
+    def to_str
+      @object.respond_to?(:to_str) ? @object.to_str : @object.to_s
+    end
+
     def overlay? = !@fallback.nil?
 
     def describe
@@ -61,6 +69,10 @@ module SlimPickins
     def has?(attribute)
       if @object.is_a?(Hash)
         return true if @object.key?(attribute) || @object.key?(attribute.to_s)
+        if attribute.to_s.end_with?('?')
+          base = attribute.to_s.chomp('?')
+          return true if @object.key?(base.to_sym) || @object.key?(base)
+        end
       elsif !@object.nil? && @object.respond_to?(attribute)
         return true
       end
@@ -68,15 +80,21 @@ module SlimPickins
     end
 
     def fetch(attribute)
-      if @object.is_a?(Hash) && @object.key?(attribute)
-        return @object[attribute]
-      elsif @object.is_a?(Hash) && @object.key?(attribute.to_s)
-        return @object[attribute.to_s]
+      if @object.is_a?(Hash)
+        if @object.key?(attribute)
+          return @object[attribute]
+        elsif @object.key?(attribute.to_s)
+          return @object[attribute.to_s]
+        elsif attribute.to_s.end_with?('?')
+          base = attribute.to_s.chomp('?')
+          return @object[base.to_sym] if @object.key?(base.to_sym)
+          return @object[base] if @object.key?(base)
+        end
       elsif !@object.nil? && @object.respond_to?(attribute)
         return @object.public_send(attribute)
-      elsif @fallback
-        return @fallback.fetch(attribute)
       end
+      return @fallback.fetch(attribute) if @fallback
+
       raise Nothing.new(attribute, self) if @object.nil?
 
       raise UnknownAttribute.new(attribute, self)
@@ -107,11 +125,20 @@ module SlimPickins
     # Only respond_to_missing? is overridden. Overriding respond_to? as well
     # makes the two call each other for ever.
     def respond_to_missing?(name, include_private = false)
-      @locals.key?(name.to_sym) || !!@helpers&.respond_to?(name) || super
+      return true if @locals.key?(name.to_sym)
+      if name.to_s.end_with?('?')
+        base = name.to_s.chomp('?').to_sym
+        return true if @locals.key?(base)
+      end
+      !!@helpers&.respond_to?(name) || super
     end
 
     def method_missing(name, *args)
       return @locals[name.to_sym] if @locals.key?(name.to_sym)
+      if name.to_s.end_with?('?')
+        base = name.to_s.chomp('?').to_sym
+        return @locals[base] if @locals.key?(base)
+      end
       return @helpers.public_send(name, *args) if @helpers&.respond_to?(name)
 
       super

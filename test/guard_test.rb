@@ -87,7 +87,18 @@ class GuardTest < Minitest::Test
     ruby = SlimPickins.compile("page \"P\"\n  note \"x\", if: .ok?\n")
 
     refute_includes ruby, 'if:', 'the modifier must not reach the word'
-    assert_includes ruby, 'next unless (subject.ok?)'
+    assert_includes ruby, 'next unless SlimPickins::Inference.truthy?(subject.ok?)'
+  end
+
+  def test_empty_string_and_empty_collection_guards_evaluate_as_falsy
+    html_empty_str = render("page \"P\"\n  note \"KEEP\", if: .q\n", q: "")
+    refute_includes html_empty_str, 'KEEP'
+
+    html_empty_arr = render("page \"P\"\n  note \"KEEP\", if: .items\n", items: [])
+    refute_includes html_empty_arr, 'KEEP'
+
+    html_present = render("page \"P\"\n  note \"KEEP\", if: .q\n", q: "search")
+    assert_includes html_present, 'KEEP'
   end
 
   def test_the_gate_still_permits_it

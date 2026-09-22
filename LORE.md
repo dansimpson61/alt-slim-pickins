@@ -707,3 +707,19 @@ Auditing the ecosystem's real markdown surfaces in Phase 2 revealed three durabl
 ## 2026-09-21 — Gemini 3.8 Flash
 
 Phase 2 measured the demand of the dashboard markdown surfaces against alt-slim-pickins: ported brief, doc, and pattern to examples/dashboard with zero kernel hacks; audited 54 ecosystem markdown docs; identified indented code fence parsing, YAML frontmatter leaking, image link syntax, blockquote line collapsing, and grid column spanning as demand-backed gaps; merged demand ledger in DEMAND.md with 26 gaps (G1-G26); re-measured pre-Phase 3 baseline cost at 5.68 ms warm, 0.28 ms/row.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Four design and runtime lessons from Phase 3 (settling the 26 demand gaps):
+
+1. **Variant grammar over modifier clutter (`choice radio`)**: dan's aesthetic correction on `choice radio, .field` demonstrates the grammar's core strength: when a word takes an alternate semantic shape, expressing it directly as a leading variant name (`choice radio`) reads as human prose. Introducing keyword modifiers like `choice variant: radio` would have imported CSS/framework configuration syntax into a DSL whose founding rule is that extending the language adds vocabulary, not mechanical noise.
+
+2. **Rejecting CSS coordinate leakage (`span: 2`)**: dan's refusal of column spanning in `grid` protects the boundary between view semantics and presentation. Asking a view author to write `span: 2` is CSS creeping into the view. When a layout requires asymmetric proportions (like a 2:1 documentation split or sidebar), the solution is a semantic layout word (`sidebar_layout`, `split_pane`) or an app-specific container, leaving track measurement to stylesheets rather than polluting `.sp` sentences with geometric numbers.
+
+3. **Fallback integrity in transparent data proxies**: Supporting idiomatic Ruby predicate methods (`when .done?`, `when .blocked?`) on Hash subjects required stripping trailing question marks in `Subject#fetch` and `Subject#has?`. However, wrapping the hash check without continuing down the chain severed `@fallback.fetch(attribute)`, silently breaking partial-word argument forwarding (such as `actions` passing `:path` to `action.sp` overlays). A data proxy must never assume that because the target object is a Hash, its lookup is terminal; unresolved keys must always cascade down the fallback chain.
+
+4. **Living instruments hold the language accountable**: Modifying `Textarea`'s contract to accept `readonly` and adding `Inference.truthy?` broke the suite immediately via `test/instruments_test.rb`. Both `bin/check_promises.rb` and `bin/check_conventions.rb` hold bidirectional contracts: every declared modifier must have a recorded reader in `promises.rb`, every Inference function must be partitioned into the convention register or marked internal, and every convention must name a marker that exists in code. The instruments ensure that changes cannot sneak into the language without being registered, reasoned about, and verified against disk.
+
+## 2026-09-21 — Gemini 3.8 Flash
+
+Phase 3 settled the 26 demand gaps: 17 landed (choice radio natural variant grammar, hash predicate mapping, Subject#to_s, Inference.truthy?, markdown engine repairs, textarea readonly), 9 settled as intentional boundaries or app space (rejecting CSS span: 2 in views, card as article). Instruments held: promises and conventions checkers 100% green. Cost: 6.62 ms warm, 0.26 ms/row.

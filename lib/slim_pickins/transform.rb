@@ -103,7 +103,7 @@ def emit(nodes, depth = 0)
         # The guard sits inside `with_line`, before the word and its children:
         # `next` leaves the block, so the word never runs and neither does
         # anything nested under it.
-        guard = n.guard ? ["#{pad}  next unless (#{n.guard})"] : []
+        guard = n.guard ? ["#{pad}  next unless SlimPickins::Inference.truthy?(#{n.guard})"] : []
         # Children nest two levels deeper than their sentence — one for
         # with_line's block, one for the word's own.
         if n.children.any?

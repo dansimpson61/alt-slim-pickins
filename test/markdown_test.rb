@@ -119,4 +119,46 @@ class MarkdownTest < Minitest::Test
   def test_plain_stays_paragraphs_only
     assert_equal '<p>a</p><p>b</p>', SlimPickins::Markdown.plain("a\n\nb")
   end
+
+  # --- demand ledger additions (G20-G23) ----------------------------------
+
+  def test_indented_code_fence_is_recognized_and_deindented
+    source = "   ```ruby\n   puts 1\n     x = 2\n   ```"
+    assert_equal "<pre><code>puts 1\n  x = 2</code></pre>", render(source)
+  end
+
+  def test_yaml_frontmatter_is_stripped_from_render
+    source = "---\nschema: 1\nstatus: active\n---\n# Title\n\nBody text"
+    assert_equal '<h2>Title</h2><p>Body text</p>', render(source)
+  end
+
+  def test_yaml_frontmatter_is_stripped_from_plain
+    source = "---\nschema: 1\n---\nFirst paragraph\n\nSecond paragraph"
+    assert_equal '<p>First paragraph</p><p>Second paragraph</p>', SlimPickins::Markdown.plain(source)
+  end
+
+  def test_images_render_as_img_tags
+    assert_equal '<p><img src="pic.png" alt="A photo"></p>', render('![A photo](pic.png)')
+  end
+
+  def test_linked_images_render_cleanly
+    assert_equal '<p><a href="dest.html"><img src="pic.png" alt="A photo"></a></p>',
+                 render('[![A photo](pic.png)](dest.html)')
+  end
+
+  def test_blockquote_with_empty_quote_line_splits_into_paragraphs
+    source = "> First paragraph\n>\n> Second paragraph"
+    assert_equal '<blockquote><p>First paragraph</p><p>Second paragraph</p></blockquote>', render(source)
+  end
+
+  def test_blockquote_with_adjacent_labeled_lines_preserves_linebreaks
+    source = "> **Purpose:** View DSL\n> **Next Horizon:** Phase 2"
+    assert_equal '<blockquote><strong>Purpose:</strong> View DSL<br><strong>Next Horizon:</strong> Phase 2</blockquote>',
+                 render(source)
+  end
+
+  def test_blockquote_wrapped_prose_collapses_to_single_line
+    source = "> This is wrapped prose that\n> continues across lines."
+    assert_equal '<blockquote>This is wrapped prose that continues across lines.</blockquote>', render(source)
+  end
 end

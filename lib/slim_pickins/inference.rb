@@ -41,24 +41,40 @@ module SlimPickins
 
     def boolean?(value) = value == true || value == false
 
+    def truthy?(val)
+      return false if val.nil? || val == false
+      return false if val.respond_to?(:empty?) && val.empty?
+
+      true
+    end
+
     # --- Collections ----------------------------------------------------
 
-    # `each holding` looks for `holdings`. Deliberately the two rules English
-    # actually needs here; anything else is what `from:` is for.
+    IRREGULAR_PLURALS = {
+      'child' => 'children',
+      'person' => 'people',
+      'datum' => 'data'
+    }.freeze
+
+    IRREGULAR_SINGULARS = IRREGULAR_PLURALS.invert.freeze
+
+    # `each holding` looks for `holdings`.
     def plural(name)
       s = name.to_s
+      return IRREGULAR_PLURALS[s] if IRREGULAR_PLURALS.key?(s)
       return "#{s[0..-2]}ies" if s.end_with?('y') && !%w[a e i o u].include?(s[-2])
 
       "#{s}s"
     end
 
     # The inverse, for `chart years` finding each row's `year`. Deliberately
-    # the same two rules `plural` runs backwards, and nil when the name is not
+    # the same rules `plural` runs backwards, and nil when the name is not
     # a plural at all — a chart that cannot name its axis counts instead.
     def singular(name)
       return nil if name.nil?
 
       s = name.to_s
+      return IRREGULAR_SINGULARS[s].to_sym if IRREGULAR_SINGULARS.key?(s)
       return :"#{s[0..-4]}y" if s.end_with?('ies')
 
       s.end_with?('s') ? s[0..-2].to_sym : nil

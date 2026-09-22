@@ -99,7 +99,13 @@ if Word.registry.key?(name)
                "`from:` — `each row, from: .#{Inference.plural(name)}`."
 end
 
-items = from || collection_for(name)
+items = if from.is_a?(Symbol)
+          subject.fetch(from)
+        elsif from
+          from
+        else
+          collection_for(name)
+        end
 collected = items.to_a.map do |item|
   bind(name, item)
   chain.with(item, described_as: "this #{name}") { capture(&@block) }
@@ -205,11 +211,18 @@ end
       contract name: :attribute, content: true, shape: :presents, lazy: [], infers: [:label, :format]
 
       def evaluate
-      name, value = arguments(@args)
-      shown = value.nil? ? subject.fetch(name) : value
-      emit_node([:fact, { name: name, label: label_for(name, nil),
-                          value: shown, kind: format_of({ name: name, as: nil }) }, []])
-
+        name, value = arguments(@args)
+        if name
+          shown = value.nil? ? subject.fetch(name) : value
+          resolved_label = label_for(name, nil)
+          kind = format_of({ name: name, as: nil })
+        else
+          shown = @args[0]
+          resolved_label = @args[1]
+          kind = nil
+        end
+        emit_node([:fact, { name: name, label: resolved_label,
+                            value: shown, kind: kind }, []])
       end
     end
 
@@ -229,11 +242,18 @@ end
 
       def evaluate
         as = @kwargs.key?(:as) ? @kwargs[:as] : nil
-      name, label = arguments(@args)
-      value = subject.fetch(name)
-      emit_node([:metric, { name: name, label: label_for(name, label),
-                            value: value, kind: as || subject.format_for(name) }, []])
-
+        name, label = arguments(@args)
+        if name
+          value = subject.fetch(name)
+          resolved_label = label_for(name, label)
+          kind = as || subject.format_for(name)
+        else
+          value = @args[0]
+          resolved_label = @args[1] || 'Metric'
+          kind = as
+        end
+        emit_node([:metric, { name: name, label: resolved_label,
+                              value: value, kind: kind }, []])
       end
     end
 
@@ -326,8 +346,8 @@ end
       # The transform sends the condition as a lambda, unevaluated — so this
       # guard can refuse a `when` outside a `choose` before the argument
       # runs, instead of reporting the argument's problem.
-      condition = @args.first
-      target.add_branch(!!(condition&.call), @block)
+        condition = @args.first
+        target.add_branch(Inference.truthy?(condition&.call), @block)
 
       end
     end
@@ -399,16 +419,22 @@ end
     end
 
     class Textarea < Word
-      contract name: :attribute, content: true, modifiers: [:rows, :required], shape: :says, lazy: [], infers: [:label]
+      contract name: :attribute, content: true, modifiers: [:rows, :required, :readonly], shape: :says, lazy: [], infers: [:label]
 
       def evaluate
         rows = @kwargs.key?(:rows) ? @kwargs[:rows] : nil
         required = @kwargs.key?(:required) ? @kwargs[:required] : nil
-      name, label = arguments(@args)
-      value = subject.fetch(name)
-      emit_node([:textarea, { name: name, label: label_for(name, label),
-                              value: value, rows: (rows || 4).to_s,
-                              required: required }, []])
+        readonly = @kwargs.key?(:readonly) ? @kwargs[:readonly] : nil
+        name, label = arguments(@args)
+        if name
+          value = subject.has?(name) ? subject.fetch(name) : nil
+        else
+          value = @args[0]
+          label = @args[1]
+        end
+        emit_node([:textarea, { name: name, label: label_for(name, label),
+                                value: value, rows: (rows || 4).to_s,
+                                required: required, readonly: readonly }, []])
 
       end
     end
@@ -436,20 +462,34 @@ end
     end
 
     class Choice < Word
-      contract name: :attribute, content: true, children: [:option, :choice], shape: :gathers, lazy: [], infers: [:label, :option_selected]
+      contract name: :attribute, content: true, children: [:option, :choice, :each], shape: :gathers, lazy: [], infers: [:label, :option_selected]
 
       def evaluate
-name, label = arguments(@args)
-@name = name
-@label = label
-@selected = subject.fetch(name)
+        variant = nil
+        remaining = @args.dup
+        if remaining.first == :radio
+          variant = :radio
+          remaining.shift
+        end
 
-with_open
-options = @collected.map do |o|
-  [:option, { value: o[:value], label: o[:label], selected: @selected }, []]
-end
-emit_node([:choice, { name: @name, label: label_for(@name, @label), selected: @selected },
-           options])
+        name, label = arguments(remaining)
+        if name.nil? && remaining.first
+          val = remaining.first
+          name = val.is_a?(Symbol) ? val : nil
+          label = remaining[1] || (name ? label_for(name, nil) : nil)
+          selected = val.is_a?(Symbol) ? (subject.has?(val) ? subject.fetch(val) : nil) : val
+        else
+          @name = name
+          @label = label
+          selected = name && subject.has?(name) ? subject.fetch(name) : nil
+        end
+
+        with_open
+        options = @collected.map do |o|
+          [:option, { value: o[:value], label: o[:label], selected: selected }, []]
+        end
+        emit_node([:choice, { name: name, label: label_for(name, label), selected: selected, variant: variant },
+                   options])
 
       end
     end
@@ -458,8 +498,9 @@ emit_node([:choice, { name: @name, label: label_for(@name, @label), selected: @s
       contract name: :value, content: true, parents: [:choice], shape: :registers, lazy: []
 
       def evaluate
-      value, label = arguments(@args)
-      register!(SlimPickins::Words::Choice, { value: value, label: label }, 'option')
+        value = @args[0]
+        label = @args[1] || (value.is_a?(Symbol) ? label_for(value, nil) : value.to_s)
+        register!(SlimPickins::Words::Choice, { value: value, label: label }, 'option')
 
       end
     end

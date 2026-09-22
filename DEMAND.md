@@ -211,3 +211,51 @@ Across 4 garden applications and 3 dashboard markdown surfaces, 26 distinct gaps
 | **Ergonomics & Bindings** | G1, G2, G3, G5, G6, G8, G12, G14, G15, G16, G17 | Friction in Ruby data resolution (dotted vs bare, collection inference, `Subject#to_s`, method predicate mapping) | **High**. Corroborated across both Garden apps and Dashboard surfaces. Candidate for kernel refinement (e.g. name-directed access, predicate handling on hashes). |
 | **Vocabulary & Morphology** | G4 (`article`), G7 (`search` route), G9 (`radio`), G10 (`form` sections), G11 (`choice` each), G13 (`progress`), G18 (`badge` variants), G19/G24 (`grid` variants & spanning), G25 (`textarea` readonly), G26 (`stylesheet` inference) | New words or structural power additions | **Selective / Demand-Gated**. Must be judged against the Ode: solve via app words/composition where possible, admit to the 64-word kernel only where an inexpressible structural floor exists. |
 
+---
+
+## Phase 3 Resolution: The Ledger Settles (2026-09-21)
+
+All 26 gaps cataloged across Phases 1 and 2 are settled in Phase 3. Seventeen gaps landed as targeted runtime, parser, and vocabulary refinements; nine were resolved by deliberate design rulings, architectural boundaries, or app-space composition without bloating the 64-word core.
+
+### 1. Landed Refinements (17 Gaps)
+
+- **G1 (`Library#render`)**: Implemented `SlimPickins::Library#render(name, locals: {}, helpers: nil)`. Resolves named views and compiles with the library's layouts and partials.
+- **G2 (`metric` expressions)**: Handled evaluated expressions in `Metric#evaluate` without attempting `subject.fetch(nil)` when an expression or number occupies value position.
+- **G3 (`Subject#to_s`)**: Added `Subject#to_s` and `Subject#to_str` delegating directly to the wrapped `@object`. Scalar strings and data objects inside `each` display their true values rather than Ruby object inspection strings.
+- **G7 (`search` destination override)**: Updated `lib/vocabulary/search.sp` with `takes: q, placeholder, to` falling back to `to: "/search"`. Apps can now direct search forms anywhere (`search to: "/"`).
+- **G8 (Truthiness in conditionals)**: Added `SlimPickins::Inference.truthy?` treating `nil`, `false`, and empty collections/strings (`""`, `[]`, `{}`) as falsy. Both `when` and sentence guard `if:` now reject empty strings and empty arrays naturally.
+- **G9 (`choice radio`)**: Dan's ruling: natural variant grammar without extra keywords (`choice radio, .frequency`). Renders `<fieldset class="choice choice--radio">` with child `<input type="radio">` and `<label class="choice-option">`.
+- **G11 (`choice` with `each` and dynamic options)**: Expanded `Choice` contract children to `[:option, :choice, :each]`. `Option` supports dynamic string and symbol values and single-argument options.
+- **G12 (Hash predicate methods)**: `Subject#fetch` and `Subject#has?` (and `Page#fetch`) fall back to stripping trailing `?` on hashes, allowing idiomatic Ruby predicate queries (`when .done?`, `when .blocked?`) over JSON/Hash payloads without losing fallback overlays.
+- **G14 (Irregular plurals)**: Expanded `Inference.plural` and `Inference.singular` with irregular English word pairs (`child` ↔ `children`, `person` ↔ `people`, `datum` ↔ `data`).
+- **G15 (`from: children` bare symbol)**: `Each#evaluate` accepts bare symbols in `from:`, resolving them against the subject if a symbol is passed (`from: children` is equivalent to `from: .children`).
+- **G16 (`fact` and `metric` dotted data)**: `Fact#evaluate` and `Metric#evaluate` gracefully handle dotted data in the first position without raising `TypeError`.
+- **G17 (`title` bare attribute)**: `partial_word.rb` and `lib/vocabulary/title.sp` support bare attribute names by mapping unquoted names to content.
+- **G20 (Indented code fences)**: `SlimPickins::Markdown` supports code fences indented up to 8 spaces (e.g. inside markdown lists) and de-indents body lines accordingly.
+- **G21 (YAML frontmatter)**: `SlimPickins::Markdown` automatically detects and strips leading YAML frontmatter (`--- ... ---`) from document bodies.
+- **G22 (Markdown images)**: `SlimPickins::Markdown` parses `![alt](url)` into `<img src="url" alt="alt">`.
+- **G23 (Multi-line blockquotes)**: `SlimPickins::Markdown` preserves linebreaks and paragraphs inside blockquote blocks.
+- **G25 (`textarea readonly`)**: `Textarea` accepts `readonly:` modifier (emitting `readonly="readonly"`) and supports standalone evaluated content.
+
+### 2. Settled by Architectural Ruling & App Space (9 Gaps)
+
+- **G4 (`article`)**: **Intentional design**. `card` already renders semantic `<article class="card">`. Adding a synonym violates the Ode's rule against aliases.
+- **G5 (`#{.id}`)**: **Lexical boundary**. String interpolation (`"..."`) is Ruby syntax, not `.sp` syntax. View authors write `to: "/entries/#{entry.id}"` or pass data directly.
+- **G6 (`empty` in title-only `section`)**: **Semantic intent**. `empty` binds to the enclosing subject. A section naming only a title string has no collection subject. Authors bind the collection explicitly: `section words, "Words Mentioned"`.
+- **G10 (`form` refusing `section`)**: **Form morphology**. Form sections use `group` (rendering `<fieldset class="group"><legend>...`), preserving semantic form grouping.
+- **G13 (`progress` widget)**: **App space**. Visual meters and progress bars are app-level component words or metric presentations, not required in the 64-word foundational kernel.
+- **G18 (`badge` variants)**: **House styling**. The 7 theme states (`ok`, `pending`, `warning`, `polish`, `error`, `blocker`, `neutral`) intentionally govern semantic status. Non-state informative chips use `badge neutral`.
+- **G19 & G24 (`grid` variants and `span: 2` column spanning)**: **Dan's ruling: Reject CSS creeping into views**. Asymmetric layout is handled by semantic layout words (e.g. `sidebar_layout`) or app words, not by coordinate numbers like `span: 2`.
+- **G26 (`stylesheet` inference)**: **Architectural clarity**. Chrome and assets are explicitly declared in the application layout (`stylesheet "/assets/slim-pickins.css"`).
+
+---
+
+### Verification and Cost Ledger
+- **Suite**: 418 runs, 4,554 assertions, 0 failures, 0 errors, 0 skips across all unit tests and 4 garden applications.
+- **Gates**: All four gate checkers passed cleanly (`check_grammar.rb`, `check_shape.rb`, `check_styles.rb`, `bin/verify_pages.rb` checking 31 pages).
+- **Instruments**: `bin/check_promises.rb` (33 promises, 0 unread, 0 problems) and `bin/check_conventions.rb` (38 conventions, 0 problems) 100% green.
+- **Cost Guardrails (`bin/measure_cost.rb`)**:
+  - Cold render: **8.30 ms**
+  - Warm render: **6.62 ms** (guardrail < 10 ms)
+  - Per row: **0.26 ms** (guardrail < 0.5 ms)
+
