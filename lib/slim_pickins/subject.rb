@@ -11,13 +11,20 @@ module SlimPickins
     # does not hold the attribute. Only a partial's parameters use it — an
     # overlay — so a declared partial's slots are its scope and the rest of
     # the world stays visible.
-    def initialize(object, described_as: nil, fallback: nil)
-      @object = object
-      @described_as = described_as
+    def initialize(object, described_as: nil, fallback: nil, builder: nil)
+      if object.is_a?(Subject)
+        @object = object.object
+        @described_as = described_as || object.instance_variable_get(:@described_as)
+        @builder = builder || object.builder || fallback&.builder
+      else
+        @object = object
+        @described_as = described_as
+        @builder = builder || fallback&.builder
+      end
       @fallback = fallback
     end
 
-    attr_reader :object, :fallback
+    attr_reader :object, :fallback, :builder
 
     def to_s
       @object.to_s
@@ -67,7 +74,9 @@ module SlimPickins
     # disagreed once — fetch understood hash keys and respond_to? did not — and
     # a hash-backed subject behaved differently from a struct-backed one.
     def has?(attribute)
-      if @object.is_a?(Hash)
+      if @object.is_a?(Subject)
+        return @object.has?(attribute)
+      elsif @object.is_a?(Hash)
         return true if @object.key?(attribute) || @object.key?(attribute.to_s)
         if attribute.to_s.end_with?('?')
           base = attribute.to_s.chomp('?')
@@ -80,7 +89,9 @@ module SlimPickins
     end
 
     def fetch(attribute)
-      if @object.is_a?(Hash)
+      if @object.is_a?(Subject)
+        return @object.fetch(attribute)
+      elsif @object.is_a?(Hash)
         if @object.key?(attribute)
           return @object[attribute]
         elsif @object.key?(attribute.to_s)
@@ -93,6 +104,9 @@ module SlimPickins
       elsif !@object.nil? && @object.respond_to?(attribute)
         return @object.public_send(attribute)
       end
+
+      return nil if @object.nil? && @builder&.empty_active?
+
       return @fallback.fetch(attribute) if @fallback
 
       raise Nothing.new(attribute, self) if @object.nil?
@@ -148,8 +162,9 @@ module SlimPickins
   # The chain itself. `.foo` always means the innermost subject; there is
   # always one, because the page sits at the bottom.
   class Chain
-    def initialize(page)
-      @stack = [Subject.new(page, described_as: 'this page')]
+    def initialize(page, builder: nil)
+      @builder = builder
+      @stack = [Subject.new(page, described_as: 'this page', builder: builder)]
     end
 
     def current = @stack.last
@@ -159,7 +174,7 @@ module SlimPickins
     # scope, the rest of the chain stays visible.
     def with(object, described_as: nil, overlay: false)
       fallback = overlay ? @stack.last : nil
-      @stack.push(Subject.new(object, described_as: described_as, fallback: fallback))
+      @stack.push(Subject.new(object, described_as: described_as, fallback: fallback, builder: @builder))
       yield
     ensure
       @stack.pop

@@ -315,6 +315,10 @@ module StudioInspector
   def render_single_node(node, collector, id)
     return '' unless node.is_a?(Array) && !node.empty?
 
+    unless node.first.is_a?(Symbol)
+      return node.map.with_index { |child, i| render_single_node(child, collector, "#{id}_#{i}") }.join("\n")
+    end
+
     type = node[0]
     attrs = node[1] || {}
     raw_children = node[2] || []

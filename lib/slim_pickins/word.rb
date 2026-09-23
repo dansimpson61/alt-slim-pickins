@@ -117,6 +117,7 @@ end
     def open_gatherer(...) = @builder.open_gatherer(...)
     def about(...) = @builder.about(...)
     def prune(...) = @builder.prune(...)
+    def empty_active? = @builder.empty_active?
     def wrapped_in_layout(&block) = @builder.wrapped_in_layout(&block)
     def head_nodes = @builder.head_nodes
     def in_head(node) = @builder.in_head(node)

@@ -17,7 +17,7 @@ module SlimPickins
   class Builder
     def initialize(page, library = nil)
       @library = library || Library.builtin
-      @chain = Chain.new(page)
+      @chain = Chain.new(page, builder: self)
       @empty_active = false # set while the named subject is an empty collection
       @bindings = {}        # `each holding` binds `holding` for reaching out
       @gatherers = []       # the components whose children are declarations
@@ -39,8 +39,66 @@ def define_app_words
   return unless @library
 
   Array(@library.words).each { |mod| extend mod }
+  @library.partials.each do |word, source|
+    if source.match?(/\A\s*def\s+/m)
+      eval_with(Transform.call(source, path: "partials/#{word}.sp"), "partials/#{word}.sp", source.lines)
+    end
+  end
 end
 private :define_app_words
+
+    # An in-buffer domain word defined with `def <word>, *params`.
+    # Flexible argument binding:
+    #   - Positional args map in order to declared parameter names.
+    #   - Named kwargs map by key, order-independent.
+    #   - Undeclared named args forward into chain scope.
+    #   - Omitted declared parameters default to nil.
+    def define_local_word(word_name, param_names = [], &definition_block)
+      word_name = word_name.to_sym
+      param_names = Array(param_names).map(&:to_sym)
+
+      define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
+        bound = {}
+        args.each_with_index do |arg, i|
+          val = if arg.is_a?(Symbol)
+                  subject.has?(arg) ? subject.fetch(arg) : arg
+                elsif arg.is_a?(Proc)
+                  arg.call
+                else
+                  arg
+                end
+          bound[param_names[i]] = val if i < param_names.size
+        end
+
+        kwargs.each do |k, v|
+          val = if v.is_a?(Symbol)
+                  subject.has?(v) ? subject.fetch(v) : v
+                elsif v.is_a?(Proc)
+                  v.call
+                else
+                  v
+                end
+          bound[k.to_sym] = val
+        end
+
+        param_names.each do |p|
+          bound[p.to_sym] = nil unless bound.key?(p.to_sym)
+        end
+
+        evaluate_proc = lambda do
+          if caller_block
+            captured = capture(&caller_block)
+            with_splice(captured) { definition_block.call }
+          else
+            definition_block.call
+          end
+        end
+
+        chain.with(bound, described_as: "this #{word_name}", overlay: true) do
+          evaluate_proc.call
+        end
+      end
+    end
 
 
 
@@ -156,7 +214,7 @@ private :define_app_words
     # lets `empty` know what is empty — it iterates that instead.
     def collection_for(name)
       plural = Inference.plural(name).to_sym
-      return subject.fetch(plural) if subject.respond_to?(plural)
+      return subject.fetch(plural) if subject.has?(plural)
       return subject.object if Inference.collection?(subject.object)
 
       raise Error, "#{subject.describe} has no #{plural} to go through"

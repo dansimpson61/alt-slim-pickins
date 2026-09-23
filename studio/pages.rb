@@ -606,10 +606,90 @@ module StudioPages
       require_relative 'inspector'
       StudioInspector.error_page_for(e)
     end
-    { visual: visual, source: raw_page(visual), inspect: inspect_html }
+    { visual: visual, source: raw_page(visual), inspect: inspect_html,
+      definitions: extract_definitions(source) }
   end
 
   def self.raw_page(html)
     "<!DOCTYPE html><html><head><style>body { font-family: monospace; white-space: pre-wrap; padding: 1rem; }</style></head><body>#{CGI.escapeHTML(html)}</body></html>"
+  end
+
+  # Extracts in-buffer `def <word_name>, *params` blocks from source text.
+  def self.extract_definitions(source)
+    lines = source.lines
+    defs = []
+    i = 0
+    while i < lines.size
+      line = lines[i]
+      if line.chomp =~ /\A(\s*)def\s+([a-z_][a-z0-9_]*)(.*)\z/
+        indent_len = Regexp.last_match(1).length
+        word = Regexp.last_match(2)
+        raw_rest = Regexp.last_match(3).to_s.sub(/\A\s*,\s*/, '').strip
+        params = raw_rest.empty? ? [] : raw_rest.split(',').map(&:strip)
+        start_line = i + 1
+        raw_block_lines = [line]
+        body_lines = []
+        i += 1
+        while i < lines.size
+          next_line = lines[i]
+          if next_line.strip.empty?
+            raw_block_lines << next_line
+            body_lines << next_line
+            i += 1
+            next
+          end
+          child_indent = next_line[/\A */].size
+          break if child_indent <= indent_len
+
+          raw_block_lines << next_line
+          body_lines << next_line
+          i += 1
+        end
+
+        non_empty = body_lines.reject { |l| l.strip.empty? }
+        min_indent = non_empty.map { |l| l[/\A */].size }.min || (indent_len + 2)
+        unindented_body = body_lines.map do |l|
+          l.strip.empty? ? "\n" : l.sub(/\A {1,#{min_indent}}/, '')
+        end.join.rstrip + "\n"
+
+        defs << {
+          word: word,
+          params: params,
+          body: unindented_body,
+          raw: raw_block_lines.join,
+          start_line: start_line,
+          end_line: i
+        }
+      else
+        i += 1
+      end
+    end
+    defs
+  end
+
+  # Promotes a local in-buffer word definition into a standalone app partial.
+  def self.mint_partial!(app_dir, word_name, param_names, body)
+    target_dir = if app_dir.nil? || app_dir.to_s.empty?
+                   File.join(ROOT, 'pages', 'partials')
+                 elsif File.directory?(File.join(app_dir, 'views', 'partials'))
+                   File.join(app_dir, 'views', 'partials')
+                 elsif File.directory?(File.join(app_dir, 'partials'))
+                   File.join(app_dir, 'partials')
+                 else
+                   File.join(app_dir, 'partials')
+                 end
+    FileUtils.mkdir_p(target_dir)
+    file_path = File.join(target_dir, "#{word_name}.sp")
+
+    params_str = param_names.any? ? ", #{param_names.join(', ')}" : ''
+    indented_body = body.lines.map { |l| l.strip.empty? ? "\n" : "  #{l}" }.join
+    content = "def #{word_name}#{params_str}\n#{indented_body}"
+
+    File.write(file_path, content)
+
+    SlimPickins::Compilation.clear!
+    @library = nil
+
+    file_path
   end
 end

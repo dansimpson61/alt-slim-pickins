@@ -175,6 +175,39 @@ post '/render.json' do
   JSON.generate(StudioPages.render_json(params[:source].to_s, params[:data], library: library))
 end
 
+# Minting affordance — promotes an in-buffer `def` domain word into a permanent
+# standalone app partial on disk.
+post '/mint' do
+  content_type :json
+  raw_body = request.body.read
+  payload = begin
+              JSON.parse(raw_body)
+            rescue StandardError
+              params
+            end
+
+  source = (payload['source'] || payload[:source] || params[:source]).to_s
+  word = (payload['word'] || payload[:word] || params[:word]).to_s
+  app_dir = payload['app'] || payload[:app] || params[:app]
+
+  defs = StudioPages.extract_definitions(source)
+  target_def = defs.find { |d| d[:word] == word }
+
+  unless target_def
+    halt 400, JSON.generate({ error: "No definition found for word `#{word}`" })
+  end
+
+  path = StudioPages.mint_partial!(app_dir, word, target_def[:params], target_def[:body])
+  remaining_source = source.sub(target_def[:raw], '').rstrip + "\n"
+
+  JSON.generate({
+    ok: true,
+    word: word,
+    path: path.sub("#{StudioPages::ROOT}/", ''),
+    remaining_source: remaining_source
+  })
+end
+
 # The studio's static assets — the stylesheet, the vendored Stimulus, the
 # controller. A whitelist rather than a glob: an asset route must never
 # become a file reader.

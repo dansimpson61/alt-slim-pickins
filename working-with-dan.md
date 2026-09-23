@@ -325,6 +325,9 @@ working manual that should be better after every session than it was before.
   Prompt: *"I would also like to add one more thing to the hpousekeeping. I would like you to tell me the status of your context window whenever you do the housekeeping."*
   Housekeeping is not only repo hygiene; it is session awareness. An agent must monitor and explicitly state its context window status (truncation boundaries, trajectory length, transcript footprint, headroom) at every housekeeping pass so both human and agent know how much continuity remains before compaction occurs.
 
+- **In-buffer prototyping as a proving ground for language-wide kernel reforms (Volet 4b -> Package C)**: (observed 2026-09-23).
+  dan's approach to language evolution is empirical and grounded in immediate authoring pain points. Rather than redesigning the entire 64-word runtime abstractly in one monolithic refactor, he defined a simple concrete specimen (Doc Reader) to test in-buffer `def <word>, *params` authoring, flexible argument binding, and declaration-free words in a single view buffer. Once proven end-to-end with tests and Studio partial minting, this local mechanism serves as the proven template to generalize across the entire language in Package C (Lean & Elemental Kernel).
+
 ## Proposed deletions — nothing here yet
 
 

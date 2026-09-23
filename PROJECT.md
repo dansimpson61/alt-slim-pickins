@@ -3,15 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  DAYTRIP-0.4.0d (Volet 4: The Empirical Diagnostic Taxonomy) landed 2026-09-22.
-  Delivered 5-tier deductive taxonomy (Structural, Semantic, Interactive,
-  Behavioral, Visual) with multi-category shelf presence and empirical diagnostic
-  audit (missing stack, ad-hoc figcaption/summary, visual idiom standard).
-  All 7 gates green, 384 in-process tests pass (0 failures), 43 test files.
+  DAYTRIP-0.4.0e (Volet 4b: Studio Partial Minting & Bite-Sized Domain Words) landed 2026-09-23.
+  Delivered in-buffer def word, *params authoring with flexible argument binding,
+  declaration-free word definitions (Package C proving ground), enhanced box subject shifting,
+  positional link fallback, and Studio POST /mint affordance. All 7 gates green, 402 tests pass.
 kind: project
 last_touched: 2026-09-23
 next_step: >-
-  Execute Volet 4b: Studio partial minting and bite-sized, locally scoped domain words (Pain Point 2).
+  Execute Package C (Lean & Elemental Kernel): generalize flexible argument binding and declaration-free words across the language.
 
 
 run: ruby examples/roth/app.rb

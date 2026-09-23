@@ -262,6 +262,9 @@ class VocabularyPartialsTest < Minitest::Test
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<p class="text">Hello</p>'
+    ensure
+      SlimPickins::Word.registry.delete(:wrapper)
+      SlimPickins::CONTRACTS.delete(:wrapper)
     end
   end
 

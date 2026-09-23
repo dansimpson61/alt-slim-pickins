@@ -10,9 +10,9 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
-3. `PROJECT.md` — `next_step` points at Volet 3: Studio & Workbench Wins (`DAYTRIP-0.4.0c.md`)
+3. `PROJECT.md` — `next_step` points at Package C: Lean & Elemental Kernel
 4. `HANDOFF.md` — this document, specifically the active itinerary below
-5. `DAYTRIP-0.4.0a.md` & `DAYTRIP-0.4.0b.md` — outcomes of Volet 1 (Truthful Floor) and Volet 2 (Expressive View Composition)
+5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0e.md` — outcomes of Volets 1 through 4b
 6. `PRIMER.md` — the Way, as it stands now
 7. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
 8. `LORE.md` — what previous sessions *learned*; the last entries are this session's
@@ -29,18 +29,19 @@ conversation; it is all written down.
 - **Volet 2 (Expressive View Composition, `DAYTRIP-0.4.0b.md`)**: Landed 2026-09-22. Delivered R3P2 (subject-shifting `card`, eliminating 7 repeated bindings in `queue.sp`), R3P3 (single-form `formaction` button groups in `actions.sp`), and R3P1 (open partial payload forwarding via `takes: payload` / `open: true`).
 - **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: Landed 2026-09-22. Delivered W2 (live test suite 8th leg on `/status`) and W3 (combined `Inspect` surface uniting Semantic Tree AST and The Why Pane / inference provenance inspector).
 - **Volet 4 (The Empirical Diagnostic Taxonomy, `DAYTRIP-0.4.0d.md`)**: Landed 2026-09-22. Delivered `SlimPickins::Taxonomy` as SSOT for 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual); 64-word empirical diagnostic audit surfacing missing `stack`/`cluster`, ad-hoc `figcaption`/`summary` kernel leaks, and the visual styling idiom standard; multi-category shelf presence with cross-facets on Workbench and Classic UIs; `PRIMER.md` updated.
-- **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words)**: **ACTIVE NEXT STEP** (Pain Point 2).
+- **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words, `DAYTRIP-0.4.0e.md`)**: Landed 2026-09-23. Delivered in-buffer `def <word>, *params` authoring with flexible argument binding, declaration-free word execution (Package C proving ground), enhanced `box subject, title` context shifting, positional `link` fallback, Studio `/mint` endpoint, and live editor minting toolbar affordance.
+- **Package C (Lean & Elemental Kernel)**: **ACTIVE NEXT STEP**.
 
-### Current Vitals (measured 2026-09-22)
-- **Census SSOT (`bin/census.rb`)**: 64 canonical words (42 Ruby primitives + 22 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 43 test files.
-- **Full Suite**: 384 runs, 5,340 assertions, 0 failures, 0 errors, 0 skips in one process.
+### Current Vitals (measured 2026-09-23)
+- **Census SSOT (`bin/census.rb`)**: 64 canonical words (42 Ruby primitives + 22 .sp partials), 7 apps, 29 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 44 test files.
+- **Full Suite**: 402 runs, 5,436 assertions, 0 failures, 0 errors, 0 skips in one process.
 - **Check Grammar**: 1,235 sentences checked, 94 words defined, 0 problems.
 - **Check Shape**: 64 canonical words, 987 sentences, 0 problems.
 - **Check Styles**: 26 emitted classes, 59 rendering, 105 rules, 0 problems.
 - **Verify Pages**: 31 pages verified, 0 problems.
 - **Promise Ledger**: 35 promises (32 read, 3 forwarded, 0 unread), 0 problems.
 - **Convention Register**: 38 conventions, 0 problems.
-- **Resume Card**: 7 fields present, last_touched 2026-09-22, 0 problems.
+- **Resume Card**: 7 fields present, last_touched 2026-09-23, 0 problems.
 
 ---
 
@@ -70,23 +71,24 @@ conversation; it is all written down.
 - **Studio Shelf & Documentation**:
   - Studio shelf (Workbench `library.sp` and Classic `vocabulary.sp`) organized into 5 tiers with authoring questions, counts, and multi-category presence with secondary cross-facets.
   - `PRIMER.md` updated with "The Deductive Structure (The Five Tiers)".
-  - 8 new unit tests in `test/taxonomy_test.rb` (1,136 assertions); all 8 status legs green; all 7 repository checkers green.
 
-### [NEXT] Volet 4b: Studio Partial Minting & Bite-Sized Domain Words
-*Focus: Resolving Pain Point 2.*
-1. **Studio Partial Minting**:
-   - Provide Studio-driven authoring of locally scoped, bite-sized `.sp` partials to eliminate long, unDRY view scripts.
-2. **Unified Workbench (Collapsible Shelf)**:
-   - Fold the docs try-it pane and the vocabulary palette into one cohesive, collapsible library shelf.
+### [COMPLETED] Volet 4b: Studio Partial Minting & Bite-Sized Domain Words (`DAYTRIP-0.4.0e.md`)
+- **In-Buffer Words via `def <word_name>, *params` (`lib/slim_pickins/transform.rb`)**: Top-level definitions hoisted in AST and evaluated as local builder words before page body execution.
+- **Flexible Argument Binding (`lib/slim_pickins/builder.rb`)**: Positional ordering, order-independent keyword mapping, nil defaults for omitted parameters, open kwargs forwarding into chain scope, child block splicing via `children`.
+- **Declaration-Free Execution**: Author words run with zero `contract` metadata or `expects` preambles; serves as the living proving ground for Package C.
+- **Enhanced Primitives**: `box subject, title` shifts context and handles empty/nil subjects gracefully; positional `link label, href` fallback.
+- **Studio Minting Affordance (`studio/pages.rb`, `studio/app.rb`, `assets/studio.js`)**: Interactive `Mint <word>(*params) → partial` toolbar button in editor; `POST /mint` endpoint promotes local definitions to disk partials and re-renders live.
 
-### Package C — Lean & Elemental Kernel (Kernel Purity & Primitives)
-*Focus: Shrinking the compiled Ruby core and building words out of simpler, elemental primitives.*
-1. **Privileged `tag` Primitive (`KERNEL.md` Round 1)**:
+### [NEXT] Package C — Lean & Elemental Kernel (Kernel Purity & Primitives)
+*Focus: Shrinking the compiled Ruby core, generalizing flexible argument binding and declaration-free words across the language, and building words out of elemental primitives.*
+1. **Generalize Flexible Argument Binding & Declaration-Free Words**:
+   - Apply the proven Volet 4b binding engine (`define_local_word`) across all 64 canonical words, replacing verbose 16-parameter `contract` metadata with elemental declarations.
+2. **Privileged `tag` Primitive (`KERNEL.md` Round 1)**:
    - Introduce a privileged `tag` primitive in the kernel that is strictly forbidden in app views by test/gate, but permitted in `lib/vocabulary/`.
-2. **Lower First Wave of Ruby Atoms to `.sp` Compositions**:
+3. **Lower First Wave of Ruby Atoms to `.sp` Compositions**:
    - Re-atomize single-consumer or thin-wrapper Ruby words (`figcaption`, `summary`, `box`, `paragraph`) into pure `.sp` partial compositions.
    - Inverts the kernel: moves alt-slim-pickins further toward the Rubinius ideal where the core is minimal and vocabulary is authored in the language itself.
-3. **Cost Budget Verification**:
+4. **Cost Budget Verification**:
    - Re-measure cost before and after lowering words, ensuring warm render stays strictly under the 10 ms guardrail.
 
 ### Package D — House Honesty & Integrity (Census, Registry & Doc Parity)

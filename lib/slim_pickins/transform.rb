@@ -68,7 +68,8 @@ module SlimPickins
     end
 
     def call
-      "#{emit(tree).join("\n")}\n"
+      defs, rest = tree.partition { |n| n.word == 'def' }
+      "#{emit(defs + rest).join("\n")}\n"
     end
 
     def tree
@@ -87,30 +88,40 @@ module SlimPickins
 
     private
 
-def emit(nodes, depth = 0)
-  nodes.flat_map do |n|
-    next [] if n.word == 'expects'
+    def emit(nodes, depth = 0)
+      nodes.flat_map do |n|
+        next [] if n.word == 'expects'
 
-    ruby = if RESERVED.include?(n.word)
-
-                 "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
-               elsif n.compiled.empty?
-                 n.word
-               else
-                 "#{n.word}(#{n.compiled.join(', ')})"
-               end
         pad = '  ' * depth
-        # The guard sits inside `with_line`, before the word and its children:
-        # `next` leaves the block, so the word never runs and neither does
-        # anything nested under it.
-        guard = n.guard ? ["#{pad}  next unless SlimPickins::Inference.truthy?(#{n.guard})"] : []
-        # Children nest two levels deeper than their sentence — one for
-        # with_line's block, one for the word's own.
-        if n.children.any?
-          ["#{pad}with_line(#{n.lineno}) do", *guard, "#{pad}  #{ruby} do",
-           *emit(n.children, depth + 2), "#{pad}  end", "#{pad}end"]
+
+        if n.word == 'def'
+          word_name = n.compiled.first
+          params = "[#{n.compiled.drop(1).join(', ')}]"
+          [
+            "#{pad}define_local_word(#{word_name}, #{params}) do",
+            *emit(n.children, depth + 1),
+            "#{pad}end"
+          ]
         else
-          ["#{pad}with_line(#{n.lineno}) do", *guard, "#{pad}  #{ruby}", "#{pad}end"]
+          ruby = if RESERVED.include?(n.word)
+                   "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
+                 elsif n.compiled.empty?
+                   n.word
+                 else
+                   "#{n.word}(#{n.compiled.join(', ')})"
+                 end
+          # The guard sits inside `with_line`, before the word and its children:
+          # `next` leaves the block, so the word never runs and neither does
+          # anything nested under it.
+          guard = n.guard ? ["#{pad}  next unless SlimPickins::Inference.truthy?(#{n.guard})"] : []
+          # Children nest two levels deeper than their sentence — one for
+          # with_line's block, one for the word's own.
+          if n.children.any?
+            ["#{pad}with_line(#{n.lineno}) do", *guard, "#{pad}  #{ruby} do",
+             *emit(n.children, depth + 2), "#{pad}  end", "#{pad}end"]
+          else
+            ["#{pad}with_line(#{n.lineno}) do", *guard, "#{pad}  #{ruby}", "#{pad}end"]
+          end
         end
       end
     end

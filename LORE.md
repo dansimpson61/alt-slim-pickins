@@ -786,3 +786,7 @@ DAYTRIP-0.4.0d: Volet 4 (The Empirical Diagnostic Taxonomy) landed. Three durabl
 ## 2026-09-22 — Antigravity
 
 Volet 4: The Empirical Diagnostic Taxonomy landed. 5-tier deductive taxonomy (Structural, Semantic, Interactive, Behavioral, Visual) implemented as an empirical diagnostic instrument. Surfaced missing primitives (stack, cluster), ad-hoc kernel leaks (figcaption, summary), and validated the visual idiom standard (words describe meaning and structure, not paint). Multi-category words appear under all relevant categories with cross-facets on the Studio shelf. All 8 status legs green, 384 tests pass.
+
+## 2026-09-23 — Antigravity
+
+Volet 4b (Studio Partial Minting & Bite-Sized Domain Words) landed. Three durable learnings: (1) In-Buffer Words Prefigure Package C: Allowing authors to write def <word>, *params in the same view buffer with flexible argument binding and declaration-free execution proves that full-blown contract declarations are unnecessary for author-defined words. (2) Transparent Subject Proxies: Wrapping and nesting Subject proxies in local definitions requires Subject#initialize to unwrap inner Subjects, while @builder.empty_active? protects nil attributes under empty containers from raising before prune. (3) Studio Minting: Live AST extraction paired with POST /mint allows authors to draft locally and promote words to disk partials with a single click, updating the buffer cleanly.

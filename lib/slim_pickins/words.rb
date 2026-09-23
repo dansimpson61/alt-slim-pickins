@@ -48,6 +48,15 @@ module SlimPickins
     class Link < Says
       contract name: :destination, content: true, modifiers: [:to, :active], shape: :says, lazy: [], infers: [:link_href, :label]
       maps name: :name, content: :label
+
+      def evaluate
+        attrs = unpack_arguments
+        if @args.size >= 2 && !@args[0].is_a?(Symbol)
+          attrs[:label] ||= @args[0]
+          attrs[:to] ||= @args[1]
+        end
+        emit_node([:link, attrs, []])
+      end
     end
 
     class Paragraph < Encloses
@@ -56,14 +65,74 @@ module SlimPickins
     end
 
     class Box < Word
-      contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: [], infers: [:box_body_over_children]
+      contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: [:content], infers: [:box_body_over_children]
 
       def evaluate
         open = @kwargs.key?(:open) ? @kwargs[:open] : nil
         id = @kwargs.key?(:id) ? @kwargs[:id] : nil
-      variant, body = arguments(@args)
-      emit_node([:box, { variant: variant, body: body, open: open, id: id }, capture(&@block)])
 
+        first = @args[0]
+        second = @args[1]
+
+        first = first.call if first.is_a?(Proc)
+
+        unless @block
+          body_text = first.is_a?(Proc) ? first.call : first
+          return emit_node([:box, { variant: nil, body: body_text, open: open, id: id }, []])
+        end
+
+        shifts_subject = false
+        subject_target = nil
+        title_arg = nil
+
+        if first.is_a?(Symbol) ? subject.has?(first) : (!first.nil? && !first.is_a?(String))
+          shifts_subject = true
+          subject_target = first
+          title_arg = second
+        end
+
+        if shifts_subject
+          title_text = nil
+          target_val = subject_target.is_a?(Symbol) ? subject.fetch(subject_target) : subject_target
+          empty = Inference.nothing_in?(target_val)
+
+          was_empty = @builder.empty_active?
+          @builder.instance_variable_set(:@empty_active, empty)
+
+          raw_children = chain.with(target_val, described_as: "this #{subject_target || 'box'}", overlay: true) do
+            if title_arg
+              if !empty
+                title_text = if title_arg.is_a?(Proc)
+                               title_arg.call
+                             elsif title_arg.is_a?(Symbol)
+                               subject.has?(title_arg) ? subject.fetch(title_arg) : title_arg.to_s
+                             else
+                               title_arg
+                             end
+              else
+                if title_arg.is_a?(String)
+                  title_text = title_arg
+                elsif title_arg.is_a?(Symbol) && !title_arg.to_s.start_with?('.')
+                  title_text = subject.has?(title_arg) ? subject.fetch(title_arg) : title_arg.to_s
+                end
+              end
+            end
+            capture(&@block)
+          end
+          @builder.instance_variable_set(:@empty_active, was_empty)
+
+          children = prune(raw_children, empty)
+          if title_text && !title_text.to_s.empty?
+            children.unshift([:heading, { body: title_text.to_s }, []])
+          end
+
+          emit_node([:box, { variant: nil, body: nil, open: open, id: id }, children])
+          target_val
+        else
+          resolved_args = @args.map { |a| a.is_a?(Proc) ? a.call : a }
+          variant, body = arguments(resolved_args)
+          emit_node([:box, { variant: variant, body: body, open: open, id: id }, capture(&@block)])
+        end
       end
     end
 
