@@ -103,7 +103,7 @@ class StudioDocsTest < Minitest::Test
   def test_status_page_renders_canned_results
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'status.sp')),
                               path: 'status.sp',
-                              locals: { title: 'Status', words: [], guides: [], ui_names: [],
+                              locals: { title: 'Status', words: [], vocabulary_tiers: [], guides: [], ui_names: [],
                                         **StudioStatus.canned_locals },
                               library: LIBRARY)
     assert_includes html, '1 of 8 legs red'
@@ -187,7 +187,7 @@ class StudioDocsTest < Minitest::Test
                               locals: { title: 'Docs: badge', contract: 'c', implementation: 'i',
                                         examples: examples, source: "page \"Try: badge\"\n",
                                         editor_title: 'Try it: badge', data: '',
-                                        data_note: StudioDocs::DATA_NOTE, words: [], guides: [],
+                                        data_note: StudioDocs::DATA_NOTE, words: [], vocabulary_tiers: [], guides: [],
                                         ui_names: [] },
                               library: LIBRARY)
     assert_includes html, 'In the wild'

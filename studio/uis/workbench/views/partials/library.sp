@@ -10,19 +10,23 @@ box
   fact words, .words_count
   fact pages, .pages_count
   tabs
-    tab "Pages"
+    tab "Pages", active: .pages_active
       list
         each entry, from: .palette
           item
             link_to .name, path: .load_path, id: .id, active: .here
             badge .status
             prose plain, .refusal, if: .refusal
-    tab "Words"
-      list
-        each word
-          item
-            link_to .name, to: word, word: .name
-    tab "Guides"
+    tab "Words", active: .words_active
+      each tier, from: .vocabulary_tiers
+        group .title
+          note quiet, .question
+          list
+            each word, from: .words
+              item
+                link_to .name, to: word, word: .name, active: .active
+                badge neutral, .badge, if: .badge
+    tab "Guides", active: .guides_active
       list
         each guide
           item

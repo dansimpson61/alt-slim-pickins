@@ -10,6 +10,7 @@ require_relative 'slim_pickins/library'
 require_relative 'slim_pickins/generator'
 require_relative 'slim_pickins/builder'
 require_relative 'slim_pickins/partial_word'
+require_relative 'slim_pickins/taxonomy'
 
 module SlimPickins
   module_function

@@ -307,6 +307,27 @@ has stepped outside the language and into machine code; the house discipline is
 to speak the existing semantic roles and variants, or to propose a word or role
 when genuine repetition demands it.
 
+## The deductive structure (The Five Tiers)
+
+Authoring in the language proceeds top-down, answering five deductive questions:
+
+1. **Structure & Layout** (*What is the skeleton, geometry, or layout container?*):
+   `page`, `section`, `grid`, `box`, `card`, `list`, `item`, `aside`, `nav`, `footer`, `scroll`, `contents`, `children`.
+2. **Meaning & Domain** (*What does this content mean or represent?*):
+   `title`, `heading`, `paragraph`, `prose`, `text`, `span`, `note`, `metric`, `fact`, `table`, `column`, `total`, `money`, `percent`, `number`, `time`, `chart` (`band`, `line`, `level`), `snippet`, `figure`, `figcaption`.
+3. **Controls & Actions** (*How does the user interact, input data, or trigger an action?*):
+   `button`, `link`, `action`, `actions`, `field`, `input`, `textarea`, `checkbox`, `choice`, `option`, `search`, `tab`, `disclosure`, `summary`.
+4. **Flow, State & Dispatch** (*How does the page react, branch, iterate, or submit?*):
+   `each`, `empty`, `choose`, `when`, `otherwise`, `form`, `hidden`, `flash`, `tabs`.
+5. **Surfaces & Chrome** (*How is information surfaced, framed, or styled?*):
+   `badge`, `stylesheet`, `script`, `iframe`.
+
+### Porosity and the visual standard
+
+Boundaries between tiers are porous. A `card` is simultaneously a structural container, an elevated visual surface, and an entity scope (`R3P2`). A `table` is semantic domain data, a structural grid, and an implicit behavioral loop. On the Studio shelf, words appear under **every** tier they participate in, marked with cross-category badges so authors find them wherever they naturally reach.
+
+Crucially, **no word in the language exists solely for decorative paint.** Visual presentation belongs to the theme's semantic roles and to declared word variants (`note quiet`, `badge ok`). Words that appear in the visual tier represent chrome assets, isolated viewports, or semantic status dressed as a pill. The language describes *what is on the page*, never how to paint it.
+
 ## The Studio Workbench
 
 The language ships with its own living environment: the studio (running on port
@@ -314,9 +335,10 @@ The language ships with its own living environment: the studio (running on port
 via `?ui=` or switched via `/ui/:name`.
 
 The workbench UI organizes authoring into two zones:
-- **The Shelf**: Holds the 64 vocabulary words, the repository's living pages
-  with their census verdicts (verified against real data payloads), and the
-  project guides.
+- **The Shelf**: Holds the 64 vocabulary words organized by the five-tier deductive
+  hierarchy (with multi-category presence and secondary cross-facets), the
+  repository's living pages with their census verdicts (verified against real data
+  payloads), and the project guides.
 - **The Work Area**: Provides live, debounced rendering as you type (300 ms),
   evaluating source and JSON data locals against the language's runtime,
   displaying the Visual and HTML outputs side by side.

@@ -312,10 +312,18 @@ working manual that should be better after every session than it was before.
   7. Full test suite verified green in single-process and isolated runs.
   8. Living Census SSOT (`bin/census.rb`) matched and checked.
   9. `working-with-dan.md` updated with operational observations.
-  10. Named git state, finished work distinguished from in-flight work, commit and push offered.
+  10. Context window status reported: (instructed 2026-09-23) Whenever doing housekeeping, report the state of the context window (truncation/compaction status, step count, transcript volume, headroom).
+  11. Named git state, finished work distinguished from in-flight work, commit and push executed or offered.
 
 - **Combined inspection surface over modal tab proliferation**: (observed 2026-09-22).
   When considering inspecting the evaluated semantic AST alongside inference provenance, dan preferred a single unified 'Inspect' surface over proliferating disconnected tabs (Visual | HTML | Tree | Why). Uniting the Tree (the physical scaffolding of What) and the Why Pane (the provenance of Why) into a master-detail inspection surface eliminates mode-switching, aligns with Raskin's modelessness, and lets the structure and its causal receipts explain each other.
+
+- **Taxonomy as an empirical diagnostic instrument over a rigid filing cabinet**: (observed 2026-09-22).
+  dan reframed the 5-tier vocabulary taxonomy from an organizational filing cabinet into an empirical diagnostic test of the language. Boundaries between categories are naturally blurred or porous (multi-category words appear under all relevant categories rather than being artificially siloed); the taxonomy tests what is missing (e.g. layout primitives like `stack`), what is cohesive vs. what should be split (e.g. overloaded `box`), what is weirdly ad-hoc (e.g. `figcaption` and `summary` as single-consumer HTML element leaks), and validates the standard that words are meaning and structure, not decorative paint.
+
+- **Context window status in housekeeping**: (observed 2026-09-23).
+  Prompt: *"I would also like to add one more thing to the hpousekeeping. I would like you to tell me the status of your context window whenever you do the housekeeping."*
+  Housekeeping is not only repo hygiene; it is session awareness. An agent must monitor and explicitly state its context window status (truncation boundaries, trajectory length, transcript footprint, headroom) at every housekeeping pass so both human and agent know how much continuity remains before compaction occurs.
 
 ## Proposed deletions — nothing here yet
 

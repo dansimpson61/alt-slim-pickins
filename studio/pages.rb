@@ -272,6 +272,7 @@ module StudioPages
     base = {
       docs: StudioDocs.build,
       words: StudioDocs.words,
+      vocabulary_tiers: StudioDocs.words_by_tier,
       guides: StudioDocs.guides,
       palette: [Entry.new(id: 'pages/specimen', name: 'pages/specimen.sp', path: 'pages/specimen.sp',
                           load_path: '/?load=:id&ui=:ui', status: 'ok', refusal: nil, here: false)],

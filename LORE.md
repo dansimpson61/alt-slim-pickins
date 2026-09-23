@@ -776,7 +776,13 @@ DAYTRIP-0.4.0c: Volet 3 (Studio & Workbench Wins) landed. Two durable architectu
 
 Volet 3 (Studio & Workbench Wins) delivered W2 (live test suite 8th leg on /status) and W3 (combined Inspect surface uniting Semantic Tree AST and The Why Pane). All 7 gates green, 376 tests pass.
 
+## 2026-09-22 — Antigravity
+
+DAYTRIP-0.4.0d: Volet 4 (The Empirical Diagnostic Taxonomy) landed. Three durable learnings:
+1. **Taxonomy as an Empirical Diagnostic Instrument**: Holding the 64-word vocabulary against the 5 deductive tiers (Structural, Semantic, Interactive, Behavioral, Visual) is not a filing cabinet exercise; it is an empirical diagnostic test. It immediately surfaces what is missing (`stack` for uniform vertical rhythm, `cluster` for horizontal flow), what sits awkwardly (`figcaption` and `summary` as single-consumer in-degree-1 HTML leaks into the kernel, validating Package C), and confirms the architectural standard that words describe meaning and structure, not paint (zero words exist solely for decorative paint; styling belongs to the theme/variant idiom).
+2. **Category Porosity Over Single-Inheritance Silos**: Rigid single-category taxonomies are an anti-pattern for human view articulation. 38 of 64 words participate legitimately in multiple tiers (e.g. `card` is a Structural boundary, a Visual elevated surface, and an entity scope; `table` is Semantic relational data, a Structural grid, and a Behavioral implicit loop). Surfacing multi-category words under all relevant categories on the Studio shelf, marked with secondary cross-facet badges, meets authors wherever their top-down reasoning begins.
+3. **Cohesion vs. Split Assessment**: Evaluating multi-category words reveals that concepts like `card`, `table`, `disclosure`, and `actions` represent cohesive unities where splitting would merely recreate view boilerplate. Conversely, `box` (generic div + layout container + title host) and `span` (bare inline styling hook) were diagnosed as overloaded candidates for splitting and styling leaks.
 
 ## 2026-09-22 — Antigravity
 
-Volet 3 (Studio & Workbench Wins) delivered W2 (live test suite 8th leg on /status) and W3 (combined Inspect surface uniting Semantic Tree AST and The Why Pane). All 7 gates green, 376 tests pass.
+Volet 4: The Empirical Diagnostic Taxonomy landed. 5-tier deductive taxonomy (Structural, Semantic, Interactive, Behavioral, Visual) implemented as an empirical diagnostic instrument. Surfaced missing primitives (stack, cluster), ad-hoc kernel leaks (figcaption, summary), and validated the visual idiom standard (words describe meaning and structure, not paint). Multi-category words appear under all relevant categories with cross-facets on the Studio shelf. All 8 status legs green, 384 tests pass.

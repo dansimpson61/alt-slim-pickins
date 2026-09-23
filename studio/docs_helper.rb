@@ -5,7 +5,11 @@ module StudioDocs
   # One link in the sidebar. A plain Struct is the app contract satisfied with
   # no ceremony, which is the point — `each word` binds one of these and the
   # view reads `.name` and `.path` off it.
-  Entry = Struct.new(:name, :path, keyword_init: true)
+  Entry = Struct.new(:name, :path, :role, :facets, :badge, :active, keyword_init: true)
+
+  # A tier group of words on the library shelf, representing one of the five
+  # deductive authoring tiers (Structural, Semantic, Interactive, Behavioral, Visual).
+  TierGroup = Struct.new(:name, :title, :question, :summary, :count, :words, keyword_init: true)
 
   ROOT = File.expand_path('..', __dir__)
 
@@ -41,6 +45,46 @@ module StudioDocs
     SlimPickins::Library.builtin
     vocabulary.select { |word| SlimPickins::Word.registry.key?(word.to_sym) }.sort
       .map { |word| Entry.new(name: word, path: ui.path(ui.paths[:word], word: word)) }
+  end
+
+  # The five-tier deductive authoring hierarchy for the Studio shelf (Volet 4).
+  # Each word appears in its primary tier and cross-references any secondary
+  # facets (e.g., `card` appears in Structural with badge "visual, semantic",
+  # and in Semantic with badge "structural, visual").
+  def self.words_by_tier(ui = Uis.default_ui, current: nil)
+    require_relative '../lib/slim_pickins/taxonomy'
+    SlimPickins::Library.builtin
+
+    SlimPickins::Taxonomy.tiers.map do |tier_key, meta|
+      words_in_tier = SlimPickins::Taxonomy.words_for_tier(tier_key)
+      valid_words = words_in_tier.select do |word|
+        vocabulary.include?(word.to_s) && SlimPickins::Word.registry.key?(word.to_sym)
+      end
+
+      entries = valid_words.map do |word|
+        entry_meta = SlimPickins::Taxonomy.entry(word)
+        other_facets = (entry_meta&.tiers || []) - [tier_key]
+        badge_text = other_facets.empty? ? nil : other_facets.join(', ')
+
+        Entry.new(
+          name: word.to_s,
+          path: ui.path(ui.paths[:word], word: word.to_s),
+          role: entry_meta&.role,
+          facets: other_facets,
+          badge: badge_text,
+          active: current.to_s == word.to_s
+        )
+      end
+
+      TierGroup.new(
+        name: tier_key,
+        title: "#{meta[:title]} (#{entries.size})",
+        question: meta[:question],
+        summary: meta[:summary],
+        count: entries.size,
+        words: entries
+      )
+    end
   end
 
   # The payloads, with one home: a plain hash of word name to its contract

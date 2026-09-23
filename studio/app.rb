@@ -18,7 +18,9 @@ Uis.all
 
 # What the sidebar iterates. Every page that draws it needs both, so they are
 # named once here rather than repeated at each render.
-SIDEBAR = { words: StudioDocs.words, guides: StudioDocs.guides }.freeze
+SIDEBAR = { words: StudioDocs.words,
+            vocabulary_tiers: StudioDocs.words_by_tier,
+            guides: StudioDocs.guides }.freeze
 
 # The picker remembers a choice in a cookie; Sinatra's cookie helpers are the
 # one dependency that costs — a query parameter alone would have to ride every
@@ -63,10 +65,11 @@ helpers do
   # the language's vitals, and the dated measurement they carry. Named once,
   # so a new UI cannot forget one — and a UI that wants a different shelf
   # overrides a name here rather than building its own payload.
-  def commons
+  def commons(current_word: nil, active_tab: :pages)
     { docs: StudioDocs.build,
       palette: shelf,
       words: StudioDocs.words(ui),
+      vocabulary_tiers: StudioDocs.words_by_tier(ui, current: current_word),
       guides: StudioDocs.guides(ui),
       ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == ui.name } },
       ui: ui.name,
@@ -76,7 +79,10 @@ helpers do
       measured: StudioVitals::MEASURED,
       data_note: StudioDocs::DATA_NOTE,
       words_count: StudioVitals::WORDS,
-      pages_count: StudioPages::PAGES.size }
+      pages_count: StudioPages::PAGES.size,
+      pages_active: active_tab == :pages,
+      words_active: active_tab == :words,
+      guides_active: active_tab == :guides }
   end
 end
 
@@ -98,7 +104,7 @@ get '/' do
   locals = { title: 'Workbench', source: source,
              editor_title: StudioPages.title_for(loaded_id),
              data: loaded_id ? StudioPages.data_json_for(StudioPages::PAGES[loaded_id]) : '',
-             loaded: loaded_id, **commons }
+             loaded: loaded_id, **commons(active_tab: :pages) }
   SlimPickins.render(page_source('index.sp'), path: 'index.sp', locals: locals, library: library)
 end
 
@@ -123,13 +129,13 @@ get '/docs/:word' do
              source: seedable ? (StudioDocs.seed_for(params[:word], try_index || 0) || '') : '',
              editor_title: "Try it: #{params[:word]}",
              data: seedable ? example.data.to_s : '',
-             data_note: StudioDocs::DATA_NOTE, **commons }
+             data_note: StudioDocs::DATA_NOTE, **commons(current_word: params[:word], active_tab: :words) }
   SlimPickins.render(page_source('docs.sp'), path: 'docs.sp', locals: locals, library: library)
 end
 
 # A guide is one of this repo's own documents, served through the language
 # rather than round-tripped through the playground. The playground could not
-# serve it: `/render` receives only the editor's `source`, so a page saying
+# serve it: `/render` receives only the editor's source, so a page saying
 # `prose markdown, .content` arrives with no content to read.
 #
 # `File.basename` is what keeps `../` out of the path; the guide must be a
@@ -139,7 +145,7 @@ get '/guides/:name' do
   document = File.expand_path("../#{name}.md", __dir__)
   halt 404, "There is no guide called #{name}." unless File.file?(document)
 
-  locals = { title: "Guide: #{name}", content: File.read(document), **commons }
+  locals = { title: "Guide: #{name}", content: File.read(document), **commons(active_tab: :guides) }
   SlimPickins.render(page_source('guide.sp'), path: 'guide.sp', locals: locals, library: library)
 end
 

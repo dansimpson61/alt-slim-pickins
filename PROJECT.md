@@ -3,14 +3,15 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  DAYTRIP-0.4.0c (Volet 3: Studio & Workbench Wins) landed 2026-09-22.
-  Delivered W2 (live test suite 8th leg on /status) and W3 (combined Inspect
-  surface uniting Semantic Tree AST and The Why Pane / inference provenance).
-  All 7 gates green, 376 in-process tests pass (0 failures), 42 test files.
+  DAYTRIP-0.4.0d (Volet 4: The Empirical Diagnostic Taxonomy) landed 2026-09-22.
+  Delivered 5-tier deductive taxonomy (Structural, Semantic, Interactive,
+  Behavioral, Visual) with multi-category shelf presence and empirical diagnostic
+  audit (missing stack, ad-hoc figcaption/summary, visual idiom standard).
+  All 7 gates green, 384 in-process tests pass (0 failures), 43 test files.
 kind: project
-last_touched: 2026-09-22
+last_touched: 2026-09-23
 next_step: >-
-  Plan and execute Volet 4: 5-tier vocabulary taxonomy on Studio shelf and in PRIMER (Pain Point 1).
+  Execute Volet 4b: Studio partial minting and bite-sized, locally scoped domain words (Pain Point 2).
 
 
 run: ruby examples/roth/app.rb
@@ -115,9 +116,11 @@ notes: >-
   DAYTRIP-0.4.0c.md) lands W2 (live test suite leg on /status) and W3
   (combined Inspect surface uniting Semantic Tree AST and The Why Pane).
   Authoring pain points noted on dan's word: Pain Point 1 (5-tier vocabulary
-  taxonomy) assigned to Volet 4 (Studio shelf) and PRIMER; Pain Point 2
+  taxonomy) executed in Volet 4 (DAYTRIP-0.4.0d.md) as an empirical diagnostic
+  instrument (surfacing missing stack/cluster, ad-hoc figcaption/summary, and
+  visual idiom standard) with multi-category shelf presence; Pain Point 2
   (Studio partial minting / OOP bite-sized, locally scoped domain words to combat
-  long, unDRY views) reserved for dedicated discussion as Volet 4b.
+  long, unDRY views) reserved for dedicated execution as Volet 4b.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

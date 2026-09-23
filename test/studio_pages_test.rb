@@ -112,7 +112,7 @@ class StudioPagesTest < Minitest::Test
                               path: 'index.sp',
                               locals: { source: "page \"x\"\n", palette: entries,
                                         editor_title: 'Write .sp Code', data: '',
-                                        docs: StudioDocs.build, words: [], guides: [],
+                                        docs: StudioDocs.build, words: [], vocabulary_tiers: [], guides: [],
                                         ui_names: [], words_count: 64, pages_count: 22 },
                               library: LIBRARY)
     assert_includes html, 'Start from a real page'

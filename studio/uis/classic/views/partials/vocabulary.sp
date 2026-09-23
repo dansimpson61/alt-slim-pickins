@@ -15,8 +15,11 @@ aside
       each entry, from: .ui_names
         item
           link_to .title, to: switch, name: .name, active: .current
-  group "Vocabulary"
-    list
-      each word
-        item
-          link_to .name, to: word, word: .name
+  each tier, from: .vocabulary_tiers
+    group .title
+      note quiet, .question
+      list
+        each word, from: .words
+          item
+            link_to .name, to: word, word: .name, active: .active
+            badge neutral, .badge, if: .badge
