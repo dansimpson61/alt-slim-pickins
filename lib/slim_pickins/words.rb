@@ -59,10 +59,6 @@ module SlimPickins
       end
     end
 
-    class Paragraph < Encloses
-      contract name: :variant, content: true, children: :any, shape: :presents, lazy: []
-      maps content: :body
-    end
 
     class Box < Word
       contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: [:content], infers: [:box_body_over_children]
@@ -141,20 +137,10 @@ module SlimPickins
       maps content: :body
     end
 
-class Span < Encloses
-  contract name: :variant, content: true, modifiers: [:precision], shape: :presents, lazy: []
-  maps content: :body
-end
-
-    class Figcaption < Encloses
-      contract content: true, shape: :presents, lazy: []
-      maps content: :body
-    end
-
-    class Summary < Encloses
-      contract content: true, shape: :presents, lazy: []
-      maps content: :body
-    end
+  class Span < Encloses
+    contract name: :variant, content: true, modifiers: [:precision], shape: :presents, lazy: []
+    maps content: :body
+  end
 
     class Each < Word
       contract name: :binding, modifiers: [:from], children: :any, subject: :each, speech: :determiner, shape: :iterates, lazy: [], infers: [:plural_collection, :singular_binding, :subject_or_collection]
@@ -175,7 +161,12 @@ items = if from.is_a?(Symbol)
         else
           collection_for(name)
         end
-collected = items.to_a.map do |item|
+
+unless items.nil? || Inference.collection?(items)
+  raise Error, "`each #{name}` expects a collection to go through, got #{items.class.name.split('::').last.downcase}"
+end
+
+collected = (items || []).to_a.map do |item|
   bind(name, item)
   chain.with(item, described_as: "this #{name}") { capture(&@block) }
 end

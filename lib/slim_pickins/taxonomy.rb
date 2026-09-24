@@ -394,15 +394,6 @@ module SlimPickins
         cohesion: :cohesive,
         note: 'Structural enclosure for media and caption.'
       ),
-      figcaption: Entry.new(
-        word: :figcaption,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Caption text specifically nested under a figure',
-        diagnostic: :ad_hoc,
-        cohesion: :single_consumer,
-        note: 'Ad-hoc anomaly: in-degree 1 (sole consumer is figure.sp). A raw HTML element leak in the kernel.'
-      ),
 
       # --- Interactive Controls & Affordances ---
       button: Entry.new(
@@ -521,15 +512,6 @@ module SlimPickins
         diagnostic: :sits_well,
         cohesion: :cohesive,
         note: 'Cohesive HTML5 details paradigm: toggle + open state + body container.'
-      ),
-      summary: Entry.new(
-        word: :summary,
-        tiers: %i[interactive semantic],
-        primary_tier: :interactive,
-        role: 'Summary label and toggle trigger specifically inside disclosure',
-        diagnostic: :ad_hoc,
-        cohesion: :single_consumer,
-        note: 'Ad-hoc anomaly: in-degree 1 (sole consumer is disclosure.sp). A raw HTML element leak in the kernel.'
       ),
 
       # --- Behavioral State & Dispatch ---

@@ -2,5 +2,5 @@ expects takes: content, children: any, shape: encloses, takes: open, infers: box
 
 
 box open: .open
-  summary .content
+  tag summary, .content
   children

@@ -67,6 +67,20 @@ class Phase2Test < Minitest::Test
     assert_match(/\Athis book has no entries to go through\n/, error.message)
   end
 
+  def test_a_non_collection_attribute_refuses_honestly
+    error = assert_raises(SlimPickins::Error) do
+      render("page book\n  each entry\n    title .name\n", book: { entries: 'not a collection' })
+    end
+    assert_match(/this book's entries is not a collection to go through/, error.message)
+  end
+
+  def test_each_from_non_collection_refuses_honestly
+    error = assert_raises(SlimPickins::Error) do
+      render("page book\n  each entry, from: .count\n    title .name\n", book: { count: 42 })
+    end
+    assert_match(/`each entry` expects a collection to go through, got integer/, error.message)
+  end
+
   # --- three levels, through the language this time --------------------
 
   def test_collections_nest_and_reaching_out_by_name_still_works

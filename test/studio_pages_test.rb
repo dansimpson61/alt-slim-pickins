@@ -286,4 +286,39 @@ class StudioPagesTest < Minitest::Test
     assert_includes html, 'does not parse'
     refute_includes html, 'snippet', 'no sentence means no fence'
   end
+
+  def test_playground_locals_does_not_shadow_docs
+    locals = StudioPages.playground_locals('{"docs": [{"title": "Hello"}]}')
+    assert_equal [{ 'title' => 'Hello' }], locals['docs']
+    assert_nil locals[:docs], 'playground locals must be pure JSON data without OpenStruct docs'
+  end
+
+  def test_refusal_renders_cleanly_even_with_layout_in_library
+    layout_lib = SlimPickins::Library.new(layout: "box\n  fact words, .words_count\n  contents\n",
+                                          partials: {}, words: [])
+    html = StudioPages.refusal(SlimPickins::Error.new('custom refusal message'), library: layout_lib)
+    assert_includes html, 'note--error'
+    assert_includes html, 'custom refusal message'
+    refute_includes html, 'words_count',
+                    'refusal must not attempt to render layout chrome'
+  end
+
+  def test_render_json_with_specimen_and_missing_data_refuses_honestly_in_language_voice
+    source = <<~SP
+      page "Doc Reader"
+        sidebar docs, "Documents"
+
+      def sidebar, documents, title
+        box documents, title
+          empty "No docs"
+          list documents
+            each document
+              link .name, .path
+    SP
+    res = StudioPages.render_json(source, '')
+    assert_includes res[:visual], 'note--error'
+    assert_includes res[:visual], "this documents&#39;s documents is not a collection to go through"
+    refute_includes res[:visual], 'NoMethodError'
+    refute_includes res[:visual], "undefined method 'map' for nil"
+  end
 end

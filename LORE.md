@@ -790,3 +790,27 @@ Volet 4: The Empirical Diagnostic Taxonomy landed. 5-tier deductive taxonomy (St
 ## 2026-09-23 — Antigravity
 
 Volet 4b (Studio Partial Minting & Bite-Sized Domain Words) landed. Three durable learnings: (1) In-Buffer Words Prefigure Package C: Allowing authors to write def <word>, *params in the same view buffer with flexible argument binding and declaration-free execution proves that full-blown contract declarations are unnecessary for author-defined words. (2) Transparent Subject Proxies: Wrapping and nesting Subject proxies in local definitions requires Subject#initialize to unwrap inner Subjects, while @builder.empty_active? protects nil attributes under empty containers from raising before prune. (3) Studio Minting: Live AST extraction paired with POST /mint allows authors to draft locally and promote words to disk partials with a single click, updating the buffer cleanly.
+
+## 2026-09-23 — Antigravity
+
+DAYTRIP-0.4.0f: Volet 5 (Package C: Lean & Elemental Kernel) landed. Four durable learnings:
+1. **The Privileged Primitive as a Vocabulary Composition Boundary**: Introducing `tag` as an elemental escape hatch strictly reserved for built-in vocabulary definitions (`lib/vocabulary/*.sp`) cleanly operationalizes the Rubinius question without diluting the opinionated authoring DSL. Partitioning the compilation cache on `[source, privileged]` guarantees zero cache pollution across privilege boundaries.
+2. **Single-Consumer Words Belong in Their Parent Containers**: Words with in-degree 1 in the grammar that only ever make sense inside a single parent container (`figcaption` in `figure`, `summary` in `disclosure`) are not true vocabulary words—they are single-consumer leaks of HTML structure into the public namespace. Absorbing them directly into the parent partials via privileged `tag` shrinks the public canonical vocabulary (from 64 to 62) while keeping the grammar cleaner and eliminating whole classes and methods from the Ruby core.
+3. **Re-atomization via Privileged `tag`**: Re-expressing `paragraph` over `tag p, .content, variant: .variant` demonstrates that presentation primitives can be defined directly in slim-pickins itself rather than hardcoded in Ruby AST emitters, while seamlessly preserving variant class token synthesis and root class deduplication.
+4. **Generalizing `def` Across Disk Partials**: Reusing the universal `Builder.bind_parameters` binding engine for disk partials authoring allows authors to write top-level `def <word>, *params` without boilerplate contracts or `expects` preambles, seamlessly handling positional arguments, keyword arguments, scope forwarding, comments, and block children splicing via `children`.
+
+
+## 2026-09-23 — Antigravity
+
+Volet 5 (Package C: Lean & Elemental Kernel) delivered. Absorbed figcaption and summary into parent partials via privileged tag (canonical vocabulary: 62), re-atomized paragraph over tag p, and generalized flexible def argument binding to disk partials. All 7 gates green, warm render cost 6.24 ms.
+
+## 2026-09-23 — Antigravity
+
+Studio Workbench Preview Error Elimination & Robust Collection Refusal. Three durable learnings:
+1. **OpenStruct#to_a returns nil & Data Wall Purity**: In Ruby, calling `.to_a` on an `OpenStruct` evaluates to `nil`, not an array. Injecting `{ docs: StudioDocs.build }` into `StudioPages.playground_locals` violated the data wall's documented contract ('plain hashes and arrays, no kernel motion') and silently shadowed user JSON keys (`"docs"`). `playground_locals` must strictly return pure parsed JSON data.
+2. **Defensive Collection Verification in Language Primitives**: `Words::Each#evaluate` and `Builder#collection_for` must never assume an attribute fetched from subject or passed via `from:` is Enumerable without verifying `Inference.collection?(val)`. If given a non-collection (Integer, Symbol, OpenStruct, etc.), raising an honest `SlimPickins::Error` in the language's own voice (`"#{subject.describe}'s #{plural} is not a collection to go through"` or `` `each #{name}` expects a collection to go through, got #{class} ``) prevents raw Ruby runtime exceptions (`NoMethodError: undefined method 'map' for nil` / `'to_a' for an instance of Symbol`) from ever leaking out.
+3. **Decoupling Sandbox Previews from Host UI Layout Chrome**: In `studio/app.rb`, the playground preview (`/render` and `/render.json`) renders arbitrary author code and test specimens, not the Studio UI itself. Passing `ui_library(ui)` containing `workbench/layout.sp` wrapped both author pages and the shared `refusal.sp` error card in Workbench chrome (`main_menu`, `sidebar_layout`, `library`, `foot`), which crashed with `UnknownAttribute: this page has no words_count` and triggered raw unstyled HTML error fallbacks. Sandbox rendering must always evaluate against a clean library with `layout: nil`.
+
+## 2026-09-23 — Antigravity
+
+Studio Workbench Preview Error Elimination: eliminated OpenStruct#to_a nil map collision and shadow, guarded collection_for and each against non-collections in language voice, decoupled sandbox preview routes from host UI workbench layout chrome.

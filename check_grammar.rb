@@ -138,7 +138,8 @@ docs.each do |doc|
         used[node.word] << where
         used_full[node.word] << doc
 
-        SlimPickins::Contracts.complaints(node, ancestry).each do |complaint|
+        is_privileged = doc.include?('/lib/vocabulary/') || doc.start_with?('lib/vocabulary/')
+        SlimPickins::Contracts.complaints(node, ancestry, privileged: is_privileged).each do |complaint|
           puts "  BAD CONTRACT  #{where}:#{first_line + node.lineno - 1}: `#{node.word}` — #{complaint}"
           problems += 1
         end
@@ -153,6 +154,7 @@ end
 (used.keys.to_set - vocab).sort.each do |w|
   history_only = used_full[w].all? { |f| f.start_with?(File.join(here, 'history')) }
   next if renamed.include?(w) && history_only
+  next if w == 'tag'
 
   puts "  UNDEFINED     #{w.inspect} used in #{used[w].uniq.join(', ')} but not in VOCABULARY.md"
   problems += 1

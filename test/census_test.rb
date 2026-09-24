@@ -7,9 +7,9 @@ class CensusTest < Minitest::Test
   def test_words_census_matches_canonical_source_of_truth
     words = SlimPickins::Census.words
 
-    assert_equal 42, words[:primitives].size
-    assert_equal 22, words[:partials].size
-    assert_equal 64, words[:total].size
+    assert_equal 39, words[:primitives].size
+    assert_equal 23, words[:partials].size
+    assert_equal 62, words[:total].size
   end
 
   def test_apps_census_identifies_all_demonstration_apps
@@ -40,7 +40,7 @@ class CensusTest < Minitest::Test
   def test_report_formats_all_metrics
     report = SlimPickins::Census.report
 
-    assert_match(/64 canonical/, report)
+    assert_match(/62 canonical/, report)
     assert_match(/31 checked by verify_pages/, report)
     assert_match(/38 registered in SlimPickins::Conventions::ALL/, report)
   end

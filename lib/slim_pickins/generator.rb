@@ -159,16 +159,15 @@ end
   was_app_class, @current_app_class = @current_app_class, attrs[:app_class]
       case kind
       when :raw then @out << children.join
-when :tag
-  if attrs[:app_class] || @current_app_class
-    # Merge the app class into the tag's explicit classes. The wrapper
-    # carries the promoted root's app_class into @current_app_class, so the
-    # two are the same token here — deduped, or the root's class doubled.
-    existing = attrs[:attrs][:class]
-    injected = [existing, attrs[:app_class], @current_app_class].compact.uniq.join(' ')
-    attrs[:attrs][:class] = injected unless injected.empty?
-  end
-  @out << "<#{attrs[:name]}#{attrs_html(attrs[:attrs])}>"
+      when :tag
+        variant = attrs[:attrs]&.delete(:variant) || attrs.delete(:variant)
+        base_class = attrs[:class_base] ? token(attrs[:class_base], variant) : nil
+        existing = attrs[:attrs][:class]
+        app = attrs[:app_class] || @current_app_class
+        injected = [existing, base_class, app].compact.join(' ').split.uniq.join(' ')
+        attrs[:attrs][:class] = injected unless injected.empty?
+
+        @out << "<#{attrs[:name]}#{attrs_html(attrs[:attrs])}>"
         children.each { |c| emit(c) } unless VOID.include?(attrs[:name].to_s)
         @out << "</#{attrs[:name]}>" unless VOID.include?(attrs[:name].to_s)
       when :each then children.flatten(1).each { |c| emit(c) } # one list per iteration
@@ -397,14 +396,6 @@ def tabs(attrs, children)
       end
     end
 
-    def figcaption(attrs, _children)
-      full_tag('figcaption', attrs[:body]) if attrs[:body]
-    end
-
-    def summary(attrs, _children)
-      full_tag('summary', attrs[:body])
-    end
-
     def heading(attrs, _children)
       # A heading inside a box is the box's title — the class follows the
       # part convention, `#{box}-title`, at the box's own level; the depth
@@ -418,11 +409,6 @@ def tabs(attrs, children)
       end
     end
 
-    def paragraph(attrs, children)
-      open_tag('p', class: token(attrs[:class_base] || :paragraph, attrs[:variant]))
-      attrs[:body] ? @out << esc(attrs[:body]) : children.each { |c| emit(c) }
-      @out << '</p>'
-    end
 
     # The named boxes: a promoted word's box is its tag too. `box` under
     # a `footer` partial emits a <footer>, so promotion changes nothing a

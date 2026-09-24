@@ -247,4 +247,30 @@ class DefTest < Minitest::Test
     refute_includes html, 'class="list"'
     refute_includes html, 'class="prose"'
   end
+
+  def test_doc_reader_specimen_unprovided_collection_refuses_in_language_voice
+    source = <<~SP
+      page "Doc Reader"
+        sidebar docs, "Documents"
+        reading_pane selected_doc
+
+      def sidebar, documents, title
+        box documents, title
+          empty "No markdown documents in ~/dev/alt-slim-pickins."
+          list documents
+            each document
+              link .name, .path
+
+      def reading_pane, document
+        box document, .name
+          empty "No document selected."
+          prose markdown, .content
+    SP
+
+    error = assert_raises(SlimPickins::Error) do
+      render(source, locals: {})
+    end
+    assert_match(/this documents's documents is not a collection to go through/, error.message)
+    refute_match(/NoMethodError/, error.message)
+  end
 end

@@ -38,8 +38,6 @@ class StudioTryTest < Minitest::Test
     'when' => 'Allocation has drifted.',
     'column' => 'Symbol',
     'total' => '<tfoot',
-    'figcaption' => '<figcaption',
-    'summary' => '<summary',
     'flash' => 'A page waiting for its ruling.'
   }.freeze
 
@@ -57,7 +55,7 @@ class StudioTryTest < Minitest::Test
     # makes the studio's words the studio's words (last compile wins).
     library = StudioPages.merge_libraries([*StudioPages.library_dirs, Uis['classic'].views],
                                           words: [AppWords, ClassicWords])
-    assert_equal 62, vocabulary.size - STRUCTURAL.size, 'the yield moved — re-measure'
+    assert_equal 60, vocabulary.size - STRUCTURAL.size, 'the yield moved — re-measure'
 
     vocabulary.each do |word|
       ex = StudioDocs.examples_of(word) { |p, c| StudioPages.data_json_for(p, c) }.first

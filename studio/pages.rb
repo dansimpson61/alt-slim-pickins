@@ -93,7 +93,7 @@ module StudioPages
   # the data wall, landed at app level: plain hashes and arrays, no kernel
   # motion.
   def self.playground_locals(data = nil)
-    { docs: StudioDocs.build }.merge(data_locals(data))
+    data_locals(data)
   end
 
   # The writer's data, as locals. Empty means no data; anything else must
@@ -577,7 +577,7 @@ module StudioPages
     SlimPickins.render(File.read(File.join(ROOT, 'studio', 'shared', 'refusal.sp')),
                        path: 'refusal.sp',
                        locals: { title: 'Refusal', complaint: complaint, where: where, line: line },
-                       library: library || self.library)
+                       library: self.library)
   rescue StandardError
     "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
   end

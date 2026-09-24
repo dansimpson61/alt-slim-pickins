@@ -392,7 +392,7 @@ Replaces the CSS arithmetic — a three-column grid whose body spans two — tha
 - **subject** — unchanged
 - **conventions** — `box_tag` — the `<details>` element
 - **infers** — none
-- **renders** — `<details><summary>…</summary>…</details>`
+- **renders** — `<details><summary>…</summary>…</details>` (formerly required a companion `summary` word; absorbed directly into `disclosure` via the privileged `tag` primitive in Volet 5)
 
 ```
 disclosure "Show advanced assumptions"
@@ -629,7 +629,7 @@ The variants are `date`, `datetime` and `relative`.
 - **conventions** — `box_tag` — the `<figure>` element
 - **infers** — that the caption belongs to the child, and associates them for
   screen readers
-- **renders** — `<figure>` with a `<figcaption>`
+- **renders** — `<figure>` with a `<figcaption>` (formerly required a companion `figcaption` word; absorbed directly into `figure` via the privileged `tag` primitive in Volet 5)
 
 ```
 figure "The studio index, as it stands"
@@ -1149,24 +1149,6 @@ heading "A line worth a heading."
 - **name** — the variant
 - **content** — text or data, when there is any
 - **modifiers** — `precision:`
-- **children** — none
-- **subject** — unchanged
-
-
-### `figcaption`
-
-- **name** — none
-- **content** — text or data, when there is any
-- **modifiers** — none
-- **children** — none
-- **subject** — unchanged
-
-
-### `summary`
-
-- **name** — none
-- **content** — text or data, when there is any
-- **modifiers** — none
 - **children** — none
 - **subject** — unchanged
 

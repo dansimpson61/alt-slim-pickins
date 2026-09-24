@@ -3,14 +3,15 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  DAYTRIP-0.4.0e (Volet 4b: Studio Partial Minting & Bite-Sized Domain Words) landed 2026-09-23.
-  Delivered in-buffer def word, *params authoring with flexible argument binding,
-  declaration-free word definitions (Package C proving ground), enhanced box subject shifting,
-  positional link fallback, and Studio POST /mint affordance. All 7 gates green, 402 tests pass.
+  Studio Workbench preview error fixed and Volet 5 (Package C) completed 2026-09-23.
+  Eliminated OpenStruct#to_a nil map collision and playground_locals shadow, guarded
+  collection_for and each against non-collections in the language's own voice, decoupled
+  sandbox render routes from workbench layout chrome, and restored clean refusal rendering.
+  All 7 quality gates green, 424 tests pass in one process with 0 failures.
 kind: project
-last_touched: 2026-09-23
+last_touched: 2026-09-24
 next_step: >-
-  Execute Package C (Lean & Elemental Kernel): generalize flexible argument binding and declaration-free words across the language.
+  Execute Volet 6 (Vocabulary Restructuring): split overloaded box, address span, and introduce missing layout primitives (stack/cluster).
 
 
 run: ruby examples/roth/app.rb

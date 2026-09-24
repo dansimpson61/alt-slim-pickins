@@ -12,8 +12,8 @@ class TaxonomyTest < Minitest::Test
   end
 
   def test_exact_parity_with_canonical_census
-    assert_equal 64, @census_words.size
-    assert_equal 64, @entries.size
+    assert_equal 62, @census_words.size
+    assert_equal 62, @entries.size
     assert_equal @census_words.sort, @entries.keys.sort
   end
 
@@ -89,10 +89,9 @@ class TaxonomyTest < Minitest::Test
     assert_includes split_words, :box, "box is diagnosed as an overloaded container/div"
     assert_includes split_words, :span, "span is diagnosed as an inline styling leak"
 
-    # Single-consumer ad-hoc words
+    # Single-consumer ad-hoc words (absorbed into figure and disclosure in Volet 5)
     ad_hoc = SlimPickins::Taxonomy.ad_hoc_words
-    assert_includes ad_hoc, :figcaption, "figcaption has in-degree 1 inside figure"
-    assert_includes ad_hoc, :summary, "summary has in-degree 1 inside disclosure"
+    assert_empty ad_hoc, "figcaption and summary absorbed into figure and disclosure via privileged tag"
   end
 
   def test_missing_primitives_identified

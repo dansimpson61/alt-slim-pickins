@@ -24,6 +24,7 @@ module SlimPickins
       @lines = []           # the sentence being evaluated, so an error can name it
       @contents = nil       # the page's own nodes, while a layout renders
       @head_nodes = []      # words that belong in <head>, wherever they are said
+      @nodes = []
       define_app_words
     end
 
@@ -40,7 +41,7 @@ def define_app_words
 
   Array(@library.words).each { |mod| extend mod }
   @library.partials.each do |word, source|
-    if source.match?(/\A\s*def\s+/m)
+    if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
       eval_with(Transform.call(source, path: "partials/#{word}.sp"), "partials/#{word}.sp", source.lines)
     end
   end
@@ -53,37 +54,43 @@ private :define_app_words
     #   - Named kwargs map by key, order-independent.
     #   - Undeclared named args forward into chain scope.
     #   - Omitted declared parameters default to nil.
+    def self.bind_parameters(param_names, args, kwargs, subject)
+      bound = {}
+      args.each_with_index do |arg, i|
+        val = if arg.is_a?(Symbol)
+                subject.has?(arg) ? subject.fetch(arg) : arg
+              elsif arg.is_a?(Proc)
+                arg.call
+              else
+                arg
+              end
+        bound[param_names[i]] = val if i < param_names.size
+      end
+
+      kwargs.each do |k, v|
+        val = if v.is_a?(Symbol)
+                subject.has?(v) ? subject.fetch(v) : v
+              elsif v.is_a?(Proc)
+                v.call
+              else
+                v
+              end
+        bound[k.to_sym] = val
+      end
+
+      param_names.each do |p|
+        bound[p.to_sym] = nil unless bound.key?(p.to_sym)
+      end
+
+      bound
+    end
+
     def define_local_word(word_name, param_names = [], &definition_block)
       word_name = word_name.to_sym
       param_names = Array(param_names).map(&:to_sym)
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
-        bound = {}
-        args.each_with_index do |arg, i|
-          val = if arg.is_a?(Symbol)
-                  subject.has?(arg) ? subject.fetch(arg) : arg
-                elsif arg.is_a?(Proc)
-                  arg.call
-                else
-                  arg
-                end
-          bound[param_names[i]] = val if i < param_names.size
-        end
-
-        kwargs.each do |k, v|
-          val = if v.is_a?(Symbol)
-                  subject.has?(v) ? subject.fetch(v) : v
-                elsif v.is_a?(Proc)
-                  v.call
-                else
-                  v
-                end
-          bound[k.to_sym] = val
-        end
-
-        param_names.each do |p|
-          bound[p.to_sym] = nil unless bound.key?(p.to_sym)
-        end
+        bound = Builder.bind_parameters(param_names, args, kwargs, subject)
 
         evaluate_proc = lambda do
           if caller_block
@@ -214,7 +221,12 @@ private :define_app_words
     # lets `empty` know what is empty — it iterates that instead.
     def collection_for(name)
       plural = Inference.plural(name).to_sym
-      return subject.fetch(plural) if subject.has?(plural)
+      if subject.has?(plural)
+        val = subject.fetch(plural)
+        return val if Inference.collection?(val) || val.nil?
+
+        raise Error, "#{subject.describe}'s #{plural} is not a collection to go through"
+      end
       return subject.object if Inference.collection?(subject.object)
 
       raise Error, "#{subject.describe} has no #{plural} to go through"
@@ -458,8 +470,37 @@ private :define_app_words
     def token(word, variant = nil) = Generator.token(word, variant)
     def html(string) = emit_node([:raw, {}, [string]]) # trusted markup — you escape it
     def element(name, attributes = {}, children = []) = [:tag, { name: name, attrs: attributes }, children]
-    def tag(name, attributes = {}, children = [], &block)
-      emit_node(element(name, attributes, block ? capture(&block) : children))
+    def tag(name, *args, **kwargs, &block)
+      name = name.to_sym
+      content = nil
+      passed_children = nil
+      attrs = {}
+
+      args.each do |arg|
+        if arg.is_a?(Hash)
+          attrs.merge!(arg)
+        elsif arg.is_a?(Array)
+          passed_children = arg
+        else
+          content = arg.nil? ? nil : arg.to_s
+        end
+      end
+      attrs.merge!(kwargs)
+
+      has_content = !content.nil? && !content.empty?
+
+      children = if block
+                   captured = capture(&block)
+                   has_content ? [content, *captured] : captured
+                 elsif passed_children
+                   passed_children
+                 elsif has_content
+                   [content]
+                 else
+                   []
+                 end
+
+      emit_node(element(name, attrs, children))
     end
     def arguments(args) = name_and_content(args)
   end

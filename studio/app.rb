@@ -161,7 +161,7 @@ get '/status' do
 end
 
 post '/render' do
-  StudioPages.render_json(params[:source].to_s, params[:data], library: library)[:visual]
+  StudioPages.render_json(params[:source].to_s, params[:data])[:visual]
 end
 
 # The render contract, as JSON — one request, both panes. The controller on
@@ -172,7 +172,7 @@ end
 # JavaScript rather than hiding it.
 post '/render.json' do
   content_type :json
-  JSON.generate(StudioPages.render_json(params[:source].to_s, params[:data], library: library))
+  JSON.generate(StudioPages.render_json(params[:source].to_s, params[:data]))
 end
 
 # Minting affordance — promotes an in-buffer `def` domain word into a permanent

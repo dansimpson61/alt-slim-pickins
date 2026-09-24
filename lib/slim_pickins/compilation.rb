@@ -19,39 +19,39 @@ module SlimPickins
   # will not parse raises during the first build, is not cached, and so
   # names the path of every render that tries it.
   class Compilation
-def self.compile_partial(word, source, is_builtin, path)
-  klass = Class.new(PartialWord)
-  klass.partial_name = word
-  klass.is_builtin = is_builtin
-  klass.source_path = path
-  klass.source_lines = source.lines
-  klass.compilation = of(source, "partials/#{word}.sp")
-  
-  # Now parse the contract from the AST
-contract = VocabularyShapes.parse(source)
-  klass.instance_variable_set(:@contract, contract) if contract
+    def self.compile_partial(word, source, is_builtin, path)
+      klass = Class.new(PartialWord)
+      klass.partial_name = word
+      klass.is_builtin = is_builtin
+      klass.source_path = path
+      klass.source_lines = source.lines
+      klass.compilation = of(source, "partials/#{word}.sp", privileged: is_builtin)
+      
+      # Now parse the contract from the AST
+      contract = VocabularyShapes.parse(source)
+      klass.instance_variable_set(:@contract, contract) if contract
 
-  
-  SlimPickins::Word.registry[word] = klass
-end
+      SlimPickins::Word.registry[word] = klass
+    end
 
-    def self.of(source, path)
+    def self.of(source, path, privileged: false)
       # The cache is read without the lock first: under MRI a Hash read is
       # atomic, and the common path is a hit — every partial invocation pays
       # this call, so the lock only belongs to the miss that builds.
-      cached = (@cache ||= {})[source]
+      key = [source, privileged]
+      cached = (@cache ||= {})[key]
       return cached if cached
 
-      (@mutex ||= Mutex.new).synchronize { @cache[source] ||= new(source, path) }
+      (@mutex ||= Mutex.new).synchronize { @cache[key] ||= new(source, path, privileged: privileged) }
     end
 
     # The instrument's reach: bin/measure_cost.rb empties it to measure the
     # cold path.
     def self.clear! = @cache&.clear
 
-    def initialize(source, path)
+    def initialize(source, path, privileged: false)
       transform = Transform.new(source, path)
-      @violation = Contracts.first_violation(transform.tree)
+      @violation = Contracts.first_violation(transform.tree, privileged: privileged)
       @ruby = transform.call
     end
 

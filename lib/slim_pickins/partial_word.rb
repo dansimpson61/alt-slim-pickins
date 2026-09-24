@@ -145,7 +145,7 @@ module SlimPickins
                         end
                       end
       declared[:label] = label_for(name, content) if contract.label
-      if contract.modifiers.include?(:variant)
+      if contract.modifiers.include?(:variant) || contract.name == :variant
         declared[:variant] = kwargs[:variant] || (name && !subject.has?(name) ? name : nil)
       end
       declared
