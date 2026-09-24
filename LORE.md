@@ -814,3 +814,14 @@ Studio Workbench Preview Error Elimination & Robust Collection Refusal. Three du
 ## 2026-09-23 — Antigravity
 
 Studio Workbench Preview Error Elimination: eliminated OpenStruct#to_a nil map collision and shadow, guarded collection_for and each against non-collections in language voice, decoupled sandbox preview routes from host UI workbench layout chrome.
+
+## 2026-09-24 — Antigravity
+
+In-Buffer `def` Word Root-Class Parity. Two durable learnings:
+1. **The Shared Food Principle Between Disk and Memory**: When an app partial on disk emits a single root element (like `box` or `section`), `PartialWord` wraps/tags it with `box[:app_class] = partial_name`, producing semantic CSS classes like `<div class="box sidebar">` or `<section class="section section--projection report">`. In-buffer words defined with `def <word>` initially omitted this AST decoration because `define_local_word` directly emitted into the parent stream without capturing its body. In-buffer `def` words must eat the exact same food as disk partials: capturing their body, detecting single-root nodes via `Builder.box_root(body)`, and setting `root[1][:app_class] = word_name` guarantees identical DOM output whether a word lives in the buffer or on disk.
+2. **Class Token Composition Without Overwriting**: Setting `root[1][:app_class]` by preserving any existing inner classes (`box[:app_class] = box[:app_class] ? "#{box[:app_class]} #{word_name}" : word_name`) ensures that when higher-order or nested custom words enclose one another, neither class token is lost, and the generator's whitespace deduplication (`.split.uniq.join(' ')`) outputs clean, predictable HTML.
+
+
+## 2026-09-24 — Antigravity
+
+In-buffer def words and disk partials must eat the exact same food: capturing body and decorating single-root elements with app_class ensures classes like box sidebar and box reading_pane appear identically.

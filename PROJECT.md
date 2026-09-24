@@ -3,10 +3,10 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Studio Workbench preview error fixed and Volet 5 (Package C) completed 2026-09-23.
-  Eliminated OpenStruct#to_a nil map collision and playground_locals shadow, guarded
-  collection_for and each against non-collections in the language's own voice, decoupled
-  sandbox render routes from workbench layout chrome, and restored clean refusal rendering.
+  Volet 5 (Package C: Lean & Elemental Kernel) completed and in-buffer def root-class parity landed 2026-09-24.
+  Absorbed figcaption and summary into figure.sp and disclosure.sp, re-atomized paragraph over tag p,
+  generalized Builder.bind_parameters across disk and in-memory partials, and ensured in-buffer def words
+  wrap single-root boxes with app_class just like disk app partials.
   All 7 quality gates green, 424 tests pass in one process with 0 failures.
 kind: project
 last_touched: 2026-09-24

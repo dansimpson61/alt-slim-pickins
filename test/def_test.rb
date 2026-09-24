@@ -19,7 +19,7 @@ class DefTest < Minitest::Test
         note "Welcome to the studio"
     SP
     html = render(source)
-    assert_includes html, '<p class="note">Welcome to the studio</p>'
+    assert_includes html, '<p class="note banner">Welcome to the studio</p>'
   end
 
   def test_single_parameter_def
@@ -31,7 +31,7 @@ class DefTest < Minitest::Test
         note .name
     SP
     html = render(source)
-    assert_includes html, '<p class="note">Dan</p>'
+    assert_includes html, '<p class="note greeting">Dan</p>'
   end
 
   def test_multiple_parameters_positional_binding
@@ -183,6 +183,8 @@ class DefTest < Minitest::Test
     ]
     html = render(source, locals: { docs: docs, selected_doc: docs.first })
 
+    assert_includes html, '<div class="box sidebar">'
+    assert_includes html, '<div class="box reading_pane">'
     assert_includes html, '<h2 class="heading">Documents</h2>'
     assert_includes html, '<a href="/docs/README.md" class="link">README.md</a>'
     assert_includes html, '<a href="/docs/ODE.md" class="link">ODE.md</a>'

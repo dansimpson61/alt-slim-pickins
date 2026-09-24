@@ -40,7 +40,7 @@ class DiskDefPartialTest < Minitest::Test
         page "App"
           banner
       SP
-      assert_includes html, '<p class="note">Welcome to the studio</p>'
+      assert_includes html, '<p class="note banner">Welcome to the studio</p>'
     end
   end
 
@@ -57,7 +57,7 @@ class DiskDefPartialTest < Minitest::Test
         page "App"
           greeting "Dan"
       SP
-      assert_includes html, '<p class="note">Dan</p>'
+      assert_includes html, '<p class="note greeting">Dan</p>'
     end
   end
 
@@ -204,7 +204,7 @@ class DiskDefPartialTest < Minitest::Test
         page "App"
           tagged_badge "Commented"
       SP
-      assert_includes html, '<p class="note">Commented</p>'
+      assert_includes html, '<p class="note tagged_badge">Commented</p>'
     end
   end
 
@@ -225,8 +225,8 @@ class DiskDefPartialTest < Minitest::Test
           widget_header "Header Title"
           widget_footer "Footer Text"
       SP
-      assert_includes html, '<h2 class="heading">Header Title</h2>'
-      assert_includes html, '<p class="note">Footer Text</p>'
+      assert_includes html, '<h2 class="heading widget_header">Header Title</h2>'
+      assert_includes html, '<p class="note widget_footer">Footer Text</p>'
     end
   end
 end

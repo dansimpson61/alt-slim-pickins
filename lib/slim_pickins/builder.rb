@@ -92,18 +92,25 @@ private :define_app_words
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
         bound = Builder.bind_parameters(param_names, args, kwargs, subject)
 
-        evaluate_proc = lambda do
-          if caller_block
-            captured = capture(&caller_block)
-            with_splice(captured) { definition_block.call }
-          else
-            definition_block.call
+        body = capture do
+          chain.with(bound, described_as: "this #{word_name}", overlay: true) do
+            if caller_block
+              captured = capture(&caller_block)
+              with_splice(captured) { definition_block.call }
+            else
+              definition_block.call
+            end
           end
         end
 
-        chain.with(bound, described_as: "this #{word_name}", overlay: true) do
-          evaluate_proc.call
+        if body.size == 1 && body.first.is_a?(Array)
+          root = Builder.box_root(body)
+          if root && root[1].is_a?(Hash)
+            root[1][:app_class] = root[1][:app_class] ? "#{root[1][:app_class]} #{word_name}" : word_name
+          end
         end
+
+        body.each { |n| emit_node(n) }
       end
     end
 
