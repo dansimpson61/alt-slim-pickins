@@ -334,6 +334,11 @@ working manual that should be better after every session than it was before.
 - **Screenshot error reports: trace the entire causal chain before assuming an isolated frontend or browser bug**: (observed 2026-09-23).
   When dan shared a screenshot of Workbench displaying 'Error: undefined method 'map' for nil' noting that 'some browsers show this error though some may not', the root cause was not a browser incompatibility—it was an intricate dual causal failure: (1) `playground_locals` injecting an `OpenStruct` (`StudioDocs.build`) that shadowed the template's `docs` identifier, coupled with `OpenStruct#to_a` returning `nil` and leaking a raw Ruby `NoMethodError` through `each`; and (2) Workbench UI chrome (`workbench/layout.sp`) leaking into sandbox `/render.json` execution, causing `refusal.sp` to fail on missing `.words_count` and fall back to raw unstyled HTML error text. The browser variation was simply due to cookie-based UI selection (`sp_ui=classic` vs `workbench`) and form input state. Lesson: treat multi-browser discrepancies as symptoms of stateful server-side routing/chrome interaction, and fortify language collection boundaries so raw Ruby errors never escape.
 
+- **In-buffer `def` words must eat the exact same food as disk partials**: (observed 2026-09-24).
+  Screenshot prompt: *"Before we move on, i note that our inline-defined words did not wrap classes around their contents. Please see the screenshot"*.
+  When dan noted that in-buffer defined words rendered bare `<div class="box">` instead of `<div class="box sidebar">` and `<div class="box reading_pane">`, it revealed an asymmetry: `PartialWord` for disk partials inspected single-root bodies and tagged them with `box[:app_class] = partial_name`, but `define_local_word` emitted directly without capturing or tagging. In slim-pickins, in-memory local words and disk partials are the same concept in different stages of life. Any behavioral discrepancy between the two is a defect.
+
+
 ## Proposed deletions — nothing here yet
 
 
