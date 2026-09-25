@@ -352,11 +352,35 @@ No behavior change for a page visitor; the fix is entirely in traceability.
    free forwarding.
 2. `Stage#to_css` and `Zone#to_css` (`design_idiom.rb:274-280`, `~495-503`)
    target exactly `[data-surface="#{name}"]` / `[data-zone="#{name}"]`.
-   Delete the six-way and four-way guess lists entirely, including every
+   Delete the six-way and seven-way guess lists entirely, including every
    selector confirmed dead in §2/§3.
 3. `assets/workbench.css` should shrink and lose all 99 `:has(` lines; the
    council did not compute the exact resulting line count — that's a
    post-implementation measurement, not a promise made here.
+
+> **Superseded 2026-09-25, before implementation.** Dan rejected this
+> proposal on sight: asking a `.sp` author to write `data_zone: "library"`
+> inside `library.sp` — or `data_zone: "catalog"` inside a partial literally
+> named `catalog` by its own `def` — states a fact the file already
+> carries, and a machine-inferable name doesn't belong in the DSL as an
+> authored literal. Investigating that objection found the redundancy could
+> be eliminated almost entirely rather than relocated, using evidence this
+> document already had: `workbench.css` is linked by exactly one UI
+> (verified), so a bare zone class needs no attribute to be safely scoped,
+> and the app_class-promotion convention (§2) already makes it real. What
+> shipped instead (`lib/slim_pickins/compiler/design_idiom.rb`, commit
+> `5929565`): **zero new HTML attributes, zero `.sp` changes**. `ZoneBuilder`
+> targets the bare `.{zone_name}` class directly. The one case that
+> genuinely couldn't be inferred — `sidebar_layout` is shared by four
+> classic-UI pages with no `.design` file, so nothing in its own markup can
+> name "workbench" — was resolved by pulling one symbol forward from Scope
+> Proposal 1 below: `surface workbench, kind: shell` (a real structural fact,
+> not a duplicated name), with the compiler mapping `:shell → .sidebar_layout`
+> and the default `:document → body` as its own two constants. This also
+> fixed doc_reader's regression risk (§3: it was working by accident, via
+> the guess list's `body:not(:has(> .sidebar_layout))`) for free — `body` is
+> now the *stated* target for document-kind surfaces, not a guess. Actual
+> result: **162 lines, 0 `:has(`** (down from 459 / 99).
 
 ### Frontier 4 — the narrow fix now, the real one later
 
@@ -378,8 +402,9 @@ compiler — and requires no new design vocabulary.
   `workbench.css`'s selector list does not change what `check_styles.rb`
   gates.
 - **Test surface.** `test/design_idiom_test.rb` needs new assertions for
-  `collapse:` tokens (Frontier 1) and for `data-surface`/`data-zone`
-  selector output replacing the guess list (Frontier 3); Frontiers 2 and 4
+  `collapse:` tokens (Frontier 1) and for the real, guess-free selector
+  output (Frontier 3, revised — `.{zone}` and `kind:`-selected
+  `.sidebar_layout`/`body`, not `data-*` attributes); Frontiers 2 and 4
   should be invisible to existing tests — one is a refactor of *how* CSS is
   delivered, the other a value swap in an existing formula.
 - **Nothing here is committed or implemented.** This document is a design
@@ -402,6 +427,14 @@ by zone. This changes the authoring model for every `.design` file that
 will ever exist and deserves its own design pass, not a rider on this
 consensus.
 
+> **Partially executed 2026-09-25** — see the Frontier 3 superseding note
+> above. Only the narrow slice Frontier 3 needed landed: `kind:` picking
+> which of two hardcoded wrapper-selector constants the compiler targets.
+> The fuller idea this proposal actually described — containment properties
+> like `presence`/`100dvh` bounding applying once at the surface level
+> instead of being assembled zone by zone — did **not** land and remains
+> open.
+
 ### Scope Proposal 2: measure the real selector-count reduction
 
 Once Frontier 3 lands, re-run `wc -l assets/workbench.css` and `grep -c
@@ -409,6 +442,8 @@ Once Frontier 3 lands, re-run `wc -l assets/workbench.css` and `grep -c
 the council named the current numbers (459 lines, 99 `:has(` lines) but
 deliberately did not promise a resulting count, per Katrina Owen's caution
 in §3.
+
+> **Done 2026-09-25**: 162 lines, 0 `:has(`. Recorded in `LORE.md`.
 
 ---
 

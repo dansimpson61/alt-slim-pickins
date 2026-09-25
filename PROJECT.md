@@ -3,16 +3,24 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Workbench spatial investigation complete 2026-09-25. Identified four architectural frontiers:
-  (1) eliminating numerical units from `.design` files in favor of qualitative/intrinsic proportions;
-  (2) resolving stylesheet traceability and cascade fragmentation across three strata;
-  (3) eliminating defensive selector explosion via a crisp generator/compiler contract (`data-surface`/`data-zone`);
-  (4) formalizing the App Shell vs Document Page dualism (`100dvh` viewport containment).
-  All 7 quality gates green (105 rules, 0 problems, 31 verified pages), 437 unit tests pass with 0 failures.
+  The four workbench spatial frontiers (identified 2026-09-25) are resolved, in three commits.
+  A council session (COMMUNITY_BULLETIN_BOARD.md) proposed data-surface/data-zone HTML attributes
+  for frontier 3; dan rejected authoring an already-inferable name as a DSL literal, and the
+  revised fix needs zero new HTML attributes and zero .sp file changes — a compiled stylesheet
+  is already scoped by which pages load it, so a zone's real class needs no attribute, and the
+  one case that wasn't inferable (the shared sidebar_layout wrapper) is resolved by a `surface
+  ..., kind: shell` token pulled forward from the deferred Scope Proposal 1. Frontier 1 (qualitative
+  collapse tokens), frontier 2 (one compiled-CSS pipeline with provenance), and frontier 4 (100vh
+  -> 100dvh, narrower than first framed) landed alongside. assets/workbench.css: 459 lines / 99
+  `:has(` -> 162 lines / 0. All 7 quality gates green (105 rules, 0 problems, 31 verified pages),
+  443 unit tests pass with 0 failures. Verified live by rendering the real workbench page,
+  including the container-query collapse at a sub-56rem width.
 kind: project
 last_touched: 2026-09-25
 next_step: >-
-  Take sidetrip in fresh session to resolve the four architectural frontiers (contract clarity, qualitative units, unified CSS pipeline, shell viewport containment).
+  No active thread. Pick the next roadmap question fresh, or take up Scope Proposal 1's
+  fuller form (surface-level containment: presence/100dvh applying once per kind instead
+  of assembled zone by zone) if the workbench needs another spatial pass.
 
 
 run: ruby examples/roth/app.rb

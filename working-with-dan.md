@@ -187,6 +187,24 @@ working manual that should be better after every session than it was before.
   DRY complaint, it's a correctness defect — the artifact failing to be
   excellent — and stays a legitimate finding even though shortening it or
   deduplicating it is not.
+- **A machine-inferable name authored as a literal.** 2026-09-25: a plan
+  proposed fixing the design-idiom selector-explosion defect by having
+  `.sp` authors write `data_zone: "library"` inside `library.sp` — the
+  partial's own name, typed again, in quotes. He rejected it immediately:
+  *"I object to making a human being copy the name of the zone, put it in
+  quotes and add it as an data_zone parameter. The name of the zone is
+  machine inferable and therefore does not belong in the dsl."* This is the
+  Ode's "a line that states the inferable should not exist" applied to a
+  case that didn't look like restatement at first glance — the literal
+  didn't look redundant because it was buried inside an HTML attribute
+  value, not sitting next to its own duplicate. The fix was not to relocate
+  the redundancy (e.g. thread it from a caller instead) but to ask whether
+  it was needed *at all* — it mostly wasn't: the zone's real class was
+  already real and already safely scoped by which stylesheet loaded it, so
+  the entire attribute mechanism turned out unnecessary. Tell for next
+  time: before adding a parameter whose value names something the code
+  already names elsewhere, ask what already knows this fact, not just
+  whether repeating it is tolerable.
 
 ## Tells and habits
 
