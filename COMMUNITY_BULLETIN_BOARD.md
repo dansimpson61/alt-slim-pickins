@@ -1,323 +1,416 @@
 # COMMUNITY BULLETIN BOARD
-## The Ruby Luminaries Council on `alt-slim-pickins`
-### Assessing and Refactoring the `action` Primitive
+## The Council on `alt-slim-pickins`
+### The Workbench Spatial Frontier: Numerical Units, Cascade Traceability, Selector Contracts, and Viewport Containment
 
 ---
 
 ## 1. Council Charter & Team Norms
 
+### Orientation
+
+`PROJECT.md` (`last_touched` 2026-09-25) is treated as authoritative over
+`HANDOFF.md`, which still names "Package C: Lean & Elemental Kernel" as the
+active next step — two days stale, the same HANDOFF/PROJECT.md drift
+`LORE.md` already named once (2026-09-14). The topic below is `PROJECT.md`'s
+actual `next_step`: resolving the four frontiers the 2026-09-25 workbench
+spatial investigation identified and left for "a sidetrip in fresh session."
+`LORE.md`'s four entries from that date are the starting evidence; this
+council re-verified every figure against the live tree rather than
+re-quoting them.
+
 ### The Council
-We are eight stewards of the Ruby soul, gathered to evaluate `alt-slim-pickins` and restore joy, clarity, and structural honesty to its view grammar:
-- **Yukihiro Matsumoto (Matz)** — Creator of Ruby; guardian of developer happiness and the Principle of Least Surprise (POLS).
-- **Sandi Metz** — Author of *POODR*; defender of single responsibility, small interfaces, and eradicating parameter code smells.
-- **why the lucky stiff (_why)** — Bard of Ruby; champion of poetic conciseness, playful whimsy, and living DSLs.
-- **David Heinemeier Hansson (DHH)** — Creator of Ruby on Rails; champion of convention over configuration and conceptual compression.
-- **Jim Weirich** — Master craftsman; champion of block composability, structural hierarchy, and tree integrity.
-- **Avdi Grimm** — Author of *Confident Ruby*; champion of duck typing, trust between collaborators, and intentional design.
-- **Katrina Owen** — Creator of Exercism; champion of therapeutic refactoring, small verifiable steps, and empirical metrics.
-- **Sarah Mei** — Architect and founder; champion of long-term maintainability, team readability, and avoiding clever traps.
+
+Cast for this session, chosen because their documented expertise bears
+directly on a contract between two compiled languages and the humans on
+either side of it — not the full ten-person roster:
+
+- **Sandi Metz** — single responsibility, small interfaces, code smells.
+- **Avdi Grimm** — confident collaborators; trust over defensive checking.
+- **Jim Weirich** — structural hierarchy; one canonical contract per
+  relationship.
+- **Katrina Owen** — therapeutic refactoring; small, measurable, verifiable
+  steps.
+- **Bret Victor** — immediate, visible feedback; tools for thought.
+- **Don Norman** — signifiers and mental models; what a declaration *means*
+  to the person writing it.
+
+Sitting this one out: **Matz and why the lucky stiff**, because the tension
+here is not in the `.sp`/`.design` sentence-level prose (both read fine) but
+in the compiled contract underneath it; **DHH**, because his "convention
+over configuration" ground is already covered by Weirich's contract argument
+and Metz's smell-hunting, and a third voice repeating it would be padding,
+not friction; **Sarah Mei**, for the same reason — Metz and Owen already
+carry "no magic, small steps" for this specific technical question.
 
 ### Team Norms & Operating Principles
-Governed by the **Ode to Joy** (`ODE_TO_JOY.md`) and the **Slim-Pickins Way** (`PRIMER.md`):
-1. **Precedence**: Correctness > The House > Clarity > Idiom > Elegance. Cleverness is not on the list.
-2. **Honesty over Perfection**: Report suites that are red; never silently patch or conceal broken tests.
-3. **Ugliness is a Defect**: A sentence that works but reads like a bureaucratic form is broken.
-4. **Omit the Inferable**: *"A line that states the inferable should not exist."* Give every truth one home.
-5. **Therapeutic Progress**: Small, disciplined steps. Run checkers and tests before and after every touch.
+
+Read directly from `ODE_TO_JOY.md` and `working-with-dan.md` this session,
+not carried over from the prior charter:
+
+1. **Precedence**: Correctness > The house > Clarity > Idiom > Elegance.
+   Cleverness is not on the list (`ODE_TO_JOY.md` Part II).
+2. **DRY binds the language, not the artifact — but the artifact must still
+   be excellent.** The compiled CSS may repeat itself freely. It may not
+   contain a selector that matches nothing real in the actual DOM; that is
+   a correctness defect, not a style complaint (`working-with-dan.md`,
+   refined 2026-09-25).
+3. **Every number here was measured this session.** No figure below is
+   re-quoted from `LORE.md`'s memory of the investigation; each was
+   re-derived by `grep`/`wc` against the live tree.
+4. **Honesty over Perfection**: report what's uncomfortable, including
+   where a prior finding turns out to be narrower than first framed.
+5. **Winnable victories over grand scope**: this council proposes a design
+   spec, not a patch; what ships and when is a separate, later decision.
 
 ---
 
-## 2. The Problem: The Longest Sentence in the Language
+## 2. The Problem: Four Frontiers, One Compiler
 
-### The Empirical Evidence
-Across all 439 sentences in `alt-slim-pickins` (mean sentence length: 1.28 arguments), three lines in `examples/dashboard/views/partials/queue.sp` stand out as extreme 5-argument outliers:
+`SlimPickins::DesignIdiom` (`lib/slim_pickins/compiler/design_idiom.rb`,
+629 lines) compiles `.design` files — `studio/uis/workbench/workbench.design`
+(20 lines) and `examples/doc_reader/doc_reader.design` (12 lines) are the
+only two that exist. Both surfaces are declared through the same seven
+qualitative words: `air`, `posture`, `frame`, `cadence`, `treatment`,
+`scroll`, `presence`, `focus` — every one resolved through a named token
+table (`AIR_TOKENS`, `POSTURE_TOKENS`, `FRAME_TOKENS`, at
+`design_idiom.rb:15-83`). `collapse_at` is the one exception:
 
 ```slim
-action "Commit", to: "/actions/commit", path: first_item.path, return_to: "/triage", variant: primary
-action "Archive", to: "/actions/archive", path: first_item.path, return_to: "/triage", variant: neutral
-action "Skip 30d", to: "/actions/skip", path: first_item.path, return_to: "/triage", variant: neutral
+# studio/uis/workbench/workbench.design:6
+    collapse_at "56rem"
+
+# examples/doc_reader/doc_reader.design:3
+    flank catalog, beside: reading_pane, balance: subordinate, collapse_at: "26rem"
 ```
 
-In `lib/vocabulary/action.sp`, `action` is declared as a vocabulary partial:
+Two raw, unrelated string literals, on the only word in either file that
+isn't a symbol. `DEFAULT_COLLAPSE_THRESHOLD = '48rem'` exists
+(`design_idiom.rb:85`) and both files override it independently.
+`test/design_idiom_test.rb:12,130` carries the same two raw literals in its
+fixtures.
+
+`/assets/workbench.css` is not a file on disk — `studio/app.rb:229-233`
+recompiles it from `workbench.design` on every request:
+
+```ruby
+if name == 'workbench.css'
+  design_file = File.expand_path('uis/workbench/workbench.design', __dir__)
+  SlimPickins::DesignIdiom.compile(File.read(design_file))
+```
+
+That compiled output carries a provenance comment
+(`assets/workbench.css:1`, `/* Compiled automatically from
+studio/uis/workbench/workbench.design */`) and is `wc -l`-measured at
+**459 lines**, of which **99 lines contain `:has(`**. A second, independent
+call site compiles the same way with no shared helper and no provenance
+comment: `studio/pages.rb:613-630`, the playground's `render_json`, compiles
+whatever the user typed into the design textarea and splices it into
+`<style id="design-idiom">` before `</head>`. A third stylesheet,
+`assets/slim-pickins.css` (753 lines), is the static core language
+stylesheet, unrelated to either. Three delivery paths for CSS on one page.
+
+The 99 `:has(` lines come from a defensive selector list
+(`design_idiom.rb:274-280`) that targets **six** candidate selectors per
+stage rule because the compiler cannot see what the real page actually
+renders:
+
+```ruby
+targets = [".stage-#{@stage_name}", ".#{@stage_name}", ".surface-#{@surface_name}",
+           "body:has(> .sidebar_layout) > .sidebar_layout",
+           ".sidebar_layout:has(> .library)",
+           "body:not(:has(> .sidebar_layout))"]
+```
+
+The ground truth, `studio/uis/workbench/layout.sp:15-17`:
+
 ```slim
-expects content: true, shape: encloses, to: true, path: true, return_to: true, variant: true
-
-form method: post, to: .to
-  hidden path, .path
-  hidden return_to, .return_to
-  button .variant, .content
+sidebar_layout
+  library
+  contents
 ```
 
-### The Sibling Symptom: `dormant.sp`
-Because `action.sp` hardcoded `path` and `return_to`, when the triage queue needed to offer a fourth button with a `status="dormant"` payload, `action` could not express it. The author was forced to author a one-off ad-hoc partial (`examples/dashboard/views/partials/dormant.sp`):
-```slim
-form method: post, to: "/actions/status"
-  hidden path, .path
-  hidden return_to, "/triage"
-  hidden status, "dormant"
-  button neutral, .content
-```
+`sidebar_layout`, `library`, `contents`/`panes.sp` are plain `box` partials;
+per this project's own promotion convention (`LORE.md`, 2026-09-15), a
+single-root `box` partial is promoted with its own app_class, so
+`library.sp` renders `class="box library"`, not `class="library"` and
+certainly not `class="zone-library"`. Checked directly: `grep -rn
+"surface-\|class=\"workbench\|stage-workbench" lib/ studio/` outside
+`design_idiom.rb` itself returns **zero matches**. `.stage-workbench`,
+`.workbench`, `.surface-workbench`, and the Zone-level guesses
+`.zone-library`/`.zone-editor`/`body > .zone-library` match nothing in the
+actual DOM — they are dead selectors, kept alive only because the compiler
+has no contract telling it which of its six guesses is real. `grep -rn
+"data-surface\|data-zone"` across the repo: **zero matches**.
+`PROJECT.md`'s frontier (3) names `data-surface`/`data-zone` as the target
+contract; it does not exist yet.
+
+The fourth frontier is narrower than `PROJECT.md`'s framing suggested.
+`design_idiom.rb:549-551` emits a fixed-viewport `calc(100vh - ...)` block —
+but only where a zone declares `presence :steady`
+(`design_idiom.rb:544-553`), not on every surface. `workbench.design`'s
+`zone output` declares `presence steady`; `doc_reader.design` declares no
+`presence` at all, so it never reaches this code path today. The real bug
+is narrower and sharper: the one place this fires uses `100vh`, not
+`100dvh` — on mobile Safari/Chrome, where the address bar changes the
+visible viewport height, `100vh` overshoots and either clips content or
+forces a scrollbar the shell was built to avoid. There is no
+`surface`-level declaration of "this is a tool shell" vs. "this is a
+document" — each zone opts into containment individually.
 
 ---
 
 ## 3. The Council Debate
 
-### Yukihiro Matsumoto (Matz)
-> *"Ruby is designed for human beings, not machines. A DSL must bring joy, not fatigue."*
+### Frontier 1 — the one word that broke the pattern
 
-"When I look at this `action` sentence, I feel sorrow. The average sentence in `alt-slim-pickins` is 1.28 arguments. It has words like `text .purpose` or `link "Details"` or `badge .status`. That is natural, light, and joyful.
+**Don Norman:**
+> "Seven words in this file are signifiers — `air tight` tells the author
+> what they're declaring without making them do arithmetic. Then
+> `collapse_at "56rem"` asks the same author to reason in a unit they were
+> never asked to reason in anywhere else in the file. That's not a small
+> inconsistency; it's the one place the mental model breaks. The author has
+> to stop, guess what `56rem` means relative to `26rem` two files over, and
+> hope. A signifier that only sometimes signifies isn't one."
 
-Then suddenly the programmer encounters:
-```slim
-action "Commit", to: "/actions/commit", path: first_item.path, return_to: "/triage", variant: primary
-```
-This is not human prose. This is a command line utility from 1985 with five flags!
-In Ruby, we honor the Principle of Least Surprise. What does a programmer want to say here? They want to say: *'Here is a primary button that commits.'* They do not want to construct a multipart HTTP POST form carrying four separate state strings by hand on every button.
+**Sandi Metz:**
+> "Don's naming the smell; here's the mechanism. `collapse_at "56rem"` and
+> `collapse_at: "26rem"` are two magic numbers with no shared vocabulary
+> between them, and — this matters — the machinery to fix it already
+> exists. `AIR_TOKENS`, `POSTURE_TOKENS`, `FRAME_TOKENS` are the exact same
+> shape of problem, solved once, at `design_idiom.rb:15-83`.
+> `collapse_at` not going through that table isn't a design decision, it's
+> an oversight. This is the cheapest fix on the table tonight because the
+> pattern is already written down six times."
 
-Let us return joy to this grammar. The sentence must be concise, expressive, and serene."
+**Katrina Owen:**
+> "Agreed, and it's a genuinely small, verifiable step: add
+> `COLLAPSE_TOKENS`, route `collapse` through
+> `@compiler.collapse_tokens.fetch(...)` the same way `posture` already does
+> at line 259, update the two real call sites
+> (`workbench.design:6`, `doc_reader.design:3`) and the two test fixtures
+> (`test/design_idiom_test.rb:12,130`). Four files, one mechanism, and
+> `check_grammar.rb`/`check_shape.rb` don't even see `.design` files, so
+> there's nothing to regress there — only `test/design_idiom_test.rb` needs
+> new assertions."
 
----
+### Frontier 2 — one compiler, two doors
 
-### Sandi Metz
-> *"Five arguments is a distress flare. It is screaming that you have a missing abstraction."*
+**Bret Victor:**
+> "Here's the failure I care about: open DevTools on the real workbench and
+> the interactive playground pane side by side, and you cannot tell which
+> compiled that rule. One has a comment naming its source file
+> (`assets/workbench.css:1`); the other, `studio/pages.rb`'s inline
+> `<style id="design-idiom">`, has none. The whole point of a spatial idiom
+> is that the author can see the *causal line* from what they typed to what
+> rendered. Right now that line breaks exactly at the boundary that matters
+> most — the live-editing pane, where the author is actually iterating."
 
-"Matz is right about the feeling, and the code explains why: this method has too many responsibilities and suffers from a textbook **Data Clump**.
+**Jim Weirich:**
+> "And it's not just missing a comment — it's two independent entry points
+> calling the same compiler. `studio/app.rb:230-231` and
+> `studio/pages.rb:613-630` both call `SlimPickins::DesignIdiom.compile`
+> with no shared plumbing between them. A tree language should have one
+> place where 'design source becomes CSS' happens, with provenance as a
+> parameter, not two call sites that happen to agree today and can drift
+> tomorrow. One method — `compiled_stylesheet_for(source, provenance:)` —
+> used by both."
 
-Look at the five arguments:
-1. `content` and `variant:` belong to **Presentation**.
-2. `to:` and `return_to:` belong to **Routing and Navigation**.
-3. `path:` belongs to **Entity Identity**.
+**Katrina Owen:**
+> "Small step again: extract that method, have both callers pass it a
+> provenance string (the file path for the asset route, `'playground
+> buffer'` for the studio pane), have it always prepend the comment. No
+> behavior changes for a visitor; `test/studio_docs_test.rb` and the
+> existing design_idiom tests should still pass unmodified, which is exactly
+> the kind of verifiable-and-boring step this project rewards."
 
-Three distinct responsibilities in one line!
-Even worse: `path: first_item.path` and `return_to: "/triage"` appear identically on lines 12, 14, and 15 of `queue.sp`. When a group of parameters always travels together across multiple call sites, that group is a concept waiting to be born.
+### Frontier 3 — six guesses, most of them dead
 
-Notice what happened when `dormant.sp` was needed: because the data clump was rigid, the abstraction shattered immediately upon encountering a third parameter (`status: "dormant"`).
+**Avdi Grimm:**
+> "This is the one I actually mind. Six selectors joined per rule, and I
+> just heard Jim confirm three of them — `.stage-workbench`, `.workbench`,
+> `.surface-workbench` — match nothing in the real DOM, and two more —
+> `.zone-library`, `body > .zone-library` — are equally dead. That's not
+> defensiveness, that's a compiler that doesn't trust its collaborator and
+> covers every possibility it can imagine instead of the one that's real.
+> `sidebar_layout`, `library`, `editor` are plain `.sp` partials one file
+> away. Nothing stops them from saying who they are."
 
-The missing abstraction is twofold:
-1. A **scope** that holds the common payload context (`path` and `return_to`).
-2. An **action trigger** that simply names its verb and endpoint."
+**Sandi Metz:**
+> "Avdi's right, and per tonight's norm — DRY doesn't bind the artifact,
+> excellence does — the complaint isn't that this compiles to 459 lines.
+> It's that five of those six candidate selectors *are dead code shipped to
+> every visitor's browser*, which is a correctness defect wearing a
+> performance costume. A six-way `:has()`/`:not()` chain that's 83% fiction
+> would fail review in any language."
 
----
+**Jim Weirich:**
+> "The fix is a contract, not a smarter guesser: `sidebar_layout` emits
+> `data-surface="workbench"`, each zone partial emits
+> `data-zone="library"` / `"editor"` / `"output"`, and the compiler targets
+> `[data-surface="workbench"]` / `[data-zone="library"]` — one selector,
+> not six. The tree already has the right shape for this; it's missing one
+> attribute per level."
 
-### why the lucky stiff (_why)
-> *"Code is poetry! Why make a button drag a filing cabinet across the screen?"*
+**Katrina Owen:**
+> "I want to flag scope honestly before we all nod. I checked whether
+> Volet 2's open-payload-forwarding (R3P1, `contracts.rb:115-136`) already
+> gives partials a free way to emit an arbitrary `data-*` attribute — it
+> doesn't. What it forwards is kwargs onto the subject chain for a *child*
+> to read (how `action` reads `.path` from `actions`), not a literal HTML
+> attribute on the partial's own wrapping tag. The real precedent is
+> narrower and more recent: Volet 2 also gave `button` new `:name` and
+> `:value` modifiers that do emit literal HTML attributes
+> (`words.rb`, `formaction`). `sidebar_layout` and the zone partials need
+> the same treatment — a `data_surface:`/`data_zone:` modifier wired to
+> `attrs_html` (`generator.rb:188`) — which is real, small, precedented
+> work, not zero work. I don't want this council's excitement about the
+> contract to quietly promise a mechanism that isn't built yet."
 
-"Look at this poor little button! It just wanted to say *'Commit'*, and instead someone loaded it down with sacks of gravel: `path: this, return_to: that, to: the_other`!
+**Avdi Grimm:**
+> "Fair, and it doesn't change the recommendation — it changes the
+> estimate, not the direction. Confident code is still the goal; I'm just
+> agreeing with Katrina that 'confident' isn't free."
 
-Look at the rest of the dictionary in `VOCABULARY.md`. We have `actions`! `actions` is already a word! It’s a plural noun. It’s a lovely, roomy box where buttons go to play together. In the portfolio example, we write:
-```slim
-actions
-  link "Deposit", to: ...
-  link "Withdraw", to: ...
-```
-Why on earth are the triage buttons in `queue.sp` wandering out in the cold without an `actions` box?
-If you put them in an `actions` box, the box can hold the context, and the buttons inside can just sing:
-```slim
-actions path: first_item.path, return_to: "/triage"
-  action "Commit", to: "/actions/commit", variant: primary
-  action "Archive", to: "/actions/archive"
-```
-Give the buttons their freedom!"
+### Frontier 4 — shell and document are not the same shape
 
----
+**Jim Weirich:**
+> "`presence :steady` only fires for `workbench.design`'s output zone today
+> — `doc_reader.design` never touches this code. So this isn't a universal
+> bug, it's a narrow one: one `100vh` that should be `100dvh`, at
+> `design_idiom.rb:549-550`. That part is a one-line, fully-scoped fix with
+> no design question attached to it — ship it with Frontier 1, it's the
+> same size of change."
 
-### David Heinemeier Hansson (DHH)
-> *"Convention over Configuration. Why write down what the system already knows?"*
+**Bret Victor:**
+> "The one-line fix should happen regardless. But I don't want the council
+> to stop there and call the frontier closed, because the actual authoring
+> experience is still wrong: `workbench.design` has to know, zone by zone,
+> which ones need `presence: :steady` and `scroll: :internal` to behave
+> like a tool shell. A person opening this file for the first time can't
+> see, from the top, 'this whole surface is a shell' — they have to infer
+> it from which zones happen to carry which properties. Immediate
+> understanding means the *surface* should say what kind of thing it is."
 
-"This is the exact configuration bloat that Rails was built to destroy.
-Why are we repeating `return_to: "/triage"` when the user is literally on the `/triage` page?
-Why are we writing `path: first_item.path` on four consecutive lines when the card is titled `card first_item.path`?
+**Don Norman:**
+> "Agreed with Bret's shape, and I'd put it as: `surface workbench` and
+> `surface doc_reader` are answering different questions — 'how do I stay
+> put' versus 'how do I flow' — and right now nothing at the top of either
+> file signifies which question it's answering. That's a real finding, but
+> it's a new declarative concept, not a bugfix, and it deserves its own
+> design pass rather than being decided as a rider on tonight's discussion."
 
-Twenty years ago in Rails, we built `button_to`. We applied **conceptual compression**: an action inside a resource card acts on that resource, posts to its endpoint, and returns to the current view by default.
+**Katrina Owen:**
+> "Then it's scope, not tonight's work — Proposed Additional Scope, not the
+> consensus. The `dvh` swap ships now because it's measurable and total;
+> `kind: :shell` / `kind: :document` needs its own design pass because it
+> touches every existing `.design` file's authoring model, and this project
+> doesn't decide that shape by rider."
 
-If `alt-slim-pickins` wants to be idiomatic and productive, it should allow conventions to carry the weight. At minimum, the enclosing card or container should establish the subject, and child actions should inherit that subject without noisy repetition."
-
----
-
-### Jim Weirich
-> *"Honor the hierarchy of the tree. Blocks are how Ruby expresses scope."*
-
-"Let’s examine the grammar's architecture. `alt-slim-pickins` is an indentation-based tree language. In a tree language, nesting is the primary mechanism for establishing scope and relationships:
-- A `table` encloses `column`s.
-- A `form` encloses `field`s.
-- A `choose` encloses `when` and `otherwise`.
-
-Every complex concept in this DSL has a container that sets up scope, and children that declare particulars.
-The 5-argument `action` was an attempt to flatten a form, two hidden fields, and a submit button into a single line. In trying to make it a one-liner, the author destroyed the language's structural composability.
-
-Look at how `actions.sp` is defined:
-```slim
-expects children: "link button", shape: encloses
-box
-  children
-```
-If we permit `actions` to accept parameters (`path:`, `return_to:`) and enclose `action` children, the indentation tree naturally expresses the shared scope. The structure reflects the meaning."
-
----
-
-### Avdi Grimm
-> *"Confident Ruby: Stop checking pockets and trust your collaborators."*
-
-"The current implementation of `action` is timid Ruby. It doesn't trust the enclosing subject or the page. It forces the caller to manually thread every piece of data through keyword arguments on every invocation.
-
-In *Confident Ruby*, we talk about objects trusting their collaborators. Look at `lib/vocabulary/action.sp`: it has hardcoded `hidden path, .path`. That is not a generic primitive; that is tightly coupled to the dashboard port! What happens when another application needs an action with `user_id` or `token`? `action.sp` is powerless.
-
-A confident `action` should:
-1. Accept its primary intent: label (`content`), destination (`to:`), and style (`variant:`).
-2. Inherit contextual parameters from the subject chain or enclosing container.
-3. Emit hidden fields for whatever payload parameters are in scope, rather than being rigidly chained to `path`."
-
----
-
-### Katrina Owen
-> *"Therapeutic refactoring: Take small, measurable, verifiable steps."*
-
-"Let's look at the metrics from `check_shape.rb`:
-- Current: 439 sentences, mean 1.28 args, max 5 args.
-- Target: Bring the max sentence length down from 5 to 2 or 3, without introducing regressions.
-
-Let's look at the call sites:
-- `queue.sp`: 3 calls to `action`, 1 call to `dormant`.
-- `test/vocabulary_partials_test.rb`: 1 test of `action`.
-- `test/dashboard_test.rb`: tests verifying form actions, methods, and hidden inputs.
-
-We don't need a massive, speculative rewrite of the parser. We have `PartialWord`, which already supports the subject chain with overlay fallback (`chain.with(parameters, overlay: true)`).
-When an outer word (like `actions`) pushes parameters onto the chain, any inner partial can read them via `.path` and `.return_to`!
-
-Step by step:
-1. Update `actions.sp` to accept `path:` and `return_to:` modifiers and allow `action` children.
-2. Update `action.sp` to read `.path` and `.return_to` from the chain when not supplied directly, and support optional parameters like `status:`.
-3. Update `queue.sp` to wrap the triage actions in `actions path: first_item.path, return_to: "/triage"`.
-4. Replace `dormant` with `action "Set dormant", to: "/actions/status", status: "dormant"`.
-5. Run the full test suite and checkers at every step."
-
----
-
-### Sarah Mei
-> *"Make it maintainable for real teams. Avoid clever magic traps."*
-
-"I want to echo Katrina's discipline and issue a cautionary note to DHH and _why:
-Do not solve the 5-argument problem by introducing invisible, spooky magic.
-
-If `action` magically inspects the stack, guesses routes by chopping strings, and silently injects hidden inputs that appear nowhere in the template, we will make debugging a nightmare for the next developer who joins the project.
-
-The scoped container proposal (`actions path: ..., return_to: ...`) strikes the perfect balance:
-- It is **completely explicit**: anyone reading `queue.sp` can see exactly where `path` and `return_to` come from.
-- It is **DRY**: it is written once per group of actions instead of four times.
-- It is **locally scoped**: no global state, no spooky action at a distance.
-
-This is honest, kind code that teams can maintain."
+*(No dissent recorded past this point — every objection raised above was
+either answered on its own terms, as with Katrina's scope correction on
+Frontier 3, or explicitly deferred by agreement, as on Frontier 4.)*
 
 ---
 
 ## 4. The Council Consensus & Design Specification
 
-After deliberation, the Council has reached a unanimous consensus on the refactoring plan:
+### Frontier 1 — Qualitative collapse tokens
 
-### Architecture: The Scoped Actions Container
+Add, beside the existing token tables (`design_idiom.rb:15-83`):
 
-1. **`lib/vocabulary/actions.sp`**:
-   Enhance `actions` to take contextual modifiers (`path:`, `return_to:`) and allow `children: any` (including `action`, `link`, `button`, and `choose`):
-   ```slim
-   expects children: any, path: true, return_to: true, shape: encloses
+```ruby
+COLLAPSE_TOKENS = {
+  tight: '32rem',
+  cozy:  '40rem',
+  roomy: '48rem',    # == current DEFAULT_COLLAPSE_THRESHOLD
+  wide:  '64rem'
+}.freeze
+```
 
-   box
-     children
-   ```
-   When `actions` evaluates, `PartialWord` pushes `{ path: ..., return_to: ... }` onto the subject chain with `overlay: true`.
+`flank`/`horizon`'s `collapse_at` parameter becomes `collapse:`, resolved
+via `@compiler.collapse_tokens.fetch(level_sym) { raise ArgumentError,
+"Unknown collapse token: `#{level}`" }`, mirroring `posture` at
+`design_idiom.rb:259`. Update the two real call sites and the two test
+fixtures named in §2. No grammar change, no checker exposure — a `.design`
+compiler concern only.
 
-2. **`lib/vocabulary/action.sp`**:
-   Refactor `action` so that `path:`, `return_to:`, and `status:` are optional modifiers that resolve against the subject chain when not passed directly:
-   ```slim
-   expects content: true, shape: encloses, to: true, path: true, return_to: true, variant: true, status: true
+### Frontier 2 — One compiled-CSS pipeline
 
-   form method: post, to: .to
-     choose
-       when .path
-         hidden path, .path
-     choose
-       when .return_to
-         hidden return_to, .return_to
-     choose
-       when .status
-         hidden status, .status
-     button .variant, .content
-   ```
-   - If `path:` or `return_to:` is passed directly to `action`, it uses that value.
-   - If omitted on `action`, `.path` and `.return_to` seamlessly fall through to the enclosing `actions` container on the subject chain!
-   - If `status:` is passed (e.g. `status: "dormant"`), it emits `<input type="hidden" name="status" value="dormant">`.
+Extract `SlimPickins::DesignIdiom.compiled_stylesheet(source, provenance:)`
+(or a thin wrapper in `studio/`) that both `studio/app.rb`'s asset route
+and `studio/pages.rb`'s `render_json` call, always prefixing the provenance
+comment `workbench.css` already carries. The playground's `<style
+id="design-idiom">` block gains `/* Compiled from playground buffer */`.
+No behavior change for a page visitor; the fix is entirely in traceability.
 
-3. **`examples/dashboard/views/partials/queue.sp`**:
-   Refactor the call sites to use the clean scoped container:
-   ```slim
-   choose
-     when .first_item
-       text .queue_intro
-       card first_item.path
-         badge first_item.status_variant, first_item.status
-         text first_item.purpose
-         choose
-           when first_item.next_line
-             text first_item.next_line
-         actions path: first_item.path, return_to: "/triage"
-           choose
-             when first_item.offer_commit
-               action "Commit", to: "/actions/commit", variant: primary
-           action "Set dormant", to: "/actions/status", status: "dormant", variant: neutral
-           action "Archive", to: "/actions/archive", variant: neutral
-           action "Skip 30d", to: "/actions/skip", variant: neutral
-     otherwise
-       text "All caught up. Nothing needs attention."
-   ```
+### Frontier 3 — `data-surface` / `data-zone`
 
-4. **Retire `dormant.sp`**:
-   The ad-hoc partial `examples/dashboard/views/partials/dormant.sp` was a workaround for `action`'s inflexibility. With `action` supporting `status:`, `dormant.sp` is deleted or redirected, restoring a single unified vocabulary.
+1. Add `data_surface:`/`data_zone:` modifiers to `sidebar_layout` and the
+   zone partials (`library.sp`, the `contents`/`panes.sp` chain), wired to
+   HTML attribute emission the way `button`'s `:name`/`:value` already are
+   (`words.rb`, Volet 2 R3P3 precedent) — new, small, precedented work, not
+   free forwarding.
+2. `Stage#to_css` and `Zone#to_css` (`design_idiom.rb:274-280`, `~495-503`)
+   target exactly `[data-surface="#{name}"]` / `[data-zone="#{name}"]`.
+   Delete the six-way and four-way guess lists entirely, including every
+   selector confirmed dead in §2/§3.
+3. `assets/workbench.css` should shrink and lose all 99 `:has(` lines; the
+   council did not compute the exact resulting line count — that's a
+   post-implementation measurement, not a promise made here.
 
-5. **Regenerate Documentation Bullets**:
-   Run `ruby bin/generate_vocabulary.rb` to update `VOCABULARY.md` so `check_grammar.rb` passes with 0 problems.
+### Frontier 4 — the narrow fix now, the real one later
+
+Ship immediately, bundled with Frontier 1 as a matching one-line-per-file
+change: `design_idiom.rb:549,550`, `calc(100vh - ...)` → `calc(100dvh -
+...)`. This is total — it is the only place `100vh` appears in the
+compiler — and requires no new design vocabulary.
 
 ---
 
-## 5. Flexible Parity & HTML Justification
+## 5. Flexible Parity & Evidence Justification
 
-The council explicitly documents the intentional changes to the HTML structure under the project's flexible parity charter:
-
-1. **Elimination of the ad-hoc `.dormant` CSS class on `<form>`**:
-   - *Previous*: `dormant.sp` generated `<form class="form dormant" action="/actions/status" method="post">` because it was a custom partial named `dormant.sp`.
-   - *Refactored*: Emits `<form class="form" action="/actions/status" method="post">` with `<input type="hidden" name="status" value="dormant">`.
-   - *Justification*: `check_styles.rb` proves that `slim-pickins.css` has no rules for `.dormant`. The class was an accidental byproduct of partial file naming. The semantic payload (`status=dormant`, `path`, `return_to`) and button behavior remain 100% identical.
-
-2. **Semantic Affordances Preservation**:
-   - `bin/dashboard_parity.rb` requires 25 affordances:
-     - Forms: `post /actions/commit`, `post /actions/status`, `post /actions/archive`, `post /actions/skip`.
-     - Hiddens: `path=<item.path>`, `return_to=/triage`, `status=dormant`.
-     - Buttons: `Commit`, `Set dormant`, `Archive`, `Skip 30d`.
-   - All 25 affordances are fully preserved.
+- **No grammar or vocabulary change.** `check_grammar.rb`, `check_shape.rb`
+  do not read `.design` files (confirmed: neither script's `DOCS`/corpus
+  list includes them). Nothing here touches the 64-word `.sp` vocabulary.
+- **`check_styles.rb` scope.** That checker holds `assets/slim-pickins.css`
+  to the `.sp` runtime's emitted classes; `workbench.css` is compiled
+  separately by `DesignIdiom` and is out of its corpus. Shrinking
+  `workbench.css`'s selector list does not change what `check_styles.rb`
+  gates.
+- **Test surface.** `test/design_idiom_test.rb` needs new assertions for
+  `collapse:` tokens (Frontier 1) and for `data-surface`/`data-zone`
+  selector output replacing the guess list (Frontier 3); Frontiers 2 and 4
+  should be invisible to existing tests — one is a refactor of *how* CSS is
+  delivered, the other a value swap in an existing formula.
+- **Nothing here is committed or implemented.** This document is a design
+  spec the council reached consensus on, per its own operating rule
+  (`.claude/skills/council/SKILL.md`) — landing it is separate, later work,
+  and `dan`'s call.
 
 ---
 
-## 6. Proposed Additional Scope (R3)
+## 6. Proposed Additional Scope
 
-Through this investigation, the Council identified four deeper architectural constraints in `alt-slim-pickins` that should be considered for future roadmaps:
+### Scope Proposal 1: `surface kind: :shell | :document`
 
-### Scope Proposal 1: Dynamic Parameter Splatting / Forwarding in Vocabulary Partials
-Currently, `lib/slim_pickins/contracts.rb` converts unrecognized keys in `expects` into rigid modifier lists. A partial cannot accept arbitrary HTML hidden inputs or keyword arguments without declaring each one in `expects` (`path: true, return_to: true, status: true`).
-*Recommendation*: Support a `payload: :any` or `hidden: :hash` contract slot in `expects` so that any action or form can forward arbitrary hidden key-values without polluting the core grammar.
+Frontier 4's deeper finding (Weirich, Victor, Norman, §3): a `surface`
+declaration should be able to name what kind of thing it is — a tool shell
+that owns the viewport, or a document that flows in the page — so that
+containment properties (`presence: :steady`-like behavior, `100dvh`
+bounding) apply once at the surface level instead of being assembled zone
+by zone. This changes the authoring model for every `.design` file that
+will ever exist and deserves its own design pass, not a rider on this
+consensus.
 
-### Scope Proposal 2: Subject Shifting in `card`
-In `queue.sp`, lines 58–64 repeatedly write `first_item.status`, `first_item.purpose`, `first_item.next_line`, and `first_item.path` because `card` does not shift the subject (`contract name: :variant, content: true`).
-*Recommendation*: Allow `card` to declare `name: :subject`, enabling child sentences to write `.status`, `.purpose`, and `.path` directly. This would eliminate 7 redundant references to `first_item` and bring `queue.sp` into harmony with the rest of the DSL.
+### Scope Proposal 2: measure the real selector-count reduction
 
-### Scope Proposal 3: HTML5 `formaction` Button Consolidation
-`lib/slim_pickins/words.rb:465` already defines `button` with `to:`, and `generator.rb:533` emits `<button formaction="...">`.
-*Recommendation*: In HTML5, multiple submit buttons with different `formaction` URLs can live inside a single `<form>` block. Future versions could express an action group as a single form with multiple buttons, reducing 4 separate `<form>` elements to 1.
-
-### Scope Proposal 4: Housekeeping of Dangling Guide in `studio/docs_helper.rb`
-`test/studio_docs_test.rb:68` currently fails because commit `0b054a4` deleted `design_conventions.md`, but left `design_conventions` in `StudioDocs::GUIDES`.
-*Recommendation*: Remove `design_conventions` from `StudioDocs::GUIDES` in `studio/docs_helper.rb` so the test suite is 100% green.
+Once Frontier 3 lands, re-run `wc -l assets/workbench.css` and `grep -c
+":has(" assets/workbench.css` and record the before/after in `LORE.md` —
+the council named the current numbers (459 lines, 99 `:has(` lines) but
+deliberately did not promise a resulting count, per Katrina Owen's caution
+in §3.
 
 ---
 
 Signed by the Council:
-*Yukihiro Matsumoto · Sandi Metz · why the lucky stiff · David Heinemeier Hansson*  
-*Jim Weirich · Avdi Grimm · Katrina Owen · Sarah Mei*
+*Sandi Metz · Avdi Grimm · Jim Weirich · Katrina Owen · Bret Victor · Don Norman*

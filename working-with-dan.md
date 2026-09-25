@@ -178,6 +178,15 @@ working manual that should be better after every session than it was before.
   is a truth living in two places *in sp* — which is what the round then found,
   five files declaring one stylesheet, and fixed with a seam the language
   already had.
+  **Refined 2026-09-25**, for the DSL compilers (`.design`, and any future
+  emitting language): his words, *"DRY binds the language (DSLs) and the
+  emitted artifact must be excellent. They may not be DRY, but they must be
+  excellent."* "Never the artifact" was too strong — repetition in compiled
+  CSS/HTML is fine, but the artifact still answers to a bar, just not DRY's.
+  A compiled selector that matches nothing real in the actual DOM is not a
+  DRY complaint, it's a correctness defect — the artifact failing to be
+  excellent — and stays a legitimate finding even though shortening it or
+  deduplicating it is not.
 
 ## Tells and habits
 
