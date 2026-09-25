@@ -430,12 +430,45 @@ def tabs(attrs, children)
         was_box, was_level = @box_base, @box_level
         begin
           @box_base, @box_level = attrs[:class_base], @depth if attrs[:class_base]
-          with_depth(@depth + BOX_DEPTH.fetch(attrs[:class_base], 0)) { children.each { |c| emit(c) } }
+          items = attrs[:class_base] == :list ? list_items(children) : children
+          with_depth(@depth + BOX_DEPTH.fetch(attrs[:class_base], 0)) { items.each { |c| emit(c) } }
         ensure
           @box_base, @box_level = was_box, was_level
         end
       end
       @out << "</#{tag_name}>"
+    end
+
+    # `list` makes its children into items (VOCABULARY.md:1021).
+    # Wraps direct children or each-iterations in li.item unless already an item.
+    def list_items(children)
+      children.map do |child|
+        next child if child.nil?
+
+        if child.is_a?(Array) && child[0] == :each
+          each_attrs = child[1]
+          iterations = child[2]
+          wrapped_iterations = iterations.map do |iteration|
+            if iteration.size == 1 && item_node?(iteration.first)
+              iteration
+            else
+              [[:box, { class_base: :item }, iteration]]
+            end
+          end
+          [:each, each_attrs, wrapped_iterations]
+        elsif item_node?(child)
+          child
+        else
+          [:box, { class_base: :item }, [child]]
+        end
+      end
+    end
+
+    def item_node?(node)
+      node.is_a?(Array) && (
+        (node[0] == :box && node[1][:class_base] == :item) ||
+        (node[0] == :tag && node[1][:name] == :li)
+      )
     end
 
     # --- Interaction ------------------------------------------------------

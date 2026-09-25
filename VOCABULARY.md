@@ -250,7 +250,7 @@ The name says what the cells are: `grid cards`, `grid metrics`.
 - **name** — the variant
 - **content** — none
 - **modifiers** — none
-- **children** — `item`, `each`
+- **children** — anything
 - **subject** — unchanged
 - **conventions** — `box_tag` — the `<ul>` element
 - **infers** — none

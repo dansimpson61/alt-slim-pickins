@@ -344,7 +344,20 @@ working manual that should be better after every session than it was before.
 
 
 
+- **Inference beats ceremony & rejection of compound class convolutions**: (observed 2026-09-24).
+  Prompts: *"can't we infer that items nested under 'list' are list items?"* and *"i assume we are keeping layout.sp temporarily while we test the workshop page, right? Because .surface-studio_workbench.stage-studio_workbench seems a horrible convolution."*
+  Two core architectural rulings:
+  (1) If a container's semantic contract is that it makes its children into items (`VOCABULARY.md:1021`), forcing authors to manually type boilerplate `item` lines is an unnecessary ceremony leak. Pushing automatic item inference into the compiler (`Generator#box` wrapping child nodes or iterations in `<li class="item">`) honors the contract and keeps specimen views unceremonious and clean.
+  (2) Never tolerate compound class soup (`.surface-workbench.stage-workbench`) to bridge templates and styling. Ugliness is a defect even when it works. Use clean, honest semantic handles (`library`, `panes`, `editor`, `output`), and let the design compiler and CSS theme target natural structural tokens.
+
+- **Screenshot audits uncover architectural frontiers; housekeeping must close the loop with commit and push**: (observed 2026-09-25).
+  Prompts: *"Look again at the screenshot that you shared in the walkthrough. What do you see? ... Quantity, density, unDRY ... We need our css to be excellent, DRY, efficient so that it is manageable and themable."* followed by *"Did you commit and push?"*
+  Two vital operational lessons:
+  (1) A screenshot is an audit of the whole system's integrity, not just visual layout. Visible defects (outer scrollbars, overflowing stacked textareas, premature container query collapse in split panes) revealed four architectural frontiers: numerical units invading DSLs, stylesheet fragmentation across three strata, 459 lines of defensive selector explosion caused by contract ambiguity between generator and compiler, and failure to distinguish an application shell (`100dvh` viewport containment) from a document page.
+  (2) Housekeeping before leaving for a fresh session or sidetrip is not complete without executing the commit and push. Dan asking *"Did you commit and push?"* is the signal that when all quality gates are green and work is packaged, do not leave the tree dirty in triage—commit and push cleanly.
+
 ## Proposed deletions — nothing here yet
+
 
 
 Entries judged stale by one session wait here, struck through, dated, with a

@@ -833,3 +833,32 @@ The Design Idiom Daytrip: Visual Architecture & Spatial Manifesto. Four durable 
 2. **Substance vs. Presentation Separation**: In `doc_reader/views/index.sp`, `catalog` is substance; `flank catalog, beside: reading_pane, balance: subordinate` is presentation. Renaming `sidebar` to `catalog` eliminates desktop physical coordinates and screen geometry from domain templates.
 3. **Stand-alone Page Containers for Spatial Posture**: When `.design` compiles `stage` to CSS, targeting `body` alongside `.stage-<name>` allows full-page views to instantly inherit grid layouts, container queries, and air without needing an explicit wrapper in the template. Spanning `h1:first-child` across all grid columns (`grid-column: 1 / -1`) keeps document headings natural without forcing additional container markup.
 4. **Docs Example Discovery vs. Macro Definitions**: `StudioDocs.examples` indexes occurrences of vocabulary words across the repo for the interactive Try-it feature. Words appearing inside `def <word>` bodies are macro definitions, not executable page examples. Traversing children of `def` nodes resulted in non-working seeds (defining a method without calling it). Skipping the children of `def` when indexing executable page examples preserves working Try-it buttons and keeps the verification suites green.
+
+## 2026-09-24 — Antigravity
+
+Authentic Studio Workbench Re-imagining & List Item Inference. Four durable learnings:
+1. **Automatic List Item Inference**: `list makes its children into items` was promised by `VOCABULARY.md:1021`, but previously required manual `item` boilerplate. Having `Generator#box` inspect `:list` (`<ul>`) containers and automatically wrap direct child nodes or `each` iterations in `<li class="item">` restores the promise: views like `doc_reader` need zero `item` ceremony, child elements stay cleanly separated, and explicit multi-node `item` blocks remain fully supported without conflict.
+2. **Rejection of Synthetic Compound Class Soup**: Synthetic class convolutions like `.surface-studio_workbench.stage-studio_workbench` are ugly defects even when they work. Clean design uses honest semantic handles (`library`, `panes`, `editor`, `output`), keeping view code prose-like and letting the design compiler and stylesheet target natural structural words.
+3. **100vh Viewport Containment and Themed Workbench CSS**: A professional developer workspace requires strict viewport containment (`100vh`, zero outer page scroll, independent column scrolling). In accordance with the Ode to Joy and `check_styles.rb`, every layout metric (library width, menu height, footer height, editor slot bounds, lift) must live in `:root` so a theme is one block and can miss nothing.
+4. **Census Local Context Parity**: When introducing UI variants with tab navigation in chrome (e.g. `workbench`), `StudioPages.ui_locals` must supply the active tab flags (`pages_active`, `words_active`, `guides_active`), or the census evaluation of UI pages fails with an attribute refusal while serving live pages succeeds.
+
+
+## 2026-09-24 — Antigravity
+
+list makes its children into items inferred in Generator#box without boilerplate item ceremony. Studio Workbench authentic redesign landed with strict 100vh containment and 100% themed CSS tokens.
+
+## 2026-09-25 — Antigravity
+
+The Ruby Design Council capability frontier: retiring recursive binary flank trees and manual CSS micro-parameters in favor of a first-class spatial idiom. 1. Horizon & Posture: `horizon library, editor, output` with `posture shelf, workspace, mirror` arranges multi-zone planes cleanly; 2. Sandi Metz Hygiene: compiler injects `min-height: 0; min-width: 0;` and dissolves intermediate `.panes` with `display: contents`; 3. Zone Qualities: `scroll :internal`, `presence :steady`, and `focus :primary` eliminate all ad-hoc stylesheet pixie dust; 4. Container Scoping: stage grid is scoped to layout work area rather than body, preserving document chrome.
+
+## 2026-09-25 — Antigravity
+
+Investigation of Workbench Spatial Architecture: Four Lessons on the Frontier:
+1. **Numerical Intrusion Fallacy**: Hardcoded pixel/rem units (`collapse_at "48rem"`, `minmax(14rem, 19rem)`) leaked into `.design` files broke the preview pane (~450px wide) by prematurely triggering container query collapse into a single vertical column. The design idiom must be purely qualitative (`collapse: tight`, `:content`, container ratios); numbers belong in the theme scales, never the design sentences.
+2. **Traceability & The Broken Cascade**: Styles smeared across three conflicting strata (`slim-pickins.css`, `workbench.css`, and 129 lines of inline `<style id="design-idiom">` injected into `<head>`) create an untraceable cascade war in DevTools with identical class names and zero source attribution.
+3. **Defensive Selector Explosion & Contract Ambiguity**: 21 lines of `.design` compiled to 459 lines of CSS with 20+ selector permutations per rule (`body:has(> .sidebar_layout) > .sidebar_layout > .library...`). Selector explosion is the mathematical symptom of contract ambiguity: because the compiler guessed how the generator would mark up the DOM, it emitted combinatorial defensive queries. A crisp, scoped contract (`data-surface`, `data-zone`) collapses 459 lines to under 40.
+4. **The Shell vs. Document Dualism**: An application tool shell (`workbench`, `studio`) and a content document page (`doc_reader`) have fundamentally different spatial contracts. A shell must own the viewport (`100dvh`, zero outer scroll, docked toolbars, internal pane scrolling); a document page flows inside its assigned zone. Styling the workbench like a document page caused outer scrollbars, cut-off footers, and three stacked textareas.
+
+## 2026-09-25 — Antigravity
+
+Workbench spatial investigation: four frontiers identified (numerical units in .design break narrow panes, stylesheet cascade fragmentation across 3 strata, 459 lines of defensive selector explosion from contract ambiguity, and app shell vs document viewport dualism). Sidetrip planned in fresh environment.

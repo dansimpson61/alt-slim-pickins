@@ -1,0 +1,20 @@
+surface workbench
+  air tight
+
+  horizon library, editor, output
+    posture shelf, workspace, mirror
+    collapse_at "56rem"
+
+  zone library
+    frame quiet
+    cadence compact
+    scroll internal
+
+  zone editor
+    frame quiet
+    air balanced
+    focus primary
+
+  zone output
+    frame lifted
+    presence steady

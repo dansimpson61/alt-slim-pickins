@@ -27,6 +27,14 @@ SIDEBAR = { words: StudioDocs.words,
 # link, and `links` exists so a view holds no route at all.
 helpers Sinatra::Cookies
 
+before do
+  StudioUI.current = ui
+end
+
+after do
+  StudioUI.current = nil
+end
+
 helpers do
   # The picker's choice: `?ui=` wins, a cookie remembers, the default is the
   # registry's. A cookie naming a UI that no longer exists falls back rather
@@ -212,12 +220,17 @@ end
 # The studio's static assets — the stylesheet, the vendored Stimulus, the
 # controller. A whitelist rather than a glob: an asset route must never
 # become a file reader.
-ASSETS = %w[slim-pickins.css stimulus.umd.js studio.js].freeze
+ASSETS = %w[slim-pickins.css stimulus.umd.js studio.js workbench.css].freeze
 
 get '/assets/:file' do
   name = File.basename(params[:file])
   halt 404, "There is no asset called #{name}." unless ASSETS.include?(name)
 
   content_type name.end_with?('.css') ? 'text/css' : 'text/javascript'
-  File.read(File.expand_path("../assets/#{name}", __dir__))
+  if name == 'workbench.css'
+    design_file = File.expand_path('uis/workbench/workbench.design', __dir__)
+    SlimPickins::DesignIdiom.compile(File.read(design_file))
+  else
+    File.read(File.expand_path("../assets/#{name}", __dir__))
+  end
 end

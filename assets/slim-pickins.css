@@ -56,9 +56,12 @@
      contract, and the two bars the frame carries — the menu above the work
      and the footer below it. A `calc` needs all three named, or the page
      grows a scrollbar it did not ask for. */
-  --library-width: 22rem;
-  --menu-height: 3.5rem;
-  --footer-height: 2.5rem;
+  --menu-height: 2.75rem;
+  --footer-height: 2rem;
+  --panel-height: 28rem;
+  --editor-source-height: 12rem;
+  --editor-design-height: 9rem;
+  --editor-data-height: 6rem;
   --lift: 0 1px 2px rgb(0 0 0 / 0.05);
 
   --face: ui-sans-serif, system-ui, sans-serif;
@@ -616,77 +619,135 @@ time { color: var(--ink-soft); }
    with this UI's own shelf width. The id is on the layout element by design
    and the workbench is the layout that holds a `.library`, so that is what
    the selector asks. */
-.sidebar_layout:has(> .library) {
-  grid-template-columns: var(--library-width) 1fr;
-  height: calc(100vh - var(--chrome-height) - var(--menu-height) - var(--footer-height));
-}
-
-/* The work area: the writing and the artifact, half each. Guide and status
-   pages have one pane, so they span the row instead. */
-.sidebar_layout:has(> .library) > .panes {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--gap);
-  min-height: 0;
-}
-
-/* The shelf: the words, the repo's pages, the guides — one column, its own
-   scroll, and never the first thing a visitor reads as failure. */
-.sidebar_layout:has(> .library) > .library {
+body:has(> .sidebar_layout) {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: var(--step);
-  border-right: var(--rule-width) solid var(--rule);
-  padding-right: var(--gap);
-  overflow-y: auto;
-  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: var(--canvas);
 }
+
+body:has(> .sidebar_layout) > h1:first-child {
+  display: none;
+}
+
+.main_menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--step) var(--gap-loose);
+  background: var(--surface);
+  border-bottom: var(--rule-width) solid var(--rule);
+  flex-shrink: 0;
+  min-height: var(--menu-height);
+}
+.main_menu .link {
+  font-size: var(--size-code);
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: var(--step) var(--gap);
+  border-radius: var(--radius);
+}
+.main_menu .link--active {
+  color: var(--ink);
+  font-weight: var(--weight-strong);
+  background: var(--surface-soft);
+}
+
+/* The frame layout and zone postures (shelf, workspace, mirror) are compiled
+   directly from studio/uis/workbench/workbench.design into /assets/workbench.css.
+   Only common document-level sub-elements and chrome rules remain here. */
 
 .ui_picker { border-top: var(--rule-width) solid var(--rule); padding-top: var(--step); }
 
-/* A word's own sheet: its contract, its implementation, its real sentences,
-   and the workbench beside them — one editor, seeded by whichever example the
-   writer picked. */
-.sidebar_layout:has(> .library) > .panes > .word_docs {
+.library, .panes { min-height: 0; }
+
+/* A guide or the gate's output is one pane, so it takes the whole work area */
+.scroll {
+  grid-column: 2 / -1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--surface);
+  border: var(--rule-width) solid var(--rule);
+  border-radius: var(--radius);
+  padding: var(--gap-loose);
+}
+
+/* A word's own sheet */
+.word_docs {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);
   min-height: 0;
   overflow-y: auto;
 }
-.sidebar_layout:has(> .library) > .panes > .word_docs > .editor, .sidebar_layout:has(> .library) > .panes > .word_docs > .output { grid-column: 2; }
-.sidebar_layout:has(> .library) > .panes > .word_docs > section, .sidebar_layout:has(> .library) > .panes > .word_docs > .list { grid-column: 1; }
+.word_docs > .editor,
+.word_docs > .output { grid-column: 2; }
+.word_docs > section,
+.word_docs > .list { grid-column: 1; }
 
-/* The writing is the tall pane: the source takes the height and the data slot
-   keeps its own, so the two texts never split the pane evenly. */
-.editor, .output { display: flex; flex-direction: column; min-height: 0; }
-.editor_form { flex-grow: 1; }
-.editor_form .field:first-of-type { flex-grow: 1; }
-
-/* The artifact: framed and quieter than the tool around it — a rendered page
-   should not compete with the studio's own heading. */
-.output { border: var(--rule-width) solid var(--rule); }
-
-/* A guide or the gate's output is one pane, so it takes the whole work area:
-   the two columns are for the writing and the artifact. */
-.sidebar_layout:has(> .library) > .panes > .scroll { grid-column: 1 / -1; min-height: 0; }
-
-/* The frame: a menu that says where you are, a footer that says what you are
-   working in. */
-.main_menu {
-  display: flex;
-  align-items: baseline;
-  gap: var(--gap);
-  padding-bottom: var(--step);
-  border-bottom: var(--rule-width) solid var(--rule);
+.editor > section {
+  margin: 0;
+  padding: 0 0 var(--step) 0;
+  font-size: var(--size-code);
+  font-weight: var(--weight-strong);
+  color: var(--ink);
 }
-.main_menu .nav { display: flex; gap: var(--step); }
+
+.editor .form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--step);
+}
+
+.editor .form .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor .form .field label {
+  font-size: var(--size-small);
+  font-weight: var(--weight-strong);
+  color: var(--ink-soft);
+  margin-bottom: var(--step);
+}
+
+.editor .note {
+  margin: 0;
+  font-size: var(--size-small);
+  color: var(--ink-soft);
+}
+
+.output .tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--step);
+  padding: var(--step) var(--gap);
+  background: var(--surface-soft);
+  border-bottom: var(--rule-width) solid var(--rule);
+  flex-shrink: 0;
+}
+
+.output .tab-button {
+  padding: var(--step) var(--gap);
+  font-size: var(--size-small);
+  font-weight: var(--weight-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--ink-soft);
+}
 
 .footer {
   display: flex;
-  align-items: baseline;
-  gap: var(--step);
-  padding-top: var(--step);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--step) var(--gap-loose);
   border-top: var(--rule-width) solid var(--rule);
   color: var(--ink-soft);
+  background: var(--surface-soft);
+  font-size: var(--size-small);
+  flex-shrink: 0;
+  min-height: var(--footer-height);
 }
+

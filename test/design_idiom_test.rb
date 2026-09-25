@@ -119,4 +119,96 @@ class DesignIdiomTest < Minitest::Test
     end
     assert_includes error.message, 'Unknown air token: `non_existent_token`'
   end
+
+  def test_surface_with_direct_air_and_horizon_manifesto
+    source = <<~DESIGN
+      surface workbench
+        air tight
+
+        horizon library, editor, output
+          posture shelf, workspace, mirror
+          collapse_at "56rem"
+
+        zone library
+          frame quiet
+          cadence compact
+          scroll internal
+
+        zone editor
+          frame quiet
+          air balanced
+          focus primary
+
+        zone output
+          frame lifted
+          presence steady
+    DESIGN
+
+    css = SlimPickins::DesignIdiom.compile(source)
+
+    # Surface & Stage grid container
+    assert_includes css, '.surface-workbench { display: block; width: 100%; }'
+    assert_includes css, 'container-name: workbench;'
+    assert_includes css, 'grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);'
+    assert_includes css, 'padding: clamp(0.5rem, 1.5cqi, 0.875rem);'
+    assert_includes css, 'gap: clamp(0.5rem, 1.5cqi, 0.875rem);'
+
+    # Dissolve intermediate panes wrapper
+    assert_includes css, 'display: contents;'
+
+    # Sandi Metz hygiene baseline
+    assert_includes css, 'min-height: 0;'
+    assert_includes css, 'min-width: 0;'
+
+    # Explicit column placement
+    assert_includes css, 'grid-column: 1;'
+    assert_includes css, 'grid-column: 2;'
+    assert_includes css, 'grid-column: 3;'
+
+    # Container query collapse
+    assert_includes css, '@container workbench (inline-size < 56rem) {'
+    assert_includes css, 'grid-template-columns: 100%;'
+
+    # Zone library: internal scroll & panel containment
+    assert_includes css, 'overflow-y: auto;'
+    assert_includes css, 'overscroll-behavior: contain;'
+    assert_includes css, 'max-height: var(--panel-height, 28rem);'
+
+    # Zone editor: primary focus
+    assert_includes css, 'resize: vertical;'
+    assert_includes css, 'min-height: var(--editor-source-height, 12rem);'
+    assert_includes css, 'min-height: var(--editor-design-height, 9rem);'
+    assert_includes css, 'min-height: var(--editor-data-height, 6rem);'
+
+    # Zone output: steady presence
+    assert_includes css, 'position: sticky;'
+    assert_includes css, 'top: var(--gap, 0.75rem);'
+    assert_includes css, 'height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));'
+  end
+
+  def test_horizon_mismatched_postures_raises_error
+    source = <<~DESIGN
+      surface test_page
+        horizon col1, col2, col3
+          posture shelf, workspace
+    DESIGN
+
+    error = assert_raises(ArgumentError) do
+      SlimPickins::DesignIdiom.compile(source)
+    end
+    assert_includes error.message, 'horizon with 3 zones (col1, col2, col3) expected 3 postures, got 2 (shelf, workspace)'
+  end
+
+  def test_horizon_unknown_posture_token_raises_error
+    source = <<~DESIGN
+      surface test_page
+        horizon col1, col2
+          posture shelf, imaginary_token
+    DESIGN
+
+    error = assert_raises(ArgumentError) do
+      SlimPickins::DesignIdiom.compile(source)
+    end
+    assert_includes error.message, 'Unknown posture token: `imaginary_token`'
+  end
 end

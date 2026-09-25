@@ -281,7 +281,10 @@ module StudioPages
       ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == Uis.default } },
       ui: Uis.default,
       word_count: 64, convention_count: 38, promise_count: 32, measured: '2026-09-17',
-      words_count: 64, pages_count: PAGES.size
+      words_count: 64, pages_count: PAGES.size,
+      pages_active: page == 'index' || page.nil?,
+      words_active: page == 'docs',
+      guides_active: page == 'guide'
     }
     case page
     when 'index'

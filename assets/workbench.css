@@ -1,0 +1,459 @@
+/* Compiled automatically from studio/uis/workbench/workbench.design */
+
+.surface-workbench { display: block; width: 100%; }
+
+.stage-workbench, .workbench, .surface-workbench, body:has(> .sidebar_layout) > .sidebar_layout, .sidebar_layout:has(> .library), body:not(:has(> .sidebar_layout)) {
+  container-type: inline-size;
+  container-name: workbench;
+  display: grid;
+  align-items: start;
+  padding: clamp(0.5rem, 1.5cqi, 0.875rem);
+  gap: clamp(0.5rem, 1.5cqi, 0.875rem);
+  box-sizing: border-box;
+}
+
+.stage-workbench, .workbench, .surface-workbench, body:has(> .sidebar_layout) > .sidebar_layout, .sidebar_layout:has(> .library), body:not(:has(> .sidebar_layout)) {
+  grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.stage-workbench > h1:first-child,
+.workbench > h1:first-child,
+.surface-workbench > h1:first-child,
+body:has(> .sidebar_layout) > .sidebar_layout > h1:first-child,
+.sidebar_layout:has(> .library) > h1:first-child,
+body:not(:has(> .sidebar_layout)) > h1:first-child {
+  grid-column: 1 / -1;
+}
+
+.stage-workbench > .panes,
+.workbench > .panes,
+.surface-workbench > .panes,
+body:has(> .sidebar_layout) > .sidebar_layout > .panes,
+.sidebar_layout:has(> .library) > .panes,
+body:not(:has(> .sidebar_layout)) > .panes {
+  display: contents;
+}
+
+.stage-workbench > .library,
+.stage-workbench > .zone-library,
+.workbench > .library,
+.workbench > .zone-library,
+.surface-workbench > .library,
+.surface-workbench > .zone-library,
+body:has(> .sidebar_layout) > .sidebar_layout > .library,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-library,
+.sidebar_layout:has(> .library) > .library,
+.sidebar_layout:has(> .library) > .zone-library,
+body:not(:has(> .sidebar_layout)) > .library,
+body:not(:has(> .sidebar_layout)) > .zone-library,
+.library,
+.zone-library,
+.stage-workbench > .editor,
+.stage-workbench > .zone-editor,
+.workbench > .editor,
+.workbench > .zone-editor,
+.surface-workbench > .editor,
+.surface-workbench > .zone-editor,
+body:has(> .sidebar_layout) > .sidebar_layout > .editor,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-editor,
+.sidebar_layout:has(> .library) > .editor,
+.sidebar_layout:has(> .library) > .zone-editor,
+body:not(:has(> .sidebar_layout)) > .editor,
+body:not(:has(> .sidebar_layout)) > .zone-editor,
+.editor,
+.zone-editor,
+.stage-workbench > .output,
+.stage-workbench > .zone-output,
+.workbench > .output,
+.workbench > .zone-output,
+.surface-workbench > .output,
+.surface-workbench > .zone-output,
+body:has(> .sidebar_layout) > .sidebar_layout > .output,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-output,
+.sidebar_layout:has(> .library) > .output,
+.sidebar_layout:has(> .library) > .zone-output,
+body:not(:has(> .sidebar_layout)) > .output,
+body:not(:has(> .sidebar_layout)) > .zone-output,
+.output,
+.zone-output {
+  min-height: 0;
+  min-width: 0;
+}
+
+.stage-workbench > .library,
+.stage-workbench > .zone-library,
+.stage-workbench > * > .library,
+.stage-workbench > * > .zone-library,
+.workbench > .library,
+.workbench > .zone-library,
+.workbench > * > .library,
+.workbench > * > .zone-library,
+.surface-workbench > .library,
+.surface-workbench > .zone-library,
+.surface-workbench > * > .library,
+.surface-workbench > * > .zone-library,
+body:has(> .sidebar_layout) > .sidebar_layout > .library,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-library,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .library,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .zone-library,
+.sidebar_layout:has(> .library) > .library,
+.sidebar_layout:has(> .library) > .zone-library,
+.sidebar_layout:has(> .library) > * > .library,
+.sidebar_layout:has(> .library) > * > .zone-library,
+body:not(:has(> .sidebar_layout)) > .library,
+body:not(:has(> .sidebar_layout)) > .zone-library,
+body:not(:has(> .sidebar_layout)) > * > .library,
+body:not(:has(> .sidebar_layout)) > * > .zone-library {
+  grid-column: 1;
+}
+
+.stage-workbench > .editor,
+.stage-workbench > .zone-editor,
+.stage-workbench > * > .editor,
+.stage-workbench > * > .zone-editor,
+.workbench > .editor,
+.workbench > .zone-editor,
+.workbench > * > .editor,
+.workbench > * > .zone-editor,
+.surface-workbench > .editor,
+.surface-workbench > .zone-editor,
+.surface-workbench > * > .editor,
+.surface-workbench > * > .zone-editor,
+body:has(> .sidebar_layout) > .sidebar_layout > .editor,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-editor,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .editor,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .zone-editor,
+.sidebar_layout:has(> .library) > .editor,
+.sidebar_layout:has(> .library) > .zone-editor,
+.sidebar_layout:has(> .library) > * > .editor,
+.sidebar_layout:has(> .library) > * > .zone-editor,
+body:not(:has(> .sidebar_layout)) > .editor,
+body:not(:has(> .sidebar_layout)) > .zone-editor,
+body:not(:has(> .sidebar_layout)) > * > .editor,
+body:not(:has(> .sidebar_layout)) > * > .zone-editor {
+  grid-column: 2;
+}
+
+.stage-workbench > .output,
+.stage-workbench > .zone-output,
+.stage-workbench > * > .output,
+.stage-workbench > * > .zone-output,
+.workbench > .output,
+.workbench > .zone-output,
+.workbench > * > .output,
+.workbench > * > .zone-output,
+.surface-workbench > .output,
+.surface-workbench > .zone-output,
+.surface-workbench > * > .output,
+.surface-workbench > * > .zone-output,
+body:has(> .sidebar_layout) > .sidebar_layout > .output,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-output,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .output,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .zone-output,
+.sidebar_layout:has(> .library) > .output,
+.sidebar_layout:has(> .library) > .zone-output,
+.sidebar_layout:has(> .library) > * > .output,
+.sidebar_layout:has(> .library) > * > .zone-output,
+body:not(:has(> .sidebar_layout)) > .output,
+body:not(:has(> .sidebar_layout)) > .zone-output,
+body:not(:has(> .sidebar_layout)) > * > .output,
+body:not(:has(> .sidebar_layout)) > * > .zone-output {
+  grid-column: 3;
+}
+
+@container workbench (inline-size < 56rem) {
+  .stage-workbench, .workbench, .surface-workbench, body:has(> .sidebar_layout) > .sidebar_layout, .sidebar_layout:has(> .library), body:not(:has(> .sidebar_layout)) {
+    grid-template-columns: 100%;
+  }
+  .stage-workbench > .library,
+.stage-workbench > .zone-library,
+.stage-workbench > * > .library,
+.stage-workbench > * > .zone-library,
+.workbench > .library,
+.workbench > .zone-library,
+.workbench > * > .library,
+.workbench > * > .zone-library,
+.surface-workbench > .library,
+.surface-workbench > .zone-library,
+.surface-workbench > * > .library,
+.surface-workbench > * > .zone-library,
+body:has(> .sidebar_layout) > .sidebar_layout > .library,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-library,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .library,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .zone-library,
+.sidebar_layout:has(> .library) > .library,
+.sidebar_layout:has(> .library) > .zone-library,
+.sidebar_layout:has(> .library) > * > .library,
+.sidebar_layout:has(> .library) > * > .zone-library,
+body:not(:has(> .sidebar_layout)) > .library,
+body:not(:has(> .sidebar_layout)) > .zone-library,
+body:not(:has(> .sidebar_layout)) > * > .library,
+body:not(:has(> .sidebar_layout)) > * > .zone-library,
+.stage-workbench > .editor,
+.stage-workbench > .zone-editor,
+.stage-workbench > * > .editor,
+.stage-workbench > * > .zone-editor,
+.workbench > .editor,
+.workbench > .zone-editor,
+.workbench > * > .editor,
+.workbench > * > .zone-editor,
+.surface-workbench > .editor,
+.surface-workbench > .zone-editor,
+.surface-workbench > * > .editor,
+.surface-workbench > * > .zone-editor,
+body:has(> .sidebar_layout) > .sidebar_layout > .editor,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-editor,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .editor,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .zone-editor,
+.sidebar_layout:has(> .library) > .editor,
+.sidebar_layout:has(> .library) > .zone-editor,
+.sidebar_layout:has(> .library) > * > .editor,
+.sidebar_layout:has(> .library) > * > .zone-editor,
+body:not(:has(> .sidebar_layout)) > .editor,
+body:not(:has(> .sidebar_layout)) > .zone-editor,
+body:not(:has(> .sidebar_layout)) > * > .editor,
+body:not(:has(> .sidebar_layout)) > * > .zone-editor,
+.stage-workbench > .output,
+.stage-workbench > .zone-output,
+.stage-workbench > * > .output,
+.stage-workbench > * > .zone-output,
+.workbench > .output,
+.workbench > .zone-output,
+.workbench > * > .output,
+.workbench > * > .zone-output,
+.surface-workbench > .output,
+.surface-workbench > .zone-output,
+.surface-workbench > * > .output,
+.surface-workbench > * > .zone-output,
+body:has(> .sidebar_layout) > .sidebar_layout > .output,
+body:has(> .sidebar_layout) > .sidebar_layout > .zone-output,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .output,
+body:has(> .sidebar_layout) > .sidebar_layout > * > .zone-output,
+.sidebar_layout:has(> .library) > .output,
+.sidebar_layout:has(> .library) > .zone-output,
+.sidebar_layout:has(> .library) > * > .output,
+.sidebar_layout:has(> .library) > * > .zone-output,
+body:not(:has(> .sidebar_layout)) > .output,
+body:not(:has(> .sidebar_layout)) > .zone-output,
+body:not(:has(> .sidebar_layout)) > * > .output,
+body:not(:has(> .sidebar_layout)) > * > .zone-output {
+    grid-column: 1;
+  }
+}
+
+.stage-workbench > .library,
+.stage-workbench > .zone-library,
+.stage-workbench .library,
+body > .library,
+body > .zone-library,
+.library,
+.zone-library {
+  background: var(--surface-soft, #f9f8f5);
+  border: 1px solid var(--rule, #e5e1d8);
+  border-radius: var(--radius, 4px);
+  padding: clamp(0.75rem, 1.5cqi, 1rem);
+}
+
+.stage-workbench > .library,
+.stage-workbench > .zone-library,
+.stage-workbench .library,
+body > .library,
+body > .zone-library,
+.library,
+.zone-library {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.stage-workbench > .library,
+.stage-workbench > .zone-library,
+.stage-workbench .library,
+body > .library,
+body > .zone-library,
+.library,
+.zone-library {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+
+.stage-workbench > .library .tab-panel,
+.stage-workbench > .zone-library .tab-panel,
+.stage-workbench .library .tab-panel,
+body > .library .tab-panel,
+body > .zone-library .tab-panel,
+.library .tab-panel,
+.zone-library .tab-panel {
+  max-height: var(--panel-height, 28rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.stage-workbench > .editor,
+.stage-workbench > .zone-editor,
+.stage-workbench .editor,
+body > .editor,
+body > .zone-editor,
+.editor,
+.zone-editor {
+  background: var(--surface-soft, #f9f8f5);
+  border: 1px solid var(--rule, #e5e1d8);
+  border-radius: var(--radius, 4px);
+  padding: clamp(1rem, 2.5cqi, 1.75rem);
+  gap: clamp(1rem, 2.5cqi, 1.75rem);
+}
+
+.stage-workbench > .editor,
+.stage-workbench > .zone-editor,
+.stage-workbench .editor,
+body > .editor,
+body > .zone-editor,
+.editor,
+.zone-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.stage-workbench > .editor textarea,
+.stage-workbench > .editor .form textarea,
+.stage-workbench > .zone-editor textarea,
+.stage-workbench > .zone-editor .form textarea,
+.stage-workbench .editor textarea,
+.stage-workbench .editor .form textarea,
+body > .editor textarea,
+body > .editor .form textarea,
+body > .zone-editor textarea,
+body > .zone-editor .form textarea,
+.editor textarea,
+.editor .form textarea,
+.zone-editor textarea,
+.zone-editor .form textarea {
+  width: 100%;
+  font-family: var(--face-mono, monospace);
+  font-size: var(--size-small, 0.875rem);
+  line-height: var(--lead-tight, 1.25);
+  background: var(--surface, #ffffff);
+  border: var(--rule-width, 1px) solid var(--rule, #e5e1d8);
+  border-radius: var(--radius, 4px);
+  padding: var(--step, 0.25rem) var(--gap, 0.75rem);
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.stage-workbench > .editor .field:nth-of-type(1) textarea,
+.stage-workbench > .zone-editor .field:nth-of-type(1) textarea,
+.stage-workbench .editor .field:nth-of-type(1) textarea,
+body > .editor .field:nth-of-type(1) textarea,
+body > .zone-editor .field:nth-of-type(1) textarea,
+.editor .field:nth-of-type(1) textarea,
+.zone-editor .field:nth-of-type(1) textarea {
+  min-height: var(--editor-source-height, 12rem);
+}
+
+.stage-workbench > .editor .field:nth-of-type(2) textarea,
+.stage-workbench > .zone-editor .field:nth-of-type(2) textarea,
+.stage-workbench .editor .field:nth-of-type(2) textarea,
+body > .editor .field:nth-of-type(2) textarea,
+body > .zone-editor .field:nth-of-type(2) textarea,
+.editor .field:nth-of-type(2) textarea,
+.zone-editor .field:nth-of-type(2) textarea {
+  min-height: var(--editor-design-height, 9rem);
+}
+
+.stage-workbench > .editor .field:nth-of-type(3) textarea,
+.stage-workbench > .zone-editor .field:nth-of-type(3) textarea,
+.stage-workbench .editor .field:nth-of-type(3) textarea,
+body > .editor .field:nth-of-type(3) textarea,
+body > .zone-editor .field:nth-of-type(3) textarea,
+.editor .field:nth-of-type(3) textarea,
+.zone-editor .field:nth-of-type(3) textarea {
+  min-height: var(--editor-data-height, 6rem);
+}
+
+.stage-workbench > .output,
+.stage-workbench > .zone-output,
+.stage-workbench .output,
+body > .output,
+body > .zone-output,
+.output,
+.zone-output {
+  background: var(--surface, #ffffff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius, 4px);
+  padding: clamp(1rem, 2cqi, 1.5rem);
+}
+
+.stage-workbench > .output,
+.stage-workbench > .zone-output,
+.stage-workbench .output,
+body > .output,
+body > .zone-output,
+.output,
+.zone-output {
+  position: sticky;
+  top: var(--gap, 0.75rem);
+  align-self: start;
+  height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+  max-height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.stage-workbench > .output .tabs,
+.stage-workbench > .zone-output .tabs,
+.stage-workbench .output .tabs,
+body > .output .tabs,
+body > .zone-output .tabs,
+.output .tabs,
+.zone-output .tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.stage-workbench > .output .tabs-content,
+.stage-workbench > .zone-output .tabs-content,
+.stage-workbench .output .tabs-content,
+body > .output .tabs-content,
+body > .zone-output .tabs-content,
+.output .tabs-content,
+.zone-output .tabs-content {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.stage-workbench > .output .tab-panel,
+.stage-workbench > .zone-output .tab-panel,
+.stage-workbench .output .tab-panel,
+body > .output .tab-panel,
+body > .zone-output .tab-panel,
+.output .tab-panel,
+.zone-output .tab-panel {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.stage-workbench > .output iframe,
+.stage-workbench > .output .iframe,
+.stage-workbench > .zone-output iframe,
+.stage-workbench > .zone-output .iframe,
+.stage-workbench .output iframe,
+.stage-workbench .output .iframe,
+body > .output iframe,
+body > .output .iframe,
+body > .zone-output iframe,
+body > .zone-output .iframe,
+.output iframe,
+.output .iframe,
+.zone-output iframe,
+.zone-output .iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}

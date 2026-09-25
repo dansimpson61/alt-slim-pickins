@@ -8,6 +8,7 @@
 # the workbench into 250px. The layout owns the two-column frame; a page owns
 # its own work.
 stylesheet "/assets/slim-pickins.css"
+stylesheet "/assets/workbench.css"
 script "/assets/stimulus.umd.js"
 script "/assets/studio.js"
 main_menu

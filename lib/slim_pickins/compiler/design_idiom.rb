@@ -74,19 +74,28 @@ module SlimPickins
         }
       }.freeze
 
+      POSTURE_TOKENS = {
+        shelf:     'minmax(14rem, 19rem)',
+        workspace: 'minmax(0, 3fr)',
+        mirror:    'minmax(0, 2fr)',
+        aside:     'minmax(16rem, 1fr)',
+        equal:     'minmax(0, 1fr)'
+      }.freeze
+
       DEFAULT_COLLAPSE_THRESHOLD = '48rem'
 
-      attr_reader :air_tokens, :balance_tokens, :frame_tokens, :cadence_tokens, :treatment_tokens
+      attr_reader :air_tokens, :balance_tokens, :posture_tokens, :frame_tokens, :cadence_tokens, :treatment_tokens
 
       def self.compile(source, path: '(design)', **theme_tokens)
         new(**theme_tokens).compile(source, path: path)
       end
 
       def initialize(air_tokens: AIR_TOKENS, balance_tokens: BALANCE_TOKENS,
-                     frame_tokens: FRAME_TOKENS, cadence_tokens: CADENCE_TOKENS,
-                     treatment_tokens: TREATMENT_TOKENS)
+                     posture_tokens: POSTURE_TOKENS, frame_tokens: FRAME_TOKENS,
+                     cadence_tokens: CADENCE_TOKENS, treatment_tokens: TREATMENT_TOKENS)
         @air_tokens = air_tokens
         @balance_tokens = balance_tokens
+        @posture_tokens = posture_tokens
         @frame_tokens = frame_tokens
         @cadence_tokens = cadence_tokens
         @treatment_tokens = treatment_tokens
@@ -142,18 +151,48 @@ module SlimPickins
           @name = name
           @stages = []
           @zones = []
+          @default_stage = nil
+        end
+
+        def default_stage
+          @default_stage ||= begin
+            sb = StageBuilder.new(@compiler, @name, @name)
+            @stages << sb
+            sb
+          end
+        end
+
+        def air(level)
+          default_stage.air(level)
+        end
+
+        def horizon(*zones, &block)
+          default_stage.horizon(*zones, &block)
+        end
+
+        def flank(lead_zone, beside:, balance: :equal, collapse_at: DEFAULT_COLLAPSE_THRESHOLD)
+          default_stage.flank(lead_zone, beside: beside, balance: balance, collapse_at: collapse_at)
+        end
+
+        def stack(*zones, air: nil)
+          default_stage.stack(*zones, air: air)
         end
 
         def stage(stage_name = nil, &block)
-          sb = StageBuilder.new(@compiler, @name, stage_name || @name)
+          sb = if (stage_name.nil? || stage_name.to_sym == @name.to_sym) && @default_stage && !@default_stage.has_rules?
+                 @default_stage
+               else
+                 StageBuilder.new(@compiler, @name, stage_name || @name).tap { |s| @stages << s }
+               end
           sb.instance_eval(&block) if block
-          @stages << sb
+          sb
         end
 
         def zone(zone_name, &block)
           zb = ZoneBuilder.new(@compiler, @name, zone_name.to_sym)
           zb.instance_eval(&block) if block
           @zones << zb
+          zb
         end
 
         def to_css
@@ -167,7 +206,7 @@ module SlimPickins
       end
 
       class StageBuilder < BaseBuilder
-        attr_reader :surface_name, :stage_name
+        attr_reader :surface_name, :stage_name, :air_level, :flank_rule, :stack_rule, :horizon_rule
 
         def initialize(compiler, surface_name, stage_name)
           super(compiler)
@@ -176,6 +215,11 @@ module SlimPickins
           @air_level = nil
           @flank_rule = nil
           @stack_rule = nil
+          @horizon_rule = nil
+        end
+
+        def has_rules?
+          !(@air_level.nil? && @flank_rule.nil? && @stack_rule.nil? && @horizon_rule.nil?)
         end
 
         def air(level)
@@ -204,9 +248,40 @@ module SlimPickins
           @stack_rule = { zones: zones.map(&:to_sym) }
         end
 
+        def horizon(*zones, &block)
+          hb = HorizonBuilder.new(@compiler, zones)
+          hb.instance_eval(&block) if block
+
+          tracks = hb.postures.map do |role|
+            if role.is_a?(String)
+              role
+            else
+              @compiler.posture_tokens.fetch(role.to_sym) do
+                raise ArgumentError, "Unknown posture token: `#{role}`"
+              end
+            end
+          end
+
+          @horizon_rule = {
+            zones: hb.zones,
+            tracks: tracks,
+            collapse_at: hb.collapse_threshold
+          }
+        end
+
         def to_css
           rules = []
-          target = ".stage-#{@stage_name}, body"
+          targets = if @stage_name.to_sym == @surface_name.to_sym
+                      [".stage-#{@stage_name}",
+                       ".#{@stage_name}",
+                       ".surface-#{@surface_name}",
+                       "body:has(> .sidebar_layout) > .sidebar_layout",
+                       ".sidebar_layout:has(> .library)",
+                       "body:not(:has(> .sidebar_layout))"]
+                    else
+                      [".stage-#{@stage_name}", ".#{@stage_name}"]
+                    end
+          target = targets.join(', ')
 
           # Container Query Context & Air
           rules << <<~CSS.strip
@@ -217,6 +292,7 @@ module SlimPickins
               align-items: start;
               padding: #{@air_level || '0'};
               gap: #{@air_level || '0'};
+              box-sizing: border-box;
             }
           CSS
 
@@ -230,24 +306,20 @@ module SlimPickins
                 grid-template-columns: #{cols};
               }
 
-              .stage-#{@stage_name} > h1:first-child,
-              body > h1:first-child {
+              #{targets.map { |t| "#{t} > h1:first-child" }.join(",\n")} {
                 grid-column: 1 / -1;
               }
             CSS
 
+            lead_sels = targets.map { |t| "#{t} > .#{lead},\n#{t} > .zone-#{lead}" }.join(",\n")
+            companion_sels = targets.map { |t| "#{t} > .#{companion},\n#{t} > .zone-#{companion}" }.join(",\n")
+
             rules << <<~CSS.strip
-              .stage-#{@stage_name} > .#{lead},
-              .stage-#{@stage_name} > .zone-#{lead},
-              body > .#{lead},
-              body > .zone-#{lead} {
+              #{lead_sels} {
                 grid-column: 1;
               }
 
-              .stage-#{@stage_name} > .#{companion},
-              .stage-#{@stage_name} > .zone-#{companion},
-              body > .#{companion},
-              body > .zone-#{companion} {
+              #{companion_sels} {
                 grid-column: 2;
               }
             CSS
@@ -257,14 +329,69 @@ module SlimPickins
                 #{target} {
                   grid-template-columns: 100%;
                 }
-                .stage-#{@stage_name} > .#{lead},
-                .stage-#{@stage_name} > .zone-#{lead},
-                .stage-#{@stage_name} > .#{companion},
-                .stage-#{@stage_name} > .zone-#{companion},
-                body > .#{lead},
-                body > .zone-#{lead},
-                body > .#{companion},
-                body > .zone-#{companion} {
+                #{lead_sels},
+                #{companion_sels} {
+                  grid-column: 1;
+                }
+              }
+            CSS
+          elsif @horizon_rule
+            zones = @horizon_rule[:zones]
+            cols = @horizon_rule[:tracks].join(' ')
+
+            rules << <<~CSS.strip
+              #{target} {
+                grid-template-columns: #{cols};
+              }
+
+              #{targets.map { |t| "#{t} > h1:first-child" }.join(",\n")} {
+                grid-column: 1 / -1;
+              }
+
+              #{targets.map { |t| "#{t} > .panes" }.join(",\n")} {
+                display: contents;
+              }
+            CSS
+
+            # Sandi Metz hygiene baseline: prevent flex/grid item overflow blowout
+            hygiene_sels = zones.flat_map do |zone|
+              targets.map { |t| "#{t} > .#{zone},\n#{t} > .zone-#{zone}" } + [".#{zone}", ".zone-#{zone}"]
+            end.uniq.join(",\n")
+
+            rules << <<~CSS.strip
+              #{hygiene_sels} {
+                min-height: 0;
+                min-width: 0;
+              }
+            CSS
+
+            # Explicit column placement for each zone (1-indexed)
+            zones.each_with_index do |zone, index|
+              col_idx = index + 1
+              zone_sels = targets.map do |t|
+                "#{t} > .#{zone},\n#{t} > .zone-#{zone},\n#{t} > * > .#{zone},\n#{t} > * > .zone-#{zone}"
+              end.join(",\n")
+
+              rules << <<~CSS.strip
+                #{zone_sels} {
+                  grid-column: #{col_idx};
+                }
+              CSS
+            end
+
+            # Container Query Collapse
+            all_zone_sels = zones.flat_map do |zone|
+              targets.map do |t|
+                "#{t} > .#{zone},\n#{t} > .zone-#{zone},\n#{t} > * > .#{zone},\n#{t} > * > .zone-#{zone}"
+              end
+            end.join(",\n")
+
+            rules << <<~CSS.strip
+              @container #{@stage_name} (inline-size < #{@horizon_rule[:collapse_at]}) {
+                #{target} {
+                  grid-template-columns: 100%;
+                }
+                #{all_zone_sels} {
                   grid-column: 1;
                 }
               }
@@ -282,8 +409,31 @@ module SlimPickins
         end
       end
 
+      class HorizonBuilder < BaseBuilder
+        attr_reader :zones, :postures, :collapse_threshold
+
+        def initialize(compiler, zones)
+          super(compiler)
+          @zones = zones.map(&:to_sym)
+          @postures = Array.new(@zones.size, :equal)
+          @collapse_threshold = DEFAULT_COLLAPSE_THRESHOLD
+        end
+
+        def posture(*roles)
+          if roles.size != @zones.size
+            raise ArgumentError, "horizon with #{@zones.size} zones (#{@zones.join(', ')}) expected #{@zones.size} postures, got #{roles.size} (#{roles.join(', ')})"
+          end
+          @postures = roles.map(&:to_sym)
+        end
+
+        def collapse_at(threshold)
+          @collapse_threshold = threshold.to_s
+        end
+      end
+
       class ZoneBuilder < BaseBuilder
-        attr_reader :surface_name, :zone_name
+        attr_reader :surface_name, :zone_name, :properties, :child_gap,
+                    :scroll_kind, :presence_kind, :focus_kind
 
         def initialize(compiler, surface_name, zone_name)
           super(compiler)
@@ -291,6 +441,9 @@ module SlimPickins
           @zone_name = zone_name
           @properties = {}
           @child_gap = nil
+          @scroll_kind = nil
+          @presence_kind = nil
+          @focus_kind = nil
         end
 
         def air(level)
@@ -326,9 +479,30 @@ module SlimPickins
           @properties.merge!(treatment_props)
         end
 
+        def scroll(kind)
+          @scroll_kind = kind.to_sym
+        end
+
+        def presence(kind)
+          @presence_kind = kind.to_sym
+        end
+
+        def focus(kind)
+          @focus_kind = kind.to_sym
+        end
+
         def to_css
           rules = []
-          target = ".stage-#{@surface_name} > .#{@zone_name},\n.stage-#{@surface_name} > .zone-#{@zone_name},\nbody > .#{@zone_name},\nbody > .zone-#{@zone_name}"
+          targets = [
+            ".stage-#{@surface_name} > .#{@zone_name}",
+            ".stage-#{@surface_name} > .zone-#{@zone_name}",
+            ".stage-#{@surface_name} .#{@zone_name}",
+            "body > .#{@zone_name}",
+            "body > .zone-#{@zone_name}",
+            ".#{@zone_name}",
+            ".zone-#{@zone_name}"
+          ]
+          target = targets.join(",\n")
 
           unless @properties.empty?
             props_str = @properties.map { |k, v| "  #{k}: #{v};" }.join("\n")
@@ -345,6 +519,97 @@ module SlimPickins
                 display: flex;
                 flex-direction: column;
                 gap: #{@child_gap};
+              }
+            CSS
+          end
+
+          if @scroll_kind == :internal
+            rules << <<~CSS.strip
+              #{target} {
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                min-height: 0;
+              }
+
+              #{targets.map { |t| "#{t} .tab-panel" }.join(",\n")} {
+                max-height: var(--panel-height, 28rem);
+                overflow-y: auto;
+                overflow-x: hidden;
+                overscroll-behavior: contain;
+              }
+            CSS
+          end
+
+          if @presence_kind == :steady
+            rules << <<~CSS.strip
+              #{target} {
+                position: sticky;
+                top: var(--gap, 0.75rem);
+                align-self: start;
+                height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+                max-height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+                overflow: hidden;
+                box-sizing: border-box;
+              }
+
+              #{targets.map { |t| "#{t} .tabs" }.join(",\n")} {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                min-height: 0;
+              }
+
+              #{targets.map { |t| "#{t} .tabs-content" }.join(",\n")} {
+                flex: 1 1 0;
+                min-height: 0;
+                height: 100%;
+              }
+
+              #{targets.map { |t| "#{t} .tab-panel" }.join(",\n")} {
+                height: 100%;
+                min-height: 0;
+                overflow-y: auto;
+              }
+
+              #{targets.map { |t| "#{t} iframe,\n#{t} .iframe" }.join(",\n")} {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            CSS
+          end
+
+          if @focus_kind == :primary
+            rules << <<~CSS.strip
+              #{target} {
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+              }
+
+              #{targets.map { |t| "#{t} textarea,\n#{t} .form textarea" }.join(",\n")} {
+                width: 100%;
+                font-family: var(--face-mono, monospace);
+                font-size: var(--size-small, 0.875rem);
+                line-height: var(--lead-tight, 1.25);
+                background: var(--surface, #ffffff);
+                border: var(--rule-width, 1px) solid var(--rule, #e5e1d8);
+                border-radius: var(--radius, 4px);
+                padding: var(--step, 0.25rem) var(--gap, 0.75rem);
+                box-sizing: border-box;
+                resize: vertical;
+              }
+
+              #{targets.map { |t| "#{t} .field:nth-of-type(1) textarea" }.join(",\n")} {
+                min-height: var(--editor-source-height, 12rem);
+              }
+
+              #{targets.map { |t| "#{t} .field:nth-of-type(2) textarea" }.join(",\n")} {
+                min-height: var(--editor-design-height, 9rem);
+              }
+
+              #{targets.map { |t| "#{t} .field:nth-of-type(3) textarea" }.join(",\n")} {
+                min-height: var(--editor-data-height, 6rem);
               }
             CSS
           end

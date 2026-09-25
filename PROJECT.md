@@ -3,15 +3,16 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  The Design Idiom (Visual Architecture) daytrip landed 2026-09-24.
-  Drafted 10-word spatial manifesto (surface, stage, flank, stack, zone, air, balance, frame, cadence, treatment)
-  using 100% slim-pickins transform grammar. Built SlimPickins::Compiler::DesignIdiom translating human spatial
-  posture to CSS Grid, container queries (@container), and fluid clamp() tokens. Added split design editor and CSS
-  tab to Studio Workbench, wired doc_reader specimen end-to-end. All 7 quality gates green, 431 tests pass with 0 failures.
+  Workbench spatial investigation complete 2026-09-25. Identified four architectural frontiers:
+  (1) eliminating numerical units from `.design` files in favor of qualitative/intrinsic proportions;
+  (2) resolving stylesheet traceability and cascade fragmentation across three strata;
+  (3) eliminating defensive selector explosion via a crisp generator/compiler contract (`data-surface`/`data-zone`);
+  (4) formalizing the App Shell vs Document Page dualism (`100dvh` viewport containment).
+  All 7 quality gates green (105 rules, 0 problems, 31 verified pages), 437 unit tests pass with 0 failures.
 kind: project
-last_touched: 2026-09-24
+last_touched: 2026-09-25
 next_step: >-
-  Advance Daytrip stop 2 (Strong Language maintenance) and stop 3 (Clear Thinking documentation protocols).
+  Take sidetrip in fresh session to resolve the four architectural frontiers (contract clarity, qualitative units, unified CSS pipeline, shell viewport containment).
 
 
 run: ruby examples/roth/app.rb
