@@ -1,8 +1,11 @@
 /* Compiled automatically from studio/uis/workbench/workbench.design */
 
-.sidebar_layout {
+body {
   container-type: inline-size;
   container-name: workbench;
+}
+
+.sidebar_layout {
   display: grid;
   align-items: start;
   padding: clamp(0.5rem, 1.5cqi, 0.875rem);
@@ -95,6 +98,7 @@
 .editor textarea,
 .editor .form textarea {
   width: 100%;
+  max-width: none;
   font-family: var(--face-mono, monospace);
   font-size: var(--size-small, 0.875rem);
   line-height: var(--lead-tight, 1.25);

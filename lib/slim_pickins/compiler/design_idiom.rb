@@ -233,6 +233,17 @@ module SlimPickins
         # not before.
         KIND_WRAPPERS = { shell: '.sidebar_layout', document: 'body' }.freeze
 
+        # A container query cannot reliably restyle the element that
+        # establishes it — verified empirically (isolated reproduction,
+        # not spec-reading): `body { container-type: inline-size; } @container
+        # name (...) { body { grid-template-columns: 100%; } }` never
+        # matches, at any width, in this browser. Splitting the query onto
+        # the wrapper's real parent (which already exists — no new markup)
+        # fixes it. Each `KIND_WRAPPERS` entry needs one: `.sidebar_layout`
+        # sits directly under `body` (`layout.sp`); `body` sits directly
+        # under `html`, always.
+        KIND_CONTAINER_PARENTS = { shell: 'body', document: 'html' }.freeze
+
         attr_reader :surface_name, :stage_name, :air_level, :flank_rule, :stack_rule, :horizon_rule
 
         def initialize(compiler, surface_name, stage_name, kind: :document)
@@ -302,17 +313,30 @@ module SlimPickins
 
         def to_css
           rules = []
-          target = if @stage_name.to_sym == @surface_name.to_sym
+          is_default_stage = @stage_name.to_sym == @surface_name.to_sym
+          target = if is_default_stage
                      KIND_WRAPPERS.fetch(@kind) { KIND_WRAPPERS[:document] }
                    else
                      ".#{@stage_name}"
                    end
+          # Named, non-default stages aren't exercised by either real
+          # `.design` file today, and the compiler has no way to know a
+          # generic one's real parent — falls back to self-referencing
+          # (the same bug this fix targets) only for that untested path.
+          container_parent = is_default_stage ? KIND_CONTAINER_PARENTS.fetch(@kind) { KIND_CONTAINER_PARENTS[:document] } : target
 
-          # Container Query Context & Air
+          # Container Query Context — established on the real parent, not
+          # on `target` itself (see KIND_CONTAINER_PARENTS).
           rules << <<~CSS.strip
-            #{target} {
+            #{container_parent} {
               container-type: inline-size;
               container-name: #{@stage_name};
+            }
+          CSS
+
+          # Air
+          rules << <<~CSS.strip
+            #{target} {
               display: grid;
               align-items: start;
               padding: #{@air_level || '0'};
@@ -609,6 +633,7 @@ module SlimPickins
 
               #{targets.map { |t| "#{t} textarea,\n#{t} .form textarea" }.join(",\n")} {
                 width: 100%;
+                max-width: none;
                 font-family: var(--face-mono, monospace);
                 font-size: var(--size-small, 0.875rem);
                 line-height: var(--lead-tight, 1.25);

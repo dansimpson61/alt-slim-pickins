@@ -292,4 +292,31 @@ class DesignIdiomTest < Minitest::Test
     refute_includes css, '.stage-'
     refute_includes css, '.surface-'
   end
+
+  def test_container_query_is_established_on_the_real_parent_not_the_grid_target
+    # A container query cannot reliably restyle the element that
+    # establishes it - verified empirically against a real browser (an
+    # isolated repro, not a spec reading): container-type on the same
+    # selector the @container rule targets never matches, at any width.
+    # Regression guard against re-merging them back onto one selector.
+    shell_css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
+      surface shell_page, kind: shell
+        stage
+          flank left_col, beside: right_col
+    DESIGN
+    assert_includes shell_css,
+      "body {\n  container-type: inline-size;\n  container-name: shell_page;\n}"
+    sidebar_layout_block = shell_css[/\.sidebar_layout \{([^}]*)\}/, 1]
+    refute_includes sidebar_layout_block, 'container-type'
+
+    document_css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
+      surface document_page
+        stage
+          flank left_col, beside: right_col
+    DESIGN
+    assert_includes document_css,
+      "html {\n  container-type: inline-size;\n  container-name: document_page;\n}"
+    body_block = document_css[/body \{([^}]*)\}/, 1]
+    refute_includes body_block, 'container-type'
+  end
 end
