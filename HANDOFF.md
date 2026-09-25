@@ -10,13 +10,17 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
-3. `PROJECT.md` — `next_step` points at Package C: Lean & Elemental Kernel
+3. `PROJECT.md` — `next_step`: no active thread as of 2026-09-25; three items
+   deliberately left open for a future token ground-truthing daytrip
 4. `HANDOFF.md` — this document, specifically the active itinerary below
-5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0e.md` — outcomes of Volets 1 through 4b
-6. `PRIMER.md` — the Way, as it stands now
-7. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
-8. `LORE.md` — what previous sessions *learned*; the last entries are this session's
-9. `working-with-dan.md` — candid notes on working with him: what his questions mean, what lands, what does not. It is short, it is honest, and **it is yours to keep true** — updating it is part of the round.
+5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0g.md` — outcomes of every daytrip so far
+6. `COMMUNITY_BULLETIN_BOARD.md` — the council's most recent session (currently:
+   the workbench spatial frontier fixes, 2026-09-25); `.claude/skills/council/SKILL.md`
+   is the reusable skill, read it before convening the council again
+7. `PRIMER.md` — the Way, as it stands now
+8. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
+9. `LORE.md` — what previous sessions *learned*; the last entries are this session's
+10. `working-with-dan.md` — candid notes on working with him: what his questions mean, what lands, what does not. It is short, it is honest, and **it is yours to keep true** — updating it is part of the round.
 
 Root holds what you read. `history/` is roadmap 0.1, consulted, not maintained;
 `roth/` is notes on a different project. Don't re-derive any of the above in
@@ -30,18 +34,21 @@ conversation; it is all written down.
 - **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: Landed 2026-09-22. Delivered W2 (live test suite 8th leg on `/status`) and W3 (combined `Inspect` surface uniting Semantic Tree AST and The Why Pane / inference provenance inspector).
 - **Volet 4 (The Empirical Diagnostic Taxonomy, `DAYTRIP-0.4.0d.md`)**: Landed 2026-09-22. Delivered `SlimPickins::Taxonomy` as SSOT for 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual); 64-word empirical diagnostic audit surfacing missing `stack`/`cluster`, ad-hoc `figcaption`/`summary` kernel leaks, and the visual styling idiom standard; multi-category shelf presence with cross-facets on Workbench and Classic UIs; `PRIMER.md` updated.
 - **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words, `DAYTRIP-0.4.0e.md`)**: Landed 2026-09-23. Delivered in-buffer `def <word>, *params` authoring with flexible argument binding, declaration-free word execution (Package C proving ground), enhanced `box subject, title` context shifting, positional `link` fallback, Studio `/mint` endpoint, and live editor minting toolbar affordance.
-- **Package C (Lean & Elemental Kernel)**: **ACTIVE NEXT STEP**.
+- **Volet 5 (Package C: Lean & Elemental Kernel, `DAYTRIP-0.4.0f.md`)**: Landed 2026-09-23. Privileged `tag` primitive with a compilation-privilege boundary; `figcaption`/`summary` absorbed into their single consumers (64 words → 62); `paragraph` re-atomized over `tag p`; flexible argument binding generalized to disk `def` partials.
+- 2026-09-24 (no numbered volet): the Visual Architecture & Spatial Manifesto compiler landed (`docs/DESIGN_IDIOM.md`, `lib/slim_pickins/compiler/design_idiom.rb`), then the Council spatial manifesto (`horizon`/`posture`/`scroll`/`presence`/`focus`) the same round.
+- **Volet 6 (The Council Skill & Workbench Spatial Frontier, `DAYTRIP-0.4.0g.md`)**: Landed 2026-09-25. The council pattern formalized as a reusable skill (`.claude/skills/council/SKILL.md`), used to resolve the four workbench spatial frontiers (revised mid-session after dan rejected an authoring-redundancy proposal), then three real rendering defects dan caught by eye — a `max-width` leak, container queries that had never actually worked since the compiler's first commit, and three shell columns at three different heights.
+- **Active next step**: **none** — three items deliberately left open for a future token ground-truthing daytrip (see `PROJECT.md next_step` and `DAYTRIP-0.4.0g.md`'s closing section).
 
-### Current Vitals (measured 2026-09-23)
-- **Census SSOT (`bin/census.rb`)**: 64 canonical words (42 Ruby primitives + 22 .sp partials), 7 apps, 29 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 44 test files.
-- **Full Suite**: 402 runs, 5,436 assertions, 0 failures, 0 errors, 0 skips in one process.
-- **Check Grammar**: 1,235 sentences checked, 94 words defined, 0 problems.
-- **Check Shape**: 64 canonical words, 987 sentences, 0 problems.
-- **Check Styles**: 26 emitted classes, 59 rendering, 105 rules, 0 problems.
+### Current Vitals (measured 2026-09-25)
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 49 test files.
+- **Full Suite**: 445 runs, 5,619 assertions, 0 failures, 0 errors, 0 skips in one process.
+- **Check Grammar**: 1,254 sentences checked, 94 words defined, 0 problems.
+- **Check Shape**: 62 canonical words, 1,006 sentences, 0 problems.
+- **Check Styles**: 27 emittable classes, 59 rendering, 105 rules, 0 problems.
 - **Verify Pages**: 31 pages verified, 0 problems.
 - **Promise Ledger**: 35 promises (32 read, 3 forwarded, 0 unread), 0 problems.
 - **Convention Register**: 38 conventions, 0 problems.
-- **Resume Card**: 7 fields present, last_touched 2026-09-23, 0 problems.
+- **Resume Card**: 7 fields present, last_touched 2026-09-25, 0 problems.
 
 ---
 
@@ -79,23 +86,36 @@ conversation; it is all written down.
 - **Enhanced Primitives**: `box subject, title` shifts context and handles empty/nil subjects gracefully; positional `link label, href` fallback.
 - **Studio Minting Affordance (`studio/pages.rb`, `studio/app.rb`, `assets/studio.js`)**: Interactive `Mint <word>(*params) → partial` toolbar button in editor; `POST /mint` endpoint promotes local definitions to disk partials and re-renders live.
 
-### [NEXT] Package C — Lean & Elemental Kernel (Kernel Purity & Primitives)
-*Focus: Shrinking the compiled Ruby core, generalizing flexible argument binding and declaration-free words across the language, and building words out of elemental primitives.*
-1. **Generalize Flexible Argument Binding & Declaration-Free Words**:
-   - Apply the proven Volet 4b binding engine (`define_local_word`) across all 64 canonical words, replacing verbose 16-parameter `contract` metadata with elemental declarations.
-2. **Privileged `tag` Primitive (`KERNEL.md` Round 1)**:
-   - Introduce a privileged `tag` primitive in the kernel that is strictly forbidden in app views by test/gate, but permitted in `lib/vocabulary/`.
-3. **Lower First Wave of Ruby Atoms to `.sp` Compositions**:
-   - Re-atomize single-consumer or thin-wrapper Ruby words (`figcaption`, `summary`, `box`, `paragraph`) into pure `.sp` partial compositions.
-   - Inverts the kernel: moves alt-slim-pickins further toward the Rubinius ideal where the core is minimal and vocabulary is authored in the language itself.
-4. **Cost Budget Verification**:
-   - Re-measure cost before and after lowering words, ensuring warm render stays strictly under the 10 ms guardrail.
+### [COMPLETED] Volet 5: Package C — Lean & Elemental Kernel (`DAYTRIP-0.4.0f.md`)
+- **Privileged `tag` Primitive**: strictly refused in app/user templates by compiler error; compilation cache partitioned on `[source, privileged]`.
+- **Absorbed Single-Consumers**: `figcaption`/`summary` folded into `figure`/`disclosure` (canonical vocabulary 64 → 62).
+- **Re-atomized `paragraph`**: expressed as a `.sp` partial over `tag p`.
+- **Flexible Argument Binding for Disk Partials**: `Builder.bind_parameters` generalizes Volet 4b's binding engine to `.sp` partials on disk, not just in-buffer.
+- Byte-diff verified against all application pages; warm render 6.24 ms (budget 10 ms).
+
+### [COMPLETED] The Design Idiom Compiler & Council Spatial Manifesto (no volet number, 2026-09-24)
+- **`SlimPickins::Compiler::DesignIdiom`** (`lib/slim_pickins/compiler/design_idiom.rb`, `docs/DESIGN_IDIOM.md`): a companion `.design` language compiling qualitative spatial vocabulary (`surface`, `stage`, `zone`, `flank`, `stack`, `air`, `frame`, `cadence`, `treatment`) to modern CSS Grid + Container Queries.
+- Same round: `horizon`/`posture` (multi-zone planes), `scroll`/`presence`/`focus` zone qualities, Sandi Metz hygiene (`min-height: 0`), `.panes` dissolution via `display: contents`.
+
+### [COMPLETED] Volet 6: The Council Skill & Workbench Spatial Frontier (`DAYTRIP-0.4.0g.md`)
+- **`.claude/skills/council/SKILL.md`**: the multi-persona architecture-debate pattern formalized as a reusable skill — one continuous transcript, never one subagent per persona; every round after the first must engage a specific prior claim by name.
+- **The four workbench spatial frontiers resolved** (qualitative collapse tokens, one compiled-CSS pipeline with provenance, real selectors replacing a defensive 6/7-way guess list, `100vh` → `100dvh`) — Frontier 3 revised mid-session after dan rejected authoring an already-inferable zone name as a `data-*` HTML attribute literal.
+- **Three real rendering defects**, each found by dan in the live studio and measured before being touched: a `max-width` leak in the editor's textareas; container queries that had never worked since the compiler's first commit (a self-referencing `@container` pattern — fixed with zero new markup); `align-items: start` leaving the three shell columns at three different heights (now `stretch`).
+- Left open, by dan's own call: the `collapse`/`balance` rem scale, `output`'s independently-governed height, `--footer-height`'s corrected-but-still-guessed value — candidates for a future token ground-truthing daytrip, not decided this round.
+
+### No active next step
+
+Nothing is mandated next. Candidates, none prioritized over the others —
+open with dan rather than picking unilaterally:
+- **The token ground-truthing daytrip** named above (`DAYTRIP-0.4.0g.md`'s closing section) — real values for the `.design` collapse/balance scale and the workbench's menu/footer-height constants, measured against real embedding widths instead of preserved-by-habit numbers.
+- **Package D** below (still unstarted, still valid).
+- Whatever roadmap question dan brings to the next session — this project's own convention (`README.md`, *How roadmaps go*) is to re-read the history and lore before choosing a direction, not to assume the last session's tail is the next session's head.
 
 ### Package D — House Honesty & Integrity (Census, Registry & Doc Parity)
 *Focus: Aligning every prose document and registry with the living reality of the codebase.*
 1. **Harmonize Historical Prose Census**:
    - Realign `README.md`, `DESIGN.md`, `PRIMER.md`, and `CONTRACT.md`.
-   - Update historical figures (outdated "53 words / 2 apps / 10 pages") to the true living counts (64 words / 6 apps / 31 pages).
+   - Update historical figures (outdated "53 words / 2 apps / 10 pages") to the true living counts (62 words / 7 apps / 31 pages).
 2. **Registry Hygiene & Dead Stub Removal**:
    - Fill 14 blank slots in `VOCABULARY.md`.
    - Purge dead or deprecated stubs from `builder.rb` and `words.rb`.
@@ -110,6 +130,21 @@ The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is agent-managed.
 - Check the port: `curl -s -m 2 http://127.0.0.1:4580/`.
 - If down or after code changes, run in background:
   `cd ~/dev/alt-slim-pickins && exec ruby studio/app.rb`
+- **A `.design`/`.sp` file edit takes effect on the next request, with no
+  restart** — the compiler reads those fresh every time. A `lib/` Ruby
+  code edit does not; Ruby doesn't reload changed source, so the running
+  process keeps serving the old code until it's actually restarted.
+- **Restarting reliably is the trap** (cost two dead-end detours in
+  2026-09-25's session, `DAYTRIP-0.4.0g.md`): Puma renames its own process
+  title to `puma 8.0.2 (tcp://localhost:4580) [alt-slim-pickins]`, so
+  `pgrep -f "ruby studio/app.rb"` silently matches nothing, `kill`s
+  nothing, and a second `ruby studio/app.rb &` then fails to bind (port
+  still held) while the stale process keeps answering every request as if
+  the restart worked. Kill by the listening socket's actual PID instead:
+  `kill $(lsof -t -i:4580)` (or `ss -ltnp | grep 4580`), confirm the port
+  is free, *then* start the new process — and verify with a direct
+  `curl`/`fetch` for a string only the new code would emit, not just an
+  HTTP 200, before trusting anything rendered against it.
 - The checkers' status page at `/status` re-runs the gate live on every visit.
 
 ## Comprehensive Housekeeping Protocol (The RIF Loop)
@@ -134,7 +169,7 @@ You must execute every step of this loop per round, not at the end of the sessio
   adds vocabulary, never syntax. A dot means data; a bare word is language.
   There is no numeric literal. A name is a subject and must exist. Mechanical
   facts are free; judgements belong to the app. A line that states the
-  inferable should not exist. This is a noun language — 59 of 64.
+  inferable should not exist. This is a noun language — 57 of 62.
 - **Every truth has one home** (the grammar in Transform, the vocabulary in
   contracts, the checkers consuming, never mirroring).
 - **A rule must outlive its reason** — when a proscription blocks empowerment

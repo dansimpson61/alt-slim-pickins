@@ -3,24 +3,31 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  The four workbench spatial frontiers (identified 2026-09-25) are resolved, in three commits.
-  A council session (COMMUNITY_BULLETIN_BOARD.md) proposed data-surface/data-zone HTML attributes
-  for frontier 3; dan rejected authoring an already-inferable name as a DSL literal, and the
-  revised fix needs zero new HTML attributes and zero .sp file changes — a compiled stylesheet
-  is already scoped by which pages load it, so a zone's real class needs no attribute, and the
-  one case that wasn't inferable (the shared sidebar_layout wrapper) is resolved by a `surface
-  ..., kind: shell` token pulled forward from the deferred Scope Proposal 1. Frontier 1 (qualitative
-  collapse tokens), frontier 2 (one compiled-CSS pipeline with provenance), and frontier 4 (100vh
-  -> 100dvh, narrower than first framed) landed alongside. assets/workbench.css: 459 lines / 99
-  `:has(` -> 162 lines / 0. All 7 quality gates green (105 rules, 0 problems, 31 verified pages),
-  443 unit tests pass with 0 failures. Verified live by rendering the real workbench page,
-  including the container-query collapse at a sub-56rem width.
+  DAYTRIP-0.4.0g.md closed 2026-09-25: the council skill (.claude/skills/council/SKILL.md,
+  10-voice roster) landed, used it to resolve the four workbench spatial frontiers, then chased
+  three real rendering defects dan caught by eye in the live studio — a max-width leak in the
+  editor's textareas, container queries that had never actually worked since the compiler was
+  first written (a self-referencing @container pattern, fixed with zero new markup by splitting
+  container-type onto each wrapper's real DOM parent), and align-items: start leaving the three
+  shell columns at three different heights (now align-items: stretch; library/editor match
+  exactly, output stays independently sized by design). Two "verified live" claims this same
+  session wrote into LORE.md earlier that night were themselves wrong and corrected in place.
+  assets/workbench.css: 459 lines / 99 `:has(` -> 162 lines / 0. All 7 quality gates green
+  (105 rules, 0 problems, 31 verified pages), 445 unit tests pass with 0 failures, one process.
+  Nine commits, each independently green, verified against a genuinely restarted studio server
+  and live DOM measurement — not screenshots alone.
 kind: project
 last_touched: 2026-09-25
 next_step: >-
-  No active thread. Pick the next roadmap question fresh, or take up Scope Proposal 1's
-  fuller form (surface-level containment: presence/100dvh applying once per kind instead
-  of assembled zone by zone) if the workbench needs another spatial pass.
+  No active thread — pick the next roadmap question fresh. Three items deliberately left open
+  from tonight, candidates for a future token ground-truthing daytrip rather than piecemeal
+  patches: collapse: tight's 26rem threshold and balance: subordinate's 14rem lead floor (the
+  same underlying question — real values for the .design collapse/balance scale, measured
+  against real embedding widths, not preserved-by-habit numbers); output's independent height
+  under presence: steady (full three-way row parity needs that calc moved from the zone to the
+  stage/row level — the same deferred "surface containment" idea as the first council session's
+  Scope Proposal 1); and --footer-height: 2.8rem (corrected from a wrong 2rem this session, but
+  still a hardcoded guess about the footer's real rendered size, same fragile character as tight).
 
 
 run: ruby examples/roth/app.rb
@@ -130,6 +137,25 @@ notes: >-
   visual idiom standard) with multi-category shelf presence; Pain Point 2
   (Studio partial minting / OOP bite-sized, locally scoped domain words to combat
   long, unDRY views) reserved for dedicated execution as Volet 4b.
+  Volet 5 (Package C, DAYTRIP-0.4.0f.md, 2026-09-23) lowered the compiled Ruby
+  core into elemental primitives (64 words -> 62, figcaption/summary absorbed
+  into their single consumers) and landed flexible-argument disk `def` partials.
+  2026-09-24 — the Visual Architecture & Spatial Manifesto compiler landed
+  (docs/DESIGN_IDIOM.md, lib/slim_pickins/compiler/design_idiom.rb), then the
+  Council spatial manifesto (horizon/posture/scroll/presence/focus) the same
+  round. 2026-09-25 — DAYTRIP-0.4.0g.md: the council skill formalized
+  (.claude/skills/council/SKILL.md) and used to resolve the four workbench
+  spatial frontiers (qualitative collapse tokens, one compiled-CSS pipeline,
+  real selectors replacing a defensive guess list, 100vh -> 100dvh), revised
+  mid-session after dan rejected the first Frontier 3 proposal for authoring
+  an already-inferable name as a DSL literal — then three real rendering
+  defects dan caught by eye (a max-width leak, container queries that had
+  never actually worked since the compiler's first commit, three shell
+  columns at three different heights), each measured live and two of them
+  correcting the session's own earlier wrong "verified" claims. Left open,
+  by dan's own call, for a future token ground-truthing daytrip: the
+  collapse/balance rem scale, output's independently-governed height, and
+  --footer-height's corrected-but-still-guessed value.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.

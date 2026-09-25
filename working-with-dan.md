@@ -78,6 +78,26 @@ working manual that should be better after every session than it was before.
   but many (most?) do not" — his suspicion was right (34/64 useful), and
   confirming it *and fixing it* in one cycle is the expected answer, never
   a defense of the current behavior (observed 2026-09-15).
+  **Recurred 2026-09-25**: "server running old code, not the code itself"
+  happened again, twice, chasing a container-query and a stretch fix — Puma
+  renames its process title, so `pgrep -f "ruby studio/app.rb"` silently
+  kills nothing and a stale process keeps answering as if a restart worked.
+  Now written down operationally in `HANDOFF.md` (kill by the listening
+  socket's PID, verify with a string only new code emits) specifically so
+  a third session doesn't lose the same twenty minutes.
+- **A follow-up screenshot is not new ground until proven otherwise — it
+  is often "was your last fix actually complete?"** 2026-09-25, three
+  rounds in one session: uninviting preview → fixed → "contents are
+  undersized" (a different, real defect the first fix hadn't touched) →
+  fixed → "the three columns' three different heights?" (the *same*
+  screenshot's second half, not yet addressed by the sizing fix). Each
+  time the right move was a fresh live measurement, not a defense that the
+  prior fix should have covered it — one round even overturned this same
+  session's own five-minutes-earlier "verified live" claim (observed
+  measuring a screenshot as evidence the container-query fix worked, when
+  it hadn't — see `LORE.md`, 2026-09-25). Treat "and the X?" as "you
+  stopped one measurement short," not as a new complaint needing its own
+  investigation from zero.
 
 ## What lands well
 
