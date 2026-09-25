@@ -14,15 +14,15 @@ class DesignIdiomTest < Minitest::Test
 
     css = SlimPickins::DesignIdiom.compile(source)
 
-    assert_includes css, '.surface-doc_reader { display: block; width: 100%; }'
+    assert_includes css, 'body {'
     assert_includes css, 'container-type: inline-size;'
     assert_includes css, 'container-name: doc_reader;'
     assert_includes css, 'padding: clamp(1.5rem, 4cqi, 3rem);'
     assert_includes css, 'gap: clamp(1.5rem, 4cqi, 3rem);'
     assert_includes css, 'grid-template-columns: minmax(14rem, 1fr) minmax(0, 3fr);'
-    assert_includes css, '.stage-doc_reader > .catalog,'
+    assert_includes css, 'body .catalog {'
     assert_includes css, 'grid-column: 1;'
-    assert_includes css, '.stage-doc_reader > .reading_pane,'
+    assert_includes css, 'body .reading_pane {'
     assert_includes css, 'grid-column: 2;'
     assert_includes css, '@container doc_reader (inline-size < 48rem) {'
     assert_includes css, 'grid-template-columns: 100%;'
@@ -76,13 +76,13 @@ class DesignIdiomTest < Minitest::Test
     css = SlimPickins::DesignIdiom.compile(source)
 
     # Catalog zone assertions
-    assert_includes css, '.stage-doc_reader > .catalog,'
+    assert_includes css, '.catalog {'
     assert_includes css, 'background: var(--surface-soft, #f9f8f5);'
     assert_includes css, 'border: 1px solid var(--rule, #e5e1d8);'
     assert_includes css, 'gap: 0.35rem;'
 
     # Reading pane zone assertions
-    assert_includes css, '.stage-doc_reader > .reading_pane,'
+    assert_includes css, '.reading_pane {'
     assert_includes css, 'max-width: 65ch;'
     assert_includes css, 'line-height: 1.7;'
     assert_includes css, 'font-size: 1.05rem;'
@@ -153,7 +153,7 @@ class DesignIdiomTest < Minitest::Test
 
   def test_surface_with_direct_air_and_horizon_manifesto
     source = <<~DESIGN
-      surface workbench
+      surface workbench, kind: shell
         air tight
 
         horizon library, editor, output
@@ -178,7 +178,7 @@ class DesignIdiomTest < Minitest::Test
     css = SlimPickins::DesignIdiom.compile(source)
 
     # Surface & Stage grid container
-    assert_includes css, '.surface-workbench { display: block; width: 100%; }'
+    assert_includes css, '.sidebar_layout {'
     assert_includes css, 'container-name: workbench;'
     assert_includes css, 'grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);'
     assert_includes css, 'padding: clamp(0.5rem, 1.5cqi, 0.875rem);'
@@ -252,10 +252,44 @@ class DesignIdiomTest < Minitest::Test
 
     css = SlimPickins::DesignIdiom.compiled_stylesheet(source, provenance: 'from a test')
     assert_includes css, '/* Compiled from a test */'
-    assert css.index('/* Compiled from a test */') < css.index('.surface-labeled_page')
+    assert css.index('/* Compiled from a test */') < css.index('container-type: inline-size;')
   end
 
   def test_compiled_stylesheet_leaves_empty_source_empty
     assert_equal '', SlimPickins::DesignIdiom.compiled_stylesheet('', provenance: 'from a test')
+  end
+
+  def test_shell_kind_targets_sidebar_layout_with_no_guessed_selectors
+    source = <<~DESIGN
+      surface shell_page, kind: shell
+        stage
+          flank left_col, beside: right_col
+
+        zone left_col
+          frame quiet
+    DESIGN
+
+    css = SlimPickins::DesignIdiom.compile(source)
+    assert_includes css, '.sidebar_layout {'
+    assert_includes css, '.left_col {'
+    refute_includes css, '.stage-'
+    refute_includes css, '.surface-'
+    refute_includes css, '.zone-'
+    refute_includes css, ':has('
+    refute_includes css, ':not('
+  end
+
+  def test_document_kind_is_the_default_and_targets_body
+    source = <<~DESIGN
+      surface document_page
+        stage
+          flank left_col, beside: right_col
+    DESIGN
+
+    css = SlimPickins::DesignIdiom.compile(source)
+    assert_includes css, 'body {'
+    refute_includes css, '.sidebar_layout'
+    refute_includes css, '.stage-'
+    refute_includes css, '.surface-'
   end
 end

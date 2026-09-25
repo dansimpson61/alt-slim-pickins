@@ -1,4 +1,4 @@
-surface workbench
+surface workbench, kind: shell
   air tight
 
   horizon library, editor, output

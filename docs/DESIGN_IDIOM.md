@@ -56,10 +56,10 @@ Every word in the design idiom models exemplary lexical practice:
 
 ### `surface`
 - **What it is**: The top-level root declaration binding a visual specification to a page or view surface.
-- **What it is for**: Defining the scope of a visual manifesto, establishing the namespace for all generated CSS rules, and naming the container context.
+- **What it is for**: Defining the scope of a visual manifesto and naming which of two known container conventions its `stage` targets — `kind: :shell` for an app tool that owns the viewport (the studio workbench: `.sidebar_layout`, the one real shell wrapper this project has), or the default `kind: :document` for a page that flows normally under `body`. `surface` itself compiles to no CSS of its own; `kind` is read once, by the `stage` it encloses.
 - **How to use it**:
   ```
-  surface <name>
+  surface <name>, kind: shell
     # stage and zone declarations indented below
   ```
 - **Example**:
@@ -68,22 +68,15 @@ Every word in the design idiom models exemplary lexical practice:
     stage
       flank catalog, beside: reading_pane, balance: subordinate
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
-
-```css
-.surface-doc_reader {
-  display: block;
-  width: 100%;
-}
-```
-</details>
+  (No `kind:` — `doc_reader` is a document surface; its zones flow directly
+  under `body`, which is also why the compiled rule below targets `body`
+  rather than a wrapper element that doesn't exist in this page's markup.)
 
 ---
 
 ### `stage`
 - **What it is**: The primary canvas context within a surface.
-- **What it is for**: Establishing an inline-size container query context (`container-type: inline-size`) so that internal spatial postures (`flank`, `stack`) respond to their container's actual width rather than the screen viewport.
+- **What it is for**: Establishing an inline-size container query context (`container-type: inline-size`) so that internal spatial postures (`flank`, `stack`) respond to their container's actual width rather than the screen viewport. It targets the real element implied by its surface's `kind` — never a guessed class.
 - **How to use it**:
   ```
   stage
@@ -100,7 +93,7 @@ Every word in the design idiom models exemplary lexical practice:
 <summary><strong>Compiled CSS</strong></summary>
 
 ```css
-.stage-doc_reader {
+body {
   container-type: inline-size;
   container-name: doc_reader;
   display: grid;
@@ -133,28 +126,24 @@ Every word in the design idiom models exemplary lexical practice:
 <summary><strong>Compiled CSS</strong></summary>
 
 ```css
-.stage-doc_reader {
+body {
   grid-template-columns: minmax(14rem, 1fr) minmax(0, 3fr);
 }
 
-.stage-doc_reader > .catalog,
-.stage-doc_reader > .zone-catalog {
+body .catalog {
   grid-column: 1;
 }
 
-.stage-doc_reader > .reading_pane,
-.stage-doc_reader > .zone-reading_pane {
+body .reading_pane {
   grid-column: 2;
 }
 
 @container doc_reader (inline-size < 48rem) {
-  .stage-doc_reader {
+  body {
     grid-template-columns: 100%;
   }
-  .stage-doc_reader > .catalog,
-  .stage-doc_reader > .zone-catalog,
-  .stage-doc_reader > .reading_pane,
-  .stage-doc_reader > .zone-reading_pane {
+  body .catalog,
+  body .reading_pane {
     grid-column: 1;
   }
 }
@@ -178,7 +167,7 @@ Every word in the design idiom models exemplary lexical practice:
 <summary><strong>Compiled CSS</strong></summary>
 
 ```css
-.stage-doc_reader {
+body {
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 4cqi, 3rem);
@@ -208,8 +197,7 @@ Every word in the design idiom models exemplary lexical practice:
 <summary><strong>Compiled CSS</strong></summary>
 
 ```css
-.stage-doc_reader > .catalog,
-.stage-doc_reader > .zone-catalog {
+.catalog {
   background: var(--surface-soft, #f9f8f5);
   border: 1px solid var(--rule, #e5e1d8);
   border-radius: var(--radius, 4px);
@@ -219,6 +207,10 @@ Every word in the design idiom models exemplary lexical practice:
   gap: 0.35rem;
 }
 ```
+A zone's selector is its own bare class — the same class its `.sp` partial
+already renders via this project's app_class-promotion convention, and
+already scoped safely because a compiled `.design` stylesheet is only ever
+loaded by the pages that use it.
 </details>
 
 ---

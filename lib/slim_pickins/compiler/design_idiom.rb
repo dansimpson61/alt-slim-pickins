@@ -151,8 +151,8 @@ module SlimPickins
           @surfaces = []
         end
 
-        def surface(name, &block)
-          surface_builder = SurfaceBuilder.new(@compiler, name.to_sym)
+        def surface(name, kind: :document, &block)
+          surface_builder = SurfaceBuilder.new(@compiler, name.to_sym, kind: kind)
           surface_builder.instance_eval(&block) if block
           @surfaces << surface_builder
         end
@@ -163,11 +163,12 @@ module SlimPickins
       end
 
       class SurfaceBuilder < BaseBuilder
-        attr_reader :name, :stages, :zones
+        attr_reader :name, :stages, :zones, :kind
 
-        def initialize(compiler, name)
+        def initialize(compiler, name, kind: :document)
           super(compiler)
           @name = name
+          @kind = kind
           @stages = []
           @zones = []
           @default_stage = nil
@@ -175,7 +176,7 @@ module SlimPickins
 
         def default_stage
           @default_stage ||= begin
-            sb = StageBuilder.new(@compiler, @name, @name)
+            sb = StageBuilder.new(@compiler, @name, @name, kind: @kind)
             @stages << sb
             sb
           end
@@ -201,7 +202,7 @@ module SlimPickins
           sb = if (stage_name.nil? || stage_name.to_sym == @name.to_sym) && @default_stage && !@default_stage.has_rules?
                  @default_stage
                else
-                 StageBuilder.new(@compiler, @name, stage_name || @name).tap { |s| @stages << s }
+                 StageBuilder.new(@compiler, @name, stage_name || @name, kind: @kind).tap { |s| @stages << s }
                end
           sb.instance_eval(&block) if block
           sb
@@ -215,9 +216,7 @@ module SlimPickins
         end
 
         def to_css
-          rules = [
-            ".surface-#{@name} { display: block; width: 100%; }"
-          ]
+          rules = []
           rules.concat(@stages.map(&:to_css))
           rules.concat(@zones.map(&:to_css))
           rules.reject(&:empty?).join("\n\n")
@@ -225,12 +224,22 @@ module SlimPickins
       end
 
       class StageBuilder < BaseBuilder
+        # The one real selector per surface kind. Both are already-real,
+        # already-scoped classes/elements — `.sidebar_layout` because this
+        # project's own app_class convention makes it real, `body` because a
+        # document-kind surface's zones sit under it directly and a compiled
+        # stylesheet is only ever loaded by the pages that need it. Neither
+        # guesses; a third surface kind earns a third entry when it exists,
+        # not before.
+        KIND_WRAPPERS = { shell: '.sidebar_layout', document: 'body' }.freeze
+
         attr_reader :surface_name, :stage_name, :air_level, :flank_rule, :stack_rule, :horizon_rule
 
-        def initialize(compiler, surface_name, stage_name)
+        def initialize(compiler, surface_name, stage_name, kind: :document)
           super(compiler)
           @surface_name = surface_name
           @stage_name = stage_name
+          @kind = kind
           @air_level = nil
           @flank_rule = nil
           @stack_rule = nil
@@ -293,17 +302,11 @@ module SlimPickins
 
         def to_css
           rules = []
-          targets = if @stage_name.to_sym == @surface_name.to_sym
-                      [".stage-#{@stage_name}",
-                       ".#{@stage_name}",
-                       ".surface-#{@surface_name}",
-                       "body:has(> .sidebar_layout) > .sidebar_layout",
-                       ".sidebar_layout:has(> .library)",
-                       "body:not(:has(> .sidebar_layout))"]
-                    else
-                      [".stage-#{@stage_name}", ".#{@stage_name}"]
-                    end
-          target = targets.join(', ')
+          target = if @stage_name.to_sym == @surface_name.to_sym
+                     KIND_WRAPPERS.fetch(@kind) { KIND_WRAPPERS[:document] }
+                   else
+                     ".#{@stage_name}"
+                   end
 
           # Container Query Context & Air
           rules << <<~CSS.strip
@@ -328,20 +331,20 @@ module SlimPickins
                 grid-template-columns: #{cols};
               }
 
-              #{targets.map { |t| "#{t} > h1:first-child" }.join(",\n")} {
+              #{target} > h1:first-child {
                 grid-column: 1 / -1;
               }
             CSS
 
-            lead_sels = targets.map { |t| "#{t} > .#{lead},\n#{t} > .zone-#{lead}" }.join(",\n")
-            companion_sels = targets.map { |t| "#{t} > .#{companion},\n#{t} > .zone-#{companion}" }.join(",\n")
+            lead_sel = "#{target} .#{lead}"
+            companion_sel = "#{target} .#{companion}"
 
             rules << <<~CSS.strip
-              #{lead_sels} {
+              #{lead_sel} {
                 grid-column: 1;
               }
 
-              #{companion_sels} {
+              #{companion_sel} {
                 grid-column: 2;
               }
             CSS
@@ -351,8 +354,8 @@ module SlimPickins
                 #{target} {
                   grid-template-columns: 100%;
                 }
-                #{lead_sels},
-                #{companion_sels} {
+                #{lead_sel},
+                #{companion_sel} {
                   grid-column: 1;
                 }
               }
@@ -366,19 +369,17 @@ module SlimPickins
                 grid-template-columns: #{cols};
               }
 
-              #{targets.map { |t| "#{t} > h1:first-child" }.join(",\n")} {
+              #{target} > h1:first-child {
                 grid-column: 1 / -1;
               }
 
-              #{targets.map { |t| "#{t} > .panes" }.join(",\n")} {
+              #{target} > .panes {
                 display: contents;
               }
             CSS
 
             # Sandi Metz hygiene baseline: prevent flex/grid item overflow blowout
-            hygiene_sels = zones.flat_map do |zone|
-              targets.map { |t| "#{t} > .#{zone},\n#{t} > .zone-#{zone}" } + [".#{zone}", ".zone-#{zone}"]
-            end.uniq.join(",\n")
+            hygiene_sels = zones.map { |zone| "#{target} .#{zone}" }.join(",\n")
 
             rules << <<~CSS.strip
               #{hygiene_sels} {
@@ -387,26 +388,23 @@ module SlimPickins
               }
             CSS
 
-            # Explicit column placement for each zone (1-indexed)
+            # Explicit column placement for each zone (1-indexed) — a
+            # descendant combinator, not a chain of child combinators,
+            # because a zone may sit directly under the target or one level
+            # down through the dissolved `.panes` wrapper; either way it's
+            # the same real class, so one selector covers both.
             zones.each_with_index do |zone, index|
               col_idx = index + 1
-              zone_sels = targets.map do |t|
-                "#{t} > .#{zone},\n#{t} > .zone-#{zone},\n#{t} > * > .#{zone},\n#{t} > * > .zone-#{zone}"
-              end.join(",\n")
 
               rules << <<~CSS.strip
-                #{zone_sels} {
+                #{target} .#{zone} {
                   grid-column: #{col_idx};
                 }
               CSS
             end
 
             # Container Query Collapse
-            all_zone_sels = zones.flat_map do |zone|
-              targets.map do |t|
-                "#{t} > .#{zone},\n#{t} > .zone-#{zone},\n#{t} > * > .#{zone},\n#{t} > * > .zone-#{zone}"
-              end
-            end.join(",\n")
+            all_zone_sels = zones.map { |zone| "#{target} .#{zone}" }.join(",\n")
 
             rules << <<~CSS.strip
               @container #{@stage_name} (inline-size < #{@horizon_rule[:collapse_at]}) {
@@ -517,15 +515,13 @@ module SlimPickins
 
         def to_css
           rules = []
-          targets = [
-            ".stage-#{@surface_name} > .#{@zone_name}",
-            ".stage-#{@surface_name} > .zone-#{@zone_name}",
-            ".stage-#{@surface_name} .#{@zone_name}",
-            "body > .#{@zone_name}",
-            "body > .zone-#{@zone_name}",
-            ".#{@zone_name}",
-            ".zone-#{@zone_name}"
-          ]
+          # A zone's own partial already renders this bare class via this
+          # project's app_class-promotion convention, and the compiled
+          # stylesheet is only ever loaded by the pages that use it — so
+          # there's nothing else to guess against. `targets` stays an array
+          # (rather than inlining `target` everywhere below) only because
+          # several rules build compound selectors like "#{t} .tabs" off it.
+          targets = [".#{@zone_name}"]
           target = targets.join(",\n")
 
           unless @properties.empty?
