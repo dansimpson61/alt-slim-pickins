@@ -4,9 +4,9 @@ surface doc_reader
     flank catalog, beside: reading_pane, balance: subordinate, collapse: tight
 
   zone catalog
-    frame quiet
+    frame flat
     cadence compact
 
   zone reading_pane
-    frame quiet
+    frame lifted
     treatment editorial
