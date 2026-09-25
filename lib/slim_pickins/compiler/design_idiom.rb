@@ -97,6 +97,16 @@ module SlimPickins
         new(**theme_tokens).compile(source, path: path)
       end
 
+      # One pipeline for "design source becomes labeled CSS," used by every
+      # caller instead of each compiling and commenting its own way. Empty
+      # source stays empty — no comment over nothing.
+      def self.compiled_stylesheet(source, provenance:, path: '(design)', **theme_tokens)
+        css = compile(source, path: path, **theme_tokens)
+        return css if css.empty?
+
+        "/* Compiled #{provenance} */\n\n#{css}"
+      end
+
       def initialize(air_tokens: AIR_TOKENS, balance_tokens: BALANCE_TOKENS,
                      posture_tokens: POSTURE_TOKENS, frame_tokens: FRAME_TOKENS,
                      cadence_tokens: CADENCE_TOKENS, treatment_tokens: TREATMENT_TOKENS,
@@ -638,6 +648,10 @@ module SlimPickins
   module DesignIdiom
     def self.compile(source, path: '(design)', **theme_tokens)
       Compiler::DesignIdiom.compile(source, path: path, **theme_tokens)
+    end
+
+    def self.compiled_stylesheet(source, provenance:, path: '(design)', **theme_tokens)
+      Compiler::DesignIdiom.compiled_stylesheet(source, provenance: provenance, path: path, **theme_tokens)
     end
   end
 end

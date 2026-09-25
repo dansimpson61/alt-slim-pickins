@@ -242,4 +242,20 @@ class DesignIdiomTest < Minitest::Test
     end
     assert_includes error.message, 'Unknown posture token: `imaginary_token`'
   end
+
+  def test_compiled_stylesheet_prefixes_provenance_comment
+    source = <<~DESIGN
+      surface labeled_page
+        stage
+          air tight
+    DESIGN
+
+    css = SlimPickins::DesignIdiom.compiled_stylesheet(source, provenance: 'from a test')
+    assert_includes css, '/* Compiled from a test */'
+    assert css.index('/* Compiled from a test */') < css.index('.surface-labeled_page')
+  end
+
+  def test_compiled_stylesheet_leaves_empty_source_empty
+    assert_equal '', SlimPickins::DesignIdiom.compiled_stylesheet('', provenance: 'from a test')
+  end
 end
