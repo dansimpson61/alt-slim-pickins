@@ -18,7 +18,7 @@ The design idiom uses `SlimPickins::Transform` directly:
 - **One-sentence grammar**: Each line begins with a word.
 - **Indentation nests it**: Blocks are indented; no `do ... end`, no curly braces, no semicolons.
 - **Bare identifiers become symbols**: `air generous` compiles to `air(:generous)`; `frame quiet` compiles to `frame(:quiet)`.
-- **Keyword modifiers**: `beside: reading_pane, balance: subordinate, collapse_at: "48rem"`.
+- **Keyword modifiers**: `beside: reading_pane, balance: subordinate, collapse: cozy`.
 - **Line tracking**: Errors pinpoint the exact line number of the `.design` file.
 
 ### Substance vs. Design Idiom Side-by-Side
@@ -118,13 +118,16 @@ Every word in the design idiom models exemplary lexical practice:
 - **What it is for**: Placing a primary zone beside a companion zone when space allows, with an explicit balance ratio and a responsive collapse threshold.
 - **How to use it**:
   ```
-  flank lead_zone, beside: companion_zone, balance: subordinate, collapse_at: "48rem"
+  flank lead_zone, beside: companion_zone, balance: subordinate, collapse: cozy
   ```
   - `balance`: Relative visual prominence (`subordinate`, `equal`, `dominant`).
-  - `collapse_at`: Container query threshold below which columns collapse into a vertical stack (default `"48rem"`).
+  - `collapse`: Qualitative container query threshold token below which columns
+    collapse into a vertical stack — `tight` (26rem), `cozy` (48rem, the
+    default), `roomy` (56rem), or `wide` (64rem). Never a raw CSS length; the
+    scale lives once in `DesignIdiom::COLLAPSE_TOKENS`.
 - **Example**:
   ```
-  flank catalog, beside: reading_pane, balance: subordinate, collapse_at: "48rem"
+  flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy
   ```
 <details>
 <summary><strong>Compiled CSS</strong></summary>

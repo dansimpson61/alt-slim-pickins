@@ -9,7 +9,7 @@ class DesignIdiomTest < Minitest::Test
       surface doc_reader
         stage
           air generous
-          flank catalog, beside: reading_pane, balance: subordinate, collapse_at: "48rem"
+          flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy
     DESIGN
 
     css = SlimPickins::DesignIdiom.compile(source)
@@ -120,6 +120,37 @@ class DesignIdiomTest < Minitest::Test
     assert_includes error.message, 'Unknown air token: `non_existent_token`'
   end
 
+  def test_unknown_collapse_token_raises_honest_argument_error
+    source = <<~DESIGN
+      surface error_page
+        stage
+          flank left_col, beside: right_col, collapse: non_existent_token
+    DESIGN
+
+    error = assert_raises(ArgumentError) do
+      SlimPickins::DesignIdiom.compile(source)
+    end
+    assert_includes error.message, 'Unknown collapse token: `non_existent_token`'
+  end
+
+  def test_collapse_token_resolves_for_flank_and_horizon
+    flank_source = <<~DESIGN
+      surface flank_page
+        stage
+          flank left_col, beside: right_col, collapse: wide
+    DESIGN
+    flank_css = SlimPickins::DesignIdiom.compile(flank_source)
+    assert_includes flank_css, '(inline-size < 64rem)'
+
+    horizon_source = <<~DESIGN
+      surface horizon_page
+        horizon col1, col2
+          collapse wide
+    DESIGN
+    horizon_css = SlimPickins::DesignIdiom.compile(horizon_source)
+    assert_includes horizon_css, '(inline-size < 64rem)'
+  end
+
   def test_surface_with_direct_air_and_horizon_manifesto
     source = <<~DESIGN
       surface workbench
@@ -127,7 +158,7 @@ class DesignIdiomTest < Minitest::Test
 
         horizon library, editor, output
           posture shelf, workspace, mirror
-          collapse_at "56rem"
+          collapse roomy
 
         zone library
           frame quiet
@@ -183,7 +214,7 @@ class DesignIdiomTest < Minitest::Test
     # Zone output: steady presence
     assert_includes css, 'position: sticky;'
     assert_includes css, 'top: var(--gap, 0.75rem);'
-    assert_includes css, 'height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));'
+    assert_includes css, 'height: calc(100dvh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));'
   end
 
   def test_horizon_mismatched_postures_raises_error

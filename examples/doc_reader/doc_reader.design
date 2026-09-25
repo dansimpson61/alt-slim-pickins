@@ -1,7 +1,7 @@
 surface doc_reader
   stage
     air generous
-    flank catalog, beside: reading_pane, balance: subordinate, collapse_at: "26rem"
+    flank catalog, beside: reading_pane, balance: subordinate, collapse: tight
 
   zone catalog
     frame quiet

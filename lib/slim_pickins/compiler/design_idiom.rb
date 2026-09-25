@@ -82,9 +82,16 @@ module SlimPickins
         equal:     'minmax(0, 1fr)'
       }.freeze
 
-      DEFAULT_COLLAPSE_THRESHOLD = '48rem'
+      COLLAPSE_TOKENS = {
+        tight: '26rem',
+        cozy:  '48rem',
+        roomy: '56rem',
+        wide:  '64rem'
+      }.freeze
 
-      attr_reader :air_tokens, :balance_tokens, :posture_tokens, :frame_tokens, :cadence_tokens, :treatment_tokens
+      DEFAULT_COLLAPSE_TOKEN = :cozy
+
+      attr_reader :air_tokens, :balance_tokens, :posture_tokens, :frame_tokens, :cadence_tokens, :treatment_tokens, :collapse_tokens
 
       def self.compile(source, path: '(design)', **theme_tokens)
         new(**theme_tokens).compile(source, path: path)
@@ -92,13 +99,15 @@ module SlimPickins
 
       def initialize(air_tokens: AIR_TOKENS, balance_tokens: BALANCE_TOKENS,
                      posture_tokens: POSTURE_TOKENS, frame_tokens: FRAME_TOKENS,
-                     cadence_tokens: CADENCE_TOKENS, treatment_tokens: TREATMENT_TOKENS)
+                     cadence_tokens: CADENCE_TOKENS, treatment_tokens: TREATMENT_TOKENS,
+                     collapse_tokens: COLLAPSE_TOKENS)
         @air_tokens = air_tokens
         @balance_tokens = balance_tokens
         @posture_tokens = posture_tokens
         @frame_tokens = frame_tokens
         @cadence_tokens = cadence_tokens
         @treatment_tokens = treatment_tokens
+        @collapse_tokens = collapse_tokens
       end
 
       def compile(source, path: '(design)')
@@ -170,8 +179,8 @@ module SlimPickins
           default_stage.horizon(*zones, &block)
         end
 
-        def flank(lead_zone, beside:, balance: :equal, collapse_at: DEFAULT_COLLAPSE_THRESHOLD)
-          default_stage.flank(lead_zone, beside: beside, balance: balance, collapse_at: collapse_at)
+        def flank(lead_zone, beside:, balance: :equal, collapse: DEFAULT_COLLAPSE_TOKEN)
+          default_stage.flank(lead_zone, beside: beside, balance: balance, collapse: collapse)
         end
 
         def stack(*zones, air: nil)
@@ -229,17 +238,20 @@ module SlimPickins
           end
         end
 
-        def flank(lead_zone, beside:, balance: :equal, collapse_at: DEFAULT_COLLAPSE_THRESHOLD)
+        def flank(lead_zone, beside:, balance: :equal, collapse: DEFAULT_COLLAPSE_TOKEN)
           balance_sym = balance.to_sym
           tracks = @compiler.balance_tokens.fetch(balance_sym) do
             raise ArgumentError, "Unknown balance token: `#{balance}`"
+          end
+          collapse_value = @compiler.collapse_tokens.fetch(collapse.to_sym) do
+            raise ArgumentError, "Unknown collapse token: `#{collapse}`"
           end
 
           @flank_rule = {
             lead: lead_zone.to_sym,
             companion: beside.to_sym,
             tracks: tracks,
-            collapse_at: collapse_at
+            collapse_at: collapse_value
           }
         end
 
@@ -416,7 +428,7 @@ module SlimPickins
           super(compiler)
           @zones = zones.map(&:to_sym)
           @postures = Array.new(@zones.size, :equal)
-          @collapse_threshold = DEFAULT_COLLAPSE_THRESHOLD
+          @collapse_threshold = compiler.collapse_tokens.fetch(DEFAULT_COLLAPSE_TOKEN)
         end
 
         def posture(*roles)
@@ -426,8 +438,10 @@ module SlimPickins
           @postures = roles.map(&:to_sym)
         end
 
-        def collapse_at(threshold)
-          @collapse_threshold = threshold.to_s
+        def collapse(level)
+          @collapse_threshold = @compiler.collapse_tokens.fetch(level.to_sym) do
+            raise ArgumentError, "Unknown collapse token: `#{level}`"
+          end
         end
       end
 
@@ -546,8 +560,8 @@ module SlimPickins
                 position: sticky;
                 top: var(--gap, 0.75rem);
                 align-self: start;
-                height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
-                max-height: calc(100vh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+                height: calc(100dvh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+                max-height: calc(100dvh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
                 overflow: hidden;
                 box-sizing: border-box;
               }
