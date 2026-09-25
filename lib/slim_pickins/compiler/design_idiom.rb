@@ -338,7 +338,7 @@ module SlimPickins
           rules << <<~CSS.strip
             #{target} {
               display: grid;
-              align-items: start;
+              align-items: stretch;
               padding: #{@air_level || '0'};
               gap: #{@air_level || '0'};
               box-sizing: border-box;

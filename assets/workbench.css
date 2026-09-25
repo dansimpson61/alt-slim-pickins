@@ -7,7 +7,7 @@ body {
 
 .sidebar_layout {
   display: grid;
-  align-items: start;
+  align-items: stretch;
   padding: clamp(0.5rem, 1.5cqi, 0.875rem);
   gap: clamp(0.5rem, 1.5cqi, 0.875rem);
   box-sizing: border-box;

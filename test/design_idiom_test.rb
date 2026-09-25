@@ -319,4 +319,18 @@ class DesignIdiomTest < Minitest::Test
     body_block = document_css[/body \{([^}]*)\}/, 1]
     refute_includes body_block, 'container-type'
   end
+
+  def test_stage_stretches_zones_to_a_uniform_row_height
+    # align-items: start left multi-zone stages with mismatched heights
+    # (each zone sized to its own content) - stretch gives every zone in
+    # the row the same height. A zone with an explicit height of its own
+    # (e.g. presence: :steady) still overrides this, by design.
+    css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
+      surface stretch_page
+        stage
+          flank left_col, beside: right_col
+    DESIGN
+    assert_includes css, 'align-items: stretch;'
+    refute_includes css, 'align-items: start;'
+  end
 end
