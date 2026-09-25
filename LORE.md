@@ -825,3 +825,11 @@ In-Buffer `def` Word Root-Class Parity. Two durable learnings:
 ## 2026-09-24 — Antigravity
 
 In-buffer def words and disk partials must eat the exact same food: capturing body and decorating single-root elements with app_class ensures classes like box sidebar and box reading_pane appear identically.
+
+## 2026-09-24 — Antigravity
+
+The Design Idiom Daytrip: Visual Architecture & Spatial Manifesto. Four durable learnings:
+1. **100% Shared Grammar via Transform Reuse**: The Design Idiom does not require separate parser or grammar machinery. Passing `.design` source directly through `SlimPickins::Transform` translates declarative spatial sentences (`surface`, `stage`, `flank`, `stack`, `zone`, `air`, `balance`, `frame`, `cadence`, `treatment`) into standard Ruby method blocks where bare identifiers become symbols, indentation nests scopes, and line-numbered errors trace back cleanly to source lines.
+2. **Substance vs. Presentation Separation**: In `doc_reader/views/index.sp`, `catalog` is substance; `flank catalog, beside: reading_pane, balance: subordinate` is presentation. Renaming `sidebar` to `catalog` eliminates desktop physical coordinates and screen geometry from domain templates.
+3. **Stand-alone Page Containers for Spatial Posture**: When `.design` compiles `stage` to CSS, targeting `body` alongside `.stage-<name>` allows full-page views to instantly inherit grid layouts, container queries, and air without needing an explicit wrapper in the template. Spanning `h1:first-child` across all grid columns (`grid-column: 1 / -1`) keeps document headings natural without forcing additional container markup.
+4. **Docs Example Discovery vs. Macro Definitions**: `StudioDocs.examples` indexes occurrences of vocabulary words across the repo for the interactive Try-it feature. Words appearing inside `def <word>` bodies are macro definitions, not executable page examples. Traversing children of `def` nodes resulted in non-working seeds (defining a method without calling it). Skipping the children of `def` when indexing executable page examples preserves working Try-it buttons and keeps the verification suites green.

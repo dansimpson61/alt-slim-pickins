@@ -1,0 +1,12 @@
+{
+  "docs": [
+    { "name": "README.md", "path": "/docs/README.md", "content": "# Welcome to Slim-Pickins\nA joyful view templating language." },
+    { "name": "DESIGN_IDIOM.md", "path": "/docs/DESIGN_IDIOM.md", "content": "# The Design Idiom\nSpatial manifesto for human beings." },
+    { "name": "ODE.md", "path": "/docs/ODE.md", "content": "# Ode to Joy\nHonest, clear, kind." }
+  ],
+  "selected_doc": {
+    "name": "DESIGN_IDIOM.md",
+    "path": "/docs/DESIGN_IDIOM.md",
+    "content": "# The Design Idiom\nSpatial manifesto for human beings.\n\nSubstance declares *what*; Design Idiom declares *how*."
+  }
+}

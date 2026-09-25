@@ -11,6 +11,7 @@ require_relative 'slim_pickins/generator'
 require_relative 'slim_pickins/builder'
 require_relative 'slim_pickins/partial_word'
 require_relative 'slim_pickins/taxonomy'
+require_relative 'slim_pickins/compiler/design_idiom'
 
 module SlimPickins
   module_function

@@ -142,17 +142,24 @@ end
 # quietly weakened, and the next unstylable variant should simply fail.
 said_variants = Hash.new { |h, k| h[k] = [] }
 Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].each do |path|
-  walk = lambda do |nodes|
+  walk = lambda do |nodes, current_params = []|
     nodes.each do |node|
+      if node.word == 'def'
+        walk.call(node.children, node.raw_args.drop(1))
+        next
+      end
+
       contract = SlimPickins::CONTRACTS[node.word.to_sym]
       if contract&.name == :variant
         variant = node.raw_args.zip(node.ranks).find { |_, rank| rank.zero? }&.first
-        said_variants["#{node.word}--#{variant}"] << "#{path.sub("#{__dir__}/", '')}:#{node.lineno}" if variant
+        if variant && !current_params.include?(variant)
+          said_variants["#{node.word}--#{variant}"] << "#{path.sub("#{__dir__}/", '')}:#{node.lineno}"
+        end
       end
-      walk.call(node.children)
+      walk.call(node.children, current_params)
     end
   end
-  walk.call(SlimPickins::Transform.tree(File.read(path), path: path))
+  walk.call(SlimPickins::Transform.tree(File.read(path), path: path), [])
 end
 
 (said_variants.keys - defined.to_a).sort.each do |klass|

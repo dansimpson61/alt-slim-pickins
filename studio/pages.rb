@@ -82,7 +82,8 @@ module StudioPages
     'word_graph/word' => 'examples/word_graph/views/word.sp',
     'word_graph/shapes' => 'examples/word_graph/views/shapes.sp',
     'word_graph/matrix' => 'examples/word_graph/views/matrix.sp',
-    'word_graph/partials/word_card' => 'examples/word_graph/views/partials/word_card.sp'
+    'word_graph/partials/word_card' => 'examples/word_graph/views/partials/word_card.sp',
+    'doc_reader/index' => 'examples/doc_reader/views/index.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
 
@@ -211,7 +212,8 @@ module StudioPages
     File.join(ROOT, 'examples', 'lore_reader', 'views'),
     File.join(ROOT, 'examples', 'way_exam', 'views'),
     File.join(ROOT, 'examples', 'milestone_planner', 'views'),
-    File.join(ROOT, 'examples', 'word_graph', 'views')
+    File.join(ROOT, 'examples', 'word_graph', 'views'),
+    File.join(ROOT, 'examples', 'doc_reader', 'views')
   ].freeze
 
 
@@ -446,6 +448,9 @@ module StudioPages
       graph = WordGraph::Graph.instance
       w = graph.find('table')
       w.to_h.merge('word' => w.to_h)
+    when 'examples/doc_reader/views/index.sp'
+      json_path = File.expand_path('../examples/doc_reader/data.json', __dir__)
+      File.file?(json_path) ? JSON.parse(File.read(json_path)) : {}
     else
       {}
     end
@@ -582,18 +587,47 @@ module StudioPages
     "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
   end
 
+  def self.design_for(rel)
+    return '' unless rel
+
+    actual_path = PAGES[rel] || rel
+    dir = File.dirname(File.dirname(actual_path))
+    companion = File.expand_path("../#{dir}/#{File.basename(dir)}.design", __dir__)
+    return File.read(companion) if File.file?(companion)
+
+    direct = File.expand_path("../#{actual_path.sub(/\.sp\z/, '.design')}", __dir__)
+    return File.read(direct) if File.file?(direct)
+
+    ''
+  end
+
   # The studio's render contract — one response, both panes. The visual is
   # the rendered page (a refusal is still a page); the source is the raw-
   # HTML pane's own page: the same output escaped, kept tidy by the
   # pre-wrap monospace the pane has always worn. This is the client API
   # the controller grows against: a future pane joins as a key, not a
   # change.
-  def self.render_json(source, data = nil, library: nil)
+  def self.render_json(source, data = nil, library: nil, design: nil)
     library ||= StudioPages.library
     locals = playground_locals(data)
+
+    design_css = ''
+    if design && !design.to_s.strip.empty?
+      design_css = begin
+        SlimPickins::DesignIdiom.compile(design.to_s)
+      rescue StandardError => e
+        "/* Design Idiom Refusal: #{e.message} */"
+      end
+    end
+
     visual = begin
-      SlimPickins.render(source, path: 'playground.sp',
-                         locals: locals, library: library)
+      rendered = SlimPickins.render(source, path: 'playground.sp',
+                                    locals: locals, library: library)
+      if !design_css.empty? && rendered.include?('</head>')
+        rendered.sub('</head>', "<style id=\"design-idiom\">\n#{design_css}\n</style></head>")
+      else
+        rendered
+      end
     rescue StandardError => e
       refusal(e, library: library)
     end
@@ -607,7 +641,7 @@ module StudioPages
       StudioInspector.error_page_for(e)
     end
     { visual: visual, source: raw_page(visual), inspect: inspect_html,
-      definitions: extract_definitions(source) }
+      css: raw_page(design_css), definitions: extract_definitions(source) }
   end
 
   def self.raw_page(html)

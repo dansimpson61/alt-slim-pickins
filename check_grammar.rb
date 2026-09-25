@@ -74,6 +74,9 @@ Dir[File.join(here, '{examples,studio}', '**', '*.rb')].each do |f|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end
+Dir[File.join(here, '{pages,examples,studio}', '**', '*.sp')].each do |f|
+  app_words |= File.read(f).scan(/^\s*def\s+([a-z_][a-z0-9_]*)/).flatten.to_set
+end
 vocab |= app_words
 
 # Walk a document and yield each untagged fenced block, with the line its
@@ -154,7 +157,7 @@ end
 (used.keys.to_set - vocab).sort.each do |w|
   history_only = used_full[w].all? { |f| f.start_with?(File.join(here, 'history')) }
   next if renamed.include?(w) && history_only
-  next if w == 'tag'
+  next if w == 'tag' || w == 'def'
 
   puts "  UNDEFINED     #{w.inspect} used in #{used[w].uniq.join(', ')} but not in VOCABULARY.md"
   problems += 1

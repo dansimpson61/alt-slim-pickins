@@ -217,7 +217,7 @@ module StudioDocs
                        ancestors + [node],
                        ancestors.last ? ancestors.last.children : []]
             end
-            visit.call(node.children, ancestors + [node])
+            visit.call(node.children, ancestors + [node]) unless node.word.to_sym == :def
           end
         end
         visit.call(tree, [])

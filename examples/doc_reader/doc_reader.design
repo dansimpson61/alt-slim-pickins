@@ -1,0 +1,12 @@
+surface doc_reader
+  stage
+    air generous
+    flank catalog, beside: reading_pane, balance: subordinate, collapse_at: "48rem"
+
+  zone catalog
+    frame quiet
+    cadence compact
+
+  zone reading_pane
+    frame quiet
+    treatment editorial

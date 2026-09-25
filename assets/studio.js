@@ -37,10 +37,11 @@ class RenderController extends Stimulus.Controller {
     const body = new URLSearchParams(new FormData(this.element))
     try {
       const response = await fetch('/render.json', { method: 'POST', body })
-      const { visual, source, inspect, definitions } = await response.json()
+      const { visual, source, inspect, css, definitions } = await response.json()
       if (this.visual()) this.visual().srcdoc = visual
       if (this.source()) this.source().srcdoc = source
       if (this.inspect() && inspect) this.inspect().srcdoc = inspect
+      if (this.css() && css) this.css().srcdoc = css
       this.updateDefinitions(definitions)
     } catch (error) {
       if (this.visual()) this.visual().srcdoc = `<p style="color:red;padding:1rem">The studio did not answer: ${error}</p>`
@@ -112,6 +113,7 @@ class RenderController extends Stimulus.Controller {
   visual() { return document.getElementsByName('preview')[0] }
   source() { return document.getElementsByName('html_preview')[0] }
   inspect() { return document.getElementsByName('inspect_preview')[0] }
+  css() { return document.getElementsByName('css_preview')[0] }
 }
 
 Stimulus.Application.start().register('render', RenderController)

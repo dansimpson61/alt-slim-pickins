@@ -338,6 +338,11 @@ working manual that should be better after every session than it was before.
   Screenshot prompt: *"Before we move on, i note that our inline-defined words did not wrap classes around their contents. Please see the screenshot"*.
   When dan noted that in-buffer defined words rendered bare `<div class="box">` instead of `<div class="box sidebar">` and `<div class="box reading_pane">`, it revealed an asymmetry: `PartialWord` for disk partials inspected single-root bodies and tagged them with `box[:app_class] = partial_name`, but `define_local_word` emitted directly without capturing or tagging. In slim-pickins, in-memory local words and disk partials are the same concept in different stages of life. Any behavioral discrepancy between the two is a defect.
 
+- **The Design Idiom: 100% Shared Syntax, Dedicated Spatial Vocabulary**: (observed 2026-09-24).
+  Prompt: *"To the extent we can, lets let our design idiom look like sp but with its own vocabulary. How much of sp's grammar and syntax can we use as-is?"*
+  The answer is 100%. Reusing `SlimPickins::Transform` translates `.design` files directly into standard Ruby blocks: one sentence per line, bare words becoming symbols, indentation nesting blocks, and line-numbered errors. Substance templates (.sp) declare domain intent without spatial coordinates or colors (`catalog`, not `sidebar`); companion design manifests (.design) declare spatial postures (`surface`, `stage`, `flank`, `stack`, `zone`, `air`, `balance`, `frame`, `cadence`, `treatment`), which the compiler lowers into modern CSS Grid, `@container` queries, and fluid `clamp()` tokens. Furthermore, docs indexers (`StudioDocs.examples`) must recognize that child nodes inside `def` blocks are unexecuted macro definitions rather than top-level executable page examples, ensuring Try-it seeds remain working demonstrations.
+
+
 
 ## Proposed deletions — nothing here yet
 

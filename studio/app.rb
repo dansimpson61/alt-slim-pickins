@@ -99,9 +99,10 @@ get '/' do
   loaded_id = params[:load]
   source = StudioPages.source_for(loaded_id, ui: ui) ||
            "page \"Slim-Pickins Studio\"\n  heading \"Hello World\"\n"
+  design = loaded_id ? StudioPages.design_for(loaded_id) : ''
   # `palette` is in `commons`, already measured against this UI's own pages
   # and with `loaded` marked, so the route does not build a second census.
-  locals = { title: 'Workbench', source: source,
+  locals = { title: 'Workbench', source: source, design: design,
              editor_title: StudioPages.title_for(loaded_id),
              data: loaded_id ? StudioPages.data_json_for(StudioPages::PAGES[loaded_id]) : '',
              loaded: loaded_id, **commons(active_tab: :pages) }
@@ -161,7 +162,7 @@ get '/status' do
 end
 
 post '/render' do
-  StudioPages.render_json(params[:source].to_s, params[:data])[:visual]
+  StudioPages.render_json(params[:source].to_s, params[:data], design: params[:design])[:visual]
 end
 
 # The render contract, as JSON — one request, both panes. The controller on
@@ -172,7 +173,7 @@ end
 # JavaScript rather than hiding it.
 post '/render.json' do
   content_type :json
-  JSON.generate(StudioPages.render_json(params[:source].to_s, params[:data]))
+  JSON.generate(StudioPages.render_json(params[:source].to_s, params[:data], design: params[:design]))
 end
 
 # Minting affordance — promotes an in-buffer `def` domain word into a permanent

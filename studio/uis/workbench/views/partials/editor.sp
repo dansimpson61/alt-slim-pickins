@@ -7,6 +7,7 @@
 box
   section .editor_title
   wired_form
-    textarea source, "Page", rows: 24
-    textarea data, "Data (JSON)", rows: 6
+    textarea source, "Page (Substance)", rows: 14
+    textarea design, "Design Idiom (.design)", rows: 9
+    textarea data, "Data (JSON)", rows: 5
     note quiet, .data_note

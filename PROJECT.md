@@ -3,15 +3,15 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Volet 5 (Package C: Lean & Elemental Kernel) completed and in-buffer def root-class parity landed 2026-09-24.
-  Absorbed figcaption and summary into figure.sp and disclosure.sp, re-atomized paragraph over tag p,
-  generalized Builder.bind_parameters across disk and in-memory partials, and ensured in-buffer def words
-  wrap single-root boxes with app_class just like disk app partials.
-  All 7 quality gates green, 424 tests pass in one process with 0 failures.
+  The Design Idiom (Visual Architecture) daytrip landed 2026-09-24.
+  Drafted 10-word spatial manifesto (surface, stage, flank, stack, zone, air, balance, frame, cadence, treatment)
+  using 100% slim-pickins transform grammar. Built SlimPickins::Compiler::DesignIdiom translating human spatial
+  posture to CSS Grid, container queries (@container), and fluid clamp() tokens. Added split design editor and CSS
+  tab to Studio Workbench, wired doc_reader specimen end-to-end. All 7 quality gates green, 431 tests pass with 0 failures.
 kind: project
 last_touched: 2026-09-24
 next_step: >-
-  Execute Volet 6 (Vocabulary Restructuring): split overloaded box, address span, and introduce missing layout primitives (stack/cluster).
+  Advance Daytrip stop 2 (Strong Language maintenance) and stop 3 (Clear Thinking documentation protocols).
 
 
 run: ruby examples/roth/app.rb

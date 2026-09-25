@@ -11,3 +11,5 @@ box
       iframe html_preview
     tab "Inspect"
       iframe inspect_preview
+    tab "CSS"
+      iframe css_preview
