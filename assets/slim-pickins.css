@@ -57,7 +57,7 @@
      and the footer below it. A `calc` needs all three named, or the page
      grows a scrollbar it did not ask for. */
   --menu-height: 2.75rem;
-  --footer-height: 2rem;
+  --footer-height: 2.8rem;
   --panel-height: 28rem;
   --editor-source-height: 12rem;
   --editor-design-height: 9rem;

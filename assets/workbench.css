@@ -90,6 +90,19 @@ body {
 }
 
 .editor {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+
+.editor .tab-panel {
+  max-height: var(--panel-height, 28rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+.editor {
   display: flex;
   flex-direction: column;
   min-height: 0;

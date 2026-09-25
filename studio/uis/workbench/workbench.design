@@ -14,6 +14,7 @@ surface workbench, kind: shell
     frame quiet
     air balanced
     focus primary
+    scroll internal
 
   zone output
     frame lifted
