@@ -18,7 +18,16 @@ status: >-
   check_conventions.rb reads it every run and has no opinion about it. All eight
   gates and 445 tests green; two commits, each independently green. The lesson
   recorded in LORE.md: a checker holds the shape of a claim, never its
-  arithmetic. No behavior changed.
+  arithmetic. No behavior changed. Then, on dan's steer to check
+  design_idiom_discussion.md, COMMUNITY_BULLETIN_BOARD.md and LORE.md for the
+  missing material: those sources supplied the origin (the discussion's Part II
+  lexicon is where the eight documented words came from) and the Council
+  spatial manifesto's one-line summary in LORE.md, which named
+  horizon/posture/scroll/presence/focus and their four motions. The five
+  missing lexicon entries were written from the compiler's real output, and
+  docs/DESIGN_IDIOM.md is now served as a guide — which needed the guide route
+  itself changed, since it resolved every name to <root>/<name>.md and a
+  document in docs/ was unreachable. All eight gates green; 446 tests.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
@@ -27,11 +36,15 @@ next_step: >-
   (one question — real values for the .design collapse/balance scale, measured
   against real embedding widths); output's independent height under presence:
   steady (full three-way row parity needs that calc moved from the zone to the
-  stage/row level); and --footer-height: 2.8rem. Two smaller candidates this
-  round surfaced and deliberately did not build: the design-idiom lexicon omits
-  horizon/posture/scroll/presence/focus entirely (a documentation gap, not a
-  false claim), and nothing verifies a doc's compiled-CSS examples, which is how
-  four of them drifted. Package D remains valid and unstarted.
+  stage/row level); and --footer-height: 2.8rem (note the compiler's own
+  fallback for it is still 2rem, which is inert only because
+  assets/workbench.css sets the real value). One candidate this round surfaced
+  and deliberately did not build: nothing verifies a doc's compiled-CSS
+  examples, which is how four of them drifted — a checker able to re-compile
+  each <details> block and fail on a mismatch is new machinery, so it is dan's
+  call. design_idiom_discussion.md was read in full this round but is not a
+  guide and has no corpus; whether the studio should serve it as one is the
+  same open question. Package D remains valid and unstarted.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

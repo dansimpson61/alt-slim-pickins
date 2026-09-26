@@ -990,3 +990,41 @@ sentences, 105 rules, 35 promises, 38 conventions, card, 31 pages, census) and
 the full suite at 445 runs / 5,619 assertions / 0 failures, one process. Two
 commits, each independently green. No behavior changed — every edit is prose,
 a count, or a documentation example.
+
+### Addendum — the missing lexicon, closed the same day
+
+dan's steer: *check `design_idiom_discussion.md`, `COMMUNITY_BULLETIN_BOARD.md`
+and the lore; they may have information to help you complete
+`docs/DESIGN_IDIOM.md` and the `GUIDES`.* They did, and the check changed the
+shape of the fix.
+
+`design_idiom_discussion.md` is the origin document — its Part II lexicon is
+exactly the eight words the lexicon already documented (`stage`, `flank`,
+`stack`, `balance`, `air`, `cadence`, `frame`, `treatment`), so it could not
+supply the five that were missing. What it did supply is the reason the file's
+**stale compiler listing cannot be used as a source**: its worked compiler
+emits the retired `.stage-X > .zone-Y` selectors from a "zone class injection"
+pass its own checklist item 3 asked for and nobody ever built. The five missing
+words came later, with the Council spatial manifesto — and their origin is
+recorded in `LORE.md`, 2026-09-24, as a single paragraph naming all five and
+their four motions (*Horizon & Posture*, *Zone Qualities: `scroll :internal`,
+`presence :steady`, `focus :primary`*), so the entries were written from the
+manifesto's intent plus the compiler's actual output, not from either alone.
+
+The lexicon gained `horizon`, `posture`, `scroll`, `presence` and `focus`, each
+in the five-slot shape the lexicon declares, each compiled-CSS block pasted
+from a real run. All 12 documented blocks were then verified mechanically
+against the compiler — four had not been. The `GUIDES` half was smaller than it
+looked and would have failed if done literally: `DESIGN_IDIOM` lives in
+`docs/`, and the guide route resolved every name to `<root>/<name>.md`, so
+adding it to the list alone would have 404'd. `StudioDocs::DOCUMENTS` now maps
+name to document and the route resolves through it, which also retires the
+route's reliance on `File.basename` — an unknown name and a traversal attempt
+now take the same honest 404. Verified on a throwaway instance: the guide
+renders (50,305 bytes, lexicon present), the traversal 404s, and the shelf lists
+it. The live studio on `:4580` still serves the pre-change code, because this
+sandbox runs its own PID namespace and cannot see or signal that process —
+**the running studio needs a restart by hand before the guide appears there.**
+
+Verification after the addendum: all eight gates green, suite 446 runs / 5,635
+assertions / 0 failures. Two further commits.
