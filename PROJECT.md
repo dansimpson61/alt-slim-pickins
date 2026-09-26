@@ -163,9 +163,10 @@ conventions: >-
 
 # alt-slim-pickins
 
-A working view language: one-sentence grammar, 64 words, its own stylesheet,
-and three example apps plus the studio that speak it. See [README.md](README.md)
-— its *How roadmaps go* section governs how roadmaps work, and
-[ROADMAP-0.3.md](ROADMAP-0.3.md) is the active one (the forward eye, entering
-Phase 1: the garden, planted). [ROADMAP-0.2.md](ROADMAP-0.2.md) is
+A working view language: one-sentence grammar, 62 words, its own stylesheet,
+and seven example apps plus the studio that speak it. See [README.md](README.md)
+— its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.3.md](ROADMAP-0.3.md)
+is the last phase plan (closed 2026-09-21); roadmap 0.4 runs as a sequence of
+daytrip victories instead, and `next_step` above is the live resume point.
+[ROADMAP-0.2.md](ROADMAP-0.2.md) is
 closed; it began with the rewrite of the Slim-Pickins Way.

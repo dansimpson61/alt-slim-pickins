@@ -2,7 +2,7 @@
 
 A view language whose grammar stays describable all the way down. It began as
 paper — the first question was what we were building *on* — and it now runs:
-one sentence, sixty-four words, its own stylesheet, and a studio plus a
+one sentence, sixty-two words, its own stylesheet, and a studio plus a
 garden of demonstration apps that speak it (vitals reported live by `ruby bin/census.rb`).
 
 `slim-pickins` is a helper vocabulary layered on Slim. This is the other
@@ -100,7 +100,7 @@ this as money* and the formatting belongs to the word.
 
 - **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
   no open questions.
-- **[VOCABULARY.md](VOCABULARY.md)** — sixty-four words, seven slots each.
+- **[VOCABULARY.md](VOCABULARY.md)** — sixty-two words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
 - **[ROADMAP-0.1.md](history/ROADMAP-0.1.md)** — closed, and kept as the record
@@ -171,9 +171,14 @@ is a beautifully organised runtime for the wrong language.
 - [ROADMAP-0.2.md](ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
 - [ROADMAP-0.3.md](ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
 
-**Roadmap 0.4 planning is underway**, opening with [DAYTRIP-0.4.0a.md](DAYTRIP-0.4.0a.md) (Volet 1: The Truthful Floor).
+**Roadmap 0.4 is underway as a sequence of daytrip victories** rather than a
+phase plan — *the itinerary is a vector; daytrips give it volume*. Six volets
+have landed, most recently [DAYTRIP-0.4.0g.md](DAYTRIP-0.4.0g.md) (the council
+skill, the workbench spatial frontier, and three defects found by eye in the
+live studio); there is no active thread, and `PROJECT.md`'s `next_step` names
+what was deliberately left open.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words, 7 apps, 31 verified pages, 38 conventions, 33 promises, and 105 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, and 105 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
@@ -181,4 +186,4 @@ Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
 ruby check_styles.rb && ruby bin/check_promises.rb &&
 ruby bin/check_conventions.rb && ruby bin/check_card.rb &&
 ruby bin/verify_pages.rb && ruby bin/census.rb &&
-for f in test/*_test.rb; do ruby $f; done`
+ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`

@@ -20,7 +20,7 @@ module SlimPickins
   # Grades are BLUESKY's four: :structural (the tree decides), :shape (the
   # value's class decides), :domain (the app must be asked) and :axiomatic (the
   # design's own standing decisions). The fourth grade has **one entry, and it
-  # records an absence** — the theme owns 53 roles and no page can say one.
+  # records an absence** — the theme owns 61 roles and no page can say one.
   # That absence is the reason a style language is the next thing this project
   # needs, and it is registered here so it cannot be forgotten.
   module Conventions
@@ -233,7 +233,7 @@ module SlimPickins
       # --- axiomatic: the design's own standing decisions --------------------
       Convention.new(name: :theme_roles,
                      when_silent: 'a page wants a different measure, density or emphasis',
-                     decides: 'NOTHING — the theme owns 53 roles and no page can say one. ' \
+                     decides: 'NOTHING — the theme owns 61 roles and no page can say one. ' \
                               'This is the absent grade, registered so it cannot be forgotten',
                      file: 'assets/slim-pickins.css', marker: '--measure',
                      inference: nil,

@@ -18,7 +18,7 @@ of line, and every piece of scaffolding — the markup, the classes, the
 escaping, the loop — lives in one place where it can be fixed once.
 
 A page in this language is a **description of what the page means**, in
-sixty-four known words, with every subject resolvable. What the page means is checkable,
+sixty-two known words, with every subject resolvable. What the page means is checkable,
 before it renders.
 
 ## The grammar, in one sentence
@@ -122,7 +122,7 @@ and the leading word tells you how to read the rest of the line.
 
 ## The register
 
-Counted across the sixty-four words: **59 carry the noun register** — two of them
+Counted across the sixty-two words: **57 carry the noun register** — two of them
 plural by nature (`actions`, `contents`) — and the five non-nouns are
 exactly the control flow (`each` a determiner,
 `empty` an adjective, `choose` a verb, `when` a conjunction, `otherwise` an
@@ -411,8 +411,8 @@ What this document exists to carry forward, sentence by sentence:
 
 ## Adding a word
 
-Sixty-four words is where the vocabulary stands, and the discipline for
-the next is the same one that wrote the first sixty-four: draft it against a
+Sixty-two words is where the vocabulary stands, and the discipline for
+the next is the same one that wrote the first sixty-two: draft it against a
 real page that already hand-builds the thing, fill the seven slots (name,
 content, modifiers, children, subject, infers, renders) without a blank, and
 give it a sentence that [`check_grammar.rb`](check_grammar.rb) holds. A word

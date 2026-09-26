@@ -1,11 +1,15 @@
 # Vocabulary — draft 3
 
-Status: **implemented.** Sixty-four words — 42 declared as Ruby classes and 22
+Status: **implemented.** Sixty-two words — 39 declared as Ruby classes and 23
 written in the language — every one of them declared in its own file and every
 one exercised by a sentence somewhere in the repo, which `check_grammar.rb`
-fails if either stops being true. (The count is measured, not remembered: this
-line said *fifty* for a fortnight after the vocabulary had grown to 64, which
-is the drift the promise ledger and this daytrip exist to stop.)
+fails if either stops being true. (The count is measured, not remembered. It
+said *fifty* for a fortnight after the vocabulary had grown; it said *64, in
+42 and 22*, after `figcaption` and `summary` were absorbed into their single
+consumers and the split moved to 39 and 23. `figcaption` and `summary` are
+each still exercised by a sentence — inside `figure` and `disclosure`, where
+they now live as privileged `tag` calls rather than as public words. Both
+drifts are why the promise ledger and the census exist.)
 
 Every entry has now been drafted against a real page. `chart` was the last
 holdout — written on paper, unevidenced, and claiming inferences it did not
