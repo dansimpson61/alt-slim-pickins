@@ -93,13 +93,17 @@ Every word in the design idiom models exemplary lexical practice:
 <summary><strong>Compiled CSS</strong></summary>
 
 ```css
-body {
+html {
   container-type: inline-size;
   container-name: doc_reader;
+}
+
+body {
   display: grid;
-  align-items: start;
+  align-items: stretch;
   padding: clamp(1.5rem, 4cqi, 3rem);
   gap: clamp(1.5rem, 4cqi, 3rem);
+  box-sizing: border-box;
 }
 ```
 </details>
@@ -126,8 +130,17 @@ body {
 <summary><strong>Compiled CSS</strong></summary>
 
 ```css
+html {
+  container-type: inline-size;
+  container-name: doc_reader;
+}
+
 body {
   grid-template-columns: minmax(14rem, 1fr) minmax(0, 3fr);
+}
+
+body > h1:first-child {
+  grid-column: 1 / -1;
 }
 
 body .catalog {
@@ -168,9 +181,16 @@ body .reading_pane {
 
 ```css
 body {
+  display: grid;
+  align-items: stretch;
+  padding: clamp(1.5rem, 4cqi, 3rem);
+  gap: clamp(1.5rem, 4cqi, 3rem);
+  box-sizing: border-box;
+}
+
+body {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 4cqi, 3rem);
 }
 ```
 </details>
