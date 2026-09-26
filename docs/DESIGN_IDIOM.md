@@ -110,6 +110,99 @@ body {
 
 ---
 
+### `horizon`
+- **What it is**: A spatial declaration of several semantic zones as *planes* in one row.
+- **What it is for**: Arranging a shell's zones side by side — a navigation shelf, a working surface, a mirror of results — when two zones in a `flank` are not enough and more would nest flank inside flank. It is the multi-zone form of horizontal composition, and the one that costs no extra markup: an intermediate `.panes` wrapper that happens to sit between the stage and its zones is dissolved with `display: contents`, so the zones reach the grid whether or not it exists.
+- **How to use it**:
+  ```
+  horizon zone_a, zone_b, zone_c
+    posture role_a, role_b, role_c
+    collapse roomy
+  ```
+  - `posture`: one role per zone, in order — see the `posture` entry below. Omitting it gives every zone `equal`.
+  - `collapse`: the container-query threshold below which the row stacks (same token scale as `flank`).
+  - It also carries the hygiene baseline: every named zone gets `min-height: 0; min-width: 0`, so a wide child cannot blow the track out (Sandi Metz's rule, injected rather than asked for).
+- **Example**:
+  ```
+  horizon library, editor, output
+    posture shelf, workspace, mirror
+    collapse roomy
+  ```
+<details>
+<summary><strong>Compiled CSS</strong></summary>
+
+```css
+.sidebar_layout {
+  grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.sidebar_layout > h1:first-child {
+  grid-column: 1 / -1;
+}
+
+.sidebar_layout > .panes {
+  display: contents;
+}
+
+.sidebar_layout .library,
+.sidebar_layout .editor,
+.sidebar_layout .output {
+  min-height: 0;
+  min-width: 0;
+}
+
+.sidebar_layout .library {
+  grid-column: 1;
+}
+
+.sidebar_layout .editor {
+  grid-column: 2;
+}
+
+.sidebar_layout .output {
+  grid-column: 3;
+}
+
+@container workbench (inline-size < 56rem) {
+  .sidebar_layout {
+    grid-template-columns: 100%;
+  }
+  .sidebar_layout .library,
+  .sidebar_layout .editor,
+  .sidebar_layout .output {
+    grid-column: 1;
+  }
+}
+```
+</details>
+
+---
+
+### `posture`
+- **What it is**: The width role each zone takes in a `horizon`.
+- **What it is for**: Naming the relative prominence of several planes at once, the way `balance` does for two. It is a *modifier of `horizon`*, not a word that stands alone — and it is strict: it refuses a count that does not match the horizon's zones, with a message naming both lists, rather than silently leaving a column unsized.
+- **How to use it**: one role per zone, in the order the zones were declared.
+  ```
+  horizon library, editor, output
+    posture shelf, workspace, mirror
+  ```
+  - `shelf` — a fixed, browsable strip: `minmax(14rem, 19rem)`.
+  - `workspace` — the fluid primary surface: `minmax(0, 3fr)`.
+  - `mirror` — a fluid secondary surface: `minmax(0, 2fr)`.
+  - `aside` — a fixed companion: `minmax(16rem, 1fr)`.
+  - `equal` — an even share: `minmax(0, 1fr)` (the default when `posture` is omitted).
+- **Example**: `posture shelf, workspace, mirror`
+<details>
+<summary><strong>Compiled CSS</strong></summary>
+
+```css
+/* shelf, workspace, mirror */
+grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
+```
+</details>
+
+---
+
 ### `flank`
 - **What it is**: A spatial declaration of horizontal companionship between two semantic zones.
 - **What it is for**: Placing a primary zone beside a companion zone when space allows, with an explicit balance ratio and a responsive collapse threshold.
@@ -320,5 +413,143 @@ gap: 0.35rem;
 max-width: 65ch;
 line-height: 1.7;
 font-size: 1.05rem;
+```
+</details>
+
+---
+
+### `scroll`
+- **What it is**: Whether a zone scrolls its own overflow.
+- **What it is for**: Giving a bounded pane its own scrollbar instead of growing the page — the shelf whose list is longer than the viewport, the panel whose tab content is taller than its slot. Without it, a long list pushes the whole shell taller and the shell stops owning the viewport.
+- **How to use it**: `scroll internal`
+  - `internal` — the only token today, and the honest one: the zone becomes a scroll container (`overflow-y: auto`, `overscroll-behavior: contain`) and its tab panels get a capped height of their own.
+  - Omitted, the zone does not scroll; its content contributes to the page's height, which is what a document surface wants.
+- **Example**:
+  ```
+  zone library
+    scroll internal
+  ```
+<details>
+<summary><strong>Compiled CSS</strong></summary>
+
+```css
+.library {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+
+.library .tab-panel {
+  max-height: var(--panel-height, 28rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+```
+</details>
+
+---
+
+### `presence`
+- **What it is**: How a zone holds its place against the viewport.
+- **What it is for**: Keeping a zone in view while the rest of the shell scrolls, and giving it a height derived from the viewport rather than from its own content. This is the declaration that makes a shell a shell: the output pane is the same height whatever the editor beside it does.
+- **How to use it**: `presence steady`
+  - `steady` — the zone is sticky below the menu, aligned to the top of its track, and sized to the viewport minus the menu, the footer and one loose gap; its tabs, panels and iframes are told to fill that height.
+  - Omitting it lets the zone size to its content, and to the row's stretch.
+- **Example**:
+  ```
+  zone output
+    presence steady
+  ```
+<details>
+<summary><strong>Compiled CSS</strong></summary>
+
+```css
+.output {
+  position: sticky;
+  top: var(--gap, 0.75rem);
+  align-self: start;
+  height: calc(100dvh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+  max-height: calc(100dvh - var(--menu-height, 2.75rem) - var(--footer-height, 2rem) - var(--gap-loose, 1.5rem));
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.output .tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.output .tabs-content {
+  flex: 1 1 0;
+  min-height: 0;
+  height: 100%;
+}
+
+.output .tab-panel {
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.output iframe,
+.output .iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+```
+</details>
+
+---
+
+### `focus`
+- **What it is**: Which zone is the one being worked in.
+- **What it is for**: Marking the primary interactive surface of a layout and giving the fields inside it the room to be worked in. In the workbench that is the editor: three stacked textareas that each need real height and a monospace face, and that a general `.field textarea` rule had been sizing as if they were short form fields.
+- **How to use it**: `focus primary`
+  - `primary` — the zone becomes a column flex container, and every textarea in it (directly, or inside a `.form`) is reset to full width with the code face; the first three fields are given source/design/data minimum heights. The `max-width: none` is load-bearing: it is what undoes the generic form-field cap.
+- **Example**:
+  ```
+  zone editor
+    focus primary
+  ```
+<details>
+<summary><strong>Compiled CSS</strong></summary>
+
+```css
+.editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.editor textarea,
+.editor .form textarea {
+  width: 100%;
+  max-width: none;
+  font-family: var(--face-mono, monospace);
+  font-size: var(--size-small, 0.875rem);
+  line-height: var(--lead-tight, 1.25);
+  background: var(--surface, #ffffff);
+  border: var(--rule-width, 1px) solid var(--rule, #e5e1d8);
+  border-radius: var(--radius, 4px);
+  padding: var(--step, 0.25rem) var(--gap, 0.75rem);
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.editor .field:nth-of-type(1) textarea {
+  min-height: var(--editor-source-height, 12rem);
+}
+
+.editor .field:nth-of-type(2) textarea {
+  min-height: var(--editor-design-height, 9rem);
+}
+
+.editor .field:nth-of-type(3) textarea {
+  min-height: var(--editor-data-height, 6rem);
+}
 ```
 </details>
