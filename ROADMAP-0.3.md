@@ -945,3 +945,48 @@ number stays retired, and roth's defects are roth's backlog.
   records it and stops asking.
 - **This document is a draft.** The question is the load-bearing sentence; the
   phases are the proposal, and they move when the work says so.
+
+## The truth round (2026-09-26)
+
+Not a phase — a small round dan called after asking whether the BLUESKY
+exercise had been useful. Answering it honestly required measuring BLUESKY's
+own numbers, and the measurement found that the drift it was investigating is
+a standing property of this repo, not a one-off: **a checker holds the shape of
+a claim, never its arithmetic.**
+
+Fixed, each re-measured this session:
+
+1. **`docs/DESIGN_IDIOM.md`'s compiled-CSS examples.** Four had drifted from
+   `DesignIdiom` — `container-type`/`container-name` on `html` (not `body`,
+   since the 2026-09-25 container-query fix moved them to the wrapper's real
+   DOM parent), `align-items: stretch` (not `start`, since the row-height fix),
+   plus emitted-but-undocumented `box-sizing: border-box` and
+   `body > h1:first-child`. Nothing checks these blocks; every one was
+   re-compiled before it was corrected.
+2. **The vocabulary count in five living documents.** Package C took the
+   canonical vocabulary from 64 (42 Ruby + 22 `.sp`) to 62 (39 + 23) on
+   2026-09-23; `README.md`, `PRIMER.md`, `DESIGN.md`, `VOCABULARY.md` and
+   `PROJECT.md`'s body still said 64. `PRIMER.md`'s register count *depended*
+   on it — both absorbed words were nouns, so it is 57 of 62, not 59;
+   `bin/word_arguments.rb` is the instrument, and 59 − 2 is not the evidence.
+3. **The theme-role count.** `lib/slim_pickins/conventions.rb`'s `:axiomatic`
+   entry said the theme owns 53 roles. It owns **61**, in one `:root` block;
+   the 73rd definition line count comes from counting definition *sites*, and
+   12 of those are the color roles re-declared inside
+   `@media (prefers-color-scheme: dark)`. `check_conventions.rb` read this
+   prose on every run and had no opinion about it — the register's own reason
+   for existing was where the stale number lived longest.
+4. **README's status section**, which still said 0.4 planning was "underway"
+   and quoted 33 promises against the census's 35; and its suite command,
+   which ran the tests one process per file.
+
+Two things the round surfaced and deliberately did not build, because they are
+not drift: the design-idiom lexicon never documented `horizon`, `posture`,
+`scroll`, `presence` or `focus` at all (a gap, not a false claim), and nothing
+verifies a doc's compiled-CSS examples, which is *how* the four drifted.
+
+Verification: all eight gates green (1,254 sentences, 62 words / 1,006
+sentences, 105 rules, 35 promises, 38 conventions, card, 31 pages, census) and
+the full suite at 445 runs / 5,619 assertions / 0 failures, one process. Two
+commits, each independently green. No behavior changed — every edit is prose,
+a count, or a documentation example.

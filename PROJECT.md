@@ -3,33 +3,36 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  DAYTRIP-0.4.0g.md closed 2026-09-25: the council skill (.claude/skills/council/SKILL.md,
-  10-voice roster) landed, used it to resolve the four workbench spatial frontiers, then chased
-  three real rendering defects dan caught by eye in the live studio — a max-width leak in the
-  editor's textareas, container queries that had never actually worked since the compiler was
-  first written (a self-referencing @container pattern, fixed with zero new markup by splitting
-  container-type onto each wrapper's real DOM parent), and align-items: start leaving the three
-  shell columns at three different heights (now align-items: stretch; library/editor match
-  exactly, output stays independently sized by design). Two "verified live" claims this same
-  session wrote into LORE.md earlier that night were themselves wrong and corrected in place.
-  assets/workbench.css: 459 lines / 99 `:has(` -> 162 lines / 0. All 7 quality gates green
-  (105 rules, 0 problems, 31 verified pages), 445 unit tests pass with 0 failures, one process.
-  Nine commits, each independently green, verified against a genuinely restarted studio server
-  and live DOM measurement — not screenshots alone.
-kind: project
-last_touched: 2026-09-25
+  Truth round closed 2026-09-26 (dan's call, after asking whether the BLUESKY
+  exercise had been useful — it had, as fertilizer for a later design). Four
+  living documents and the design-idiom lexicon were realigned with measurements
+  taken this session: the canonical vocabulary is 62 (39 Ruby + 23 .sp), not the
+  64 that Package C absorbed away; PRIMER's register count was 59 nouns and is
+  57 (bin/word_arguments.rb), because both absorbed words were nouns;
+  docs/DESIGN_IDIOM.md's four compiled-CSS examples were re-compiled and
+  corrected (container-type on html, align-items: stretch, box-sizing, and an
+  emitted-but-undocumented h1 rule); and the theme is 61 roles in one :root, not
+  the 53 that BLUESKY wrote on 2026-09-16 against a stylesheet already holding 65
+  — that stale number had propagated into ROADMAP-0.3, two daytrips, and twice
+  into the :axiomatic entry of lib/slim_pickins/conventions.rb, where
+  check_conventions.rb reads it every run and has no opinion about it. All eight
+  gates and 445 tests green; two commits, each independently green. The lesson
+  recorded in LORE.md: a checker holds the shape of a claim, never its
+  arithmetic. No behavior changed.
+last_touched: 2026-09-26
 next_step: >-
-  No active thread — pick the next roadmap question fresh. Three items deliberately left open
-  from tonight, candidates for a future token ground-truthing daytrip rather than piecemeal
-  patches: collapse: tight's 26rem threshold and balance: subordinate's 14rem lead floor (the
-  same underlying question — real values for the .design collapse/balance scale, measured
-  against real embedding widths, not preserved-by-habit numbers); output's independent height
-  under presence: steady (full three-way row parity needs that calc moved from the zone to the
-  stage/row level — the same deferred "surface containment" idea as the first council session's
-  Scope Proposal 1); and --footer-height: 2.8rem (corrected from a wrong 2rem this session, but
-  still a hardcoded guess about the footer's real rendered size, same fragile character as tight).
-
-
+  No active thread. Three items stand as dan's own call from 0.4.0g, still
+  waiting for a token ground-truthing daytrip rather than piecemeal patches:
+  collapse: tight's 26rem threshold and balance: subordinate's 14rem lead floor
+  (one question — real values for the .design collapse/balance scale, measured
+  against real embedding widths); output's independent height under presence:
+  steady (full three-way row parity needs that calc moved from the zone to the
+  stage/row level); and --footer-height: 2.8rem. Two smaller candidates this
+  round surfaced and deliberately did not build: the design-idiom lexicon omits
+  horizon/posture/scroll/presence/focus entirely (a documentation gap, not a
+  false claim), and nothing verifies a doc's compiled-CSS examples, which is how
+  four of them drifted. Package D remains valid and unstarted.
+kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
 related:
@@ -156,6 +159,14 @@ notes: >-
   by dan's own call, for a future token ground-truthing daytrip: the
   collapse/balance rem scale, output's independently-governed height, and
   --footer-height's corrected-but-still-guessed value.
+  2026-09-26 — the truth round, opened by dan's question about whether the
+  BLUESKY exercise had been useful. It had: a decision instrument at a scoping
+  boundary, whose structure reached the code (the Inspect surface's
+  page/app/language/theme provenance tiers are BLUESKY's Part 4 annotation, and
+  the four inference grades became the convention register's own grades) while
+  some of its numbers did not survive. The round fixed the numbers it left
+  behind plus four siblings of the same kind, none of which any checker could
+  see. Full lesson in LORE.md, 2026-09-26.
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
