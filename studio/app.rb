@@ -147,12 +147,13 @@ end
 # serve it: `/render` receives only the editor's source, so a page saying
 # `prose markdown, .content` arrives with no content to read.
 #
-# `File.basename` is what keeps `../` out of the path; the guide must be a
-# markdown document sitting at the repo root, or it does not exist.
+# The name is resolved through StudioDocs' registry, so the URL never reaches
+# the filesystem: a name that is not a guide has no document, and `../` is
+# simply not a guide name.
 get '/guides/:name' do
   name = File.basename(params[:name], '.md')
-  document = File.expand_path("../#{name}.md", __dir__)
-  halt 404, "There is no guide called #{name}." unless File.file?(document)
+  document = StudioDocs.guide_document(name)
+  halt 404, "There is no guide called #{name}." unless document && File.file?(document)
 
   locals = { title: "Guide: #{name}", content: File.read(document), **commons(active_tab: :guides) }
   SlimPickins.render(page_source('guide.sp'), path: 'guide.sp', locals: locals, library: library)

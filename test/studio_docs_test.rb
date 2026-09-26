@@ -70,10 +70,17 @@ class StudioDocsTest < Minitest::Test
     assert_empty unknown, "payloads without a home: #{unknown.size}"
   end
 
-  def test_every_guide_exists_at_the_root
+  def test_every_guide_has_a_document
     StudioDocs::GUIDES.each do |name|
-      assert File.file?(File.join(ROOT, "#{name}.md")), "guide #{name} has no document"
+      document = StudioDocs.guide_document(name)
+      assert document, "guide #{name} has no registered document"
+      assert File.file?(document), "guide #{name} names #{document}, which does not exist"
     end
+  end
+
+  def test_a_name_that_is_not_a_guide_has_no_document
+    refute StudioDocs.guide_document('NOT_A_GUIDE')
+    refute StudioDocs.guide_document('../../etc/passwd'), 'a traversal is not a guide name'
   end
 
   # --- the docs document the language, not the apps --------------------------

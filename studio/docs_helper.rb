@@ -21,7 +21,26 @@ module StudioDocs
   # that cannot show its own resume prompt and its own plan is a studio that
   # eats someone else's food.
   GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
-              ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY].freeze
+              ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY
+              DESIGN_IDIOM].freeze
+
+  # Which document each guide name is. Most live at the root; the design
+  # idiom lives in `docs/` beside its compiler. Named here, in one place, so
+  # the route serves a known document instead of interpolating a path from
+  # the URL — the registry *is* the guard.
+  DOCUMENTS = GUIDES.to_h { |name| [name, "#{name}.md"] }
+                      .merge('DESIGN_IDIOM' => 'docs/DESIGN_IDIOM.md').freeze
+
+  # The absolute path of a guide's document, or nil when the name names no
+  # guide. `nil` is the honest answer to "is this a guide?": it keeps a
+  # traversal attempt and a typo on the same path, and it means a guide
+  # cannot be added to the shelf without also being given a document.
+  def self.guide_document(name)
+    relative = DOCUMENTS[name.to_s]
+    return nil unless relative
+
+    File.join(ROOT, relative)
+  end
 
   def self.guides(ui = Uis.default_ui)
     GUIDES.map { |name| Entry.new(name: name, path: ui.path(ui.paths[:guide], name: name)) }
