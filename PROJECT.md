@@ -76,7 +76,23 @@ status: >-
   position. The studio chrome's own navigation and taxonomy's `:sidebar`
   structural primitive are different things wearing a similar word and were
   left alone. All nine gates green, 462 tests, every page verified to render
-  `class="box shell"` and none to emit the old name.
+  `class="box shell"` and none to emit the old name. Then an audit for the same
+  disease — presentation vocabulary in `.sp`, which the design idiom exists to
+  prevent — found the pattern rather than a single artifact: a partial whose
+  whole body is `box` + `children` exists only to hand a stylesheet a class,
+  which is a presentation decision wearing a substance name. Four qualify
+  (`shell`, `split_pane`, `panes`, `word_docs`); `shell`, `panes` and
+  `word_docs` are purpose-named and fine, and `split_pane` is the technique
+  name left standing. The root cause is that the classic UI has no `.design`
+  file, so its presentation pooled in two wrapper partials, in
+  `slim-pickins.css` (which every UI loads), and in a root role. Dan's call was
+  the smallest item: the workbench's `foot` partial is gone and the layout says
+  the canonical `footer` — which was also a live defect, since a
+  workbench-specific `.footer` rule had been styling nothing because the
+  element was a `.foot`. Recorded and deliberately not done, awaiting dan's
+  word: one pane word instead of `split_pane`/`panes` (the same concept under
+  two names), a `classic.design` to give the classic UI's presentation its
+  proper home, and retiring the term "layout" from nine `layout.sp` files.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still

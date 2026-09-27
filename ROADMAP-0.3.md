@@ -1244,3 +1244,43 @@ Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
 failures, every page type fetched and confirmed to render `class="box shell"`
 with no page emitting the old name. Two commits, one of which removes a
 scratch file that had ridden along in the first.
+
+### Addendum 7 — the audit behind the rename (same day)
+
+Renaming the instance raised the question of the class, and dan asked it: are
+there other artifacts of the same muddled thinking? There are, and the audit
+found the rule rather than a list.
+
+**A partial whose whole body is `box` plus `children` exists to do one thing:
+hand a stylesheet a class to hold.** Its name has no substance to describe, so
+it drifts toward describing presentation. Four qualify: `shell`, `split_pane`,
+`panes`, `word_docs`. The test that separates them is not "does the name
+describe a position" but **whether the body gives the name anything to be
+about** — `shell`, `panes` and `word_docs` name a purpose; `split_pane` names a
+technique.
+
+The cause is a gap, not carelessness: **the classic UI has no `.design`
+file**, so its presentation has nowhere legitimate to live and pools in two
+wrapper partials, in `slim-pickins.css` (which every UI loads), and in a root
+role (`--shelf-width`). The workbench has a `.design` and does not have the
+problem. Clearing the wrappers without giving the presentation a home would
+move it again.
+
+**Acted on, dan's call — the smallest item.** The workbench's `foot` partial is
+gone and the layout says the canonical `footer`, which takes block children, so
+the vitals render through it unchanged. That was also a live defect:
+`slim-pickins.css` carries a workbench-specific `.footer` rule written for a
+`<footer>` the layout never emitted, because the partial promoted its own name
+as the class and the element was a `.foot`. The intended styling had been dead,
+and no instrument here could see it — `check_styles` verifies that every
+emitted class has a rule, never that every rule has an element.
+
+**Recorded, not done, awaiting dan's word:** one pane word instead of
+`split_pane`/`panes` (the same concept under two names, in two UIs); a
+`classic.design` to give the classic UI's presentation its proper home; and
+retiring the term "layout" from the nine `layout.sp` files, which is a rename
+of how a UI declares its frame and wants a name chosen first.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures, the workbench footer verified live as `<footer class="footer">` with
+no element carrying a `foot` class. One commit.
