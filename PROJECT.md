@@ -27,7 +27,15 @@ status: >-
   missing lexicon entries were written from the compiler's real output, and
   docs/DESIGN_IDIOM.md is now served as a guide — which needed the guide route
   itself changed, since it resolved every name to <root>/<name>.md and a
-  document in docs/ was unreachable. All eight gates green; 446 tests.
+  document in docs/ was unreachable. Then the
+  round's last two pieces, both dan's calls: check_design_docs.rb — the ninth
+  gate leg, which holds the lexicon to the compiler in both directions and
+  found `collapse` undocumented on its first honest run — and
+  design_idiom_discussion.md served as a guide beside the lexicon it explains.
+  The checker's own logic is pinned by test/check_design_docs_test.rb, and its
+  value was proven by mutation (the align-items defect, an invented property,
+  and a wrong grid-column value each fail it with exit 1). All nine gates
+  green; 451 tests.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
@@ -36,15 +44,15 @@ next_step: >-
   (one question — real values for the .design collapse/balance scale, measured
   against real embedding widths); output's independent height under presence:
   steady (full three-way row parity needs that calc moved from the zone to the
-  stage/row level); and --footer-height: 2.8rem (note the compiler's own
-  fallback for it is still 2rem, which is inert only because
-  assets/workbench.css sets the real value). One candidate this round surfaced
-  and deliberately did not build: nothing verifies a doc's compiled-CSS
-  examples, which is how four of them drifted — a checker able to re-compile
-  each <details> block and fail on a mismatch is new machinery, so it is dan's
-  call. design_idiom_discussion.md was read in full this round but is not a
-  guide and has no corpus; whether the studio should serve it as one is the
-  same open question. Package D remains valid and unstarted.
+  stage/row level); and --footer-height, whose hardcoded 2.8rem still has a
+  stale 2rem fallback inside DesignIdiom's own generated CSS (inert only
+  because assets/workbench.css sets the real value). The live studio on :4580
+  needs a hand restart to serve the two new guides — this sandbox runs its own
+  PID namespace and cannot signal that process. Also open, and small:
+  design_idiom_discussion.md carries eleven escaped-markdown artifacts (\\#,
+  method\\_missing) that render as literal backslashes — the document's own
+  text, so repairing it is a content edit for dan, not a side effect of
+  serving it. Package D remains valid and unstarted.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

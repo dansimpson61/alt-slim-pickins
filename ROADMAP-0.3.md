@@ -1028,3 +1028,49 @@ sandbox runs its own PID namespace and cannot see or signal that process —
 
 Verification after the addendum: all eight gates green, suite 446 runs / 5,635
 assertions / 0 failures. Two further commits.
+
+### Addendum 2 — the instrument, and the discussion served (same day)
+
+The round left two things to dan's call; he called both, and the instrument
+immediately earned itself.
+
+**`check_design_docs.rb`, the ninth gate leg.** It holds the lexicon to the
+compiler in both directions: every word the compiler implements must have an
+entry, and every entry's example must compile with every declaration in its
+compiled-CSS block one the compiler really emits. The lexicon's examples are
+teaching fragments rather than programs, so the pairing between an entry and a
+compilable source is information the document does not carry; it is written in
+the checker, and `Source#shows?` asserts the fragment really is part of the
+source it documents — without that, the checker would validate entries against
+the wrong program and call it green.
+
+Its first honest run found a defect the round had not: **`collapse` was
+implemented, used by `workbench.design`, and undocumented** while the string
+`collapse:` appeared in the `flank` and `horizon` usage blocks with nothing
+defining it. The round had found four drifted CSS blocks by asking whether the
+documentation was *accurate*; the checker found the fifth thing by asking
+whether it was *complete*. That entry now exists.
+
+Verified by mutation rather than assertion, since an instrument that cannot
+fail is a rubber stamp: `align-items: start` (the historical defect) fails it
+in both entries, an invented `will-change: transform` fails it, and a
+`grid-column` value changed from `2` to `9` fails it while naming what the
+compiler really emits. That last probe exposed a permissiveness bug — the
+matcher accepted a value if the property existed anywhere — now fixed and
+pinned by `test/check_design_docs_test.rb` (5 cases). A second fix came from
+the same discipline: selectors are compared as the set of things they select,
+because the documentation indents a wrapped selector inside `@container` and
+the compiler does not, and comparing rendered strings failed on whitespace
+rather than on meaning.
+
+**`design_idiom_discussion.md` served as a guide**, beside the lexicon it
+explains, through the `DOCUMENTS` registry the previous addendum introduced —
+the registry was already the guard, so this was one line. Verified on a
+throwaway `:4582` instance: both guides 200, an unknown name 404. The document
+carries eleven escaped-markdown artifacts (`\#`, `method\_missing`) that render
+as literal backslashes; that is its own text, so repairing it is a content edit
+for dan rather than a side effect of serving it, and it is recorded in
+`PROJECT.md`.
+
+Verification: all nine gates green, suite 451 runs / 5,666 assertions / 0
+failures. Four further commits.
