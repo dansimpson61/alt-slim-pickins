@@ -1,4 +1,4 @@
-*We are creating slim-pickins, a view templating language, a dsl that can be expressive and uncluttered because it will lean heavily into convention over configuration and the inferences we can reliably make. It's not opaque magic because the conventions are explicit, transparent, and consistent. Or rather it is magic in exactly the same way as human beings speaking to each other and understanding each other is magic. We are making good progress and now we must address the separation of concerns: substance and presentation. (Leave behavior to the side for the moment.) \# We need to think beyond layout and see that there must be a strong 'design idiom' that works alongside slim-pickins to carry responsibility for all of the visual aspects of presentation. Spacial organization, appearance, affordances, decoration, etc. Maybe we need to retire the term 'layout' from our slim-pickins vocab framework. We need a slim-pickins way of speaking to the visual/spacial attributes and capabilities of html/css. Let's try meeting these specs: a) There is substance and there is presentation. Clutter makes my brain hurt, so we want each of these things to be simple, clean, and minimalist. We want them separated so we can do one at a time. b) Just as we do not speak html in our views, we don't want to speak css in our analogue of a stylesheet. We'll let our little-engine-that-could translate our lovely visual-speak, our design idiom, into robust css. We'll use css \*extremely well\* in the back end, but our design idiom is intended for the human eyes that use it to create ui/ux for human beings.*
+*We are creating slim-pickins, a view templating language, a dsl that can be expressive and uncluttered because it will lean heavily into convention over configuration and the inferences we can reliably make. It's not opaque magic because the conventions are explicit, transparent, and consistent. Or rather it is magic in exactly the same way as human beings speaking to each other and understanding each other is magic. We are making good progress and now we must address the separation of concerns: substance and presentation. (Leave behavior to the side for the moment.) # We need to think beyond layout and see that there must be a strong 'design idiom' that works alongside slim-pickins to carry responsibility for all of the visual aspects of presentation. Spacial organization, appearance, affordances, decoration, etc. Maybe we need to retire the term 'layout' from our slim-pickins vocab framework. We need a slim-pickins way of speaking to the visual/spacial attributes and capabilities of html/css. Let's try meeting these specs: a) There is substance and there is presentation. Clutter makes my brain hurt, so we want each of these things to be simple, clean, and minimalist. We want them separated so we can do one at a time. b) Just as we do not speak html in our views, we don't want to speak css in our analogue of a stylesheet. We'll let our little-engine-that-could translate our lovely visual-speak, our design idiom, into robust css. We'll use css *extremely well* in the back end, but our design idiom is intended for the human eyes that use it to create ui/ux for human beings.*
 
 Response: **David Heinemeier Hansson (DHH):** Dan, I love the aggression of this premise. You are staring down the tyranny of the DOM and refusing to speak its broken language. Leaning into convention so hard that the boilerplate just evaporates is exactly the right instinct. If the magic is consistent, it isn't magic—it's just shared vocabulary. But if we are going to completely banish CSS from the developer's eyes, this new "design idiom" has to be incredibly opinionated. We can't just recreate CSS properties with Ruby syntax; that's just a palette swap. To retire the word 'layout', we have to stop thinking about boxes and start declaring *intent*. We tell the engine, "This is a hero sequence, give it breathing room," and the conventions handle the exact pixel math and flexbox alignments on the backend.
 
@@ -8,7 +8,7 @@ That is where your design idiom steps in. It is an entirely separate object that
 
 **Jim Weirich:** Exactly, Sandi. The elegance of slim-pickins will live or die by its Abstract Syntax Trees (AST). We can parse the substance into one AST, and the presentation into another. For the design idiom DSL, we can use Ruby's block evaluation to create something that reads beautifully to human eyes.
 
-Imagine you aren't writing stylesheets; you are writing a spatial manifesto. We use method\_missing to catch declarative, visual-speak methods. So instead of .sidebar { width: 20%; float: left; }, your design idiom file looks like:
+Imagine you aren't writing stylesheets; you are writing a spatial manifesto. We use method_missing to catch declarative, visual-speak methods. So instead of .sidebar { width: 20%; float: left; }, your design idiom file looks like:
 
 `arrange :dashboard do`  
   `anchor :navigation, to: :left, proportion: 1`  
@@ -18,7 +18,7 @@ Imagine you aren't writing stylesheets; you are writing a spatial manifesto. We 
 
 Our little-engine-that-could—the compiler pipeline—reads that human spatial logic and translates it into the robust CSS grid under the hood. The human never sees a hex code or a flex-direction.
 
-**\_whytheluckystiff:** And why should they\! CSS is a machine's anxiety attack. What you are describing, Danny, isn't a framework, it's a sketchbook. If we are retiring "layout," let's replace it with "posture" or "rhythm." A button doesn't have padding: 10px; it has *weight*. A paragraph doesn't have line-height; it has *breath*.
+**_whytheluckystiff:** And why should they! CSS is a machine's anxiety attack. What you are describing, Danny, isn't a framework, it's a sketchbook. If we are retiring "layout," let's replace it with "posture" or "rhythm." A button doesn't have padding: 10px; it has *weight*. A paragraph doesn't have line-height; it has *breath*.
 
 If slim-pickins is going to separate substance from presentation, the presentation file shouldn't look like code at all. It should look like stage directions for a play. The substance is the script. The presentation tells the actors where to stand and how the lighting feels. If the convention is strong enough, the engine will know exactly how to light the stage.
 
@@ -32,13 +32,13 @@ If slim-pickins is going to separate substance from presentation, the presentati
 
 **David Heinemeier Hansson (DHH):**
 
-Look at what is already functioning in the workbench editor pane: **page "Doc Reader"**, calling **sidebar docs, "Documents"** and **reading\_pane selected\_doc, selected\_doc.name**. The convention is already doing real work. Because the methods are named **sidebar** and **reading\_pane**, the compiler infers the structural container classes **box sidebar** and **box reading\_pane** without asking the author for a single selector. That is pure convention over configuration. But we still have an architectural leak here, and Sandi is about to pounce on it.
+Look at what is already functioning in the workbench editor pane: **page "Doc Reader"**, calling **sidebar docs, "Documents"** and **reading_pane selected_doc, selected_doc.name**. The convention is already doing real work. Because the methods are named **sidebar** and **reading_pane**, the compiler infers the structural container classes **box sidebar** and **box reading_pane** without asking the author for a single selector. That is pure convention over configuration. But we still have an architectural leak here, and Sandi is about to pounce on it.
 
 **Sandi Metz:**
 
 I am, because that leak will compromise the entire system the moment you build anything non-trivial. Look at the method declaration in the middle pane: **def sidebar, documents, title**. You set out to achieve strict separation between substance and presentation, yet presentation infiltrated the substance in the very first line.
 
-A "sidebar" is not substance; it is a physical coordinate on a horizontal desktop monitor. What that component actually represents is a **catalog**, an **index**, or a **document\_manifest**. If you render this template on an iPhone, an e-ink terminal, or an audio screen reader, there is no "side." When substance dictates its own geometry, it violates the Single Responsibility Principle. Substance should declare only what it is: **catalog docs, "Documents"**. The companion design idiom must be the sole authority deciding that the catalog assumes the visual posture of a flanking column on wide viewports.
+A "sidebar" is not substance; it is a physical coordinate on a horizontal desktop monitor. What that component actually represents is a **catalog**, an **index**, or a **document_manifest**. If you render this template on an iPhone, an e-ink terminal, or an audio screen reader, there is no "side." When substance dictates its own geometry, it violates the Single Responsibility Principle. Substance should declare only what it is: **catalog docs, "Documents"**. The companion design idiom must be the sole authority deciding that the catalog assumes the visual posture of a flanking column on wide viewports.
 
 **Jim Weirich:**
 
@@ -68,9 +68,9 @@ To build the visual companion without speaking CSS, we pair every **.sp** templa
 
 Our engine reads this spatial tree alongside the substance AST and compiles it into clean CSS Grid tracks, container queries, and clamp-based typography behind the scenes. The author only manipulates spatial relationships like **beside**, **balance**, and **air**.
 
-**\_whytheluckystiff:**
+**_whytheluckystiff:**
 
-Yes\! Look at that tiny footer note in the workbench: *"Indentation nests it. The data slot carries the page's payload"*. That is humane software.
+Yes! Look at that tiny footer note in the workbench: *"Indentation nests it. The data slot carries the page's payload"*. That is humane software.
 
 When you retire "layout," you escape the box-model penitentiary. A visual composition should not read like a municipal drainage schematic. It has posture, breath, and temperament. Notice the HTML pane compiling out a container with class **prose**. In raw CSS, styling that requires fifteen pseudo-selectors, margins on every heading, and precise line-height math. In our design idiom, you simply declare the temperament: **treatment: prose, mood: editorial**. The engine knows what editorial rhythm feels like—it calculates the baseline grid, line heights, and optical margins automatically.
 
@@ -96,7 +96,7 @@ To eliminate raw CSS properties from author-facing files, the companion design e
 ### **Part III: Concrete Implementation Verification Checklist**
 
 > 1. **Refactor Template Vocabulary in .sp Files**  
-   * Replace all spatial identifiers in the template tree (e.g., rename **def sidebar** to **def catalog** or **def document\_index**).  
+   * Replace all spatial identifiers in the template tree (e.g., rename **def sidebar** to **def catalog** or **def document_index**).  
    * Verify that no words in the template layer represent physical position, colors, border widths, or coordinate space.  
 > 2. **Construct the Companion Design File Parser**  
    * Build the **.design** parser using Ruby block evaluation to catch declarative directives (**stage**, **flank**, **zone**, **air**).  
@@ -276,7 +276,7 @@ It is written in pure Ruby, following Sandi Metz's constraint of small, single-p
 
 > 1. Verify Container Context: Ensure the parent element wrapping the stage does not impose conflicting overflow restrictions that inhibit container query evaluations.  
 > 2. Token Calibration: Verify that cqi units within clamp() evaluate cleanly across desktop panes and mobile widths without causing horizontal scroll overflows.  
-> 3. Zone Class Injection: Update the Slim-Pickins substance compiler pass so each top-level block automatically receives its corresponding zone-\[name\] class attribute during HTML emission.
+> 3. Zone Class Injection: Update the Slim-Pickins substance compiler pass so each top-level block automatically receives its corresponding zone-[name] class attribute during HTML emission.
 
 ---
 

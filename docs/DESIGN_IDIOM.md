@@ -50,7 +50,8 @@ Every word in the design idiom models exemplary lexical practice:
 2. **What it is for**: The design problem it solves and intent it declares.
 3. **How to use it**: Syntax, options, and constraints.
 4. **Examples**: Code snippet in pure `.design` syntax.
-5. **Compiled CSS**: Collapsible `<details>` showing the exact modern CSS emitted under the hood.
+5. **Compiled CSS**: the exact modern CSS emitted under the hood, in a fenced
+   block under its own heading — real output, not a sketch.
 
 ---
 
@@ -89,8 +90,7 @@ Every word in the design idiom models exemplary lexical practice:
     air generous
     flank catalog, beside: reading_pane, balance: subordinate
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 html {
@@ -106,7 +106,6 @@ body {
   box-sizing: border-box;
 }
 ```
-</details>
 
 ---
 
@@ -128,8 +127,7 @@ body {
     posture shelf, workspace, mirror
     collapse roomy
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 .sidebar_layout {
@@ -174,7 +172,6 @@ body {
   }
 }
 ```
-</details>
 
 ---
 
@@ -192,14 +189,12 @@ body {
   - `aside` — a fixed companion: `minmax(16rem, 1fr)`.
   - `equal` — an even share: `minmax(0, 1fr)` (the default when `posture` is omitted).
 - **Example**: `posture shelf, workspace, mirror`
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 /* shelf, workspace, mirror */
 grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 ```
-</details>
 
 ---
 
@@ -218,8 +213,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
   - `wide` — 64rem.
   - The emitted query is `@container <surface> (inline-size < <threshold>)` — measured against the surface's container, never the viewport, so an embedded preview collapses on its own width.
 - **Example**: `collapse roomy`
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 @container workbench (inline-size < 56rem) {
@@ -228,7 +222,6 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
   }
 }
 ```
-</details>
 
 ---
 
@@ -248,8 +241,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
   ```
   flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 html {
@@ -283,7 +275,6 @@ body .reading_pane {
   }
 }
 ```
-</details>
 
 ---
 
@@ -298,8 +289,7 @@ body .reading_pane {
   ```
   stack overview, details, air: generous
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 body {
@@ -315,7 +305,6 @@ body {
   flex-direction: column;
 }
 ```
-</details>
 
 ---
 
@@ -335,8 +324,7 @@ body {
     frame quiet
     cadence compact
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 .catalog {
@@ -353,7 +341,6 @@ A zone's selector is its own bare class — the same class its `.sp` partial
 already renders via this project's app_class-promotion convention, and
 already scoped safely because a compiled `.design` stylesheet is only ever
 loaded by the pages that use it.
-</details>
 
 ---
 
@@ -362,14 +349,12 @@ loaded by the pages that use it.
 - **What it is for**: Controlling internal spacing through tokenized, fluid `clamp()` values using container query inline units (`cqi`).
 - **How to use it**: `air tight` | `air balanced` | `air generous`
 - **Example**: `air generous`
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 padding: clamp(1.5rem, 4cqi, 3rem);
 gap: clamp(1.5rem, 4cqi, 3rem);
 ```
-</details>
 
 ---
 
@@ -378,8 +363,7 @@ gap: clamp(1.5rem, 4cqi, 3rem);
 - **What it is for**: Declaring which zone dominates visual weight without calculating percentages or column spans.
 - **How to use it**: Modifier to `flank(..., balance: subordinate | equal | dominant)`
 - **Example**: `balance: subordinate` (lead is minor column, companion is major column).
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 /* subordinate */
@@ -391,7 +375,6 @@ grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 /* dominant */
 grid-template-columns: minmax(0, 3fr) minmax(14rem, 1fr);
 ```
-</details>
 
 ---
 
@@ -400,8 +383,7 @@ grid-template-columns: minmax(0, 3fr) minmax(14rem, 1fr);
 - **What it is for**: Defining surface boundaries, backgrounds, and borders.
 - **How to use it**: `frame quiet` | `frame lifted` | `frame bordered` | `frame flat`
 - **Example**: `frame quiet`
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 background: var(--surface-soft, #f9f8f5);
@@ -409,7 +391,6 @@ border: 1px solid var(--rule, #e5e1d8);
 border-radius: var(--radius, 4px);
 padding: clamp(0.75rem, 1.5cqi, 1rem);
 ```
-</details>
 
 ---
 
@@ -418,15 +399,13 @@ padding: clamp(0.75rem, 1.5cqi, 1rem);
 - **What it is for**: Controlling how tightly packed items are inside a list or manifest.
 - **How to use it**: `cadence compact` | `cadence regular` | `cadence relaxed`
 - **Example**: `cadence compact`
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 display: flex;
 flex-direction: column;
 gap: 0.35rem;
 ```
-</details>
 
 ---
 
@@ -435,15 +414,13 @@ gap: 0.35rem;
 - **What it is for**: Applying optical measure (reading line length), line-height, and typographic rhythm.
 - **How to use it**: `treatment editorial` | `treatment prose` | `treatment code` | `treatment tabular`
 - **Example**: `treatment editorial`
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 max-width: 65ch;
 line-height: 1.7;
 font-size: 1.05rem;
 ```
-</details>
 
 ---
 
@@ -458,8 +435,7 @@ font-size: 1.05rem;
   zone library
     scroll internal
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 .library {
@@ -475,7 +451,6 @@ font-size: 1.05rem;
   overscroll-behavior: contain;
 }
 ```
-</details>
 
 ---
 
@@ -490,8 +465,7 @@ font-size: 1.05rem;
   zone output
     presence steady
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 .output {
@@ -530,7 +504,6 @@ font-size: 1.05rem;
   border: none;
 }
 ```
-</details>
 
 ---
 
@@ -544,8 +517,7 @@ font-size: 1.05rem;
   zone editor
     focus primary
   ```
-<details>
-<summary><strong>Compiled CSS</strong></summary>
+**Compiled CSS**
 
 ```css
 .editor {
@@ -581,4 +553,4 @@ font-size: 1.05rem;
   min-height: var(--editor-data-height, 6rem);
 }
 ```
-</details>
+
