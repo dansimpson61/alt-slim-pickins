@@ -134,17 +134,18 @@ status: >-
   a filename anyway, since `Spiff.compile` takes source. One latent bug fell
   out of the sweep: `check_spiff.rb` had carried two copies of its own module
   comment since the truth round rewrote it in place.
-last_touched: 2026-09-26
+last_touched: 2026-09-27
 next_step: >-
-  All three steps of the tin work are done. A view may carry its own
-  `[view].tin` and `[view].spiff` or inherit the app's, resolved by one rule in
-  one place (`Library#tin_for`, `Library.spiff_for`); and a page's stylesheets
-  are inferred — the language's own always, then the app's or the view's from
-  `public/css/`, announced only where `Library.from(…, public_url:)` says the
-  app serves that directory. `stylesheet`/`script` remain as the escape hatch,
-  which is what makes inference a default rather than a replacement: ten
-  declarations were deleted and roth, the one app with styles of its own and
-  the one that fits no convention, still says what it needs.
+  All four steps of the tin/Spiff work are done: the rename (`[app].tin`), a
+  view's own `[view].tin`/`[view].spiff` beating the app's (one rule, in
+  `Library#tin_for` and `Library.spiff_for`), stylesheet inference (the
+  language's own always, then `public/css/[app].css` or `[view].css` where
+  `Library.from(…, public_url:)` says they are served), and the tenth gate
+  (`check_spiff_scope.rb`, a Spiff's zones against the pages that must render
+  them). `stylesheet`/`script` remain as the escape hatch — which is what makes
+  inference a default rather than a replacement, and why roth, the one app with
+  styles of its own and the one that fits no convention, still says what it
+  needs.
 
   And the question dan asked — whether anything holds a `.sp` to its `.spiff` —
   is now answered by a tenth gate, `check_spiff_scope.rb`: every zone a Spiff
@@ -161,8 +162,10 @@ next_step: >-
   Left recorded and unresolved: two byte-identical tins (`pages/pages.tin` and
   `examples/portfolio/views/portfolio.tin`), which dan chose to leave; and the
   classic UI still has no `.spiff`, so its presentation still pools in
-  `slim-pickins.css`. Otherwise no active thread: the three 0.4.0g items below
-  still stand, and Package D is still valid and unstarted.
+  `slim-pickins.css`. Package D is mostly done and was annotated so in
+  HANDOFF.md (its item 2 was an illusion per the 2026-09-22 audit; items 1 and
+  3 are resolved) — re-measure it rather than trusting the list. The three
+  0.4.0g items below still stand. Otherwise no active thread.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
