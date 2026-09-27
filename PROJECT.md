@@ -118,7 +118,20 @@ status: >-
   — the visual or structural sense, which is the design idiom's. Roth's views
   have no tin, which is a real answer: that page carries its own chrome, and
   `Library.tin_path` returning nil records it. All nine gates green, 462
-  tests, every tin resolving, both UIs rendering live.
+  tests, every tin resolving, both UIs rendering live. Then the design idiom
+  got its name: **Spiff**. "Design Idiom" had been a description doing a
+  name's job, which is why the three things it named never agreed — a
+  `.design` extension, a `DESIGN_IDIOM.md` lexicon, a `DesignIdiom` class. The
+  module is now `SlimPickins::Spiff` (`lib/slim_pickins/compiler/spiff.rb`,
+  entrypoints `.compile` and `.compiled_stylesheet`), the lexicon is
+  `docs/SPIFF.md`, the discussion `spiff_discussion.md`, the gate
+  `check_spiff.rb`, the status leg `Spiff`, the studio guide `SPIFF`, and the
+  editor's label "Spiff (.design)". The lowercase "design idiom" survives
+  where it explains rather than refers: "Spiff is slim-pickins' design idiom."
+  The file extension stays `.design`, since the language is named and not the
+  format. One latent bug fell out of the sweep: `check_spiff.rb` had carried
+  two copies of its own module comment since the truth round rewrote it in
+  place.
 last_touched: 2026-09-26
 next_step: >-
   The tin work is in progress, one step at a time as dan asked. Step 1 (the

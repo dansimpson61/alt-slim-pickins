@@ -1371,3 +1371,40 @@ Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
 failures, every tin resolving (nine), both studio UIs rendering live, and the
 roth app booting with no tin by design. Three commits, one of which removes a
 scratch file that rode along.
+
+### Addendum 10 — the design idiom is named Spiff (same day)
+
+Before investing further in the layer, dan named it, on the observation that
+"Design Idiom" had always been a *description* rather than a name — and that
+it showed: the extension was `.design`, the lexicon `DESIGN_IDIOM.md`, the
+compiler class `DesignIdiom`, three reasonable names that did not agree
+because nothing had ever named the thing they belonged to.
+
+**Spiff**, and it is slim-pickins' design idiom. One name now, everywhere:
+
+| was | is |
+|---|---|
+| `lib/slim_pickins/compiler/design_idiom.rb`, `DesignIdiom` | `spiff.rb`, `Spiff` |
+| `docs/DESIGN_IDIOM.md` | `docs/SPIFF.md` |
+| `design_idiom_discussion.md` | `spiff_discussion.md` |
+| `check_design_docs.rb`, `DesignDocsCheck` | `check_spiff.rb`, `SpiffCheck` |
+| `test/design_idiom_test.rb` | `test/spiff_test.rb` |
+| status leg `Design docs` | `Spiff` |
+
+`SlimPickins::Spiff.compile` and `.compiled_stylesheet` are the public
+entrypoints; the studio offers `SPIFF` and `SPIFF_DISCUSSION` as guides and
+labels the editor's textarea "Spiff (.design)". The lowercase "design idiom"
+survives only where it explains rather than refers — "Spiff is slim-pickins'
+design idiom" — which is what it was always meant to be.
+
+The file extension stays `.design`: the language is named, not the format.
+Whether a Spiff document should eventually be `.spiff` is left open, since
+that is a second decision and dan named the language, not the suffix.
+
+A latent defect fell out of the sweep, which is the incidental value of a
+rename: `check_spiff.rb` had carried **two copies of its own module comment**
+since the truth round rewrote that file in place. It was fixed in passing.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures, and a live studio serving the Spiff guide, both shelf entries, the
+"Spiff (.design)" label, and the Spiff status leg. Two commits.
