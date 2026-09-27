@@ -244,14 +244,92 @@ module SlimPickins
       cells
     end
 
+    # The one character a document cannot contain, used to hold a code span's
+    # place while the text around it is read for links and emphasis. It has to
+    # be a mask rather than a walk, because the forms nest: a link's text is
+    # often a code span (`[`word`](word)`), and emphasis often wraps one
+    # (`**word (`word`)**`). A mask lets each form be read against text the
+    # others have already been taken out of, so nothing is parsed twice.
+    PLACEHOLDER = "\u0000"
+
+    CODE = /`+[^`]+?`+/
+
     def spans(text)
-      text.gsub(/`([^`]+)`/, '<code>\1</code>')
-          .gsub(/\*\*([^*]+)\*\*/, '<strong>\1</strong>')
-          .gsub(/(?<!\*)\*([^*]+)\*(?!\*)/, '<em>\1</em>')
-          .gsub(/!\[([^\]]*)\]\(([^)\s]+)\)/) { %(<img src="#{CGI.escapeHTML($2)}" alt="#{CGI.escapeHTML($1)}">) }
-          .gsub(/\[([^\]]+)\]\(([^)\s]+)\)/) { %(<a href="#{CGI.escapeHTML($2)}">#{$1}</a>) }
-          .gsub(/  +\n/, '<br>')
-          .gsub("\n", ' ')
+      code = []
+      masked = matched_backticks(text).reverse.reduce(text.dup) do |rest, (open_at, content_at, close_at, close_end)|
+        code.unshift(text[content_at...close_at])
+        rest[open_at...close_end] = PLACEHOLDER
+        rest
+      end
+
+      out = markup(masked)
+      code.each { |content| out.sub!(PLACEHOLDER) { "<code>#{content}</code>" } }
+      out.gsub("\n", ' ')
+    end
+
+    # The markup that may appear *around* a code span: links, images,
+    # emphasis. Code is already masked out, so `**this**` inside a span is
+    # never read as bold — rendered as bold it would be a lie about what the
+    # page says.
+    #
+    # Precedence matters between the forms: `[![alt](pic)](dest)` is a linked
+    # image, and a pattern that tried the link first would read `![alt` as its
+    # text and swallow the image.
+    IMAGE = /!\[(?<alt>[^\]]*)\]\((?<src>[^)\s]+)\)/m
+    # A link's text may hold one nested image pair — `[![alt](pic)](dest)` is
+    # how a linked image is written — and the mask may stand in for a code
+    # span, which is how `[`word`](word)` reads.
+    LINK = /\[(?<text>(?:!?\[[^\[\]]*\])?[^\[\]]*)\]\((?<href>[^)\s]+)\)/m
+
+    def markup(text)
+      # Image before link: `[![alt](pic)](dest)` is a linked image, and a link
+      # pattern that saw it first would read `![alt` as its own text.
+      with_images = text.gsub(IMAGE) do
+        m = Regexp.last_match
+        %(<img src="#{CGI.escapeHTML(m[:src])}" alt="#{CGI.escapeHTML(m[:alt])}">)
+      end
+      with_images.gsub(LINK) do
+        m = Regexp.last_match
+        %(<a href="#{CGI.escapeHTML(m[:href])}">#{markup(m[:text])}</a>)
+      end.gsub(/\*\*([^*]+)\*\*/) { "<strong>#{Regexp.last_match(1)}</strong>" }
+                  .gsub(/(?<!\*)\*([^*]+)\*(?!\*)/) { "<em>#{Regexp.last_match(1)}</em>" }
+                  .gsub(/  +\n/, '<br>')
+    end
+
+    # Every matched code span in the text, as [open_at, content_at, close_at,
+    # close_end]. This is CommonMark's rule and it has to be a scan rather
+    # than a pattern: a span opens on a run of backticks and closes on the
+    # next run of *the same length*, so a shorter run inside it is content.
+    #
+    # The pattern it replaced, /`([^`]+)`/, could express only the
+    # length-one case, which made a whole class of sentence unwritable — any
+    # sentence that had to quote three backticks, starting with this repo's
+    # own fence pattern. It also paired the first backtick with the last,
+    # which silently welded `.`/`#` into one span whose content was `./`.
+    #
+    # A run with no partner of its length is left as written, so a fence line
+    # — a lone run of three — survives untouched.
+    def matched_backticks(text)
+      runs = []
+      text.to_enum(:scan, /`+/).each do
+        runs << [Regexp.last_match.begin(0), Regexp.last_match[0].length]
+      end
+
+      pairs = []
+      index = 0
+      while index < runs.size
+        at, length = runs[index]
+        closing = index + 1
+        closing += 1 while closing < runs.size && runs[closing][1] != length
+        if closing < runs.size
+          close_at = runs[closing][0]
+          pairs << [at, at + length, close_at, close_at + length]
+          index = closing + 1
+        else
+          index += 1
+        end
+      end
+      pairs
     end
 
     # `prose plain, .notes` — no markup at all, just paragraphs.

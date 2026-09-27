@@ -195,12 +195,19 @@ class GuideRenderingTest < Minitest::Test
     SlimPickins::Markdown.render(File.read(path))
   end
 
+  # The invariant, stated exactly: a backtick may appear *inside* a code
+  # element — that is what a span containing backticks looks like when it
+  # renders correctly — but a backtick in the prose around the code means a
+  # span never closed, and the reader is looking at punctuation instead of
+  # content. The first version of this test counted every backtick and so read
+  # a correct document as broken once the engine could quote backticks.
   def test_no_guide_leaves_a_backtick_in_its_prose
     offenders = documents.filter_map do |path|
-      count = rendered(path).scan('`').size
+      prose = rendered(path).gsub(%r{<pre>.*?</pre>|<code>.*?</code>}m, '')
+      count = prose.scan('`').size
       "#{File.basename(path)}: #{count}" if count.positive?
     end
-    assert_empty offenders, "a backtick reached the reader, so a code span never closed"
+    assert_empty offenders, 'a backtick reached the reader as prose, so a code span never closed'
   end
 
   def test_no_guide_renders_an_html_element_as_literal_text
@@ -223,5 +230,54 @@ class GuideRenderingTest < Minitest::Test
   def test_a_code_span_may_wrap_a_line_inside_a_paragraph
     assert_equal '<p>a <code>one two</code> b</p>',
                  SlimPickins::Markdown.render("a `one\ntwo` b")
+  end
+
+  # --- code spans that contain backticks ---------------------------------
+  #
+  # CommonMark's rule: a span opens on a run of backticks and closes on the
+  # next run of *the same length*, so a shorter run inside it is content.
+  # The pattern this replaced could only ever delimit with one backtick,
+  # which made a whole class of sentence unwritable — anything that had to
+  # quote a fence, starting with this repository's own fence pattern.
+
+  def test_a_code_span_may_contain_a_run_of_backticks
+    # The spaces are content: CommonMark strips one leading and trailing space
+    # only when both are present, and nothing here does that yet.
+    assert_equal '<p>the fence <code> ```ruby </code> opens</p>',
+                 SlimPickins::Markdown.render('the fence ```` ```ruby ```` opens')
+  end
+
+  def test_a_span_delimited_by_four_backticks_may_quote_the_fence_pattern
+    source = 'pattern: ````FENCE = %r{\A```[^\n`]*\z}```` here'
+    assert_equal '<p>pattern: <code>FENCE = %r{\A```[^\n`]*\z}</code> here</p>',
+                 SlimPickins::Markdown.render(source)
+  end
+
+  def test_a_lone_run_with_no_partner_is_left_as_written
+    assert_equal '<p>a `lonely backtick</p>', SlimPickins::Markdown.render('a `lonely backtick')
+  end
+
+  def test_separate_spans_do_not_merge_across_a_line
+    # The old pattern paired the first backtick with the last, so `.` / `#`
+    # became one span whose content was `./`.
+    assert_equal '<p><code>.</code>/<code>#</code></p>',
+                 SlimPickins::Markdown.render('`.`/`#`')
+  end
+
+  # --- code is not markup -------------------------------------------------
+
+  def test_emphasis_inside_a_code_span_is_left_alone
+    assert_equal '<p><code>**not bold**</code> and <strong>bold</strong></p>',
+                 SlimPickins::Markdown.render('`**not bold**` and **bold**')
+  end
+
+  def test_a_link_may_use_a_code_span_as_its_text
+    assert_equal '<p><a href="word.md"><code>word.md</code></a></p>',
+                 SlimPickins::Markdown.render('[`word.md`](word.md)')
+  end
+
+  def test_emphasis_may_wrap_a_code_span
+    assert_equal '<p><strong>card (<code>card</code>)</strong> is bold</p>',
+                 SlimPickins::Markdown.render('**card (`card`)** is bold')
   end
 end
