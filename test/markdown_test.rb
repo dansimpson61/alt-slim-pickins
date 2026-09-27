@@ -162,3 +162,66 @@ class MarkdownTest < Minitest::Test
     assert_equal '<blockquote>This is wrapped prose that continues across lines.</blockquote>', render(source)
   end
 end
+
+# The guides the studio serves, held to the rule that their prose renders.
+#
+# The 2026-09-26 round found four classes of defect here, none of them
+# visible to any checker because nothing rendered the documents and read the
+# result: a code span that wrapped inside a list item (the item renderer ran
+# `spans` twice, splitting the pair), a four-backtick delimiter, a span whose
+# content held three backticks, and three element names that had simply lost
+# their backticks. Every one of them showed the reader raw punctuation.
+#
+# Reading the source cannot catch these, because the source is ambiguous by
+# construction — what is broken is the pairing. So this tests the *output*:
+# no backtick may survive rendering, and no HTML element name may render as
+# literal text.
+class GuideRenderingTest < Minitest::Test
+  ROOT = File.expand_path('..', __dir__)
+
+  # Every document the studio serves as a guide, plus the design idiom's
+  # companion, since all of them are read through `prose`.
+  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
+              ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY].freeze
+
+  def documents
+    (GUIDES.map { |n| File.join(ROOT, "#{n}.md") } +
+      [File.join(ROOT, 'docs', 'DESIGN_IDIOM.md'),
+       File.join(ROOT, 'design_idiom_discussion.md')])
+      .select { |path| File.file?(path) }
+  end
+
+  def rendered(path)
+    SlimPickins::Markdown.render(File.read(path))
+  end
+
+  def test_no_guide_leaves_a_backtick_in_its_prose
+    offenders = documents.filter_map do |path|
+      count = rendered(path).scan('`').size
+      "#{File.basename(path)}: #{count}" if count.positive?
+    end
+    assert_empty offenders, "a backtick reached the reader, so a code span never closed"
+  end
+
+  def test_no_guide_renders_an_html_element_as_literal_text
+    offenders = documents.filter_map do |path|
+      # Remove what the engine really emitted as code, then look for a tag
+      # that is still escaped in the prose around it.
+      prose = rendered(path).gsub(%r{<pre>.*?</pre>|<code>.*?</code>}m, '')
+      found = prose.scan(/&lt;\/?(?:details|summary|div|p|ul|ol|li|section|article|aside|nav|footer|head|table|form|figure|fieldset)\b/i)
+      "#{File.basename(path)}: #{found.uniq.join(', ')}" if found.any?
+    end
+    assert_empty offenders, 'an HTML element name rendered as literal text instead of code'
+  end
+
+  # The engine bug behind six of the defects above, pinned directly.
+  def test_a_code_span_may_wrap_a_line_inside_a_list_item
+    assert_equal "<ul><li>a <code>one two</code> b</li></ul>",
+                 SlimPickins::Markdown.render("- a `one\ntwo` b")
+  end
+
+  def test_a_code_span_may_wrap_a_line_inside_a_paragraph
+    assert_equal '<p>a <code>one two</code> b</p>',
+                 SlimPickins::Markdown.render("a `one\ntwo` b")
+  end
+end

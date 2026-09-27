@@ -133,9 +133,8 @@ module SlimPickins
       out = []
       i = 0
       while i < lines.size
-        body = +spans(lines[i].sub(marker, ''))
+        collected = [lines[i].sub(marker, '')]
         i += 1
-        continuations = []
         nested_lines = []
         while i < lines.size && !lines[i].match?(ITEM_LINE)
           line = lines[i]
@@ -148,11 +147,18 @@ module SlimPickins
               i += 1
             end
           else
-            continuations << line.strip
+            collected << line.strip
             i += 1
           end
         end
-        body << " #{spans(continuations.join(' '))}" unless continuations.empty?
+        # An item's text is read as one piece and given to `spans` once. It
+        # used to be two calls — the marker line, then its continuations —
+        # which broke any code span that wrapped: the opening backtick landed
+        # in one call and the closing backtick in the other, so the span never
+        # closed and the backticks rendered as literal text with a stray
+        # `<code>` between them. Six passages rendered that way; a paragraph,
+        # which always joined before spanning, did not.
+        body = spans(collected.join(' '))
         body << "<ul>#{items(nested_lines, UNORDERED)}</ul>" unless nested_lines.empty?
         out << "<li>#{body}</li>"
       end
