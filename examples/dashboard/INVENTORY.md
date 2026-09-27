@@ -172,6 +172,10 @@ surfaces against the frozen 64-word runtime. All three views were authored in
   - Consumer: `examples/dashboard/views/pattern.sp` (Agent Lore Snippet).
   - Refusal: `textarea` requires form/attribute context and always renders `<div class="field"><label>`. Workaround: `snippet .lore`.
 - **G26 — Layout chrome requires explicit stylesheet declaration.**
-  - Consumer: `examples/dashboard/views/layout.sp`.
+  - Consumer: `examples/dashboard/views/dashboard.tin` (was `layout.sp` before the
+    2026-09-26 rename to `.tin`).
   - Refusal: Omitting `stylesheet "/assets/slim-pickins.css"` results in completely unstyled HTML.
+  - **Closed 2026-09-26:** a page now gets the language's own stylesheet by
+    inference, and that declaration is gone from all nine tins. The refusal as
+    recorded no longer applies.
 

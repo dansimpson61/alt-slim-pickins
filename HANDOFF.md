@@ -10,8 +10,8 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
-3. `PROJECT.md` — `next_step`: no active thread as of 2026-09-25; three items
-   deliberately left open for a future token ground-truthing daytrip
+3. `PROJECT.md` — `next_step`: the tin/Spiff work (four steps) is **closed** as of
+   2026-09-26; what remains open is the token ground-truthing daytrip and Package D
 4. `HANDOFF.md` — this document, specifically the active itinerary below
 5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0g.md` — outcomes of every daytrip so far
 6. `COMMUNITY_BULLETIN_BOARD.md` — the council's most recent session (currently:
@@ -21,6 +21,11 @@ Resume work on `~/dev/alt-slim-pickins`.
 8. `DESIGN.md`, `CONTRACT.md` — the grammar and the app promise; `VOCABULARY.md`'s checkable bullets per entry are generated (`bin/generate_vocabulary.rb`)
 9. `LORE.md` — what previous sessions *learned*; the last entries are this session's
 10. `working-with-dan.md` — candid notes on working with him: what his questions mean, what lands, what does not. It is short, it is honest, and **it is yours to keep true** — updating it is part of the round.
+
+**Two names changed on 2026-09-26 and older documents may still use the old ones.**
+The frame a page wears is a **tin** (`.tin`, was `layout.sp`), and the design
+idiom is **Spiff** (`.spiff`, was `Design Idiom` / `.design`). "Layout" survives
+only where it means the visual arrangement, which is Spiff's business.
 
 Root holds what you read. `history/` is roadmap 0.1, consulted, not maintained;
 `roth/` is notes on a different project. Don't re-derive any of the above in
@@ -37,18 +42,27 @@ conversation; it is all written down.
 - **Volet 5 (Package C: Lean & Elemental Kernel, `DAYTRIP-0.4.0f.md`)**: Landed 2026-09-23. Privileged `tag` primitive with a compilation-privilege boundary; `figcaption`/`summary` absorbed into their single consumers (64 words → 62); `paragraph` re-atomized over `tag p`; flexible argument binding generalized to disk `def` partials.
 - 2026-09-24 (no numbered volet): the Visual Architecture & Spatial Manifesto compiler landed (`docs/SPIFF.md`, `lib/slim_pickins/compiler/spiff.rb`), then the Council spatial manifesto (`horizon`/`posture`/`scroll`/`presence`/`focus`) the same round.
 - **Volet 6 (The Council Skill & Workbench Spatial Frontier, `DAYTRIP-0.4.0g.md`)**: Landed 2026-09-25. The council pattern formalized as a reusable skill (`.claude/skills/council/SKILL.md`), used to resolve the four workbench spatial frontiers (revised mid-session after dan rejected an authoring-redundancy proposal), then three real rendering defects dan caught by eye — a `max-width` leak, container queries that had never actually worked since the compiler's first commit, and three shell columns at three different heights.
-- **Active next step**: **none** — three items deliberately left open for a future token ground-truthing daytrip (see `PROJECT.md next_step` and `DAYTRIP-0.4.0g.md`'s closing section).
+- **2026-09-26 (no numbered volet): the truth round, the naming, and the tin.** Nine rounds of work, all recorded in `ROADMAP-0.3.md`'s Addenda 1–14 and `LORE.md`:
+  1. **Truth round** — five living documents realigned to measured counts; `check_design_docs.rb` (now `check_spiff.rb`) built to hold the lexicon to the compiler and `check_design_docs`'s sibling `GuideRenderingTest` added after two guides rendered raw HTML and backslashes; the markdown engine's code-span pairing fixed (a span may now contain backticks).
+  2. **`sidebar_layout` → `shell`, then `foot` → `footer`** — the design idiom's founding complaint finished.
+  3. **The audit** that found the pattern: *a partial whose whole body is `box` + `children` exists only to hand a stylesheet a class*, which is a presentation decision in substance clothing.
+  4. **`layout.sp` → `[app].tin`** — the word "layout" retired from the language; `Library#tin`, the `:tin` convention.
+  5. **Spiff named** — `DesignIdiom` was a description doing a name's job; module, doc, gate and suffix now all say Spiff, and the extension followed (`.design` → `.spiff`).
+  6. **Per-view resolution** — `[view].tin`/`[view].spiff` beat the app's, one rule in one place (`Library#tin_for`, `Library.spiff_for`), lifted out of the studio.
+  7. **Asset inference** — a page gets `slim-pickins.css` unasked, plus `public/css/[app].css` or `[view].css` when they exist and `Library.from(…, public_url:)` says where they are served. A default, not a replacement: `stylesheet`/`script` remain.
+  8. **`check_spiff_scope.rb`** — the tenth gate, answering dan's own question: every zone a Spiff names must be renderable in its scope.
+- **Active next step**: **none.** The tin/Spiff work is closed. Open threads are named in `PROJECT.md next_step` and in the section below.
 
-### Current Vitals (measured 2026-09-25)
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 49 test files.
-- **Full Suite**: 445 runs, 5,619 assertions, 0 failures, 0 errors, 0 skips in one process.
-- **Check Grammar**: 1,254 sentences checked, 94 words defined, 0 problems.
-- **Check Shape**: 62 canonical words, 1,006 sentences, 0 problems.
+### Current Vitals (measured 2026-09-26)
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 52 test files.
+- **Full Suite**: 485 runs, 5,731 assertions, 0 failures, 0 errors, 0 skips in one process.
+- **Check Grammar**: 1,239 sentences checked, 92 words defined, 0 problems.
+- **Check Shape**: 62 canonical words, 0 problems.
 - **Check Styles**: 27 emittable classes, 59 rendering, 104 rules, 0 problems.
-- **Verify Pages**: 31 pages verified, 0 problems.
-- **Promise Ledger**: 35 promises (32 read, 3 forwarded, 0 unread), 0 problems.
-- **Convention Register**: 38 conventions, 0 problems.
-- **Resume Card**: 7 fields present, last_touched 2026-09-25, 0 problems.
+- **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
+- **Spiff Scope (zones)**: 2 spiffs held to their pages, 0 problems.
+- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 31 pages, 0 problems.
+- **Ten gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Suite.
 
 ---
 
@@ -105,22 +119,44 @@ conversation; it is all written down.
 
 ### No active next step
 
-Nothing is mandated next. Candidates, none prioritized over the others —
-open with dan rather than picking unilaterally:
-- **The token ground-truthing daytrip** named above (`DAYTRIP-0.4.0g.md`'s closing section) — real values for the `.spiff` collapse/balance scale and the workbench's menu/footer-height constants, measured against real embedding widths instead of preserved-by-habit numbers.
-- **Package D** below (still unstarted, still valid).
-- Whatever roadmap question dan brings to the next session — this project's own convention (`README.md`, *How roadmaps go*) is to re-read the history and lore before choosing a direction, not to assume the last session's tail is the next session's head.
+Nothing is mandated next. The strongest candidates, none prioritized over the
+others — open with dan rather than picking unilaterally:
+
+- **The token ground-truthing daytrip** (`DAYTRIP-0.4.0g.md`'s closing section;
+  `PROJECT.md next_step`) — real values for the `.spiff` collapse/balance scale
+  (`tight`'s 26rem, `subordinate`'s 14rem floor), `output`'s independently
+  governed height, and `--footer-height` (whose 2.8rem is corrected but still
+  guessed, and whose fallback inside Spiff's generated CSS is still a
+  stale 2rem). Measured against real embedding widths instead of
+  preserved-by-habit numbers.
+- **Package D** below (still unstarted; note its item 1 is largely done — the
+  prose census was realigned in the truth round — so re-read it before starting).
+- **Two leftovers from the audit, dan's call, deliberately not done**: `pages/pages.tin`
+  and `examples/portfolio/views/portfolio.tin` are byte-identical; and the classic
+  UI still has no `.spiff`, so its presentation still pools in `slim-pickins.css`.
+- **A `.sp`↔`.spiff` render gate** — `check_spiff_scope.rb` checks the *names*
+  and says so; a gate that renders would also catch a word that never reaches
+  the DOM, at the cost of needing each app's data.
+- Whatever roadmap question dan brings — this project's convention
+  (`README.md`, *How roadmaps go*) is to re-read the history and lore before
+  choosing a direction, not to assume the last session's tail is the next
+  session's head.
 
 ### Package D — House Honesty & Integrity (Census, Registry & Doc Parity)
 *Focus: Aligning every prose document and registry with the living reality of the codebase.*
-1. **Harmonize Historical Prose Census**:
-   - Realign `README.md`, `DESIGN.md`, `PRIMER.md`, and `CONTRACT.md`.
-   - Update historical figures (outdated "53 words / 2 apps / 10 pages") to the true living counts (62 words / 7 apps / 31 pages).
-2. **Registry Hygiene & Dead Stub Removal**:
-   - Fill 14 blank slots in `VOCABULARY.md`.
-   - Purge dead or deprecated stubs from `builder.rb` and `words.rb`.
-3. **Unify Row-Oriented Label Conventions (F9)**:
-   - Resolve convention asymmetry between `table_header` vs `label` across `column` and `chart`.
+**Mostly done, verified 2026-09-26 — re-measure before starting any of it.**
+1. ~~**Harmonize Historical Prose Census**~~ — **done.** The truth round realigned
+   `README.md`, `PRIMER.md`, `DESIGN.md`, `VOCABULARY.md` and `PROJECT.md`, and
+   `grep` finds no stale "53 words / 2 apps / 10 pages" in any of them.
+2. ~~**Registry Hygiene & Dead Stub Removal**~~ — **an illusion, per the
+   2026-09-22 audit** (`LORE.md`): the "14 blank slots" are words that declare
+   no inferences, and the "dead stubs" do not exist. `VOCABULARY.md`'s rule 1
+   is *no blank slots*, and it holds.
+3. ~~**Unify Row-Oriented Label Conventions (F9)**~~ — **done in
+   `DAYTRIP-0.4.0a.md`**: `chart` declares `table_header`, matching
+   `Builder#label_of`.
+
+What is left of Package D is a re-measurement pass, not a list of known work.
 
 ---
 
@@ -150,8 +186,9 @@ The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is agent-managed.
 ## Comprehensive Housekeeping Protocol (The RIF Loop)
 
 You must execute every step of this loop per round, not at the end of the session:
-1. **Implement & Verify**: Ensure suite is 100% green:
-   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
+1. **Implement & Verify**: Ensure suite is 100% green. The gate has **ten legs**
+   (the same ten `/status` runs live):
+   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby check_spiff.rb && ruby check_spiff_scope.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb && ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
 2. **Commit**: Leave the tree clean. Commit with an intention-revealing message. (Push only when dan says so).
 3. **Update `PROJECT.md`**: Update `status`, `last_touched`, and advance `next_step`.
 4. **Validate `PROJECT.md` YAML**:

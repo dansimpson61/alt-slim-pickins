@@ -29,10 +29,11 @@ status: >-
   itself changed, since it resolved every name to <root>/<name>.md and a
   document in docs/ was unreachable. Then the
   round's last two pieces, both dan's calls: check_design_docs.rb — the ninth
-  gate leg, which holds the lexicon to the compiler in both directions and
-  found `collapse` undocumented on its first honest run — and
-  design_idiom_discussion.md served as a guide beside the lexicon it explains.
-  The checker's own logic is pinned by test/check_design_docs_test.rb, and its
+  gate leg, now `check_spiff.rb`, which holds the lexicon to the compiler in
+  both directions and found `collapse` undocumented on its first honest run — and
+  design_idiom_discussion.md, now `spiff_discussion.md`, served as a guide beside
+  the lexicon it explains.
+  The checker's own logic is pinned by test/check_spiff_test.rb, and its
   value was proven by mutation (the align-items defect, an invented property,
   and a wrong grid-column value each fail it with exit 1). All nine gates
   green; 451 tests. Dan then had the two guides' rendering fixed — the
