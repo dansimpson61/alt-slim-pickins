@@ -113,7 +113,10 @@ class StudioDocsTest < Minitest::Test
                               locals: { title: 'Status', words: [], vocabulary_tiers: [], guides: [], ui_names: [],
                                         **StudioStatus.canned_locals },
                               library: LIBRARY)
-    assert_includes html, '1 of 8 legs red'
+    # The count is derived, not typed: a leg added to the gate should not
+    # fail this test, which is about the page rendering the shape it is
+    # given, not about how many legs there happen to be.
+    assert_includes html, "1 of #{StudioStatus::LEGS.size} legs red"
     assert_includes html, 'Grammar'
     assert_includes html, '<pre><code>0 problems', 'the leg output renders as a fence'
     # The state is a badge whose class the stylesheet marks — the page
