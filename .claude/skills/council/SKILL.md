@@ -108,7 +108,7 @@ answer directly, or as that one voice, without staging a debate.
 3. **First round: each cast voice reacts to the evidence**, from their own
    documented philosophy, citing something checkable — a line number, a
    real code snippet, an existing convention in `DESIGN.md`,
-   `VOCABULARY.md`, `docs/DESIGN_IDIOM.md`, or a `LORE.md` precedent. No
+   `VOCABULARY.md`, `docs/SPIFF.md`, or a `LORE.md` precedent. No
    adjectives without a citation behind them.
 
 4. **Every round after the first must engage a specific, named prior

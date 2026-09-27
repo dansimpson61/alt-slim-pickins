@@ -11,7 +11,7 @@ module SlimPickins
     # - Small, single-purpose DSL evaluation contexts (Surface, Stage, Zone).
     # - Injected, themeable token dictionaries (Air, Balance, Frame, Cadence, Treatment).
     # - 100% compatible with SlimPickins::Transform.
-    class DesignIdiom
+    class Spiff
       AIR_TOKENS = {
         tight: 'clamp(0.5rem, 1.5cqi, 0.875rem)',
         balanced: 'clamp(1rem, 2.5cqi, 1.75rem)',
@@ -666,13 +666,13 @@ module SlimPickins
   end
 
   # Public entrypoint
-  module DesignIdiom
+  module Spiff
     def self.compile(source, path: '(design)', **theme_tokens)
-      Compiler::DesignIdiom.compile(source, path: path, **theme_tokens)
+      Compiler::Spiff.compile(source, path: path, **theme_tokens)
     end
 
     def self.compiled_stylesheet(source, provenance:, path: '(design)', **theme_tokens)
-      Compiler::DesignIdiom.compiled_stylesheet(source, provenance: provenance, path: path, **theme_tokens)
+      Compiler::Spiff.compiled_stylesheet(source, provenance: provenance, path: path, **theme_tokens)
     end
   end
 end

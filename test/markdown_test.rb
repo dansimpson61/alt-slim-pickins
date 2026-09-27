@@ -186,8 +186,8 @@ class GuideRenderingTest < Minitest::Test
 
   def documents
     (GUIDES.map { |n| File.join(ROOT, "#{n}.md") } +
-      [File.join(ROOT, 'docs', 'DESIGN_IDIOM.md'),
-       File.join(ROOT, 'design_idiom_discussion.md')])
+      [File.join(ROOT, 'docs', 'SPIFF.md'),
+       File.join(ROOT, 'spiff_discussion.md')])
       .select { |path| File.file?(path) }
   end
 

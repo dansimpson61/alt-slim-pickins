@@ -116,9 +116,9 @@ this as money* and the formatting belongs to the word.
   accountable to the code and to each other. Every sentence must obey the
   grammar table; every word used must be defined; every word defined must have
   a sentence; every class emitted must have a rule.
-- **[docs/DESIGN_IDIOM.md](docs/DESIGN_IDIOM.md)** — the design idiom: the
+- **[docs/SPIFF.md](docs/SPIFF.md)** — Spiff, the design idiom: the
   spatial companion language a `.design` file is written in, and the lexicon of
-  its words. `check_design_docs.rb` holds every compiled-CSS example in it to
+  its words. `check_spiff.rb` holds every compiled-CSS example in it to
   the compiler, in both directions.
 
 Two directories hold what is consulted rather than read:
@@ -187,7 +187,7 @@ Living vitals are computed directly from the repository tree by `SlimPickins::Ce
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
 Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
-ruby check_styles.rb && ruby check_design_docs.rb &&
+ruby check_styles.rb && ruby check_spiff.rb &&
 ruby bin/check_promises.rb && ruby bin/check_conventions.rb &&
 ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb &&
 ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`

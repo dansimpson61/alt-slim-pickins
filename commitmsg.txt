@@ -1,0 +1,32 @@
+feat(spiff): give the design idiom its name
+
+"Design Idiom" was a description doing a name's job, which is why the three
+things it named never agreed with each other: a `.design` file extension, a
+`DESIGN_IDIOM.md` lexicon, and a `DesignIdiom` compiler class. One name now,
+used everywhere — Spiff, slim-pickins' design idiom — and the description
+goes back to being one: the lowercase "design idiom" stays where it explains
+what Spiff is rather than referring to it.
+
+  lib/slim_pickins/compiler/design_idiom.rb  -> spiff.rb      (class Spiff)
+  docs/DESIGN_IDIOM.md                       -> docs/SPIFF.md
+  design_idiom_discussion.md                 -> spiff_discussion.md
+  check_design_docs.rb                       -> check_spiff.rb
+  test/design_idiom_test.rb                  -> test/spiff_test.rb
+  test/check_design_docs_test.rb             -> test/check_spiff_test.rb
+
+`SlimPickins::Spiff.compile` and `.compiled_stylesheet` are the public
+entrypoints now; the compiler module's own `Spiff` constant is reachable at
+both depths as before. `SpiffCheck` replaces `DesignDocsCheck`, the status
+leg reads `Spiff`, and the studio's guides offer `SPIFF` and
+`SPIFF_DISCUSSION`.
+
+The file extension stays `.design` — the language is named, not the format —
+and doc_reader's specimen data now names the document it shows.
+
+Also fixed in passing, from the rename's sweep: `check_spiff.rb` carried two
+copies of its own module comment, left behind when the truth round rewrote
+that file in place.
+
+Verified: all nine gates green, suite 462 runs / 5,679 assertions with no
+failures, and a live studio serving the Spiff guide, both shelf entries, the
+editor's "Spiff (.design)" label, and the Spiff status leg.

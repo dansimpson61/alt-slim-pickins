@@ -22,15 +22,15 @@ module StudioDocs
   # eats someone else's food.
   GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
               ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY
-              DESIGN_IDIOM DESIGN_IDIOM_DISCUSSION].freeze
+              SPIFF SPIFF_DISCUSSION].freeze
 
   # Which document each guide name is. Most live at the root; the design
   # idiom lives in `docs/` beside its compiler. Named here, in one place, so
   # the route serves a known document instead of interpolating a path from
   # the URL — the registry *is* the guard.
   DOCUMENTS = GUIDES.to_h { |name| [name, "#{name}.md"] }
-                      .merge('DESIGN_IDIOM' => 'docs/DESIGN_IDIOM.md',
-                             'DESIGN_IDIOM_DISCUSSION' => 'design_idiom_discussion.md').freeze
+                      .merge('SPIFF' => 'docs/SPIFF.md',
+                             'SPIFF_DISCUSSION' => 'spiff_discussion.md').freeze
 
   # The absolute path of a guide's document, or nil when the name names no
   # guide. `nil` is the honest answer to "is this a guide?": it keeps a

@@ -617,9 +617,9 @@ module StudioPages
     design_css = ''
     if design && !design.to_s.strip.empty?
       design_css = begin
-        SlimPickins::DesignIdiom.compiled_stylesheet(design.to_s, provenance: 'from playground buffer')
+        SlimPickins::Spiff.compiled_stylesheet(design.to_s, provenance: 'from playground buffer')
       rescue StandardError => e
-        "/* Design Idiom Refusal: #{e.message} */"
+        "/* Spiff refusal: #{e.message} */"
       end
     end
 

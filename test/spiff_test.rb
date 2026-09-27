@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require_relative '../lib/slim_pickins'
 
-class DesignIdiomTest < Minitest::Test
+class SpiffTest < Minitest::Test
   def test_surface_and_stage_with_flank_and_air
     source = <<~DESIGN
       surface doc_reader
@@ -12,7 +12,7 @@ class DesignIdiomTest < Minitest::Test
           flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source)
+    css = SlimPickins::Spiff.compile(source)
 
     assert_includes css, 'body {'
     assert_includes css, 'container-type: inline-size;'
@@ -34,7 +34,7 @@ class DesignIdiomTest < Minitest::Test
         stage
           flank left_col, beside: right_col, balance: equal
     DESIGN
-    equal_css = SlimPickins::DesignIdiom.compile(equal_source)
+    equal_css = SlimPickins::Spiff.compile(equal_source)
     assert_includes equal_css, 'grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);'
 
     dominant_source = <<~DESIGN
@@ -42,7 +42,7 @@ class DesignIdiomTest < Minitest::Test
         stage
           flank hero, beside: aside_col, balance: dominant
     DESIGN
-    dominant_css = SlimPickins::DesignIdiom.compile(dominant_source)
+    dominant_css = SlimPickins::Spiff.compile(dominant_source)
     assert_includes dominant_css, 'grid-template-columns: minmax(0, 3fr) minmax(14rem, 1fr);'
   end
 
@@ -54,7 +54,7 @@ class DesignIdiomTest < Minitest::Test
           stack header, metrics, chart
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source)
+    css = SlimPickins::Spiff.compile(source)
     assert_includes css, 'display: flex;'
     assert_includes css, 'flex-direction: column;'
     assert_includes css, 'padding: clamp(1rem, 2.5cqi, 1.75rem);'
@@ -73,7 +73,7 @@ class DesignIdiomTest < Minitest::Test
           treatment editorial
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source)
+    css = SlimPickins::Spiff.compile(source)
 
     # Catalog zone assertions
     assert_includes css, '.catalog {'
@@ -89,9 +89,9 @@ class DesignIdiomTest < Minitest::Test
   end
 
   def test_empty_or_blank_design_returns_empty_string
-    assert_equal '', SlimPickins::DesignIdiom.compile('')
-    assert_equal '', SlimPickins::DesignIdiom.compile(nil)
-    assert_equal '', SlimPickins::DesignIdiom.compile("   \n\n  ")
+    assert_equal '', SlimPickins::Spiff.compile('')
+    assert_equal '', SlimPickins::Spiff.compile(nil)
+    assert_equal '', SlimPickins::Spiff.compile("   \n\n  ")
   end
 
   def test_theme_custom_token_injection
@@ -102,7 +102,7 @@ class DesignIdiomTest < Minitest::Test
           air custom_wide
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source, air_tokens: custom_air)
+    css = SlimPickins::Spiff.compile(source, air_tokens: custom_air)
     assert_includes css, 'padding: 5rem;'
     assert_includes css, 'gap: 5rem;'
   end
@@ -115,7 +115,7 @@ class DesignIdiomTest < Minitest::Test
     DESIGN
 
     error = assert_raises(ArgumentError) do
-      SlimPickins::DesignIdiom.compile(source)
+      SlimPickins::Spiff.compile(source)
     end
     assert_includes error.message, 'Unknown air token: `non_existent_token`'
   end
@@ -128,7 +128,7 @@ class DesignIdiomTest < Minitest::Test
     DESIGN
 
     error = assert_raises(ArgumentError) do
-      SlimPickins::DesignIdiom.compile(source)
+      SlimPickins::Spiff.compile(source)
     end
     assert_includes error.message, 'Unknown collapse token: `non_existent_token`'
   end
@@ -139,7 +139,7 @@ class DesignIdiomTest < Minitest::Test
         stage
           flank left_col, beside: right_col, collapse: wide
     DESIGN
-    flank_css = SlimPickins::DesignIdiom.compile(flank_source)
+    flank_css = SlimPickins::Spiff.compile(flank_source)
     assert_includes flank_css, '(inline-size < 64rem)'
 
     horizon_source = <<~DESIGN
@@ -147,7 +147,7 @@ class DesignIdiomTest < Minitest::Test
         horizon col1, col2
           collapse wide
     DESIGN
-    horizon_css = SlimPickins::DesignIdiom.compile(horizon_source)
+    horizon_css = SlimPickins::Spiff.compile(horizon_source)
     assert_includes horizon_css, '(inline-size < 64rem)'
   end
 
@@ -175,7 +175,7 @@ class DesignIdiomTest < Minitest::Test
           presence steady
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source)
+    css = SlimPickins::Spiff.compile(source)
 
     # Surface & Stage grid container
     assert_includes css, '.shell {'
@@ -225,7 +225,7 @@ class DesignIdiomTest < Minitest::Test
     DESIGN
 
     error = assert_raises(ArgumentError) do
-      SlimPickins::DesignIdiom.compile(source)
+      SlimPickins::Spiff.compile(source)
     end
     assert_includes error.message, 'horizon with 3 zones (col1, col2, col3) expected 3 postures, got 2 (shelf, workspace)'
   end
@@ -238,7 +238,7 @@ class DesignIdiomTest < Minitest::Test
     DESIGN
 
     error = assert_raises(ArgumentError) do
-      SlimPickins::DesignIdiom.compile(source)
+      SlimPickins::Spiff.compile(source)
     end
     assert_includes error.message, 'Unknown posture token: `imaginary_token`'
   end
@@ -250,13 +250,13 @@ class DesignIdiomTest < Minitest::Test
           air tight
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compiled_stylesheet(source, provenance: 'from a test')
+    css = SlimPickins::Spiff.compiled_stylesheet(source, provenance: 'from a test')
     assert_includes css, '/* Compiled from a test */'
     assert css.index('/* Compiled from a test */') < css.index('container-type: inline-size;')
   end
 
   def test_compiled_stylesheet_leaves_empty_source_empty
-    assert_equal '', SlimPickins::DesignIdiom.compiled_stylesheet('', provenance: 'from a test')
+    assert_equal '', SlimPickins::Spiff.compiled_stylesheet('', provenance: 'from a test')
   end
 
   def test_shell_kind_targets_the_shell_class_with_no_guessed_selectors
@@ -269,7 +269,7 @@ class DesignIdiomTest < Minitest::Test
           frame quiet
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source)
+    css = SlimPickins::Spiff.compile(source)
     assert_includes css, '.shell {'
     assert_includes css, '.left_col {'
     refute_includes css, '.stage-'
@@ -286,7 +286,7 @@ class DesignIdiomTest < Minitest::Test
           flank left_col, beside: right_col
     DESIGN
 
-    css = SlimPickins::DesignIdiom.compile(source)
+    css = SlimPickins::Spiff.compile(source)
     assert_includes css, 'body {'
     refute_includes css, '.shell'
     refute_includes css, '.stage-'
@@ -299,7 +299,7 @@ class DesignIdiomTest < Minitest::Test
     # isolated repro, not a spec reading): container-type on the same
     # selector the @container rule targets never matches, at any width.
     # Regression guard against re-merging them back onto one selector.
-    shell_css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
+    shell_css = SlimPickins::Spiff.compile(<<~DESIGN)
       surface shell_page, kind: shell
         stage
           flank left_col, beside: right_col
@@ -309,7 +309,7 @@ class DesignIdiomTest < Minitest::Test
     shell_block = shell_css[/\.shell \{([^}]*)\}/, 1]
     refute_includes shell_block, 'container-type'
 
-    document_css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
+    document_css = SlimPickins::Spiff.compile(<<~DESIGN)
       surface document_page
         stage
           flank left_col, beside: right_col
@@ -325,7 +325,7 @@ class DesignIdiomTest < Minitest::Test
     # (each zone sized to its own content) - stretch gives every zone in
     # the row the same height. A zone with an explicit height of its own
     # (e.g. presence: :steady) still overrides this, by design.
-    css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
+    css = SlimPickins::Spiff.compile(<<~DESIGN)
       surface stretch_page
         stage
           flank left_col, beside: right_col

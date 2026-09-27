@@ -1,9 +1,10 @@
-# The Design Idiom — Visual Architecture for Slim-Pickins
+# Spiff — slim-pickins' design idiom
 
-> **Purpose & Ethos**: The Design Idiom is the visual companion to slim-pickins.
-> It separates *substance* from *presentation* so authors only ever have to reason about
-> one domain at a time. Substance declares **what** knowledge is; the Design Idiom declares
-> **how** that knowledge sits in space.
+> **Purpose & Ethos**: Spiff is the visual companion to slim-pickins — a design
+> idiom, in the sense the language means it: its own small vocabulary for saying how
+> things sit. It separates *substance* from *presentation* so authors only ever have
+> to reason about one domain at a time. Substance declares **what** knowledge is;
+> Spiff declares **how** that knowledge sits in space.
 >
 > It speaks slim-pickins's one-sentence grammar and indentation rules, but uses its own
 > vocabulary of spatial posture, breathing room, and visual temperament. The compiler
@@ -14,17 +15,17 @@
 
 ## 1. Syntax: 100% Shared Grammar with Slim-Pickins
 
-The design idiom uses `SlimPickins::Transform` directly:
+Spiff uses `SlimPickins::Transform` directly:
 - **One-sentence grammar**: Each line begins with a word.
 - **Indentation nests it**: Blocks are indented; no `do ... end`, no curly braces, no semicolons.
 - **Bare identifiers become symbols**: `air generous` compiles to `air(:generous)`; `frame quiet` compiles to `frame(:quiet)`.
 - **Keyword modifiers**: `beside: reading_pane, balance: subordinate, collapse: cozy`.
 - **Line tracking**: Errors pinpoint the exact line number of the `.design` file.
 
-### Substance vs. Design Idiom Side-by-Side
+### Substance vs. Spiff Side-by-Side
 
 ```
-Substance (.sp)                      Design Idiom (.design)
+Substance (.sp)                      Spiff (.design)
 ──────────────────────────────       ──────────────────────────────────────────
 page "Doc Reader"                    surface doc_reader
   catalog docs, "Documents"            stage
@@ -45,7 +46,7 @@ def reading_pane, document               frame quiet
 
 ## 2. The Lexicon
 
-Every word in the design idiom models exemplary lexical practice:
+Every word in Spiff models exemplary lexical practice:
 1. **What it is**: The conceptual essence.
 2. **What it is for**: The design problem it solves and intent it declares.
 3. **How to use it**: Syntax, options, and constraints.
@@ -200,7 +201,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 
 ### `collapse`
 - **What it is**: The container width below which a horizontal arrangement gives up and stacks.
-- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `DesignIdiom::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.design` file. It is the reason a `.design` never holds a raw CSS length.
+- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `Spiff::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.design` file. It is the reason a `.design` never holds a raw CSS length.
 - **How to use it**: a modifier of both `flank` and `horizon`.
   ```
   flank catalog, beside: reading_pane, collapse: tight
@@ -236,7 +237,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
   - `collapse`: Qualitative container query threshold token below which columns
     collapse into a vertical stack — `tight` (26rem), `cozy` (48rem, the
     default), `roomy` (56rem), or `wide` (64rem). Never a raw CSS length; the
-    scale lives once in `DesignIdiom::COLLAPSE_TOKENS`.
+    scale lives once in `Spiff::COLLAPSE_TOKENS`.
 - **Example**:
   ```
   flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy

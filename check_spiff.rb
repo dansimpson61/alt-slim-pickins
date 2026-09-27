@@ -10,10 +10,10 @@
 #
 # This is the fifth checker and the last instrument the 2026-09-26 truth
 # round asked for. The round found four of the lexicon's compiled-CSS blocks
-# had drifted from `DesignIdiom` — `container-type` on `body` rather than
+# had drifted from `Spiff` — `container-type` on `body` rather than
 # `html`, `align-items: start`, and two emitted properties nothing documented
 # — and that nothing in the repo could have noticed: `check_grammar` reads
-# the root documents (never `docs/`), and `docs/DESIGN_IDIOM.md` is prose
+# the root documents (never `docs/`), and `docs/SPIFF.md` is prose
 # about CSS, so none of the other checkers look at it either. A `<details>`
 # block claiming to show "the exact modern CSS emitted under the hood" is a
 # measurement with no instrument behind it. This is the instrument.
@@ -27,8 +27,8 @@
 
 require_relative 'lib/slim_pickins'
 
-LEXICON = File.join(__dir__, 'docs', 'DESIGN_IDIOM.md')
-compiler = SlimPickins::Compiler::DesignIdiom
+LEXICON = File.join(__dir__, 'docs', 'SPIFF.md')
+compiler = SlimPickins::Compiler::Spiff
 
 # Words that honestly emit no CSS of their own, so their entries carry no
 # compiled block and `surface`'s example compiles to an empty string on
@@ -129,19 +129,11 @@ end
 
 # --- the check ----------------------------------------------------------------
 # The lexicon's own instrument, callable as a script and requirable by the
-# suite. `docs/DESIGN_IDIOM.md` is not in `check_grammar`'s corpus — it is
+# suite. `docs/SPIFF.md` is not in `check_grammar`'s corpus — it is
 # prose about CSS, not `.sp` sentences — so nothing else in the repo looks at
 # it, and a checker nothing tests is the same shape of liability this file
-# exists to remove. `test/check_design_docs_test.rb` holds the runner.
-
-# --- the check ----------------------------------------------------------------
-#
-# The lexicon's own instrument, callable as a script and requirable by the
-# suite. `docs/DESIGN_IDIOM.md` is not in `check_grammar`'s corpus — it is
-# prose about CSS, not `.sp` sentences — so nothing else in the repo looks at
-# it, and a checker nothing tests is the same shape of liability this file
-# exists to remove. `test/check_design_docs_test.rb` holds the runner.
-module DesignDocsCheck
+# exists to remove. `test/check_spiff_test.rb` holds the runner.
+module SpiffCheck
   module_function
 
   # The lexicon's examples are teaching fragments — `air tight`, a bare `zone
@@ -209,7 +201,7 @@ module DesignDocsCheck
   # implements — a word it does not is a gap a reader cannot see — and every
   # documented word's example must compile, with every declaration in its
   # compiled-CSS block one the compiler really emits for that example.
-  def run(files: [LEXICON], compiler: SlimPickins::Compiler::DesignIdiom, out: $stdout)
+  def run(files: [LEXICON], compiler: SlimPickins::Compiler::Spiff, out: $stdout)
     problems = 0
     report = ->(line) { out.puts "  #{line}" }
 
@@ -225,7 +217,7 @@ module DesignDocsCheck
     # no reader is not a word anyone can say. `air`, `flank`, `stack` and
     # `horizon` are readable at surface scope as well as stage scope; that is
     # one word with two doors, not eight words.
-    source = File.read(File.join(__dir__, 'lib', 'slim_pickins', 'compiler', 'design_idiom.rb'))
+    source = File.read(File.join(__dir__, 'lib', 'slim_pickins', 'compiler', 'spiff.rb'))
     documented = entries.map(&:word).to_set
     implemented = source.scan(/^        def ([a-z_]+)\(/).flatten.to_set - MACHINERY
     (implemented - documented).sort.each do |word|
@@ -251,7 +243,7 @@ module DesignDocsCheck
       end
 
       begin
-        css = compiler.compile(pairing.design, path: "docs/DESIGN_IDIOM.md (#{entry.word})")
+        css = compiler.compile(pairing.design, path: "docs/SPIFF.md (#{entry.word})")
       rescue StandardError => e
         report.call("WILL NOT COMPILE  `#{entry.word}`'s example: #{e.message}")
         problems += 1
@@ -283,4 +275,4 @@ module DesignDocsCheck
   end
 end
 
-exit(DesignDocsCheck.run(files: ARGV.empty? ? [LEXICON] : ARGV).zero? ? 0 : 1) if $PROGRAM_NAME == __FILE__
+exit(SpiffCheck.run(files: ARGV.empty? ? [LEXICON] : ARGV).zero? ? 0 : 1) if $PROGRAM_NAME == __FILE__

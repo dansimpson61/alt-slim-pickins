@@ -35,7 +35,7 @@ conversation; it is all written down.
 - **Volet 4 (The Empirical Diagnostic Taxonomy, `DAYTRIP-0.4.0d.md`)**: Landed 2026-09-22. Delivered `SlimPickins::Taxonomy` as SSOT for 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual); 64-word empirical diagnostic audit surfacing missing `stack`/`cluster`, ad-hoc `figcaption`/`summary` kernel leaks, and the visual styling idiom standard; multi-category shelf presence with cross-facets on Workbench and Classic UIs; `PRIMER.md` updated.
 - **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words, `DAYTRIP-0.4.0e.md`)**: Landed 2026-09-23. Delivered in-buffer `def <word>, *params` authoring with flexible argument binding, declaration-free word execution (Package C proving ground), enhanced `box subject, title` context shifting, positional `link` fallback, Studio `/mint` endpoint, and live editor minting toolbar affordance.
 - **Volet 5 (Package C: Lean & Elemental Kernel, `DAYTRIP-0.4.0f.md`)**: Landed 2026-09-23. Privileged `tag` primitive with a compilation-privilege boundary; `figcaption`/`summary` absorbed into their single consumers (64 words → 62); `paragraph` re-atomized over `tag p`; flexible argument binding generalized to disk `def` partials.
-- 2026-09-24 (no numbered volet): the Visual Architecture & Spatial Manifesto compiler landed (`docs/DESIGN_IDIOM.md`, `lib/slim_pickins/compiler/design_idiom.rb`), then the Council spatial manifesto (`horizon`/`posture`/`scroll`/`presence`/`focus`) the same round.
+- 2026-09-24 (no numbered volet): the Visual Architecture & Spatial Manifesto compiler landed (`docs/SPIFF.md`, `lib/slim_pickins/compiler/spiff.rb`), then the Council spatial manifesto (`horizon`/`posture`/`scroll`/`presence`/`focus`) the same round.
 - **Volet 6 (The Council Skill & Workbench Spatial Frontier, `DAYTRIP-0.4.0g.md`)**: Landed 2026-09-25. The council pattern formalized as a reusable skill (`.claude/skills/council/SKILL.md`), used to resolve the four workbench spatial frontiers (revised mid-session after dan rejected an authoring-redundancy proposal), then three real rendering defects dan caught by eye — a `max-width` leak, container queries that had never actually worked since the compiler's first commit, and three shell columns at three different heights.
 - **Active next step**: **none** — three items deliberately left open for a future token ground-truthing daytrip (see `PROJECT.md next_step` and `DAYTRIP-0.4.0g.md`'s closing section).
 
@@ -93,8 +93,8 @@ conversation; it is all written down.
 - **Flexible Argument Binding for Disk Partials**: `Builder.bind_parameters` generalizes Volet 4b's binding engine to `.sp` partials on disk, not just in-buffer.
 - Byte-diff verified against all application pages; warm render 6.24 ms (budget 10 ms).
 
-### [COMPLETED] The Design Idiom Compiler & Council Spatial Manifesto (no volet number, 2026-09-24)
-- **`SlimPickins::Compiler::DesignIdiom`** (`lib/slim_pickins/compiler/design_idiom.rb`, `docs/DESIGN_IDIOM.md`): a companion `.design` language compiling qualitative spatial vocabulary (`surface`, `stage`, `zone`, `flank`, `stack`, `air`, `frame`, `cadence`, `treatment`) to modern CSS Grid + Container Queries.
+### [COMPLETED] The Spiff Compiler & Council Spatial Manifesto (no volet number, 2026-09-24)
+- **`SlimPickins::Compiler::Spiff`** (`lib/slim_pickins/compiler/spiff.rb`, `docs/SPIFF.md`): a companion `.design` language compiling qualitative spatial vocabulary (`surface`, `stage`, `zone`, `flank`, `stack`, `air`, `frame`, `cadence`, `treatment`) to modern CSS Grid + Container Queries.
 - Same round: `horizon`/`posture` (multi-zone planes), `scroll`/`presence`/`focus` zone qualities, Sandi Metz hygiene (`min-height: 0`), `.panes` dissolution via `display: contents`.
 
 ### [COMPLETED] Volet 6: The Council Skill & Workbench Spatial Frontier (`DAYTRIP-0.4.0g.md`)
