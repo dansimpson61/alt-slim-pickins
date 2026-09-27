@@ -203,6 +203,35 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 
 ---
 
+### `collapse`
+- **What it is**: The container width below which a horizontal arrangement gives up and stacks.
+- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `DesignIdiom::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.design` file. It is the reason a `.design` never holds a raw CSS length.
+- **How to use it**: a modifier of both `flank` and `horizon`.
+  ```
+  flank catalog, beside: reading_pane, collapse: tight
+  horizon library, editor, output
+    collapse roomy
+  ```
+  - `tight` — 26rem: collapse only in genuinely narrow embeddings.
+  - `cozy` — 48rem, the default when a `flank` says nothing.
+  - `roomy` — 56rem.
+  - `wide` — 64rem.
+  - The emitted query is `@container <surface> (inline-size < <threshold>)` — measured against the surface's container, never the viewport, so an embedded preview collapses on its own width.
+- **Example**: `collapse roomy`
+<details>
+<summary><strong>Compiled CSS</strong></summary>
+
+```css
+@container workbench (inline-size < 56rem) {
+  .sidebar_layout {
+    grid-template-columns: 100%;
+  }
+}
+```
+</details>
+
+---
+
 ### `flank`
 - **What it is**: A spatial declaration of horizontal companionship between two semantic zones.
 - **What it is for**: Placing a primary zone beside a companion zone when space allows, with an explicit balance ratio and a responsive collapse threshold.
