@@ -35,7 +35,14 @@ status: >-
   The checker's own logic is pinned by test/check_design_docs_test.rb, and its
   value was proven by mutation (the align-items defect, an invented property,
   and a wrong grid-column value each fail it with exit 1). All nine gates
-  green; 451 tests.
+  green; 451 tests. Dan then had the two guides' rendering fixed — the
+  artifact being that both documents were accurate and unreadable:
+  DESIGN_IDIOM.md's fifteen <details> wrappers rendered as literal text
+  (the markdown engine escapes HTML by contract, and prose has no
+  raw-HTML spelling), so they are now markdown headings; and
+  design_idiom_discussion.md's twenty backslash escapes rendered their
+  backslashes (the engine has no escape either), so they are stripped.
+  Verified by fetching both rendered pages, not by reading the source.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
@@ -48,11 +55,12 @@ next_step: >-
   stale 2rem fallback inside DesignIdiom's own generated CSS (inert only
   because assets/workbench.css sets the real value). The live studio on :4580
   needs a hand restart to serve the two new guides — this sandbox runs its own
-  PID namespace and cannot signal that process. Also open, and small:
-  design_idiom_discussion.md carries eleven escaped-markdown artifacts (\\#,
-  method\\_missing) that render as literal backslashes — the document's own
-  text, so repairing it is a content edit for dan, not a side effect of
-  serving it. Package D remains valid and unstarted.
+  PID namespace and cannot signal that process. One finding this round left
+  unfixed and unruled: five other served guides contain raw HTML that will
+  render as literal text the same way (VOCABULARY.md 17, KERNEL.md 6, LORE.md
+  6, ROADMAP-0.3.md 2, PRIMER.md 1, DAYTRIP.md 1) — the same defect class, and
+  the same one-line class of fix, but on documents no one has looked at yet.
+  Package D remains valid and unstarted.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

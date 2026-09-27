@@ -1074,3 +1074,42 @@ for dan rather than a side effect of serving it, and it is recorded in
 
 Verification: all nine gates green, suite 451 runs / 5,666 assertions / 0
 failures. Four further commits.
+
+### Addendum 3 — the guides made readable (same day)
+
+Serving a document is not the same as making it readable, and dan found both
+defects by looking at the pages.
+
+`docs/DESIGN_IDIOM.md` wrapped all fifteen compiled-CSS blocks in
+`<details>`/`<summary>`. `SlimPickins::Markdown` escapes HTML before it
+interprets anything — that is the property that lets `prose` have no
+"trust me" spelling — so each wrapper rendered as literal `<details>` text
+above its code block. The tags are gone; each block now sits under a markdown
+`**Compiled CSS**` heading. The information is unchanged, the machinery is
+gone, and the engine's guarantee is untouched. The loss is collapsibility,
+which would have required teaching `prose` to pass raw HTML through — a
+"trust me" hole in the one property that makes it safe, which is dan's call
+and not a fix to make silently.
+
+`design_idiom_discussion.md` carried twenty backslash escapes (`\#`, `\*`,
+`method\_missing`, `zone-\[name\]`, `they\!`). The engine has no backslash
+escape either, so each rendered its backslash literally. All twenty are
+stripped; the two `\n` that remain are inside a fenced Ruby block, where they
+are code.
+
+The finding worth carrying: **`check_design_docs.rb` passed throughout.** It
+holds every compiled-CSS example to the compiler, and every example was
+correct — the document was accurate and unreadable. Accuracy and readability
+are different claims. Both fixes were verified by fetching the rendered pages
+from a throwaway instance and grepping the HTML a reader actually receives
+(zero escaped `<details>`, zero literal backslashes), not by reading the
+source or an intermediate.
+
+Audited while there and left alone, since it is the same defect on documents
+nobody has looked at yet: five other served guides contain raw HTML that will
+render as literal text — `VOCABULARY.md` 17, `KERNEL.md` 6, `LORE.md` 6,
+`ROADMAP-0.3.md` 2, `PRIMER.md` 1, `DAYTRIP.md` 1. Recorded in `PROJECT.md`
+as the next instance of the class.
+
+Verification: all nine gates green, suite 451 runs / 5,666 assertions / 0
+failures. One further commit.
