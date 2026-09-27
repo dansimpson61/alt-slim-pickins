@@ -135,25 +135,21 @@ status: >-
   comment since the truth round rewrote it in place.
 last_touched: 2026-09-26
 next_step: >-
-  Step 2 of the tin work is done: a view may carry its own `[view].tin` and
-  `[view].spiff`, or inherit the app's, and the view's word wins. The rule is
-  now the language's, in one place, because it is one rule for both documents:
-  `Library#tin_for(view)` and `Library.spiff_for(view, path:)`, with
-  `StudioPages.design_for` delegating and keeping only where an app keeps its
-  views. Covered by nine tests in `test/resolution_test.rb`, and proven through
-  the real loader with a temporary per-view tin.
+  All three steps of the tin work are done. A view may carry its own
+  `[view].tin` and `[view].spiff` or inherit the app's, resolved by one rule in
+  one place (`Library#tin_for`, `Library.spiff_for`); and a page's stylesheets
+  are inferred — the language's own always, then the app's or the view's from
+  `public/css/`, announced only where `Library.from(…, public_url:)` says the
+  app serves that directory. `stylesheet`/`script` remain as the escape hatch,
+  which is what makes inference a default rather than a replacement: ten
+  declarations were deleted and roth, the one app with styles of its own and
+  the one that fits no convention, still says what it needs.
 
-  Next is step 3, asset inference by convention: `slim-pickins.css`,
-  `[app].css`, `[view].css`, loaded only if they exist and only when needed —
-  the same two-tier shape the tins and Spiffs now use. `stylesheet`/`script`
-  stay as explicit words (roth's page needs `/css/roth.css`), so inference
-  becomes the default rather than a replacement.
-
-  That also unblocks the gate dan asked about. Nothing today holds a `.sp` to
-  its `.spiff`: the design is read studio-side, the page never knows it has
-  one, and no checker cross-checks a Spiff's zones against the elements a page
-  emits. Step 2 is what makes such a gate possible, since the language can now
-  name the companion of a given page.
+  What is not done, and is the natural next question: **nothing holds a `.sp`
+  to its `.spiff`.** The language can now name a page's companion, which is
+  the precondition, but no checker cross-checks a Spiff's zones against the
+  elements a page emits — the design is still read studio-side and a page
+  never knows it has one. That was dan's own question and remains open.
 
   Left recorded and unresolved: two byte-identical tins (`pages/pages.tin` and
   `examples/portfolio/views/portfolio.tin`), which dan chose to leave; and the

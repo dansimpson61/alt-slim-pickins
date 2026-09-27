@@ -1477,3 +1477,44 @@ Verification: all nine gates green, suite 471 runs / 5,704 assertions / 0
 failures, one commit. Step 3 — asset inference by convention — is next, and
 step 2 is what makes the `.sp`↔`.spiff` gate dan asked about possible at all,
 since the language can now name a given page's companion.
+
+### Addendum 13 — inference as the default, not a replacement (same day)
+
+Step 3, in the shape dan chose: a page gets the language's own stylesheet
+without saying so, and its app's or its own by convention — the same two-tier
+rule the tins and Spiffs now use, in the same place. The `stylesheet` word
+stays, because **a convention covers the shapes it was written for, and the
+one app with styles of its own fits none of them**: roth is standalone, its
+files are named `roth.css` and `app.js` rather than for app or view, and it
+serves them from its own `public/`. A replacement design would have had one
+dissenter and no way to express it.
+
+What it deleted: nine tins repeating `stylesheet "/assets/slim-pickins.css"`,
+roth's page repeating the base plus its own, and `guide.sp`'s copy — ten lines
+that said nothing a convention could not.
+
+**The on-disk convention cannot carry the URL**, and the first attempt got
+this wrong by reasoning about the file's home instead of about who serves it.
+Each app hands Sinatra a *different* public folder (an example the repo root,
+so its files are served under `examples/…`; roth its own `public/`, served at
+the root), so the library announces an app's own stylesheet only when
+`Library.from(…, public_url:)` states where that directory is served, and
+stays silent otherwise. A guessed URL is a stylesheet the app cannot serve,
+which is worse than no line at all.
+
+**The convention was read off the one working example.** roth already kept
+`public/css/roth.css`, so the rule is roth's layout rather than one invented
+and then found unservable — which is exactly what the first attempt was: it
+put a view's stylesheet beneath the views, where no app can serve it.
+
+Order is behaviour: the base is announced first so an app may override it, and
+the inferred entries precede anything a page or tin says so that speaking
+wins. The inferred list was briefly emitted backwards — the library returned
+the right order and the emission reversed it, which only reading the rendered
+head caught.
+
+Verified: all nine gates green, suite 478 runs / 5,707 assertions / 0
+failures (seven new tests, covering both URL prefixes and the order), and
+through the running app: roth's page emits `/assets/slim-pickins.css` then
+`/css/roth.css`, both served 200, with neither line written in
+`controls.sp`. One commit.
