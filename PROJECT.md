@@ -135,20 +135,29 @@ status: >-
   comment since the truth round rewrote it in place.
 last_touched: 2026-09-26
 next_step: >-
-  The tin work is in progress, one step at a time as dan asked. Step 1 (the
-  rename and the convention) is done. Next is step 2, per-view resolution:
-  `[view].tin` falling back to `[app].tin`, and the same for `.design`, lifted
-  from the studio's `design_for` discovery into `Library`/`Builder` so the
-  language knows rather than only the studio. That is also the precondition
-  for the gate dan asked about — whether anything holds `.sp` to `.design` —
-  since today nothing does: the design is discovered studio-side, the page
-  never knows it has one, and no checker cross-checks a design's zones against
-  the elements a page emits. Then step 3, asset inference by convention:
-  `slim-pickins.css`, `[app].css`, `[view].css`, loaded only if they exist,
-  the same two-tier shape `design_for` already uses. Left recorded and
-  unresolved: two byte-identical tins (`pages/pages.tin` and
+  Step 2 of the tin work is done: a view may carry its own `[view].tin` and
+  `[view].spiff`, or inherit the app's, and the view's word wins. The rule is
+  now the language's, in one place, because it is one rule for both documents:
+  `Library#tin_for(view)` and `Library.spiff_for(view, path:)`, with
+  `StudioPages.design_for` delegating and keeping only where an app keeps its
+  views. Covered by nine tests in `test/resolution_test.rb`, and proven through
+  the real loader with a temporary per-view tin.
+
+  Next is step 3, asset inference by convention: `slim-pickins.css`,
+  `[app].css`, `[view].css`, loaded only if they exist and only when needed —
+  the same two-tier shape the tins and Spiffs now use. `stylesheet`/`script`
+  stay as explicit words (roth's page needs `/css/roth.css`), so inference
+  becomes the default rather than a replacement.
+
+  That also unblocks the gate dan asked about. Nothing today holds a `.sp` to
+  its `.spiff`: the design is read studio-side, the page never knows it has
+  one, and no checker cross-checks a Spiff's zones against the elements a page
+  emits. Step 2 is what makes such a gate possible, since the language can now
+  name the companion of a given page.
+
+  Left recorded and unresolved: two byte-identical tins (`pages/pages.tin` and
   `examples/portfolio/views/portfolio.tin`), which dan chose to leave; and the
-  classic UI still has no `.design`, so its presentation still pools in
+  classic UI still has no `.spiff`, so its presentation still pools in
   `slim-pickins.css`. Otherwise no active thread: the three 0.4.0g items below
   still stand, and Package D is still valid and unstarted.
 kind: project

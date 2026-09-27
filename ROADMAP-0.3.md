@@ -1435,3 +1435,45 @@ failures, and a live studio compiling the workbench's stylesheet from
 `workbench.spiff` — its provenance comment naming the new path — and reading
 `doc_reader.spiff` into doc_reader's design pane. Two commits, after a first
 attempt that staged nothing because a bad pathspec aborted the `git add`.
+
+### Addendum 12 — a view may carry its own tin and Spiff (same day)
+
+Step 2 of the tin work, and the rule dan described: an app's views may reuse
+`[app].tin`/`[app].spiff` or bring their own `[view].tin`/`[view].spiff`, and
+the view's word wins.
+
+**The rule had been possible since step 1 and unusable, because it lived in
+the wrong layer.** `StudioPages.design_for` knew that a page's own document
+beats its app's; `Library` did not, so the language could not answer "which
+tin does this page wear?" and `Builder` simply assumed the app's. A capability
+that lives in a caller is a capability the thing itself does not have. Now:
+
+    Library#tin_for(view)            a view's tin, else the app's
+    Library.spiff_for(view, path:)   a view's Spiff, else the app's
+
+One rule, stated once, for both documents — they resolve identically, so the
+two methods read as two spellings of one sentence. `StudioPages.design_for`
+delegates and keeps only where a loaded page's app keeps its views.
+
+`spiff_for` is a **class** method because it needs no library: it reads a
+couple of files and is asked on every page load, while constructing a
+`Library` compiles all 62 vocabulary partials. `tin_for` stays on the
+instance, because it genuinely needs the tins `from` already read. What the
+caller needs is the test for where a method lives.
+
+The names a per-view document may carry are two, not one: a view is known by
+its file (`index.sp`) and by its app (`doc_reader`), so the lookup tries the
+view's name and then the directory's, and the app's is found one level up
+(`doc_reader/doc_reader.spiff`). Three candidate paths, no search.
+
+**Verified beyond the unit tests.** Nine new tests in
+`test/resolution_test.rb` cover both tiers, both fallbacks, and a page with
+neither — and a temporary `examples/dashboard/views/triage.tin` was dropped
+into the real tree to watch `triage` change while `queue` inherited the app's
+tin, then removed. A feature proved only on synthetic trees has not been shown
+to work in the thing it was built for.
+
+Verification: all nine gates green, suite 471 runs / 5,704 assertions / 0
+failures, one commit. Step 3 — asset inference by convention — is next, and
+step 2 is what makes the `.sp`↔`.spiff` gate dan asked about possible at all,
+since the language can now name a given page's companion.
