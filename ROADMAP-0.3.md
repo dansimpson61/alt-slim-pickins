@@ -1518,3 +1518,44 @@ failures (seven new tests, covering both URL prefixes and the order), and
 through the running app: roth's page emits `/assets/slim-pickins.css` then
 `/css/roth.css`, both served 200, with neither line written in
 `controls.sp`. One commit.
+
+### Addendum 14 — the tenth gate: a Spiff's zones (same day)
+
+The question dan asked at the start of the tin work, and the last piece of it:
+**is there a gate between `.sp` and `.spiff`?** There was not. The Spiff
+compiler emits a rule per zone, a zone's class is promoted from the word or
+partial of the same name, and nothing compared the two — so a typo
+(`reading_pane` for `reading_panel`) or a zone renamed on one side compiled to
+a rule that silently styled nothing. This is the selector-explosion defect one
+level down: a selector matching a DOM that does not exist.
+
+**Step 2 is what made it buildable.** Before it, the language could not say
+which Spiff accompanied which page — the pairing lived in the studio's file
+discovery — so "hold the Spiff to its pages" had no way to find the pages. A
+gate needs its subject's associations to live in the subject, not in a caller.
+
+`check_spiff_scope.rb`, the tenth leg: every zone a Spiff names must be
+something the pages in its scope can render, with that name as its class. It
+reads zones from the Spiff's own parse tree — `zone`, `horizon`, and `flank`'s
+lead *and* its `beside:` companion — and asks the question of the sources on
+disk.
+
+**It is deliberately weaker than rendering, and says so.** A render gate would
+also catch a zone whose word exists but never reaches the DOM, but it needs
+each app's data and would have to skip pages it cannot render — the silent
+omission this project has paid for twice. The source-level question needs no
+data and cannot skip; it proves the Spiff is not naming a stranger, not that
+the element reaches every render. `bin/verify_pages.rb` is the gate that
+renders.
+
+Two bugs, both caught before it ran green. The first was **a false pass**:
+`app_root` walked past the app to the filesystem root, so the scope was empty
+and the checker reported 0 problems over nothing — a green from a checker that
+compared nothing is worse than a red. The second was **a hole**: `flank` names
+two zones, and only the lead was extracted, leaving unchecked the name a Spiff
+is most likely to get wrong; the tests caught it because one was written from
+the Spiff's syntax rather than from the code.
+
+Verification: all ten gates green, suite 485 runs / 5,731 assertions / 0
+failures (seven new tests, one a mutation that must fail), and the live status
+page reporting "All 10 legs green" with Scope among them. One commit.

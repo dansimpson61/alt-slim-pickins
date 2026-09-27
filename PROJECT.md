@@ -145,11 +145,17 @@ next_step: >-
   declarations were deleted and roth, the one app with styles of its own and
   the one that fits no convention, still says what it needs.
 
-  What is not done, and is the natural next question: **nothing holds a `.sp`
-  to its `.spiff`.** The language can now name a page's companion, which is
-  the precondition, but no checker cross-checks a Spiff's zones against the
-  elements a page emits — the design is still read studio-side and a page
-  never knows it has one. That was dan's own question and remains open.
+  And the question dan asked — whether anything holds a `.sp` to its `.spiff` —
+  is now answered by a tenth gate, `check_spiff_scope.rb`: every zone a Spiff
+  names must be something the pages in its scope can render, with that name as
+  its class. It reads a zone from the Spiff's own parse tree (`zone`,
+  `horizon`, and `flank`'s lead *and* its `beside:` companion) and asks the
+  question of the sources on disk, so it needs no data and cannot silently
+  skip a page that would not render. It is deliberately weaker than a render
+  gate and says so: it proves the Spiff is not naming a stranger, not that the
+  element reaches every render — `bin/verify_pages.rb` is the gate that
+  renders. Registered as the tenth leg; the status page reports "All 10 legs
+  green".
 
   Left recorded and unresolved: two byte-identical tins (`pages/pages.tin` and
   `examples/portfolio/views/portfolio.tin`), which dan chose to leave; and the
