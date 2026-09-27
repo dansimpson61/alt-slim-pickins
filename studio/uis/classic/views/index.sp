@@ -1,7 +1,7 @@
 page "Slim-Pickins Studio"
   shell
     vocabulary
-    split_pane
+    panes
       editor
       tabs
         tab "Visual", active: true

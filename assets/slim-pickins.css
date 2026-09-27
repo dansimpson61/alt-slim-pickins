@@ -417,7 +417,7 @@ time { color: var(--ink-soft); }
 .search { display: block; }
 
 /* Layout Primitives */
-.split_pane {
+.panes {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--gap);

@@ -34,7 +34,10 @@ class CensusTest < Minitest::Test
   end
 
   def test_styles_census_matches_stylesheet_rules
-    assert_equal 105, SlimPickins::Census.styles[:rules_defined]
+    # A pinned number is a canary: it fails when the stylesheet gains or
+    # loses a class, which is how `.split_pane` folding into `.panes` was
+    # noticed rather than absorbed silently.
+    assert_equal 104, SlimPickins::Census.styles[:rules_defined]
   end
 
   def test_report_formats_all_metrics

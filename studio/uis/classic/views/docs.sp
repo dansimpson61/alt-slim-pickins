@@ -1,7 +1,7 @@
 page .title
   shell
     vocabulary
-    split_pane
+    panes
       scroll
         section "Contract"
           prose markdown, .contract

@@ -40,11 +40,11 @@ conversation; it is all written down.
 - **Active next step**: **none** — three items deliberately left open for a future token ground-truthing daytrip (see `PROJECT.md next_step` and `DAYTRIP-0.4.0g.md`'s closing section).
 
 ### Current Vitals (measured 2026-09-25)
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 105 stylesheet rules, 49 test files.
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 .sp partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 49 test files.
 - **Full Suite**: 445 runs, 5,619 assertions, 0 failures, 0 errors, 0 skips in one process.
 - **Check Grammar**: 1,254 sentences checked, 94 words defined, 0 problems.
 - **Check Shape**: 62 canonical words, 1,006 sentences, 0 problems.
-- **Check Styles**: 27 emittable classes, 59 rendering, 105 rules, 0 problems.
+- **Check Styles**: 27 emittable classes, 59 rendering, 104 rules, 0 problems.
 - **Verify Pages**: 31 pages verified, 0 problems.
 - **Promise Ledger**: 35 promises (32 read, 3 forwarded, 0 unread), 0 problems.
 - **Convention Register**: 38 conventions, 0 problems.
