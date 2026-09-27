@@ -12,7 +12,7 @@ Lowering the compiled Ruby core into elemental primitives, eliminating single-co
 Volet 5 delivers Package C:
 1. **Privileged `tag` Primitive & Compilation Boundary**:
    - Introduces `tag` as an elemental escape hatch strictly reserved for built-in vocabulary definitions in `lib/vocabulary/*.sp`.
-   - Refused in user/app templates and app partials with a truthful compiler error: `` `tag` is a privileged primitive and may not be used in app pages ``.
+   - Refused in user/app templates and app partials with a truthful compiler error: ``` `tag` is a privileged primitive and may not be used in app pages ```.
    - Compilation cache partitioned on `[source, privileged]` to guarantee zero cache pollution across privilege boundaries.
 2. **Absorption of Single-Consumers (`figcaption` & `summary`)**:
    - `figcaption` and `summary` were single-consumer words in the public vocabulary that only ever made sense nested directly inside `figure` and `disclosure`.

@@ -155,9 +155,9 @@ These logged gaps form the demand evidence that gates Phase 3's vocabulary and k
 
 ### G20 — Indented code fences are unparsed as code blocks
 - **Consumer**: `foresight/README.md`, `rmd/README.md`, `foresight/docs/AI_Agent_Onboarding.md`.
-- **Desired Expression**: Indented code fences (e.g. `   ```bash` or `    ``` `) inside list item continuations or indented sections.
-- **Refusal**: Silently unparsed as code blocks. Emitted as standard paragraphs with inner code quotes: `<p>``<code>bash bundle install </code>``</p>`.
-- **Obstacle**: `SlimPickins::Markdown::FENCE = %r{\A```[^\n`]*\z}` strictly requires backticks to begin at column 0. Any indented fence is treated as prose text, mangling the code block completely.
+- **Desired Expression**: Indented code fences (e.g. `    ```bash ` or `     ``` `) inside list item continuations or indented sections.
+- **Refusal**: Silently unparsed as code blocks. Emitted as standard paragraphs with inner code quotes: ````<p>``<code>bash bundle install </code>``</p>````.
+- **Obstacle**: ````SlimPickins::Markdown::FENCE = %r{\A```[^\n`]*\z}```` strictly requires backticks to begin at column 0. Any indented fence is treated as prose text, mangling the code block completely.
 - **Workaround**: Authors must de-indent all code blocks to column 0.
 
 ### G21 — YAML frontmatter leaks into prose as horizontal rule and paragraphs
