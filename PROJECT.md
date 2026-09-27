@@ -90,9 +90,11 @@ status: >-
   the canonical `footer` — which was also a live defect, since a
   workbench-specific `.footer` rule had been styling nothing because the
   element was a `.foot`. Recorded and deliberately not done, awaiting dan's
-  word: one pane word instead of `split_pane`/`panes` (the same concept under
-  two names), a `classic.design` to give the classic UI's presentation its
-  proper home, and retiring the term "layout" from nine `layout.sp` files.
+  word instead: one pane word instead of `split_pane`/`panes` (the same concept
+  under two names), a `classic.design` to give the classic UI's presentation
+  its proper home, and retiring the term "layout" from nine `layout.sp` files.
+  No active thread otherwise: the three 0.4.0g items below still stand, and
+  Package D is still valid and unstarted.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
