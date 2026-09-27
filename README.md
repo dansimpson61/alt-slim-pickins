@@ -117,7 +117,7 @@ this as money* and the formatting belongs to the word.
   grammar table; every word used must be defined; every word defined must have
   a sentence; every class emitted must have a rule.
 - **[docs/SPIFF.md](docs/SPIFF.md)** — Spiff, the design idiom: the
-  spatial companion language a `.design` file is written in, and the lexicon of
+  spatial companion language a `.spiff` file is written in, and the lexicon of
   its words. `check_spiff.rb` holds every compiled-CSS example in it to
   the compiler, in both directions.
 

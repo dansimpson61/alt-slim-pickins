@@ -94,7 +94,7 @@ conversation; it is all written down.
 - Byte-diff verified against all application pages; warm render 6.24 ms (budget 10 ms).
 
 ### [COMPLETED] The Spiff Compiler & Council Spatial Manifesto (no volet number, 2026-09-24)
-- **`SlimPickins::Compiler::Spiff`** (`lib/slim_pickins/compiler/spiff.rb`, `docs/SPIFF.md`): a companion `.design` language compiling qualitative spatial vocabulary (`surface`, `stage`, `zone`, `flank`, `stack`, `air`, `frame`, `cadence`, `treatment`) to modern CSS Grid + Container Queries.
+- **`SlimPickins::Compiler::Spiff`** (`lib/slim_pickins/compiler/spiff.rb`, `docs/SPIFF.md`): a companion `.spiff` language compiling qualitative spatial vocabulary (`surface`, `stage`, `zone`, `flank`, `stack`, `air`, `frame`, `cadence`, `treatment`) to modern CSS Grid + Container Queries.
 - Same round: `horizon`/`posture` (multi-zone planes), `scroll`/`presence`/`focus` zone qualities, Sandi Metz hygiene (`min-height: 0`), `.panes` dissolution via `display: contents`.
 
 ### [COMPLETED] Volet 6: The Council Skill & Workbench Spatial Frontier (`DAYTRIP-0.4.0g.md`)
@@ -107,7 +107,7 @@ conversation; it is all written down.
 
 Nothing is mandated next. Candidates, none prioritized over the others —
 open with dan rather than picking unilaterally:
-- **The token ground-truthing daytrip** named above (`DAYTRIP-0.4.0g.md`'s closing section) — real values for the `.design` collapse/balance scale and the workbench's menu/footer-height constants, measured against real embedding widths instead of preserved-by-habit numbers.
+- **The token ground-truthing daytrip** named above (`DAYTRIP-0.4.0g.md`'s closing section) — real values for the `.spiff` collapse/balance scale and the workbench's menu/footer-height constants, measured against real embedding widths instead of preserved-by-habit numbers.
 - **Package D** below (still unstarted, still valid).
 - Whatever roadmap question dan brings to the next session — this project's own convention (`README.md`, *How roadmaps go*) is to re-read the history and lore before choosing a direction, not to assume the last session's tail is the next session's head.
 
@@ -130,7 +130,7 @@ The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is agent-managed.
 - Check the port: `curl -s -m 2 http://127.0.0.1:4580/`.
 - If down or after code changes, run in background:
   `cd ~/dev/alt-slim-pickins && exec ruby studio/app.rb`
-- **A `.design`/`.sp` file edit takes effect on the next request, with no
+- **A `.spiff`/`.sp` file edit takes effect on the next request, with no
   restart** — the compiler reads those fresh every time. A `lib/` Ruby
   code edit does not; Ruby doesn't reload changed source, so the running
   process keeps serving the old code until it's actually restarted.

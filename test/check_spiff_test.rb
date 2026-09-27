@@ -64,7 +64,7 @@ class CheckDesignDocsTest < Minitest::Test
 
   def test_a_word_implemented_but_not_documented_is_refused
     # Direction two of the checker. `collapse` was exactly this: implemented,
-    # used by workbench.design, and absent from the lexicon until the checker
+    # used by workbench.spiff, and absent from the lexicon until the checker
     # said so.
     with_mutated_lexicon(from: "### `collapse`\n", to: "### `collapse_hidden`\n") do |path|
       problems, output = run_check([path])

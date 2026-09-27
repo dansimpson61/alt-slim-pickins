@@ -20,12 +20,12 @@ Spiff uses `SlimPickins::Transform` directly:
 - **Indentation nests it**: Blocks are indented; no `do ... end`, no curly braces, no semicolons.
 - **Bare identifiers become symbols**: `air generous` compiles to `air(:generous)`; `frame quiet` compiles to `frame(:quiet)`.
 - **Keyword modifiers**: `beside: reading_pane, balance: subordinate, collapse: cozy`.
-- **Line tracking**: Errors pinpoint the exact line number of the `.design` file.
+- **Line tracking**: Errors pinpoint the exact line number of the `.spiff` file.
 
 ### Substance vs. Spiff Side-by-Side
 
 ```
-Substance (.sp)                      Spiff (.design)
+Substance (.sp)                      Spiff (.spiff)
 ──────────────────────────────       ──────────────────────────────────────────
 page "Doc Reader"                    surface doc_reader
   catalog docs, "Documents"            stage
@@ -50,7 +50,7 @@ Every word in Spiff models exemplary lexical practice:
 1. **What it is**: The conceptual essence.
 2. **What it is for**: The design problem it solves and intent it declares.
 3. **How to use it**: Syntax, options, and constraints.
-4. **Examples**: Code snippet in pure `.design` syntax.
+4. **Examples**: Code snippet in pure `.spiff` syntax.
 5. **Compiled CSS**: the exact modern CSS emitted under the hood, in a fenced
    block under its own heading — real output, not a sketch.
 
@@ -201,7 +201,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 
 ### `collapse`
 - **What it is**: The container width below which a horizontal arrangement gives up and stacks.
-- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `Spiff::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.design` file. It is the reason a `.design` never holds a raw CSS length.
+- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `Spiff::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.spiff` file. It is the reason a `.spiff` never holds a raw CSS length.
 - **How to use it**: a modifier of both `flank` and `horizon`.
   ```
   flank catalog, beside: reading_pane, collapse: tight
@@ -340,7 +340,7 @@ body {
 ```
 A zone's selector is its own bare class — the same class its `.sp` partial
 already renders via this project's app_class-promotion convention, and
-already scoped safely because a compiled `.design` stylesheet is only ever
+already scoped safely because a compiled `.spiff` stylesheet is only ever
 loaded by the pages that use it.
 
 ---

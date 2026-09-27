@@ -229,9 +229,9 @@ get '/assets/:file' do
 
   content_type name.end_with?('.css') ? 'text/css' : 'text/javascript'
   if name == 'workbench.css'
-    design_file = File.expand_path('uis/workbench/workbench.design', __dir__)
+    design_file = File.expand_path('uis/workbench/workbench.spiff', __dir__)
     SlimPickins::Spiff.compiled_stylesheet(File.read(design_file),
-      provenance: 'automatically from studio/uis/workbench/workbench.design')
+      provenance: 'automatically from studio/uis/workbench/workbench.spiff')
   else
     File.read(File.expand_path("../assets/#{name}", __dir__))
   end

@@ -87,7 +87,7 @@ answer directly, or as that one voice, without staging a debate.
      constraints on the output itself: **every number in the transcript
      must come from a command run this session, never re-quoted from
      memory or from an earlier lore entry**, and **DRY binds the
-     `.design`/`.sp` language; the compiled CSS/HTML need not be DRY, but
+     `.spiff`/`.sp` language; the compiled CSS/HTML need not be DRY, but
      it must still be excellent** — correct, minimal in a way that's
      earned, not merely short. A finding that the compiled output repeats
      itself is not, by itself, a finding. A finding that a compiled

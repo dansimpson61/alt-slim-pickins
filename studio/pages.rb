@@ -595,10 +595,10 @@ module StudioPages
 
     actual_path = PAGES[rel] || rel
     dir = File.dirname(File.dirname(actual_path))
-    companion = File.expand_path("../#{dir}/#{File.basename(dir)}.design", __dir__)
+    companion = File.expand_path("../#{dir}/#{File.basename(dir)}.spiff", __dir__)
     return File.read(companion) if File.file?(companion)
 
-    direct = File.expand_path("../#{actual_path.sub(/\.sp\z/, '.design')}", __dir__)
+    direct = File.expand_path("../#{actual_path.sub(/\.sp\z/, '.spiff')}", __dir__)
     return File.read(direct) if File.file?(direct)
 
     ''

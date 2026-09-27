@@ -8,6 +8,6 @@ box
   section .editor_title
   wired_form
     textarea source, "Page (Substance)", rows: 14
-    textarea design, "Spiff (.design)", rows: 9
+    textarea design, "Spiff (.spiff)", rows: 9
     textarea data, "Data (JSON)", rows: 5
     note quiet, .data_note

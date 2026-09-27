@@ -12,7 +12,7 @@ module SlimPickins
   # once as `[name].tin`, with `contents` marking where the page goes. The
   # word for it used to be "layout", which named the presentation the design
   # idiom now owns; a tin is the modest metal over the building, and
-  # `[name].tin` sits beside `[name].design` as one concern per file.
+  # `[name].tin` sits beside `[name].spiff` as one concern per file.
   class Library
     attr_reader :tin, :partials, :words, :app_partials, :dir
 

@@ -143,51 +143,51 @@ module SpiffCheck
   # its job, and `Source#shows?` holds the pairing: the fragment must actually
   # be part of the source it is said to document, or the pairing is a fiction
   # and the declarations below are checked against the wrong program.
-  Source = Struct.new(:design, :fragment, keyword_init: true) do
+  Source = Struct.new(:spiff, :fragment, keyword_init: true) do
     def shows?
       said = fragment.to_s.split("\n").map(&:strip).reject(&:empty?)
       return false if said.empty?
 
-      said.all? { |line| design.to_s.include?(line) }
+      said.all? { |line| spiff.to_s.include?(line) }
     end
   end
 
   EXAMPLES = {
-    'surface' => Source.new(design: "surface doc_reader\n  stage\n    flank catalog, beside: reading_pane\n",
+    'surface' => Source.new(spiff: "surface doc_reader\n  stage\n    flank catalog, beside: reading_pane\n",
                             fragment: "surface doc_reader\n  stage\n    flank catalog, beside: reading_pane"),
-    'stage' => Source.new(design: "surface doc_reader\n  stage\n    air generous\n" \
+    'stage' => Source.new(spiff: "surface doc_reader\n  stage\n    air generous\n" \
                                   "    flank catalog, beside: reading_pane, balance: subordinate\n",
                           fragment: "stage\n    air generous\n    flank catalog, beside: reading_pane, balance: subordinate"),
-    'horizon' => Source.new(design: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
+    'horizon' => Source.new(spiff: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
                                     "    posture shelf, workspace, mirror\n    collapse roomy\n",
                             fragment: "horizon library, editor, output\n    posture shelf, workspace, mirror\n    collapse roomy"),
-    'posture' => Source.new(design: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
+    'posture' => Source.new(spiff: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
                                     "    posture shelf, workspace, mirror\n",
                             fragment: "horizon library, editor, output\n    posture shelf, workspace, mirror"),
-    'collapse' => Source.new(design: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
+    'collapse' => Source.new(spiff: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
                                      "    posture shelf, workspace, mirror\n    collapse roomy\n",
                              fragment: "collapse roomy"),
-    'flank' => Source.new(design: "surface doc_reader\n  stage\n" \
+    'flank' => Source.new(spiff: "surface doc_reader\n  stage\n" \
                                   "    flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy\n",
                           fragment: "flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy"),
-    'stack' => Source.new(design: "surface doc_reader\n  stage\n    stack overview, details, air: generous\n",
+    'stack' => Source.new(spiff: "surface doc_reader\n  stage\n    stack overview, details, air: generous\n",
                           fragment: "stack overview, details, air: generous"),
-    'zone' => Source.new(design: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n    cadence compact\n",
+    'zone' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n    cadence compact\n",
                          fragment: "zone catalog\n    frame quiet\n    cadence compact"),
-    'air' => Source.new(design: "surface doc_reader\n  stage\n    air generous\n", fragment: 'air generous'),
-    'balance' => Source.new(design: "surface doc_reader\n  stage\n" \
+    'air' => Source.new(spiff: "surface doc_reader\n  stage\n    air generous\n", fragment: 'air generous'),
+    'balance' => Source.new(spiff: "surface doc_reader\n  stage\n" \
                                     "    flank catalog, beside: reading_pane, balance: subordinate\n",
                             fragment: "flank catalog, beside: reading_pane, balance: subordinate"),
-    'frame' => Source.new(design: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n", fragment: 'frame quiet'),
-    'cadence' => Source.new(design: "surface doc_reader\n  stage\n  zone catalog\n    cadence compact\n",
+    'frame' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n", fragment: 'frame quiet'),
+    'cadence' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    cadence compact\n",
                             fragment: 'cadence compact'),
-    'treatment' => Source.new(design: "surface doc_reader\n  stage\n  zone reading_pane\n    treatment editorial\n",
+    'treatment' => Source.new(spiff: "surface doc_reader\n  stage\n  zone reading_pane\n    treatment editorial\n",
                               fragment: 'treatment editorial'),
-    'scroll' => Source.new(design: "surface workbench, kind: shell\n  zone library\n    scroll internal\n",
+    'scroll' => Source.new(spiff: "surface workbench, kind: shell\n  zone library\n    scroll internal\n",
                            fragment: 'scroll internal'),
-    'presence' => Source.new(design: "surface workbench, kind: shell\n  zone output\n    presence steady\n",
+    'presence' => Source.new(spiff: "surface workbench, kind: shell\n  zone output\n    presence steady\n",
                              fragment: 'presence steady'),
-    'focus' => Source.new(design: "surface workbench, kind: shell\n  zone editor\n    focus primary\n",
+    'focus' => Source.new(spiff: "surface workbench, kind: shell\n  zone editor\n    focus primary\n",
                           fragment: 'focus primary')
   }.freeze
 
@@ -243,7 +243,7 @@ module SpiffCheck
       end
 
       begin
-        css = compiler.compile(pairing.design, path: "docs/SPIFF.md (#{entry.word})")
+        css = compiler.compile(pairing.spiff, path: "docs/SPIFF.md (#{entry.word})")
       rescue StandardError => e
         report.call("WILL NOT COMPILE  `#{entry.word}`'s example: #{e.message}")
         problems += 1

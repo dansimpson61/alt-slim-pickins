@@ -4,7 +4,7 @@ require_relative '../transform'
 
 module SlimPickins
   module Compiler
-    # Translates a high-level spatial manifesto (.design) into modern, high-grade CSS:
+    # Translates a high-level spatial manifesto (.spiff) into modern, high-grade CSS:
     # Container Queries (@container), CSS Grid (minmax), and fluid clamp() scaling.
     #
     # Sandi Metz & Jim Weirich architecture:
@@ -320,7 +320,7 @@ module SlimPickins
                      ".#{@stage_name}"
                    end
           # Named, non-default stages aren't exercised by either real
-          # `.design` file today, and the compiler has no way to know a
+          # `.spiff` file today, and the compiler has no way to know a
           # generic one's real parent — falls back to self-referencing
           # (the same bug this fix targets) only for that untested path.
           container_parent = is_default_stage ? KIND_CONTAINER_PARENTS.fetch(@kind) { KIND_CONTAINER_PARENTS[:document] } : target
