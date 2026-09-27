@@ -1284,3 +1284,40 @@ of how a UI declares its frame and wants a name chosen first.
 Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
 failures, the workbench footer verified live as `<footer class="footer">` with
 no element carrying a `foot` class. One commit.
+
+### Addendum 8 — one pane word, not two (same day)
+
+The second of the audit's three items, taken alone. The classic UI's
+`split_pane` and the workbench's `panes` were the same region — a box holding
+two panes side by side — under two names, which in this house means two homes.
+
+Three facts settled it, each narrowing the answer:
+
+- **The concept is real and shared.** `split_pane` held `editor` + `tabs` on
+  one page and `scroll` + `try_it` on another; `panes` held `editor` +
+  `output`. One name is right; two was the defect.
+- **The compiler already hardcodes `.panes`.** It emits
+  `.shell > .panes { display: contents }` for a `horizon`, so the zones reach
+  the shell grid through the wrapper. `panes` was load-bearing in the language
+  and `split_pane` was the invented name, which decides the survivor.
+- **The two layout rules are genuinely different** — the classic UI's is a
+  real grid with the panes as its tracks, the workbench dissolves the wrapper
+  — and that is the negative finding worth keeping: the rules must not be
+  merged just because the name is. One name, two presentations, because the
+  UIs differ.
+
+The partial moved to `studio/shared/partials`, since both UIs now say it, and
+the classic grid rule followed the name; neither UI loads the other's
+stylesheet, so there is no cascade interaction.
+
+Verified in a live browser on both UIs rather than by reading the cascade:
+classic computes `display: grid` with two 583px columns, the workbench
+`display: contents` with the shell placing a 648px editor and a 432px output.
+Unchanged layouts, one name.
+
+The census pinned 105 rules and now pins 104 — one fewer because a class name
+really stopped existing. `README` and `HANDOFF` quoted the old number and were
+updated with it.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures. Two commits.

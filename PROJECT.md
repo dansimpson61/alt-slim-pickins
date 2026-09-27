@@ -85,13 +85,27 @@ status: >-
   `word_docs` are purpose-named and fine, and `split_pane` is the technique
   name left standing. The root cause is that the classic UI has no `.design`
   file, so its presentation pooled in two wrapper partials, in
-  `slim-pickins.css` (which every UI loads), and in a root role. Dan's call was
+  `slim-pickins.css` (which every UI loads), and in a root role. That duplicate
+  is now gone: `split_pane` became `panes`, one word for one concept, kept
+  because the compiler already dissolves a `panes` wrapper inside a `horizon`.
+  Its two layout rules were deliberately not merged — they are per-UI
+  presentation and genuinely differ — and both UIs were measured in a live
+  browser to confirm the layout is unchanged. Census 104 rules, one fewer
+  because a class name really went away. Dan's call was
   the smallest item: the workbench's `foot` partial is gone and the layout says
   the canonical `footer` — which was also a live defect, since a
   workbench-specific `.footer` rule had been styling nothing because the
   element was a `.foot`. Recorded and deliberately not done, awaiting dan's
-  word instead: one pane word instead of `split_pane`/`panes` (the same concept
-  under two names), a `classic.design` to give the classic UI's presentation
+  word instead: the duplicate pane names are unified — the classic UI's
+  `split_pane` and the workbench's `panes` were the same region under two names,
+  and `panes` is the survivor because the compiler already dissolves a `panes`
+  wrapper inside a `horizon`, so the name was load-bearing. The partial moved to
+  `studio/shared/partials` (both UIs say it) and the classic grid rule followed
+  the name; the two per-UI layout rules stay separate because they genuinely
+  differ (classic is a real grid, the workbench dissolves the wrapper so the
+  shell places the zones). Verified in a live browser on both UIs. Census
+  105 -> 104 rules; README and HANDOFF updated. Remaining from the audit,
+  awaiting dan's word: a `classic.design` to give the classic UI's presentation
   its proper home, and retiring the term "layout" from nine `layout.sp` files.
   No active thread otherwise: the three 0.4.0g items below still stand, and
   Package D is still valid and unstarted.
