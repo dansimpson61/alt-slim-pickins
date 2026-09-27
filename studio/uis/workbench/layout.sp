@@ -15,4 +15,13 @@ main_menu
 shell
   library
   contents
-foot
+# The frame's own vitals, said through the language's own word. This was a
+# studio partial named `foot`, which was two things wrong at once: a second
+# name for an element the vocabulary already owns, and a name for where it
+# sits rather than what it is. It also meant the workbench's own `.footer`
+# rule in slim-pickins.css styled nothing, because the element was a `.foot`.
+footer
+  fact words, .word_count
+  fact conventions, .convention_count
+  fact promises, .promise_count
+  note quiet, "One sentence: word arguments. Indentation nests it."
