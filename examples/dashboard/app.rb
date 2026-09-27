@@ -54,7 +54,7 @@ module DashboardPort
     end
 
     helpers do
-      # The original layout's active-link rule: @nav wins, then the view and
+      # The original tin's active-link rule: @nav wins, then the view and
       # path rules. For /triage none of them fire — the port matches.
       def nav_here?(section)
         return true if @nav == section

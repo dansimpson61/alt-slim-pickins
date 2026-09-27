@@ -626,7 +626,7 @@ end
       contract shape: :document, lazy: []
 
       def evaluate
-      raise Error, '`contents` belongs in a layout' unless contents_stowed?
+      raise Error, '`contents` belongs in a tin' unless contents_stowed?
 
       take_contents&.each { |n| emit_node(n) }
 

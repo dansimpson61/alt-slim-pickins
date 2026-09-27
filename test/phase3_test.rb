@@ -63,7 +63,7 @@ class Phase3Test < Minitest::Test
 
   def test_contents_outside_a_layout_is_an_error
     error = assert_raises(SlimPickins::Error) { render("page account\n  contents\n", account: {}) }
-    assert_match(/\A`contents` belongs in a layout\n/, error.message)
+    assert_match(/\A`contents` belongs in a tin\n/, error.message)
   end
 
   # --- partials as app-defined words ------------------------------------

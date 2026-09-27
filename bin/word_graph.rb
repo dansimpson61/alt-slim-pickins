@@ -12,7 +12,7 @@
 # applied. The proposed half is a drawing of a plan, not a measurement, and
 # every node it invents is marked as such.
 #
-# There is no JavaScript. The layout is computed here, the edges are static
+# There is no JavaScript. The geometry is computed here, the edges are static
 # SVG, and the interaction is `:hover` and `:checked` — Ruby > CSS > JS, in
 # that order of reach.
 
@@ -171,7 +171,7 @@ module WordGraph
       # empowered to write `tag div, class: "flex"` when they need it,
       # rather than being blocked by the framework's distrust.
       #
-      # Because `tag` is public, almost every structural and layout 
+      # Because `tag` is public, almost every structural and visual 
       # word in the language becomes a .sp partial built on top of it.
       #
       #   box        ->  tag div
@@ -188,11 +188,11 @@ module WordGraph
     RUBY
   end
 
-  # --- layout ------------------------------------------------------------
+  # --- geometry ----------------------------------------------------------
   #
   # Layered: a word sits one level above the highest word it composes over,
   # so the floor is literally the floor. Computed here, in Ruby, because a
-  # layout that arrives as data needs no script to place it.
+  # geometry that arrives as data needs no script to place it.
 
   def layers_for(nodes)
     depth = {}

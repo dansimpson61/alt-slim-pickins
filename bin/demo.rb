@@ -16,7 +16,7 @@ html = SlimPickins.render(File.read(File.join(root, 'pages', "#{name}.sp")),
                           path: "pages/#{name}.sp",
                           locals: Fixtures.for(name), library: library)
 
-# The layout's <link> cannot resolve from a file:// URL, so inline it instead.
+# The tin's <link> cannot resolve from a file:// URL, so inline it instead.
 html = html.sub(%r{<link rel="stylesheet"[^>]*>}, "<style>#{css}</style>")
 out = "/tmp/#{name}.html"
 File.write(out, html)

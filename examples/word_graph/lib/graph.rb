@@ -7,11 +7,11 @@ module WordGraph
   # A structural point for shape distribution visualizations.
   ShapePoint = Struct.new(:name, :count, :shape, :description, keyword_init: true) do
     SHAPE_DESCRIPTIONS = {
-      encloses: 'Structural containers that hold child words and define layout boundaries.',
+      encloses: 'Structural containers that hold child words and define tin boundaries.',
       presents: 'Visual leaf elements displaying formatted content, text, numbers, and dates.',
       says: 'Interactive and semantic leaves saying actions, inputs, and state.',
       registers: 'Subordinate words declaring columns, series, options, or items to a gatherer.',
-      document: 'Root layout chrome, page headers, scripts, and stylesheets.',
+      document: 'Root tin chrome, page headers, scripts, and stylesheets.',
       gathers: 'Orchestrating words collecting child registrations into composite structures.',
       iterates: 'Control flow iterating over collections and rebinding subjects.'
     }.freeze

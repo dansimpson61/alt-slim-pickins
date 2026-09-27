@@ -305,7 +305,7 @@ module StudioDocs
   # page context cannot hold. Their examples show context and a note, and
   # carry no Try-it link.
   STRUCTURAL_NOTES = {
-    contents: 'lives in a layout — `contents` marks where the page goes, so it has no standalone try.',
+    contents: 'lives in a tin — `contents` marks where the page goes, so it has no standalone try.',
     children: 'lives in a partial — `children` splices the caller\'s body, so it has no standalone try.'
   }.freeze
 

@@ -33,7 +33,7 @@ module SlimPickins
 
     # The flat token stream, stacked back into a tree. Text and self-closing
     # tags are leaves carrying their own source; everything else is an element
-    # with children, which is the only thing layout needs to know. `VOID` is
+    # with children, which is the only thing the tree walk needs to know. `VOID` is
     # the emitter's own list, read here rather than kept twice.
     def self.structure(html)
       root = []
@@ -59,7 +59,7 @@ module SlimPickins
       spacing_removed(root)
     end
 
-    # Whitespace a previous layout inserted is not content, and laying a
+    # Whitespace a previous pass inserted is not content, and laying a
     # document out twice must not deepen it. A run of spaces with no line
     # break may be a deliberate separator between inline words, so only the
     # runs carrying a break are dropped — and only where an element is being

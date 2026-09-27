@@ -24,7 +24,7 @@ require_relative '../examples/word_graph/lib/graph'
 # renders with the playground's locals and the studio's library; `error`
 # means it named a wall, and the refusal is recorded verbatim, the way the
 # language said it. The palette is curated for order and complete by test:
-# every `.sp` under pages/ and examples/ (a layout is chrome, not a page)
+# every `.sp` under pages/ and examples/ (a tin is chrome, not a page)
 # and the studio's own top-level views is in it, because a census that
 # skips pages understates the demand.
 module StudioPages
@@ -133,7 +133,7 @@ module StudioPages
 
   # `library` is what a *UI's own* page renders with — its frame, its partials.
   # `pages_library` is what a *loaded* page renders with: the sandbox, with no
-  # UI's layout. The distinction is the whole reason a palette page cannot be
+  # UI's tin. The distinction is the whole reason a palette page cannot be
   # rendered inside the workbench's chrome, and it was invisible until the
   # census started measuring the load — every entry went red with "this
   # specimen has no word_count", which is a frame asking a page for its own
@@ -148,7 +148,7 @@ module StudioPages
     end
     pages.map do |id, rel|
       # A UI's own page renders with that UI's library; a *loaded* page renders
-      # with the sandbox, which carries no UI's layout — because that is what
+      # with the sandbox, which carries no UI's tin — because that is what
       # the load gives it. Measuring a loaded page inside the workbench's frame
       # is how every entry went red asking a specimen for `words_count`.
       engine = rel.start_with?('studio/uis/') ? library : (pages_library || library)
@@ -245,7 +245,7 @@ module StudioPages
 
   # A UI's own library: its tin (so `page` infers the frame), its partials,
   # the shared furniture, the example apps' partials so a loaded page renders
-  # end-to-end, and every UI's words. Built per UI because the layout is part
+  # end-to-end, and every UI's words. Built per UI because the tin is part
   # of the library — the page word wraps itself in it — so a UI's frame cannot
   # be borrowed from another UI by accident.
   #

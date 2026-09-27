@@ -22,7 +22,7 @@ module SlimPickins
       @bindings = {}        # `each holding` binds `holding` for reaching out
       @gatherers = []       # the components whose children are declarations
       @lines = []           # the sentence being evaluated, so an error can name it
-      @contents = nil       # the page's own nodes, while a layout renders
+      @contents = nil       # the page's own nodes, while a tin renders
       @head_nodes = []      # words that belong in <head>, wherever they are said
       @nodes = []
       define_app_words
@@ -338,7 +338,7 @@ private :define_app_words
     def bind(name, value) = @bindings[name] = value
     def unbind(name) = @bindings.delete(name)
 
-    # The layout's splice point — the contents word takes what page stowed.
+    # The tin's splice point — the contents word takes what page stowed.
     def stow_contents(nodes) = @contents = nodes
     def contents_stowed? = !@contents.nil?
 
@@ -375,7 +375,7 @@ private :define_app_words
 
     private
 
-    # Every place the grammar's Ruby runs — the page, a partial, the layout.
+    # Every place the grammar's Ruby runs — the page, a partial, the tin.
     # It remembers where, so an error the words raise can be located there.
     def eval_with(ruby, path, source_lines)
       was_path = @path

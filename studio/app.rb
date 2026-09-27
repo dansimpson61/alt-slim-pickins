@@ -44,7 +44,7 @@ helpers do
   end
 
   # The UI's own library, built once per UI per process: it carries the UI's
-  # layout (so `page` wraps itself in the frame), its partials, the example
+  # tin (so `page` wraps itself in the frame), its partials, the example
   # apps' partials, and every UI's words.
   def library
     @libraries ||= {}

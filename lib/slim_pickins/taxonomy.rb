@@ -15,7 +15,7 @@ module SlimPickins
   #      are recognized as naturally blurred rather than artificial silos.
   #   2. Cohesion vs. Split: Every multi-category word is assessed for whether
   #      it represents a unified concept or an overloaded candidate for splitting.
-  #   3. Missing Primitives: Surfaces missing structural layout axioms (e.g. `stack`).
+  #   3. Missing Primitives: Surfaces missing structural axioms (e.g. `stack`).
   #   4. Ad-hoc Anomalies: Pinpoints words that are single-consumer HTML element
   #      leaks (e.g. `figcaption`, `summary`).
   #   5. Visual Tier Idiom: Audits the principle that words describe meaning and
@@ -26,8 +26,8 @@ module SlimPickins
       structural: {
         name: :structural,
         title: 'Structure & Layout',
-        question: 'What is the skeleton, geometry, or layout container?',
-        summary: 'Scaffolding, layout geometry, document regions, and composition slots.'
+        question: 'What is the skeleton — the containers and their order?',
+        summary: 'Scaffolding, document regions, and composition slots.'
       },
       semantic: {
         name: :semantic,
@@ -653,7 +653,7 @@ module SlimPickins
       {
         name: :sidebar,
         tier: :structural,
-        role: 'Two-element layout where one element has intrinsic width and the other fills remaining space',
+        role: 'Two-element arrangement where one element has intrinsic width and the other fills remaining space',
         rationale: 'Common layout pattern currently hand-rolled in apps (e.g. shell in studio).'
       }
     ].freeze
