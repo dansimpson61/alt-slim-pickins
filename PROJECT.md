@@ -56,6 +56,18 @@ status: >-
   spans whose content held three backticks). Fixed at the root, plus the source
   spans; stray backticks across all fourteen served documents: 20 -> 0, with a
   new invariant test over every served document. All nine gates green, 455 tests.
+  Then dan had the engine limit itself fixed — a code span could contain no
+  backticks, so the fence pattern could not be quoted — and the first attempt
+  was reverted for making things worse. The second was built by diffing the
+  rendered output of all 29 documents against the old renderer at every step,
+  which is how the fix itself was found to be carrying two more defects the old
+  pattern had been hiding: spans welded first-backtick-to-last, and emphasis
+  applied inside code spans. Code is now masked out before links and emphasis
+  are read. Four spans in DEMAND and DAYTRIP-0.4.0f had delimiters their content
+  could not pair with and were given ones it can. 462 tests. The invariant that
+  would have caught all of it — no backtick in the prose around a code element —
+  now measures exactly that, having first been written too crudely to tell
+  content from a leak.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
@@ -68,14 +80,8 @@ next_step: >-
   stale 2rem fallback inside DesignIdiom's own generated CSS (inert only
   because assets/workbench.css sets the real value). The live studio on :4580
   needs a hand restart to serve the two new guides — this sandbox runs its own
-  PID namespace and cannot signal that process. One engine limit remains open,
-  deliberately: a code span whose content contains three backticks cannot be
-  written at all (the span matcher reads only single-backtick delimiters), so
-  such a sentence must describe the fence rather than quote it. Teaching the
-  engine CommonMark's equal-length rule was attempted this round and reverted —
-  the naive scanner halved LORE.md's code spans and left more stray backticks
-  than it fixed, so it is not a change to make without its own careful round.
-  Package D remains valid and unstarted.
+  PID namespace and cannot signal that process. Package D remains valid and
+  unstarted.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

@@ -1162,3 +1162,45 @@ immediately.
 
 Verification: all nine gates green, suite 455 runs / 5,672 assertions / 0
 failures. Two further commits.
+
+### Addendum 5 — the engine limit itself (same day)
+
+The previous addendum recorded a limit and declined to fix it: a code span
+could contain no backticks, so a sentence that had to quote three of them —
+starting with this repository's own fence pattern — was described instead of
+quoted. dan's instruction was to fix it, and the instruction was right: a
+grammar you cannot quote in your own documentation is a defect, not a
+boundary.
+
+**The first attempt was reverted.** A scanner implementing CommonMark's
+equal-length rule left *more* stray backticks than the pattern it replaced (22
+against 20) and cut LORE.md's code spans from 913 to 478. The cause was
+`String#index` finding the first backtick of a run rather than the first run of
+the required length, so a two-backtick span closed on the first backtick of a
+three-run. The reason it was caught at all: the change was diffed against the
+old renderer over all 29 documents, which the earlier attempt had not been.
+
+**The second attempt is what shipped, and the diff found more than the goal.**
+Two defects had been hiding behind the old pattern:
+
+1. It paired the first backtick with the last, so a run of separate spans was
+   welded into one whose content spanned both of them.
+2. Emphasis was applied to the finished string, so bold markers inside a code
+   span rendered bold — the page saying something the document does not.
+
+Code is now masked out before links and emphasis are read, which is also what
+lets a link's text be a code span and lets bold wrap one. Four spans in
+`DEMAND.md` and `DAYTRIP-0.4.0f.md` used a delimiter their content contained
+and were given one it can pair with; `LORE.md`'s fence-quoting span is restored
+to its original form, since the workaround existed only because the engine
+could not render it.
+
+**The instrument needed fixing too.** `GuideRenderingTest` asserted that no
+backtick survives rendering, which was true while a backtick could only be a
+failed delimiter. The moment the engine could quote backticks it read a correct
+document as broken. The invariant is now stated exactly: a backtick inside a
+code element is content; only a backtick in the prose *around* code means a
+span never closed.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures, every guide fetched and confirmed to leak nothing. Two commits.
