@@ -119,7 +119,9 @@ this as money* and the formatting belongs to the word.
 - **[docs/SPIFF.md](docs/SPIFF.md)** — Spiff, the design idiom: the
   spatial companion language a `.spiff` file is written in, and the lexicon of
   its words. `check_spiff.rb` holds every compiled-CSS example in it to
-  the compiler, in both directions.
+  the compiler, and `check_spiff_scope.rb` holds every zone it names to the
+  pages that must render it — a selector matching nothing real is a defect,
+  however short it is.
 
 Two directories hold what is consulted rather than read:
 [history/](history/README.md) is roadmap 0.1 — its eight phase records and the
@@ -187,7 +189,7 @@ Living vitals are computed directly from the repository tree by `SlimPickins::Ce
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
 Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
-ruby check_styles.rb && ruby check_spiff.rb &&
+ruby check_styles.rb && ruby check_spiff.rb && ruby check_spiff_scope.rb &&
 ruby bin/check_promises.rb && ruby bin/check_conventions.rb &&
 ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb &&
 ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
