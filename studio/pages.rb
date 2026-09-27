@@ -590,18 +590,16 @@ module StudioPages
     "<div style='color: red; padding: 1rem;'><strong>Error:</strong> #{CGI.escapeHTML(error.message)}</div>"
   end
 
-  def self.design_for(rel)
+  # The Spiff a loaded page is presented by. The *precedence* — a page's own
+  # document before its app's — belongs to the language, in
+  # `Library.spiff_for`, because the tin resolves by the same rule one layer
+  # up. What stays here is only the studio's own business: where a loaded
+  # page's app keeps its views.
+  def self.design_for(rel, app: nil)
     return '' unless rel
 
-    actual_path = PAGES[rel] || rel
-    dir = File.dirname(File.dirname(actual_path))
-    companion = File.expand_path("../#{dir}/#{File.basename(dir)}.spiff", __dir__)
-    return File.read(companion) if File.file?(companion)
-
-    direct = File.expand_path("../#{actual_path.sub(/\.sp\z/, '.spiff')}", __dir__)
-    return File.read(direct) if File.file?(direct)
-
-    ''
+    actual_path = File.expand_path("../#{PAGES[rel] || rel}", __dir__)
+    SlimPickins::Library.spiff_for(File.basename(actual_path, '.sp'), path: actual_path, app: app).to_s
   end
 
   # The studio's render contract — one response, both panes. The visual is

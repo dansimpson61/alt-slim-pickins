@@ -41,6 +41,29 @@ module SlimPickins
        File.join(File.dirname(dir), "#{outer}.tin")].find { |path| File.file?(path) }
     end
 
+    # Where a directory's views are: the directory itself when it holds `.sp`
+    # files (a studio UI keeps its pages in `views/`, and is handed the root),
+    # else a `views/` beneath it (an example app). One reading, used by both
+    # `from` and the per-view lookups so a page and its tin are never found by
+    # two different rules.
+    def self.views_dir(dir)
+      dir = File.expand_path(dir)
+      return dir unless Dir[File.join(dir, '*.sp')].empty?
+
+      nested = File.join(dir, 'views')
+      Dir.exist?(nested) ? nested : dir
+    end
+
+    # Every view that carries its own tin, by view name. A view's tin is
+    # `<view>.tin` beside the app's, and it beats the app's — presentation may
+    # be decided once for the app or once for one page, and the page's word
+    # wins. Read in one glob so the name and the source cannot drift.
+    def self.view_tins(dir)
+      Dir[File.join(views_dir(dir), '*.tin')].to_h do |path|
+        [File.basename(path, '.tin'), File.read(path)]
+      end
+    end
+
     def self.from(dir, words: nil)
       dir = File.expand_path(dir)
       frame_path = tin_path(dir)
@@ -52,6 +75,7 @@ module SlimPickins
         partial_paths[name] = path
       end
       new(tin: (File.read(frame_path) if frame_path),
+          tins: view_tins(dir),
           partials: partials, partial_paths: partial_paths, words: words,
           dir: dir)
     end
@@ -61,8 +85,9 @@ module SlimPickins
     # delegate to each other — written in Ruby because the thing they render
     # has no word yet. See Builder's "escape hatch" section for the surface
     # they may use.
-    def initialize(tin: nil, partials: {}, partial_paths: {}, words: nil, dir: nil)
+    def initialize(tin: nil, tins: {}, partials: {}, partial_paths: {}, words: nil, dir: nil)
       @tin = tin
+      @tins = tins
       @dir = dir
       app_partials = partials.transform_keys(&:to_sym)
       vocabulary = self.class.builtin_partials
@@ -108,6 +133,60 @@ module SlimPickins
     def word?(name) = @partials.key?(name)
 
     def source_for(name) = @partials.fetch(name)
+
+    # The tin a page wears: its own if it has one, else the app's.
+    #
+    # This is the only place the rule lives. It used to live in the studio, so
+    # the language did not know a page could have its own chrome and only the
+    # studio could find the document that said so.
+    def tin_for(view = nil)
+      return @tin unless view
+
+      @tins.fetch(view.to_s) { @tin }
+    end
+
+    # The Spiff a page is presented by: `[view].spiff` beside it, else the
+    # app's companion — the same rule as the tin, in the same place, so a page
+    # and its presentation are never found by two different rules.
+    #
+    # A class method because it needs no library: the lookup reads two files
+    # and is asked on every page load, while building a `Library` compiles the
+    # whole vocabulary. Reading what a page is presented by should not cost
+    # that.
+    #
+    # `nil` when neither exists, which is a real state: a page with nowhere to
+    # say how it sits is not an error, it wears the stylesheet as it is.
+    def self.spiff_for(view = nil, path: nil, app: nil)
+      found = view_spiff(view, path) || app || app_spiff(path)
+      found && File.read(found)
+    end
+
+    # A companion written for one view, beside that view. The names tried are
+    # the view's own and its directory's, because a view is named either by
+    # its file (`index.sp`) or by the app it belongs to (`doc_reader`), and a
+    # `[name].spiff` is written under one of those.
+    def self.view_spiff(view, path)
+      dir = path ? File.dirname(path.to_s) : nil
+      return nil unless dir
+
+      [view, File.basename(dir)].compact.uniq.reject(&:empty?)
+                                 .map { |name| File.join(dir, "#{name}.spiff") }
+                                 .find { |file| File.file?(file) }
+    end
+
+    # An app's own companion, named for the app: beside the views
+    # (`dashboard/views/dashboard.spiff`) or one level up
+    # (`doc_reader/doc_reader.spiff`, where the app's directory holds the
+    # views).
+    def self.app_spiff(path)
+      return nil unless path
+
+      dir = File.dirname(path.to_s)
+      inner = File.basename(dir)
+      outer = File.basename(File.dirname(dir))
+      [File.join(dir, "#{inner}.spiff"),
+       File.join(File.dirname(dir), "#{outer}.spiff")].find { |file| File.file?(file) }
+    end
 
     # Render a named page or partial directly from this library.
     def render(name, locals: {}, helpers: nil, filter: nil)

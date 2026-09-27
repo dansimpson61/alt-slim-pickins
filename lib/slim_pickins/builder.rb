@@ -356,18 +356,24 @@ private :define_app_words
     # the tin never repeats it. No tin at all is a real answer: the page is
     # standalone and carries its own chrome.
     #
+    # Which tin is the library's business, not the builder's — a page may wear
+    # its own (`[view].tin`) instead of its app's (`[app].tin`), and the rule
+    # for that lives in one place rather than here.
+    #
     # An error in the tin names the tin, not the page — `tin` when the library
     # was built in memory and there is no file to name, which is honest: there
     # is no path, and inventing one would send a reader looking for a file
     # that never existed.
     def wrapped_in_tin(&block)
-      return capture(&block) unless @library&.tin
+      view = @path && File.basename(@path.to_s, '.sp')
+      tin = @library&.tin_for(view)
+      return capture(&block) unless tin
 
       stow_contents(capture(&block))
-      path = @library.dir ? "#{File.basename(@library.dir)}.tin" : 'tin'
-      compilation = Compilation.of(@library.tin, path)
+      path = @library.dir ? "#{view || File.basename(@library.dir)}.tin" : 'tin'
+      compilation = Compilation.of(tin, path)
       compilation.refuse!(path)
-      nodes = capture { eval_with(compilation.ruby, path, @library.tin.lines) }
+      nodes = capture { eval_with(compilation.ruby, path, tin.lines) }
       raise Error, 'this tin never says `contents`' if @contents
 
       nodes
