@@ -28,6 +28,8 @@ page "Directional Roth Conversion Sketch"
 
   footer "This tool provides approximate directional estimates. It omits many tax nuances (credits, deductions, capital gains, phaseouts, state tax). Use for planning ranges only."
 
-  stylesheet "/assets/slim-pickins.css"
-  stylesheet "/css/roth.css"
+  # The stylesheets are not said: the language's own comes to every page, and
+  # `/css/roth.css` is this app's own, found by convention and announced
+  # because `Library.from` was told where its public directory is served. The
+  # script has no convention yet, so it is still said.
   script "/js/app.js"

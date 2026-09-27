@@ -335,6 +335,21 @@ private :define_app_words
 
     def in_head(node) = @head_nodes << node
 
+    # The page's view name, as the tin and Spiff lookups know it.
+    def view_name = @path && File.basename(@path.to_s, '.sp')
+
+    # The stylesheets a page gets without saying so, in precedence order:
+    # slim-pickins' own, then the view's `[view].css` if it has one, else the
+    # app's `[app].css`.
+    #
+    # A page that says `stylesheet` itself is not overruled — its word is
+    # said later and lands later in the head — so this is a default and not a
+    # replacement. The vocabulary covers the shape; reaching past it is the
+    # escape hatch.
+    def inferred_stylesheets
+      @library ? @library.stylesheets_for(view_name, path: @path, url: @library.public_url) : []
+    end
+
     def bind(name, value) = @bindings[name] = value
     def unbind(name) = @bindings.delete(name)
 

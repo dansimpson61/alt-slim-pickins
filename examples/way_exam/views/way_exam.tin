@@ -1,4 +1,3 @@
-stylesheet "/assets/slim-pickins.css"
 nav
   link home, "The Way Exam", to: "/"
   link examine, "Take Exam", to: "/"

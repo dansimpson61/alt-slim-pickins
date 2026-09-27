@@ -14,7 +14,7 @@ module SlimPickins
   # idiom now owns; a tin is the modest metal over the building, and
   # `[name].tin` sits beside `[name].spiff` as one concern per file.
   class Library
-    attr_reader :tin, :partials, :words, :app_partials, :dir
+    attr_reader :tin, :partials, :words, :app_partials, :dir, :public_url
 
     # The language's own vocabulary, written as partials — the dogfood made
     # visible: new words are drafted in the language itself, in
@@ -64,7 +64,7 @@ module SlimPickins
       end
     end
 
-    def self.from(dir, words: nil)
+    def self.from(dir, words: nil, public_url: nil)
       dir = File.expand_path(dir)
       frame_path = tin_path(dir)
       partials = {}
@@ -77,7 +77,7 @@ module SlimPickins
       new(tin: (File.read(frame_path) if frame_path),
           tins: view_tins(dir),
           partials: partials, partial_paths: partial_paths, words: words,
-          dir: dir)
+          dir: dir, public_url: public_url)
     end
 
     # `words:` is the escape hatch: one module whose methods become words —
@@ -85,9 +85,11 @@ module SlimPickins
     # delegate to each other — written in Ruby because the thing they render
     # has no word yet. See Builder's "escape hatch" section for the surface
     # they may use.
-    def initialize(tin: nil, tins: {}, partials: {}, partial_paths: {}, words: nil, dir: nil)
+    def initialize(tin: nil, tins: {}, partials: {}, partial_paths: {}, words: nil, dir: nil,
+                   public_url: nil)
       @tin = tin
       @tins = tins
+      @public_url = public_url
       @dir = dir
       app_partials = partials.transform_keys(&:to_sym)
       vocabulary = self.class.builtin_partials
@@ -186,6 +188,60 @@ module SlimPickins
       outer = File.basename(File.dirname(dir))
       [File.join(dir, "#{inner}.spiff"),
        File.join(File.dirname(dir), "#{outer}.spiff")].find { |file| File.file?(file) }
+    end
+
+    # An app's stylesheets live in its own public directory, named for what
+    # they style: `public/css/[app].css`, or `public/css/[view].css` for one
+    # view. The view's word wins, as it does for tins and Spiffs.
+    #
+    # This is roth's layout, which is the only app that has ever had styles of
+    # its own — `public/css/roth.css` — so the convention was read off a
+    # working example rather than invented and then found unservable.
+    #
+    # A page gets the app's or its own *only when the app says where its public
+    # directory is served*. The on-disk convention is one rule; the URL is not
+    # derivable from it, because each app hands Sinatra a different public
+    # folder (an example hands it the repo root, so its files are served under
+    # `examples/…`; roth hands it its own `public/`). Emitting a guessed URL
+    # would be a stylesheet the app cannot serve, which is worse than no line
+    # at all.
+    def self.public_dir(path)
+      return nil unless path
+
+      dir = File.dirname(path.to_s)
+      base = File.basename(dir) == 'views' ? File.dirname(dir) : dir
+      candidate = File.join(base, 'public')
+      Dir.exist?(candidate) ? candidate : nil
+    end
+
+    # The style a page wears of its own or its app's: `[view].css` first, then
+    # `[app].css`, in the app's public directory.
+    def self.own_stylesheet(view, path, public_dir: nil)
+      public_dir ||= self.public_dir(path)
+      return nil unless public_dir && view
+
+      app = File.basename(File.dirname(public_dir))
+      [view, app].uniq.map { |name| File.join(public_dir, 'css', "#{name}.css") }
+                    .find { |file| File.file?(file) }
+    end
+
+    # The stylesheets a page gets without saying so, in precedence order:
+    # slim-pickins' own, then the page's or its app's.
+    #
+    # The base is the language's and every page has it, so it is never looked
+    # for. The other is found only if it exists — and only announced when
+    # `public_url` says where the app serves its public directory, so silence
+    # stays the normal case and never costs a 404.
+    BASE_STYLESHEET = '/assets/slim-pickins.css'
+
+    def stylesheets_for(view, path: nil, public_dir: nil, url: nil)
+      return [BASE_STYLESHEET] unless url
+
+      own = self.class.own_stylesheet(view, path, public_dir: public_dir)
+      # `File.join` answers `"/css/roth.css"` for both an empty prefix (roth,
+      # which serves its `public/` at its root) and `"/public"`, where a naive
+      # join leaves a doubled slash.
+      [BASE_STYLESHEET, own && File.join(url.to_s, 'css', File.basename(own))].compact
     end
 
     # Render a named page or partial directly from this library.

@@ -50,7 +50,13 @@ module Roth
     # ignored and `run!` takes 4567 — which roth itself is usually holding.
     set :port, ENV.fetch('PORT', 4577).to_i
 
-    SlimPickins::Template.libraries[settings.views] = SlimPickins::Library.from(settings.views)
+    # roth serves its own `public/` at its root, so `public/css/roth.css` is
+    # served at `/css/roth.css` and the prefix is empty. Saying so is what lets
+    # the pages stop declaring their stylesheets: the library finds the app's
+    # own by convention, and announces it only because it knows the URL can be
+    # served.
+    SlimPickins::Template.libraries[settings.views] =
+      SlimPickins::Library.from(settings.views, public_url: '')
 
     # Boot proves the pages: an attribute renamed or removed in the model
     # fails here, naming the line and the attribute — the eleven-month

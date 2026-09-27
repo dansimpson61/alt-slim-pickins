@@ -1,4 +1,3 @@
-stylesheet "/assets/slim-pickins.css"
 nav
   link home, "The Lore Reader", to: "/"
   link timeline, "Timeline", to: "/"

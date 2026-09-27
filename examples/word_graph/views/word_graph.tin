@@ -1,4 +1,3 @@
-stylesheet "/assets/slim-pickins.css"
 nav
   link "The Word Graph", to: "/"
   link "Shapes & Chart", to: "/shapes"

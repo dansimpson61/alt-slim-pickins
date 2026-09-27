@@ -12,6 +12,14 @@ module SlimPickins
         name, title = arguments(@args)
         heading = title || Inference.label(name)
 
+        # The stylesheets a page gets by convention go in first, so anything
+        # the page or its tin says is said later and lands later — a default
+        # that can be overruled by speaking, not a replacement for speaking.
+        # `unshift` on each in order leaves them in order.
+        inferred_stylesheets.each do |path|
+          in_head([:stylesheet, { path: path }, []])
+        end
+
         # The tin runs first, because it may contribute to the head — its
         # stylesheet and its scripts. Reading `head_nodes` before it ran meant
         # a tin's assets never reached the document, which is the one thing a

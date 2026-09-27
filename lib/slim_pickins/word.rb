@@ -121,6 +121,9 @@ end
     def wrapped_in_tin(&block) = @builder.wrapped_in_tin(&block)
     def head_nodes = @builder.head_nodes
     def in_head(node) = @builder.in_head(node)
+
+    # The stylesheets this page gets without saying so, in precedence order.
+    def inferred_stylesheets = @builder.inferred_stylesheets
     def collection_for(name) = @builder.collection_for(name)
     def bind(name, value) = @builder.bind(name, value)
     def unbind(name) = @builder.unbind(name)
