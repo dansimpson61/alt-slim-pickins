@@ -42,7 +42,20 @@ status: >-
   raw-HTML spelling), so they are now markdown headings; and
   design_idiom_discussion.md's twenty backslash escapes rendered their
   backslashes (the engine has no escape either), so they are stripped.
-  Verified by fetching both rendered pages, not by reading the source.
+  Verified by fetching both rendered pages, not by reading the source. Then the
+  remaining guides, and this is where the round's own claim had to be corrected:
+  the earlier count of "raw HTML" in five other guides was wrong — it counted
+  inline code spans that quote HTML on purpose (`renders — a <ul>`), which are
+  correct and stay. Reading the *rendered* output instead of grepping the source
+  found the real defect, and it was in the engine: the list-item renderer called
+  `spans` twice, once for the marker line and once for its continuations, so a
+  code span that wrapped a line never closed and the reader got literal
+  backticks with a stray `<code>` between them. A paragraph with the same text
+  rendered correctly, which is why it survived. Six passages were broken that
+  way; four more in LORE.md had malformed delimiters (a four-backtick span, and
+  spans whose content held three backticks). Fixed at the root, plus the source
+  spans; stray backticks across all fourteen served documents: 20 -> 0, with a
+  new invariant test over every served document. All nine gates green, 455 tests.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
@@ -55,11 +68,13 @@ next_step: >-
   stale 2rem fallback inside DesignIdiom's own generated CSS (inert only
   because assets/workbench.css sets the real value). The live studio on :4580
   needs a hand restart to serve the two new guides — this sandbox runs its own
-  PID namespace and cannot signal that process. One finding this round left
-  unfixed and unruled: five other served guides contain raw HTML that will
-  render as literal text the same way (VOCABULARY.md 17, KERNEL.md 6, LORE.md
-  6, ROADMAP-0.3.md 2, PRIMER.md 1, DAYTRIP.md 1) — the same defect class, and
-  the same one-line class of fix, but on documents no one has looked at yet.
+  PID namespace and cannot signal that process. One engine limit remains open,
+  deliberately: a code span whose content contains three backticks cannot be
+  written at all (the span matcher reads only single-backtick delimiters), so
+  such a sentence must describe the fence rather than quote it. Teaching the
+  engine CommonMark's equal-length rule was attempted this round and reverted —
+  the naive scanner halved LORE.md's code spans and left more stray backticks
+  than it fixed, so it is not a change to make without its own careful round.
   Package D remains valid and unstarted.
 kind: project
 run: ruby examples/roth/app.rb

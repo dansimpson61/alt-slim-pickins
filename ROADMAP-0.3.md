@@ -1113,3 +1113,52 @@ as the next instance of the class.
 
 Verification: all nine gates green, suite 451 runs / 5,666 assertions / 0
 failures. One further commit.
+
+### Addendum 4 — the remaining guides, and an engine bug (same day)
+
+Dan's instruction was to fix the raw HTML in the other served guides. Measuring
+it first was the right move, and it corrected the previous addendum's own claim:
+**the "raw HTML" count was wrong.** `grep -o '<[a-z/][^>]*>'` cannot distinguish
+a tag from a tag quoted inside a code span, and nearly every match was prose
+describing what a word renders — `renders — a <ul>` — which is correct and must
+stay. The real defects were ten, not thirty-three, and two-thirds were in the
+engine.
+
+**The engine bug.** `Markdown.items` called `spans` twice: once for the marker
+line, once for its joined continuations. A code span that wrapped a line was
+therefore cut in half — the opening backtick went to one call, the closing
+backtick to the other, the span never closed, and the reader got literal
+backticks with a stray `<code>` between them. The same text inside a paragraph
+rendered correctly, because a paragraph joins before spanning. Six passages were
+broken that way (VOCABULARY's metric tile, two ROADMAP-0.3 bullets, and others),
+and no reading of the source could have found it — the source is ambiguous by
+construction; what breaks is the pairing. Fixed by reading an item's text as one
+piece.
+
+**The source defects.** Four spans in `LORE.md` had malformed delimiters: a
+four-backtick delimiter around a three-backtick run; spans whose content held
+three backticks (which cannot be written as a single-backtick span at all); and
+three HTML element names that had simply lost their backticks. Where the content
+genuinely cannot live inside a span, the sentence now describes the thing rather
+than drawing it — the same instinct as the `<details>` fix, and the same refusal
+to widen the engine's trust boundary to accommodate a document.
+
+Measured result: stray backticks across all fourteen served documents, 20 → 0,
+verified on the rendered pages of every guide, not in the source.
+
+**Attempted and reverted.** CommonMark's equal-length rule (a span opened by N
+backticks closes at the next run of N) is the principled fix, and it was
+implemented — and it made things worse: 22 stray backticks against the old 20,
+with LORE.md's code spans cut from 913 to 478. Reverted rather than shipped. The
+old single-backtick regex is both too naive and, on this corpus, more forgiving
+than a greedy first-run scanner. A correct version needs its own round and a
+differential harness over every document.
+
+The instrument that would have caught all ten is now in the suite:
+`GuideRenderingTest` asserts over every served document that no backtick
+survives rendering and no HTML element name renders as literal text. It holds
+the output, not the source, and reintroducing the two-call renderer fails it
+immediately.
+
+Verification: all nine gates green, suite 455 runs / 5,672 assertions / 0
+failures. Two further commits.
