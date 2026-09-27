@@ -654,7 +654,7 @@ module SlimPickins
         name: :sidebar,
         tier: :structural,
         role: 'Two-element layout where one element has intrinsic width and the other fills remaining space',
-        rationale: 'Common layout pattern currently hand-rolled in apps (e.g. sidebar_layout in studio).'
+        rationale: 'Common layout pattern currently hand-rolled in apps (e.g. shell in studio).'
       }
     ].freeze
 

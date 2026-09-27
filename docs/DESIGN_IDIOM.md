@@ -57,7 +57,7 @@ Every word in the design idiom models exemplary lexical practice:
 
 ### `surface`
 - **What it is**: The top-level root declaration binding a visual specification to a page or view surface.
-- **What it is for**: Defining the scope of a visual manifesto and naming which of two known container conventions its `stage` targets — `kind: :shell` for an app tool that owns the viewport (the studio workbench: `.sidebar_layout`, the one real shell wrapper this project has), or the default `kind: :document` for a page that flows normally under `body`. `surface` itself compiles to no CSS of its own; `kind` is read once, by the `stage` it encloses.
+- **What it is for**: Defining the scope of a visual manifesto and naming which of two known container conventions its `stage` targets — `kind: :shell` for an app tool that owns the viewport (the studio workbench: `.shell`, the one real shell wrapper this project has, pinned by the emitted `.shell` class), or the default `kind: :document` for a page that flows normally under `body`. `surface` itself compiles to no CSS of its own; `kind` is read once, by the `stage` it encloses.
 - **How to use it**:
   ```
   surface <name>, kind: shell
@@ -130,44 +130,44 @@ body {
 **Compiled CSS**
 
 ```css
-.sidebar_layout {
+.shell {
   grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 }
 
-.sidebar_layout > h1:first-child {
+.shell > h1:first-child {
   grid-column: 1 / -1;
 }
 
-.sidebar_layout > .panes {
+.shell > .panes {
   display: contents;
 }
 
-.sidebar_layout .library,
-.sidebar_layout .editor,
-.sidebar_layout .output {
+.shell .library,
+.shell .editor,
+.shell .output {
   min-height: 0;
   min-width: 0;
 }
 
-.sidebar_layout .library {
+.shell .library {
   grid-column: 1;
 }
 
-.sidebar_layout .editor {
+.shell .editor {
   grid-column: 2;
 }
 
-.sidebar_layout .output {
+.shell .output {
   grid-column: 3;
 }
 
 @container workbench (inline-size < 56rem) {
-  .sidebar_layout {
+  .shell {
     grid-template-columns: 100%;
   }
-  .sidebar_layout .library,
-  .sidebar_layout .editor,
-  .sidebar_layout .output {
+  .shell .library,
+  .shell .editor,
+  .shell .output {
     grid-column: 1;
   }
 }
@@ -217,7 +217,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 
 ```css
 @container workbench (inline-size < 56rem) {
-  .sidebar_layout {
+  .shell {
     grid-template-columns: 100%;
   }
 }

@@ -3,16 +3,16 @@
 # library, and `page` infers this file, so no page mentions the shelf or the
 # assets — which is what "declared once" means here.
 #
-# It is also why a page must *not* say `sidebar_layout` itself: nesting one
-# inside this one wrapped the page in the layout's sidebar column and squeezed
-# the workbench into 250px. The layout owns the two-column frame; a page owns
-# its own work.
+# It is also why a page must *not* say `shell` itself: a page that wrapped one
+# inside this one nested its work in the shell's own grid and squeezed the
+# workbench into a single column. The layout owns the frame; a page owns its
+# own work.
 stylesheet "/assets/slim-pickins.css"
 stylesheet "/assets/workbench.css"
 script "/assets/stimulus.umd.js"
 script "/assets/studio.js"
 main_menu
-sidebar_layout
+shell
   library
   contents
 foot

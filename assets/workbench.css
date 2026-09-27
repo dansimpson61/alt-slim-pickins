@@ -5,7 +5,7 @@ body {
   container-name: workbench;
 }
 
-.sidebar_layout {
+.shell {
   display: grid;
   align-items: stretch;
   padding: clamp(0.5rem, 1.5cqi, 0.875rem);
@@ -13,44 +13,44 @@ body {
   box-sizing: border-box;
 }
 
-.sidebar_layout {
+.shell {
   grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 }
 
-.sidebar_layout > h1:first-child {
+.shell > h1:first-child {
   grid-column: 1 / -1;
 }
 
-.sidebar_layout > .panes {
+.shell > .panes {
   display: contents;
 }
 
-.sidebar_layout .library,
-.sidebar_layout .editor,
-.sidebar_layout .output {
+.shell .library,
+.shell .editor,
+.shell .output {
   min-height: 0;
   min-width: 0;
 }
 
-.sidebar_layout .library {
+.shell .library {
   grid-column: 1;
 }
 
-.sidebar_layout .editor {
+.shell .editor {
   grid-column: 2;
 }
 
-.sidebar_layout .output {
+.shell .output {
   grid-column: 3;
 }
 
 @container workbench (inline-size < 56rem) {
-  .sidebar_layout {
+  .shell {
     grid-template-columns: 100%;
   }
-  .sidebar_layout .library,
-.sidebar_layout .editor,
-.sidebar_layout .output {
+  .shell .library,
+.shell .editor,
+.shell .output {
     grid-column: 1;
   }
 }

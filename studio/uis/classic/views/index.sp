@@ -1,5 +1,5 @@
 page "Slim-Pickins Studio"
-  sidebar_layout
+  shell
     vocabulary
     split_pane
       editor

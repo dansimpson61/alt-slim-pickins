@@ -225,13 +225,13 @@ module SlimPickins
 
       class StageBuilder < BaseBuilder
         # The one real selector per surface kind. Both are already-real,
-        # already-scoped classes/elements — `.sidebar_layout` because this
+        # already-scoped classes/elements — `.shell` because this
         # project's own app_class convention makes it real, `body` because a
         # document-kind surface's zones sit under it directly and a compiled
         # stylesheet is only ever loaded by the pages that need it. Neither
         # guesses; a third surface kind earns a third entry when it exists,
         # not before.
-        KIND_WRAPPERS = { shell: '.sidebar_layout', document: 'body' }.freeze
+        KIND_WRAPPERS = { shell: '.shell', document: 'body' }.freeze
 
         # A container query cannot reliably restyle the element that
         # establishes it — verified empirically (isolated reproduction,
@@ -239,7 +239,7 @@ module SlimPickins
         # name (...) { body { grid-template-columns: 100%; } }` never
         # matches, at any width, in this browser. Splitting the query onto
         # the wrapper's real parent (which already exists — no new markup)
-        # fixes it. Each `KIND_WRAPPERS` entry needs one: `.sidebar_layout`
+        # fixes it. Each `KIND_WRAPPERS` entry needs one: `.shell`
         # sits directly under `body` (`layout.sp`); `body` sits directly
         # under `html`, always.
         KIND_CONTAINER_PARENTS = { shell: 'body', document: 'html' }.freeze

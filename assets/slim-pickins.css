@@ -50,7 +50,7 @@
   --mark-size: 0.6em;
   --mark-weight: 2px;
   --measure: 68ch;
-  --sidebar-width: 250px;
+  --shelf-width: 250px;
   --chrome-height: 120px;
   /* The workbench's own real estate: a shelf wide enough for a word's
      contract, and the two bars the frame carries — the menu above the work
@@ -424,9 +424,9 @@ time { color: var(--ink-soft); }
   height: 100%;
 }
 
-.sidebar_layout {
+.shell {
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-columns: var(--shelf-width) 1fr;
   grid-template-rows: minmax(0, 100%);
   gap: var(--gap);
   height: calc(100vh - var(--chrome-height));
@@ -615,11 +615,11 @@ time { color: var(--ink-soft); }
    said once in the stylesheet instead of in a page. */
 
 /* The frame: the shelf is a column that never competes, and the work takes
-   what is left — the same two-column idea `.sidebar_layout` already means,
+   what is left — the same two-column idea `.shell` already means,
    with this UI's own shelf width. The id is on the layout element by design
    and the workbench is the layout that holds a `.library`, so that is what
    the selector asks. */
-body:has(> .sidebar_layout) {
+body:has(> .shell) {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -628,7 +628,7 @@ body:has(> .sidebar_layout) {
   background: var(--canvas);
 }
 
-body:has(> .sidebar_layout) > h1:first-child {
+body:has(> .shell) > h1:first-child {
   display: none;
 }
 

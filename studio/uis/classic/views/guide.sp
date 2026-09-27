@@ -1,6 +1,6 @@
 page .title
   stylesheet "/assets/slim-pickins.css"
-  sidebar_layout
+  shell
     vocabulary
     scroll
       prose markdown, .content

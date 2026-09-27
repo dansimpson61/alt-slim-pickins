@@ -178,7 +178,7 @@ class DesignIdiomTest < Minitest::Test
     css = SlimPickins::DesignIdiom.compile(source)
 
     # Surface & Stage grid container
-    assert_includes css, '.sidebar_layout {'
+    assert_includes css, '.shell {'
     assert_includes css, 'container-name: workbench;'
     assert_includes css, 'grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);'
     assert_includes css, 'padding: clamp(0.5rem, 1.5cqi, 0.875rem);'
@@ -259,7 +259,7 @@ class DesignIdiomTest < Minitest::Test
     assert_equal '', SlimPickins::DesignIdiom.compiled_stylesheet('', provenance: 'from a test')
   end
 
-  def test_shell_kind_targets_sidebar_layout_with_no_guessed_selectors
+  def test_shell_kind_targets_the_shell_class_with_no_guessed_selectors
     source = <<~DESIGN
       surface shell_page, kind: shell
         stage
@@ -270,7 +270,7 @@ class DesignIdiomTest < Minitest::Test
     DESIGN
 
     css = SlimPickins::DesignIdiom.compile(source)
-    assert_includes css, '.sidebar_layout {'
+    assert_includes css, '.shell {'
     assert_includes css, '.left_col {'
     refute_includes css, '.stage-'
     refute_includes css, '.surface-'
@@ -288,7 +288,7 @@ class DesignIdiomTest < Minitest::Test
 
     css = SlimPickins::DesignIdiom.compile(source)
     assert_includes css, 'body {'
-    refute_includes css, '.sidebar_layout'
+    refute_includes css, '.shell'
     refute_includes css, '.stage-'
     refute_includes css, '.surface-'
   end
@@ -306,8 +306,8 @@ class DesignIdiomTest < Minitest::Test
     DESIGN
     assert_includes shell_css,
       "body {\n  container-type: inline-size;\n  container-name: shell_page;\n}"
-    sidebar_layout_block = shell_css[/\.sidebar_layout \{([^}]*)\}/, 1]
-    refute_includes sidebar_layout_block, 'container-type'
+    shell_block = shell_css[/\.shell \{([^}]*)\}/, 1]
+    refute_includes shell_block, 'container-type'
 
     document_css = SlimPickins::DesignIdiom.compile(<<~DESIGN)
       surface document_page

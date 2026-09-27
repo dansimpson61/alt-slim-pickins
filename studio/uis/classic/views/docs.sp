@@ -1,5 +1,5 @@
 page .title
-  sidebar_layout
+  shell
     vocabulary
     split_pane
       scroll
