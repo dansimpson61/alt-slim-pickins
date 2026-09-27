@@ -1321,3 +1321,53 @@ updated with it.
 
 Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
 failures. Two commits.
+
+### Addendum 9 — the term "layout" retired, step 1 of the tin (same day)
+
+The audit's third item, and the one the design idiom's founding discussion
+asked for. "Layout" had two referents: the visual arrangement, which the
+design idiom already replaced with `surface`/`stage`/`flank`/`zone`/`air`,
+and the chrome-with-a-hole that `page` infers. Only the second survived, and
+it now has its own word.
+
+**dan's naming, and it is a better pair than either candidate:** `[app].tin`
+beside `[app].design` beside the app's `[view].sp`. A tin is the modest metal
+over the building; the design is how it looks; the views are what is inside.
+One concern per file, each named for its concern — the shape dan asked for,
+now on disk.
+
+Step 1, the convention:
+
+- Nine files renamed `layout.sp` → `[app].tin`.
+- `Library#layout` → `Library#tin`; `Library.from` resolves `[app].tin` beside
+  the app's views, accepting either the app directory or its `views/` (the
+  studio UIs keep the frame at the UI root, the example apps at
+  `<app>/views/`); `merge_libraries(tin:)`; `Builder#wrapped_in_tin`.
+- The `:layout` convention → `:tin`, marker `wrapped_in_tin`, and
+  `VOCABULARY.md` and `PRIMER.md` follow — tier 1 is now "Structure", since
+  "layout" belonged to the tier's old name too.
+- **The checkers, boot and docs corpora learned `.tin`.** They globbed `.sp`;
+  left alone they would have kept passing while silently no longer reading the
+  nine frames. That the vocabulary's `contents` lost its only real example is
+  what surfaced it, not any direct check.
+- A tin that does not exist stays a real answer: roth's views have none and
+  its page carries its own chrome, which `Library.tin_path` returning nil
+  records. The specs' in-memory tins therefore report themselves as `tin` in
+  an error rather than a path — there is no file, and inventing one would send
+  a reader looking for it.
+- "Layout" survives only where it is accurate: the visual or structural sense
+  (`2D grid layout`, `layout primitive`). Three comments that used it for
+  neither were fixed rather than renamed — an object tree is not a layout, and
+  Sinatra's own `layout: false` is Sinatra's word.
+
+**Scoped and waiting, one at a time as dan asked:** step 2, per-view
+`[view].tin`/`[view].design` resolution — lifted from the studio's
+`design_for` into `Library`/`Builder`, and the precondition for any gate
+holding `.sp` to `.design`, of which there is none today. Step 3, asset
+inference by convention (`slim-pickins.css`, `[app].css`, `[view].css`), the
+two-tier shape `design_for` already implements.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures, every tin resolving (nine), both studio UIs rendering live, and the
+roth app booting with no tin by design. Three commits, one of which removes a
+scratch file that rode along.

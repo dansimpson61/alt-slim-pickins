@@ -104,25 +104,39 @@ status: >-
   the name; the two per-UI layout rules stay separate because they genuinely
   differ (classic is a real grid, the workbench dissolves the wrapper so the
   shell places the zones). Verified in a live browser on both UIs. Census
-  105 -> 104 rules; README and HANDOFF updated. Remaining from the audit,
-  awaiting dan's word: a `classic.design` to give the classic UI's presentation
-  its proper home, and retiring the term "layout" from nine `layout.sp` files.
-  No active thread otherwise: the three 0.4.0g items below still stand, and
-  Package D is still valid and unstarted.
+  105 -> 104 rules; README and HANDOFF updated. Then the third: the term
+  "layout" is retired from the language. It had named two things — the visual
+  arrangement, which the design idiom already took over with
+  `surface`/`stage`/`flank`/`zone`/`air`, and the chrome-with-a-hole that
+  `page` infers — and dan named the second `tin`, pairing with `.design` the
+  way the files pair on disk: `[app].tin` is the metal over the building,
+  `[app].design` is how it looks, `[view].sp` is what is inside. Nine files
+  became `[app].tin`; `Library#layout` → `#tin`; the `:layout` convention →
+  `:tin`; `wrapped_in_layout` → `wrapped_in_tin`; the checkers, boot and docs
+  corpora learned `.tin` (they globbed `.sp` and would otherwise have silently
+  stopped reading the frames); and "layout" survives only where it is accurate
+  — the visual or structural sense, which is the design idiom's. Roth's views
+  have no tin, which is a real answer: that page carries its own chrome, and
+  `Library.tin_path` returning nil records it. All nine gates green, 462
+  tests, every tin resolving, both UIs rendering live.
 last_touched: 2026-09-26
 next_step: >-
-  No active thread. Three items stand as dan's own call from 0.4.0g, still
-  waiting for a token ground-truthing daytrip rather than piecemeal patches:
-  collapse: tight's 26rem threshold and balance: subordinate's 14rem lead floor
-  (one question — real values for the .design collapse/balance scale, measured
-  against real embedding widths); output's independent height under presence:
-  steady (full three-way row parity needs that calc moved from the zone to the
-  stage/row level); and --footer-height, whose hardcoded 2.8rem still has a
-  stale 2rem fallback inside DesignIdiom's own generated CSS (inert only
-  because assets/workbench.css sets the real value). The live studio on :4580
-  needs a hand restart to serve the two new guides — this sandbox runs its own
-  PID namespace and cannot signal that process. Package D remains valid and
-  unstarted.
+  The tin work is in progress, one step at a time as dan asked. Step 1 (the
+  rename and the convention) is done. Next is step 2, per-view resolution:
+  `[view].tin` falling back to `[app].tin`, and the same for `.design`, lifted
+  from the studio's `design_for` discovery into `Library`/`Builder` so the
+  language knows rather than only the studio. That is also the precondition
+  for the gate dan asked about — whether anything holds `.sp` to `.design` —
+  since today nothing does: the design is discovered studio-side, the page
+  never knows it has one, and no checker cross-checks a design's zones against
+  the elements a page emits. Then step 3, asset inference by convention:
+  `slim-pickins.css`, `[app].css`, `[view].css`, loaded only if they exist,
+  the same two-tier shape `design_for` already uses. Left recorded and
+  unresolved: two byte-identical tins (`pages/pages.tin` and
+  `examples/portfolio/views/portfolio.tin`), which dan chose to leave; and the
+  classic UI still has no `.design`, so its presentation still pools in
+  `slim-pickins.css`. Otherwise no active thread: the three 0.4.0g items below
+  still stand, and Package D is still valid and unstarted.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
