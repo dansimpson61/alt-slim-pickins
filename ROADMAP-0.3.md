@@ -1408,3 +1408,30 @@ since the truth round rewrote that file in place. It was fixed in passing.
 Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
 failures, and a live studio serving the Spiff guide, both shelf entries, the
 "Spiff (.design)" label, and the Spiff status leg. Two commits.
+
+### Addendum 11 — the extension follows the name (same day)
+
+Naming the language left the suffix as the only part still speaking the old
+description, and dan closed that the same day: `.design` → `.spiff`.
+
+| was | is |
+|---|---|
+| `examples/doc_reader/doc_reader.design` | `doc_reader.spiff` |
+| `studio/uis/workbench/workbench.design` | `workbench.spiff` |
+
+So the three files are `[app].spiff` (how it sits), `[app].tin` (the chrome
+with a hole) and `[view].sp` (the substance) — one concern each, each named
+for its concern, and the module, lexicon, gate and suffix all agree.
+
+The change was two lines because the compiler never sees a filename:
+`Spiff.compile` takes a source string, so the suffix is read only by
+`StudioPages.design_for` and by the studio's provenance comment, both of
+which now resolve `[dir]/[dir].spiff` and `[view].spiff`. `.sp` is untouched.
+`check_spiff`'s `Source` struct field `design` became `spiff` for the same
+reason — the struct holds Spiff source.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures, and a live studio compiling the workbench's stylesheet from
+`workbench.spiff` — its provenance comment naming the new path — and reading
+`doc_reader.spiff` into doc_reader's design pane. Two commits, after a first
+attempt that staged nothing because a bad pathspec aborted the `git add`.

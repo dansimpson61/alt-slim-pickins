@@ -126,12 +126,13 @@ status: >-
   entrypoints `.compile` and `.compiled_stylesheet`), the lexicon is
   `docs/SPIFF.md`, the discussion `spiff_discussion.md`, the gate
   `check_spiff.rb`, the status leg `Spiff`, the studio guide `SPIFF`, and the
-  editor's label "Spiff (.design)". The lowercase "design idiom" survives
-  where it explains rather than refers: "Spiff is slim-pickins' design idiom."
-  The file extension stays `.design`, since the language is named and not the
-  format. One latent bug fell out of the sweep: `check_spiff.rb` had carried
-  two copies of its own module comment since the truth round rewrote it in
-  place.
+  editor's label "Spiff (.spiff)". The extension followed the name the same
+  day: `[app].spiff` now sits beside `[app].tin` and the app's `[view].sp`
+  files, so the module, lexicon, gate and suffix all say Spiff and the last
+  three-name disagreement is gone. `.sp` is untouched — the compiler never saw
+  a filename anyway, since `Spiff.compile` takes source. One latent bug fell
+  out of the sweep: `check_spiff.rb` had carried two copies of its own module
+  comment since the truth round rewrote it in place.
 last_touched: 2026-09-26
 next_step: >-
   The tin work is in progress, one step at a time as dan asked. Step 1 (the
