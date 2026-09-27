@@ -13,7 +13,7 @@ class PartialArgsTest < Minitest::Test
 
   def render(source, partials:, **locals)
     SlimPickins.render(source, path: '(test)', locals: locals,
-                       library: SlimPickins::Library.new(layout: nil, partials: partials))
+                       library: SlimPickins::Library.new(tin: nil, partials: partials))
   end
 
   # Compiling a partial registers its word globally (`Compilation.compile_partial`),

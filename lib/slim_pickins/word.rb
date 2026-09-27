@@ -118,7 +118,7 @@ end
     def about(...) = @builder.about(...)
     def prune(...) = @builder.prune(...)
     def empty_active? = @builder.empty_active?
-    def wrapped_in_layout(&block) = @builder.wrapped_in_layout(&block)
+    def wrapped_in_tin(&block) = @builder.wrapped_in_tin(&block)
     def head_nodes = @builder.head_nodes
     def in_head(node) = @builder.in_head(node)
     def collection_for(name) = @builder.collection_for(name)

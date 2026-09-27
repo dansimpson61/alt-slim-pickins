@@ -31,10 +31,10 @@ class StudioPagesTest < Minitest::Test
 
   def test_the_census_is_complete
     expected = Dir[File.join(ROOT, 'pages', '**', '*.sp')]
-               .reject { |f| File.basename(f) == 'layout.sp' } # chrome, not a page
+               .reject { |f| File.basename(f).end_with?('.tin') } # chrome, not a page
                .map { |f| f.sub("#{ROOT}/", '') }
     expected += Dir[File.join(ROOT, 'examples', '**', 'views', '**', '*.sp')]
-                .reject { |f| File.basename(f) == 'layout.sp' } # chrome, not a page
+                .reject { |f| File.basename(f).end_with?('.tin') } # chrome, not a page
                 .map { |f| f.sub("#{ROOT}/", '') }
     # Every UI's pages are in the census, discovered the way the registry
     # discovers them: a UI's page that is missing from the palette is a page
@@ -294,7 +294,7 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_refusal_renders_cleanly_even_with_layout_in_library
-    layout_lib = SlimPickins::Library.new(layout: "box\n  fact words, .words_count\n  contents\n",
+    layout_lib = SlimPickins::Library.new(tin: "box\n  fact words, .words_count\n  contents\n",
                                           partials: {}, words: [])
     html = StudioPages.refusal(SlimPickins::Error.new('custom refusal message'), library: layout_lib)
     assert_includes html, 'note--error'

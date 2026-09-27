@@ -223,11 +223,11 @@ never a keyword, so nothing needs special parsing. Measured across a real
 app's 176 branches, 81% were the two cases this language dissolves — the
 branch, most of the time, was the page failing to name its situation.
 
-## Reuse: a layout and app words
+## Reuse: a tin and app words
 
-A layout is chrome with a hole, written once. `contents` marks the hole, and
-no page mentions the layout — `page` infers it, the same way it infers the
-doctype and the flash:
+A tin is chrome with a hole, written once as `[name].tin`. `contents` marks
+the hole, and no page mentions the tin — `page` infers it, the same way it
+infers the doctype and the flash:
 
 ```
 stylesheet "/assets/slim-pickins.css"
@@ -311,7 +311,7 @@ when genuine repetition demands it.
 
 Authoring in the language proceeds top-down, answering five deductive questions:
 
-1. **Structure & Layout** (*What is the skeleton, geometry, or layout container?*):
+1. **Structure** (*What is the skeleton — the containers and their order?*):
    `page`, `section`, `grid`, `box`, `card`, `list`, `item`, `aside`, `nav`, `footer`, `scroll`, `contents`, `children`.
 2. **Meaning & Domain** (*What does this content mean or represent?*):
    `title`, `heading`, `paragraph`, `prose`, `text`, `span`, `note`, `metric`, `fact`, `table`, `column`, `total`, `money`, `percent`, `number`, `time`, `chart` (`band`, `line`, `level`), `snippet`, `figure`.

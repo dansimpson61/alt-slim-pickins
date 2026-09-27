@@ -49,7 +49,7 @@ module SlimPickins
   # An app boots by proving its pages: every top-level view renders against
   # the locals the app gives it, and the first page the app cannot answer
   # raises — naming the line — so a renamed attribute is a boot error, not an
-  # eleven-month silence. `layout.sp` is chrome, not a page, and partials are
+  # eleven-month silence. `[name].tin` is chrome, not a page, and partials are
   # proven through the pages that include them. A view the block answers
   # nothing for is refused, loudly: an unproven page may not boot either.
   #
@@ -58,7 +58,7 @@ module SlimPickins
   #   end
   def prove!(dir, words: nil, &locals_for)
     library = Library.from(dir, words: words)
-    views = Dir[File.join(dir, '*.sp')].sort.reject { |p| File.basename(p) == 'layout.sp' }
+    views = Dir[File.join(dir, '*.sp')].sort.reject { |p| File.basename(p).end_with?('.tin') }
     raise Error, "no pages to prove in #{dir}" if views.empty?
 
     views.each do |path|

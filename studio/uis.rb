@@ -5,7 +5,7 @@
 # A UI is a directory under `studio/uis/` holding four things and nothing
 # else:
 #
-#   layout.sp     the frame — assets and chrome, declared once, inferred by
+#   [name].tin    the frame — assets and chrome, declared once, inferred by
 #                 `page` (`Library.from` reads it; no page mentions it)
 #   views/        the pages, plus `views/partials/` if the UI has fragments
 #   words.rb      the UI's own vocabulary, a module extending StudioUI
@@ -33,7 +33,7 @@ module Uis
   # might mistake for a hash — which is a mistake this round made twice.
   UI = Struct.new(:name, :dir, :title, :design, :words, :templates, keyword_init: true) do
     # The UI's view directory: its pages and its partials. `Library.from`
-    # reads `layout.sp` and `partials/` from exactly here, so a UI's frame
+    # reads `[name].tin` and `partials/` from exactly here, so a UI's frame
     # and its fragments are its own.
     def views = File.join(dir, 'views')
 

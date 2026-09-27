@@ -8,10 +8,13 @@ module SlimPickins
   # slim-pickins owns the vocabulary of presentation; an app owns the
   # vocabulary of its own components.
   #
-  # A layout is the same idea one level up: the chrome every page shares,
-  # written once, with `contents` marking where the page goes.
+  # A tin is the same idea one level up: the chrome every page shares, written
+  # once as `[name].tin`, with `contents` marking where the page goes. The
+  # word for it used to be "layout", which named the presentation the design
+  # idiom now owns; a tin is the modest metal over the building, and
+  # `[name].tin` sits beside `[name].design` as one concern per file.
   class Library
-    attr_reader :layout, :partials, :words, :app_partials, :dir
+    attr_reader :tin, :partials, :words, :app_partials, :dir
 
     # The language's own vocabulary, written as partials — the dogfood made
     # visible: new words are drafted in the language itself, in
@@ -19,9 +22,28 @@ module SlimPickins
     # is a round-end decision, not an assumption.
     VOCABULARY_DIR = File.expand_path('../vocabulary', __dir__)
 
+    # The frame's home on disk: `[app].tin`, named for the app it frames, so
+    # it sits beside that app's views. Callers reach a library from either
+    # side of the `views/` line — an app boots with its `views/` directory, a
+    # studio UI with the UI's root — so both readings are tried, and each is
+    # named for the app it would belong to: `dashboard/views/dashboard.tin`
+    # when handed the views, `workbench/workbench.tin` when handed the root.
+    #
+    # nil is a real answer — a page may be standalone, and then it carries its
+    # own chrome rather than inheriting one.
+    def self.tin_path(dir)
+      dir = File.expand_path(dir)
+      app = File.basename(dir)
+      outer = File.basename(File.dirname(dir))
+      [File.join(dir, "#{app}.tin"),
+       File.join(dir, 'views', "#{app}.tin"),
+       File.join(dir, "#{outer}.tin"),
+       File.join(File.dirname(dir), "#{outer}.tin")].find { |path| File.file?(path) }
+    end
+
     def self.from(dir, words: nil)
       dir = File.expand_path(dir)
-      layout_path = File.join(dir, 'layout.sp')
+      frame_path = tin_path(dir)
       partials = {}
       partial_paths = {}
       Dir[File.join(dir, 'partials', '*.sp')].each do |path|
@@ -29,7 +51,7 @@ module SlimPickins
         partials[name] = File.read(path)
         partial_paths[name] = path
       end
-      new(layout: (File.read(layout_path) if File.exist?(layout_path)),
+      new(tin: (File.read(frame_path) if frame_path),
           partials: partials, partial_paths: partial_paths, words: words,
           dir: dir)
     end
@@ -39,8 +61,8 @@ module SlimPickins
     # delegate to each other — written in Ruby because the thing they render
     # has no word yet. See Builder's "escape hatch" section for the surface
     # they may use.
-    def initialize(layout: nil, partials: {}, partial_paths: {}, words: nil, dir: nil)
-      @layout = layout
+    def initialize(tin: nil, partials: {}, partial_paths: {}, words: nil, dir: nil)
+      @tin = tin
       @dir = dir
       app_partials = partials.transform_keys(&:to_sym)
       vocabulary = self.class.builtin_partials

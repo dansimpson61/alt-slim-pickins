@@ -2,6 +2,7 @@
 
 require 'minitest/autorun'
 require 'tmpdir'
+require 'fileutils'
 require_relative '../lib/slim_pickins'
 require_relative '../examples/roth/app'
 
@@ -39,7 +40,8 @@ class BootTest < Minitest::Test
 
   def test_boot_proves_every_top_level_view_and_names_each
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'layout.sp'), "nav\n  link home\ncontents\n")
+      FileUtils.mkdir_p(File.join(dir, 'views'))
+      File.write(File.join(dir, 'views', "#{File.basename(dir)}.tin"), "nav\n  link home\ncontents\n")
       File.write(File.join(dir, 'one.sp'), "page one\n  title .name\n")
       File.write(File.join(dir, 'two.sp'), "page two\n  text .blurb\n")
       out, = capture_io do

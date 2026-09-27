@@ -25,7 +25,7 @@ DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md ROADMAP-0.
             BLUESKY.md
             history/ROADMAP-0.1.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +
-         Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')]
+         Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
            .map { |f| f.sub("#{__dir__}/", '') }).freeze
 
 here = File.expand_path(__dir__)
@@ -74,7 +74,7 @@ Dir[File.join(here, '{examples,studio}', '**', '*.rb')].each do |f|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end
-Dir[File.join(here, '{pages,examples,studio}', '**', '*.sp')].each do |f|
+Dir[File.join(here, '{pages,examples,studio}', '**', '*.{sp,tin}')].each do |f|
   app_words |= File.read(f).scan(/^\s*def\s+([a-z_][a-z0-9_]*)/).flatten.to_set
 end
 vocab |= app_words
@@ -217,7 +217,7 @@ end
 # forms that both get written. The corpus and the tests' phrasebook pages are
 # both scanned, because a test that shows the language is documentation.
 old_spelling = 0
-(Dir[File.join(here, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')] +
+(Dir[File.join(here, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')] +
  Dir[File.join(here, 'test', '*.rb')]).each do |path|
   File.readlines(path).each_with_index do |line, i|
     next unless line.match?(/^\s*expects\s.*\b[a-z_]+: true\b/)

@@ -215,10 +215,12 @@ module StudioDocs
               'where the example has no page of its own — edit it to steer ' \
               'the page; a refusal names what is missing.'
 
-  # The corpus every example comes from — the same .sp files check_shape
-  # measures, so an example exists exactly where the language is really used.
+  # The corpus every example comes from — the same files check_shape measures
+  # (`.sp` views and partials, plus the `.tin` frames, which carry words of
+  # their own — `contents`, most of all), so an example exists exactly where
+  # the language is really used.
   def self.corpus_files
-    Dir[File.join(ROOT, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')]
+    Dir[File.join(ROOT, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
   end
 
   # Built once per boot: walking the whole corpus per docs page would be a

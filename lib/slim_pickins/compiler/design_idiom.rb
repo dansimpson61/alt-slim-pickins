@@ -240,7 +240,7 @@ module SlimPickins
         # matches, at any width, in this browser. Splitting the query onto
         # the wrapper's real parent (which already exists — no new markup)
         # fixes it. Each `KIND_WRAPPERS` entry needs one: `.shell`
-        # sits directly under `body` (`layout.sp`); `body` sits directly
+        # sits directly under `body` (`[name].tin`); `body` sits directly
         # under `html`, always.
         KIND_CONTAINER_PARENTS = { shell: 'body', document: 'html' }.freeze
 

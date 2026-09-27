@@ -37,7 +37,7 @@ class GateTest < Minitest::Test
   end
 
   def test_a_violating_partial_names_the_partial
-    library = SlimPickins::Library.new(layout: nil,
+    library = SlimPickins::Library.new(tin: nil,
                                        partials: { test_account_card: "title .name\nmoney name\n" })
     error = assert_raises(SlimPickins::SyntaxError) do
       render("page account\n  test_account_card\n", library: library, account: { name: 'Roth' })
@@ -46,13 +46,13 @@ class GateTest < Minitest::Test
                  error.message)
   end
 
-  def test_a_violating_layout_names_the_layout
-    layout = "money name\ncontents\n"
+  def test_a_violating_tin_names_the_tin
+    tin = "money name\ncontents\n"
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(layout: layout),
+      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(tin: tin),
              account: { name: 'Roth' })
     end
-    assert_match(/\A`money` takes no name — name\n  layout\.sp, line 1\n    money name\z/, error.message)
+    assert_match(/\A`money` takes no name — name\n  tin, line 1\n    money name\z/, error.message)
   end
 
   def test_evaluate_is_gated_too

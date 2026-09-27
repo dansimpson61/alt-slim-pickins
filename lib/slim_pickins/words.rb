@@ -5,18 +5,18 @@ require_relative 'word'
 module SlimPickins
   module Words
     class Page < Word
-      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: [], infers: [:document, :title, :layout]
+      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: [], infers: [:document, :title, :tin]
 
       def evaluate
         favicon = @kwargs.key?(:favicon) ? @kwargs[:favicon] : nil
         name, title = arguments(@args)
         heading = title || Inference.label(name)
 
-        # The layout runs first, because it may contribute to the head — its
+        # The tin runs first, because it may contribute to the head — its
         # stylesheet and its scripts. Reading `head_nodes` before it ran meant
-        # a layout's assets never reached the document, which is the one thing
-        # a layout exists to hold.
-        value, empty, body = about(name) { wrapped_in_layout(&@block) }
+        # a tin's assets never reached the document, which is the one thing a
+        # tin exists to hold.
+        value, empty, body = about(name) { wrapped_in_tin(&@block) }
         emit_node([:page, { heading: heading, head: head_nodes,
                             favicon: favicon },
                    prune(body, empty)])

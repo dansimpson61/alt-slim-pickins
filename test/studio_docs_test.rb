@@ -140,7 +140,7 @@ class StudioDocsTest < Minitest::Test
       examples.each do |ex|
         refute_includes ex.body, "\n", "#{word}'s example is not one sentence"
         refute_empty ex.context, "#{word}'s example has no context"
-        assert_match(/\.sp:\d+\z/, ex.where, "#{word}'s example is uncited")
+        assert_match(/\.(?:sp|tin):\d+\z/, ex.where, "#{word}'s example is uncited")
         next unless ex.try_path # structural words carry a note, not a link
 
         assert_equal "/docs/#{word}?try=#{examples.index(ex)}&ui=classic", ex.try_path

@@ -8,7 +8,7 @@ module SlimPickins
   #
   # Two things are deliberately not Sinatra's job here. The layout is ours —
   # a layout says `contents`, not `yield`, so Sinatra's own layout machinery
-  # is bypassed and `Library` finds `layout.sp` beside the views. And the
+  # is bypassed and `Library` finds `[name].tin` beside the views. And the
   # scope becomes the page's helpers, which is what makes a helper method
   # reachable as `.foo` at the top level.
   class Template < Tilt::Template

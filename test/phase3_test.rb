@@ -16,8 +16,8 @@ class Phase3Test < Minitest::Test
     footer "Made here."
   SP
 
-  def library(layout: LAYOUT, partials: {})
-    SlimPickins::Library.new(layout: layout, partials: partials)
+  def library(tin: LAYOUT, partials: {})
+    SlimPickins::Library.new(tin: tin, partials: partials)
   end
 
   def render(source, library: nil, **locals)
@@ -52,13 +52,13 @@ class Phase3Test < Minitest::Test
                     '<footer class="footer">Made here.</footer>'
   end
 
-  def test_a_layout_that_never_says_contents_is_an_error
+  def test_a_tin_that_never_says_contents_is_an_error
     error = assert_raises(SlimPickins::Error) do
       render("page account\n  title .name\n",
-             library: library(layout: %(footer "Only chrome.")),
+             library: library(tin: %(footer "Only chrome.")),
              account: Account.new(name: 'x', balance: 1))
     end
-    assert_match(/\Athis layout never says `contents`\n/, error.message)
+    assert_match(/\Athis tin never says `contents`\n/, error.message)
   end
 
   def test_contents_outside_a_layout_is_an_error
@@ -72,7 +72,7 @@ class Phase3Test < Minitest::Test
 
   def test_an_app_word_is_invoked_exactly_like_a_built_in
     html = render("page account\n  test_account_card\n",
-                  library: library(layout: nil, partials: { test_account_card: CARD }),
+                  library: library(tin: nil, partials: { test_account_card: CARD }),
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<h2 class="title">Roth</h2>'
     assert_includes html, '$1,500'
@@ -81,7 +81,7 @@ class Phase3Test < Minitest::Test
   def test_an_app_word_takes_the_current_subject
     accounts = [Account.new(name: 'A', balance: 1), Account.new(name: 'B', balance: 2)]
     html = render("page portfolio\n  each account\n    test_account_card\n",
-                  library: library(layout: nil, partials: { test_account_card: CARD }),
+                  library: library(tin: nil, partials: { test_account_card: CARD }),
                   portfolio: { accounts: accounts })
     assert_includes html, '<h2 class="title">A</h2>'
     assert_includes html, '<h2 class="title">B</h2>'
@@ -90,7 +90,7 @@ class Phase3Test < Minitest::Test
   # Same rule as `section`: a name shifts the subject, and must be there.
   def test_an_app_word_may_name_a_subject
     html = render("page portfolio\n  test_account_card best\n",
-                  library: library(layout: nil, partials: { test_account_card: CARD }),
+                  library: library(tin: nil, partials: { test_account_card: CARD }),
                   portfolio: { best: Account.new(name: 'Roth', balance: 9) })
     assert_includes html, '<h2 class="title">Roth</h2>'
   end
@@ -99,7 +99,7 @@ class Phase3Test < Minitest::Test
   def test_a_reader_cannot_tell_an_app_word_from_a_built_in
     builder = SlimPickins::Builder.new(
       SlimPickins::Page.new(locals: {}),
-      library(layout: nil, partials: { test_account_card: CARD })
+      library(tin: nil, partials: { test_account_card: CARD })
     )
     assert builder.respond_to?(:test_account_card)
     assert builder.respond_to?(:section)
@@ -108,7 +108,7 @@ class Phase3Test < Minitest::Test
   def test_an_unknown_word_still_fails_with_its_own_name
     error = assert_raises(SlimPickins::Error) do
       render(%(page account\n  sparkline "x"\n),
-             library: library(layout: nil, partials: { test_account_card: CARD }), account: {})
+             library: library(tin: nil, partials: { test_account_card: CARD }), account: {})
     end
     assert_match(/\Athere is no word `sparkline`\n/, error.message)
   end
@@ -124,9 +124,9 @@ class Phase3Test < Minitest::Test
 
   # --- loading from disk ------------------------------------------------
 
-  def test_a_library_reads_a_layout_and_partials_from_a_directory
+  def test_a_library_reads_a_tin_and_partials_from_a_directory
     lib = SlimPickins::Library.from(File.expand_path('../pages', __dir__))
-    assert lib.layout
+    assert lib.tin
     assert lib.word?(:test_account_card)
     refute lib.word?(:nonexistent)
   end

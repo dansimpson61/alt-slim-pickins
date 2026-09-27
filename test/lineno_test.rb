@@ -46,7 +46,7 @@ class LinenoTest < Minitest::Test
   end
 
   def test_an_error_in_a_partial_names_the_partial_not_the_page
-    library = SlimPickins::Library.new(layout: nil,
+    library = SlimPickins::Library.new(tin: nil,
                                        partials: { test_account_card: "title .name\nmoney .nmae\n" })
     error = assert_raises(SlimPickins::UnknownAttribute) do
       render("page account\n  test_account_card\n", library: library, account: Account.new(name: 'Roth'))
@@ -55,12 +55,12 @@ class LinenoTest < Minitest::Test
                  error.message)
   end
 
-  def test_an_error_in_the_layout_names_the_layout_not_the_page
+  def test_an_error_in_the_tin_names_the_tin_not_the_page
     layout = "nav\n  link home\ntitle .nmae\ncontents\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(layout: layout),
+      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(tin: layout),
              account: Account.new(name: 'Roth'))
     end
-    assert_match(/\Athis account has no nmae\n  layout\.sp, line 3\n    title \.nmae\z/, error.message)
+    assert_match(/\Athis account has no nmae\n  tin, line 3\n    title \.nmae\z/, error.message)
   end
 end

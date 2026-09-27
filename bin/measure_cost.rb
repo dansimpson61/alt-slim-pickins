@@ -35,7 +35,7 @@ end
 
 rows = (1..ROWS).map { |i| Fixtures.account("A#{i}", i, 100, 7_000, 'Pre-tax', []) }
 loop_page = "page p\n  each account\n    test_account_card\n"
-partials = SlimPickins::Library.new(layout: nil, partials: pages.app_partials)
+partials = SlimPickins::Library.new(tin: nil, partials: pages.app_partials)
 SlimPickins.render(loop_page, path: 'x', locals: { p: { accounts: rows } }, library: partials) # warm it
 per_row = ms { 20.times { SlimPickins.render(loop_page, path: 'x',
                                              locals: { p: { accounts: rows } }, library: partials) } } / 20 / ROWS

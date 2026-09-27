@@ -352,16 +352,23 @@ private :define_app_words
     # collection phase needs.
     def evaluate(&block) = nest(&block)
 
-    # The layout is chrome inside the page, so `page` still owns the document
-    # and the layout never repeats it.
-    def wrapped_in_layout(&block)
-      return capture(&block) unless @library&.layout
+    # The tin is chrome inside the page, so `page` still owns the document and
+    # the tin never repeats it. No tin at all is a real answer: the page is
+    # standalone and carries its own chrome.
+    #
+    # An error in the tin names the tin, not the page — `tin` when the library
+    # was built in memory and there is no file to name, which is honest: there
+    # is no path, and inventing one would send a reader looking for a file
+    # that never existed.
+    def wrapped_in_tin(&block)
+      return capture(&block) unless @library&.tin
 
       stow_contents(capture(&block))
-      compilation = Compilation.of(@library.layout, 'layout.sp')
-      compilation.refuse!('layout.sp')
-      nodes = capture { eval_with(compilation.ruby, 'layout.sp', @library.layout.lines) }
-      raise Error, 'this layout never says `contents`' if @contents
+      path = @library.dir ? "#{File.basename(@library.dir)}.tin" : 'tin'
+      compilation = Compilation.of(@library.tin, path)
+      compilation.refuse!(path)
+      nodes = capture { eval_with(compilation.ruby, path, @library.tin.lines) }
+      raise Error, 'this tin never says `contents`' if @contents
 
       nodes
     end

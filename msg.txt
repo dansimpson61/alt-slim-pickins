@@ -1,0 +1,28 @@
+refactor: rename the layout convention to tin
+
+The word "layout" named two different things and had worn out both. The
+design idiom — the visual and spatial arrangement — already retired it in
+favour of `surface`, `stage`, `flank`, `zone`, `air`. What survived was the
+other sense: the chrome with a hole that `page` infers, a file that declared
+its assets, its nav, a `contents` slot and a footer, and nothing else.
+
+That sense now has its own word, and it pairs with `.design` the way the
+files pair on disk: `[app].tin` is the modest metal over the building,
+`[app].design` is how it looks, and the app's `[view].sp` files are what is
+inside. One concern per file, each named for its concern.
+
+Renamed: nine files to `[app].tin`; `Library#layout` to `Library#tin`;
+`Library.from` resolves `[app].tin` beside the app's views, accepting either
+the app directory or its `views/`; `merge_libraries(tin:)`;
+`Builder#wrapped_in_tin`; the `:layout` convention to `:tin` with its marker
+`wrapped_in_tin`; and the checkers, boot, and docs corpora, which globbed
+`.sp` and would otherwise have silently stopped reading the nine frames.
+
+A tin that does not exist is left a real answer rather than an error: roth's
+views have none, and its page carries its own chrome, as `Library.tin_path`
+returning nil records. That is also why the specs' in-memory tins report
+themselves as `tin` in an error rather than a path — there is no file to
+name, and inventing one would send a reader looking for it.
+
+Verified: all nine gates green, suite 462 runs / 5,679 assertions with no
+failures, every tin resolving, and both studio UIs rendering live.

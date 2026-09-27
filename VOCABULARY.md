@@ -72,7 +72,7 @@ condition holds. It is not repeated in the entries below.
 - **modifiers** — `favicon:`
 - **children** — anything
 - **subject** — the named thing
-- **conventions** — `document` — the doctype, html/head/body, the charset and the viewport; `title` — the `<title>` and the top heading, humanised from the name (override: `page portfolio, "Your retirement"`); `layout` — the chrome every page wears, with `contents` marking the hole (override: delete the layout, or move the page)
+- **conventions** — `document` — the doctype, html/head/body, the charset and the viewport; `title` — the `<title>` and the top heading, humanised from the name (override: `page portfolio, "Your retirement"`); `tin` — the chrome every page wears, with `contents` marking the hole (override: delete the tin, or move the page)
 - **infers** — none
 - **renders** — the whole document
 
@@ -98,9 +98,9 @@ rule. It is not a keyword; it is something `page` knows.
 contents
 ```
 
-Only a layout has one, and a layout must have exactly one. It is the single
-word that reuse needed: the chrome is written once, `contents` says where the
-page goes, and no page mentions the layout at all.
+Only a tin has one, and a tin must have exactly one. It is the single
+word that reuse needed: the chrome is written once in `[name].tin`, `contents`
+says where the page goes, and no page mentions the tin at all.
 
 
 ### `stylesheet`

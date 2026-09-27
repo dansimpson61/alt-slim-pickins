@@ -169,7 +169,7 @@ module Fixtures
   end
 
   # Which locals each page in pages/ needs. A page with no entry is not a page
-  # — `layout.sp` is chrome, not something that renders alone.
+  # — `[name].tin` is chrome, not something that renders alone.
   def for(name)
     case name
     when 'portfolio', 'portfolio_table' then { portfolio: portfolio }

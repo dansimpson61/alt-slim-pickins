@@ -36,7 +36,7 @@ module StudioPages
   # Ordered as an argument, exactly like the guides: the repo's own pages
   # first — specimen leads, it is the whole vocabulary on one page — then
   # the example apps, an app's pages before its partials, the studio last.
-  # A layout and the refusal template are chrome, not pages, so they are
+  # A tin and the refusal template are chrome, not pages, so they are
   # not here.
   # Every UI's own pages join the census, discovered rather than listed: a
   # new UI's pages must appear in the palette the moment the UI does, or the
@@ -225,7 +225,7 @@ module StudioPages
   # The merge, its own seam so the collision refusal is testable: two apps
   # naming the same partial would otherwise render one app's word in
   # another's place, silently.
-  def self.merge_libraries(dirs, words: nil, layout: nil)
+  def self.merge_libraries(dirs, words: nil, tin: nil)
     partials = {}
     partial_paths = {}
     dirs.each do |dir|
@@ -240,25 +240,25 @@ module StudioPages
         partial_paths[name] = path
       end
     end
-    SlimPickins::Library.new(layout: layout, partials: partials, partial_paths: partial_paths, words: words)
+    SlimPickins::Library.new(tin: tin, partials: partials, partial_paths: partial_paths, words: words)
   end
 
-  # A UI's own library: its layout (so `page` infers the frame), its partials,
+  # A UI's own library: its tin (so `page` infers the frame), its partials,
   # the shared furniture, the example apps' partials so a loaded page renders
   # end-to-end, and every UI's words. Built per UI because the layout is part
   # of the library — the page word wraps itself in it — so a UI's frame cannot
   # be borrowed from another UI by accident.
   #
-  # The layout sits at the UI's *root*, not in `views/`: `Library.from` reads a
-  # directory's `layout.sp` beside its `partials/`, and a UI's views are one
+  # The tin sits at the UI's *root*, not in `views/`: `Library.from` reads a
+  # directory's `[name].tin` beside its `partials/`, and a UI's views are one
   # level down, so the frame is read here rather than left to be missed. A
-  # missing layout is silent — the pages simply render unframed — which is how
+  # missing tin is silent — the pages simply render unframed — which is how
   # this cost a round.
   def self.ui_library(ui)
-    layout_path = File.join(ui.dir, 'layout.sp')
+    tin_path = SlimPickins::Library.tin_path(ui.dir)
     merge_libraries([*library_dirs, ui.views],
                     words: [AppWords, *Uis.all.map(&:words)],
-                    layout: (File.read(layout_path) if File.exist?(layout_path)))
+                    tin: (File.read(tin_path) if tin_path))
   end
 
   # --- the data ledger: what the playground pre-fills ------------------------
