@@ -1204,3 +1204,43 @@ span never closed.
 
 Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
 failures, every guide fetched and confirmed to leak nothing. Two commits.
+
+### Addendum 6 — the founding complaint, finished (same day)
+
+The design idiom began with a diagnosis that was only half-applied. When the
+discussion was held, the *substance* words were renamed — `sidebar` →
+`catalog`, the physical coordinate removed from the zone's name — and the
+wrapper those zones are drawn inside kept its spatial name. `sidebar_layout`
+then survived three roadmaps and every subtraction pass since, because the
+complaint had been read as being about zones and the wrapper is not a zone.
+dan called it an odor; it was the last surviving instance of the leak the
+design idiom exists to remove.
+
+The word is now `shell`, which is what the codebase already called it: the
+compiler's `KIND_WRAPPERS` maps `kind: shell`, and `workbench.design` declares
+`surface workbench, kind: shell`. Its partial is unchanged (`box` with
+children, no spatial term in it), so only the name and the class it promotes
+moved; `--sidebar-width` became `--shelf-width`, the shell's first column,
+which the workbench calls the shelf. `sidebar_layout` was authored in six
+`.sp` files — six pages of presentation climbing back into substance — and
+none of them says it now.
+
+Three things wearing a similar word were deliberately left alone, and
+rendering them all out would have been tidiness rather than principle: the
+studio chrome's own navigation (a real sidebar, and app code), the test
+fixtures that use `sidebar` as a domain name (they test the language), and
+`taxonomy.rb`'s `:sidebar` structural primitive, whose role reads "one element
+has intrinsic width and the other fills remaining space" — a fact about a
+layout, not about a screen.
+
+Two gates caught the change's own loose ends, both of them instruments from
+this day's work: `check_design_docs.rb` failed because the lexicon's `horizon`
+example still documented `.sidebar_layout` in its compiled CSS — the first
+time it has caught a change to the code rather than a drift of its own round —
+and `check_grammar.rb` failed when the comment explaining the renamed partial
+pushed its `expects` pragma off line one, which an anchored regex reads.
+
+Verification: all nine gates green, suite 462 runs / 5,679 assertions / 0
+failures, every page type fetched and confirmed to render `class="box shell"`
+with no page emitting the old name. Two commits, one of which removes a
+scratch file that had ridden along in the first.

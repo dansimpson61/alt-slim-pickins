@@ -67,7 +67,16 @@ status: >-
   could not pair with and were given ones it can. 462 tests. The invariant that
   would have caught all of it — no backtick in the prose around a code element —
   now measures exactly that, having first been written too crudely to tell
-  content from a leak.
+  content from a leak. Then dan pointed at the last survivor of the design
+  idiom's founding complaint: the substance words were renamed (`sidebar` →
+  `catalog`) when the discussion was held, but the wrapper they were drawn
+  inside kept the spatial name, and `sidebar_layout` was still authored in six
+  .sp files. It is now `shell` — the word the compiler already used for it
+  (`kind: shell`) — with `--shelf-width` for the role that named a screen
+  position. The studio chrome's own navigation and taxonomy's `:sidebar`
+  structural primitive are different things wearing a similar word and were
+  left alone. All nine gates green, 462 tests, every page verified to render
+  `class="box shell"` and none to emit the old name.
 last_touched: 2026-09-26
 next_step: >-
   No active thread. Three items stand as dan's own call from 0.4.0g, still
