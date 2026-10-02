@@ -134,38 +134,63 @@ status: >-
   a filename anyway, since `Spiff.compile` takes source. One latent bug fell
   out of the sweep: `check_spiff.rb` had carried two copies of its own module
   comment since the truth round rewrote it in place.
-last_touched: 2026-09-27
+
+  2026-09-29 — the workbench's word page renders again, and the defect it was
+  wearing spans three layers, which is why it read as "we broke something in
+  the view". The compiler dissolved any descendant `.panes`, not the shell's
+  own, so `docs.sp`'s nested panes were handed to the page's grid and the
+  editor and output were sized by their min-content. The stylesheet's
+  `.word_docs` grid declared `1fr 1fr` and placed `.editor`/`.output` in
+  column 2, but `display: contents` on `.panes` meant those placement rules
+  matched nothing — the real grid items were placed by the compiled zone
+  rules. And those rules reach past the shell: `.shell .editor` and
+  `.shell .output` are descendant selectors, so inside any nested grid they
+  name the shell's columns and, in a two-track grid, an implicit third. Fixed
+  at each layer: the dissolution is a child combinator, `.word_docs` is a real
+  grid spanning the work area with tracks of its own, and the page says which
+  track its own zones take. The page's grid also needed the shell's collapse,
+  or `grid-column: 2 / -1` in a one-column grid names a line that is not there
+  and puts the work outside it. One thing was not a view defect and was fixed
+  beside it: the footer's counts were hand-kept copies of a live number, and
+  `studio/vitals.rb` now reads `Census` — Words 62 / Conventions 38 /
+  Promises 35. All 10 legs green; 485 runs, 5,731 assertions, 0 failures.
+  `assets/workbench.css` is not served at all (the studio compiles that
+  stylesheet from `workbench.spiff` per request) and now sits in the tree as a
+  stale artifact awaiting dan's call to delete it.
+
+  2026-10-02 — the audit round, recorded in DAYTRIP-0.4.0h.md rather than
+  retold here, which is itself one of its findings — this `status` is 11,145
+  characters and `bin/check_card.rb` prints that number every green run
+  without having an opinion about it. Tier 1 landed. `check_spiff_scope.rb`'s
+  `app_root` is bounded (a required `within:`, and `nil` rather than a
+  directory, so a Spiff belonging to no app is refused instead of globbing the
+  filesystem) — its first version was reverted mid-fix when mutation showed
+  the old guard was unreachable and therefore dead. And the vocabulary count
+  is now measured where it is graded, `way_exam` q5 and `word_graph`'s two red
+  tests both reading `Census`. The round's own discovery, which the audit had
+  missed — no gate runs the five example apps' suites, and `word_graph` had
+  been red on 64 words and 59 nouns since the vocabulary came down to 62. All
+  ten gates green; main suite 488 runs, 5,737 assertions, 0 failures, 0
+  errors; all five example suites green.
+last_touched: 2026-10-02
 next_step: >-
-  All four steps of the tin/Spiff work are done: the rename (`[app].tin`), a
-  view's own `[view].tin`/`[view].spiff` beating the app's (one rule, in
-  `Library#tin_for` and `Library.spiff_for`), stylesheet inference (the
-  language's own always, then `public/css/[app].css` or `[view].css` where
-  `Library.from(…, public_url:)` says they are served), and the tenth gate
-  (`check_spiff_scope.rb`, a Spiff's zones against the pages that must render
-  them). `stylesheet`/`script` remain as the escape hatch — which is what makes
-  inference a default rather than a replacement, and why roth, the one app with
-  styles of its own and the one that fits no convention, still says what it
-  needs.
-
-  And the question dan asked — whether anything holds a `.sp` to its `.spiff` —
-  is now answered by a tenth gate, `check_spiff_scope.rb`: every zone a Spiff
-  names must be something the pages in its scope can render, with that name as
-  its class. It reads a zone from the Spiff's own parse tree (`zone`,
-  `horizon`, and `flank`'s lead *and* its `beside:` companion) and asks the
-  question of the sources on disk, so it needs no data and cannot silently
-  skip a page that would not render. It is deliberately weaker than a render
-  gate and says so: it proves the Spiff is not naming a stranger, not that the
-  element reaches every render — `bin/verify_pages.rb` is the gate that
-  renders. Registered as the tenth leg; the status page reports "All 10 legs
-  green".
-
-  Left recorded and unresolved: two byte-identical tins (`pages/pages.tin` and
-  `examples/portfolio/views/portfolio.tin`), which dan chose to leave; and the
-  classic UI still has no `.spiff`, so its presentation still pools in
-  `slim-pickins.css`. Package D is mostly done and was annotated so in
-  HANDOFF.md (its item 2 was an illusion per the 2026-09-22 audit; items 1 and
-  3 are resolved) — re-measure it rather than trusting the list. The three
-  0.4.0g items below still stand. Otherwise no active thread.
+  Tier 1 of DAYTRIP-0.4.0h.md is landed and green; Tier 2 is next — the
+  eleventh leg, holding living prose and code comments to `Census.snapshot`,
+  and built before the Tier 3 corrections so its own first honest run names
+  them rather than this round's five. Its scope is the design question —
+  living documents and `.rb` comments are in, the dated record (LORE,
+  history/, ROADMAP-*, DAYTRIP-*, BLUESKY) is exempt because an entry that
+  quoted the number true when written is not lying, and neither
+  `check_grammar`'s DOCS nor the studio's GUIDES draws that line yet. Beside
+  it, newly found and unresolved — no gate runs the five example apps' suites
+  (55 runs of real coverage), so widening the gate command or adding a twelfth
+  leg is a small question with a real answer. Awaiting dan's word, all of it
+  pre-existing or raised by the audit — the workbench word page's proportions
+  (editor near 291px, output near 194px against 745px of prose), whether to
+  delete the unserved `assets/workbench.css`, and the daytrip's Tier 5 to 7
+  calls (retiring the committed VOCABULARY.md, the fate of
+  `check_spiff_scope.rb`, giving the semantic node a name, and the card
+  surgery this entry is an argument for).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
