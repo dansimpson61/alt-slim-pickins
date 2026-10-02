@@ -10,10 +10,15 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
-3. `PROJECT.md` — `next_step`: the tin/Spiff work (four steps) is **closed** as of
-   2026-09-26; what remains open is the token ground-truthing daytrip and Package D
+3. `PROJECT.md` — `next_step`. As of 2026-10-02 it resumes at **Tier 2 of
+   `DAYTRIP-0.4.0h.md`**, the eleventh gate leg. Trust it over this file's
+   itinerary if the two ever disagree; the card is updated every round and this
+   file has lagged it by a week before.
 4. `HANDOFF.md` — this document, specifically the active itinerary below
-5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0g.md` — outcomes of every daytrip so far
+5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0h.md` — outcomes of every daytrip so
+   far. **Read `0.4.0h` first if you are picking up the current thread**: it is the
+   audit round, it carries the prioritized list the next several rounds work
+   through, and its *What landed* section says what is already done
 6. `COMMUNITY_BULLETIN_BOARD.md` — the council's most recent session (currently:
    the workbench spatial frontier fixes, 2026-09-25); `.claude/skills/council/SKILL.md`
    is the reusable skill, read it before convening the council again
@@ -53,9 +58,12 @@ conversation; it is all written down.
   8. **`check_spiff_scope.rb`** — the tenth gate, answering dan's own question: every zone a Spiff names must be renderable in its scope.
 - **Active next step**: **none.** The tin/Spiff work is closed. Open threads are named in `PROJECT.md next_step` and in the section below.
 
-### Current Vitals (measured 2026-09-26)
+### Current Vitals (measured 2026-10-02)
 - **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 52 test files.
-- **Full Suite**: 485 runs, 5,731 assertions, 0 failures, 0 errors, 0 skips in one process.
+- **Full Suite**: 488 runs, 5,737 assertions, 0 failures, 0 errors, 0 skips in one process.
+- **The example apps' own suites** (`examples/*/test`, **not reached by the gate
+  command** — a standing gap, see Tier 1 item 3 of `DAYTRIP-0.4.0h.md`): dashboard 9,
+  lore_reader 9, milestone_planner 12, way_exam 10, word_graph 15 runs, all green.
 - **Check Grammar**: 1,239 sentences checked, 92 words defined, 0 problems.
 - **Check Shape**: 62 canonical words, 0 problems.
 - **Check Styles**: 27 emittable classes, 59 rendering, 104 rules, 0 problems.
@@ -63,6 +71,8 @@ conversation; it is all written down.
 - **Spiff Scope (zones)**: 2 spiffs held to their pages, 0 problems.
 - **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 31 pages, 0 problems.
 - **Ten gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Suite.
+- **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): `d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down over 31 pages.
+- **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.
 
 ---
 
@@ -117,30 +127,142 @@ conversation; it is all written down.
 - **Three real rendering defects**, each found by dan in the live studio and measured before being touched: a `max-width` leak in the editor's textareas; container queries that had never worked since the compiler's first commit (a self-referencing `@container` pattern — fixed with zero new markup); `align-items: start` leaving the three shell columns at three different heights (now `stretch`).
 - Left open, by dan's own call: the `collapse`/`balance` rem scale, `output`'s independently-governed height, `--footer-height`'s corrected-but-still-guessed value — candidates for a future token ground-truthing daytrip, not decided this round.
 
-### No active next step
+### [COMPLETED] The workbench word page, three layers deep (2026-09-29)
 
-Nothing is mandated next. The strongest candidates, none prioritized over the
-others — open with dan rather than picking unilaterally:
+A page renders through a stack of grids and every layer thought it owned the
+layout: the compiler dissolved any *descendant* `.panes` rather than the shell's
+own; `display: contents` made `.word_docs`' placement rules match nothing; and
+compiled zone rules are descendant selectors, so `.shell .editor` names the
+shell's columns inside any nested grid. Fixed at each layer. The studio's footer
+counts stopped being hand-kept literals and now read `Census`.
 
-- **The token ground-truthing daytrip** (`DAYTRIP-0.4.0g.md`'s closing section;
-  `PROJECT.md next_step`) — real values for the `.spiff` collapse/balance scale
-  (`tight`'s 26rem, `subordinate`'s 14rem floor), `output`'s independently
-  governed height, and `--footer-height` (whose 2.8rem is corrected but still
-  guessed, and whose fallback inside Spiff's generated CSS is still a
-  stale 2rem). Measured against real embedding widths instead of
-  preserved-by-habit numbers.
-- **Package D** below (still unstarted; note its item 1 is largely done — the
-  prose census was realigned in the truth round — so re-read it before starting).
-- **Two leftovers from the audit, dan's call, deliberately not done**: `pages/pages.tin`
-  and `examples/portfolio/views/portfolio.tin` are byte-identical; and the classic
-  UI still has no `.spiff`, so its presentation still pools in `slim-pickins.css`.
-- **A `.sp`↔`.spiff` render gate** — `check_spiff_scope.rb` checks the *names*
-  and says so; a gate that renders would also catch a word that never reaches
-  the DOM, at the cost of needing each app's data.
-- Whatever roadmap question dan brings — this project's convention
-  (`README.md`, *How roadmaps go*) is to re-read the history and lore before
-  choosing a direction, not to assume the last session's tail is the next
-  session's head.
+### [COMPLETED] Volet 7: The audit round (`DAYTRIP-0.4.0h.md`, 2026-10-02)
+
+The backward eye, on dan's ask: a critique on the project's own terms, then the
+sharper question — do the ten checkers carry their weight? Measured: yes, and
+they are aimed one layer too high. Eight of ten compare a declaration to a
+declaration; both defect classes that have actually cost sessions here (the
+rendered pixel, the arithmetic in prose) fall outside that. Four exist only
+because a truth has two homes. The diversion is real and the documents are doing
+it — 40,082 lines of markdown churned against 33,153 of Ruby.
+
+**Tier 1 landed**: `check_spiff_scope.rb`'s `app_root` bounded (the suite's
+standing error); the vocabulary count now measured where it is graded
+(`way_exam` q5, `word_graph`'s two red tests). **Tier 4 landed**: the thirteen
+dedented `def`s, seven more indentation mismatches inside method bodies, the
+duplicate `Builder#chain`, two dead comments, `about`'s guard restructured, three
+dead locals. **New instruments**: `bin/byte_diff.rb` and `ruby -w -c`.
+
+### The active next step — Tier 2 of `DAYTRIP-0.4.0h.md`
+
+**An eleventh gate leg: living prose and code comments held to `Census.snapshot`.**
+`bin/census.rb` is still the only consumer of the SSOT in the repository, which is
+why the counts it exists to settle were wrong in six places at once.
+
+The scope decision is already made, and it is the hard part — do not re-derive it:
+
+- **In scope**: the living documents (`README`, `PRIMER`, `VOCABULARY`,
+  `CONTRACT`, `DESIGN`, `KERNEL`, `PROJECT`, `HANDOFF`, `docs/SPIFF`), every
+  `*.rb` comment, and the example apps' answer keys and canned locals.
+- **Exempt by design**: the dated record — `LORE.md`, `history/`, `ROADMAP-*`,
+  `DAYTRIP-*`, `BLUESKY.md`, `spiff_discussion.md`. An entry that quoted the
+  number true when written is not lying, and a gate that cannot tell the
+  difference will be bargained with inside a week.
+- Neither `check_grammar`'s `DOCS` nor the studio's `GUIDES` draws that line yet.
+  This gate authors it.
+
+**Build it before fixing anything it will report.** That is deliberate: the gate's
+own first honest run should produce the list, the way `check_spiff` found
+`collapse` undocumented on its first run. A gate built by someone who already
+knows the answers gets tuned to find exactly those and stop.
+
+**Then** check your run against the Tier 3 inventory in `DAYTRIP-0.4.0h.md` — the
+six known instances, recorded so you can calibrate rather than rediscover. **If
+your first run finds fewer than six, your matcher is too narrow.** The sixth,
+found while landing Tier 1 and not in the daytrip's original list:
+`bin/verify_pages.rb`'s `ui_locals` still passes `word_count: 64,
+promise_count: 32, measured: '2026-09-17'` as canned locals — a third copy of the
+literals the studio removed from its own two homes, inside the gate itself. It is
+a Ruby hash rather than prose, so decide explicitly whether the gate's scope
+reaches it; if not, fix it by hand and say so.
+
+Also unresolved and newly found: **no gate runs the example apps' suites.** The
+gate command globs `test/**/*_test.rb` from the repo root and reaches none of
+`examples/*/test` — 55 runs of real coverage, where `word_graph` sat red for a
+week. Widening the command or adding a twelfth leg is a small question with a
+real answer, and it is dan's call which.
+
+### Then, in order — and the order changed
+
+- **Tier 4's last item is blocked.** Pointing `check_styles.rb` at `studio/*.rb`
+  (it reads `lib/**/*.rb` only) goes red immediately on `studio/inspector.rb`'s 37
+  hardcoded hex colours and two `100vh`. Do it *after* the rewrite below, not
+  before, or you add a gate with no remedy.
+- **Tier 6 is resequenced: item 19 before item 18.** `studio/inspector.rb:17` is a
+  255-line method that is mostly one HTML heredoc — 39 raw tags — in the one
+  surface a visitor opens to see what the language *means*. Rewriting it in the
+  language is the best dogfooding test the studio could run and will likely
+  surface vocabulary gaps worth more than the fix. It also *deletes* 3 of the 20
+  node-read sites that item 18 would otherwise have to touch.
+- **Tier 6 item 18, with corrected numbers.** Give the semantic node a name
+  (`Data.define(:word, :attributes, :children)`). The audit claimed the anonymous
+  triple "forces most of the 60 `is_a?` tests" — **that was wrong**, and the
+  correction matters for the decision: `is_a?(Array)` in `lib/` is 7, of which ~6
+  are node-vs-string guards. The 60 are dominated by `Symbol` (15), `String` (9),
+  `Proc` (6) and `Hash` (6) — argument discrimination in the DSL's own calling
+  convention, which this refactor does not touch. Real scope: **20 read sites, 29
+  construction sites**, in `builder.rb`, `generator.rb`, `partial_word.rb` and
+  `studio/inspector.rb`. Payoff: one good name, plus ~6 guards. Note
+  `kind, attrs, children = node` destructuring will not survive `Data` (no
+  `to_ary`), and children arrays legitimately hold Strings and nils.
+- **Tier 7**: the card surgery. `PROJECT.md`'s `status` is now over 12,000
+  characters and `bin/check_card.rb` prints the number every green run without an
+  opinion. Give it a budget and fail over it; the narrative belongs in `LORE.md`,
+  which already holds most of it.
+
+### Two instruments this round added — use them, do not rebuild them
+
+- **`ruby bin/byte_diff.rb`** renders all 31 pages the gate proves and reduces the
+  corpus to one digest; `ruby bin/byte_diff.rb /tmp/before` also writes each page
+  for `diff -r`. Current digest: `d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down. This is the
+  acceptance test for any shape or refactor work — every "byte-identical" claim in
+  Tier 4 was made with it. `bin/verify_pages.rb` is now requirable (its execution
+  sits behind `if $PROGRAM_NAME == __FILE__`) so `PAGES` has one home.
+- **`ruby -w -c <file>`** reports indentation mismatches and dead locals, in the
+  interpreter the project already runs, with no gem. It found seven mismatches a
+  grep for dedented `def` lines could not see, and three dead assignments nothing
+  else had. The repo is clean against it today. **Wiring it as a gate leg is
+  proposed and not done** — it changes the gate command, the README and the status
+  page's leg count, which is dan's call. The whole implementation is one loop:
+
+      for f in lib/**/*.rb studio/*.rb bin/*.rb check_*.rb test/*.rb; do
+        ruby -w -c "$f" 2>&1 | grep -v '^Syntax OK$'
+      done
+
+### Candidates still standing, none prioritized
+
+- **The token ground-truthing daytrip** (`DAYTRIP-0.4.0g.md`'s closing section) —
+  real values for the `.spiff` collapse/balance scale (`tight`'s 26rem,
+  `subordinate`'s 14rem floor), `output`'s independently governed height, and
+  `--footer-height` (2.8rem is corrected but still guessed, and Spiff's generated
+  CSS still carries a stale 2rem fallback).
+- **Package D** below — re-read before starting; its item 1 is largely done.
+- **Two leftovers, dan's call**: `pages/pages.tin` and
+  `examples/portfolio/views/portfolio.tin` are byte-identical; the classic UI still
+  has no `.spiff`, so its presentation still pools in `slim-pickins.css`.
+- **Retire a generated file that is committed and then gated** —
+  `bin/generate_vocabulary.rb` writes five bullets per `VOCABULARY.md` entry from
+  `contracts.rb`, and `check_grammar`'s whole `UNGENERATED` section then verifies
+  the artifact still matches its generator. Render it at read time and that check
+  becomes unnecessary rather than unenforced.
+- **`check_spiff_scope.rb`: delete or retarget.** No recorded catch, and its job —
+  names matching names — is the narrowest slice of the layer that stays correct on
+  its own. Retargeting it to assert the zone's element *reaches the render* would
+  make it the gate the project actually lacks.
+- **The unserved `assets/workbench.css`** — awaiting dan's word to delete.
+- Whatever roadmap question dan brings. This project's convention (`README.md`,
+  *How roadmaps go*) is to re-read the history and the lore before choosing a
+  direction, not to assume the last session's tail is the next session's head.
 
 ### Package D — House Honesty & Integrity (Census, Registry & Doc Parity)
 *Focus: Aligning every prose document and registry with the living reality of the codebase.*

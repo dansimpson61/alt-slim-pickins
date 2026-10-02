@@ -20,6 +20,13 @@
 #
 # The status page prints the clock, so the clock is scrubbed before hashing —
 # otherwise the corpus would never be identical to itself.
+#
+# The digest is a *relative* instrument, not a constant to pin. Some pages render
+# live repository content: `examples/lore_reader` shows a count of `LORE.md`'s
+# entries, so leaving lore moves the digest legitimately. Snapshot before your
+# change and after it, in the same session, and compare those. A digest that
+# differs from one written down in a document last week proves nothing — and
+# chasing that ghost is exactly the half hour this paragraph exists to save.
 
 require 'digest'
 require 'fileutils'

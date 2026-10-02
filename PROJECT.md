@@ -172,25 +172,36 @@ status: >-
   been red on 64 words and 59 nouns since the vocabulary came down to 62. All
   ten gates green; main suite 488 runs, 5,737 assertions, 0 failures, 0
   errors; all five example suites green.
+
+  Then, on dan's reorder, Tier 4 — recorded in the daytrip, not retold here. The
+  shape of the Ruby, and the better instrument found halfway through it: a grep
+  for dedented `def` lines sees only signatures, while `ruby -w -c` reports
+  mismatches inside method bodies and dead locals, in the interpreter the project
+  already runs, with no gem. Seven more mismatches and three dead assignments
+  gone; `ruby -w -c` clean repo-wide. `bin/byte_diff.rb` now keeps the byte-diff
+  harness instead of each session rebuilding it. Tier 6 was sized and declined,
+  which is the honest outcome — the argument the daytrip made for the node
+  refactor was wrong and is corrected in place.
 last_touched: 2026-10-02
 next_step: >-
-  Tier 1 of DAYTRIP-0.4.0h.md is landed and green; Tier 2 is next — the
-  eleventh leg, holding living prose and code comments to `Census.snapshot`,
-  and built before the Tier 3 corrections so its own first honest run names
-  them rather than this round's five. Its scope is the design question —
-  living documents and `.rb` comments are in, the dated record (LORE,
-  history/, ROADMAP-*, DAYTRIP-*, BLUESKY) is exempt because an entry that
-  quoted the number true when written is not lying, and neither
-  `check_grammar`'s DOCS nor the studio's GUIDES draws that line yet. Beside
-  it, newly found and unresolved — no gate runs the five example apps' suites
-  (55 runs of real coverage), so widening the gate command or adding a twelfth
-  leg is a small question with a real answer. Awaiting dan's word, all of it
-  pre-existing or raised by the audit — the workbench word page's proportions
-  (editor near 291px, output near 194px against 745px of prose), whether to
-  delete the unserved `assets/workbench.css`, and the daytrip's Tier 5 to 7
-  calls (retiring the committed VOCABULARY.md, the fate of
-  `check_spiff_scope.rb`, giving the semantic node a name, and the card
-  surgery this entry is an argument for).
+  Tiers 1 and 4 of DAYTRIP-0.4.0h.md are landed, green and pushed. Next is Tier
+  2 — the eleventh leg, holding living prose and code comments to
+  `Census.snapshot`. `HANDOFF.md`'s *The active next step* section now carries
+  the whole brief, and it is current as of 2026-10-02: the scope decision
+  (living documents and `.rb` comments in, the dated record exempt), the
+  instruction to build the gate before fixing what it will report, and the six
+  known instances to calibrate the first run against rather than rediscover. Two
+  instruments exist now and should not be rebuilt — `ruby bin/byte_diff.rb`
+  (corpus digest d85aac01f281cb9a15e73e03 over 31 pages) and `ruby -w -c`, whose
+  wiring as a gate leg is proposed and awaiting dan's word. Also awaiting a
+  word, newly found — no gate runs the five example apps' suites, 55 runs that
+  sat red for a week in word_graph. Then Tier 6, resequenced so the Inspect
+  surface is rewritten in the language before the semantic node is named, since
+  the rewrite deletes three of the node-read sites and unblocks pointing
+  check_styles at studio. Older calls still open — the workbench word page's
+  proportions, the unserved `assets/workbench.css`, the committed generated
+  VOCABULARY.md, the fate of check_spiff_scope.rb, and the card surgery this
+  entry keeps arguing for.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

@@ -97,9 +97,22 @@ gate stays green and only its own unit test tells the truth.
   for `Struct` seven times — `Sentence`, the parse `Node`, `Contract`,
   `Violation`, `Promise`, `Convention`, `Entry` — and the *semantic* node,
   which every docstring names as the thing the runtime is built around, is a
-  bare three-element Array read positionally in ~30 places across `lib/` and
-  `studio/`. That is what forces most of the 60 `is_a?` tests in `lib/`. The
-  Ode's remedy is already house idiom everywhere else.
+  bare three-element Array read positionally in `builder.rb`, `generator.rb`,
+  `partial_word.rb` and `studio/inspector.rb`. The Ode's remedy is already
+  house idiom everywhere else.
+
+  **Correction, made while sizing the fix (2026-10-02).** This bullet first said
+  the anonymous triple "forces most of the 60 `is_a?` tests in `lib/`". That was
+  wrong, and wrong in this round's own characteristic way — a number counted at
+  the wrong altitude and then spent as an argument, which is the same error the
+  truth round made when it counted inline code spans as raw HTML. Measured:
+  `is_a?(Array)` in `lib/` is **7**, of which about six are node-vs-string
+  guards. The 60 are dominated by `Symbol` (15), `String` (9), `Proc` (6) and
+  `Hash` (6) — argument discrimination in the DSL's own calling convention,
+  which a node refactor does not touch. Real scope is **20 read sites and 29
+  construction sites**; the payoff is one good name plus those six guards. Still
+  worth doing under *give traveling data a name*, and no longer the slam dunk
+  this bullet claimed.
 - **The showcase does not speak the language.** `studio/inspector.rb:17` is a
   255-line method that is mostly one HTML heredoc: 39 raw tags, 37 hardcoded
   hex colours, and `100vh` twice — the unit 0.4.0g retired. `check_styles.rb`
@@ -198,16 +211,27 @@ that quoted the number true when written is not lying. Neither
 `KERNEL.md` is fixed by changing the citation *style* to method names — not by
 re-measuring line numbers, which buys one round.
 
-**Tier 4 — the shape of the Ruby.** The thirteen dedented `def`s, the
-duplicate `chain`, two dead comments in `Builder`, `about`'s
-`unless was.nil?` (load-bearing via a hoisted local, and unreadable as such),
-and pointing `check_styles` at `studio/*.rb`.
+**A sixth, found while landing Tier 1 and absent from Part 2**:
+`bin/verify_pages.rb`'s `ui_locals` still passes `word_count: 64,
+promise_count: 32, measured: '2026-09-17'` as canned locals — a third copy of
+the literals the studio removed from its own two homes, sitting inside the gate
+itself. It is a Ruby hash rather than prose, so the gate's scope has to decide
+explicitly whether it reaches there.
+
+**Tier 4 — the shape of the Ruby. Landed, except its last item.** The thirteen
+dedented `def`s; then seven *more* mismatches inside method bodies that a
+`def`-line scan cannot see, found by `ruby -w -c`; the duplicate `chain`; two
+dead comments; `about`'s guard restructured so nothing needs guarding; three
+dead locals. Pointing `check_styles` at `studio/*.rb` is **blocked** — it goes
+red on `studio/inspector.rb` and wants Tier 6 item 19 first.
 
 **Tier 5 — retire duplication.** Stop committing a generated `VOCABULARY.md`;
 delete or retarget `check_spiff_scope`. Both subtract.
 
-**Tier 6 — two real refactors.** `Data.define` for the semantic node; rewrite
-the Inspect surface in the language it inspects.
+**Tier 6 — two real refactors, resequenced: 19 before 18.** Rewriting the
+Inspect surface in the language it inspects *deletes* 3 of the 20 node-read
+sites item 18 would otherwise touch, and unblocks Tier 4's last item. Then
+`Data.define` for the semantic node, at the corrected scope above.
 
 **Tier 7 — the corpus.** Card surgery, and give `check_card` an opinion.
 
@@ -263,6 +287,56 @@ other prose claims in Tier 3. They are left standing as the first honest run
 of the Tier 2 gate, which is the whole argument for building it before
 correcting by hand.
 
+## What landed, round two — Tier 4, on dan's reorder
+
+**The shape of the Ruby, and a better instrument found halfway through.** The
+first pass fixed the thirteen `def` lines at column 0. That scan was the wrong
+instrument: it could only see dedented *signatures*, and `Generator#emit` turned
+out to span four indentation regimes — body at 2, `case` at 6, `else` branch at
+4, `ensure` and closing `end` at 0 — under a correctly-indented `def`.
+
+`ruby -w -c` reports exactly that, in the interpreter the project already runs,
+with no gem:
+
+```
+generator.rb:180: warning: mismatched indentations at 'ensure' with 'def' at 152
+```
+
+Seven more mismatches, all now gone: `Generator#emit` and `#token`, and the three
+`Words` `evaluate` methods (`Table`, `Chart`, `Choose`) whose bodies sat at 2
+under a `def` at 6, with two `private` keywords stranded at column 0. It also
+found three dead assignments nothing else had — a `value, empty, body`
+destructure using two of three, `check_spiff.rb`'s unread `compiler`, and
+`verify_pages.rb`'s unread `studio`. `ruby -w -c` is now clean over `lib/`,
+`studio/`, `bin/`, the checkers, the suite and the example apps' domain code.
+
+So the audit's "no gate reads the Ruby as text, and there is no RuboCop config"
+is half answerable with no dependency at all. Wiring it as a leg is left for dan,
+because it changes the gate command, the README and the status page's leg count —
+but the repo is clean against it today, which is the precondition.
+
+**Three real defects came out with the whitespace**: `Builder#chain` defined
+twice (152 and 290; Ruby took the second silently), a seven-line tombstone for
+`render_partial` deleted in September, and a comment with no code under it. And
+`about`'s `ensure @empty_active = was unless was.nil?` was restructured rather
+than explained — the guard was protecting the `name.nil?` early return, where
+`was` is an unassigned local and therefore nil, while reading as a check against
+impossible state. A scoped `begin`/`ensure` means nothing needs guarding.
+
+**The instrument got committed.** Every "byte-identical" claim in this round was
+made by a harness built from scratch and thrown away. `bin/byte_diff.rb` keeps
+it: all 31 pages the gate proves, reduced to one digest
+(`d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down). `bin/verify_pages.rb`'s execution now sits behind
+`if $PROGRAM_NAME == __FILE__`, the idiom `check_spiff_scope.rb` already uses, so
+`PAGES` can be required rather than copied.
+
+**Tier 6 was assessed and declined, which is the honest outcome.** Sizing item 18
+disproved the argument this document had made for it (see the correction in Part
+3), and three of its twenty read sites live in `studio/inspector.rb`, which item
+19 is going to delete — so 19 precedes 18, and Tier 4's last item follows both.
+Item 19 is a design job that will surface vocabulary gaps needing dan's rulings;
+doing it badly would be worse than not doing it.
+
 ## Verification
 
 - **At audit time**: ten gates green; main suite 485 runs, 5,728 assertions, 0
@@ -274,6 +348,10 @@ correcting by hand.
 - Each fix was mutation-tested: the defect reintroduced, the suite shown to
   fail, the fix restored. One mutation failed to fail and the design changed
   because of it, recorded above.
+- **After Tier 4**: ten gates green; 488 runs, 0 failures; all five example suites
+  green; `ruby -w -c` clean repo-wide; and all 31 pages **byte-for-byte identical**
+  to the pre-Tier-4 corpus (`d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down before and after every
+  commit), which is what makes a pure-shape round provable rather than asserted.
 - Every number in this document was measured this session, not recalled: gate
   timings by wall clock, churn by `git log --numstat`, card sizes by parsing
   the frontmatter, the dedented `def`s by grep, `app_root` by calling it.
