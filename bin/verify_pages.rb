@@ -145,27 +145,31 @@ PAGES = [
 
 
 
-problems = 0
+# Running this file is the gate. Requiring it is how `bin/byte_diff.rb` borrows
+# PAGES — the corpus and its locals, in one home rather than a second copy.
+if $PROGRAM_NAME == __FILE__
+  problems = 0
 
-PAGES.each do |label, library, locals|
-  begin
-    SlimPickins.render(File.read(File.expand_path("../#{label}", __dir__)),
-                       path: label, locals: locals, library: library)
-    puts "  OK            #{label}"
-  rescue SlimPickins::Error => e
-    # The error speaks the language — path, line, sentence — so it is printed
-    # verbatim under the page it belongs to.
-    problems += 1
-    puts "  BAD ANSWER    #{label}"
-    puts e.message
-  rescue StandardError => e
-    # Not a language error: the app's own Ruby broke. That is itself the
-    # finding, and saying so keeps the language's strongest claim intact.
-    problems += 1
-    puts "  RUBY ERROR    #{label}"
-    puts "  #{e.class}: #{e.message}"
+  PAGES.each do |label, library, locals|
+    begin
+      SlimPickins.render(File.read(File.expand_path("../#{label}", __dir__)),
+                         path: label, locals: locals, library: library)
+      puts "  OK            #{label}"
+    rescue SlimPickins::Error => e
+      # The error speaks the language — path, line, sentence — so it is printed
+      # verbatim under the page it belongs to.
+      problems += 1
+      puts "  BAD ANSWER    #{label}"
+      puts e.message
+    rescue StandardError => e
+      # Not a language error: the app's own Ruby broke. That is itself the
+      # finding, and saying so keeps the language's strongest claim intact.
+      problems += 1
+      puts "  RUBY ERROR    #{label}"
+      puts "  #{e.class}: #{e.message}"
+    end
   end
-end
 
-puts "\n#{PAGES.size} pages verified, #{problems} problems"
-exit(problems.zero? ? 0 : 1)
+  puts "\n#{PAGES.size} pages verified, #{problems} problems"
+  exit(problems.zero? ? 0 : 1)
+end
