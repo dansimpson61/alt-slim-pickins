@@ -674,18 +674,72 @@ body:has(> .shell) > h1:first-child {
   padding: var(--gap-loose);
 }
 
-/* A word's own sheet */
+/* A word's own page: the work area split in two, the word's prose beside
+   the editor and the output — the same shape the classic UI gives it, where
+   the contract and the real sentences read in one column and the editor
+   works in the next. `word_docs` is the page's own grid rather than a pair
+   of zones, so it spans the whole work area: the shell's third column is
+   the one the horizon reserves for the output, and a page that puts the
+   output beside its prose would otherwise leave that column empty.
+
+   `panes` stays a grid here and is *not* dissolved. Its two children are
+   sized by their tracks, and a track is what the shell's own dissolution
+   rule cannot give them: handed to this grid instead, the editor and the
+   output were sized by their min-content — a sliver of an editor in the
+   screenshot that found this. */
 .word_docs {
+  grid-column: 2 / -1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-content: start;
   gap: var(--gap);
   min-height: 0;
   overflow-y: auto;
 }
-.word_docs > .editor,
-.word_docs > .output { grid-column: 2; }
 .word_docs > section,
 .word_docs > .list { grid-column: 1; }
+.word_docs > .panes {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-auto-rows: min-content;
+  gap: var(--gap);
+  align-self: start;
+}
+/* The zone placement the spiff compiles names the shell's own columns —
+   `.shell .editor { grid-column: 2 }` and `.shell .output { grid-column: 3 }`
+   — and a descendant selector does not stop at the shell's edge. Reaching
+   the page's grid, those put the editor in this grid's second track and the
+   output in an implicit third, so the two tracks this rule declares were
+   never used and each zone took its min-content instead. A page's own grid
+   says which track its zones take. */
+.word_docs > .panes > .editor { grid-column: 1; }
+.word_docs > .panes > .output { grid-column: 2; }
+
+/* The shell goes to one column when it is narrower than the Spiff's
+   threshold, and this page's grid has to follow: a `grid-column: 2 / -1` in
+   a one-column grid names a line that is not there and puts the work outside
+   it. The container name and the threshold are the ones
+   `studio/uis/workbench/workbench.spiff` compiles — `collapse roomy` on the
+   horizon — so a change to that line is a change to this one. `check_spiff`
+   holds the lexicon to the compiler, and neither it nor any other leg reads
+   this file's at-rules; the coupling is named here and nowhere is it
+   enforced. */
+.shell { container-type: inline-size; container-name: workbench-shell; }
+@container workbench-shell (inline-size < 56rem) {
+  .word_docs {
+    grid-column: auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .word_docs > .panes {
+    grid-column: 1;
+    grid-row: auto;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .word_docs > .panes > .editor,
+  .word_docs > .panes > .output { grid-column: 1; }
+}
 
 .editor > section {
   margin: 0;

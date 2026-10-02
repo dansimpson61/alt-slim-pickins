@@ -5,6 +5,7 @@ require 'cgi'
 require_relative '../lib/slim_pickins'
 require_relative 'uis'
 require_relative 'status'
+require_relative 'vitals'
 require_relative 'docs_helper'
 require_relative 'uis/words'
 # The sandbox: the example apps' own files, required rather than copied —
@@ -280,8 +281,15 @@ module StudioPages
                           load_path: '/?load=:id&ui=:ui', status: 'ok', refusal: nil, here: false)],
       ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == Uis.default } },
       ui: Uis.default,
-      word_count: 64, convention_count: 38, promise_count: 32, measured: '2026-09-17',
-      words_count: 64, pages_count: PAGES.size,
+      # The language's vitals come from the census, never from a literal here.
+      # This line held `word_count: 64, promise_count: 32, measured:
+      # '2026-09-17'` and was stale by the time it mattered — the same
+      # hand-kept-copy defect as `studio/vitals.rb`, in the second of the two
+      # places it lived.
+      word_count: StudioVitals::WORDS,
+      convention_count: StudioVitals::CONVENTIONS,
+      promise_count: StudioVitals::PROMISES,
+      words_count: StudioVitals::WORDS, pages_count: PAGES.size,
       pages_active: page == 'index' || page.nil?,
       words_active: page == 'docs',
       guides_active: page == 'guide'

@@ -397,6 +397,14 @@ module SlimPickins
                 grid-column: 1 / -1;
               }
 
+              /* The shell's own `.panes`, and only that one. A page's
+                 workflow — `docs.sp`'s `word_docs` — is a grid of its own
+                 that holds the shell's zones *and* the page's own prose,
+                 and dissolving a nested wrapper there handed the editor and
+                 the output to the page's grid, which sized them by their
+                 min-content: a 58px editor and a 48px output. The shell
+                 dissolves the wrapper it owns and leaves a page's own grid
+                 whole. */
               #{target} > .panes {
                 display: contents;
               }

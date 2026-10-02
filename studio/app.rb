@@ -84,7 +84,6 @@ helpers do
       word_count: StudioVitals::WORDS,
       convention_count: StudioVitals::CONVENTIONS,
       promise_count: StudioVitals::PROMISES,
-      measured: StudioVitals::MEASURED,
       data_note: StudioDocs::DATA_NOTE,
       words_count: StudioVitals::WORDS,
       pages_count: StudioPages::PAGES.size,
