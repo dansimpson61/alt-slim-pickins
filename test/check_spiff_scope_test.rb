@@ -16,9 +16,13 @@ require_relative '../check_spiff_scope'
 class CheckSpiffScopeTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
 
-  def run_check(files)
+  # `root` is the tree the run is about, and a fixture's tree is its temp
+  # directory — not this repository. Passing ROOT for an app built under /tmp
+  # was incoherent and only went unnoticed while `root` was used for nothing
+  # but the default glob and a display prefix; `app_root` now walks within it.
+  def run_check(files, root: ROOT)
     out = StringIO.new
-    problems = SpiffScope.run(files: files, root: ROOT, out: out)
+    problems = SpiffScope.run(files: files, root: root, out: out)
     [problems, out.string]
   end
 
@@ -37,7 +41,7 @@ class CheckSpiffScopeTest < Minitest::Test
       File.write(File.join(app, 'views', 'index.sp'),
                  "page index\n  def shown\n    text \"x\"\n  shown\n")
 
-      problems, output = run_check([File.join(app, 'demo.spiff')])
+      problems, output = run_check([File.join(app, 'demo.spiff')], root: root)
 
       refute_equal 0, problems, 'the checker passed a zone nothing renders'
       assert_includes output, 'nonexistent'
@@ -53,7 +57,7 @@ class CheckSpiffScopeTest < Minitest::Test
       File.write(File.join(app, 'views', 'index.sp'),
                  "page index\n  def catalog\n    text \"x\"\n  catalog\n")
 
-      problems, = run_check([File.join(app, 'demo.spiff')])
+      problems, = run_check([File.join(app, 'demo.spiff')], root: root)
       assert_equal 0, problems, 'a page that defines the word can render the zone'
     end
   end
@@ -66,7 +70,7 @@ class CheckSpiffScopeTest < Minitest::Test
       File.write(File.join(app, 'views', 'partials', 'shelf.sp'), "box\n  children\n")
       File.write(File.join(app, 'views', 'index.sp'), "page index\n  text \"x\"\n")
 
-      problems, = run_check([File.join(app, 'demo.spiff')])
+      problems, = run_check([File.join(app, 'demo.spiff')], root: root)
       assert_equal 0, problems, 'a partial of that name can render the zone'
     end
   end
@@ -83,7 +87,7 @@ class CheckSpiffScopeTest < Minitest::Test
       SPIFF
       File.write(File.join(app, 'views', 'index.sp'), "page index\n  text \"x\"\n")
 
-      problems, output = run_check([File.join(app, 'demo.spiff')])
+      problems, output = run_check([File.join(app, 'demo.spiff')], root: root)
 
       # All four names are named by the Spiff and none is rendered here.
       %w[lead companion one two].each { |zone| assert_includes output, zone }
@@ -91,16 +95,63 @@ class CheckSpiffScopeTest < Minitest::Test
     end
   end
 
-  def test_an_empty_corpus_is_refused_rather_than_passed
-    Dir.mktmpdir('empty') do |dir|
+  # Was `test_an_empty_corpus_is_refused_rather_than_passed`, and its assertion
+  # recorded the defect instead of the rule. Its fixture was a Spiff in a bare
+  # temp directory — a Spiff belonging to no app — and it asserted `0 problems`,
+  # which is what the gate reported because `app_root` returned `/` and
+  # `renderable_names` then globbed the whole filesystem (EACCES on any machine
+  # with an unreadable directory under it; a very slow green on the rest). The
+  # two things it was conflating are now two tests: a Spiff in no app is
+  # refused, and a Spiff naming no zone is fine.
+  def test_a_spiff_that_belongs_to_no_app_is_refused
+    Dir.mktmpdir('orphan') do |dir|
       spiff = File.join(dir, 'nothing.spiff')
-      File.write(spiff, "surface nothing\n")
-      problems, output = run_check([spiff])
-      # No zones to check, so nothing is wrong with it — but the corpus itself
-      # being empty is the failure mode this guards, and that is `run` with no
-      # files at all.
+      File.write(spiff, "surface nothing\n  zone somewhere\n    frame quiet\n")
+
+      problems, output = run_check([spiff], root: dir)
+
+      assert_equal 1, problems
+      assert_includes output, 'belongs to no app'
+    end
+  end
+
+  def test_a_spiff_naming_no_zone_is_accepted
+    Dir.mktmpdir('app') do |root|
+      app = File.join(root, 'demo')
+      FileUtils.mkdir_p(File.join(app, 'views'))
+      File.write(File.join(app, 'demo.spiff'), "surface demo\n")
+      File.write(File.join(app, 'views', 'index.sp'), "page index\n  text \"x\"\n")
+
+      problems, output = run_check([File.join(app, 'demo.spiff')], root: root)
+
       assert_equal 0, problems
       assert_includes output, 'held to their pages'
+    end
+  end
+
+  # The walk's two boundaries, which is where the defect lived: it must refuse
+  # rather than hand back a directory, and it must not leave the tree it was
+  # told to examine — or the answer depends on whatever an unrelated ancestor
+  # happens to hold.
+  def test_the_walk_refuses_rather_than_returning_a_directory
+    Dir.mktmpdir('orphan') do |dir|
+      spiff = File.join(dir, 'nothing.spiff')
+      File.write(spiff, "surface nothing\n")
+
+      assert_nil SpiffScope.app_root(spiff, within: dir)
+    end
+  end
+
+  def test_the_walk_stays_inside_the_tree_it_was_given
+    Dir.mktmpdir('outer') do |outer|
+      FileUtils.mkdir_p(File.join(outer, 'views'))
+      nested = File.join(outer, 'deep', 'nested')
+      FileUtils.mkdir_p(nested)
+      spiff = File.join(nested, 'x.spiff')
+      File.write(spiff, "surface x\n")
+
+      assert_equal outer, SpiffScope.app_root(spiff, within: outer)
+      assert_nil SpiffScope.app_root(spiff, within: nested)
     end
   end
 
@@ -108,7 +159,7 @@ class CheckSpiffScopeTest < Minitest::Test
     here = File.join(ROOT, 'examples/doc_reader/doc_reader.spiff')
     nested = File.join(ROOT, 'studio/uis/workbench/workbench.spiff')
 
-    assert_equal File.join(ROOT, 'examples/doc_reader'), SpiffScope.app_root(here)
-    assert_equal File.join(ROOT, 'studio/uis/workbench'), SpiffScope.app_root(nested)
+    assert_equal File.join(ROOT, 'examples/doc_reader'), SpiffScope.app_root(here, within: ROOT)
+    assert_equal File.join(ROOT, 'studio/uis/workbench'), SpiffScope.app_root(nested, within: ROOT)
   end
 end

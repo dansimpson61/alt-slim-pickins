@@ -66,18 +66,40 @@ module SpiffScope
   # the views it governs. A `.spiff` either sits at the app's root
   # (`doc_reader/`, with a `views/` beneath it; `workbench/`, with its views
   # beside it) or beside the views themselves.
-  def app_root(spiff_path)
+  # `nil` is a real answer, and the only honest one when the walk finds no app:
+  # returning the last directory seen meant returning `/` for a Spiff that
+  # belongs to none, and `renderable_names` then globbed the entire filesystem.
+  # That is the defect behind this gate's own false first run (LORE.md,
+  # 2026-09-27) — the false pass was fixed then, the walk was not.
+  #
+  # `within` is required because a walk needs a floor. It is the tree the run was
+  # told to examine, so a Spiff outside the corpus is refused deterministically
+  # rather than resolving to whatever unrelated ancestor happens to hold a `.sp`.
+  # It, and not the filesystem root, is the boundary that does the work.
+  def app_root(spiff_path, within:)
+    ceiling = File.expand_path(within)
     dir = File.dirname(File.expand_path(spiff_path))
-    loop do
-      return dir if Dir.exist?(File.join(dir, 'views'))
-      return dir if File.exist?(File.join(dir, "#{File.basename(dir)}.tin"))
-      return dir if Dir[File.join(dir, '*.sp')].any?
+
+    while inside?(dir, ceiling)
+      return dir if app?(dir)
 
       parent = File.dirname(dir)
-      return dir if parent == dir
+      break if parent == dir # only `within: '/'` gets here; the loop stays total
 
       dir = parent
     end
+    nil
+  end
+
+  # A directory is an app when it holds the views a Spiff governs.
+  def app?(dir)
+    Dir.exist?(File.join(dir, 'views')) ||
+      File.exist?(File.join(dir, "#{File.basename(dir)}.tin")) ||
+      Dir[File.join(dir, '*.sp')].any?
+  end
+
+  def inside?(dir, ceiling)
+    dir == ceiling || dir.start_with?("#{ceiling}/")
   end
 
   # What a scope can render, from the two ways this project makes a word: a page
@@ -113,7 +135,14 @@ module SpiffScope
     end
 
     spiffs.each do |spiff|
-      app = app_root(spiff)
+      app = app_root(spiff, within: root)
+      unless app
+        report.call("NO APP      `#{File.basename(spiff)}` belongs to no app — nothing at or above it " \
+                    'holds views, a tin, or a `.sp`, so its zones have nothing to answer to')
+        problems += 1
+        next
+      end
+
       renderable = renderable_names(app)
 
       zone_names(spiff).each do |zone|
