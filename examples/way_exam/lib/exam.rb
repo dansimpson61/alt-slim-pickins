@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../../lib/slim_pickins/census'
+
 module WayExam
   Question = Struct.new(:id, :number, :prompt, :options, :correct_key, :explanation, keyword_init: true) do
     def option_a = options[:a]
@@ -61,6 +63,13 @@ module WayExam
         correct_key: :b,
         explanation: 'PRIMER.md: "Styles belong to theme roles and word variants. We make machines understand humans; we do not ask humans to speak in CSS machine code."'
       ),
+      # The one question whose answer moves. It said `64 words` — and offered no
+      # other option a reader could pick, so the true answer was graded wrong and
+      # the explanation's breakdown (42 + 22) was wrong in both terms. It claimed
+      # to be "held by test", and a test did hold it, at the wrong number, in a
+      # suite no gate runs. The count is now computed from the census on load, like
+      # every other living vital, so the exam cannot grade a stale answer again.
+      # `53` stays as a distractor because it is the count roadmap 0.1 really proved.
       Question.new(
         id: 'q5',
         number: 5,
@@ -68,10 +77,13 @@ module WayExam
         options: {
           a: '53 words',
           b: '102 words',
-          c: '64 words'
+          c: "#{SlimPickins::Census.words[:total].size} words"
         },
         correct_key: :c,
-        explanation: 'VOCABULARY.md: Exactly 64 words (42 Ruby classes + 22 .sp templates), held by test.'
+        explanation: 'bin/census.rb counts the vocabulary from the tree: ' \
+                     "#{SlimPickins::Census.words[:primitives].size} Ruby primitives + " \
+                     "#{SlimPickins::Census.words[:partials].size} .sp partials. " \
+                     'Measured, not recorded — which is why this option is computed too.'
       )
     ].freeze
 

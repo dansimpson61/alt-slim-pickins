@@ -2,6 +2,7 @@
 
 require 'minitest/autorun'
 require_relative '../lib/exam'
+require_relative '../../../lib/slim_pickins/census'
 
 class ExamTest < Minitest::Test
   def test_questions_are_populated
@@ -26,12 +27,22 @@ class ExamTest < Minitest::Test
       'q2' => 'Conditionals dissolve into vocabulary (like empty) describing the situation.',
       'q3' => 'Child sentences resolve dotted attributes (e.g. .balance) directly on that account.',
       'q4' => 'In theme roles and word variants, refusing raw inline styles.',
-      'q5' => '64 words'
+      'q5' => "#{SlimPickins::Census.words[:total].size} words"
     }
     result = WayExam::Exam.grade(answers)
     assert_equal 5, result.score
     assert_equal 100, result.percentage
     assert result.passed
+  end
+
+  # The count must come from the census, not from a literal here — the defect
+  # this question carried. Distinctness is asserted too: a distractor that
+  # drifted onto the live number would make two options right.
+  def test_the_vocabulary_question_is_measured_not_recorded
+    q5 = WayExam::Exam.questions.find { |q| q.id == 'q5' }
+
+    assert_equal "#{SlimPickins::Census.words[:total].size} words", q5.correct_answer
+    assert_equal 3, q5.options.values.uniq.size, 'no two options may say the same thing'
   end
 
   def test_grading_failing_score
