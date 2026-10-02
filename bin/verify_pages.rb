@@ -42,9 +42,6 @@ w_sample = graph.find('table')
 w_peers = graph.by_shape(w_sample.shape).reject { |w| w.name == w_sample.name }
 w_parents = w_sample.explicit_parents.map { |p| graph.find(p) }.compact
 w_children = w_sample.explicit_children.map { |c| graph.find(c) }.compact
-studio = StudioPages.ui_library(Uis['classic'])
-
-
 
 scenario = Roth::Scenario.defaults
 projection = Roth::Projection.of(scenario)

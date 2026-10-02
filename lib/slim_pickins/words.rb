@@ -188,35 +188,35 @@ emit_node([:each, { name: name }, collected])
       contract name: :subject, content: true, children: [:column, :total, :choose, :each], subject: :shift, shape: :gathers, lazy: [], infers: [:table_rows]
 
       def evaluate
-  name, caption = arguments(@args)
-  @name = name
-  @caption = caption
-  @rows = name ? subject.fetch(name) : subject.object
+        name, caption = arguments(@args)
+        @name = name
+        @caption = caption
+        @rows = name ? subject.fetch(name) : subject.object
 
-  with_open
-  columns = @collected
-  sample = @rows.first
-  columns.each do |c|
-    c[:sample] = sample && Subject.new(sample).fetch(c[:name])
-    c[:header] = label_of(c, sample)
-    c[:alignment] = alignment_of(c, sample)
-  end
+        with_open
+        columns = @collected
+        sample = @rows.first
+        columns.each do |c|
+          c[:sample] = sample && Subject.new(sample).fetch(c[:name])
+          c[:header] = label_of(c, sample)
+          c[:alignment] = alignment_of(c, sample)
+        end
 
-  rows = @rows.map do |row|
-    chain.with(row) do
-      cells = columns.reject { |c| c[:total] }.map do |c|
-        { name: c[:name], value: subject.fetch(c[:name]), kind: format_of(c),
-          alignment: c[:alignment] }
+        rows = @rows.map do |row|
+          chain.with(row) do
+            cells = columns.reject { |c| c[:total] }.map do |c|
+              { name: c[:name], value: subject.fetch(c[:name]), kind: format_of(c),
+                alignment: c[:alignment] }
+            end
+            [:row, {}, cells]
+          end
+        end
+
+        emit_node([:table, { name: @name, caption: @caption, columns: columns,
+                             rows: rows, foot: foot(columns, @rows, sample) }, []])
       end
-      [:row, {}, cells]
-    end
-  end
 
-  emit_node([:table, { name: @name, caption: @caption, columns: columns,
-                       rows: rows, foot: foot(columns, @rows, sample) }, []])
-end
-
-private
+      private
 
       def foot(columns, rows, sample)
         totals = columns.select { |c| c[:total] }
@@ -329,26 +329,26 @@ private
       contract name: :subject, content: true, modifiers: [:over], children: [:band, :line, :level, :each, :choose], subject: :shift, shape: :gathers, lazy: [], infers: [:chart_axis, :format_family, :table_header]
 
       def evaluate
-  over = @kwargs.key?(:over) ? @kwargs[:over] : nil
-  name, caption = arguments(@args)
-  @name = name
-  @caption = caption
-  @over = over
-  rows = name ? subject.fetch(name) : subject.object
-  @rows = rows.to_a
+        over = @kwargs.key?(:over) ? @kwargs[:over] : nil
+        name, caption = arguments(@args)
+        @name = name
+        @caption = caption
+        @over = over
+        rows = name ? subject.fetch(name) : subject.object
+        @rows = rows.to_a
 
-  with_open
-  series = @collected.select { |i| i[:kind] }
-  levels = @collected.select { |i| i[:value] }
+        with_open
+        series = @collected.select { |i| i[:kind] }
+        levels = @collected.select { |i| i[:value] }
 
-  drawn = series.map { |s| resolve(s, @rows) }.reject { |s| s[:points].empty? }
+        drawn = series.map { |s| resolve(s, @rows) }.reject { |s| s[:points].empty? }
 
-  emit_node([:chart, { series: drawn, levels: levels,
-                       across: across(@rows, @over || Inference.singular(@name)),
-                       caption: @caption }, []])
-end
+        emit_node([:chart, { series: drawn, levels: levels,
+                             across: across(@rows, @over || Inference.singular(@name)),
+                             caption: @caption }, []])
+      end
 
-private
+      private
 
       def resolve(series, rows)
         source = series[:from] ? series[:from].to_a : rows
@@ -596,10 +596,10 @@ private
       contract children: [:when, :otherwise], speech: :verb, shape: :gathers, lazy: [], infers: [:first_truthy_branch]
 
       def evaluate
-  with_open
-  chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
-  emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
-end
+        with_open
+        chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
+        emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
+      end
 
       def add_branch(condition, block)
         @collected << [condition, block]

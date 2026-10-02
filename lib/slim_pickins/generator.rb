@@ -150,13 +150,13 @@ module SlimPickins
     VOID = %w[area base br col embed hr img input link meta param source track wbr].freeze
 
     def emit(node)
-  # A bare string in the tree is escaped text; nil is nothing at all —
-  # the old runtime escaped it to an empty string.
-  return @out << esc(node) if node.is_a?(String)
-  return if node.nil?
+      # A bare string in the tree is escaped text; nil is nothing at all —
+      # the old runtime escaped it to an empty string.
+      return @out << esc(node) if node.is_a?(String)
+      return if node.nil?
 
-  kind, attrs, children = node
-  was_app_class, @current_app_class = @current_app_class, attrs[:app_class]
+      kind, attrs, children = node
+      was_app_class, @current_app_class = @current_app_class, attrs[:app_class]
       case kind
       when :raw then @out << children.join
       when :tag
@@ -175,15 +175,15 @@ module SlimPickins
       else
         raise Error, "no generator for node `#{kind}`" unless respond_to?(kind, true)
 
-    send(kind, attrs, children)
-  end
-ensure
-  @current_app_class = was_app_class if defined?(was_app_class)
-end
+        send(kind, attrs, children)
+      end
+    ensure
+      @current_app_class = was_app_class if defined?(was_app_class)
+    end
 
     def token(word, variant = nil)
-  [self.class.token(word, variant), @current_app_class].compact.join(' ')
-end
+      [self.class.token(word, variant), @current_app_class].compact.join(' ')
+    end
     def esc(text) = CGI.escapeHTML(text.to_s)
     def attrs_html(pairs)
       pairs.reject { |_, v| v.nil? || v == '' || v == false }

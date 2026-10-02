@@ -86,7 +86,7 @@ module SlimPickins
         end
       end
 
-      value, empty, body =
+      value, _empty, body =
         if shifts
           about(shift_target, &body_block)
         elsif contract&.empty && !empty_active?

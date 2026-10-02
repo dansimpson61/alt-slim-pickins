@@ -28,7 +28,6 @@
 require_relative 'lib/slim_pickins'
 
 LEXICON = File.join(__dir__, 'docs', 'SPIFF.md')
-compiler = SlimPickins::Compiler::Spiff
 
 # Words that honestly emit no CSS of their own, so their entries carry no
 # compiled block and `surface`'s example compiles to an empty string on
