@@ -31,22 +31,22 @@ module SlimPickins
     # An app's words become real singleton methods, for the same reason the
     # built-ins are real methods: a call site should not be able to tell them
     # apart, and an unknown word should still fail with its own name.
-def define_app_words
-  SlimPickins::Word.registry.each do |word, klass|
-    define_singleton_method(word) do |*args, **kwargs, &block|
-      klass.new(self, args, kwargs, block).evaluate
-    end
-  end
-  return unless @library
+    def define_app_words
+      SlimPickins::Word.registry.each do |word, klass|
+        define_singleton_method(word) do |*args, **kwargs, &block|
+          klass.new(self, args, kwargs, block).evaluate
+        end
+      end
+      return unless @library
 
-  Array(@library.words).each { |mod| extend mod }
-  @library.partials.each do |word, source|
-    if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
-      eval_with(Transform.call(source, path: "partials/#{word}.sp"), "partials/#{word}.sp", source.lines)
+      Array(@library.words).each { |mod| extend mod }
+      @library.partials.each do |word, source|
+        if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
+          eval_with(Transform.call(source, path: "partials/#{word}.sp"), "partials/#{word}.sp", source.lines)
+        end
+      end
     end
-  end
-end
-private :define_app_words
+    private :define_app_words
 
     # An in-buffer domain word defined with `def <word>, *params`.
     # Flexible argument binding:
@@ -177,8 +177,6 @@ private :define_app_words
       @nodes = was
     end
 
-    # A word's own children, as nodes — the capture above, by its hatch name.
-
     # The paper's "conditionally pruning an AST": an empty collection keeps
     # only the `empty` node that names it; anything else keeps everything but.
     # The promoted `empty` is a paragraph whose box carries the word's name,
@@ -287,8 +285,6 @@ private :define_app_words
       @gatherers.pop
     end
 
-    def chain = @chain
-
     # Names are Symbols, content is anything else. This is why argument order
     # never has to be counted.
     def name_and_content(args)
@@ -308,8 +304,6 @@ private :define_app_words
       # missing attribute later, on a line that is not the cause.
       value = name.is_a?(Symbol) || name.is_a?(String) ? subject.fetch(name) : name
       empty = Inference.collection?(value) && Inference.nothing_in?(value)
-      was = @empty_active
-      @empty_active = empty
       description = if name.is_a?(Symbol) || name.is_a?(String)
                       "this #{name}"
                     elsif value.respond_to?(:describe)
@@ -317,9 +311,19 @@ private :define_app_words
                     else
                       "this #{value.class.name.downcase}"
                     end
-      [value, empty, @chain.with(value, described_as: description, &block)]
-    ensure
-      @empty_active = was unless was.nil?
+
+      # The restore is scoped to where `was` is a real value. A method-level
+      # `ensure` also runs on the early return above, where `was` is an
+      # unassigned local and therefore nil — and the guard that covered that
+      # (`@empty_active = was unless was.nil?`) read as a check against
+      # impossible state rather than the control-flow fix it actually was.
+      was = @empty_active
+      begin
+        @empty_active = empty
+        [value, empty, @chain.with(value, described_as: description, &block)]
+      ensure
+        @empty_active = was
+      end
     end
 
     # Precedence, each level owned by whoever knows most: the page knows this
@@ -443,15 +447,6 @@ private :define_app_words
       end
       root
     end
-
-    # `render_partial` lived here until 2026-09-17: a second implementation
-    # of partial rendering, superseded by `PartialWord#evaluate` and called by
-    # nothing — its only mentions were two comments and a test asserting it
-    # stayed private. It built `PartialGatherer`, a constant defined nowhere,
-    # so it could not have run. Deleted under dan's ruling that the
-    # partial-gatherer road be repaired rather than left half-built; what the
-    # road needed instead was `Word#word`, so `inside:` can find its gatherer.
-
 
     # The optionality spelling (dan, 2026-09-02): slots a preamble declares —
     # name, content, each modifier — are keys of the parameters subject, nil

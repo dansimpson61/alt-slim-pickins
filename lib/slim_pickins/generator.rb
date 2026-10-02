@@ -110,10 +110,10 @@ module SlimPickins
       end
     end
 
-def initialize
-  @out = +''
-  @indent = 0
-end
+    def initialize
+      @out = +''
+      @indent = 0
+    end
 
 
     def call(nodes)
@@ -218,14 +218,14 @@ end
       @out << %(<script src="#{CGI.escapeHTML(attrs[:path])}"#{attrs[:defer] ? ' defer' : ''}></script>)
     end
 
-def nav(attrs, children)
-  open_tag('nav', class: token(:nav, attrs[:variant]),
-                 'aria-label': attrs[:variant] ? attrs[:variant].to_s.capitalize : 'Main')
-  children.each { |c| emit(c) }
-  @out << '</nav>'
-end
+    def nav(attrs, children)
+      open_tag('nav', class: token(:nav, attrs[:variant]),
+                     'aria-label': attrs[:variant] ? attrs[:variant].to_s.capitalize : 'Main')
+      children.each { |c| emit(c) }
+      @out << '</nav>'
+    end
 
-def tabs(attrs, children)
+    def tabs(attrs, children)
       open_tag('div', class: token(:tabs, attrs[:variant]))
 
       # Extract tab labels from children to build the nav using radio buttons.
@@ -473,9 +473,9 @@ def tabs(attrs, children)
 
     # --- Interaction ------------------------------------------------------
 
-def form(attrs, children)
-  open_tag('form', class: token(:form), id: attrs[:name]&.to_s, action: attrs[:to]&.to_s,
-                  method: (attrs[:method] || :post).to_s, target: attrs[:target]&.to_s)
+    def form(attrs, children)
+      open_tag('form', class: token(:form), id: attrs[:name]&.to_s, action: attrs[:to]&.to_s,
+               method: (attrs[:method] || :post).to_s, target: attrs[:target]&.to_s)
       with_form(true) { children.each { |c| emit(c) } }
       @out << '</form>'
     end
@@ -595,10 +595,10 @@ def form(attrs, children)
                class: classes)
     end
 
-        # --- bits -------------------------------------------------------------
+    # --- bits -------------------------------------------------------------
 
-def open_tag(tag, **pairs) = @out << "<#{tag}#{attrs_html(pairs)}>"
-def void_tag(tag, **pairs) = @out << "<#{tag}#{attrs_html(pairs)}>"
-def full_tag(tag, text, **pairs) = @out << "<#{tag}#{attrs_html(pairs)}>#{esc(text)}</#{tag}>"
+    def open_tag(tag, **pairs) = @out << "<#{tag}#{attrs_html(pairs)}>"
+    def void_tag(tag, **pairs) = @out << "<#{tag}#{attrs_html(pairs)}>"
+    def full_tag(tag, text, **pairs) = @out << "<#{tag}#{attrs_html(pairs)}>#{esc(text)}</#{tag}>"
   end
 end

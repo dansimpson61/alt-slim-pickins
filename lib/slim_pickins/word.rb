@@ -63,31 +63,31 @@ end
       self.class.respond_to?(:partial_name) ? self.class.partial_name : self.class.word_name
     end
 
-def unpack_arguments
-  name_val, content_val = arguments(@args)
-  c = self.class.get_contract
-  mapping = self.class.maps
+    def unpack_arguments
+      name_val, content_val = arguments(@args)
+      c = self.class.get_contract
+      mapping = self.class.maps
 
-  attrs = {}
+      attrs = {}
 
-  if name_val && c.name != :none
-    key = mapping[:name] || c.name
-    key = :name if key == :attribute || key == :subject
-    attrs[key] = name_val
-  end
+      if name_val && c.name != :none
+        key = mapping[:name] || c.name
+        key = :name if key == :attribute || key == :subject
+        attrs[key] = name_val
+      end
 
-  if c.content
-    key = mapping[:content] || :content
-    if key == :label || key == :legend || key == :alt
-      attrs[key] = label_for(name_val, content_val)
-    elsif content_val
-      attrs[key] = content_val
+      if c.content
+        key = mapping[:content] || :content
+        if key == :label || key == :legend || key == :alt
+          attrs[key] = label_for(name_val, content_val)
+        elsif content_val
+          attrs[key] = content_val
+        end
+      end
+
+      attrs.merge!(@kwargs)
+      attrs
     end
-  end
-
-  attrs.merge!(@kwargs)
-  attrs
-end
 
     def evaluate
       raise NotImplementedError

@@ -218,23 +218,23 @@ end
 
 private
 
-def foot(columns, rows, sample)
-  totals = columns.select { |c| c[:total] }
-  return [] if totals.empty?
+      def foot(columns, rows, sample)
+        totals = columns.select { |c| c[:total] }
+        return [] if totals.empty?
 
-  shown = columns.reject { |c| c[:total] }
-  shown.each_with_index.map do |c, i|
-    t = totals.find { |x| x[:name] == c[:name] }
-    if t
-      sum = rows.sum { |row| Subject.new(row).fetch(c[:name]) }
-      { value: sum, kind: format_of(c, rows.first), alignment: c[:alignment] }
-    elsif i.zero?
-      { label: totals.first[:header] || 'Total' }
-    else
-      {}
-    end
-  end
-end
+        shown = columns.reject { |c| c[:total] }
+        shown.each_with_index.map do |c, i|
+          t = totals.find { |x| x[:name] == c[:name] }
+          if t
+            sum = rows.sum { |row| Subject.new(row).fetch(c[:name]) }
+            { value: sum, kind: format_of(c, rows.first), alignment: c[:alignment] }
+          elsif i.zero?
+            { label: totals.first[:header] || 'Total' }
+          else
+            {}
+          end
+        end
+      end
 
     end
 
@@ -350,24 +350,24 @@ end
 
 private
 
-def resolve(series, rows)
-  source = series[:from] ? series[:from].to_a : rows
-  sample = source.first
-  kind = Subject.new(sample).format_for(series[:name])
-  values = source.map { |row| Subject.new(row).fetch(series[:name]) }
+      def resolve(series, rows)
+        source = series[:from] ? series[:from].to_a : rows
+        sample = source.first
+        kind = Subject.new(sample).format_for(series[:name])
+        values = source.map { |row| Subject.new(row).fetch(series[:name]) }
 
-  { kind: series[:kind],
-    label: label_of({ name: series[:name], header: series[:label] }, sample),
-    points: values.map(&:to_f),
-    shown: values.map { |v| Generator.format(kind, v) } }
-end
+        { kind: series[:kind],
+          label: label_of({ name: series[:name], header: series[:label] }, sample),
+          points: values.map(&:to_f),
+          shown: values.map { |v| Generator.format(kind, v) } }
+      end
 
-def across(rows, attribute)
-  return (1..rows.size).map(&:to_s) unless attribute && rows.first
-  return (1..rows.size).map(&:to_s) unless Subject.new(rows.first).has?(attribute)
+      def across(rows, attribute)
+        return (1..rows.size).map(&:to_s) unless attribute && rows.first
+        return (1..rows.size).map(&:to_s) unless Subject.new(rows.first).has?(attribute)
 
-  rows.map { |row| Subject.new(row).fetch(attribute).to_s }
-end
+        rows.map { |row| Subject.new(row).fetch(attribute).to_s }
+      end
 
     end
 
@@ -601,9 +601,9 @@ end
   emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
 end
 
-def add_branch(condition, block)
-  @collected << [condition, block]
-end
+      def add_branch(condition, block)
+        @collected << [condition, block]
+      end
 
     end
 
