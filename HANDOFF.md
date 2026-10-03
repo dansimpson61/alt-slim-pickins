@@ -14,11 +14,11 @@ Resume work on `~/dev/alt-slim-pickins`.
    card is updated every round and this file has lagged it by a week before. It is
    also short now, and deliberately — `bin/check_card.rb` holds it to a budget.
 4. `HANDOFF.md` — this document, specifically the active next step below
-5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0m.md` — one per round, each the record
+5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0n.md` — one per round, each the record
    of its own. **Read `0.4.0h` first if you are picking up a thread from the audit's
    list**: it carries the prioritized list, and its *What landed* says what was done
    at the time. For the connected account of every round in order, read
-   `history/CHRONICLE.md` instead of reconstructing it from thirteen files
+   `history/CHRONICLE.md` instead of reconstructing it from fourteen files
 6. `COMMUNITY_BULLETIN_BOARD.md` — the council's most recent session (currently:
    the workbench spatial frontier fixes, 2026-09-25); `.claude/skills/council/SKILL.md`
    is the reusable skill, read it before convening the council again
@@ -64,11 +64,11 @@ measure are quoted as the gate output they are.
 - **Full Suite**: 600 runs, 0 failures, 0 errors, 0 skips in one process — and
   that now includes the example apps' own suites, because the Suite leg asks
   `Census.test_files` instead of keeping its own glob.
-- **Check Grammar**: `1,239 sentences checked, 92 words defined, 0 problems`.
+- **Check Grammar**: `1,289 sentences checked, 96 words defined, 0 problems`.
 - **Check Shape**: 62 canonical words, 0 problems.
 - **Check Styles**: 27 emittable classes, 59 rendering, 113 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
-- **Spiff Scope (zones)**: 2 spiffs held to their pages, 0 problems.
+- **Spiff Scope**: `3 spiff(s), 15 compiled classes held to the HTML their pages render, 0 problems` — it holds compiled selectors to rendered HTML now, not zone names to sources.
 - **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 34 pages, 0 problems.
 - **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
 - **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): a digest over every page the gate proves. No number is written down here on purpose — `examples/lore_reader` renders a live count of `LORE.md`'s entries, so the digest moves whenever lore is left. Compare snapshots within a session, which is what `bin/byte_diff.rb`'s own header says.
@@ -81,7 +81,7 @@ measure are quoted as the gate output they are.
 ### The active next step — dan's, because the list is finished
 
 **Every tier of `DAYTRIP-0.4.0h.md`'s prioritized list is landed.** Tier 7 closed in
-`DAYTRIP-0.4.0m.md`: the resume card went from 32,179 characters to 3,707 and this
+`DAYTRIP-0.4.0m.md`: the resume card went from 32,179 characters to under 4,000 and this
 file from 29,370 to about 18,000, with 29,061 characters moved verbatim to
 `history/CHRONICLE.md` and `bin/check_card.rb` given the budget the audit asked for.
 

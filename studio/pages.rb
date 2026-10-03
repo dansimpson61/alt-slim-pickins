@@ -255,6 +255,19 @@ module StudioPages
   # level down, so the frame is read here rather than left to be missed. A
   # missing tin is silent — the pages simply render unframed — which is how
   # this cost a round.
+  # **Do not memoize this.** Rebuilding on every use is what makes the studio
+  # correct, and it is not an accident of style.
+  #
+  # `SlimPickins::Word.registry` is one global hash and `Compilation` writes to it
+  # unconditionally, so a partial's name belongs to whichever library compiled it
+  # last — a `Library` scopes which sources are read, never which words are
+  # callable (DAYTRIP-0.4.0n measured this). `editor` is defined by both UIs, with
+  # structurally unrelated bodies. Rebuilding here re-registers the serving UI's
+  # partials immediately before its render, so that UI wins the slot just in time.
+  #
+  # Memoize it and the classic UI renders the workbench's `editor`, silently, with
+  # every gate green: nothing compares one UI's partial to another's.
+  # `test/studio_try_test.rb` depends on the same mechanism and says so.
   def self.ui_library(ui)
     tin_path = SlimPickins::Library.tin_path(ui.dir)
     merge_libraries([*library_dirs, ui.views],

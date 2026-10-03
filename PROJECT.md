@@ -12,7 +12,7 @@ status: >-
   round-by-round account lives in `history/CHRONICLE.md` and each round's own record
   in its `DAYTRIP-*.md`; this field carries the present, which is what a resume card
   is for — and `bin/check_card.rb` now holds it to a budget so it stays that way.
-  Tier 7 is DAYTRIP-0.4.0m.md: the card went from 32,179 characters to 3,725 and
+  Tier 7 is DAYTRIP-0.4.0m.md: the card went from 32,179 characters to under 4,000 and
   HANDOFF.md from 29,370 to 15,595, with 29,061 moved verbatim and none deleted,
   because sampling forty phrases found that prose nowhere else in the repository.
 last_touched: 2026-10-03
