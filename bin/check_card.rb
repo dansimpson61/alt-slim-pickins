@@ -14,8 +14,33 @@
 #   - every field the dashboard needs is present and not empty
 #   - `last_touched` is a date, because the dashboard reads it as one
 #   - `docs`, when it names a file, names one that exists
+#   - the prose fields are inside their budgets
 #
 # Exits non-zero when anything is wrong, so it can gate a commit.
+
+# The budgets, and why a resume card has them.
+#
+# The card is read at the start of every session so that a session can resume
+# *instead of* reading the repository. A card that costs more to read than the part
+# of the repo it describes has stopped doing that — and by 2026-10-03 this one had:
+# `status` was 20,000 characters and `notes` 9,060, together longer than
+# `transform.rb`, `builder.rb` and `generator.rb` combined, in a single folded YAML
+# scalar with no paragraph breaks. DAYTRIP-0.4.0h named it "the same disease in the
+# instrument built to stop it", and this script printed `status 11145 chars` on
+# every green run and had no opinion about it.
+#
+# It has one now. The numbers are a judgement, not a measurement: roughly a
+# minute's reading each, which is proportionate to a field read before every
+# session. `next_step` gets the most because it is the operative field — the one
+# thing a session must act on. They are dan's to change, and changing them is one
+# line.
+#
+# What overflows does not get deleted. The round-by-round account went to
+# `history/CHRONICLE.md` verbatim, because sampling found none of it anywhere else
+# in the repository — the assumption that it duplicated the `DAYTRIP-*.md` files
+# was false, and a budget that invites deletion of the only copy of something is a
+# worse instrument than no budget at all.
+BUDGETS = { 'status' => 1_500, 'next_step' => 2_000, 'notes' => 1_500 }.freeze
 
 require 'date'
 require 'yaml'
@@ -83,11 +108,22 @@ if card
     puts "  NO DOCS FILE   `docs` names #{docs.inspect}, which is not there"
     problems += 1
   end
+
+  BUDGETS.each do |field, budget|
+    length = card[field].to_s.length
+    next if length <= budget
+
+    puts "  OVER BUDGET    `#{field}` is #{length} chars against a budget of #{budget} — a card that " \
+         'costs more to read than the repo it stands in for has stopped working'
+    puts '                 (move the overflow somewhere it can be read; do not delete it)'
+    problems += 1
+  end
 end
 
 puts
 if problems.zero?
-  puts "resume card — #{REQUIRED.size} fields present, last_touched #{card['last_touched']}, status #{card['status'].to_s.length} chars"
+  room = BUDGETS.map { |field, budget| "#{field} #{card[field].to_s.length}/#{budget}" }.join(', ')
+  puts "resume card — #{REQUIRED.size} fields present, last_touched #{card['last_touched']}, #{room}"
 end
 puts "#{problems} problems"
 exit(problems.zero? ? 0 : 1)
