@@ -29,12 +29,13 @@ module StudioVitals
   # third copy is for. The count of pages is the caller's, because the shelf's
   # list belongs to the shelf.
   #
-  # `word_count` and `words_count` are two names the templates grew for one
-  # number — the tin's footer asks for one, the library shelf for the other.
-  # Named here rather than quietly reconciled; renaming a local is a change to
-  # every page that says it.
+  # One name per number. The templates had grown two for this one — the tin's
+  # footer asked for `word_count` and the library shelf for `words_count`, both
+  # answered with `WORDS` — which was named in DAYTRIP-0.4.0k rather than fixed,
+  # because renaming a local is a change to every page that says it. Two pages
+  # said it, and dan's call was to collapse them (DAYTRIP-0.4.0n).
   def self.locals(pages_count:)
     { word_count: WORDS, convention_count: CONVENTIONS, promise_count: PROMISES,
-      words_count: WORDS, pages_count: pages_count }
+      pages_count: pages_count }
   end
 end

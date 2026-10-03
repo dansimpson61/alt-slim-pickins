@@ -125,7 +125,7 @@ module Vitals
     Vital.new(key: :promises, nouns: [/promises?/i], ruby_keys: %w[promise_count promises_count]),
     Vital.new(key: :apps, nouns: [/apps?\b/i, /applications?/i], ruby_keys: %w[apps_count app_count]),
     Vital.new(key: :canonical_words, nouns: [/(?:canonical |vocabulary |known |total )?words?/i],
-              ruby_keys: %w[word_count words_count])
+              ruby_keys: %w[word_count])
   ].freeze
 
   # A key whose answer is never a literal, whatever the literal says: `measured`

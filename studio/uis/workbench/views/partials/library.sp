@@ -7,7 +7,7 @@
 # docs here rather than on a page of their own.
 box
   search placeholder: "Search the library"
-  fact words, .words_count
+  fact words, .word_count
   fact pages, .pages_count
   tabs
     tab "Pages", active: .pages_active

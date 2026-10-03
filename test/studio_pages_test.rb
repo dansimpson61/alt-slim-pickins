@@ -295,12 +295,12 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_refusal_renders_cleanly_even_with_layout_in_library
-    layout_lib = SlimPickins::Library.new(tin: "box\n  fact words, .words_count\n  contents\n",
+    layout_lib = SlimPickins::Library.new(tin: "box\n  fact words, .word_count\n  contents\n",
                                           partials: {}, words: [])
     html = StudioPages.refusal(SlimPickins::Error.new('custom refusal message'), library: layout_lib)
     assert_includes html, 'note--error'
     assert_includes html, 'custom refusal message'
-    refute_includes html, 'words_count',
+    refute_includes html, 'word_count',
                     'refusal must not attempt to render layout chrome'
   end
 
