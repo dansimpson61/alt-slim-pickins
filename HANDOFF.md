@@ -64,8 +64,8 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 32 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 54 test files.
-- **Full Suite**: 568 runs, 0 failures, 0 errors, 0 skips in one process — and
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 32 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 55 test files.
+- **Full Suite**: 575 runs, 0 failures, 0 errors, 0 skips in one process — and
   that now includes the example apps' own suites, because the Suite leg asks
   `Census.test_files` instead of keeping its own glob.
 - **Check Grammar**: `1,239 sentences checked, 92 words defined, 0 problems`.
@@ -75,7 +75,7 @@ measure are quoted as the gate output they are.
 - **Spiff Scope (zones)**: 2 spiffs held to their pages, 0 problems.
 - **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 32 pages, 0 problems.
 - **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
-- **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): `d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down over 31 pages.
+- **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): a digest over every page the gate proves. No number is written down here on purpose — `examples/lore_reader` renders a live count of `LORE.md`'s entries, so the digest moves whenever lore is left. Compare snapshots within a session, which is what `bin/byte_diff.rb`'s own header says.
 - **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.
 
 ---
@@ -157,55 +157,60 @@ dedented `def`s, seven more indentation mismatches inside method bodies, the
 duplicate `Builder#chain`, two dead comments, `about`'s guard restructured, three
 dead locals. **New instruments**: `bin/byte_diff.rb` and `ruby -w -c`.
 
-### The active next step — Tier 5 of `DAYTRIP-0.4.0h.md`, and three things to confirm
+### The active next step — Tier 6 of `DAYTRIP-0.4.0h.md`, resequenced
 
-Tiers 1 through 4 are landed, green and recorded — the audit round in
-`DAYTRIP-0.4.0h.md`, the two new legs in `DAYTRIP-0.4.0i.md`. **Read 0.4.0i
-before picking this up**; it carries the design arguments you would otherwise
-re-derive.
+Tiers 1 through 5 are landed and green. The rounds: `DAYTRIP-0.4.0h.md` is the
+audit and carries the list; `0.4.0i.md` built the two new legs; `0.4.0j.md` ran
+Tier 5 and found both of its premises wrong. **Read 0.4.0j before trusting any
+remaining item on the list** — its lesson is that a plan's premises decay faster
+than its priorities, and the items below have not been re-measured since the audit
+wrote them.
 
-**What changed that the rest of this file assumes.** The gate is **twelve legs**:
-`check_vitals.rb` holds every number the living prose and the `.rb` comments
-state about this project to `Census.snapshot`, and `check_ruby.rb` runs
-`ruby -w -c` over every Ruby file with a warning counting as a failure. The Suite
-leg no longer keeps its own glob — it asks `Census.test_files`, so the five
-example apps' suites are inside the gate and the suite is 568 runs in one
-process. `StudioStatus::LEGS` is still the one home for the leg list, and
-`README`'s gate command is the second copy of it.
+**What changed that the rest of this file assumes.** The gate is twelve legs
+(`check_vitals.rb`, `check_ruby.rb` added) and the Suite leg asks
+`Census.test_files`, so the example apps' suites are inside it: 575 runs in one
+process. `check_spiff_scope.rb` no longer compares names — it holds every class a
+Spiff's compiled stylesheet targets to the rendered HTML of the pages it governs,
+and `app_root`, `zone_names` and `renderable_names` are gone with the question
+they answered. `examples/doc_reader` is page 32 of the verified corpus.
+`lib/slim_pickins/vocabulary.rb` is the one home for VOCABULARY.md's generated
+bullets, asked by both `check_grammar.rb` and `bin/generate_vocabulary.rb`.
 
-**Three things to confirm rather than discover**, each a judgement this round
-made and named rather than absorbed:
+**Tier 6, in this order, because sizing it inverted the audit's.**
 
-1. **`KERNEL.md` is exempt from the vitals gate**, against the scope decision
-   written here last round. Its own first paragraph pins its measurements to tree
-   `5d43fe9`, which is the test every other exemption uses. The argument is in
-   `DAYTRIP-0.4.0i.md` Part 1; aligning the written scope with it is dan's call.
-2. **`README`'s "Everything green" is gone**, replaced by a sentence saying what
-   green does and does not cover — including that no leg renders to a browser and
-   that this is deliberate.
-3. **`word_count` and `words_count` are still two names for one number**, named
-   in `StudioVitals` rather than reconciled. Renaming a local changes every page
-   that says it, so it is a proposal.
+1. **Rewrite `studio/inspector.rb` in the language it inspects.**
+   `studio/inspector.rb:17` is a 255-line method that is mostly one HTML heredoc:
+   39 raw tags, 37 hardcoded hex colours, and `100vh` twice — the unit 0.4.0g
+   retired. `check_styles.rb` reads `lib/**/*.rb` but not `studio/*.rb`, so none
+   of it is visible to the gate whose job is keeping presentation in the theme's
+   roles. **This is a design job that will surface vocabulary gaps needing dan's
+   rulings — expect to stop and ask rather than invent words.**
+2. **Then `Data.define` for the semantic node**, at the corrected scope: 20 read
+   sites and 29 construction sites. Not the sixty `is_a?` checks the audit first
+   claimed — that claim was measured, disproved and corrected in place in
+   `DAYTRIP-0.4.0h.md` Part 3. Item 1 above deletes three of the twenty read
+   sites, which is why it goes first.
+3. **Then Tier 4's last item**, which both of the above unblock: point
+   `check_styles` at `studio/*.rb`.
 
-**Next on the list is Tier 5, and both of its items subtract.** Stop committing a
-generated `VOCABULARY.md` (`bin/generate_vocabulary.rb` makes it, and
-`check_grammar`'s `UNGENERATED` section exists only to verify the committed copy
-still matches its generator — the Ode's answer to two copies of one truth is one
-home, not a checker). Then delete or retarget `check_spiff_scope.rb`, which is
-the one leg with no recorded catch.
-
-**Then Tier 6, resequenced**: rewrite `studio/inspector.rb` in the language it
-inspects *before* naming the semantic node with `Data.define`, because the
-rewrite deletes three of the twenty node-read sites and unblocks pointing
-`check_styles` at `studio/` (Tier 4's last item, still red on that file). Item 19
-will surface vocabulary gaps that need dan's rulings.
-
-**Tier 7 is the card surgery, and this file is now the clearest instance of it.**
-`HANDOFF.md` restates the contents of nine `DAYTRIP-*.md` files and is the second
+**Tier 7 is the card surgery, and this file is the clearest instance of it.**
+`HANDOFF.md` restates the contents of ten `DAYTRIP-*.md` files and is the second
 most-churned file in the repository's history (3,227 lines) behind a closed
-roadmap. Its numbers are correct and gate-held now; the duplication is not. That
-is Part 4 of the audit — "the diversion is real, and the documents are doing it"
-— pointing at the resume prompt itself.
+roadmap. Its numbers are gate-held now; the duplication is not. That is the
+audit's "the diversion is real, and the documents are doing it" pointing at the
+resume prompt itself.
+
+**Three proposals awaiting dan's word**, each named in `0.4.0j` rather than
+performed:
+
+- **The word registry is global and last-compile-wins.** Rendering results depend
+  on test order; `test/studio_try_test.rb` documents the mechanism in its own
+  comment and depends on it. It is why `bin/verify_pages.rb` has always had a
+  process to itself. Fixing it is a runtime change with a blast radius.
+- **Does a committed 1,226-line `VOCABULARY.md` still earn its keep?** 72% of it
+  is prose, and the studio already renders a live vocabulary reference from the
+  code. A documentation decision, not a refactor.
+- **`word_count` and `words_count`** remain two names for one number.
 
 ### Then, in order — and the order changed
 
@@ -237,7 +242,7 @@ is Part 4 of the audit — "the diversion is real, and the documents are doing i
 
 ### Two instruments this round added — use them, do not rebuild them
 
-- **`ruby bin/byte_diff.rb`** renders all 31 pages the gate proves and reduces the
+- **`ruby bin/byte_diff.rb`** renders every page the gate proves and reduces the
   corpus to one digest; `ruby bin/byte_diff.rb /tmp/before` also writes each page
   for `diff -r`. Current digest: `d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down. This is the
   acceptance test for any shape or refactor work — every "byte-identical" claim in

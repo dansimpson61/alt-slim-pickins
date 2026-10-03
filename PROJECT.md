@@ -208,27 +208,50 @@ status: >-
   both new legs mutation-tested; the byte-diff digest moved on purpose to
   2172d2bd6c0254a8c611d59a and the move was explained by reading the rendered
   footer rather than trusting the number.
+  Daytrip 0.4.0j (2026-10-03) ran Tier 5 and found both of its premises wrong.
+  `VOCABULARY.md` cannot stop being committed: 349 of its 1,226 lines are
+  generated and the other 72% is prose no generator produces. The real
+  duplication was the question — the entry-splitting regex, the bullet lookup and
+  the conventions comparison each lived once in `bin/generate_vocabulary.rb` and
+  once in `check_grammar.rb` — so `lib/slim_pickins/vocabulary.rb` now holds it,
+  with a `Drift` struct naming the three cases (replace, insert a missing bullet,
+  delete an unwanted one) that had been buried in nested conditionals in both
+  copies. Honest accounting: 203 lines of code became 213, so it added ten rather
+  than subtracting; the generator fell 43% and the question has one home.
+  `check_spiff_scope.rb` was retargeted rather than deleted, because measuring it
+  showed it read 3 of the 11 classes its compiler emits — `panes` and `shell`
+  among the 8 it never saw, which are the two classes 0.4.0g's hardest defects
+  were about. It now holds every class the compiled stylesheet targets to the
+  rendered HTML of the pages the Spiff governs: 3 classes checked became 13, and
+  the right-hand side is rendered HTML rather than source text, so a word defined
+  but never reached now fails. Proven by A/B against the version it replaced, not
+  asserted. That retarget found `examples/doc_reader` — an app directory with a
+  Spiff, a page and a data file, no `app.rb`, that nothing had ever rendered — now
+  page 32 of the verified corpus. Also found, named and not fixed: the word
+  registry is global and last-compile-wins, so a gate that renders cannot be held
+  to the real corpus from inside the shared suite. Twelve legs green in 4.47s;
+  575 runs, 6,401 assertions, 0 failures.
 last_touched: 2026-10-03
 next_step: >-
-  Tiers 1, 2, 3 and 4 of DAYTRIP-0.4.0h.md are landed and green; the round is
-  recorded in DAYTRIP-0.4.0i.md. The gate is twelve legs and the suite now runs
-  every test file the census can find (568 runs). Three things dan may want to
-  confirm rather than discover: KERNEL.md was moved to the vitals gate's exempt
-  set against the written scope decision, because its own first paragraph pins
-  its measurements to tree 5d43fe9 — the argument is in DAYTRIP-0.4.0i.md Part 1
-  and aligning the written scope is his call; README's "Everything green" was
-  replaced with a sentence that says what green does and does not cover,
-  including that no leg renders to a browser; and `word_count`/`words_count`
-  remain two names for one number, named in StudioVitals rather than reconciled,
-  because renaming a local changes every page that says it. Next on the list is
-  Tier 5 (stop committing a generated VOCABULARY.md; delete or retarget
-  check_spiff_scope.rb — both subtract), then Tier 6 resequenced so the Inspect
-  surface is rewritten in the language before the semantic node is named, which
-  also unblocks pointing check_styles at studio/. Tier 7 is the card surgery, and
-  the clearest instance of it is now measured: HANDOFF.md restates the contents
-  of nine DAYTRIP files and is the second most-churned file in the repository's
-  history. Older calls still open — the workbench word page's proportions, the
-  unserved `assets/workbench.css`, and the two byte-identical `.tin` files.
+  Tiers 1 through 5 of DAYTRIP-0.4.0h.md are landed and green; the rounds are
+  recorded in DAYTRIP-0.4.0i.md and DAYTRIP-0.4.0j.md. Next is Tier 6,
+  resequenced: rewrite studio/inspector.rb in the language it inspects (a
+  255-line method that is mostly one HTML heredoc — 39 raw tags, 37 hardcoded hex
+  colours), which deletes three of the twenty semantic-node read sites and
+  unblocks Tier 4's last item, pointing check_styles at studio/. Item 19 is a
+  design job that will surface vocabulary gaps needing dan's rulings, so expect to
+  stop and ask. Then item 18, `Data.define` for the semantic node, at the
+  corrected scope (20 read sites, 29 construction sites — not the sixty type
+  checks the audit first claimed). Then Tier 7, the card surgery, whose clearest
+  instance is measured: HANDOFF.md restates the contents of ten DAYTRIP files and
+  is the second most-churned file in the repository's history. Three proposals
+  from 0.4.0j awaiting dan's word, each named rather than performed — the word
+  registry's global last-compile-wins order dependence (a real fragility an
+  existing test depends on by name); whether a committed 1,226-line VOCABULARY.md
+  earns its keep now that the studio renders a live vocabulary reference from the
+  code; and word_count/words_count, still two names for one number. Older calls
+  still open — the workbench word page's proportions, the unserved
+  `assets/workbench.css`, and the two byte-identical `.tin` files.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

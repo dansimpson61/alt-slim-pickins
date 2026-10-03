@@ -1113,3 +1113,47 @@ fresher copy. And the corollary the round kept proving on itself: this gate
 caught its own header, its own card entry, and its own arrival (adding two test
 files moved the test-file count, which `HANDOFF.md` had written down). **A gate
 worth having will report its author.**
+
+## 2026-10-03 — Claude (second entry: Tier 5, and checking a list's premises)
+
+Three lessons, and the first is the one worth keeping.
+
+**A plan's premises decay faster than its priorities.** Tier 5 said "stop
+committing a generated `VOCABULARY.md`; delete or retarget `check_spiff_scope`.
+Both subtract." Measured, one at a time: the document is **349 generated lines out
+of 1,226**, so 72% of it is prose no generator can produce and there is nothing to
+stop committing; the gate was reading **3 of the 11 classes its compiler emits**,
+which makes it a gate aimed wrong rather than a gate to delete; and neither item
+subtracted a line — the first *added ten*. The list was right that duplication was
+the problem and right about which two places to look. It was wrong about what the
+duplication was in both. The habit that caught it: **before acting on a list item,
+measure the sentence it is written in.** I wrote that list myself a round earlier
+and still could not have told you any of those three numbers.
+
+**When a checker and a generator are a pair, the duplication is the question, not
+the artifact.** `bin/generate_vocabulary.rb` writes the bullets and
+`check_grammar.rb` refuses a hand-edited one, and each carried its own copy of the
+splitting regex, the bullet lookup and the conventions comparison. The fix is not
+to delete the artifact one writes and the other reads — it is for both to ask one
+module and differ only in what they do with the answer. The shape that made it
+click was naming the three cases as data (`Drift#missing?`, `Drift#unwanted?`): the
+generator *inserts* a missing bullet, *deletes* an unwanted one, and *replaces* a
+wrong one, and all three had been buried in nested conditionals in both copies.
+The honest cost was +10 lines of code for -43% in the generator, and *DRY is about
+knowledge, not keystrokes* is the only defence that applies.
+
+**A gate that renders cannot be tested in the shared suite.** The retargeted Spiff
+gate's corpus assertion passed alone and failed after `studio_try_test`, which
+merges the classic UI's library and documents the mechanism in its own comment —
+"last compile wins". The word registry is global and order-dependent, so rendering
+results depend on test order. This is why `bin/verify_pages.rb` has always had a
+process to itself, and I only understood that by being bitten: the fix is for the
+corpus assertion to shell out and for fixture tests to use in-buffer `def`s, which
+are page-local and owe the registry nothing. **If a gate's standalone run and its
+in-suite run disagree, suspect global state before suspecting the gate** — and
+bisecting 54 test files one at a time took two minutes and ended the guessing.
+
+A fourth, small and repeated from this morning: **the vitals gate reports its
+author on every round.** Adding `examples/doc_reader` to the corpus moved the page
+count 31 → 32 and it named four stale prose claims; adding a test file moved 54 →
+55 and it named one more. None of those would have been noticed by hand.
