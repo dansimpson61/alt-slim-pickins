@@ -1252,3 +1252,46 @@ Inspect surface had always printed a page's `head` attribute as
 `[[:stylesheet, {…}, []]]`, which nobody could read and no gate flagged; it now
 shows as the tree, like every other node-valued attribute. **A name does not only
 remove confusion, it reveals where confusion was being tolerated.**
+
+## 2026-10-03 — Claude (fifth entry: the card surgery, and a premise that would have deleted the only copy)
+
+Tier 7, the last item on the audit's list. Three lessons, and the first is the one
+that nearly cost something irreplaceable.
+
+**Before deleting on a redundancy claim, sample the text against the repository.**
+Both the audit and my own `HANDOFF.md` said the resume card restated the
+`DAYTRIP-*.md` files, so the surgery looked like deletion. Measured: twelve six-word
+phrases from `status`, twelve from `notes`, sixteen from `HANDOFF.md` — **zero of the
+forty found anywhere else in the tree.** It was independently written prose about the
+same events, and the only connected, compressed account of the rounds in order. The
+defect was real but it was size and container, not redundancy: 29,061 characters in
+two folded YAML scalars with no paragraph breaks, in a document read at the start of
+every session so the session need not read the repo. **So the surgery was move, not
+delete** — and the move is provable, which is what made it safe: the chronicle's
+body, normalised, is byte-identical to the fields it came from. The general rule:
+*"this is duplicated"* is a claim about two texts and is cheap to check; a
+sampling pass over forty phrases took two minutes and changed the entire round.
+
+**A gate's refusal should say what to do, not only what is wrong.** The budget's
+message ends "move the overflow somewhere it can be read; do not delete it", and that
+line is this round's finding turned into the gate's own advice. Without it the next
+session to hit the ceiling does what this one nearly did. **A budget that invites
+deleting the only copy of something is a worse instrument than no budget at all** —
+and the numbers themselves are a judgement, so the source says they are a judgement
+and whose they are to change.
+
+**When a document's structure and its meaning disagree, the structure will mislead a
+mechanical edit.** `HANDOFF.md`'s active next step, its ordered plan and its open
+candidates were all nested under `## Active Roadmap Progression`, so a slice on
+section boundaries carried the entire forward-looking half of the document into a
+history file. Nothing failed; the gates were green and the suite passed, because
+nothing *references* a handoff section. Caught by listing the headings afterwards and
+noticing the next step had gone. **Read back what an edit produced, not what it was
+supposed to produce** — especially for prose, where no test will tell you.
+
+A fourth, small and worth carrying: my own claim that `HANDOFF.md` was the *second*
+most-churned file was wrong — it has overtaken `ROADMAP-0.2.md` and is first, at
+3,807 lines. The chronicle was why: every round appended an entry to a document that
+is step 4 of its own reading list. A document that grows by one entry per round is a
+document whose churn is structural, not incidental, and the fix is to stop the
+appending rather than to tidy the result.
