@@ -69,14 +69,19 @@ module WayExam
       # to be "held by test", and a test did hold it, at the wrong number, in a
       # suite no gate runs. The count is now computed from the census on load, like
       # every other living vital, so the exam cannot grade a stale answer again.
-      # `53` stays as a distractor because it is the count roadmap 0.1 really proved.
+      # Every option is computed, not just the right one. A hand-written `53` was
+      # a latent second correct answer — if the census ever measured 53 the
+      # question would have two, and nothing would say so. Each distractor is now
+      # a real quantity a reader might confuse for the vocabulary: the Ruby
+      # primitives without the partials, and the canonical words with the apps'
+      # own words added in.
       Question.new(
         id: 'q5',
         number: 5,
         prompt: 'How many words comprise the alt-slim-pickins vocabulary?',
         options: {
-          a: '53 words',
-          b: '102 words',
+          a: "#{SlimPickins::Census.words[:primitives].size} words",
+          b: "#{SlimPickins::Census.words[:total].size + SlimPickins::Census.app_words.size} words",
           c: "#{SlimPickins::Census.words[:total].size} words"
         },
         correct_key: :c,

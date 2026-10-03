@@ -43,7 +43,7 @@ module WordGraph
     end
   end
 
-  # A node representing a single word in the 64-word vocabulary and its graph connections.
+  # A node representing a single word in the vocabulary and its graph connections.
   class Node
     attr_reader :name, :shape, :speech, :subject_flow, :parents_decl, :children_decl,
                 :modifiers, :infers, :gathers, :empty, :id_flag, :label_flag, :content_flag,
@@ -296,7 +296,7 @@ module WordGraph
     end
   end
 
-  # The repository and graph analyzer for all 64 words.
+  # The repository and graph analyzer for every word in the vocabulary.
   class Graph
     attr_reader :nodes, :contracts
 

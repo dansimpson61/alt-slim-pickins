@@ -1033,7 +1033,7 @@ Predictions from the spec, and what actually happened.
 - **Three words the estimate missed entirely** — `metric`, `chart` and
   `disclosure` — all found by reading `roth/views/controls.slim`. Every one of
   them is hand-built there out of markup, classes and JavaScript.
-- **Thirty-eight words**, against an estimate of forty. The estimate was
+- **Thirty-eight of them**, against an estimate of forty. The estimate was
   close, but three of the additions were invisible until a real page was read,
   which is the argument against ever drafting this from imagination.
 

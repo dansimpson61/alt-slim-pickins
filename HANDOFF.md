@@ -42,9 +42,9 @@ conversation; it is all written down.
 - **Volet 1 (The Truthful Floor, `DAYTRIP-0.4.0a.md`)**: Landed 2026-09-22. Established `SlimPickins::Census` (`bin/census.rb`) as the living SSOT; settled F9 (`Chart` declares `table_header`); enriched `Conventions.bullet` with concrete element yields.
 - **Volet 2 (Expressive View Composition, `DAYTRIP-0.4.0b.md`)**: Landed 2026-09-22. Delivered R3P2 (subject-shifting `card`, eliminating 7 repeated bindings in `queue.sp`), R3P3 (single-form `formaction` button groups in `actions.sp`), and R3P1 (open partial payload forwarding via `takes: payload` / `open: true`).
 - **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: Landed 2026-09-22. Delivered W2 (live test suite 8th leg on `/status`) and W3 (combined `Inspect` surface uniting Semantic Tree AST and The Why Pane / inference provenance inspector).
-- **Volet 4 (The Empirical Diagnostic Taxonomy, `DAYTRIP-0.4.0d.md`)**: Landed 2026-09-22. Delivered `SlimPickins::Taxonomy` as SSOT for 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual); 64-word empirical diagnostic audit surfacing missing `stack`/`cluster`, ad-hoc `figcaption`/`summary` kernel leaks, and the visual styling idiom standard; multi-category shelf presence with cross-facets on Workbench and Classic UIs; `PRIMER.md` updated.
+- **Volet 4 (The Empirical Diagnostic Taxonomy, `DAYTRIP-0.4.0d.md`)**: Landed 2026-09-22. Delivered `SlimPickins::Taxonomy` as SSOT for 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual); a vocabulary-wide empirical diagnostic audit surfacing missing `stack`/`cluster`, ad-hoc `figcaption`/`summary` kernel leaks, and the visual styling idiom standard; multi-category shelf presence with cross-facets on Workbench and Classic UIs; `PRIMER.md` updated.
 - **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words, `DAYTRIP-0.4.0e.md`)**: Landed 2026-09-23. Delivered in-buffer `def <word>, *params` authoring with flexible argument binding, declaration-free word execution (Package C proving ground), enhanced `box subject, title` context shifting, positional `link` fallback, Studio `/mint` endpoint, and live editor minting toolbar affordance.
-- **Volet 5 (Package C: Lean & Elemental Kernel, `DAYTRIP-0.4.0f.md`)**: Landed 2026-09-23. Privileged `tag` primitive with a compilation-privilege boundary; `figcaption`/`summary` absorbed into their single consumers (64 words → 62); `paragraph` re-atomized over `tag p`; flexible argument binding generalized to disk `def` partials.
+- **Volet 5 (Package C: Lean & Elemental Kernel, `DAYTRIP-0.4.0f.md`)**: Landed 2026-09-23. Privileged `tag` primitive with a compilation-privilege boundary; `figcaption`/`summary` absorbed into their single consumers (`64` words → `62`); `paragraph` re-atomized over `tag p`; flexible argument binding generalized to disk `def` partials.
 - 2026-09-24 (no numbered volet): the Visual Architecture & Spatial Manifesto compiler landed (`docs/SPIFF.md`, `lib/slim_pickins/compiler/spiff.rb`), then the Council spatial manifesto (`horizon`/`posture`/`scroll`/`presence`/`focus`) the same round.
 - **Volet 6 (The Council Skill & Workbench Spatial Frontier, `DAYTRIP-0.4.0g.md`)**: Landed 2026-09-25. The council pattern formalized as a reusable skill (`.claude/skills/council/SKILL.md`), used to resolve the four workbench spatial frontiers (revised mid-session after dan rejected an authoring-redundancy proposal), then three real rendering defects dan caught by eye — a `max-width` leak, container queries that had never actually worked since the compiler's first commit, and three shell columns at three different heights.
 - **2026-09-26 (no numbered volet): the truth round, the naming, and the tin.** Nine rounds of work, all recorded in `ROADMAP-0.3.md`'s Addenda 1–14 and `LORE.md`:
@@ -58,19 +58,23 @@ conversation; it is all written down.
   8. **`check_spiff_scope.rb`** — the tenth gate, answering dan's own question: every zone a Spiff names must be renderable in its scope.
 - **Active next step**: **none.** The tin/Spiff work is closed. Open threads are named in `PROJECT.md next_step` and in the section below.
 
-### Current Vitals (measured 2026-10-02)
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 52 test files.
-- **Full Suite**: 488 runs, 5,737 assertions, 0 failures, 0 errors, 0 skips in one process.
-- **The example apps' own suites** (`examples/*/test`, **not reached by the gate
-  command** — a standing gap, see Tier 1 item 3 of `DAYTRIP-0.4.0h.md`): dashboard 9,
-  lore_reader 9, milestone_planner 12, way_exam 10, word_graph 15 runs, all green.
-- **Check Grammar**: 1,239 sentences checked, 92 words defined, 0 problems.
+### Current Vitals (measured 2026-10-03)
+
+Every number below that the census measures is now held by `check_vitals.rb`, so
+this block cannot go stale without the gate saying so. The rows it does *not*
+measure are quoted as the gate output they are.
+
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 54 test files.
+- **Full Suite**: 568 runs, 0 failures, 0 errors, 0 skips in one process — and
+  that now includes the example apps' own suites, because the Suite leg asks
+  `Census.test_files` instead of keeping its own glob.
+- **Check Grammar**: `1,239 sentences checked, 92 words defined, 0 problems`.
 - **Check Shape**: 62 canonical words, 0 problems.
 - **Check Styles**: 27 emittable classes, 59 rendering, 104 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
 - **Spiff Scope (zones)**: 2 spiffs held to their pages, 0 problems.
 - **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 31 pages, 0 problems.
-- **Ten gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Suite.
+- **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
 - **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): `d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down over 31 pages.
 - **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.
 
@@ -93,11 +97,11 @@ conversation; it is all written down.
 - **W3**: Combined `Inspect` surface in Workbench output tabs (`Visual` | `HTML` | `Inspect`), uniting collapsible Semantic Tree AST with synchronized Why provenance cards, 4-tier ownership, and convention links.
 
 ### [COMPLETED] Volet 4: The Empirical Diagnostic Taxonomy (`DAYTRIP-0.4.0d.md`)
-- **Taxonomy Engine (`lib/slim_pickins/taxonomy.rb`)**: Single source of truth for the 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual) and complete 64-word empirical audit ledger.
+- **Taxonomy Engine (`lib/slim_pickins/taxonomy.rb`)**: Single source of truth for the 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual) and a complete vocabulary-wide empirical audit ledger.
 - **Empirical Diagnostic Revelations**:
   - Missing primitives diagnosed: `stack` (uniform vertical rhythm layout), `cluster` (horizontal flow).
   - Ad-hoc single-consumer anomalies diagnosed: `figcaption` (in-degree 1 in `figure`) and `summary` (in-degree 1 in `disclosure`) pinpointed as kernel HTML element leaks, validating Package C.
-  - Cohesion vs. split: `box` and `span` identified as split/overload candidates; 38 multi-category words confirmed as cohesive concepts.
+  - Cohesion vs. split: `box` and `span` identified as split/overload candidates; the multi-category words confirmed as cohesive concepts.
   - The Visual Tier standard: confirmed that no vocabulary primitive exists solely for decorative paint; styling belongs to theme/variant idioms.
 - **Studio Shelf & Documentation**:
   - Studio shelf (Workbench `library.sp` and Classic `vocabulary.sp`) organized into 5 tiers with authoring questions, counts, and multi-category presence with secondary cross-facets.
@@ -153,44 +157,55 @@ dedented `def`s, seven more indentation mismatches inside method bodies, the
 duplicate `Builder#chain`, two dead comments, `about`'s guard restructured, three
 dead locals. **New instruments**: `bin/byte_diff.rb` and `ruby -w -c`.
 
-### The active next step — Tier 2 of `DAYTRIP-0.4.0h.md`
+### The active next step — Tier 5 of `DAYTRIP-0.4.0h.md`, and three things to confirm
 
-**An eleventh gate leg: living prose and code comments held to `Census.snapshot`.**
-`bin/census.rb` is still the only consumer of the SSOT in the repository, which is
-why the counts it exists to settle were wrong in six places at once.
+Tiers 1 through 4 are landed, green and recorded — the audit round in
+`DAYTRIP-0.4.0h.md`, the two new legs in `DAYTRIP-0.4.0i.md`. **Read 0.4.0i
+before picking this up**; it carries the design arguments you would otherwise
+re-derive.
 
-The scope decision is already made, and it is the hard part — do not re-derive it:
+**What changed that the rest of this file assumes.** The gate is **twelve legs**:
+`check_vitals.rb` holds every number the living prose and the `.rb` comments
+state about this project to `Census.snapshot`, and `check_ruby.rb` runs
+`ruby -w -c` over every Ruby file with a warning counting as a failure. The Suite
+leg no longer keeps its own glob — it asks `Census.test_files`, so the five
+example apps' suites are inside the gate and the suite is 568 runs in one
+process. `StudioStatus::LEGS` is still the one home for the leg list, and
+`README`'s gate command is the second copy of it.
 
-- **In scope**: the living documents (`README`, `PRIMER`, `VOCABULARY`,
-  `CONTRACT`, `DESIGN`, `KERNEL`, `PROJECT`, `HANDOFF`, `docs/SPIFF`), every
-  `*.rb` comment, and the example apps' answer keys and canned locals.
-- **Exempt by design**: the dated record — `LORE.md`, `history/`, `ROADMAP-*`,
-  `DAYTRIP-*`, `BLUESKY.md`, `spiff_discussion.md`. An entry that quoted the
-  number true when written is not lying, and a gate that cannot tell the
-  difference will be bargained with inside a week.
-- Neither `check_grammar`'s `DOCS` nor the studio's `GUIDES` draws that line yet.
-  This gate authors it.
+**Three things to confirm rather than discover**, each a judgement this round
+made and named rather than absorbed:
 
-**Build it before fixing anything it will report.** That is deliberate: the gate's
-own first honest run should produce the list, the way `check_spiff` found
-`collapse` undocumented on its first run. A gate built by someone who already
-knows the answers gets tuned to find exactly those and stop.
+1. **`KERNEL.md` is exempt from the vitals gate**, against the scope decision
+   written here last round. Its own first paragraph pins its measurements to tree
+   `5d43fe9`, which is the test every other exemption uses. The argument is in
+   `DAYTRIP-0.4.0i.md` Part 1; aligning the written scope with it is dan's call.
+2. **`README`'s "Everything green" is gone**, replaced by a sentence saying what
+   green does and does not cover — including that no leg renders to a browser and
+   that this is deliberate.
+3. **`word_count` and `words_count` are still two names for one number**, named
+   in `StudioVitals` rather than reconciled. Renaming a local changes every page
+   that says it, so it is a proposal.
 
-**Then** check your run against the Tier 3 inventory in `DAYTRIP-0.4.0h.md` — the
-six known instances, recorded so you can calibrate rather than rediscover. **If
-your first run finds fewer than six, your matcher is too narrow.** The sixth,
-found while landing Tier 1 and not in the daytrip's original list:
-`bin/verify_pages.rb`'s `ui_locals` still passes `word_count: 64,
-promise_count: 32, measured: '2026-09-17'` as canned locals — a third copy of the
-literals the studio removed from its own two homes, inside the gate itself. It is
-a Ruby hash rather than prose, so decide explicitly whether the gate's scope
-reaches it; if not, fix it by hand and say so.
+**Next on the list is Tier 5, and both of its items subtract.** Stop committing a
+generated `VOCABULARY.md` (`bin/generate_vocabulary.rb` makes it, and
+`check_grammar`'s `UNGENERATED` section exists only to verify the committed copy
+still matches its generator — the Ode's answer to two copies of one truth is one
+home, not a checker). Then delete or retarget `check_spiff_scope.rb`, which is
+the one leg with no recorded catch.
 
-Also unresolved and newly found: **no gate runs the example apps' suites.** The
-gate command globs `test/**/*_test.rb` from the repo root and reaches none of
-`examples/*/test` — 55 runs of real coverage, where `word_graph` sat red for a
-week. Widening the command or adding a twelfth leg is a small question with a
-real answer, and it is dan's call which.
+**Then Tier 6, resequenced**: rewrite `studio/inspector.rb` in the language it
+inspects *before* naming the semantic node with `Data.define`, because the
+rewrite deletes three of the twenty node-read sites and unblocks pointing
+`check_styles` at `studio/` (Tier 4's last item, still red on that file). Item 19
+will surface vocabulary gaps that need dan's rulings.
+
+**Tier 7 is the card surgery, and this file is now the clearest instance of it.**
+`HANDOFF.md` restates the contents of nine `DAYTRIP-*.md` files and is the second
+most-churned file in the repository's history (3,227 lines) behind a closed
+roadmap. Its numbers are correct and gate-held now; the duplication is not. That
+is Part 4 of the audit — "the diversion is real, and the documents are doing it"
+— pointing at the resume prompt itself.
 
 ### Then, in order — and the order changed
 
@@ -308,7 +323,7 @@ The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is agent-managed.
 ## Comprehensive Housekeeping Protocol (The RIF Loop)
 
 You must execute every step of this loop per round, not at the end of the session:
-1. **Implement & Verify**: Ensure suite is 100% green. The gate has **ten legs**
+1. **Implement & Verify**: Ensure suite is 100% green. The gate has **twelve legs**
    (the same ten `/status` runs live):
    `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby check_spiff.rb && ruby check_spiff_scope.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb && ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
 2. **Commit**: Leave the tree clean. Commit with an intention-revealing message. (Push only when dan says so).

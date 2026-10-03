@@ -9,7 +9,7 @@ class GraphTest < Minitest::Test
     @graph = WordGraph::Graph.new
   end
 
-  # Was `test_graph_loads_all_64_words`, pinned to 64 words and 59 nouns — the
+  # Was `test_graph_loads_all_64_words`, pinned to `64` words and `59` nouns — the
   # pair the 2026-09-26 truth round corrected everywhere it could see. It could
   # not see here: no gate runs the example apps' suites, so this test has been
   # red and silent since the vocabulary came down to 62. The number is now read

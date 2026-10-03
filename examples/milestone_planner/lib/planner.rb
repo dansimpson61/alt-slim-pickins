@@ -169,7 +169,7 @@ module MilestonePlanner
         Milestone.new(
           id: 'm2',
           title: 'Phase 1: The Garden, planted',
-          description: 'Plant real demonstration applications exercising different regions of the frozen 64 words.',
+          description: 'Plant real demonstration applications exercising different regions of the frozen vocabulary.',
           due_date: '2026-09-24',
           tasks: [
             Task.new(id: 't5', title: 'The Lore Reader dynamically parsing LORE.md', owner: 'agent', status: 'ok', done: true),

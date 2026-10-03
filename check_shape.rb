@@ -4,8 +4,10 @@
 # The third checker: a word is reviewable.
 #
 #   - every word declares a part of speech and a structural shape, in its
-#     contract — the language is a noun language (59 of 64), and the five
-#     non-nouns are the control flow
+#     contract — the language is a noun language, and the non-nouns are the
+#     control flow. The register below counts both, so this header does not:
+#     it carried `59 of 64` for a month after the vocabulary came down to 62,
+#     on a line that runs on every gate pass
 #   - the vitals are printed, measured over the real .sp corpus
 #
 # It fails only on the shape row: a word with no declared shape has to argue
@@ -89,7 +91,11 @@ puts "  sentences: #{sentences} · mean #{format('%.2f', args.to_f / sentences)}
      "longest #{max_args} · deepest nesting #{max_depth}"
 puts "  distinct modifiers: #{modifiers.size} — #{modifiers.keys.sort.join(' ')}"
 app_used = used.reject { |w| vocabulary.key?(w.to_sym) }
+# Not "app words": the census owns that name and counts `**/partials/*.sp`,
+# which is a different set. These are the words real pages use that the
+# vocabulary does not define — a partial, an in-buffer `def`, or `tag`. One
+# quantity under two names was three numbers in three places (DAYTRIP-0.4.0h).
 puts "  words used in real pages: #{used.size - app_used.size} of #{vocabulary.size} " \
-     "(plus #{app_used.size} app words: #{app_used.sort.join(', ')})"
+     "(plus #{app_used.size} the apps define: #{app_used.sort.join(', ')})"
 puts "  #{problems} problems"
 exit(problems.zero? ? 0 : 1)

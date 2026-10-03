@@ -166,7 +166,7 @@ module SlimPickins
       Promise.new(name: :VocabularyShapes, kind: :loader, declared_by: [],
                   read_by: ['lib/slim_pickins/contracts.rb',
                             'lib/slim_pickins/compilation.rb'], verdict: :read,
-                  note: 'reads the `expects` preamble of all 22 vocabulary partials'),
+                  note: 'reads the `expects` preamble of every vocabulary partial'),
 
       # --- a helper that claims to help --------------------------------------
       Promise.new(name: :boolean?, kind: :helper, declared_by: [],

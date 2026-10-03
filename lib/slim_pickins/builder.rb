@@ -9,8 +9,9 @@ require_relative 'words'
 module SlimPickins
   # The runtime — nothing else. A page evaluates into a tree of semantic
   # nodes (`[:word, attributes, children]`) and the Generator walks the tree
-  # to HTML. The vocabulary lives in Words, extended in here; the gatherers
-  # live in components.rb; the presentation lives in the Generator. What is
+  # to HTML. The vocabulary lives in Words, extended in here; the gatherers are
+  # the words that collect their children as declarations, and they live in
+  # Words with the rest; the presentation lives in the Generator. What is
   # left for this class is the evaluation: the subject chain, the bindings,
   # the gatherer stack, the capture and pruning of children, and the escape
   # hatch every word — built-in or an app's own — is written with.

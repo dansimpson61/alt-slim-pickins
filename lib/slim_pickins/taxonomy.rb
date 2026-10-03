@@ -7,7 +7,7 @@ module SlimPickins
   # and empirical diagnostic instrument.
   #
   # Formulated in DAYTRIP-0.4.0d (Volet 4) to solve Authoring Pain Point 1:
-  # moving beyond a flat, alphabetical 64-word list into a structured,
+  # moving beyond a flat, alphabetical word list into a structured,
   # deductive authoring hierarchy.
   #
   # Crucially, this taxonomy is an EMPIRICAL DIAGNOSTIC TEST of the language:

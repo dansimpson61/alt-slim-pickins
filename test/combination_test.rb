@@ -77,8 +77,9 @@ class CombinationTest < Minitest::Test
   # --- the binding namespace and the word namespace -----------------------
 
   # `each` binds its name so an inner loop can reach back out, and that
-  # reaching is served by `method_missing`. A word is a real method, so for 23
-  # of the 50 words the word answered instead and handed back its own output —
+  # reaching is served by `method_missing`. A word is a real method, so for any
+  # name the vocabulary already uses the word answered instead and handed back
+  # its own output —
   # `each item` made `item.name` raise about a String.
   def test_a_loop_may_not_bind_a_name_the_language_already_uses
     error = assert_raises(SlimPickins::Error) { draw("each item\n  text .name\n", items: INNER) }

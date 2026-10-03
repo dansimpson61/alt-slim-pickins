@@ -116,6 +116,13 @@ this as money* and the formatting belongs to the word.
   accountable to the code and to each other. Every sentence must obey the
   grammar table; every word used must be defined; every word defined must have
   a sentence; every class emitted must have a rule.
+- **`check_vitals.rb`**, **`check_ruby.rb`** — the two legs
+  [DAYTRIP-0.4.0h.md](DAYTRIP-0.4.0h.md) added after measuring what the other
+  ten could not see. The first holds every number the living prose and the
+  `.rb` comments state about this project to `SlimPickins::Census`, and exempts
+  the dated record with a written reason per entry. The second runs `ruby -w -c`
+  over every Ruby file, because a mismatched indentation and an assignment
+  nothing reads are warnings, and nothing was listening.
 - **[docs/SPIFF.md](docs/SPIFF.md)** — Spiff, the design idiom: the
   spatial companion language a `.spiff` file is written in, and the lexicon of
   its words. `check_spiff.rb` holds every compiled-CSS example in it to
@@ -141,8 +148,8 @@ number says which one leads.**
 
 An **odd** roadmap leads with the forward eye. It asks something the project
 cannot yet answer and spends itself finding out — 0.1 asked whether a view
-language could keep one sentence all the way down, and answered it: fifty-three
-words, two apps, no grammar changes. It still re-reads the history and the lore
+language could keep one sentence all the way down, and answered it: yes, across
+two apps, with no grammar changes. It still re-reads the history and the lore
 **before** it chooses a direction.
 
 An **even** roadmap leads with the backward eye. It asks whether what was built
@@ -184,12 +191,25 @@ skill, the workbench spatial frontier, and three defects found by eye in the
 live studio); there is no active thread, and `PROJECT.md`'s `next_step` names
 what was deliberately left open.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 26 app words, 31 verified pages, 38 conventions, 35 promises, and 104 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 31 verified pages, 38 conventions, 35 promises, and 104 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
-Everything green: `ruby check_grammar.rb && ruby check_shape.rb &&
-ruby check_styles.rb && ruby check_spiff.rb && ruby check_spiff_scope.rb &&
-ruby bin/check_promises.rb && ruby bin/check_conventions.rb &&
-ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb &&
-ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
+The gate — twelve legs and the suite, run in the order `StudioStatus::LEGS`
+names them, which is the one home for that list:
+
+```sh
+ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb &&
+ruby check_spiff.rb && ruby check_spiff_scope.rb && ruby bin/check_promises.rb &&
+ruby bin/check_conventions.rb && ruby bin/check_card.rb &&
+ruby bin/verify_pages.rb && ruby check_vitals.rb && ruby check_ruby.rb &&
+ruby bin/census.rb &&
+ruby -Ilib:test -e 'require "slim_pickins/census"; SlimPickins::Census.test_files.sort.each { |f| require f }'
+```
+
+Green here means every claim these legs can read is true, every page the apps
+can answer renders, and every test file the census can find passes. It does not
+mean the pages *look* right: no leg renders to a browser, and the defects that
+have actually cost this project sessions were all found by dan's eye and a live
+measurement. That is the instrument for the visual layer, on purpose — a
+headless browser is a dependency with opinions and a second corpus to keep.
