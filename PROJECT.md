@@ -254,23 +254,49 @@ status: >-
   `scroll internal` keeps both behaviours and `workbench.spiff` compiles
   byte-identically, 184 lines before and after. Twelve legs green in 4.52s; 586
   runs, 6,466 assertions, 0 failures; 34 proved pages.
+  Daytrip 0.4.0l (2026-10-03) ran Tier 6 item 18: the semantic node, a bare
+  three-element Array for the project's first month, is now
+  `SlimPickins::Node = Data.define(:word, :attributes, :children)`. Re-measuring
+  changed the work again — the read side was already centralised, with
+  `Generator#emit` destructuring the triple once and dispatching to per-word
+  methods, so the twenty claimed read sites were one plus about a dozen guards.
+  What decided the refactor was that `Data` takes positional construction, making
+  34 sites a two-character change; keyword-only would have made the call sites
+  worse and the honest answer would have been to decline. The name bought more than
+  legibility: `is_a?(Array)` in `lib/` went from 7 to 1, and the survivor correctly
+  discriminates an argument rather than a node. The ambiguity it removes was
+  load-bearing — a node and a list of nodes were both Arrays, so
+  `body.size == 1 && body.first.is_a?(Array)` was asking a question the
+  representation could not answer, in two places. A sweep over `emit_node([:`
+  caught `21 of 34` sites; the four it missed were all found by running the suite —
+  `Word#call` building nodes with a variable word name, `in_head`, `Words::Table`
+  storing a `[:row, {}, cells]` node in the table's attributes rather than emitting
+  it, and a positional read on a method's return value. The one externally visible
+  consequence is the `filter:` extension point, which now receives and returns
+  `Node`s, and its signature says so. 33 of 34 proved pages are byte-identical to
+  the pre-refactor corpus and the 34th differs by one removed line, the Inspect
+  surface no longer printing a page's `head` as an unreadable inspect blob. Twelve
+  legs green; 592 runs, 6,482 assertions, 0 failures.
 last_touched: 2026-10-03
 next_step: >-
-  Tiers 1 through 5 of DAYTRIP-0.4.0h.md are landed, Tier 6 item 19 is landed
-  (DAYTRIP-0.4.0k.md) and Tier 4's last item went with it. Next is **Tier 6 item
-  18**: `Data.define` for the semantic node, at the corrected scope — 20 read
-  sites and 29 construction sites, not the sixty `is_a?` checks the audit first
-  claimed and then disproved in place. Item 19 deleted three of those read sites,
-  which is why it went first. Before starting it, re-measure its premises: three
-  rounds running, a list item's own sentence has been wrong, and 0.4.0k's lore
-  entry records the habit. After that, Tier 7 is the card surgery, whose clearest
-  instance is HANDOFF.md restating the contents of eleven DAYTRIP files. Three
+  Tiers 1 through 6 of DAYTRIP-0.4.0h.md are landed — item 19 in 0.4.0k, item 18 in
+  0.4.0l, and Tier 4's last item with them. **Tier 7 is next: the card surgery.**
+  Its clearest instance is measured and is this file's neighbour: HANDOFF.md
+  restates the contents of twelve DAYTRIP files and is the second most-churned file
+  in the repository's history behind a closed roadmap, while `status` here is over
+  20,000 characters. The card exists so a session can resume instead of reading the
+  repo, and `bin/check_card.rb` prints its size on every green run and has no
+  opinion about it — giving it one is part of the item. Before starting, re-measure:
+  four rounds running, a list item's premises have been wrong, and the pattern is
+  that the counts were roughly right while what they implied was not. Three
   proposals still awaiting dan's word, each named rather than performed — the word
   registry's global last-compile-wins order dependence, which an existing test
   depends on by name; whether a committed 1,226-line VOCABULARY.md earns its keep
   beside the studio's live reference; and `word_count`/`words_count`, two names for
-  one number. Older calls open: the workbench word page's proportions, the unserved
-  `assets/workbench.css`, and the two byte-identical `.tin` files.
+  one number. Also newly open: `Markdown`'s `[:element, …]` and the tokenizer's
+  triples are now the only unnamed positional ones left. Older calls: the workbench
+  word page's proportions, the unserved `assets/workbench.css`, and the two
+  byte-identical `.tin` files.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

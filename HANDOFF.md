@@ -64,8 +64,8 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 55 test files.
-- **Full Suite**: 575 runs, 0 failures, 0 errors, 0 skips in one process — and
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 56 test files.
+- **Full Suite**: 592 runs, 0 failures, 0 errors, 0 skips in one process — and
   that now includes the example apps' own suites, because the Suite leg asks
   `Census.test_files` instead of keeping its own glob.
 - **Check Grammar**: `1,239 sentences checked, 92 words defined, 0 problems`.
@@ -157,49 +157,54 @@ dedented `def`s, seven more indentation mismatches inside method bodies, the
 duplicate `Builder#chain`, two dead comments, `about`'s guard restructured, three
 dead locals. **New instruments**: `bin/byte_diff.rb` and `ruby -w -c`.
 
-### The active next step — Tier 6 item 18, and a habit to keep
+### The active next step — Tier 7, the card surgery
 
-Tiers 1 through 5 are landed; Tier 6 item 19 landed in `DAYTRIP-0.4.0k.md` and
-Tier 4's last item went with it. **Read 0.4.0k before starting item 18**, and read
-its lore entry first.
+**Tiers 1 through 6 of `DAYTRIP-0.4.0h.md` are landed.** Item 19 in `0.4.0k.md`,
+item 18 in `0.4.0l.md`, and Tier 4's last item with them. The audit's list is
+finished except its final tier.
 
-**The habit, because it has now paid three rounds running: measure the sentence a
-list item is written in before acting on it.** 0.4.0i found the gate it was told
-to build needed a second rule for Ruby; 0.4.0j found both of Tier 5's premises
-false; 0.4.0k found the audit's description of `studio/inspector.rb` wrong in
-every particular — 79% CSS not HTML, 23 tags not 39, and `26 of 37` "hardcoded"
-colours were theme-role fallbacks. The remaining items were written at the same
-altitude and have not been re-measured since.
+**The habit, because it has now paid four rounds running: measure the sentence a
+list item is written in before acting on it.** The pattern across 0.4.0i through
+0.4.0l is consistent — the *counts* were roughly right and *what they implied* was
+not. Tier 5's document turned out to be 72% prose; `studio/inspector.rb` turned out
+to be 79% CSS; the semantic node's "20 read sites" turned out to be one
+destructuring plus a dozen guards.
 
 **What changed that the rest of this file assumes.** The gate is twelve legs, the
-Suite leg asks `Census.test_files` (586 runs, one process), `check_styles` reads
-`lib/` **and** `studio/`, and `check_spiff_scope` holds a Spiff's compiled
-selectors to the HTML its pages render. The Inspect surface is
-`studio/views/inspect.sp` in the language, with `inspect.spiff` for layout and no
-JavaScript; `studio/inspector.rb` is 135 lines of data. The Spiff compiler gained
-`scroll own`. 34 pages are proved.
+Suite leg asks `Census.test_files` (592 runs, one process), `check_styles` reads
+`lib/` and `studio/`, and `check_spiff_scope` holds a Spiff's compiled selectors to
+the HTML its pages render. The semantic node is
+`SlimPickins::Node = Data.define(:word, :attributes, :children)`, built positionally
+as `Node[:box, attrs, children]`, and the `filter:` extension point receives and
+returns `Node`s. The Inspect surface is a page in the language with no JavaScript.
+34 pages are proved.
 
-**Item 18: `Data.define` for the semantic node.** The scope is 20 read sites and
-29 construction sites — *not* the sixty `is_a?` checks the audit claimed, which it
-measured, disproved and corrected in place in `DAYTRIP-0.4.0h.md` Part 3. Item 19
-deleted three of the twenty read sites, so start by re-counting them. The payoff is
-one good name plus about six node-vs-string guards, and that is the honest size of
-it.
+**Tier 7, and this file is its clearest instance.** `HANDOFF.md` restates the
+contents of twelve `DAYTRIP-*.md` files and is the second most-churned file in the
+repository's history behind a closed roadmap; `PROJECT.md`'s `status` is now about
+20,000 characters and its `notes` another nine. Together they are longer than
+`transform.rb`, `builder.rb` and `generator.rb` combined. The card exists so a
+session can resume *instead of* reading the repo, and it has grown into the thing
+it was built to prevent. `bin/check_card.rb:90` prints `status N chars` on every
+green run and has no opinion about it; giving it one — a budget it fails over — is
+part of the item.
 
-**Then Tier 7, the card surgery.** This file is still its clearest instance: it
-restates the contents of eleven `DAYTRIP-*.md` files and is the second
-most-churned file in the repository's history behind a closed roadmap. Its numbers
-are gate-held; the duplication is not.
+The audit's Part 4 is worth re-reading before starting, because it measured the
+case: 40,082 lines of markdown churned against 33,153 of Ruby, with `ROADMAP-0.2.md`
+and this file both ahead of `builder.rb`. "The diversion is real, and the documents
+are doing it."
 
 **Three proposals awaiting dan's word**, each named rather than performed:
 
 - **The word registry is global and last-compile-wins.** Rendering results depend
   on test order, `test/studio_try_test.rb` documents the mechanism and depends on
-  it, and it is why any gate that renders needs its own process. Fixing it is a
-  runtime change with a blast radius.
-- **Does a committed 1,226-line `VOCABULARY.md` still earn its keep?** 72% of it
-  is prose, and the studio renders a live vocabulary reference from the code.
+  it, and it is why any gate that renders needs its own process.
+- **Does a committed 1,226-line `VOCABULARY.md` still earn its keep?** 72% of it is
+  prose, and the studio renders a live vocabulary reference from the code.
 - **`word_count` and `words_count`** remain two names for one number.
+
+**And one newly open:** `Markdown`'s `[:element, open_tag, name, children]` and the
+tokenizer's triples are the only unnamed positional ones left in the project.
 
 ### Then, in order — and the order changed
 

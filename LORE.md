@@ -1209,3 +1209,46 @@ A fifth, small: **two tests pinned numbers that move** — the census report's p
 count and the scope gate's spiff count — and both broke on work that was correct.
 A number pinned twice is a number with one stale copy; assert the shape of the
 verdict and let the count have its own test.
+
+## 2026-10-03 — Claude (fourth entry: naming the node, and what a grep cannot see)
+
+Tier 6 item 18 — the semantic node became `Data.define(:word, :attributes,
+:children)`. Three lessons.
+
+**Whether a refactor is worth doing can turn on a language feature, not on the
+design.** The audit's case was *give traveling data a name*, and it was sound. What
+decided it was that **`Data` supports positional construction**: `[:box, attrs,
+children]` becomes `Node[:box, attrs, children]`, two characters, across 34 sites.
+Had `Data` only accepted keywords, the same correct design would have made
+thirty-four call sites worse to read and the honest answer would have been to
+decline. Check how the construct you are proposing actually *reads at the call
+site* before arguing for it — a refactor whose cost falls on 34 sites and whose
+benefit falls on 12 is decided by the 34.
+
+**Re-measuring found the read side already centralised.** The claim was "20 read
+sites"; `Generator#emit` destructured the triple **once** and dispatched to
+per-word methods taking `(attrs, children)`. Roughly a dozen guards elsewhere. The
+runtime was never going to be rewritten. Fourth consecutive round where a list
+item's own sentence was wrong about the work, and the pattern is now that the
+*counts* were roughly right while *what they implied* was not.
+
+**A grep for a literal shape is blind to the generic one — and the suite found all
+four.** The sweep over `emit_node([:` caught 21 of 34 construction sites. It
+missed: `Word#call`, which builds nodes with a *variable* word name; `in_head`,
+one method away; `Words::Table`, which built `[:row, {}, cells]` and stored it in
+the table's **attributes** rather than emitting it, so no sweep over `emit_node`
+could reach it; and a positional read on a method's return value,
+`Builder.box_root(body)[1]`, which matched nothing looking for `node[1]`. This is
+the same lesson 0.4.0h recorded about grepping `def` lines for indentation damage:
+**ask what shape of defect a scan can structurally see.** Three of the four were
+found by running the thing, one error at a time, which was faster than a cleverer
+grep would have been.
+
+A fourth, about what the name exposed rather than fixed: there turned out to be
+**three positional triples**, not one — the semantic node, `Markdown`'s
+`[:element, open_tag, name, children]` read as `node[0]` *in the same Generator*,
+and the table row. And naming the node made an old unreadability obvious: the
+Inspect surface had always printed a page's `head` attribute as
+`[[:stylesheet, {…}, []]]`, which nobody could read and no gate flagged; it now
+shows as the tree, like every other node-valued attribute. **A name does not only
+remove confusion, it reveals where confusion was being tolerated.**
