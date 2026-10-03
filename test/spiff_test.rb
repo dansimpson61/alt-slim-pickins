@@ -333,4 +333,32 @@ class SpiffTest < Minitest::Test
     assert_includes css, 'align-items: stretch;'
     refute_includes css, 'align-items: start;'
   end
+
+  # `scroll own` was split out of `scroll internal` in DAYTRIP-0.4.0k. `internal`
+  # did both jobs whether or not a zone had tabs, so a zone without them compiled
+  # a `.zone .tab-panel` rule that matched nothing — which `check_spiff_scope.rb`
+  # refuses now that it compares selectors to rendered HTML.
+  def test_scroll_own_scrolls_the_zone_and_says_nothing_about_tabs
+    css = SlimPickins::Compiler::Spiff.compile("surface s\n  zone pane\n    scroll own\n", path: 'own.spiff')
+
+    assert_includes css, 'overflow-y: auto;'
+    assert_includes css, 'overscroll-behavior: contain;'
+    refute_includes css, '.tab-panel', 'a zone with no tabs must not compile a selector for one'
+  end
+
+  def test_scroll_internal_still_caps_the_tab_panels_it_was_written_for
+    css = SlimPickins::Compiler::Spiff.compile("surface s\n  zone pane\n    scroll internal\n", path: 'int.spiff')
+
+    assert_includes css, '.pane .tab-panel'
+    assert_includes css, 'max-height: var(--panel-height, 28rem);'
+  end
+
+  def test_an_unknown_scroll_token_is_refused_rather_than_ignored
+    error = assert_raises(ArgumentError) do
+      SlimPickins::Compiler::Spiff.compile("surface s\n  zone pane\n    scroll internl\n", path: 'typo.spiff')
+    end
+
+    assert_match(/Unknown scroll token: `internl`/, error.message)
+    assert_match(/`internal` or `own`/, error.message, 'the refusal names what may be said')
+  end
 end

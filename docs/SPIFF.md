@@ -428,9 +428,12 @@ font-size: 1.05rem;
 ### `scroll`
 - **What it is**: Whether a zone scrolls its own overflow.
 - **What it is for**: Giving a bounded pane its own scrollbar instead of growing the page — the shelf whose list is longer than the viewport, the panel whose tab content is taller than its slot. Without it, a long list pushes the whole shell taller and the shell stops owning the viewport.
-- **How to use it**: `scroll internal`
-  - `internal` — the only token today, and the honest one: the zone becomes a scroll container (`overflow-y: auto`, `overscroll-behavior: contain`) and its tab panels get a capped height of their own.
+- **How to use it**: `scroll internal` or `scroll own`
+  - `internal` — the zone becomes a scroll container (`overflow-y: auto`, `overscroll-behavior: contain`) **and** its tab panels get a capped height of their own. Say this when the zone holds tabs.
+  - `own` — the zone becomes a scroll container and nothing else is said. Say this when it does not.
   - Omitted, the zone does not scroll; its content contributes to the page's height, which is what a document surface wants.
+
+  `internal` was the only token for its first month, and it did both jobs whether or not the zone had tabs — so a zone without them compiled a `.zone .tab-panel` rule that matched nothing. That is the defensive-selector defect the 2026-09-25 round set out to remove, and it was still in the compiler; `check_spiff_scope.rb` found it the first time a new Spiff was held to the HTML its pages render (DAYTRIP-0.4.0k). An unknown token now raises rather than compiling to silence.
 - **Example**:
   ```
   zone library

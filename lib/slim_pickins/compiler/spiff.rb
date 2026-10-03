@@ -533,8 +533,24 @@ module SlimPickins
           @properties.merge!(treatment_props)
         end
 
+        # `internal` scrolls the zone and caps any tab panel inside it; `own`
+        # scrolls the zone and nothing else.
+        #
+        # `own` exists because `internal` was the only token and did both jobs, so
+        # a zone with no tabs compiled a `.zone .tab-panel` rule that matched
+        # nothing — the defensive-selector defect 0.4.0g set out to remove, found
+        # in the compiler itself by `check_spiff_scope.rb` once that gate started
+        # comparing selectors to rendered HTML (DAYTRIP-0.4.0k).
+        #
+        # The token is checked, as `air` and `treatment` check theirs. It was not,
+        # so `scroll internl` compiled to silence.
+        SCROLL_KINDS = %i[internal own].freeze
+
         def scroll(kind)
           @scroll_kind = kind.to_sym
+          return if SCROLL_KINDS.include?(@scroll_kind)
+
+          raise ArgumentError, "Unknown scroll token: `#{kind}` — say `internal` or `own`"
         end
 
         def presence(kind)
@@ -575,14 +591,18 @@ module SlimPickins
             CSS
           end
 
-          if @scroll_kind == :internal
+          if @scroll_kind
             rules << <<~CSS.strip
               #{target} {
                 overflow-y: auto;
                 overscroll-behavior: contain;
                 min-height: 0;
               }
+            CSS
+          end
 
+          if @scroll_kind == :internal
+            rules << <<~CSS.strip
               #{targets.map { |t| "#{t} .tab-panel" }.join(",\n")} {
                 max-height: var(--panel-height, 28rem);
                 overflow-y: auto;
