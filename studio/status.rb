@@ -15,6 +15,16 @@ module StudioStatus
   # The gate's legs, in the order the gate runs them. Promises, Conventions,
   # Card, Spiff and Scope are the instruments the daytrips landed — they are
   # gate legs because an instrument nothing runs is not an instrument.
+  #
+  # Vitals and Ruby are DAYTRIP-0.4.0h's answer to its own Part 4 finding: the
+  # ten legs before them all watched the layer that stays correct on its own,
+  # while both recurring defect classes — a document stating a number nothing
+  # measures, and Ruby whose shape nothing reads — lived outside what any of
+  # them could structurally see.
+  #
+  # The Suite leg asks `Census.test_files` which files exist rather than keeping
+  # its own glob. It kept one, the glob reached `test/` and not `examples/*/test`,
+  # and 55 runs sat outside the gate for a week with `word_graph` red in them.
   LEGS = [
     ['Grammar', 'check_grammar.rb'],
     ['Shape', 'check_shape.rb'],
@@ -25,7 +35,10 @@ module StudioStatus
     ['Conventions', 'bin/check_conventions.rb'],
     ['Card', 'bin/check_card.rb'],
     ['Pages', 'bin/verify_pages.rb'],
-    ['Suite', ['-Ilib:test', '-e', 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }']],
+    ['Vitals', 'check_vitals.rb'],
+    ['Ruby', 'check_ruby.rb'],
+    ['Suite', ['-Ilib:test', '-e',
+               'require "slim_pickins/census"; SlimPickins::Census.test_files.sort.each { |f| require f }']],
   ].freeze
 
   SECONDS = 60
