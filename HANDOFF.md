@@ -100,16 +100,24 @@ anywhere else. Acting on the premise would have deleted the only copy.
 
 **Three proposals awaiting dan's word**, each named rather than performed:
 
-- **The word registry is global and last-compile-wins.** Rendering results depend on
-  test order, `test/studio_try_test.rb` documents the mechanism and depends on it,
-  and it is why any gate that renders needs its own process. A runtime change with a
-  blast radius.
-- **Does a committed 1,226-line `VOCABULARY.md` earn its keep?** 72% of it is prose
-  no generator can produce, and the studio renders a live vocabulary reference from
-  the code. A documentation decision, not a refactor.
-- **`word_count` and `words_count`** remain two names for one number, named in
-  `StudioVitals` rather than reconciled, because renaming a local changes every page
-  that says it.
+- **The word registry is global and last-compile-wins**, and `DAYTRIP-0.4.0n.md`
+  measured it properly: a `Library` does not scope its words, and merely
+  *constructing* one takes a colliding name from another. Exactly one name collides —
+  `editor`, in both studio UIs. The live studio is correct only because
+  `StudioPages.ui_library` is not memoized and so re-registers at every use;
+  `test/studio_try_test.rb` names that mechanism and depends on it. The cheap fix is
+  to rename the classic UI's `editor`; the thorough one is a per-library registry,
+  which is a change to the runtime's lookup path. Dan's call.
+- **`VOCABULARY.md`'s two appendices cannot simply move to `history/`** — the
+  proposal was tried and declined on measurement. 12 of the vocabulary's 62 entries
+  live under `## What drafting surfaced` and `## What the drafts left open`, all with
+  contracts and zero drift, so relocating the sections would strip a fifth of the
+  vocabulary from the document that defines it. Doing it means restructuring the
+  document — lifting those entries into the main run first — which is not a tidying
+  job. The larger question of whether a committed 1,226-line `VOCABULARY.md` earns
+  its keep beside the studio's live reference is still open and still dan's.
+- **`word_count`/`words_count` is done** (`DAYTRIP-0.4.0n.md`): one name, verified by
+  rendering.
 
 **And the smaller open calls**, unchanged: `Markdown`'s `[:element, …]` and the
 tokenizer's are the only unnamed positional triples left; the workbench word page's

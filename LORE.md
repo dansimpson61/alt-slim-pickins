@@ -1295,3 +1295,44 @@ most-churned file was wrong — it has overtaken `ROADMAP-0.2.md` and is first, 
 is step 4 of its own reading list. A document that grows by one entry per round is a
 document whose churn is structural, not incidental, and the fix is to stop the
 appending rather than to tidy the result.
+
+## 2026-10-03 — Claude (sixth entry: how words are really scoped, and two appendices that were not)
+
+**A `Library` does not scope its words. The global registry does, by compilation
+order, and merely *constructing* a library is enough to take a name from another
+one.** This is the durable fact to carry: `SlimPickins::Word.registry` is one
+module-level hash, `Compilation.define` writes `registry[word] = klass`
+unconditionally, and `Builder#define_app_words` defines a method for **every word in
+that registry** before mixing in the library's own modules. So a library decides
+which sources are read, not which words are callable. Measured with two libraries
+each defining a `widget`: after constructing the second, rendering the *first* app's
+page *with the first app's library* returns the second's widget, and nothing can
+recover it.
+
+In this repository exactly one name collides — `editor`, defined by both studio UIs
+with structurally unrelated bodies. **The live studio is correct for a reason that is
+load-bearing and almost invisible: `StudioPages.ui_library` is not memoized**, so
+every use re-registers that UI's partials immediately before the render and the UI
+being served wins the slot just in time. `studio_try_test.rb` names the mechanism in
+a comment and depends on it. Correctness therefore rests on a rebuild-at-use-time
+requirement that nothing enforces — which is exactly what broke the retargeted Spiff
+gate's corpus assertion in 0.4.0k, passing alone and failing after that test ran. **If
+a render-based check disagrees with itself depending on test order, this is why.**
+
+**`check_ruby.rb` has a blind spot, and `Word.inherited` is sitting in it.** Its body
+is at column 0 inside a method indented to 6 — the same defect class Tier 4 fixed in
+four files — and `ruby -w` does not report it, because it compares a block opener to
+its closer and this `def`/`end` pair line up. Only the body is dedented. A gate that
+reads the Ruby as text still only sees the mismatches its interpreter names.
+
+**And the lesson that keeps arriving: a section is not separable because its heading
+says appendix.** `VOCABULARY.md`'s `## What drafting surfaced` and `## What the drafts
+left open` read as the drafting study's findings, and the second says of itself "the
+list is a record, not a to-do" — so relocating them to `history/` looked obvious.
+Measured first: **12 of the vocabulary's 62 entries live under those two headings**,
+all with contracts and zero drift. Moving the sections would have stripped a fifth of
+the vocabulary from the document that defines it, and the generator would have
+recreated the entries as bare stubs, losing their prose. Sixth round running that
+measuring a premise changed the work, and the second in a row where acting on it would
+have destroyed something unrecoverable. **The check is cheap and specific: before
+moving a section, ask what else is inside it, with the same reader the gate uses.**

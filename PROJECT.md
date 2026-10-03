@@ -23,10 +23,12 @@ next_step: >-
   set: 0.4 has spent itself on the backward eye, and an odd roadmap leads with the
   forward one by asking something the project cannot yet answer. That question has
   not been asked. Three proposals wait on his word, each named rather than performed
-  — the word registry's global last-compile-wins order dependence, which an existing
-  test depends on by name; whether a committed 1,226-line VOCABULARY.md earns its
-  keep beside the studio's live reference; and `word_count`/`words_count`, two names
-  for one number. Smaller open calls: `Markdown`'s triples are the last unnamed
+  — the word registry's global last-compile-wins order dependence, now measured
+  properly in DAYTRIP-0.4.0n.md (a Library does not scope its words; constructing one
+  takes a colliding name, and `editor` in the two studio UIs is the only collision),
+  and whether a committed 1,226-line VOCABULARY.md earns its keep. `word_count` is
+  done. Relocating VOCABULARY's two appendices was tried and declined: 12 of its 62
+  entries live under those headings. Smaller open calls: `Markdown`'s triples are the last unnamed
   positional ones, the workbench word page's proportions, the unserved
   `assets/workbench.css`, the two byte-identical `.tin` files. And one standing
   caution before treating any of those as a task — five consecutive rounds found a
