@@ -1054,3 +1054,62 @@ Dan reordered the audit's list and took Tier 4 first. Two lessons, and the secon
 **A count is not an argument until you know what it counted.** The audit claimed the anonymous semantic node "forces most of the 60 `is_a?` tests in `lib/`", and used that to size a 50-site refactor. Sizing it disproved it: `is_a?(Array)` in `lib/` is **7**, about six of them node guards, and the 60 are dominated by `Symbol` (15), `String` (9), `Proc` (6) and `Hash` (6) — argument discrimination in the DSL's own calling convention, untouched by any node refactor. I had counted `is_a?` in aggregate and attributed the total to the nearest hypothesis. This is **the same error the truth round recorded** when it counted inline code spans as raw HTML: a number taken at the wrong altitude and then spent as a reason. The round corrected the claim in the daytrip in place rather than quietly restating the scope, because the wrong version was already committed and pushed. The refactor is still worth doing — *give traveling data a name* stands on its own — but it is 20 read sites and one good name, not a cure for sixty type checks.
 
 A third, smaller: **sequencing is part of sizing.** Three of the twenty node-read sites live in `studio/inspector.rb`, which the other Tier 6 item is going to delete, and pointing `check_styles` at `studio/` goes red on that same file. So the order inverted — rewrite the Inspect surface first, then name the node, then widen the style gate — and none of that was visible from the audit's altitude. The plan was right about *what*; it was wrong about *when*, and only costing the work out revealed it.
+
+## 2026-10-03 — Claude (the two legs, and what a gate cannot say about itself)
+
+Dan handed back three open design decisions with one instruction — choose on the
+merits, then proceed — and the round built `check_vitals.rb` and `check_ruby.rb`.
+Four lessons, two of which changed the design mid-build.
+
+**A number is a claim; a number in quotes is an exhibit. That one distinction
+did most of the work.** The vitals gate's first honest run reported 74 problems
+and about half were text holding a number without stating one. The single most
+productive rule was that **a number inside a quoted span is being shown, not
+asserted** — and the proof it was the right rule is that `studio/vitals.rb`'s
+comment, which narrates the very literals it was written to delete
+(`` `WORDS = 64` ``), passes untouched *because its author wrote it well*. The
+rule did not have to be invented for that file; it was already being obeyed. The
+general form: **when a gate's exception turns out to be a convention good prose
+already follows, it is a rule and not a loophole.** The three others earned their
+place the same way — a date is not a count, a list marker is not a count, and a
+number more than one word from its noun is not its count.
+
+**I reached for a whitelist and the project's own record talked me out of it.**
+Four findings were historical passages inside living documents, and the obvious
+mechanism was a principled exception list — the shape `check_styles.rb:91`
+already has. What stopped it was DAYTRIP-0.4.0h's own Part 4, which had praised
+this apparatus for having *no* whitelists and named the decay signature exactly.
+Forced to look again, every one of the four was **better prose after the fix**:
+`README`'s roadmap-0.1 sentence never needed a word count, `VOCABULARY`'s
+"Thirty-eight of them" is tighter than "Thirty-eight words", and a test comment
+now names the mechanism instead of a count that was never the point. The lesson
+is not "never whitelist" — it is that **an exception is the first idea and
+rarely the best one, and the cheapest test is to write the fix you are trying to
+avoid and see if it is actually worse.** It was better four times out of four.
+
+**The clever version of a tool can be faster and still be the wrong tool, and
+only a probe tells you which.** `check_ruby` shells out once per file — 124
+processes, 909 ms — when `RubyVM::InstructionSequence.compile` with
+`Warning.warn` overridden would do it in one. Probed before choosing: the
+in-process route catches the unread assignments but **does not emit the
+mismatched-indentation warnings at all**, which are the ones that found every
+defect in the round that motivated the leg. The cheap version would have printed
+`0 problems` over a file this one refuses. A second trap in the same leg,
+measured rather than assumed: **`ruby -c a.rb b.rb` checks only `a.rb`** and
+prints one cheerful `Syntax OK`, so the batched form reads the first file and
+silently skips a hundred others. Both shortcuts fail by *passing*, which is the
+only failure mode a gate cannot survive.
+
+**A gate can be verifying a page that does not exist.** Fixing
+`bin/verify_pages.rb`'s stale canned locals moved the byte-diff digest, and
+chasing why was the round's sharpest finding. The gate had been rendering the
+studio's pages against a payload the studio itself stopped using in September:
+the footer it proved said 64 words and 32 promises; the footer the app serves
+said 62 and 35. Nothing was red, because both sides were internally consistent.
+The rule: **canned locals are a second implementation of the app's wiring, and
+they drift the way any duplicate does** — the fix is one home
+(`StudioVitals.locals`), shared by the app, the census and the gate, not a
+fresher copy. And the corollary the round kept proving on itself: this gate
+caught its own header, its own card entry, and its own arrival (adding two test
+files moved the test-file count, which `HANDOFF.md` had written down). **A gate
+worth having will report its author.**

@@ -169,7 +169,7 @@ status: >-
   is now measured where it is graded, `way_exam` q5 and `word_graph`'s two red
   tests both reading `Census`. The round's own discovery, which the audit had
   missed — no gate runs the five example apps' suites, and `word_graph` had
-  been red on 64 words and 59 nouns since the vocabulary came down to 62. All
+  been red on `64` words and `59` nouns since the vocabulary came down to 62. All
   ten gates green; main suite 488 runs, 5,737 assertions, 0 failures, 0
   errors; all five example suites green.
 
@@ -182,26 +182,53 @@ status: >-
   harness instead of each session rebuilding it. Tier 6 was sized and declined,
   which is the honest outcome — the argument the daytrip made for the node
   refactor was wrong and is corrected in place.
-last_touched: 2026-10-02
+  Daytrip 0.4.0i (2026-10-03) built the two legs the audit's own Part 4 said
+  were missing, on dan's instruction to settle three open design decisions on the
+  merits and proceed. `check_vitals.rb` (eleventh leg) holds every number the
+  living prose and the `.rb` comments state about this project to
+  `Census.snapshot`, with the dated record exempt and a written reason per entry;
+  `check_ruby.rb` (twelfth leg) runs `ruby -w -c` over all 124 Ruby files and
+  treats a warning as a failure. The vitals gate's first honest run reported 74
+  problems; four nameable classes of text that holds a number without stating one
+  (a quoted span, a date, a list marker, a number too far from its noun) became
+  four masking rules, each with its reason in the source, leaving 32 real
+  findings — all fixed. It caught five of the six instances the audit recorded,
+  plus four it had missed: a fourth copy of the stale literals in
+  studio_pages_test.rb, promises.rb claiming `22` vocabulary partials when there
+  are 23, a comment in word_graph's test, and check_shape printing a different
+  quantity under the census's name. The sharpest finding was about a gate:
+  `bin/verify_pages.rb` had been proving the studio's pages against locals the
+  studio stopped using in September, so the footer it verified said `64` words
+  and `32` promises while the footer the app serves said 62 and 35 — three homes for
+  that payload are now one, `StudioVitals.locals`. No whitelist was added, and
+  the reason is written down: every surviving historical passage read better after
+  the fix than it would have behind an exception. The Suite leg stopped keeping
+  its own glob and asks `Census.test_files`, which closes the example-suite gap by
+  subtraction: 488 runs became 568, one process, 0 failures. Twelve legs green;
+  both new legs mutation-tested; the byte-diff digest moved on purpose to
+  2172d2bd6c0254a8c611d59a and the move was explained by reading the rendered
+  footer rather than trusting the number.
+last_touched: 2026-10-03
 next_step: >-
-  Tiers 1 and 4 of DAYTRIP-0.4.0h.md are landed, green and pushed. Next is Tier
-  2 — the eleventh leg, holding living prose and code comments to
-  `Census.snapshot`. `HANDOFF.md`'s *The active next step* section now carries
-  the whole brief, and it is current as of 2026-10-02: the scope decision
-  (living documents and `.rb` comments in, the dated record exempt), the
-  instruction to build the gate before fixing what it will report, and the six
-  known instances to calibrate the first run against rather than rediscover. Two
-  instruments exist now and should not be rebuilt — `ruby bin/byte_diff.rb`
-  (corpus digest d85aac01f281cb9a15e73e03 over 31 pages) and `ruby -w -c`, whose
-  wiring as a gate leg is proposed and awaiting dan's word. Also awaiting a
-  word, newly found — no gate runs the five example apps' suites, 55 runs that
-  sat red for a week in word_graph. Then Tier 6, resequenced so the Inspect
-  surface is rewritten in the language before the semantic node is named, since
-  the rewrite deletes three of the node-read sites and unblocks pointing
-  check_styles at studio. Older calls still open — the workbench word page's
-  proportions, the unserved `assets/workbench.css`, the committed generated
-  VOCABULARY.md, the fate of check_spiff_scope.rb, and the card surgery this
-  entry keeps arguing for.
+  Tiers 1, 2, 3 and 4 of DAYTRIP-0.4.0h.md are landed and green; the round is
+  recorded in DAYTRIP-0.4.0i.md. The gate is twelve legs and the suite now runs
+  every test file the census can find (568 runs). Three things dan may want to
+  confirm rather than discover: KERNEL.md was moved to the vitals gate's exempt
+  set against the written scope decision, because its own first paragraph pins
+  its measurements to tree 5d43fe9 — the argument is in DAYTRIP-0.4.0i.md Part 1
+  and aligning the written scope is his call; README's "Everything green" was
+  replaced with a sentence that says what green does and does not cover,
+  including that no leg renders to a browser; and `word_count`/`words_count`
+  remain two names for one number, named in StudioVitals rather than reconciled,
+  because renaming a local changes every page that says it. Next on the list is
+  Tier 5 (stop committing a generated VOCABULARY.md; delete or retarget
+  check_spiff_scope.rb — both subtract), then Tier 6 resequenced so the Inspect
+  surface is rewritten in the language before the semantic node is named, which
+  also unblocks pointing check_styles at studio/. Tier 7 is the card surgery, and
+  the clearest instance of it is now measured: HANDOFF.md restates the contents
+  of nine DAYTRIP files and is the second most-churned file in the repository's
+  history. Older calls still open — the workbench word page's proportions, the
+  unserved `assets/workbench.css`, and the two byte-identical `.tin` files.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
@@ -226,7 +253,7 @@ notes: >-
   with neither eye and took no ground the language did not already hold: the
   gate runs again, the suite tests what ships, the studio's guides work. Its
   findings are all settled; the two it left to Phase 6 are `action` at five
-  arguments and vocabulary coverage at 54 of 69. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
+  arguments and vocabulary coverage at `54 of 69`. "Tight Coupling in Ruby DSLs.md" (Gemini's critique of the
   Builder) is cited by the roadmap. Phase 4 is closed (2026-09-06), judged
   by dan: the gap ledger G1–G13 is disposed in examples/dashboard/INVENTORY.md,
   flash/action/search stay partials, and the verdict stands in ROADMAP-0.2.md
@@ -276,8 +303,8 @@ notes: >-
   2026-09-14 — drift realigned before 0.3 drafting: next_step had lagged
   HANDOFF.md (0.2 closed 2026-09-11), and HANDOFF's quoted vitals were
   measured before Phase 6's last deletions; re-measured on the clean tree —
-  659 sentences, 93 rules, 64 words all 64 used, 10 pages, 269 runs / 1473
-  assertions one-process, 25 affordances — and both files now carry those
+  `659 sentences, 93 rules, 64 words all 64 used, 10 pages, 269 runs / 1473
+  assertions one-process, 25 affordances` — and both files now carry those
   numbers. Roadmap 0.2 is fully closed; 0.3 drafting begins.
   2026-09-14 — Roadmap 0.3 drafted (ROADMAP-0.3.md), then enriched on dan's
   word the same day: the question is "All three, in one question" broadened —
@@ -311,7 +338,7 @@ notes: >-
   (Studio partial minting / OOP bite-sized, locally scoped domain words to combat
   long, unDRY views) reserved for dedicated execution as Volet 4b.
   Volet 5 (Package C, DAYTRIP-0.4.0f.md, 2026-09-23) lowered the compiled Ruby
-  core into elemental primitives (64 words -> 62, figcaption/summary absorbed
+  core into elemental primitives (`64` words -> `62`, figcaption/summary absorbed
   into their single consumers) and landed flexible-argument disk `def` partials.
   2026-09-24 — the Visual Architecture & Spatial Manifesto compiler landed
   (docs/DESIGN_IDIOM.md, lib/slim_pickins/compiler/design_idiom.rb), then the
