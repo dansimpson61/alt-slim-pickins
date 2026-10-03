@@ -1157,3 +1157,55 @@ A fourth, small and repeated from this morning: **the vitals gate reports its
 author on every round.** Adding `examples/doc_reader` to the corpus moved the page
 count 31 → 32 and it named four stale prose claims; adding a test file moved 54 →
 55 and it named one more. None of those would have been noticed by hand.
+
+## 2026-10-03 — Claude (third entry: the showcase, and what the gates refused)
+
+Tier 6 item 19 — the Inspect surface rewritten in the language it inspects. Four
+lessons, and the first is the one that keeps paying.
+
+**Measure the sentence, not just the item. Third round running.** The audit
+described this target as "a 255-line method that is mostly one HTML heredoc: 39
+raw tags, 37 hardcoded hex colours". Measured: **200 of its 254 lines were a
+`<style>` block** (79% CSS, not HTML), 23 distinct tags, and **26 of the 37 hex
+values were `var(--role, #fallback)` fallbacks** on sixteen theme roles the
+surface already used correctly. They existed because the document linked no
+stylesheet — while `error_page_for`, ten lines below in the same file, linked the
+theme and needed none. The defect was never "hardcoded colour"; it was **one file
+with two documents, one of which forgot a `<link>` and carried twenty-six copies
+of the theme instead.**
+
+**A vocabulary gap predicted is not a vocabulary gap found.** The handoff warned
+to expect gaps and ask rather than invent. All 23 class literals already had words
+— `badge`, `card`, `list`, `item`, `snippet`, `title`, `span`, `empty`, `flash` —
+and the only two that did not were a *layout*, which is Spiff's job. Better: the
+DOM id `:target` needed was already a registered convention (`card_id`, "the DOM
+id, as `word-id`"), so `card node` emits `id="node-n_0"` unasked. **Before
+proposing a word, grep the conventions** — the capability was documented, tested
+and a month old.
+
+**The gates did the code review, and every refusal was right.** `check_styles`
+refused `box--roots`, which taught me `box`'s name slot is a *variant*, not a
+subject — `box roots` says a variant nothing can style, and `each node, from:
+.roots` is what I meant. It refused a `badge--language` variant for an
+`otherwise` branch over four exhaustive grades, which is a dead guard. And
+`check_grammar` refused four words because `studio/views` was missing from its
+app-word directory list — **one line below a comment claiming the checker "asks
+the registry rather than listing directories"**. It lists them for everything but
+UIs. A comment that describes an intention is not a test of it.
+
+**A gate that compares to reality finds things a gate that compares declarations
+cannot — and 0.4.0j's retarget proved itself on the first new Spiff.** It refused
+`.tab-panel`: the compiler emits a `.zone .tab-panel` rule inside every zone
+declaring `scroll internal`, and a zone with no tabs gets a selector matching
+nothing. `docs/SPIFF.md` documented the doubling on purpose, so it was not a
+mistake in the Spiff — **it was the defensive-selector defect 0.4.0g set out to
+remove, surviving inside the compiler that round was fixing.** The fix dan chose,
+`scroll own`, is one token; what makes it safe is that `workbench.spiff` compiles
+**byte-identically**, 184 lines before and after. The general rule: when a
+declaration does two jobs and one of them guesses about content, the guess will
+eventually point at nothing, and only a render can tell you.
+
+A fifth, small: **two tests pinned numbers that move** — the census report's page
+count and the scope gate's spiff count — and both broke on work that was correct.
+A number pinned twice is a number with one stale copy; assert the shape of the
+verdict and let the count have its own test.

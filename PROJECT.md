@@ -91,7 +91,7 @@ status: >-
   because the compiler already dissolves a `panes` wrapper inside a `horizon`.
   Its two layout rules were deliberately not merged — they are per-UI
   presentation and genuinely differ — and both UIs were measured in a live
-  browser to confirm the layout is unchanged. Census 104 rules, one fewer
+  browser to confirm the layout is unchanged. Census `104` rules, one fewer
   because a class name really went away. Dan's call was
   the smallest item: the workbench's `foot` partial is gone and the layout says
   the canonical `footer` — which was also a live defect, since a
@@ -105,7 +105,7 @@ status: >-
   the name; the two per-UI layout rules stay separate because they genuinely
   differ (classic is a real grid, the workbench dissolves the wrapper so the
   shell places the zones). Verified in a live browser on both UIs. Census
-  105 -> 104 rules; README and HANDOFF updated. Then the third: the term
+  `105 -> 104` rules; README and HANDOFF updated. Then the third: the term
   "layout" is retired from the language. It had named two things — the visual
   arrangement, which the design idiom already took over with
   `surface`/`stage`/`flank`/`zone`/`air`, and the chrome-with-a-hole that
@@ -231,26 +231,45 @@ status: >-
   registry is global and last-compile-wins, so a gate that renders cannot be held
   to the real corpus from inside the shared suite. Twelve legs green in 4.47s;
   575 runs, 6,401 assertions, 0 failures.
+  Daytrip 0.4.0k (2026-10-03) ran Tier 6 item 19: `studio/inspector.rb` rewritten
+  in the language it inspects, 436 lines to 135 of data plus 109 of `.sp`,
+  `.spiff` and theme. The audit's description of it was wrong in every
+  particular — 200 of its 254 lines were a `<style>` block, so 79% CSS not HTML;
+  23 distinct tags not 39; and 26 of the 37 hex values were `var(--role, #fallback)`
+  fallbacks on sixteen theme roles the surface already used correctly, present
+  only because that document linked no stylesheet while `error_page_for` ten lines
+  below it did. **No new vocabulary was needed**, which is the finding: all 23
+  class literals had words already, the two that did not were a layout and became
+  `studio/views/inspect.spiff`, and the DOM id `:target` needs was already the
+  registered `card_id` convention. Selection is `:target` — three static theme
+  rules replacing a `selectNode` function and a `DOMContentLoaded` listener — so
+  the surface carries no JavaScript. Tier 4's last item is done with it:
+  `check_styles` now reads `studio/` and went from 24 refusals to 0. The gates did
+  the review and every refusal was right, including `check_grammar` refusing four
+  words because `studio/views` was missing from its app-word list one line below a
+  comment claiming it does not keep one. And the gate 0.4.0j retargeted caught a
+  defensive `.zone .tab-panel` selector inside the Spiff compiler — the defect
+  class 0.4.0g set out to remove, surviving in the compiler that round was fixing.
+  Dan ruled it split: `scroll own` scrolls a zone and says nothing about tabs,
+  `scroll internal` keeps both behaviours and `workbench.spiff` compiles
+  byte-identically, 184 lines before and after. Twelve legs green in 4.52s; 586
+  runs, 6,466 assertions, 0 failures; 34 proved pages.
 last_touched: 2026-10-03
 next_step: >-
-  Tiers 1 through 5 of DAYTRIP-0.4.0h.md are landed and green; the rounds are
-  recorded in DAYTRIP-0.4.0i.md and DAYTRIP-0.4.0j.md. Next is Tier 6,
-  resequenced: rewrite studio/inspector.rb in the language it inspects (a
-  255-line method that is mostly one HTML heredoc — 39 raw tags, 37 hardcoded hex
-  colours), which deletes three of the twenty semantic-node read sites and
-  unblocks Tier 4's last item, pointing check_styles at studio/. Item 19 is a
-  design job that will surface vocabulary gaps needing dan's rulings, so expect to
-  stop and ask. Then item 18, `Data.define` for the semantic node, at the
-  corrected scope (20 read sites, 29 construction sites — not the sixty type
-  checks the audit first claimed). Then Tier 7, the card surgery, whose clearest
-  instance is measured: HANDOFF.md restates the contents of ten DAYTRIP files and
-  is the second most-churned file in the repository's history. Three proposals
-  from 0.4.0j awaiting dan's word, each named rather than performed — the word
-  registry's global last-compile-wins order dependence (a real fragility an
-  existing test depends on by name); whether a committed 1,226-line VOCABULARY.md
-  earns its keep now that the studio renders a live vocabulary reference from the
-  code; and word_count/words_count, still two names for one number. Older calls
-  still open — the workbench word page's proportions, the unserved
+  Tiers 1 through 5 of DAYTRIP-0.4.0h.md are landed, Tier 6 item 19 is landed
+  (DAYTRIP-0.4.0k.md) and Tier 4's last item went with it. Next is **Tier 6 item
+  18**: `Data.define` for the semantic node, at the corrected scope — 20 read
+  sites and 29 construction sites, not the sixty `is_a?` checks the audit first
+  claimed and then disproved in place. Item 19 deleted three of those read sites,
+  which is why it went first. Before starting it, re-measure its premises: three
+  rounds running, a list item's own sentence has been wrong, and 0.4.0k's lore
+  entry records the habit. After that, Tier 7 is the card surgery, whose clearest
+  instance is HANDOFF.md restating the contents of eleven DAYTRIP files. Three
+  proposals still awaiting dan's word, each named rather than performed — the word
+  registry's global last-compile-wins order dependence, which an existing test
+  depends on by name; whether a committed 1,226-line VOCABULARY.md earns its keep
+  beside the studio's live reference; and `word_count`/`words_count`, two names for
+  one number. Older calls open: the workbench word page's proportions, the unserved
   `assets/workbench.css`, and the two byte-identical `.tin` files.
 kind: project
 run: ruby examples/roth/app.rb
