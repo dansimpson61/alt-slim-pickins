@@ -19,6 +19,7 @@
 
 require 'set'
 require_relative 'lib/slim_pickins'
+require_relative 'lib/slim_pickins/vocabulary'
 require_relative 'lib/slim_pickins/conventions'
 
 DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md ROADMAP-0.3.md
@@ -172,39 +173,25 @@ if ARGV.empty?
   end
 end
 
-# VOCABULARY.md's five checkable bullets are generated from the contracts —
-# the declarations are the single home, and bin/generate_vocabulary.rb is the
-# only way to edit them. A hand-edited bullet fails here.
-File.read(File.join(here, 'VOCABULARY.md'))
-    .split(/^(### `[a-z_]+`)/).drop(1).each_slice(2) do |header, body|
-  next unless header =~ /\A### `([a-z_]+)`/
-
-  word = Regexp.last_match(1)
+# VOCABULARY.md's checkable bullets are generated from the contracts — the
+# declarations are the single home, and bin/generate_vocabulary.rb is the only way
+# to edit them. A hand-edited bullet fails here.
+#
+# This gate and that generator ask `SlimPickins::Vocabulary` the same question and
+# differ only in what they do with the answer: it repairs the drift, this refuses
+# it. The splitting regex, the bullet lookup and the conventions comparison used
+# to live in both.
+SlimPickins::Vocabulary.entries(File.read(File.join(here, 'VOCABULARY.md'))).each do |word, body|
   contract = SlimPickins::CONTRACTS[word.to_sym]
   next unless contract
 
-  SlimPickins::Contracts.bullets(word, contract).each do |bullet|
-    slot = bullet[/^- \*\*(\w+)\*\*/, 1]
-    actual = body[/^- \*\*#{slot}\*\* —.*$/, 0]
-    next if actual == bullet
-
-    puts "  UNGENERATED   VOCABULARY.md `#{word}`: expected #{bullet.inspect}, got #{actual.inspect}"
-    problems += 1
-  end
-
-  # The `conventions` bullet is generated from the word's own `infers:`
-  # declaration (2026-09-17), so it is held the same way the five are: the
-  # register's prose has one home and the entry shows it, cannot restate it
-  # differently, and cannot carry one for a word that declares nothing.
-  expected = SlimPickins::Conventions.bullet(contract, word: word)
-  # No `/m`: with it `.` matches newlines and `.*$` swallows the rest of the
-  # entry. The bullet is one line, and the check must compare one line.
-  actual = body[/^- \*\*conventions\*\* —.*$/, 0]
-  if expected && actual != expected
-    puts "  UNGENERATED   VOCABULARY.md `#{word}`: expected #{expected.inspect}, got #{actual.inspect}"
-    problems += 1
-  elsif expected.nil? && actual
-    puts "  UNGENERATED   VOCABULARY.md `#{word}` shows a conventions bullet and declares none"
+  SlimPickins::Vocabulary.drift(word, contract, body).each do |drift|
+    puts(if drift.unwanted?
+           "  UNGENERATED   VOCABULARY.md `#{word}` shows a conventions bullet and declares none"
+         else
+           "  UNGENERATED   VOCABULARY.md `#{word}`: " \
+             "expected #{drift.expected.inspect}, got #{drift.actual.inspect}"
+         end)
     problems += 1
   end
 end
