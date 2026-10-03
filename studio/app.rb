@@ -81,12 +81,8 @@ helpers do
       guides: StudioDocs.guides(ui),
       ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == ui.name } },
       ui: ui.name,
-      word_count: StudioVitals::WORDS,
-      convention_count: StudioVitals::CONVENTIONS,
-      promise_count: StudioVitals::PROMISES,
       data_note: StudioDocs::DATA_NOTE,
-      words_count: StudioVitals::WORDS,
-      pages_count: StudioPages::PAGES.size,
+      **StudioVitals.locals(pages_count: StudioPages::PAGES.size),
       pages_active: active_tab == :pages,
       words_active: active_tab == :words,
       guides_active: active_tab == :guides }

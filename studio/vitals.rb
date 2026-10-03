@@ -21,4 +21,20 @@ module StudioVitals
   WORDS = SlimPickins::Census.words[:total].size
   CONVENTIONS = SlimPickins::Census.conventions_count
   PROMISES = SlimPickins::Census.promises_count
+
+  # The locals a studio frame's footer asks for, in one place. They were in
+  # three: `studio/app.rb#commons`, `studio/pages.rb#ui_locals` and
+  # `bin/verify_pages.rb#ui_locals` — and the third still held `word_count: 64,
+  # promise_count: 32` long after the first two were fixed, which is what a
+  # third copy is for. The count of pages is the caller's, because the shelf's
+  # list belongs to the shelf.
+  #
+  # `word_count` and `words_count` are two names the templates grew for one
+  # number — the tin's footer asks for one, the library shelf for the other.
+  # Named here rather than quietly reconciled; renaming a local is a change to
+  # every page that says it.
+  def self.locals(pages_count:)
+    { word_count: WORDS, convention_count: CONVENTIONS, promise_count: PROMISES,
+      words_count: WORDS, pages_count: pages_count }
+  end
 end

@@ -19,6 +19,7 @@ require_relative '../studio/docs_helper'
 require_relative '../studio/pages'
 require_relative '../studio/status'
 require_relative '../studio/uis'
+require_relative '../studio/vitals'
 
 require '/home/dan/dev/dashboard/lib/workspace'
 require '/home/dan/dev/dashboard/lib/scan'
@@ -71,9 +72,8 @@ def ui_locals(ui)
            vocabulary_tiers: StudioDocs.words_by_tier(ui),
            guides: StudioDocs.guides(ui),
            ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == ui.name } },
-           ui: ui.name, word_count: 64, convention_count: 38, promise_count: 32,
-           measured: '2026-09-17', data_note: StudioDocs::DATA_NOTE,
-           words_count: 64, pages_count: StudioPages::PAGES.size,
+           ui: ui.name, data_note: StudioDocs::DATA_NOTE,
+           **StudioVitals.locals(pages_count: StudioPages::PAGES.size),
            pages_active: false, words_active: false, guides_active: false }
   {
     'index.sp' => base.merge(title: 'Workbench',

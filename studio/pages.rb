@@ -265,9 +265,11 @@ module StudioPages
   # --- the data ledger: what the playground pre-fills ------------------------
 
   # What a UI's own page needs, canned: its frame's locals and the page's
-  # answer. Used by the census and by `bin/verify_pages.rb`, so a UI page is
-  # measured by the same shape in both — the drift this replaces was two
-  # copies of the same canned payload, one of which had gone stale.
+  # answer. Used by the census. `bin/verify_pages.rb` keeps its own, because it
+  # renders every UI against that UI's library while this method answers for
+  # the default one — the two share the vitals through `StudioVitals.locals`
+  # and nothing else. That remaining duplication is named rather than implied;
+  # this comment used to claim the gate called this method, and it did not.
   #
   # The shelf is two canned entries rather than the real census: a UI page
   # rendered *by* the census cannot take the census again without recursing.
@@ -284,12 +286,9 @@ module StudioPages
       # The language's vitals come from the census, never from a literal here.
       # This line held `word_count: 64, promise_count: 32, measured:
       # '2026-09-17'` and was stale by the time it mattered — the same
-      # hand-kept-copy defect as `studio/vitals.rb`, in the second of the two
+      # hand-kept-copy defect as `studio/vitals.rb`, in the second of the three
       # places it lived.
-      word_count: StudioVitals::WORDS,
-      convention_count: StudioVitals::CONVENTIONS,
-      promise_count: StudioVitals::PROMISES,
-      words_count: StudioVitals::WORDS, pages_count: PAGES.size,
+      **StudioVitals.locals(pages_count: PAGES.size),
       pages_active: page == 'index' || page.nil?,
       words_active: page == 'docs',
       guides_active: page == 'guide'
