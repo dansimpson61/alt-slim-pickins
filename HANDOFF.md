@@ -10,15 +10,15 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
-3. `PROJECT.md` — `next_step`. As of 2026-10-02 it resumes at **Tier 2 of
-   `DAYTRIP-0.4.0h.md`**, the eleventh gate leg. Trust it over this file's
-   itinerary if the two ever disagree; the card is updated every round and this
-   file has lagged it by a week before.
-4. `HANDOFF.md` — this document, specifically the active itinerary below
-5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0h.md` — outcomes of every daytrip so
-   far. **Read `0.4.0h` first if you are picking up the current thread**: it is the
-   audit round, it carries the prioritized list the next several rounds work
-   through, and its *What landed* section says what is already done
+3. `PROJECT.md` — `next_step`. **Trust it over this file** if the two disagree: the
+   card is updated every round and this file has lagged it by a week before. It is
+   also short now, and deliberately — `bin/check_card.rb` holds it to a budget.
+4. `HANDOFF.md` — this document, specifically the active next step below
+5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0m.md` — one per round, each the record
+   of its own. **Read `0.4.0h` first if you are picking up a thread from the audit's
+   list**: it carries the prioritized list, and its *What landed* says what was done
+   at the time. For the connected account of every round in order, read
+   `history/CHRONICLE.md` instead of reconstructing it from thirteen files
 6. `COMMUNITY_BULLETIN_BOARD.md` — the council's most recent session (currently:
    the workbench spatial frontier fixes, 2026-09-25); `.claude/skills/council/SKILL.md`
    is the reusable skill, read it before convening the council again
@@ -38,25 +38,21 @@ conversation; it is all written down.
 
 ## Where things stand
 
-**Roadmap 0.4 is underway as an iterative sequence of winnable daytrip victories:**
-- **Volet 1 (The Truthful Floor, `DAYTRIP-0.4.0a.md`)**: Landed 2026-09-22. Established `SlimPickins::Census` (`bin/census.rb`) as the living SSOT; settled F9 (`Chart` declares `table_header`); enriched `Conventions.bullet` with concrete element yields.
-- **Volet 2 (Expressive View Composition, `DAYTRIP-0.4.0b.md`)**: Landed 2026-09-22. Delivered R3P2 (subject-shifting `card`, eliminating 7 repeated bindings in `queue.sp`), R3P3 (single-form `formaction` button groups in `actions.sp`), and R3P1 (open partial payload forwarding via `takes: payload` / `open: true`).
-- **Volet 3 (Studio & Workbench Wins, `DAYTRIP-0.4.0c.md`)**: Landed 2026-09-22. Delivered W2 (live test suite 8th leg on `/status`) and W3 (combined `Inspect` surface uniting Semantic Tree AST and The Why Pane / inference provenance inspector).
-- **Volet 4 (The Empirical Diagnostic Taxonomy, `DAYTRIP-0.4.0d.md`)**: Landed 2026-09-22. Delivered `SlimPickins::Taxonomy` as SSOT for 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual); a vocabulary-wide empirical diagnostic audit surfacing missing `stack`/`cluster`, ad-hoc `figcaption`/`summary` kernel leaks, and the visual styling idiom standard; multi-category shelf presence with cross-facets on Workbench and Classic UIs; `PRIMER.md` updated.
-- **Volet 4b (Studio Partial Minting & Bite-Sized Domain Words, `DAYTRIP-0.4.0e.md`)**: Landed 2026-09-23. Delivered in-buffer `def <word>, *params` authoring with flexible argument binding, declaration-free word execution (Package C proving ground), enhanced `box subject, title` context shifting, positional `link` fallback, Studio `/mint` endpoint, and live editor minting toolbar affordance.
-- **Volet 5 (Package C: Lean & Elemental Kernel, `DAYTRIP-0.4.0f.md`)**: Landed 2026-09-23. Privileged `tag` primitive with a compilation-privilege boundary; `figcaption`/`summary` absorbed into their single consumers (`64` words → `62`); `paragraph` re-atomized over `tag p`; flexible argument binding generalized to disk `def` partials.
-- 2026-09-24 (no numbered volet): the Visual Architecture & Spatial Manifesto compiler landed (`docs/SPIFF.md`, `lib/slim_pickins/compiler/spiff.rb`), then the Council spatial manifesto (`horizon`/`posture`/`scroll`/`presence`/`focus`) the same round.
-- **Volet 6 (The Council Skill & Workbench Spatial Frontier, `DAYTRIP-0.4.0g.md`)**: Landed 2026-09-25. The council pattern formalized as a reusable skill (`.claude/skills/council/SKILL.md`), used to resolve the four workbench spatial frontiers (revised mid-session after dan rejected an authoring-redundancy proposal), then three real rendering defects dan caught by eye — a `max-width` leak, container queries that had never actually worked since the compiler's first commit, and three shell columns at three different heights.
-- **2026-09-26 (no numbered volet): the truth round, the naming, and the tin.** Nine rounds of work, all recorded in `ROADMAP-0.3.md`'s Addenda 1–14 and `LORE.md`:
-  1. **Truth round** — five living documents realigned to measured counts; `check_design_docs.rb` (now `check_spiff.rb`) built to hold the lexicon to the compiler and `check_design_docs`'s sibling `GuideRenderingTest` added after two guides rendered raw HTML and backslashes; the markdown engine's code-span pairing fixed (a span may now contain backticks).
-  2. **`sidebar_layout` → `shell`, then `foot` → `footer`** — the design idiom's founding complaint finished.
-  3. **The audit** that found the pattern: *a partial whose whole body is `box` + `children` exists only to hand a stylesheet a class*, which is a presentation decision in substance clothing.
-  4. **`layout.sp` → `[app].tin`** — the word "layout" retired from the language; `Library#tin`, the `:tin` convention.
-  5. **Spiff named** — `DesignIdiom` was a description doing a name's job; module, doc, gate and suffix now all say Spiff, and the extension followed (`.design` → `.spiff`).
-  6. **Per-view resolution** — `[view].tin`/`[view].spiff` beat the app's, one rule in one place (`Library#tin_for`, `Library.spiff_for`), lifted out of the studio.
-  7. **Asset inference** — a page gets `slim-pickins.css` unasked, plus `public/css/[app].css` or `[view].css` when they exist and `Library.from(…, public_url:)` says where they are served. A default, not a replacement: `stylesheet`/`script` remain.
-  8. **`check_spiff_scope.rb`** — the tenth gate, answering dan's own question: every zone a Spiff names must be renderable in its scope.
-- **Active next step**: **none.** The tin/Spiff work is closed. Open threads are named in `PROJECT.md next_step` and in the section below.
+Roadmap 0.4 is underway as a sequence of winnable daytrip victories. **Each round's
+record is its own `DAYTRIP-*.md`**, and the connected account of all of them in
+order is [history/CHRONICLE.md](history/CHRONICLE.md) — which is where this file's
+volet-by-volet chronicle went on 2026-10-03, verbatim.
+
+It went because of what it cost rather than what it said. This file is the
+most-churned in the repository's history — 3,807 lines, ahead of the closed
+`ROADMAP-0.2.md` at 3,462 and `builder.rb` at 3,009 — and the chronicle was why:
+every round appended a volet entry to a document that is step 4 of its own reading
+list. It was not a duplicate of the daytrips; sampling sixteen phrases found none of
+them anywhere else, so it moved rather than went.
+
+What stays here is what a fresh session needs and cannot get elsewhere: the reading
+list above, the vitals below, the active next step, the protocols and the standing
+principles.
 
 ### Current Vitals (measured 2026-10-03)
 
@@ -64,8 +60,8 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 56 test files.
-- **Full Suite**: 592 runs, 0 failures, 0 errors, 0 skips in one process — and
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
+- **Full Suite**: 600 runs, 0 failures, 0 errors, 0 skips in one process — and
   that now includes the example apps' own suites, because the Suite leg asks
   `Census.test_files` instead of keeping its own glob.
 - **Check Grammar**: `1,239 sentences checked, 92 words defined, 0 problems`.
@@ -80,161 +76,47 @@ measure are quoted as the gate output they are.
 
 ---
 
-## Active Roadmap Progression
+---
 
-### [COMPLETED] Volet 1: The Truthful Floor (`DAYTRIP-0.4.0a.md`)
-- Established `SlimPickins::Census` as live executable SSOT.
-- Settled F9 (`Chart` infers `table_header`).
-- Enriched `Conventions.bullet` with concrete HTML tag yields in `VOCABULARY.md`.
+### The active next step — dan's, because the list is finished
 
-### [COMPLETED] Volet 2: Expressive View Composition (`DAYTRIP-0.4.0b.md`)
-- **R3P2**: Subject-shifting `card` (eliminating repeated dotted subject paths in card blocks).
-- **R3P3**: Single-form `formaction` button groups in `actions` (collapsing 4 separate forms into 1).
-- **R3P1**: Partial payload forwarding (`open: true` / `takes: payload`).
+**Every tier of `DAYTRIP-0.4.0h.md`'s prioritized list is landed.** Tier 7 closed in
+`DAYTRIP-0.4.0m.md`: the resume card went from 32,179 characters to 3,707 and this
+file from 29,370 to about 18,000, with 29,061 characters moved verbatim to
+`history/CHRONICLE.md` and `bin/check_card.rb` given the budget the audit asked for.
 
-### [COMPLETED] Volet 3: Studio & Workbench Wins (`DAYTRIP-0.4.0c.md`)
-- **W2**: Live test suite integrated as 8th leg in `StudioStatus::LEGS` on Studio `/status`.
-- **W3**: Combined `Inspect` surface in Workbench output tabs (`Visual` | `HTML` | `Inspect`), uniting collapsible Semantic Tree AST with synchronized Why provenance cards, 4-tier ownership, and convention links.
+So there is no queued item. What the audit set out eleven rounds ago is done, and
+what comes next is a direction rather than a task — which by this project's own
+*How roadmaps go* is dan's to set. **0.4 has spent itself on the backward eye**, and
+an odd roadmap leads with the forward one: it asks something the project cannot yet
+answer. That question has not been asked yet.
 
-### [COMPLETED] Volet 4: The Empirical Diagnostic Taxonomy (`DAYTRIP-0.4.0d.md`)
-- **Taxonomy Engine (`lib/slim_pickins/taxonomy.rb`)**: Single source of truth for the 5-tier deductive hierarchy (Structural, Semantic, Interactive, Behavioral, Visual) and a complete vocabulary-wide empirical audit ledger.
-- **Empirical Diagnostic Revelations**:
-  - Missing primitives diagnosed: `stack` (uniform vertical rhythm layout), `cluster` (horizontal flow).
-  - Ad-hoc single-consumer anomalies diagnosed: `figcaption` (in-degree 1 in `figure`) and `summary` (in-degree 1 in `disclosure`) pinpointed as kernel HTML element leaks, validating Package C.
-  - Cohesion vs. split: `box` and `span` identified as split/overload candidates; the multi-category words confirmed as cohesive concepts.
-  - The Visual Tier standard: confirmed that no vocabulary primitive exists solely for decorative paint; styling belongs to theme/variant idioms.
-- **Studio Shelf & Documentation**:
-  - Studio shelf (Workbench `library.sp` and Classic `vocabulary.sp`) organized into 5 tiers with authoring questions, counts, and multi-category presence with secondary cross-facets.
-  - `PRIMER.md` updated with "The Deductive Structure (The Five Tiers)".
-
-### [COMPLETED] Volet 4b: Studio Partial Minting & Bite-Sized Domain Words (`DAYTRIP-0.4.0e.md`)
-- **In-Buffer Words via `def <word_name>, *params` (`lib/slim_pickins/transform.rb`)**: Top-level definitions hoisted in AST and evaluated as local builder words before page body execution.
-- **Flexible Argument Binding (`lib/slim_pickins/builder.rb`)**: Positional ordering, order-independent keyword mapping, nil defaults for omitted parameters, open kwargs forwarding into chain scope, child block splicing via `children`.
-- **Declaration-Free Execution**: Author words run with zero `contract` metadata or `expects` preambles; serves as the living proving ground for Package C.
-- **Enhanced Primitives**: `box subject, title` shifts context and handles empty/nil subjects gracefully; positional `link label, href` fallback.
-- **Studio Minting Affordance (`studio/pages.rb`, `studio/app.rb`, `assets/studio.js`)**: Interactive `Mint <word>(*params) → partial` toolbar button in editor; `POST /mint` endpoint promotes local definitions to disk partials and re-renders live.
-
-### [COMPLETED] Volet 5: Package C — Lean & Elemental Kernel (`DAYTRIP-0.4.0f.md`)
-- **Privileged `tag` Primitive**: strictly refused in app/user templates by compiler error; compilation cache partitioned on `[source, privileged]`.
-- **Absorbed Single-Consumers**: `figcaption`/`summary` folded into `figure`/`disclosure` (canonical vocabulary 64 → 62).
-- **Re-atomized `paragraph`**: expressed as a `.sp` partial over `tag p`.
-- **Flexible Argument Binding for Disk Partials**: `Builder.bind_parameters` generalizes Volet 4b's binding engine to `.sp` partials on disk, not just in-buffer.
-- Byte-diff verified against all application pages; warm render 6.24 ms (budget 10 ms).
-
-### [COMPLETED] The Spiff Compiler & Council Spatial Manifesto (no volet number, 2026-09-24)
-- **`SlimPickins::Compiler::Spiff`** (`lib/slim_pickins/compiler/spiff.rb`, `docs/SPIFF.md`): a companion `.spiff` language compiling qualitative spatial vocabulary (`surface`, `stage`, `zone`, `flank`, `stack`, `air`, `frame`, `cadence`, `treatment`) to modern CSS Grid + Container Queries.
-- Same round: `horizon`/`posture` (multi-zone planes), `scroll`/`presence`/`focus` zone qualities, Sandi Metz hygiene (`min-height: 0`), `.panes` dissolution via `display: contents`.
-
-### [COMPLETED] Volet 6: The Council Skill & Workbench Spatial Frontier (`DAYTRIP-0.4.0g.md`)
-- **`.claude/skills/council/SKILL.md`**: the multi-persona architecture-debate pattern formalized as a reusable skill — one continuous transcript, never one subagent per persona; every round after the first must engage a specific prior claim by name.
-- **The four workbench spatial frontiers resolved** (qualitative collapse tokens, one compiled-CSS pipeline with provenance, real selectors replacing a defensive 6/7-way guess list, `100vh` → `100dvh`) — Frontier 3 revised mid-session after dan rejected authoring an already-inferable zone name as a `data-*` HTML attribute literal.
-- **Three real rendering defects**, each found by dan in the live studio and measured before being touched: a `max-width` leak in the editor's textareas; container queries that had never worked since the compiler's first commit (a self-referencing `@container` pattern — fixed with zero new markup); `align-items: start` leaving the three shell columns at three different heights (now `stretch`).
-- Left open, by dan's own call: the `collapse`/`balance` rem scale, `output`'s independently-governed height, `--footer-height`'s corrected-but-still-guessed value — candidates for a future token ground-truthing daytrip, not decided this round.
-
-### [COMPLETED] The workbench word page, three layers deep (2026-09-29)
-
-A page renders through a stack of grids and every layer thought it owned the
-layout: the compiler dissolved any *descendant* `.panes` rather than the shell's
-own; `display: contents` made `.word_docs`' placement rules match nothing; and
-compiled zone rules are descendant selectors, so `.shell .editor` names the
-shell's columns inside any nested grid. Fixed at each layer. The studio's footer
-counts stopped being hand-kept literals and now read `Census`.
-
-### [COMPLETED] Volet 7: The audit round (`DAYTRIP-0.4.0h.md`, 2026-10-02)
-
-The backward eye, on dan's ask: a critique on the project's own terms, then the
-sharper question — do the ten checkers carry their weight? Measured: yes, and
-they are aimed one layer too high. Eight of ten compare a declaration to a
-declaration; both defect classes that have actually cost sessions here (the
-rendered pixel, the arithmetic in prose) fall outside that. Four exist only
-because a truth has two homes. The diversion is real and the documents are doing
-it — 40,082 lines of markdown churned against 33,153 of Ruby.
-
-**Tier 1 landed**: `check_spiff_scope.rb`'s `app_root` bounded (the suite's
-standing error); the vocabulary count now measured where it is graded
-(`way_exam` q5, `word_graph`'s two red tests). **Tier 4 landed**: the thirteen
-dedented `def`s, seven more indentation mismatches inside method bodies, the
-duplicate `Builder#chain`, two dead comments, `about`'s guard restructured, three
-dead locals. **New instruments**: `bin/byte_diff.rb` and `ruby -w -c`.
-
-### The active next step — Tier 7, the card surgery
-
-**Tiers 1 through 6 of `DAYTRIP-0.4.0h.md` are landed.** Item 19 in `0.4.0k.md`,
-item 18 in `0.4.0l.md`, and Tier 4's last item with them. The audit's list is
-finished except its final tier.
-
-**The habit, because it has now paid four rounds running: measure the sentence a
-list item is written in before acting on it.** The pattern across 0.4.0i through
-0.4.0l is consistent — the *counts* were roughly right and *what they implied* was
-not. Tier 5's document turned out to be 72% prose; `studio/inspector.rb` turned out
-to be 79% CSS; the semantic node's "20 read sites" turned out to be one
-destructuring plus a dozen guards.
-
-**What changed that the rest of this file assumes.** The gate is twelve legs, the
-Suite leg asks `Census.test_files` (592 runs, one process), `check_styles` reads
-`lib/` and `studio/`, and `check_spiff_scope` holds a Spiff's compiled selectors to
-the HTML its pages render. The semantic node is
-`SlimPickins::Node = Data.define(:word, :attributes, :children)`, built positionally
-as `Node[:box, attrs, children]`, and the `filter:` extension point receives and
-returns `Node`s. The Inspect surface is a page in the language with no JavaScript.
-34 pages are proved.
-
-**Tier 7, and this file is its clearest instance.** `HANDOFF.md` restates the
-contents of twelve `DAYTRIP-*.md` files and is the second most-churned file in the
-repository's history behind a closed roadmap; `PROJECT.md`'s `status` is now about
-20,000 characters and its `notes` another nine. Together they are longer than
-`transform.rb`, `builder.rb` and `generator.rb` combined. The card exists so a
-session can resume *instead of* reading the repo, and it has grown into the thing
-it was built to prevent. `bin/check_card.rb:90` prints `status N chars` on every
-green run and has no opinion about it; giving it one — a budget it fails over — is
-part of the item.
-
-The audit's Part 4 is worth re-reading before starting, because it measured the
-case: 40,082 lines of markdown churned against 33,153 of Ruby, with `ROADMAP-0.2.md`
-and this file both ahead of `builder.rb`. "The diversion is real, and the documents
-are doing it."
+**Before taking anything below as a task, measure the sentence it is written in.**
+Five consecutive rounds (0.4.0i to 0.4.0m) found a list item's own premises wrong,
+and the pattern held every time: the counts were roughly right and what they implied
+was not. Tier 7 was the sharpest case — both this file and the audit said the card
+duplicated the daytrips, and sampling twenty-four phrases found none of them
+anywhere else. Acting on the premise would have deleted the only copy.
 
 **Three proposals awaiting dan's word**, each named rather than performed:
 
-- **The word registry is global and last-compile-wins.** Rendering results depend
-  on test order, `test/studio_try_test.rb` documents the mechanism and depends on
-  it, and it is why any gate that renders needs its own process.
-- **Does a committed 1,226-line `VOCABULARY.md` still earn its keep?** 72% of it is
-  prose, and the studio renders a live vocabulary reference from the code.
-- **`word_count` and `words_count`** remain two names for one number.
+- **The word registry is global and last-compile-wins.** Rendering results depend on
+  test order, `test/studio_try_test.rb` documents the mechanism and depends on it,
+  and it is why any gate that renders needs its own process. A runtime change with a
+  blast radius.
+- **Does a committed 1,226-line `VOCABULARY.md` earn its keep?** 72% of it is prose
+  no generator can produce, and the studio renders a live vocabulary reference from
+  the code. A documentation decision, not a refactor.
+- **`word_count` and `words_count`** remain two names for one number, named in
+  `StudioVitals` rather than reconciled, because renaming a local changes every page
+  that says it.
 
-**And one newly open:** `Markdown`'s `[:element, open_tag, name, children]` and the
-tokenizer's triples are the only unnamed positional ones left in the project.
+**And the smaller open calls**, unchanged: `Markdown`'s `[:element, …]` and the
+tokenizer's are the only unnamed positional triples left; the workbench word page's
+proportions; the unserved `assets/workbench.css`; the two byte-identical `.tin`
+files.
 
-### Then, in order — and the order changed
-
-- **Tier 4's last item is blocked.** Pointing `check_styles.rb` at `studio/*.rb`
-  (it reads `lib/**/*.rb` only) goes red immediately on `studio/inspector.rb`'s 37
-  hardcoded hex colours and two `100vh`. Do it *after* the rewrite below, not
-  before, or you add a gate with no remedy.
-- **Tier 6 is resequenced: item 19 before item 18.** `studio/inspector.rb:17` is a
-  255-line method that is mostly one HTML heredoc — 39 raw tags — in the one
-  surface a visitor opens to see what the language *means*. Rewriting it in the
-  language is the best dogfooding test the studio could run and will likely
-  surface vocabulary gaps worth more than the fix. It also *deletes* 3 of the 20
-  node-read sites that item 18 would otherwise have to touch.
-- **Tier 6 item 18, with corrected numbers.** Give the semantic node a name
-  (`Data.define(:word, :attributes, :children)`). The audit claimed the anonymous
-  triple "forces most of the 60 `is_a?` tests" — **that was wrong**, and the
-  correction matters for the decision: `is_a?(Array)` in `lib/` is 7, of which ~6
-  are node-vs-string guards. The 60 are dominated by `Symbol` (15), `String` (9),
-  `Proc` (6) and `Hash` (6) — argument discrimination in the DSL's own calling
-  convention, which this refactor does not touch. Real scope: **20 read sites, 29
-  construction sites**, in `builder.rb`, `generator.rb`, `partial_word.rb` and
-  `studio/inspector.rb`. Payoff: one good name, plus ~6 guards. Note
-  `kind, attrs, children = node` destructuring will not survive `Data` (no
-  `to_ary`), and children arrays legitimately hold Strings and nils.
-- **Tier 7**: the card surgery. `PROJECT.md`'s `status` is now over 12,000
-  characters and `bin/check_card.rb` prints the number every green run without an
-  opinion. Give it a budget and fail over it; the narrative belongs in `LORE.md`,
-  which already holds most of it.
-
-### Two instruments this round added — use them, do not rebuild them
+### Two instruments to use rather than rebuild (added in 0.4.0h)
 
 - **`ruby bin/byte_diff.rb`** renders every page the gate proves and reduces the
   corpus to one digest; `ruby bin/byte_diff.rb /tmp/before` also writes each page

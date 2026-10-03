@@ -131,9 +131,11 @@ this as money* and the formatting belongs to the word.
   however short it is.
 
 Two directories hold what is consulted rather than read:
-[history/](history/README.md) is roadmap 0.1 — its eight phase records and the
-three paper pages that were the vocabulary's evidence before there was code —
-and [roth/](roth/README.md) is notes on a different project.
+[history/](history/README.md) is the kept record — roadmap 0.1's eight phase
+records, the three paper pages that were the vocabulary's evidence before there
+was code, and [CHRONICLE.md](history/CHRONICLE.md), the round-by-round account
+that `PROJECT.md` used to carry in its frontmatter — and
+[roth/](roth/README.md) is notes on a different project.
 
 ## How roadmaps go
 

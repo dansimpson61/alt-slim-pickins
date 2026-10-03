@@ -1,11 +1,18 @@
 # history
 
-The record of roadmap 0.1, kept and not edited.
+The kept record: roadmap 0.1, and the chronicle of every round since.
 
 **Every number in these files is what was true when that phase closed**, not
 what is true now. They are consulted, not maintained — a record that updates
 itself is not a record. For the current state read [../README.md](../README.md).
 
+- **[CHRONICLE.md](CHRONICLE.md)** — the project's rounds in order, as
+  `PROJECT.md`'s `status` and `notes` fields recorded them until 2026-10-03, when
+  they had grown to 29,061 characters inside a resume card read at the start of
+  every session. Moved here verbatim, not rewritten and not cut: sampling found
+  none of that prose anywhere else in the repository, so it is the only connected
+  account of those rounds in order. Each round's own record is its
+  `../DAYTRIP-*.md`; the card now carries only the present.
 - **[ROADMAP-0.1.md](ROADMAP-0.1.md)** — the closed roadmap. Eight phases, the
   risk register that ordered them, and a close-out banner saying what 0.1 never
   tested.
