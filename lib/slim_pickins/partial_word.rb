@@ -95,8 +95,8 @@ module SlimPickins
           [nil, false, body_block.call]
         end
 
-      if body.size == 1 && body.first.is_a?(Array)
-        box = Builder.box_root(body)[1]
+      if body.size == 1 && body.first.is_a?(Node)
+        box = Builder.box_root(body).attributes
         if self.class.is_builtin
           box[:class_base] = self.class.partial_name
         else

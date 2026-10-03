@@ -17,7 +17,7 @@ module SlimPickins
         # that can be overruled by speaking, not a replacement for speaking.
         # `unshift` on each in order leaves them in order.
         inferred_stylesheets.each do |path|
-          in_head([:stylesheet, { path: path }, []])
+          in_head(Node[:stylesheet, { path: path }, []])
         end
 
         # The tin runs first, because it may contribute to the head — its
@@ -25,7 +25,7 @@ module SlimPickins
         # a tin's assets never reached the document, which is the one thing a
         # tin exists to hold.
         value, empty, body = about(name) { wrapped_in_tin(&@block) }
-        emit_node([:page, { heading: heading, head: head_nodes,
+        emit_node(Node[:page, { heading: heading, head: head_nodes,
                             favicon: favicon },
                    prune(body, empty)])
         value
@@ -63,7 +63,7 @@ module SlimPickins
           attrs[:label] ||= @args[0]
           attrs[:to] ||= @args[1]
         end
-        emit_node([:link, attrs, []])
+        emit_node(Node[:link, attrs, []])
       end
     end
 
@@ -82,7 +82,7 @@ module SlimPickins
 
         unless @block
           body_text = first.is_a?(Proc) ? first.call : first
-          return emit_node([:box, { variant: nil, body: body_text, open: open, id: id }, []])
+          return emit_node(Node[:box, { variant: nil, body: body_text, open: open, id: id }, []])
         end
 
         shifts_subject = false
@@ -127,15 +127,15 @@ module SlimPickins
 
           children = prune(raw_children, empty)
           if title_text && !title_text.to_s.empty?
-            children.unshift([:heading, { body: title_text.to_s }, []])
+            children.unshift(Node[:heading, { body: title_text.to_s }, []])
           end
 
-          emit_node([:box, { variant: nil, body: nil, open: open, id: id }, children])
+          emit_node(Node[:box, { variant: nil, body: nil, open: open, id: id }, children])
           target_val
         else
           resolved_args = @args.map { |a| a.is_a?(Proc) ? a.call : a }
           variant, body = arguments(resolved_args)
-          emit_node([:box, { variant: variant, body: body, open: open, id: id }, capture(&@block)])
+          emit_node(Node[:box, { variant: variant, body: body, open: open, id: id }, capture(&@block)])
         end
       end
     end
@@ -179,7 +179,7 @@ collected = (items || []).to_a.map do |item|
   chain.with(item, described_as: "this #{name}") { capture(&@block) }
 end
 unbind(name)
-emit_node([:each, { name: name }, collected])
+emit_node(Node[:each, { name: name }, collected])
 
       end
     end
@@ -208,12 +208,15 @@ emit_node([:each, { name: name }, collected])
               { name: c[:name], value: subject.fetch(c[:name]), kind: format_of(c),
                 alignment: c[:alignment] }
             end
-            [:row, {}, cells]
+            # A row is a node too, though it is carried in the table's attributes
+            # rather than emitted — which is why the sweep over `emit_node` did
+            # not find it and a render did.
+            Node[:row, {}, cells]
           end
         end
 
-        emit_node([:table, { name: @name, caption: @caption, columns: columns,
-                             rows: rows, foot: foot(columns, @rows, sample) }, []])
+        emit_node(Node[:table, { name: @name, caption: @caption, columns: columns,
+                                 rows: rows, foot: foot(columns, @rows, sample) }, []])
       end
 
       private
@@ -265,7 +268,7 @@ emit_node([:each, { name: name }, collected])
       def evaluate
         columns = @kwargs.key?(:columns) ? @kwargs[:columns] : nil
       variant, = arguments(@args)
-      emit_node([:grid, { variant: variant, columns: columns }, capture(&@block)])
+      emit_node(Node[:grid, { variant: variant, columns: columns }, capture(&@block)])
 
       end
     end
@@ -289,7 +292,7 @@ emit_node([:each, { name: name }, collected])
           resolved_label = @args[1]
           kind = nil
         end
-        emit_node([:fact, { name: name, label: resolved_label,
+        emit_node(Node[:fact, { name: name, label: resolved_label,
                             value: shown, kind: kind }, []])
       end
     end
@@ -320,7 +323,7 @@ emit_node([:each, { name: name }, collected])
           resolved_label = @args[1] || 'Metric'
           kind = as
         end
-        emit_node([:metric, { name: name, label: resolved_label,
+        emit_node(Node[:metric, { name: name, label: resolved_label,
                               value: value, kind: kind }, []])
       end
     end
@@ -343,7 +346,7 @@ emit_node([:each, { name: name }, collected])
 
         drawn = series.map { |s| resolve(s, @rows) }.reject { |s| s[:points].empty? }
 
-        emit_node([:chart, { series: drawn, levels: levels,
+        emit_node(Node[:chart, { series: drawn, levels: levels,
                              across: across(@rows, @over || Inference.singular(@name)),
                              caption: @caption }, []])
       end
@@ -438,7 +441,7 @@ emit_node([:each, { name: name }, collected])
         target = @kwargs.key?(:target) ? @kwargs[:target] : nil
       name, = arguments(@args)
       value, empty, children = about(name) { capture(&@block) }
-      emit_node([:form, { name: name, to: to, method: method, target: target }, prune(children, empty)])
+      emit_node(Node[:form, { name: name, to: to, method: method, target: target }, prune(children, empty)])
       value
 
       end
@@ -462,7 +465,7 @@ emit_node([:each, { name: name }, collected])
       # page says `field done` and gets a checkbox (dan's ruling, 2026-09-17).
       # `type:` overrides, as every inference is overridable by saying the thing.
       kind = type || (Inference.boolean?(value) ? :checkbox : Inference.input_type(value))
-      emit_node([:field, { name: name, label: label_for(name, label),
+      emit_node(Node[:field, { name: name, label: label_for(name, label),
                            value: value,
                            kind: kind,
                            step: (step || Inference.step_for(value))&.to_s,
@@ -479,7 +482,7 @@ emit_node([:each, { name: name }, collected])
         placeholder = @kwargs.key?(:placeholder) ? @kwargs[:placeholder] : nil
       name, value = arguments(@args)
       shown = value.nil? ? subject.fetch(name) : value
-      emit_node([:input, { name: name, value: shown,
+      emit_node(Node[:input, { name: name, value: shown,
                            kind: type || Inference.input_type(shown),
                            placeholder: placeholder }, []])
 
@@ -500,7 +503,7 @@ emit_node([:each, { name: name }, collected])
           value = @args[0]
           label = @args[1]
         end
-        emit_node([:textarea, { name: name, label: label_for(name, label),
+        emit_node(Node[:textarea, { name: name, label: label_for(name, label),
                                 value: value, rows: (rows || 4).to_s,
                                 required: required, readonly: readonly }, []])
 
@@ -513,7 +516,7 @@ emit_node([:each, { name: name }, collected])
       def evaluate
       name, value = arguments(@args)
       shown = value.nil? ? subject.fetch(name) : value
-      emit_node([:hidden, { name: name, value: shown }, []])
+      emit_node(Node[:hidden, { name: name, value: shown }, []])
 
       end
     end
@@ -524,7 +527,7 @@ emit_node([:each, { name: name }, collected])
       def evaluate
       name, label = arguments(@args)
       value = subject.fetch(name)
-      emit_node([:checkbox, { name: name, label: label_for(name, label), value: value }, []])
+      emit_node(Node[:checkbox, { name: name, label: label_for(name, label), value: value }, []])
 
       end
     end
@@ -554,9 +557,9 @@ emit_node([:each, { name: name }, collected])
 
         with_open
         options = @collected.map do |o|
-          [:option, { value: o[:value], label: o[:label], selected: selected }, []]
+          Node[:option, { value: o[:value], label: o[:label], selected: selected }, []]
         end
-        emit_node([:choice, { name: name, label: label_for(name, label), selected: selected, variant: variant },
+        emit_node(Node[:choice, { name: name, label: label_for(name, label), selected: selected, variant: variant },
                    options])
 
       end
@@ -584,7 +587,7 @@ emit_node([:each, { name: name }, collected])
         name = @kwargs.key?(:name) ? @kwargs[:name] : nil
         value = @kwargs.key?(:value) ? @kwargs[:value] : nil
         variant, label = arguments(@args)
-        emit_node([:button, { variant: variant,
+        emit_node(Node[:button, { variant: variant,
                               label: label || (variant && Inference.label(variant)),
                               to: to, target: target, type: type, size: size,
                               name: name, value: value }, []])
@@ -598,7 +601,7 @@ emit_node([:each, { name: name }, collected])
       def evaluate
         with_open
         chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
-        emit_node([:choose, {}, chosen ? capture(&chosen.last) : []])
+        emit_node(Node[:choose, {}, chosen ? capture(&chosen.last) : []])
       end
 
       def add_branch(condition, block)

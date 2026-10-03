@@ -105,8 +105,8 @@ class VocabularyPartialsTest < Minitest::Test
   end
 
   def test_the_box_passes_through_choose
-    branch = [:paragraph, {}, []]
-    root = SlimPickins::Builder.box_root([[:choose, {}, [branch]]])
+    branch = SlimPickins::Node[:paragraph, {}, []]
+    root = SlimPickins::Builder.box_root([SlimPickins::Node[:choose, {}, [branch]]])
     assert_same branch, root
     assert_same branch, SlimPickins::Builder.box_root([branch])
   end

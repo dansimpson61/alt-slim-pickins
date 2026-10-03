@@ -8,7 +8,7 @@ require_relative 'words'
 
 module SlimPickins
   # The runtime — nothing else. A page evaluates into a tree of semantic
-  # nodes (`[:word, attributes, children]`) and the Generator walks the tree
+  # nodes (`Node[word, attributes, children]`) and the Generator walks the tree
   # to HTML. The vocabulary lives in Words, extended in here; the gatherers are
   # the words that collect their children as declarations, and they live in
   # Words with the rest; the presentation lives in the Generator. What is
@@ -104,10 +104,13 @@ module SlimPickins
           end
         end
 
-        if body.size == 1 && body.first.is_a?(Array)
+        if body.size == 1 && body.first.is_a?(Node)
           root = Builder.box_root(body)
-          if root && root[1].is_a?(Hash)
-            root[1][:app_class] = root[1][:app_class] ? "#{root[1][:app_class]} #{word_name}" : word_name
+          if root && root.attributes.is_a?(Hash)
+            # The one mutation in the runtime, and it writes to the hash the node
+            # holds rather than to the node, which is why a frozen `Data` is fine.
+            was = root.attributes[:app_class]
+            root.attributes[:app_class] = was ? "#{was} #{word_name}" : word_name
           end
         end
 
@@ -191,9 +194,9 @@ module SlimPickins
     end
 
     def empty_node?(node)
-      return false unless node.is_a?(Array)
+      return false unless node.is_a?(Node)
 
-      node[0] == :empty || CONTRACTS[node[1][:class_base]]&.empty
+      node.word == :empty || CONTRACTS[node.attributes[:class_base]]&.empty
     end
 
     # --- presentation helpers ---------------------------------------------
@@ -443,8 +446,8 @@ module SlimPickins
     # generator splices it away — so the box passes through it.
     def self.box_root(body)
       root = body.first
-      while root[0] == :choose && root[2].size == 1 && root[2].first.is_a?(Array)
-        root = root[2].first
+      while root.word == :choose && root.children.size == 1 && root.children.first.is_a?(Node)
+        root = root.children.first
       end
       root
     end
@@ -499,8 +502,8 @@ module SlimPickins
     public
 
     def token(word, variant = nil) = Generator.token(word, variant)
-    def html(string) = emit_node([:raw, {}, [string]]) # trusted markup — you escape it
-    def element(name, attributes = {}, children = []) = [:tag, { name: name, attrs: attributes }, children]
+    def html(string) = emit_node(Node[:raw, {}, [string]]) # trusted markup — you escape it
+    def element(name, attributes = {}, children = []) = Node[:tag, { name: name, attrs: attributes }, children]
     def tag(name, *args, **kwargs, &block)
       name = name.to_sym
       content = nil

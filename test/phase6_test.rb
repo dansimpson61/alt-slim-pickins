@@ -107,7 +107,9 @@ class Phase6Test < Minitest::Test
   # between evaluation and the generator. The thumbnails question — count the
   # children, then present — is a filter over the tree.
   def test_a_filter_intercepts_the_tree_before_the_generator
-    badge = ->(nodes) { [[:span, { class_base: :badge, variant: :ok, body: 'filtered' }, []]] + nodes }
+    badge = lambda do |nodes|
+      [SlimPickins::Node[:span, { class_base: :badge, variant: :ok, body: 'filtered' }, []]] + nodes
+    end
     html = SlimPickins.render("page p\n  text \"x\"\n", locals: { p: {} }, filter: badge)
     assert_includes html, '<span class="badge badge--ok">filtered</span>'
   end

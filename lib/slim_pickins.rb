@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'slim_pickins/errors'
+require_relative 'slim_pickins/node'
 require_relative 'slim_pickins/transform'
 require_relative 'slim_pickins/contracts'
 require_relative 'slim_pickins/compilation'
@@ -21,7 +22,13 @@ module SlimPickins
   # pipeline's middle stage, exposed — then the Generator interprets it.
   #
   #   SlimPickins.render(File.read("form.sp"), locals: { scenario: inputs },
-  #                      filter: ->(tree) { [[:badge, { kind: :ok, label: "12" }, []]] + tree })
+  #                      filter: ->(tree) { [Node[:badge, { kind: :ok, label: "12" }, []]] + tree })
+  #
+  # A filter receives and returns `Node`s. It used to receive and return bare
+  # three-element Arrays, and that changed in DAYTRIP-0.4.0l when the semantic
+  # node was given a name — the one externally visible consequence of it, named
+  # here because this signature is the only published extension point the tree
+  # has.
   def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
     compilation = Compilation.of(source, path)
     compilation.refuse!(path)

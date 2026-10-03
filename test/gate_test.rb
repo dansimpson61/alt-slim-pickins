@@ -65,7 +65,7 @@ class GateTest < Minitest::Test
     words = Module.new do
       def stat(*args)
         name, label = arguments(args)
-        emit_node([:metric, { name: name, label: label_for(name, label),
+        emit_node(SlimPickins::Node[:metric, { name: name, label: label_for(name, label),
                               value: subject.fetch(name), kind: nil }, []])
       end
     end

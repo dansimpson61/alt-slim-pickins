@@ -8,7 +8,7 @@ require_relative 'charting'
 
 module SlimPickins
   # The HTML interpreter. It walks the tree of semantic nodes the Builder
-  # evaluates — `[:word, attributes, children]` — and emits the document. The
+  # evaluates — `Node[word, attributes, children]` — and emits the document. The
   # words built the description; this is where presentation lives: escaping,
   # formatting, and the shape of every tag. A second interpreter over the
   # same tree is what an API would be; none is built, because none has asked.
@@ -155,7 +155,7 @@ module SlimPickins
       return @out << esc(node) if node.is_a?(String)
       return if node.nil?
 
-      kind, attrs, children = node
+      kind, attrs, children = node.word, node.attributes, node.children
       was_app_class, @current_app_class = @current_app_class, attrs[:app_class]
       case kind
       when :raw then @out << children.join
@@ -229,7 +229,7 @@ module SlimPickins
       open_tag('div', class: token(:tabs, attrs[:variant]))
 
       # Extract tab labels from children to build the nav using radio buttons.
-      tabs = children.select { |c| c && c[0] == :tab }
+      tabs = children.select { |c| c && c.word == :tab }
 
       # The radio group's name and each tab's id are numbered from the render,
       # not from the object (2026-09-17). `object_id` made the ids unique and
@@ -243,14 +243,14 @@ module SlimPickins
       group = @tab_group
 
       tabs.each_with_index do |child, index|
-        tab_attrs = child[1]
-        is_active = tab_attrs[:active] || (index == 0 && !tabs.any? { |t| t[1][:active] })
+        tab_attrs = child.attributes
+        is_active = tab_attrs[:active] || (index == 0 && !tabs.any? { |t| t.attributes[:active] })
         open_tag('input', type: 'radio', name: "tabs-#{group}", id: "tab-#{group}-#{index}", checked: (is_active ? 'checked' : nil))
       end
       
       open_tag('nav', class: 'tabs-nav', role: 'tablist')
       tabs.each_with_index do |child, index|
-        tab_attrs = child[1]
+        tab_attrs = child.attributes
         label = tab_attrs[:label] || "Tab #{index + 1}"
         classes = ['tab-button']
         full_tag('label', label, class: classes.join(' '), for: "tab-#{group}-#{index}", role: 'tab')
@@ -295,7 +295,7 @@ module SlimPickins
       open_tag('tbody')
       rows.each do |row|
         open_tag('tr')
-        row[2].each do |cell|
+        row.children.each do |cell|
           full_tag('td', Generator.format(cell[:kind], cell[:value]), class: cell[:alignment])
         end
         @out << '</tr>'
@@ -445,29 +445,29 @@ module SlimPickins
       children.map do |child|
         next child if child.nil?
 
-        if child.is_a?(Array) && child[0] == :each
-          each_attrs = child[1]
-          iterations = child[2]
+        if child.is_a?(Node) && child.word == :each
+          each_attrs = child.attributes
+          iterations = child.children
           wrapped_iterations = iterations.map do |iteration|
             if iteration.size == 1 && item_node?(iteration.first)
               iteration
             else
-              [[:box, { class_base: :item }, iteration]]
+              [Node[:box, { class_base: :item }, iteration]]
             end
           end
-          [:each, each_attrs, wrapped_iterations]
+          Node[:each, each_attrs, wrapped_iterations]
         elsif item_node?(child)
           child
         else
-          [:box, { class_base: :item }, [child]]
+          Node[:box, { class_base: :item }, [child]]
         end
       end
     end
 
     def item_node?(node)
-      node.is_a?(Array) && (
-        (node[0] == :box && node[1][:class_base] == :item) ||
-        (node[0] == :tag && node[1][:name] == :li)
+      node.is_a?(Node) && (
+        (node.word == :box && node.attributes[:class_base] == :item) ||
+        (node.word == :tag && node.attributes[:name] == :li)
       )
     end
 
@@ -557,7 +557,7 @@ module SlimPickins
         open_tag('fieldset', class: token(:choice, :radio))
         full_tag('legend', attrs[:label]) if attrs[:label]
         children.each do |c|
-          opt_attrs = c[1]
+          opt_attrs = c.attributes
           val = opt_attrs[:value].to_s
           checked = (attrs[:selected].to_s == val ? 'checked' : nil)
           opt_id = "#{attrs[:name]}_#{val}"

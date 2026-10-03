@@ -134,13 +134,13 @@ end
 
 class Encloses < Word
   def evaluate
-    emit_node([self.class.word_name, unpack_arguments, capture(&@block)])
+    emit_node(Node[self.class.word_name, unpack_arguments, capture(&@block)])
   end
 end
 
 class Says < Word
   def evaluate
-    emit_node([self.class.word_name, unpack_arguments, []])
+    emit_node(Node[self.class.word_name, unpack_arguments, []])
   end
 end
 
@@ -159,7 +159,7 @@ class Registers < Word
 end
 class Head < Word
   def evaluate
-    in_head([self.class.word_name, unpack_arguments, []])
+    in_head(Node[self.class.word_name, unpack_arguments, []])
   end
 end
 
