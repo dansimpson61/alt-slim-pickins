@@ -22,6 +22,7 @@ require_relative '../studio/pages'
 require_relative '../studio/status'
 require_relative '../studio/uis'
 require_relative '../studio/vitals'
+require_relative '../studio/inspector'
 
 require '/home/dan/dev/dashboard/lib/workspace'
 require '/home/dan/dev/dashboard/lib/scan'
@@ -53,6 +54,14 @@ w_sample = graph.find('table')
 w_peers = graph.by_shape(w_sample.shape).reject { |w| w.name == w_sample.name }
 w_parents = w_sample.explicit_parents.map { |p| graph.find(p) }.compact
 w_children = w_sample.explicit_children.map { |c| graph.find(c) }.compact
+
+# A real tree, so the Inspect surface is proved against what it is given rather
+# than against a hand-built imitation of it.
+inspect_tree = SlimPickins.evaluate("page \"Specimen\"\n  heading \"A heading\"\n  list\n    item \"one\"\n",
+                                    path: 'specimen.sp', locals: {})
+inspect_roots = StudioInspector.nodes_of(inspect_tree)
+INSPECT_LOCALS = { roots: inspect_roots, details: StudioInspector.flatten(inspect_roots),
+                   node_count: StudioInspector.flatten(inspect_roots).size, source: '' }.freeze
 
 scenario = Roth::Scenario.defaults
 projection = Roth::Projection.of(scenario)
@@ -151,6 +160,12 @@ PAGES = [
   ['examples/word_graph/views/matrix.sp', word_graph,
    { words: graph.all }],
   ['examples/doc_reader/views/index.sp', doc_reader, doc_reader_data],
+  # The Inspect surface, which is a page in the language now rather than a
+  # heredoc. Its locals are a real evaluated tree, so the gate proves the surface
+  # against the shape it actually receives, and `check_spiff_scope.rb` can hold
+  # `studio/views/inspect.spiff` to what this renders.
+  ['studio/views/inspect.sp', StudioInspector.library, INSPECT_LOCALS],
+  ['studio/views/refusal.sp', StudioInspector.library, { message: 'a refusal, as the surface shows it' }],
   *STUDIO_PAGES
 ].freeze
 

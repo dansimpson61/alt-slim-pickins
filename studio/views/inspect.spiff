@@ -1,0 +1,23 @@
+# The Inspect surface's layout — two panes, side by side, equal.
+#
+# It replaces 200 lines of inline `<style>` that `studio/inspector.rb` carried in
+# a heredoc, including a hand-written `grid-template-columns: 1fr 1fr`, a
+# `@media (max-width: 720px)` that rewrote it to rows, and two `100vh` — the unit
+# 0.4.0g retired in favour of `100dvh`. Said qualitatively, the collapse and the
+# unit are the compiler's business rather than this file's.
+#
+# `kind: document` because this page is a document of its own inside an iframe,
+# not an app shell: the stage belongs on `body` and its container on `html`.
+surface inspect, kind: document
+  stage
+    air balanced
+    flank tree, beside: detail, balance: equal, collapse: tight
+
+  zone tree
+    frame quiet
+    cadence compact
+    scroll own
+
+  zone detail
+    frame quiet
+    scroll own

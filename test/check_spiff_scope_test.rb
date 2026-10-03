@@ -41,7 +41,9 @@ class CheckSpiffScopeTest < Minitest::Test
     output = IO.popen(['ruby', File.join(SpiffScope::ROOT, 'check_spiff_scope.rb')],
                       err: %i[child out], &:read)
     assert_match(/0 problems/, output, output)
-    assert_match(/2 spiff\(s\), \d+ compiled classes held/, output)
+    # The counts are not pinned: a Spiff added tomorrow moves them, and that is
+    # not a failure. The shape of the verdict is what this holds.
+    assert_match(%r{\d+ spiff\(s\), \d+ compiled classes held to the HTML their pages render}, output)
   end
 
   # The measurement that justified retargeting rather than deleting: the old

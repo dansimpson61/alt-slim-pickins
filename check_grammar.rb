@@ -61,7 +61,17 @@ require_relative 'studio/uis'
 Uis.all.each do |ui|
   app_words |= SlimPickins::Library.from(ui.views).partials.keys.map(&:to_s)
 end
-app_words |= SlimPickins::Library.from(File.join(here, 'studio', 'shared')).partials.keys.map(&:to_s)
+# `shared` is what every UI draws on; `views` is the studio's own documents —
+# the Inspect surface, which is a page of its own inside an iframe rather than
+# anything a UI encloses.
+#
+# Both are listed by hand, and the comment above claims this checker "asks the
+# registry rather than listing directories". It does for UIs and not for these,
+# which is why `studio/views` read as four UNDEFINED words the day it arrived —
+# the same failure the comment was written about, one directory over.
+['shared', 'views'].each do |dir|
+  app_words |= SlimPickins::Library.from(File.join(here, 'studio', dir)).partials.keys.map(&:to_s)
+end
 
 # The `end` that closes the module is the one at the module's own indentation.
 # Anchoring on `^end` instead read straight past a nested module and counted

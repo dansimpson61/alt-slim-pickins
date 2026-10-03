@@ -216,17 +216,26 @@ end
 # The studio's static assets — the stylesheet, the vendored Stimulus, the
 # controller. A whitelist rather than a glob: an asset route must never
 # become a file reader.
-ASSETS = %w[slim-pickins.css stimulus.umd.js studio.js workbench.css].freeze
+ASSETS = %w[slim-pickins.css stimulus.umd.js studio.js workbench.css inspect.css].freeze
+
+# The stylesheets that are compiled rather than read, and the Spiff each comes
+# from. One home for the pairing, so adding a surface is one line here.
+SPIFFS = { 'workbench.css' => 'uis/workbench/workbench.spiff',
+           'inspect.css' => 'views/inspect.spiff' }.freeze
 
 get '/assets/:file' do
   name = File.basename(params[:file])
   halt 404, "There is no asset called #{name}." unless ASSETS.include?(name)
 
   content_type name.end_with?('.css') ? 'text/css' : 'text/javascript'
-  if name == 'workbench.css'
-    design_file = File.expand_path('uis/workbench/workbench.spiff', __dir__)
-    SlimPickins::Spiff.compiled_stylesheet(File.read(design_file),
-      provenance: 'automatically from studio/uis/workbench/workbench.spiff')
+  # A Spiff is compiled per request rather than kept as a file, so the stylesheet
+  # a page gets is the one its `.spiff` says today. `inspect.css` joined on the
+  # same terms when the Inspect surface's 200 lines of inline `<style>` became
+  # `studio/views/inspect.spiff`.
+  spiff = SPIFFS[name]
+  if spiff
+    SlimPickins::Spiff.compiled_stylesheet(File.read(File.expand_path(spiff, __dir__)),
+                                           provenance: "automatically from studio/#{spiff}")
   else
     File.read(File.expand_path("../assets/#{name}", __dir__))
   end

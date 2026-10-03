@@ -46,9 +46,15 @@ module SlimPickins
       end.sort
     end
 
+    # Counted by reading the gate's source rather than by requiring it: the gate
+    # boots the example apps and the studio, and the studio's vitals come from
+    # here, so requiring it would close a circle. The cost of that is this
+    # scrape, and the scrape undercounted the day the Inspect surface was added
+    # under `studio/` — it only knew `pages/` and `examples/`. A test now holds
+    # this count to what the gate actually reports.
     def verified_pages_count
       verify_script = File.read(File.join(ROOT, 'bin', 'verify_pages.rb'))
-      explicit_pages = verify_script.scan(/^\s*\['(pages|examples)\//).size
+      explicit_pages = verify_script.scan(/^\s*\['(pages|examples|studio)\//).size
       mapped_pages = verify_script.scan(/%w\[portfolio_table account_detail roth_form specimen\]/).any? ? 4 : 0
       studio_count = verify_script.include?('*STUDIO_PAGES') ? 8 : 0
       explicit_pages + mapped_pages + studio_count

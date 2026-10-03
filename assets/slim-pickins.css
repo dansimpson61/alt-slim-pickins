@@ -97,6 +97,15 @@
   --wash: 0.2;
   --icon-size: 1em;
   --icon-shift: -0.125em;
+
+  /* The convention register's four grades, which the Inspect surface shows as
+     badges. A precedence ladder rather than a status, so they are their own
+     roles instead of borrowing --positive and --negative, which would say
+     something untrue about a tier. */
+  --grade-structural: #3730a3;
+  --grade-shape: #92400e;
+  --grade-domain: #166534;
+  --grade-axiomatic: #6b21a8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -267,6 +276,18 @@ summary { cursor: pointer; color: var(--accent); }
 .badge--pending, .badge--warning, .badge--polish { color: var(--caution); }
 .badge--error, .badge--blocker { color: var(--negative); }
 .badge--neutral { color: var(--ink-soft); }
+.badge--structural { color: var(--grade-structural); }
+.badge--shape { color: var(--grade-shape); }
+.badge--domain { color: var(--grade-domain); }
+.badge--axiomatic { color: var(--grade-axiomatic); }
+
+/* The Inspect surface says what a node is with spans, which is what the heredoc
+   it replaced did with .node-type, .node-variant, .node-preview and
+   .convention-name. The distinction is the same; the names are the language's. */
+.span--word { color: var(--accent); }
+.span--name { color: var(--accent); }
+.span--preview { color: var(--ink-faint); }
+.span--attribute { color: var(--ink-soft); }
 
 /* A state's mark is drawn here, off the class the markup already declares —
    `.note--warning`, `.badge--ok`. No page authors a glyph to say a state,
@@ -805,3 +826,13 @@ body:has(> .shell) > h1:first-child {
   min-height: var(--footer-height);
 }
 
+/* ------------------------------------------------------- inspect -- target -- */
+/* The Inspect surface's selection: a link, and three rules.
+   `studio/inspector.rb` used to do this with a `selectNode` function and a
+   `DOMContentLoaded` listener that toggled two classes. A node in the tree is now
+   a link to its own card, and :target shows the card it points at. The third rule
+   is the old listener's only real job — showing the first card before anything has
+   been clicked. Ruby > CSS > Stimulus > custom JS, and this one reaches CSS. */
+.detail .card { display: none; }
+.detail .card:target { display: block; }
+.detail:not(:has(.card:target)) .card:first-of-type { display: block; }

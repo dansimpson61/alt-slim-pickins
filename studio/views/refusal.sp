@@ -1,0 +1,2 @@
+page "Refusal"
+  flash .message
