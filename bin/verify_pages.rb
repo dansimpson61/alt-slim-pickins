@@ -11,6 +11,8 @@
 # failure the way the language does — path, line, sentence. Exits non-zero
 # on any problem, so it can gate a commit.
 
+require 'json'
+
 require_relative '../lib/slim_pickins'
 require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
@@ -37,6 +39,14 @@ way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
 milestone_planner = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
 planner = MilestonePlanner::Planner.new
 m1_sample = planner.find('m1')
+# The Volet 4b specimen. It has no `app.rb`, so nothing booted it and nothing
+# rendered it — an app directory with a `.spiff`, a page and a data file, outside
+# the proved corpus entirely. `check_spiff_scope.rb` holds a Spiff's compiled
+# selectors to the HTML its pages render, which it cannot do for a page nobody
+# renders, and that is what found this.
+doc_reader = SlimPickins::Library.from(File.expand_path('../examples/doc_reader/views', __dir__))
+doc_reader_data = JSON.parse(File.read(File.expand_path('../examples/doc_reader/data.json', __dir__)),
+                             symbolize_names: true)
 word_graph = SlimPickins::Library.from(File.expand_path('../examples/word_graph/views', __dir__))
 graph = WordGraph::Graph.instance
 w_sample = graph.find('table')
@@ -140,6 +150,7 @@ PAGES = [
    { shapes: graph.shapes }],
   ['examples/word_graph/views/matrix.sp', word_graph,
    { words: graph.all }],
+  ['examples/doc_reader/views/index.sp', doc_reader, doc_reader_data],
   *STUDIO_PAGES
 ].freeze
 

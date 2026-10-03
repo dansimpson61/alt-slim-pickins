@@ -2,164 +2,139 @@
 
 require 'minitest/autorun'
 require 'stringio'
-require 'tempfile'
 require 'fileutils'
 require 'tmpdir'
 require_relative '../check_spiff_scope'
 
-# The tenth gate: a Spiff's zones against the pages they style.
+# The Spiff gate, retargeted in DAYTRIP-0.4.0j: a compiled selector against the
+# HTML the pages it governs really render.
 #
-# It exists for a defect nothing else can see — the compiler emits a selector
-# for every zone a Spiff names, and a selector that matches nothing is a
-# correctness defect however short it is. A typo, or a zone renamed in a page
-# and not in its Spiff, compiles to a rule that silently styles nothing.
+# It used to compare a Spiff's zone names to the `.sp` sources in its directory,
+# which passed two whole classes of defect — a selector the compiler emits that
+# is not a zone at all, and a word defined on disk that nothing ever reaches.
+# Both are asked here by name, because the retarget's entire justification is
+# that those two cases now fail.
 class CheckSpiffScopeTest < Minitest::Test
-  ROOT = File.expand_path('..', __dir__)
+  WORKBENCH = File.expand_path('../studio/uis/workbench/workbench.spiff', __dir__)
 
-  # `root` is the tree the run is about, and a fixture's tree is its temp
-  # directory — not this repository. Passing ROOT for an app built under /tmp
-  # was incoherent and only went unnoticed while `root` was used for nothing
-  # but the default glob and a display prefix; `app_root` now walks within it.
-  def run_check(files, root: ROOT)
+  def run_check(spiffs: nil, pages: nil, root: SpiffScope::ROOT)
     out = StringIO.new
-    problems = SpiffScope.run(files: files, root: root, out: out)
+    problems = SpiffScope.run(spiffs: spiffs, pages: pages || PAGES, root: root, out: out)
     [problems, out.string]
   end
 
+  # Run in a process of its own, as the gate itself is, and not through
+  # `SpiffScope.run` in here.
+  #
+  # The word registry is global and last-compile-wins. `studio_try_test.rb` says
+  # so in its own comment and depends on it: it merges the classic UI's library
+  # into the registry, after which the workbench's `editor` partial is no longer
+  # the one that renders. So in a shared suite this assertion's result depends on
+  # test order — it passed alone and failed after `studio_try_test`, which is how
+  # the fragility was found rather than assumed.
+  #
+  # That is a pre-existing property of the runtime, not of this gate, and it is
+  # why `bin/verify_pages.rb` has always had a process to itself. A gate that
+  # renders needs the same. The fixture tests below stay in-process because an
+  # in-buffer `def` is page-local and owes the registry nothing.
   def test_the_real_corpus_passes
-    problems, output = run_check(nil)
-
-    assert_equal 0, problems, output
-    refute_match(/0 spiff\(s\)/, output, 'the checker found no Spiff and called it green')
+    output = IO.popen(['ruby', File.join(SpiffScope::ROOT, 'check_spiff_scope.rb')],
+                      err: %i[child out], &:read)
+    assert_match(/0 problems/, output, output)
+    assert_match(/2 spiff\(s\), \d+ compiled classes held/, output)
   end
 
-  def test_a_zone_no_page_can_render_is_refused
-    Dir.mktmpdir('app') do |root|
-      app = File.join(root, 'demo')
-      FileUtils.mkdir_p(File.join(app, 'views'))
-      File.write(File.join(app, 'demo.spiff'), "surface demo\n  zone nonexistent\n    frame quiet\n")
-      File.write(File.join(app, 'views', 'index.sp'),
-                 "page index\n  def shown\n    text \"x\"\n  shown\n")
+  # The measurement that justified retargeting rather than deleting: the old
+  # check read three zone names out of the eleven classes the compiler emits.
+  def test_every_class_the_compiler_emits_is_checked_not_only_the_zones
+    targeted = SpiffScope.targeted_classes(WORKBENCH)
+    %w[editor library output].each { |zone| assert_includes targeted, zone }
+    %w[panes shell tabs].each do |beyond|
+      assert_includes targeted, beyond,
+                      "`#{beyond}` is a class the compiler targets and the zone-name walk never saw"
+    end
+    assert_operator targeted.size, :>, 3
+  end
 
-      problems, output = run_check([File.join(app, 'demo.spiff')], root: root)
+  def test_an_at_rule_is_not_a_selector
+    refute_includes SpiffScope.targeted_classes(WORKBENCH), 'media'
+    refute_includes SpiffScope.targeted_classes(WORKBENCH), 'container'
+  end
 
-      refute_equal 0, problems, 'the checker passed a zone nothing renders'
-      assert_includes output, 'nonexistent'
-      assert_includes output, 'the selector matches nothing'
+  # --- the two defects the name-based version passed ------------------------
+  def test_a_selector_matching_nothing_is_refused
+    in_a_corpus(zone: 'librery') do |root, spiffs, pages|
+      problems, output = run_check(spiffs: spiffs, pages: pages, root: root)
+      assert_equal 1, problems, output
+      assert_match(/MATCHES NOTHING/, output)
+      assert_match(/`\.librery`/, output)
     end
   end
 
-  def test_a_zone_a_page_defines_inline_is_accepted
-    Dir.mktmpdir('app') do |root|
-      app = File.join(root, 'demo')
-      FileUtils.mkdir_p(File.join(app, 'views'))
-      File.write(File.join(app, 'demo.spiff'), "surface demo\n  zone catalog\n    frame quiet\n")
-      File.write(File.join(app, 'views', 'index.sp'),
-                 "page index\n  def catalog\n    text \"x\"\n  catalog\n")
-
-      problems, = run_check([File.join(app, 'demo.spiff')], root: root)
-      assert_equal 0, problems, 'a page that defines the word can render the zone'
+  # The upgrade, stated as a test: `ghost` is a real word on disk, so the
+  # zone-name check accepted it. Nothing renders it, so this one does not.
+  def test_a_class_defined_but_never_rendered_is_refused
+    in_a_corpus(zone: 'ghost', define: 'ghost') do |root, spiffs, pages|
+      problems, output = run_check(spiffs: spiffs, pages: pages, root: root)
+      assert_equal 1, problems, output
+      assert_match(/compiles a selector for `\.ghost`/, output)
     end
   end
 
-  def test_a_zone_an_app_partial_provides_is_accepted
-    Dir.mktmpdir('app') do |root|
-      app = File.join(root, 'demo')
+  def test_a_zone_the_page_renders_is_accepted
+    in_a_corpus(zone: 'panel', render: 'panel') do |root, spiffs, pages|
+      problems, output = run_check(spiffs: spiffs, pages: pages, root: root)
+      assert_equal 0, problems, output
+    end
+  end
+
+  # --- a Spiff with nothing to answer to -----------------------------------
+  def test_a_spiff_whose_pages_are_not_rendered_is_refused_rather_than_passed
+    in_a_corpus(zone: 'panel', render: 'panel') do |root, spiffs, _pages|
+      problems, output = run_check(spiffs: spiffs, pages: [], root: root)
+      assert_equal 1, problems, output
+      assert_match(/UNRENDERED/, output)
+      assert_match(/governs no page the corpus renders/, output)
+    end
+  end
+
+  def test_an_empty_corpus_is_refused_rather_than_passed
+    problems, output = run_check(spiffs: [], pages: [])
+    assert_equal 1, problems
+    assert_match(/NO SPIFFS/, output)
+  end
+
+  def test_scope_is_the_spiffs_own_directory
+    scope = SpiffScope.scope_of(WORKBENCH, pages: PAGES)
+    refute_empty scope
+    scope.each { |label, _library, _locals| assert_includes label, 'studio/uis/workbench/' }
+    assert_equal scope.size, PAGES.count { |l, _, _| l.start_with?('studio/uis/workbench/') }
+  end
+
+  # A fixture app: one page, its own Spiff, and whichever of the two halves of
+  # the question the test wants to put out of step.
+  def in_a_corpus(zone:, define: nil, render: nil)
+    Dir.mktmpdir do |root|
+      app = File.join(root, 'examples', 'fixture')
       FileUtils.mkdir_p(File.join(app, 'views', 'partials'))
-      File.write(File.join(app, 'demo.spiff'), "surface demo\n  zone shelf\n    frame quiet\n")
-      File.write(File.join(app, 'views', 'partials', 'shelf.sp'), "box\n  children\n")
-      File.write(File.join(app, 'views', 'index.sp'), "page index\n  text \"x\"\n")
+      if define
+        File.write(File.join(app, 'views', 'partials', "#{define}.sp"),
+                   "text \"a word on disk that nothing reaches\"\n")
+      end
+      # An in-buffer `def` promotes its own name onto the element's class, which
+      # is the mechanism a zone's selector relies on.
+      body = if render
+               "  #{render}\n\ndef #{render}\n  text \"inside the zone\"\n"
+             else
+               "  heading \"Fixture\"\n"
+             end
+      File.write(File.join(app, 'views', 'index.sp'), "page \"Fixture\"\n#{body}")
+      File.write(File.join(app, 'fixture.spiff'),
+                 "surface fixture\n  stage\n    air generous\n\n  zone #{zone}\n    frame flat\n")
 
-      problems, = run_check([File.join(app, 'demo.spiff')], root: root)
-      assert_equal 0, problems, 'a partial of that name can render the zone'
+      library = SlimPickins::Library.from(File.join(app, 'views'))
+      pages = [['examples/fixture/views/index.sp', library, {}]]
+      yield root, [File.join(app, 'fixture.spiff')], pages
     end
-  end
-
-  def test_flank_and_horizon_zones_are_read_too
-    Dir.mktmpdir('app') do |root|
-      app = File.join(root, 'demo')
-      FileUtils.mkdir_p(File.join(app, 'views'))
-      File.write(File.join(app, 'demo.spiff'), <<~SPIFF)
-        surface demo
-          stage
-            flank lead, beside: companion, balance: equal
-          horizon one, two
-      SPIFF
-      File.write(File.join(app, 'views', 'index.sp'), "page index\n  text \"x\"\n")
-
-      problems, output = run_check([File.join(app, 'demo.spiff')], root: root)
-
-      # All four names are named by the Spiff and none is rendered here.
-      %w[lead companion one two].each { |zone| assert_includes output, zone }
-      assert_equal 4, problems
-    end
-  end
-
-  # Was `test_an_empty_corpus_is_refused_rather_than_passed`, and its assertion
-  # recorded the defect instead of the rule. Its fixture was a Spiff in a bare
-  # temp directory — a Spiff belonging to no app — and it asserted `0 problems`,
-  # which is what the gate reported because `app_root` returned `/` and
-  # `renderable_names` then globbed the whole filesystem (EACCES on any machine
-  # with an unreadable directory under it; a very slow green on the rest). The
-  # two things it was conflating are now two tests: a Spiff in no app is
-  # refused, and a Spiff naming no zone is fine.
-  def test_a_spiff_that_belongs_to_no_app_is_refused
-    Dir.mktmpdir('orphan') do |dir|
-      spiff = File.join(dir, 'nothing.spiff')
-      File.write(spiff, "surface nothing\n  zone somewhere\n    frame quiet\n")
-
-      problems, output = run_check([spiff], root: dir)
-
-      assert_equal 1, problems
-      assert_includes output, 'belongs to no app'
-    end
-  end
-
-  def test_a_spiff_naming_no_zone_is_accepted
-    Dir.mktmpdir('app') do |root|
-      app = File.join(root, 'demo')
-      FileUtils.mkdir_p(File.join(app, 'views'))
-      File.write(File.join(app, 'demo.spiff'), "surface demo\n")
-      File.write(File.join(app, 'views', 'index.sp'), "page index\n  text \"x\"\n")
-
-      problems, output = run_check([File.join(app, 'demo.spiff')], root: root)
-
-      assert_equal 0, problems
-      assert_includes output, 'held to their pages'
-    end
-  end
-
-  # The walk's two boundaries, which is where the defect lived: it must refuse
-  # rather than hand back a directory, and it must not leave the tree it was
-  # told to examine — or the answer depends on whatever an unrelated ancestor
-  # happens to hold.
-  def test_the_walk_refuses_rather_than_returning_a_directory
-    Dir.mktmpdir('orphan') do |dir|
-      spiff = File.join(dir, 'nothing.spiff')
-      File.write(spiff, "surface nothing\n")
-
-      assert_nil SpiffScope.app_root(spiff, within: dir)
-    end
-  end
-
-  def test_the_walk_stays_inside_the_tree_it_was_given
-    Dir.mktmpdir('outer') do |outer|
-      FileUtils.mkdir_p(File.join(outer, 'views'))
-      nested = File.join(outer, 'deep', 'nested')
-      FileUtils.mkdir_p(nested)
-      spiff = File.join(nested, 'x.spiff')
-      File.write(spiff, "surface x\n")
-
-      assert_equal outer, SpiffScope.app_root(spiff, within: outer)
-      assert_nil SpiffScope.app_root(spiff, within: nested)
-    end
-  end
-
-  def test_the_app_root_is_found_for_both_layouts
-    here = File.join(ROOT, 'examples/doc_reader/doc_reader.spiff')
-    nested = File.join(ROOT, 'studio/uis/workbench/workbench.spiff')
-
-    assert_equal File.join(ROOT, 'examples/doc_reader'), SpiffScope.app_root(here, within: ROOT)
-    assert_equal File.join(ROOT, 'studio/uis/workbench'), SpiffScope.app_root(nested, within: ROOT)
   end
 end

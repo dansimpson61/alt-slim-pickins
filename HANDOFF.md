@@ -64,7 +64,7 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 31 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 54 test files.
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 24 app words, 32 verified pages, 38 conventions, 35 promises, 104 stylesheet rules, 54 test files.
 - **Full Suite**: 568 runs, 0 failures, 0 errors, 0 skips in one process — and
   that now includes the example apps' own suites, because the Suite leg asks
   `Census.test_files` instead of keeping its own glob.
@@ -73,7 +73,7 @@ measure are quoted as the gate output they are.
 - **Check Styles**: 27 emittable classes, 59 rendering, 104 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
 - **Spiff Scope (zones)**: 2 spiffs held to their pages, 0 problems.
-- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 31 pages, 0 problems.
+- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 32 pages, 0 problems.
 - **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
 - **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): `d85aac01f281cb9a15e73e03` as of commit 74842bc — but see the note in that file: the digest moves when `LORE.md` does, so compare snapshots within a session rather than against a number written down over 31 pages.
 - **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.

@@ -25,7 +25,7 @@ class CensusTest < Minitest::Test
   end
 
   def test_verified_pages_count_matches_corpus
-    assert_equal 31, SlimPickins::Census.verified_pages_count
+    assert_equal 32, SlimPickins::Census.verified_pages_count
   end
 
   def test_conventions_and_promises_match_registers
@@ -44,7 +44,7 @@ class CensusTest < Minitest::Test
     report = SlimPickins::Census.report
 
     assert_match(/62 canonical/, report)
-    assert_match(/31 checked by verify_pages/, report)
+    assert_match(/32 checked by verify_pages/, report)
     assert_match(/38 registered in SlimPickins::Conventions::ALL/, report)
   end
 end

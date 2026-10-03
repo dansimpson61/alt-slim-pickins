@@ -1,161 +1,141 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 #
-# Holds a Spiff to the pages it accompanies.
+# Holds a Spiff's compiled selectors to the HTML its pages really render.
 #
-#   - every zone a `.spiff` names must be something the pages in its scope can
-#     render, with that name as its class
+#   - every class the compiled stylesheet targets must appear in the rendered
+#     HTML of at least one page the Spiff governs
 #
-# This is the tenth gate and the last one the round asked for. It exists for a
-# defect the other nine cannot see: the design-idiom compiler emits a selector
-# for every zone a Spiff names, and a compiled selector that matches nothing in
-# the real DOM is a correctness defect however short it is — the round that
-# removed the defensive selector explosion said exactly that. Until now nothing
-# compared a Spiff's zone names to the pages those zones are supposed to style,
-# so a typo (`reading_pane` for `reading_panel`) or a renamed zone would compile
-# to a rule that silently styles nothing.
+# This leg was built on 2026-09-26 to compare a Spiff's *zone names* against the
+# `.sp` sources in its directory — "without data and without rendering", as its
+# own header said at the time. DAYTRIP-0.4.0h then measured two things about it:
+# it is the one leg with no recorded catch, and it shares the shape of eight of
+# the ten, comparing a declaration to a declaration while both defect classes
+# that have actually cost this project sessions live where none of them can look.
 #
-# What this checks, stated plainly: the *names*. A zone's class comes from the
-# word or partial of the same name — a page's `def catalog` promotes `catalog`,
-# and `library.sp` promotes `library` — so "can this scope render that name?"
-# is a question about the sources on disk, and it is answered without data and
-# without rendering. It cannot see a word that is defined but never reached, so
-# it proves the Spiff is not naming a stranger; it does not prove the element
-# appears in every render. `bin/verify_pages.rb` is the gate that renders.
+# Retargeted rather than deleted, because the measurement said where to aim.
+#
+#   - **It checked a third of what the compiler emits.** For `workbench.spiff`
+#     the old check read 3 zone names. The compiled CSS targets 11 classes — the
+#     surface, the stage, the `panes` it dissolves, the controls it reaches into
+#     — so 8 were never checked at all. `panes` and `shell` are among those 8,
+#     and they are the two classes 0.4.0g's hardest defects were about.
+#   - **Its right-hand side was source text, so a word defined but never reached
+#     passed.** The `.footer` rule that styled nothing because the element was a
+#     `.foot` is exactly that defect. A rendered page cannot lie about it.
+#
+# So the question moved from "does a file somewhere define this name?" to "does
+# this selector match anything the browser will be given?" — which is the
+# question a compiled stylesheet actually raises, and the reason the zone-name
+# walk, its ceiling and its `app_root` are gone: scope is now the pages rendered
+# at or below the Spiff's own directory, and a `.spiff` either sits at its app's
+# root or beside the views it governs.
+#
+# The corpus is `bin/verify_pages.rb`'s `PAGES` — one home for "every page this
+# project can render, and the locals it needs". It has three consumers now
+# (that gate, `bin/byte_diff.rb`, this one) rather than three copies, and a Spiff
+# whose pages are not in it is refused rather than passed: that is how
+# `examples/doc_reader` was found, an app directory with a Spiff, a page and a
+# data file that nothing had ever rendered.
 #
 # Exits non-zero when anything is wrong.
 
 require 'set'
+require 'stringio'
 require_relative 'lib/slim_pickins'
+require_relative 'lib/slim_pickins/compiler/spiff'
+
+# Reaching `PAGES` boots the example apps, and an app proves its own pages aloud
+# on boot (`SlimPickins.prove!`). That output belongs to the app and not to this
+# gate's report, so it is kept out of it.
+begin
+  spoken = $stdout
+  $stdout = StringIO.new
+  require_relative 'bin/verify_pages'
+ensure
+  $stdout = spoken
+end
 
 module SpiffScope
+  ROOT = __dir__
+
+  # A rule's selector, up to its brace. `@media`/`@container` lines open a block
+  # without selecting anything, so they are not selectors.
+  SELECTOR = /^\s*([^{@\n][^{\n]*)\{/
+  CLASS = /\.([A-Za-z][\w-]*)/
+
   module_function
 
-  # From the Spiff's own parse tree, not a second pattern. `zone` names one;
-  # `flank` names two — its lead, and its companion in `beside:`, which is a
-  # zone in its own right and is styled like one; `horizon` names all of its
-  # zones in order. Missing the companion would leave the one name a Spiff is
-  # most likely to get wrong unchecked.
+  # The classes the compiled stylesheet targets. Read from the CSS the compiler
+  # emits rather than from the Spiff's parse tree: the parse tree names zones,
+  # but the stylesheet is what the browser applies and therefore the only thing
+  # that can match nothing.
+  def targeted_classes(spiff_path)
+    css = SlimPickins::Compiler::Spiff.compile(File.read(spiff_path), path: spiff_path)
+    css.scan(SELECTOR).flatten.join(' ').scan(CLASS).flatten.uniq.sort
+  end
+
+  # The pages a Spiff governs: those rendered from at or below its own directory.
   #
-  # Only bare names and `beside:` are zones. `balance: equal`, `collapse:
-  # tight` and the rest name roles and tokens — `subordinate` and `tight` are
-  # not classes any page carries, and treating them as zones would refuse every
-  # real Spiff.
-  def zone_names(spiff_path)
-    tree = SlimPickins::Transform.tree(File.read(spiff_path), path: spiff_path)
-    names = []
-    walk = lambda do |nodes|
-      nodes.each do |node|
-        case node.word
-        when 'zone'
-          names << node.raw_args.first
-        when 'flank'
-          names << node.raw_args.first
-          names << node.raw_args.find { |arg| arg.to_s.start_with?('beside:') }&.split(':', 2)&.last
-        when 'horizon'
-          names.concat(node.raw_args)
-        end
-        walk.call(node.children)
-      end
+  # `root` is the tree the run is about — this repository by default, a fixture's
+  # temp directory under test. It is a parameter and not a constant because the
+  # suite has to be able to pose a corpus this one cannot: a Spiff nothing
+  # renders, a zone defined but unreached. The gate the retarget replaced learned
+  # that the hard way, with every fixture test passing the repository root for a
+  # tree built under `/tmp`.
+  def scope_of(spiff, pages:, root: ROOT)
+    prefix = "#{File.dirname(relative(spiff, root: root))}/"
+    pages.select { |label, _library, _locals| label.start_with?(prefix) }
+  end
+
+  def relative(path, root: ROOT) = File.expand_path(path).delete_prefix("#{root}/")
+
+  # Every class the pages in scope actually put into the HTML — the half of this
+  # question the gate never used to ask.
+  def rendered_classes(pages, root: ROOT)
+    pages.each_with_object(Set.new) do |(label, library, locals), classes|
+      html = SlimPickins.render(File.read(File.join(root, label)), path: label,
+                                locals: locals, library: library)
+      html.scan(/class="([^"]*)"/).flatten.each { |value| classes.merge(value.split) }
     end
-    walk.call(tree)
-    names.compact.map(&:to_s).map(&:strip).reject(&:empty?).uniq
-  end
-
-  # The app a Spiff belongs to: the nearest directory at or above it that holds
-  # the views it governs. A `.spiff` either sits at the app's root
-  # (`doc_reader/`, with a `views/` beneath it; `workbench/`, with its views
-  # beside it) or beside the views themselves.
-  # `nil` is a real answer, and the only honest one when the walk finds no app:
-  # returning the last directory seen meant returning `/` for a Spiff that
-  # belongs to none, and `renderable_names` then globbed the entire filesystem.
-  # That is the defect behind this gate's own false first run (LORE.md,
-  # 2026-09-27) — the false pass was fixed then, the walk was not.
-  #
-  # `within` is required because a walk needs a floor. It is the tree the run was
-  # told to examine, so a Spiff outside the corpus is refused deterministically
-  # rather than resolving to whatever unrelated ancestor happens to hold a `.sp`.
-  # It, and not the filesystem root, is the boundary that does the work.
-  def app_root(spiff_path, within:)
-    ceiling = File.expand_path(within)
-    dir = File.dirname(File.expand_path(spiff_path))
-
-    while inside?(dir, ceiling)
-      return dir if app?(dir)
-
-      parent = File.dirname(dir)
-      break if parent == dir # only `within: '/'` gets here; the loop stays total
-
-      dir = parent
-    end
-    nil
-  end
-
-  # A directory is an app when it holds the views a Spiff governs.
-  def app?(dir)
-    Dir.exist?(File.join(dir, 'views')) ||
-      File.exist?(File.join(dir, "#{File.basename(dir)}.tin")) ||
-      Dir[File.join(dir, '*.sp')].any?
-  end
-
-  def inside?(dir, ceiling)
-    dir == ceiling || dir.start_with?("#{ceiling}/")
-  end
-
-  # What a scope can render, from the two ways this project makes a word: a page
-  # may define one inline (`def catalog`), and an app may put one on disk
-  # (`partials/library.sp`). Both promote their name as the class on a
-  # single-root element, which is what makes the name match a Spiff's zone.
-  def renderable_names(app)
-    names = Set.new
-
-    Dir[File.join(app, '**', '*.sp')].sort.each do |path|
-      tree = SlimPickins::Transform.tree(File.read(path), path: path)
-      walk = lambda do |nodes|
-        nodes.each do |node|
-          names << node.raw_args.first.to_s if node.word == 'def'
-          walk.call(node.children)
-        end
-      end
-      walk.call(tree)
-    end
-
-    names.merge(Dir[File.join(app, '**', 'partials', '*.sp')].map { |f| File.basename(f, '.sp') })
   end
 
   # Returns the problem count and prints the report to `out`.
-  def run(files: nil, root: __dir__, out: $stdout)
+  def run(spiffs: nil, pages: PAGES, root: ROOT, out: $stdout)
     problems = 0
+    checked = 0
     report = ->(line) { out.puts "  #{line}" }
 
-    spiffs = (files || Dir[File.join(root, '{pages,examples,studio}', '**', '*.spiff')]).sort
+    spiffs = (spiffs || Dir[File.join(root, '{pages,examples,studio}', '**', '*.spiff')]).sort
     if spiffs.empty?
-      report.call('SPIFFS      no .spiff files found — the corpus or its shape changed')
+      report.call('NO SPIFFS        no `.spiff` files found — the corpus or its shape changed')
       problems += 1
     end
 
     spiffs.each do |spiff|
-      app = app_root(spiff, within: root)
-      unless app
-        report.call("NO APP      `#{File.basename(spiff)}` belongs to no app — nothing at or above it " \
-                    'holds views, a tin, or a `.sp`, so its zones have nothing to answer to')
+      scope = scope_of(spiff, pages: pages, root: root)
+      if scope.empty?
+        report.call("UNRENDERED       `#{relative(spiff, root: root)}` governs no page the corpus renders, so its " \
+                    'selectors have nothing to answer to — give its pages to `bin/verify_pages.rb`')
         problems += 1
         next
       end
 
-      renderable = renderable_names(app)
+      rendered = rendered_classes(scope, root: root)
+      targeted = targeted_classes(spiff)
+      checked += targeted.size
 
-      zone_names(spiff).each do |zone|
-        next if renderable.include?(zone)
-
-        report.call("UNRENDERABLE  `#{File.basename(spiff)}` styles zone `#{zone}`, and nothing in " \
-                    "#{app.sub("#{root}/", '')} renders a `#{zone}` — the selector matches nothing")
+      (targeted - rendered.to_a).each do |name|
+        report.call("MATCHES NOTHING  `#{relative(spiff, root: root)}` compiles a selector for `.#{name}`, " \
+                    "and none " \
+                    "of the #{scope.size} page(s) it governs renders that class")
         problems += 1
       end
     end
 
     out.puts
-    out.puts "#{spiffs.size} spiff(s) held to their pages, #{problems} problems"
+    out.puts "#{spiffs.size} spiff(s), #{checked} compiled classes held to the HTML their pages render, " \
+             "#{problems} problems"
     problems
   end
 end
