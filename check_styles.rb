@@ -7,6 +7,9 @@
 #   - every rule corresponds to a word
 #   - every class name obeys the four shapes
 #
+# `lib/` and `studio/` are both read: a class literal written in Ruby is the same
+# claim on the theme wherever it is written.
+#
 # This is check_grammar.rb's trick pointed at CSS. The existing
 # slim-pickins.css has twelve classes used in views and defined nowhere;
 # nothing could have told anyone, because no list said what ought to exist.
@@ -63,7 +66,12 @@ defined = selectors.join(' ').scan(/\.([a-z][a-z0-9_-]*)/).flatten.to_set
 # exactly the classes that go unstyled, which is how the twelve undefined ones
 # survived. Every class is built by `token(:word, …)` or written as a literal,
 # so both are greppable.
-source = Dir[File.join(__dir__, 'lib', '**', '*.rb')].flat_map { |f| File.read(f).lines }.join
+# The studio's Ruby is read too (DAYTRIP-0.4.0k, Tier 4's last item). It was
+# excluded because widening the glob reported 24 unstyled classes, every one a
+# `class="..."` literal that `studio/inspector.rb` wrote in a heredoc and demanded
+# of this theme. The Inspect surface is a page in the language now, so its classes
+# are words, and the literals are gone.
+source = Dir[File.join(__dir__, '{lib,studio}', '**', '*.rb')].flat_map { |f| File.read(f).lines }.join
 can_emit = source.scan(/token\(:([a-z_]+)/).flatten.to_set
 # A promoted partial carries its own name as the class base, so every
 # composed word's name is emittable — and must have a rule.
