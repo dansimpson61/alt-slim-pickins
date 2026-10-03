@@ -51,9 +51,14 @@ module StudioInspector
   end
 
   # One attribute of a node, as a row. The complex payloads a word carries —
-  # rows, columns, a table's foot — are the node's own children and are shown as
-  # those rather than inspected as values.
-  NESTED = %i[rows columns foot].freeze
+  # rows, columns, a table's foot, a page's head — hold nodes, and nodes are shown
+  # as the tree rather than inspected as values.
+  #
+  # `head` joined the list in DAYTRIP-0.4.0l. It had always held nodes and had
+  # always been printed as `[[:stylesheet, {…}, []]]`, which nobody could read and
+  # nothing flagged; naming the node turned that into
+  # `[#<data SlimPickins::Node …>]` and made the inconsistency obvious.
+  NESTED = %i[rows columns foot head].freeze
 
   Fact = Struct.new(:attribute, :value, keyword_init: true)
 
@@ -72,21 +77,26 @@ module StudioInspector
 
   module_function
 
-  # The semantic tree as nested nodes. A bare three-element Array is a node; an
-  # Array of them is a list of children, which is why the shape is tested before
-  # it is read.
+  # The semantic tree as nested nodes.
+  #
+  # This used to have to guess: a node was a three-element Array and so was a
+  # list of nodes, so it tested `node.first.is_a?(Symbol)` to tell them apart.
+  # Since DAYTRIP-0.4.0l a node is a `SlimPickins::Node` and a list of them is an
+  # Array, and the question answers itself.
   def nodes_of(tree, prefix: 'n')
     Array(tree).each_with_index.flat_map do |node, index|
       id = "#{prefix}_#{index}"
-      next [] unless node.is_a?(Array) && !node.empty?
-      next nodes_of(node, prefix: id) unless node.first.is_a?(Symbol)
+      next nodes_of(node, prefix: id) if node.is_a?(Array)
+      next [] unless node.is_a?(SlimPickins::Node)
 
       [node_from(node, id)]
     end
   end
 
   def node_from(node, id)
-    type, attrs, children = node[0], node[1] || {}, node[2] || []
+    type = node.word
+    attrs = node.attributes || {}
+    children = node.children || []
     word = (attrs[:class_base] || type).to_sym
     # A table carries its rows as an attribute rather than as children, and they
     # are children in every sense the reader cares about.
