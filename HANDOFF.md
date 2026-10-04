@@ -243,9 +243,13 @@ abstractions that make the language holdable *was* the pedagogy work.
    is served, and its two partials through the pages that speak them. The
    playground's census holds all seven, through a provider that names each
    document and shelf field by field. The item said four pages; there were five.
-   Two defects surfaced for the exemplar bar: `Document#id` keeps spaces
-   (`result-tight coupling in ruby dsls` is not a valid id), and a heading's
-   markdown rides into `title` (`**Tight Coupling in Ruby DSLs**`).
+   Two defects surfaced for the exemplar bar and are fixed: `Document#id` kept
+   spaces, and a heading's markdown rode into `title`; headings now render
+   through `Markdown.spans` and are read as text. Still open: dan ruled the
+   playground should hand doc_reader its **real objects**, so its labels and
+   formats show. The census could, but the live render posts the editor's JSON
+   text to `/render.json` and nothing tells it which page is loaded, so a
+   census-only fix would bring back the verdict nobody sees (W1, 2026-09-17).
 2. **The namespace.** A binding named like a word loses to the word, silently,
    because words are Ruby methods. Words should be the outermost scope (built-ins,
    then the app's words, then the page's `def`s), with the nearest winning. This

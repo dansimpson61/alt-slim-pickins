@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'cgi'
 require 'date'
+require_relative '../../../lib/slim_pickins/markdown'
 
 # The documents this repository is explained in, as a reader meets them.
 #
@@ -57,7 +59,7 @@ module DocReader
 
     def name = File.basename(path)
     def relative = path.delete_prefix("#{root}/")
-    def id = relative.delete_suffix('.md').downcase.tr('/', '-')
+    def id = relative.delete_suffix('.md').downcase.gsub(%r{[/\s]+}, '-')
     def href = "/docs/#{id}"
     def content = @content ||= File.read(path)
 
@@ -80,8 +82,15 @@ module DocReader
 
     def headings
       @headings ||= content.scan(/^(#+)\s+(.+)$/).map do |marks, text|
-        Heading.new(text: text.strip, level: marks.size)
+        Heading.new(text: Document.text_of(text), level: marks.size)
       end
+    end
+
+    # A heading as a reader sees it: its markdown rendered the way `prose`
+    # renders it, then read as text, so `**bold**` is bold and not asterisks.
+    def self.text_of(markdown)
+      html = SlimPickins::Markdown.spans(CGI.escapeHTML(markdown.strip))
+      CGI.unescapeHTML(html.gsub(/<[^>]*>/, ''))
     end
 
     # The chapters: the second-level headings, which is where a reader decides

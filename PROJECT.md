@@ -37,8 +37,9 @@ next_step: >-
   twelve legs; 606 runs, 0 failures). **Next, in order:** (1) The namespace: a
   binding named like a word loses to the word, silently; words should be the
   outermost scope, with the nearest winning. (2) Rulings dan still owes: the
-  grouping, three mis-grades, the format overlap. Two doc_reader defects are
-  waiting for the exemplar bar (an id with spaces, a title keeping its `**`).
+  grouping, three mis-grades, the format overlap. dan ruled the playground
+  should hand doc_reader its real objects; the live render posts JSON text, so
+  that needs a channel it does not have, and the shape of it is his to choose.
   The field family has not started. HANDOFF carries the detail.
 kind: project
 run: ruby examples/roth/app.rb
