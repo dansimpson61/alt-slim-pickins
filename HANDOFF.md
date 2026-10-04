@@ -83,6 +83,12 @@ measure are quoted as the gate output they are.
 
 ### The active next step — DOCS AND PEDAGOGY, dan's top priority
 
+> **Read *The route, as it went on 2026-10-04* below before acting on this
+> section.** The work moved on the same day, by dan's direction: the
+> principles and scoping work *is* the pedagogy work, not a detour from it.
+> The audience lists asked for below were drafted and reacted to; do not
+> draft them again.
+
 **Dan made this the first discussion on 2026-10-04, ahead of the field family and
 scoping, and said it must precede them.** It is not a tidying job and it is not a
 documentation refresh. It starts from an observation he made about himself, which is
@@ -153,9 +159,112 @@ and dan is the one making it.
 **Do not start by writing documents.** Start by deciding what each audience must
 hold in their head, then see which register or document has no audience at all.
 
+#### The route, as it went on 2026-10-04
+
+**The audience lists were drafted, and dan reacted to them.** The lists went top
+down, one level of abstraction at a time, because dan asked for exactly that: each
+higher level should save the reader from remembering the ones below it. As drafted,
+with the corrections the day's measurements made:
+
+- **Users:**
+  0. The sentence: `word arguments`, indentation nests, everything is a word.
+  1. Arguments come in ranks (name, content or data, modifiers). The draft said
+     "three kinds"; PRIMER's chapter is "The six argument kinds", so this level
+     needs its own reconciliation.
+  2. Say it, or it is decided. The draft said "four deciders"; the honest count
+     is three (the tree, the value, the app) plus one known gap (the theme owns
+     61 roles no page can say).
+  3. The seven shapes: what a word does with what is beneath it.
+  4. The subject: kept, shifted, or walked item by item.
+  5. The 62 words, looked up, not memorised.
+  6. Making your own word: a `.sp` file whose first line `expects …` is its
+     contract, with `takes:` one key on that line. `children` has three meanings,
+     and `contents` is the tin's version of one of them.
+
+  Never on a user's path: promises, gate legs, taxonomy tiers, any daytrip.
+- **Devs:**
+  - The contract is the hub. Conventions hang off its `infers:` slot and promises
+    off its `modifiers:` slot. Promises are an audit of the contracts, not a part
+    of the language: the first over-built finding.
+  - The gate legs, each to be mapped to what it protects (not yet done).
+  - Words are classified four ways (shape, speech, convention grade, taxonomy
+    tier). `taxonomy.rb` is the strongest surplus candidate; its readers are
+    unmeasured.
+  - `gathers` and `inside` are contract slots no word sets.
+  - The promise ledger holds two entries that are not modifiers.
+
+**dan's six impressions**, given as examples, not an exhaustive list:
+
+1. The project has almost always reached for structural solutions rather than
+   patches. Keep doing that.
+2. Words and contracts before conventions is the cart before the horse. A new word
+   could spawn a convention that duplicates or muddles another. Examine whether
+   conventions can carry the structure instead.
+3. There are three ways to mint a word (Ruby, an `.sp` file, a `def`), and no good
+   explanation of why some `.sp` files need a contract and others mint words
+   without the paperwork. (Measured: a word with no contract is unchecked, so a
+   misspelled modifier is accepted and ignored. Candidate: infer contracts from
+   bodies.)
+4. The difference between "the app" and "the theme" as deciders was unclear
+   (answered above: the theme is a gap, not a decider).
+5. `encloses`, `iterates` and `gathers` need careful thought about their semantic,
+   structural and functional differences. (Measured: the five non-nouns are the
+   control flow, scattered across four shapes; `empty` is shaped `says`.)
+6. Exceptions point to structural opportunities: the five non-nouns, and shapes
+   that are all verbs except `document`.
+
+**Then dan changed the route.** "We are reasoning from the compiler to the
+language, rather than the other way around." From that point, finding the higher
+abstractions that make the language holdable *was* the pedagogy work.
+
+1. **Principles.** The 38 conventions were regrouped under 11 principles, which
+   are rules a user can hold (commit `00180d6`).
+2. **Exemplar.** doc_reader became the app the principles were played against
+   (`bb54e09`, recorded in `examples/doc_reader/WHAT_IF.md`).
+3. **Scoping.** dan's rule, *everything available to a parent is available to its
+   descendants*, became the scoping rules, written on paper and then built
+   (`6b0c9f6`, recorded in `examples/doc_reader/ON_PAPER.md`).
+
+**Rulings made that day:**
+
+- Dots mean "it". They never borrow from further out, and reaching further is by
+  name.
+- A sentence that names where it lands reads its dots there.
+- Paper first, then reality, one at a time.
+- Broken words are expected, because they were written for a language that is
+  being healed. That is improvement, not a problem.
+- **doc_reader stays, as an exemplar, not just an example.** Its pages should show
+  the language at its best, so it is held to a higher bar than the demo apps.
+
+**Next, in order:**
+
+1. **Make the gate green by registering doc_reader**, now that dan has ruled it
+   stays. Add its four pages and two partials to the gate's page census
+   (`bin/verify_pages.rb` and `StudioPages::PAGES`), and update the three stated
+   counts to 8 apps and 30 app words. Commit `bb54e09` left this red on purpose,
+   pending the ruling.
+2. **The namespace.** A binding named like a word loses to the word, silently,
+   because words are Ruby methods. Words should be the outermost scope (built-ins,
+   then the app's words, then the page's `def`s), with the nearest winning. This
+   is where the `editor` collision and the scoping discussion below meet.
+3. **Rulings still owed:** the principle grouping, the three mis-grades, and the
+   `format` / `format_family` / `number_text` overlap.
+
+**Still open, not yet scheduled:**
+
+- the contract decides what a bare name means, not `subject.has?` (about 20 sites)
+- `actions` nests a form inside a form, which is broken on `main` in
+  milestone_planner
+- the interpolation splitter refuses `"in #{x}"`
+- an empty page subject prunes unrelated sections
+- headings skip levels
+
 ### The two discussions this one precedes
 
-Both were queued on 2026-10-03 and are now *after* docs and pedagogy by dan's word.
+Both were queued on 2026-10-03 and were *after* docs and pedagogy by dan's word.
+**Scoping has since begun, as part of that work** (see *The route, as it went*): the
+scoping rules are built, and the namespace is the next step. The field family has
+not started.
 
 1. **Scoping.** The word registry is global and last-compile-wins; a `Library` does
    not scope its words, and merely constructing one takes a colliding name

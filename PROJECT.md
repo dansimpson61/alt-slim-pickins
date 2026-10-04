@@ -21,29 +21,25 @@ status: >-
   daytrip discussions.
 last_touched: 2026-10-04
 next_step: >-
-  **On branch `conventions-as-principles`:** 38 conventions under 11 principles
-  (dan to rule on grouping, three mis-grades, the format overlap); scoping rules
-  built (shifts name their subject; dots read where a sentence lands), corpus
-  byte-identical. doc_reader WHAT_IF.md / ON_PAPER.md. Next: the namespace.
-  **DOCS AND PEDAGOGY is the top priority, by dan's word on 2026-10-04, and must
-  precede the field family and scoping.** It starts from his own observation: he had
-  been ill and could not keep track of the safeguards and checks involved in a very
-  simple, convention-rich DSL — he had lost the difference between `contracts` and
-  `promises`, between `expects` and `takes:`, what `children` are, and why or whether
-  `list` needs `item`. That the author could not hold the safeguard layer is data
-  about the project, and it is the strongest evidence yet for the over-built
-  question. Two audiences, in his words: **devs** must see why the code is structured
-  as it is and judge over-built vs under-built, duplication vs gaps; **users** must
-  hear the language sing and reliably expect what is inferred, without learning the
-  codebase's history — which indicts documents organised by when things were decided.
-  The scale to weigh: three registers (62 words x 16 slots, 35 promises, 38
-  conventions), twelve gate legs, 3,054 lines of prose. HANDOFF carries the syllabus
-  and the measured answers to his four questions. **Do not start by writing
-  documents**; start by deciding what each audience must hold in their head. Then
-  scoping (a live fragility) and the field family (the rule before the table).
-  What landed since the audit is in HANDOFF's *What landed before all three*. Two findings were escalated as larger than
-  reported — `search`'s `q:` is a coupling not a rename, and `link`'s second sentence
-  shape is a deliberate tested alias. `HANDOFF.md` carries all of the detail.
+  **DOCS AND PEDAGOGY is the top priority (dan, 2026-10-04), and it is proceeding
+  through the language itself.** dan's observation that he could not hold the
+  safeguard layer of his own DSL is the evidence; his redirection the same day,
+  "we are reasoning from the compiler to the language, rather than the other way
+  around", is the route. Finding the higher abstractions that make the language
+  holdable *is* the pedagogy work. The audience lists were drafted and dan
+  reacted to them, so **do not draft them again**: they, his six impressions and
+  the route are in HANDOFF under *The route, as it went on 2026-10-04*. On
+  branch `conventions-as-principles`, pushed: 38 conventions under 11 principles;
+  doc_reader rebuilt as the app the principles are played against; the scoping
+  rules built (dots mean "it"; every shift names its subject; a sentence that
+  names where it lands reads its dots there), with the corpus byte-identical.
+  **Next, in order:** (1) make the gate green by registering doc_reader, which
+  dan ruled stays **as an exemplar, not just an example**: its six pages and
+  partials go into the gate's page census, and the counts become 8 apps and 30
+  app words. (2) The namespace: a binding named like a word loses to the word,
+  silently; words should be the outermost scope, with the nearest winning.
+  (3) Rulings dan still owes: the grouping, three mis-grades, the format overlap.
+  The field family has not started. HANDOFF carries the detail.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
