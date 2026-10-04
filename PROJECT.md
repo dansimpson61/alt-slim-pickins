@@ -21,11 +21,10 @@ status: >-
   daytrip discussions.
 last_touched: 2026-10-04
 next_step: >-
-  **In flight on branch `conventions-as-principles` (sandbox, uncommitted):** the
-  38 conventions regrouped under 11 principles (`Conventions::PRINCIPLES`, held by
-  `bin/check_conventions.rb`), awaiting dan's ruling on the grouping, three likely
-  mis-grades it exposed, and the `format`/`format_family`/`number_text` overlap.
-  Then `examples/doc_reader/WHAT_IF.md`: the principles played out on a real app.
+  **On branch `conventions-as-principles`:** 38 conventions under 11 principles
+  (dan to rule on grouping, three mis-grades, the format overlap); scoping rules
+  built (shifts name their subject; dots read where a sentence lands), corpus
+  byte-identical. doc_reader WHAT_IF.md / ON_PAPER.md. Next: the namespace.
   **DOCS AND PEDAGOGY is the top priority, by dan's word on 2026-10-04, and must
   precede the field family and scoping.** It starts from his own observation: he had
   been ill and could not keep track of the safeguards and checks involved in a very

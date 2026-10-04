@@ -1358,3 +1358,14 @@ Two measurements from answering dan's two questions.
 **Most of an `expects` preamble is already in the body.** Measured over all 23 vocabulary partials: `children: any` agrees with whether the body says `children` 23 times out of 23; `subject: shift` and `expects subject` co-occur 2 of 2, so one implies the other; and `takes:` matches the body's `.foo` reads in 20 of 23 (the three exceptions being `takes: empty`, which is a flag not a modifier, `section`, whose content arrives as `.label`, and `paragraph`). What is *not* inferable is the judgement half — `shape:`, `parents:`, `speech:`, `infers:`. Note also that the preamble-free form already exists: a `def` partial has **no contract at all** (`CONTRACTS[:word]` is nil), so it is ungoverned by the gate. That is the real price of dropping the preamble, not convenience.
 
 And a small alias: in a `name: :variant` partial both `.name` and `.variant` read the same slot, interchangeably. Seven of eight say `.name`; `paragraph` alone says `.variant`.
+
+
+## 2026-10-04 — Claude (ninth entry: one tree, five lookups)
+
+Three lessons from building dan's scoping rules on the conventions-as-principles branch.
+
+**A name was looked up five different ways, and only one of them matched how indentation reads.** A dot asked the current subject only. A binding from `each` rode Ruby's own block scope and reached any depth. A partial's parameters fell through an overlay. An omitted modifier walked enclosing partials' hashes. And a word came from one global registry. The binding case worked *because* the transform compiles indentation into nested Ruby blocks, which are closures. The rule dan named, everything available to a parent is available to its descendants, was already true wherever the language let Ruby do the scoping.
+
+**Every shift goes through `Builder#about`, so "every shift names its subject" was one change.** Measure the chokepoint before planning a sweep. On the way, bindings turned out to be a flat hash: an inner `each account` deleted the outer binding instead of restoring it. A scope has to restore what it shadows (`Builder#naming`).
+
+**Byte-identity proves only what the corpus renders.** `card first_item, .path` sits under `when .first_item`, and the corpus renders triage with no item, so the digest could not see that line. It had to be proved separately. And two collisions surfaced: words are Ruby methods, so a binding named like a word (`section title`, then a bare `title`) silently calls the word; and the argument splitter refuses `"in #{x}"` while it accepts `"#{x} in"`.
