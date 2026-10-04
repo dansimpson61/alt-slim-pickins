@@ -19,27 +19,30 @@ status: >-
   closed. Of the five language irregularities it named, three landed on dan's word,
   two were escalated as larger than reported, and three questions became queued
   daytrip discussions.
-last_touched: 2026-10-03
+last_touched: 2026-10-04
 next_step: >-
-  **Dan ruled on the 0.4.0o audit on 2026-10-03 and queued three daytrip
-  discussions.** Each wants a decision and its argument, not a patch: (1)
-  **scoping** — the registry is global and last-compile-wins, and his framing is
-  wider than the `editor` collision DAYTRIP-0.4.0n.md measured; (2) **docs and
-  pedagogy** — whether a committed 1,226-line VOCABULARY.md earns its keep beside
-  the studio's live reference, and what each surface is *for*; (3) **the field
-  family** — `field`/`input`/`textarea` share six modifiers in no predictable
-  pattern, and the rule comes before the table. Landed since the audit: the
-  promise-ledger defect and the gate hole that hid it, the argument-order message,
-  `tab`'s `parents:` (which overrode a VOCABULARY claim that the silent loss was
-  deliberate — his to reverse), and one spelling of "the suite" in the gate command.
-  **Two findings were escalated rather than closed, both because they were presented
-  as smaller than they are**: `search`'s `q:` is not a rename (the modifier's
-  spelling had to match `input`'s name slot or the no-query case raises, and three
-  apps read `params[:q]`), and `link`'s second sentence shape is a deliberate,
-  tested alias rather than an oversight — redundant, since `link .doc_name, to:
-  .doc_path` renders identically. The smaller calls are re-measured in HANDOFF, and
-  one was stale: `Markdown`'s `[:element, …]` triples no longer exist.
-  `HANDOFF.md` carries the detail.
+  **DOCS AND PEDAGOGY is the top priority, by dan's word on 2026-10-04, and must
+  precede the field family and scoping.** It starts from his own observation: he had
+  been ill and could not keep track of the safeguards and checks involved in a very
+  simple, convention-rich DSL — he had lost the difference between `contracts` and
+  `promises`, between `expects` and `takes:`, what `children` are, and why or whether
+  `list` needs `item`. That the author could not hold the safeguard layer is data
+  about the project, and it is the strongest evidence yet for the over-built
+  question. Two audiences, in his words: **devs** must see why the code is structured
+  as it is and judge over-built vs under-built, duplication vs gaps; **users** must
+  hear the language sing and reliably expect what is inferred, without learning the
+  codebase's history — which indicts documents organised by when things were decided.
+  The scale to weigh: three registers (62 words x 16 slots, 35 promises, 38
+  conventions), twelve gate legs, 3,054 lines of prose. HANDOFF carries the syllabus
+  and the measured answers to his four questions. **Do not start by writing
+  documents**; start by deciding what each audience must hold in their head. Then
+  scoping (a live fragility) and the field family (the rule before the table).
+  Landed and pushed since the audit: the promise-ledger defect and the gate hole that
+  hid it, the argument-order message, `tab`'s `parents:` (which overrode a VOCABULARY
+  claim that the silent loss was deliberate — his to reverse), and one spelling of
+  "the suite" in the gate command. Two findings were escalated as larger than
+  reported — `search`'s `q:` is a coupling not a rename, and `link`'s second sentence
+  shape is a deliberate tested alias. `HANDOFF.md` carries all of the detail.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

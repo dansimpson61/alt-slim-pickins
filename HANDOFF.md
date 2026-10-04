@@ -81,35 +81,94 @@ measure are quoted as the gate output they are.
 
 ---
 
-### The active next step — three daytrip discussions, queued by dan
+### The active next step — DOCS AND PEDAGOGY, dan's top priority
 
-**Dan ruled on the 0.4.0o audit's findings on 2026-10-03 and queued three
-discussions.** Each is a question, not a task: a daytrip whose output is a decision
-and its argument, the way `DAYTRIP-0.4.0n.md` was.
+**Dan made this the first discussion on 2026-10-04, ahead of the field family and
+scoping, and said it must precede them.** It is not a tidying job and it is not a
+documentation refresh. It starts from an observation he made about himself, which is
+the most important sentence in this file:
+
+> "I have been ill and am having trouble keeping track of all of the safeguards and
+> checks that seem to be involved in crafting a very simple, convention-rich
+> (inference-reliant) DSL."
+
+**The author of the language could not hold its safeguard layer in his head.** Treat
+that as data about the project, not about him. It is the strongest evidence yet for
+the over-built question the dev audience below is supposed to answer.
+
+#### What he had lost track of — this list is the syllabus
+
+Answer these, in the documents, in language that survives being read once:
+
+1. **`contracts` vs `promises`.** Both are registers; neither names the other in its
+   own first paragraph.
+2. **`expects` vs `takes:`.** `expects` is the preamble keyword at the top of a `.sp`
+   partial; `takes:` is one key inside it. Nothing says so in one place.
+3. **What `children` are.** The word is overloaded three ways and the documents never
+   disambiguate: `children:` the contract key (what *may* nest), the indented block
+   itself (what *did* nest), and `children` the word (where a partial splices the
+   caller's block). `contents` is the fourth, at the tin's scale.
+4. **Why or whether `list` needs `item`, and `tabs` needs `tab`.** The honest answer
+   is that the dependency runs one way only and nothing says so: `item` needs `list`,
+   `list` does not need `item` (`children: any`). Measured 2026-10-04 — every one of
+   the 7 `shape: registers` words is held to a parent, plus `when`, `otherwise`,
+   `tab` and `hidden`, and the rule behind all eleven is *this word hands something
+   to its parent instead of rendering on its own*. That sentence exists nowhere.
+
+#### Two audiences, in his words
+
+- **Devs** "need to understand why the code is structured as it is and need to be
+  able to assess whether the thing is over-built or under-built, where there is
+  duplication and where there are gaps."
+- **Users** "need to hear the language sing, experience the potential of each word
+  without learning the history of the development of the codebase. Users need to know
+  the conventions and reliably expect what will be inferred."
+
+The second sentence is an indictment of the current documents: they are organised by
+*when things were decided* — phases, rounds, daytrips, "what drafting surfaced" — and
+a user has to read the project's biography to learn its vocabulary.
+
+#### What the discussion is actually weighing
+
+The scale, measured 2026-10-04, so the discussion starts from facts:
+
+- **Three registers**: `CONTRACTS` (62 words x 16 slots), `Promises::ALL` (35),
+  `Conventions::ALL` (38). Plus 7 shapes and a 16-entry Spiff lexicon.
+- **Twelve gate legs.**
+- **3,054 lines of prose** a reader may face before writing a page: `README.md` 217,
+  `PRIMER.md` 420, `DESIGN.md` 321, `KERNEL.md` 684, `CONTRACT.md` 173,
+  `VOCABULARY.md` 1,239.
+
+The open question is not "are the safeguards correct" — the gate says they are. It is
+whether a language whose whole claim is *one sentence, everything is a word* can
+require three registers and 3,000 lines to explain, and what the honest minimum is
+for each audience. **This is where the over-built / under-built judgement gets made**,
+and dan is the one making it.
+
+**Do not start by writing documents.** Start by deciding what each audience must
+hold in their head, then see which register or document has no audience at all.
+
+### The two discussions this one precedes
+
+Both were queued on 2026-10-03 and are now *after* docs and pedagogy by dan's word.
 
 1. **Scoping.** The word registry is global and last-compile-wins; a `Library` does
    not scope its words, and merely constructing one takes a colliding name
    (`DAYTRIP-0.4.0n.md` measured it; `editor` in the two studio UIs is the only
    collision, and the live studio is correct only because `StudioPages.ui_library`
-   is not memoized). Dan's framing is **scoping variables**, which is wider than
-   the collision — read 0.4.0n first, then ask what scope *should* mean here.
-2. **Docs and pedagogy.** Whether a committed 1,226-line `VOCABULARY.md` earns its
-   keep beside the studio's live reference. Relocating its two appendices was tried
-   and declined on measurement: 12 of the 62 entries live under those headings. The
-   question dan wants is the general one — what the documents are *for*, and who
-   learns the language from which surface.
-3. **The field family.** `field`/`input`/`textarea` take six modifiers between them
+   is not memoized). Dan's framing is **scoping variables**, wider than the
+   collision. There is a live fragility here, so it should not wait forever.
+2. **The field family.** `field`/`input`/`textarea` take six modifiers between them
    in no predictable pattern (`required:` on field and textarea not input,
    `placeholder:` on input not field, `readonly:` only textarea, `step:` only
    field). Four of six reasonable guesses are refused. **The rule comes first, then
    the table follows** — probably by answering what `field` infers that `input` does
    not. Do not patch the table without the rule.
 
-**What landed before them**, all green and committed: the promise-ledger defect and
-the gate hole that hid it, the argument-order error message, `tab`'s `parents:`, and
-one spelling of "the suite" in the gate command. Two of the audit's five findings
-were escalated rather than closed — see *Two the audit got wrong about its own
-costs* below.
+**What landed before all three**, green and pushed: the promise-ledger defect and the
+gate hole that hid it, the argument-order error message, `tab`'s `parents:`, and one
+spelling of "the suite" in the gate command. Two of the audit's five findings were
+escalated rather than closed — see *Two the audit got wrong about its own costs*.
 
 ### How the 0.4.0h list ended
 
