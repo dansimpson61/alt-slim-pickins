@@ -11,6 +11,8 @@
 #     entry — an exact set, so a new declared inference cannot arrive unregistered
 #   - all four grades are represented, because a grade that vanishes from the
 #     register is a grade the language can no longer see it has
+#   - every entry names a principle that exists, and every principle holds an
+#     entry — what is decided, beside the grade's who decides
 #   - the count is printed, and the axiomatic grade's single entry is named
 #
 # A register that only agreed with itself would be another unmanaged source of
@@ -126,6 +128,26 @@ end
   problems += 1
 end
 
+# --- 6. every convention serves a principle (2026-10-04) ---------------------
+# The register files a convention by what it decides as well as by who decides
+# it. Held both ways: an entry must name a principle that exists, and a
+# principle must hold an entry — one that holds none is a rule the language
+# states and nothing obeys.
+principles = SlimPickins::Conventions::PRINCIPLES.map(&:name)
+entries.each do |convention|
+  next if principles.include?(convention.principle)
+
+  puts "  NO PRINCIPLE `#{convention.name}` names #{convention.principle.inspect}, " \
+       'which is not one of the principles — join one, or argue for a new one'
+  problems += 1
+end
+principles.each do |principle|
+  next if SlimPickins::Conventions.by_principle(principle).any?
+
+  puts "  EMPTY        the `#{principle}` principle holds no convention"
+  problems += 1
+end
+
 # --- the report --------------------------------------------------------------
 puts
 puts "convention register — #{entries.size} conventions, every one with its home and its override"
@@ -136,6 +158,11 @@ puts "  the word link: #{named_count} named by a word's own `infers:` declaratio
 %i[structural shape domain axiomatic].each do |grade|
   names = SlimPickins::Conventions.by_grade(grade).map(&:name)
   puts "  #{grade.to_s.ljust(10)} #{names.size.to_s.rjust(2)}  #{names.join(' ')}"
+end
+puts "  by principle — #{principles.size} rules a user can hold, each convention one instance:"
+SlimPickins::Conventions::PRINCIPLES.each do |principle|
+  members = SlimPickins::Conventions.by_principle(principle.name)
+  puts "  #{principle.name.to_s.ljust(18)} #{members.size.to_s.rjust(2)}  #{principle.rule}"
 end
 axiomatic = SlimPickins::Conventions.by_grade(:axiomatic)
 puts "  the axiomatic grade holds #{axiomatic.size} entry, and it records an absence: " \

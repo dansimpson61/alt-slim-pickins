@@ -112,8 +112,13 @@ Answer these, in the documents, in language that survives being read once:
    is that the dependency runs one way only and nothing says so: `item` needs `list`,
    `list` does not need `item` (`children: any`). Measured 2026-10-04 — every one of
    the 7 `shape: registers` words is held to a parent, plus `when`, `otherwise`,
-   `tab` and `hidden`, and the rule behind all eleven is *this word hands something
-   to its parent instead of rendering on its own*. That sentence exists nowhere.
+   `tab` and `hidden`. **Corrected the same day: they are held for two reasons, not
+   one.** Most *hand something to their parent instead of rendering on their own*
+   (`column`, `total`, `band`, `line`, `level`, `when`, `otherwise`, `tab`). But
+   `item` renders itself as an `<li>` (its body is `box .name, .content`) and
+   `hidden` renders an input in place: those two only *mean* something inside
+   their parent. `item` nonetheless declares `shape: registers`, which looks
+   mis-declared. `option` is unverified. Neither sentence exists in the documents.
 
 #### Two audiences, in his words
 
@@ -166,7 +171,8 @@ Both were queued on 2026-10-03 and are now *after* docs and pedagogy by dan's wo
    not. Do not patch the table without the rule.
 
 **What landed before all three**, green and pushed: the promise-ledger defect and the
-gate hole that hid it, the argument-order error message, `tab`'s `parents:`, and one
+gate hole that hid it, the argument-order error message, `tab`'s `parents:` (which
+overrode a VOCABULARY claim that the silent loss was deliberate — dan's to reverse), and one
 spelling of "the suite" in the gate command. Two of the audit's five findings were
 escalated rather than closed — see *Two the audit got wrong about its own costs*.
 
