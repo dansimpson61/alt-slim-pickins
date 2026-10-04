@@ -35,7 +35,11 @@ class VocabularyPartialsTest < Minitest::Test
     end
   end
 
-  def test_action_inherits_path_and_return_to_from_enclosing_actions_container
+  # Named for `actions` rather than for `action` since 2026-10-03: every
+  # assertion below is satisfied by the container alone, which says both
+  # hidden fields itself. The old name claimed `action` inherited them, and
+  # `action.sp` never said either value — it declared them and dropped them.
+  def test_actions_says_the_path_and_return_to_its_children_post
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
         page p
@@ -265,6 +269,40 @@ class VocabularyPartialsTest < Minitest::Test
     ensure
       SlimPickins::Word.registry.delete(:wrapper)
       SlimPickins::CONTRACTS.delete(:wrapper)
+    end
+  end
+
+  # The slot-forwarding convention, which no word in the vocabulary exercises:
+  # a partial that declares a modifier the call did not say finds it on the
+  # enclosing partial that did. `actions`/`action` stood as the instance until
+  # 2026-10-03, when `action.sp` turned out never to say the forwarded value —
+  # so the mechanism is proved here, by the smallest pair that can show it,
+  # and the convention's prose points at this test rather than at a word.
+  def test_a_partial_finds_a_declared_modifier_on_the_enclosing_partial
+    Dir.mktmpdir do |dir|
+      FileUtils.mkdir_p(File.join(dir, 'partials'))
+      File.write(File.join(dir, 'partials', 'outer_slot.sp'), <<~SP)
+        expects children: any, takes: slot, shape: encloses
+        box
+          children
+      SP
+      File.write(File.join(dir, 'partials', 'inner_slot.sp'), <<~SP)
+        expects takes: slot, shape: says
+        note .slot
+      SP
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          outer_slot slot: "forwarded"
+            inner_slot
+      SP
+      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                                locals: { p: {} }, library: library_for(dir))
+      assert_includes html, '<div class="box outer_slot"><p class="note inner_slot">forwarded</p></div>'
+    ensure
+      %i[outer_slot inner_slot].each do |word|
+        SlimPickins::Word.registry.delete(word)
+        SlimPickins::CONTRACTS.delete(word)
+      end
     end
   end
 

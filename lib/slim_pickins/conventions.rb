@@ -165,7 +165,10 @@ module SlimPickins
                      grade: :structural),
       Convention.new(name: :partial_slot_forwarding,
                      when_silent: 'a partial declares a modifier the call did not say',
-                     decides: 'that the value is sought up the chain — how `actions path:` reaches `action`',
+                     decides: 'that the value is sought on the enclosing partial ' \
+                              'that did say it — a lookup every omitted modifier ' \
+                              'makes, and that no vocabulary word is today nested ' \
+                              'so as to win, so it is proved by test not by a word',
                      file: 'lib/slim_pickins/subject.rb', marker: 'def container_value',
                      inference: nil, override: 'say it on the child instead',
                      grade: :structural),

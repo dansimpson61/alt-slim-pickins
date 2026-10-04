@@ -1,4 +1,4 @@
-expects takes: content, shape: encloses, takes: to, takes: path, takes: return_to, takes: variant, takes: status
+expects takes: content, shape: encloses, takes: to, takes: variant, takes: status
 
 choose
   when .status

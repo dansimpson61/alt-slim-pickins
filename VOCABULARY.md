@@ -359,7 +359,7 @@ card compact
 - **modifiers** — `path:`, `return_to:`
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `partial_slot_forwarding` — that the value is sought up the chain — how `actions path:` reaches `action` (override: say it on the child instead)
+- **conventions** — `partial_slot_forwarding` — that the value is sought on the enclosing partial that did say it — a lookup every omitted modifier makes, and that no vocabulary word is today nested so as to win, so it is proved by test not by a word (override: say it on the child instead)
 - **infers** — that its children are the operations on the enclosing thing;
   their layout and spacing
 - **renders** — `<div class="actions">`
@@ -1042,7 +1042,7 @@ Predictions from the spec, and what actually happened.
 
 - **name** — none
 - **content** — text or data, when there is any
-- **modifiers** — `to:`, `path:`, `return_to:`, `variant:`, `status:`
+- **modifiers** — `to:`, `variant:`, `status:`
 - **children** — none
 - **subject** — unchanged
 

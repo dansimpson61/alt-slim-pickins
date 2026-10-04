@@ -90,6 +90,25 @@ ledger.each do |promise|
     puts "  LOST READER  `#{promise.name}` says it is read by #{path}, which is not there"
     problems += 1
   end
+
+  # A reader written in the language can be held to more than its existence:
+  # the key has to appear in the partial's *body*. Declaring `takes: path` in
+  # the preamble is the promise, not the reading of it, so the preamble is
+  # dropped before looking — which is what let `action.sp` stand as the
+  # recorded reader of two modifiers it never says. A Ruby reader is not
+  # checked this way: it reads `attrs[:path]`, or a local named anything, and
+  # a name search there finds the wrong thing (`Generator#stylesheet`).
+  promise.read_by.grep(/\.sp\z/).each do |path|
+    file = File.join(here, path)
+    next unless File.file?(file)
+
+    body = File.readlines(file).grep_v(/\A\s*expects\b/).join
+    next if body.match?(/(?:\.|\b)#{Regexp.escape(promise.name.to_s)}\b/)
+
+    puts "  UNREAD       `#{promise.name}` says it is read by #{path}, whose body never says it"
+    problems += 1
+  end
+
   next unless promise.verdict == :none && promise.read_by.any?
 
   puts "  CONTRADICTED `#{promise.name}` is recorded as unread and names a reader"

@@ -19,11 +19,18 @@ module SlimPickins
   #
   # Why the ledger has to be data and not a grep: a declaration's reader is not
   # always the word that declares it. `tab`'s `active:` is read by its *parent*,
-  # `Generator#tabs`, from the child's node attributes; `actions`'s `path:` is
-  # read by a *descendant*, `action.sp`, through `Chain#container_value`. Both
-  # were found by reasoning about the runtime, not by searching for the name —
-  # and a search for the name would have found the wrong reader, because
-  # `Generator#stylesheet` also has an `attrs[:path]`.
+  # `Generator#tabs`, from the child's node attributes; `disclosure`'s `open:`
+  # is said onward to its `box`. Both were found by reasoning about the runtime,
+  # not by searching for the name — and a search for the name would have found
+  # the wrong reader, because `Generator#stylesheet` also has an `attrs[:path]`.
+  #
+  # And why naming a reader is not enough on its own: from this ledger's first
+  # day (2026-09-17) to 2026-10-03, `action` was recorded as the reader of
+  # `path:` and `return_to:`, forwarded to it from `actions` through
+  # `Chain#container_value`. The file existed, so the gate was
+  # satisfied, and `action.sp`'s body never said either name — the values were
+  # accepted and discarded. A `.sp` reader is now held to saying the key in its
+  # body, which is the check that would have caught it (2026-10-03).
   module Promises
     # kind    — :modifier (declared by words) | :universal (permitted on every
     #           word by the gate) | :loader (claims to read declarations) |
@@ -88,11 +95,13 @@ module SlimPickins
       Promise.new(name: :over, kind: :modifier, declared_by: [:chart],
                   read_by: ['lib/slim_pickins/words.rb'], verdict: :read,
                   note: 'names the axis when the plural is not the row\'s name'),
-      Promise.new(name: :path, kind: :modifier, declared_by: %i[action actions],
-                  read_by: ['lib/vocabulary/action.sp'], verdict: :forwarded,
-                  note: '`actions path:` reaches a descendant `action` through ' \
-                        '`Chain#container_value`; `Generator#stylesheet` has an ' \
-                        '`attrs[:path]` too, and it is a different key'),
+      Promise.new(name: :path, kind: :modifier, declared_by: [:actions],
+                  read_by: ['lib/vocabulary/actions.sp'], verdict: :read,
+                  note: '`actions` says it into a hidden field itself. It was ' \
+                        'recorded until 2026-10-03 as forwarded to a descendant ' \
+                        '`action`, which declared it and never said it — so the ' \
+                        'value was accepted and discarded. `Generator#stylesheet` ' \
+                        'has an `attrs[:path]` too, and it is a different key'),
       Promise.new(name: :placeholder, kind: :modifier,
                   declared_by: %i[input search],
                   read_by: ['lib/slim_pickins/generator.rb',
@@ -113,10 +122,10 @@ module SlimPickins
                         '`required: false` meant required — `false` arrived as the ' \
                         'truthy name `:false`. A boolean literal in modifier ' \
                         'position closed it (E3)'),
-      Promise.new(name: :return_to, kind: :modifier, declared_by: %i[action actions],
-                  read_by: ['lib/vocabulary/action.sp'], verdict: :forwarded,
-                  note: 'as `path:` — the forwarding mechanism, found by reading ' \
-                        '`Chain#container_value`, invisible to a name search'),
+      Promise.new(name: :return_to, kind: :modifier, declared_by: [:actions],
+                  read_by: ['lib/vocabulary/actions.sp'], verdict: :read,
+                  note: 'as `path:` — said into a hidden field by `actions`, and ' \
+                        'recorded as forwarded for as long as `action` declared it'),
       Promise.new(name: :rows, kind: :modifier, declared_by: [:textarea],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/slim_pickins/words.rb'], verdict: :read, note: nil),
