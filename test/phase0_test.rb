@@ -46,6 +46,22 @@ class Phase0Test < Minitest::Test
 
   # --- errors speak the language --------------------------------------
 
+  # The order is one rule — a name, then content or data, then modifiers — so
+  # all three ways to break it are refused, and each refusal names the kind
+  # that arrived late. Until 2026-10-03 one message served all three and spoke
+  # only of names, so a sentence whose content followed a modifier was told to
+  # move a name it did not have.
+  def test_an_argument_out_of_order_names_the_kind_that_came_late
+    { 'badge .status, ok' => 'a name may not come after content or data',
+      'note open: true, ok' => 'a name may not come after a modifier',
+      'disclosure open: true, "More"' => 'content or data may not come after a modifier' }
+      .each do |sentence, expected|
+        error = assert_raises(SlimPickins::SyntaxError) { SlimPickins.compile(sentence) }
+        assert_includes error.message, expected
+        assert_includes error.message, 'a name, then content or data, then modifiers'
+      end
+  end
+
   def test_a_bad_argument_names_the_line_and_what_was_expected
     error = assert_raises(SlimPickins::SyntaxError) do
       SlimPickins.compile("field name, %bogus%\n", path: 'form.sp')

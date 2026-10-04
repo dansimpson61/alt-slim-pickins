@@ -145,8 +145,10 @@ module SlimPickins
         end
       end
       if ranks != ranks.sort
+        late = ranks.each_cons(2).find_index { |earlier, later| earlier > later }
         raise SyntaxError.new(
-          'a name may not come after content or data — names come first',
+          "#{KINDS[ranks[late + 1]]} may not come after #{KINDS[ranks[late]]} — " \
+          'a name, then content or data, then modifiers',
           @path, sentence.lineno, sentence.body
         )
       end
@@ -219,6 +221,12 @@ module SlimPickins
         )
       end
     end
+
+    # The three kinds of argument, in the order the sentence takes them. They
+    # are named because an error that says which kind arrived late tells the
+    # writer what to move; one that can only name the first case has to guess,
+    # and guessed wrong at every sentence whose content followed a modifier.
+    KINDS = { 0 => 'a name', 1 => 'content or data', 2 => 'a modifier' }.freeze
 
     # A name, then content or data, then modifiers — the same order the
     # grammar checker held the documents to, now enforced by the grammar
