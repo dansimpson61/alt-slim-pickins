@@ -81,7 +81,37 @@ measure are quoted as the gate output they are.
 
 ---
 
-### The active next step — dan's, because the list is finished
+### The active next step — three daytrip discussions, queued by dan
+
+**Dan ruled on the 0.4.0o audit's findings on 2026-10-03 and queued three
+discussions.** Each is a question, not a task: a daytrip whose output is a decision
+and its argument, the way `DAYTRIP-0.4.0n.md` was.
+
+1. **Scoping.** The word registry is global and last-compile-wins; a `Library` does
+   not scope its words, and merely constructing one takes a colliding name
+   (`DAYTRIP-0.4.0n.md` measured it; `editor` in the two studio UIs is the only
+   collision, and the live studio is correct only because `StudioPages.ui_library`
+   is not memoized). Dan's framing is **scoping variables**, which is wider than
+   the collision — read 0.4.0n first, then ask what scope *should* mean here.
+2. **Docs and pedagogy.** Whether a committed 1,226-line `VOCABULARY.md` earns its
+   keep beside the studio's live reference. Relocating its two appendices was tried
+   and declined on measurement: 12 of the 62 entries live under those headings. The
+   question dan wants is the general one — what the documents are *for*, and who
+   learns the language from which surface.
+3. **The field family.** `field`/`input`/`textarea` take six modifiers between them
+   in no predictable pattern (`required:` on field and textarea not input,
+   `placeholder:` on input not field, `readonly:` only textarea, `step:` only
+   field). Four of six reasonable guesses are refused. **The rule comes first, then
+   the table follows** — probably by answering what `field` infers that `input` does
+   not. Do not patch the table without the rule.
+
+**What landed before them**, all green and committed: the promise-ledger defect and
+the gate hole that hid it, the argument-order error message, `tab`'s `parents:`, and
+one spelling of "the suite" in the gate command. Two of the audit's five findings
+were escalated rather than closed — see *Two the audit got wrong about its own
+costs* below.
+
+### How the 0.4.0h list ended
 
 **Every tier of `DAYTRIP-0.4.0h.md`'s prioritized list is landed.** Tier 7 closed in
 `DAYTRIP-0.4.0m.md`: the resume card went from 32,179 characters to under 4,000 and this
@@ -108,59 +138,65 @@ forwarding mechanism behind them was dead code, was false. Instrumenting
 and **fires nowhere**, which is a different finding and a different fix. So
 measure the mechanism, not only its usage.
 
-**Five more from the regularity audit (`DAYTRIP-0.4.0o.md`)**, each measured, each
-a language decision and so none performed. The audit itself found the grammar
-regular: 31 modifier spellings over 62 words, and every shared one holds a single
-meaning, `from:` on `each` and `line` included. These five are what it did find:
+### Two the audit got wrong about its own costs
 
-1. **`link` has a second sentence shape and the grammar denies it.** `Link#evaluate`
-   swaps the positional arguments when the first is not a Symbol, so
-   `link "View", "/products"` works alongside `link show, "View"`. `DESIGN.md` says
-   *the order never varies*; the shape is documented nowhere and spoken nowhere —
-   all 55 string-leading `link` sentences say `to:`. Deleting the branch removes a
-   sentence nothing speaks, which is still a change to the language.
-2. **`tab` is the one structural child with no `parents:`.** Ten words declare the
-   parent they belong inside; a stray `item` is refused by name, a stray `tab`
-   renders `<div class="tab-panel" role="tabpanel"></div>` and **silently drops its
-   content**, because content maps to `:label` and `tabs` is not there to render it.
-   `parents: [:tabs]` is the fix. It is a defect, not a preference — listed here
-   only because it narrows what the language accepts.
-3. **The `field`/`input`/`textarea` modifier sets are arbitrary** — `required:` on
-   field and textarea not input, `placeholder:` on input not field, `readonly:` only
-   textarea, `step:` only field. No rule predicts the table; four of six reasonable
-   guesses are refused.
-4. **`variant` has two spellings.** Fourteen words take it as a bare name; `card`
-   must use `variant:` because its name slot is the subject, but **`action`'s name
-   slot is empty**, so `action primary, "Commit"` was available. `item.sp` shows a
-   partial can take a variant as a name.
-5. **`search`'s `q:` holds a value under a parameter's name** — the only
-   abbreviation among the 31 modifiers.
+Three of the audit's five findings are settled: `tab` got its `parents:`, the gate
+command got one spelling, and the field family became discussion 3 above. The other
+two were each presented to dan as small and are not.
 
-**Three older proposals awaiting dan's word**, each named rather than performed:
+- **`search`'s `q:` is not a rename.** Dan approved renaming it to `query:`; the
+  rename was made, broke four pages, and was reverted. `Input#evaluate` does its own
+  `shown = value.nil? ? subject.fetch(name) : value`, so an `input` with no value
+  goes looking for an attribute named after its *name slot*. `q:` worked only
+  because its spelling matched that slot: the lookup landed on the partial's own
+  declared-but-unset `q` parameter instead of walking up to the page and raising.
+  Rename the modifier and the workbench's `search placeholder: "Search the library"`
+  — which passes no query at all — dies with `this page has no q`. **The wire name
+  cannot move either**: `params[:q]` is read by `word_graph`, `dashboard` and
+  `lore_reader`. So the real question is whether `input` should fetch an attribute
+  it was never told it had, which is a change to a loud-failure guarantee and so
+  dan's. The abbreviation is the symptom; the coupling is the finding.
+- **`link`'s second sentence shape is an alias, and it is tested on purpose.** The
+  audit said it was used nowhere. It is used once —
+  `test_flexible_link_with_positional_arguments` in `test/def_test.rb` asserts both
+  `link "Docs", "/documentation"` and `link .doc_name, .doc_path`, deliberately, and
+  its name calls the shape *flexible*. What makes it an alias rather than a feature
+  is that the regular spelling says the same thing: `link .doc_name, to: .doc_path`
+  renders identically, byte for byte, measured. Dan's reply — that named arguments
+  may come in any order — is correct and separate: modifiers do commute, proved on
+  `iframe`, `button` and `field`. This branch is not named arguments. It is two
+  *positional* arguments swapping roles on the runtime class of the first, which is
+  the one thing `DESIGN.md` says never happens.
 
-- **The word registry is global and last-compile-wins**, and `DAYTRIP-0.4.0n.md`
-  measured it properly: a `Library` does not scope its words, and merely
-  *constructing* one takes a colliding name from another. Exactly one name collides —
-  `editor`, in both studio UIs. The live studio is correct only because
-  `StudioPages.ui_library` is not memoized and so re-registers at every use;
-  `test/studio_try_test.rb` names that mechanism and depends on it. The cheap fix is
-  to rename the classic UI's `editor`; the thorough one is a per-library registry,
-  which is a change to the runtime's lookup path. Dan's call.
-- **`VOCABULARY.md`'s two appendices cannot simply move to `history/`** — the
-  proposal was tried and declined on measurement. 12 of the vocabulary's 62 entries
-  live under `## What drafting surfaced` and `## What the drafts left open`, all with
-  contracts and zero drift, so relocating the sections would strip a fifth of the
-  vocabulary from the document that defines it. Doing it means restructuring the
-  document — lifting those entries into the main run first — which is not a tidying
-  job. The larger question of whether a committed 1,226-line `VOCABULARY.md` earns
-  its keep beside the studio's live reference is still open and still dan's.
-- **`word_count`/`words_count` is done** (`DAYTRIP-0.4.0n.md`): one name, verified by
-  rendering.
+**The two older proposals became discussions 1 and 2** at the top of this section,
+by dan's ruling of 2026-10-03; the detail that fed them is in `DAYTRIP-0.4.0n.md`
+(the registry's `editor` collision and the `ui_library` memoization trap) and in the
+declined appendix relocation (12 of 62 entries live under those two headings).
+`word_count`/`words_count` is done — one name, verified by rendering.
 
-**And the smaller open calls**, unchanged: `Markdown`'s `[:element, …]` and the
-tokenizer's are the only unnamed positional triples left; the workbench word page's
-proportions; the unserved `assets/workbench.css`; the two byte-identical `.tin`
-files.
+**And the smaller open calls, re-measured 2026-10-03** — dan asked what they were,
+and one of the four turned out to be stale, which is the seventh time a list item's
+own sentence has not survived being measured:
+
+- **`Markdown`'s unnamed triples: gone, and the item is stale.** `markdown.rb`
+  contains no `[:element, …]` literal; the only mention of that form in `lib/` is a
+  comment in `node.rb` describing what the named `Node[…]` replaced, which 0.4.0l
+  did. What remains in the markdown *tokenizer* is a different thing and arguably
+  not a defect: `pairs << [at, at + length, close_at, close_at + length]`, four
+  integer offsets in one local emphasis-matching loop. That is an algorithm's
+  arithmetic, not data that travels, so naming it buys little.
+- **The workbench word page's proportions** — a visual judgement on
+  `studio/uis/workbench`'s word page, awaiting dan's eye rather than measurement.
+- **`assets/workbench.css` is genuinely dead, and the reason is worth knowing.**
+  The file exists (3,420 bytes, 2026-09-29) and the route never reads it:
+  `studio/app.rb`'s `SPIFFS` maps `'workbench.css'` to
+  `uis/workbench/workbench.spiff` and compiles it per request, so the generated
+  stylesheet shadows the disk file of the same name. Deleting the file changes no
+  render. Awaiting dan's word.
+- **The two byte-identical `.tin` files** — `pages/pages.tin` and
+  `examples/portfolio/views/portfolio.tin` share one md5
+  (`e2c8e71c7c5ddc0dcaa175130cb7b9f4`). Whether one frame should be shared or the
+  duplication is honest independence is dan's.
 
 ### Two instruments to use rather than rebuild (added in 0.4.0h)
 

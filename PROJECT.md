@@ -16,28 +16,30 @@ status: >-
   What it found instead was a promise the gate could not check: `action` declared
   `path:` and `return_to:`, never said either, and three documents, one test name and
   the gate all recorded a reader that did not read. Fixed, with the gate's hole
-  closed; five language irregularities are named and left for dan.
+  closed. Of the five language irregularities it named, three landed on dan's word,
+  two were escalated as larger than reported, and three questions became queued
+  daytrip discussions.
 last_touched: 2026-10-03
 next_step: >-
-  **No queued item; the direction is dan's, and the queue of named-not-performed
-  proposals is now eight.** DAYTRIP-0.4.0o's regularity audit added five, each
-  measured and each a language decision: (1) `link` has a second, undocumented
-  sentence shape that swaps its positional arguments when the first is a string —
-  the only finding that contradicts a written claim in DESIGN.md, *the order never
-  varies*; it is spoken nowhere in 55 `link` sentences. (2) `tab` is the one
-  structural child with no `parents:`, so an orphan renders an empty panel and
-  silently drops its content, where `item` refuses; one line. (3) The
-  `field`/`input`/`textarea` modifier sets are arbitrary — no rule predicts which
-  of six modifiers each takes, and a fluent speaker guesses wrong four times in six.
-  (4) `variant` has two spellings, and `action`'s name slot is empty, so it did not
-  need the second. (5) `search`'s `q:` holds a value under a parameter's name. Plus
-  one in the tooling: HANDOFF's gate command runs 547 tests, the gate's Suite leg
-  602. The three older proposals stand — the registry's last-compile-wins order
-  dependence (0.4.0n), whether a committed 1,226-line VOCABULARY.md earns its keep,
-  and the smaller calls (`Markdown`'s triples, the workbench word page's
-  proportions, `assets/workbench.css`, the two byte-identical `.tin` files). And the
-  standing caution, which held a sixth time: measure the sentence before acting on
-  it. `HANDOFF.md` carries the detail.
+  **Dan ruled on the 0.4.0o audit on 2026-10-03 and queued three daytrip
+  discussions.** Each wants a decision and its argument, not a patch: (1)
+  **scoping** — the registry is global and last-compile-wins, and his framing is
+  wider than the `editor` collision DAYTRIP-0.4.0n.md measured; (2) **docs and
+  pedagogy** — whether a committed 1,226-line VOCABULARY.md earns its keep beside
+  the studio's live reference, and what each surface is *for*; (3) **the field
+  family** — `field`/`input`/`textarea` share six modifiers in no predictable
+  pattern, and the rule comes before the table. Landed since the audit: the
+  promise-ledger defect and the gate hole that hid it, the argument-order message,
+  `tab`'s `parents:` (which overrode a VOCABULARY claim that the silent loss was
+  deliberate — his to reverse), and one spelling of "the suite" in the gate command.
+  **Two findings were escalated rather than closed, both because they were presented
+  as smaller than they are**: `search`'s `q:` is not a rename (the modifier's
+  spelling had to match `input`'s name slot or the no-query case raises, and three
+  apps read `params[:q]`), and `link`'s second sentence shape is a deliberate,
+  tested alias rather than an oversight — redundant, since `link .doc_name, to:
+  .doc_path` renders identically. The smaller calls are re-measured in HANDOFF, and
+  one was stale: `Markdown`'s `[:element, …]` triples no longer exist.
+  `HANDOFF.md` carries the detail.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
