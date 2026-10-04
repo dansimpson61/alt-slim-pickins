@@ -17,6 +17,7 @@ require_relative '../lib/slim_pickins'
 require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
+require_relative '../examples/doc_reader/app'
 require_relative '../studio/docs_helper'
 require_relative '../studio/pages'
 require_relative '../studio/status'
@@ -40,14 +41,9 @@ way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
 milestone_planner = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
 planner = MilestonePlanner::Planner.new
 m1_sample = planner.find('m1')
-# The Volet 4b specimen. It has no `app.rb`, so nothing booted it and nothing
-# rendered it — an app directory with a `.spiff`, a page and a data file, outside
-# the proved corpus entirely. `check_spiff_scope.rb` holds a Spiff's compiled
-# selectors to the HTML its pages render, which it cannot do for a page nobody
-# renders, and that is what found this.
+# The exemplar. Its pages are proved against the locals its routes serve, asked
+# of the app itself, so the gate and the browser cannot disagree about them.
 doc_reader = SlimPickins::Library.from(File.expand_path('../examples/doc_reader/views', __dir__))
-doc_reader_data = JSON.parse(File.read(File.expand_path('../examples/doc_reader/data.json', __dir__)),
-                             symbolize_names: true)
 word_graph = SlimPickins::Library.from(File.expand_path('../examples/word_graph/views', __dir__))
 graph = WordGraph::Graph.instance
 w_sample = graph.find('table')
@@ -159,7 +155,15 @@ PAGES = [
    { shapes: graph.shapes }],
   ['examples/word_graph/views/matrix.sp', word_graph,
    { words: graph.all }],
-  ['examples/doc_reader/views/index.sp', doc_reader, doc_reader_data],
+  # Its partials are proved through the pages that speak them — `audiences`
+  # through `documents_list`, `search` through `document_card` — because a
+  # partial rendered alone takes a hash for its subject, not the document or
+  # shelf it is written for.
+  ['examples/doc_reader/views/index.sp', doc_reader, DocReader::App.locals_for('index')],
+  ['examples/doc_reader/views/shelf.sp', doc_reader, DocReader::App.locals_for('shelf')],
+  ['examples/doc_reader/views/audiences.sp', doc_reader, DocReader::App.locals_for('audiences')],
+  ['examples/doc_reader/views/document.sp', doc_reader, DocReader::App.locals_for('document')],
+  ['examples/doc_reader/views/search.sp', doc_reader, DocReader::App.locals_for('search', q: 'scope')],
   # The Inspect surface, which is a page in the language now rather than a
   # heredoc. Its locals are a real evaluated tree, so the gate proves the surface
   # against the shape it actually receives, and `check_spiff_scope.rb` can hold

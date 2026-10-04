@@ -193,7 +193,7 @@ skill, the workbench spatial frontier, and three defects found by eye in the
 live studio); there is no active thread, and `PROJECT.md`'s `next_step` names
 what was deliberately left open.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 30 app words, 38 verified pages, 38 conventions, 35 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 

@@ -54,25 +54,25 @@ What stays here is what a fresh session needs and cannot get elsewhere: the read
 list above, the vitals below, the active next step, the protocols and the standing
 principles.
 
-### Current Vitals (measured 2026-10-03)
+### Current Vitals (measured 2026-10-04)
 
 Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
-- **Full Suite**: 602 runs, 6,530 assertions, 0 failures, 0 errors, 0 skips in one
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 30 app words, 38 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
+- **Full Suite**: 606 runs, 6,628 assertions, 0 failures, 0 errors, 0 skips in one
   process — and that includes the example apps' own suites, because both the Suite
   leg *and* the gate command below now ask `Census.test_files`. They did not agree
   until 2026-10-03: the command kept its own `Dir["test/**/*_test.rb"]` glob and ran
   547, so a session could run the gate by hand, see green, and never touch the
   example apps' suites at all. One spelling of "the suite" now, in one home.
-- **Check Grammar**: `1,289 sentences checked, 96 words defined, 0 problems`.
+- **Check Grammar**: `1359 sentences checked, 98 words defined, 0 problems`.
 - **Check Shape**: 62 canonical words, 0 problems.
-- **Check Styles**: 27 emittable classes, 59 rendering, 113 rules, 0 problems.
+- **Check Styles**: 28 emittable classes, 59 rendering, 113 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
 - **Spiff Scope**: `3 spiff(s), 15 compiled classes held to the HTML their pages render, 0 problems` — it holds compiled selectors to rendered HTML now, not zone names to sources.
-- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 34 pages, 0 problems.
+- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 38 pages, 0 problems.
 - **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
 - **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): a digest over every page the gate proves. No number is written down here on purpose — `examples/lore_reader` renders a live count of `LORE.md`'s entries, so the digest moves whenever lore is left. Compare snapshots within a session, which is what `bin/byte_diff.rb`'s own header says.
 - **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.
@@ -238,11 +238,14 @@ abstractions that make the language holdable *was* the pedagogy work.
 
 **Next, in order:**
 
-1. **Make the gate green by registering doc_reader**, now that dan has ruled it
-   stays. Add its four pages and two partials to the gate's page census
-   (`bin/verify_pages.rb` and `StudioPages::PAGES`), and update the three stated
-   counts to 8 apps and 30 app words. Commit `bb54e09` left this red on purpose,
-   pending the ruling.
+1. ~~**Make the gate green by registering doc_reader.**~~ Done. The gate proves
+   its five pages against `DocReader::App.locals_for`, so what is proved is what
+   is served, and its two partials through the pages that speak them. The
+   playground's census holds all seven, through a provider that names each
+   document and shelf field by field. The item said four pages; there were five.
+   Two defects surfaced for the exemplar bar: `Document#id` keeps spaces
+   (`result-tight coupling in ruby dsls` is not a valid id), and a heading's
+   markdown rides into `title` (`**Tight Coupling in Ruby DSLs**`).
 2. **The namespace.** A binding named like a word loses to the word, silently,
    because words are Ruby methods. Words should be the outermost scope (built-ins,
    then the app's words, then the page's `def`s), with the nearest winning. This
@@ -308,7 +311,7 @@ anywhere else. Acting on the premise would have deleted the only copy.
 0.4.0o made it six, in a new shape worth knowing: the defect was real — `action`
 declared two modifiers and discarded them — but the obvious inference, that the
 forwarding mechanism behind them was dead code, was false. Instrumenting
-`Chain#container_value` and rendering all 34 pages proved the mechanism **works**
+`Chain#container_value` and rendering every page the gate then held proved the mechanism **works**
 and **fires nowhere**, which is a different finding and a different fix. So
 measure the mechanism, not only its usage.
 

@@ -17,6 +17,7 @@ require_relative '../examples/lore_reader/lib/lore'
 require_relative '../examples/way_exam/lib/exam'
 require_relative '../examples/milestone_planner/lib/planner'
 require_relative '../examples/word_graph/lib/graph'
+require_relative '../examples/doc_reader/lib/shelf'
 
 
 # The palette: the repo's own real pages, offered to the playground as
@@ -84,7 +85,13 @@ module StudioPages
     'word_graph/shapes' => 'examples/word_graph/views/shapes.sp',
     'word_graph/matrix' => 'examples/word_graph/views/matrix.sp',
     'word_graph/partials/word_card' => 'examples/word_graph/views/partials/word_card.sp',
-    'doc_reader/index' => 'examples/doc_reader/views/index.sp'
+    'doc_reader/index' => 'examples/doc_reader/views/index.sp',
+    'doc_reader/shelf' => 'examples/doc_reader/views/shelf.sp',
+    'doc_reader/audiences' => 'examples/doc_reader/views/audiences.sp',
+    'doc_reader/document' => 'examples/doc_reader/views/document.sp',
+    'doc_reader/search' => 'examples/doc_reader/views/search.sp',
+    'doc_reader/partials/document_card' => 'examples/doc_reader/views/partials/document_card.sp',
+    'doc_reader/partials/documents_list' => 'examples/doc_reader/views/partials/documents_list.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
 
@@ -471,14 +478,52 @@ module StudioPages
       graph = WordGraph::Graph.instance
       w = graph.find('table')
       w.to_h.merge('word' => w.to_h)
-    when 'examples/doc_reader/views/index.sp'
-      json_path = File.expand_path('../examples/doc_reader/data.json', __dir__)
-      File.file?(json_path) ? JSON.parse(File.read(json_path)) : {}
+    when %r{\Aexamples/doc_reader/views/}
+      doc_reader_locals(File.basename(rel, '.sp'))
     else
       {}
     end
 
 
+  end
+
+  # doc_reader's payload, from the shelf its routes serve. Neither a document
+  # nor a shelf is a Struct, so each is named field by field; a document's
+  # content rides only where a page reads it, or every list would carry the
+  # whole repository.
+  def self.doc_reader_locals(page)
+    shelf = DocReader::Shelf.of
+    primer = shelf.find('primer')
+    case page
+    when 'index'
+      { 'docs' => shelf.without_history.map { |doc| plain_document(doc) },
+        'selected_doc' => plain_document(primer, content: true) }
+    when 'shelf', 'audiences' then { 'shelf' => plain_shelf(shelf) }
+    when 'document' then { 'document' => plain_document(primer, content: true) }
+    when 'search'
+      results = shelf.without_history.matching('scope')
+      { 'query' => { 'q' => 'scope', 'include_history' => false,
+                     'results' => results.map { |doc| plain_document(doc) } } }
+    when 'document_card' then plain_document(primer)
+    when 'documents_list' then { 'documents' => shelf.users.map { |doc| plain_document(doc) } }
+    else {}
+    end
+  end
+
+  def self.plain_document(document, content: false)
+    fields = %i[id name title href audience word_count reading_minutes changed_on history? for_users?]
+    plain = fields.to_h { |field| [field.to_s, document.public_send(field)] }
+    plain['chapters'] = document.chapters.map(&:to_h)
+    content ? plain.merge('content' => document.content) : plain
+  end
+
+  def self.plain_shelf(shelf)
+    audiences = %w[users devs history].to_h do |audience|
+      [audience, shelf.public_send(audience).map { |doc| plain_document(doc) }]
+    end
+    { 'documents' => shelf.map { |doc| plain_document(doc) },
+      'total_words' => shelf.total_words, 'total_minutes' => shelf.total_minutes,
+      'history_share' => shelf.history_share }.merge(audiences)
   end
 
   # roth's payload, serialized field by field: Scenario's values are the

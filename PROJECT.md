@@ -4,9 +4,9 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
-  nests, everything is a word — proved across 62 canonical words, 7 apps and 34
+  nests, everything is a word — proved across 62 canonical words, 8 apps and 38
   rendered pages. Roadmaps 0.1 to 0.3 are closed; 0.4 is running as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0o`). Twelve gate legs green, 602 runs / 6,527
+  (`DAYTRIP-0.4.0a` through `0.4.0o`). Twelve gate legs green, 606 runs / 6,628
   assertions / 0 failures, `ruby -w -c` clean. DAYTRIP-0.4.0h's prioritized list is
   landed in full. The round-by-round account lives in `history/CHRONICLE.md` and each
   round's own record in its `DAYTRIP-*.md`; this field carries the present, which is
@@ -33,12 +33,12 @@ next_step: >-
   doc_reader rebuilt as the app the principles are played against; the scoping
   rules built (dots mean "it"; every shift names its subject; a sentence that
   names where it lands reads its dots there), with the corpus byte-identical.
-  **Next, in order:** (1) make the gate green by registering doc_reader, which
-  dan ruled stays **as an exemplar, not just an example**: its six pages and
-  partials go into the gate's page census, and the counts become 8 apps and 30
-  app words. (2) The namespace: a binding named like a word loses to the word,
-  silently; words should be the outermost scope, with the nearest winning.
-  (3) Rulings dan still owes: the grouping, three mis-grades, the format overlap.
+  doc_reader is registered as an exemplar, and the gate is green again (all
+  twelve legs; 606 runs, 0 failures). **Next, in order:** (1) The namespace: a
+  binding named like a word loses to the word, silently; words should be the
+  outermost scope, with the nearest winning. (2) Rulings dan still owes: the
+  grouping, three mis-grades, the format overlap. Two doc_reader defects are
+  waiting for the exemplar bar (an id with spaces, a title keeping its `**`).
   The field family has not started. HANDOFF carries the detail.
 kind: project
 run: ruby examples/roth/app.rb

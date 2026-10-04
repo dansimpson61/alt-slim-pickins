@@ -185,7 +185,14 @@ class StudioPagesTest < Minitest::Test
     'examples/word_graph/views/word.sp' => 'table',
     'examples/word_graph/views/shapes.sp' => 'Structural Shapes of alt-slim-pickins',
     'examples/word_graph/views/matrix.sp' => 'Vocabulary Connection Matrix',
-    'examples/word_graph/views/partials/word_card.sp' => 'table'
+    'examples/word_graph/views/partials/word_card.sp' => 'table',
+    'examples/doc_reader/views/index.sp' => 'Doc Reader',
+    'examples/doc_reader/views/shelf.sp' => 'The shelf',
+    'examples/doc_reader/views/audiences.sp' => 'Who each document is for',
+    'examples/doc_reader/views/document.sp' => 'The Way',
+    'examples/doc_reader/views/search.sp' => 'Search the documents',
+    'examples/doc_reader/views/partials/document_card.sp' => 'PRIMER.md',
+    'examples/doc_reader/views/partials/documents_list.sp' => 'README.md'
   }.freeze
 
 
