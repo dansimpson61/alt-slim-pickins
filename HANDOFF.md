@@ -61,12 +61,12 @@ this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
 - **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
-- **Full Suite**: 602 runs, 6,527 assertions, 0 failures, 0 errors, 0 skips in one
-  process — and that includes the example apps' own suites, because the Suite leg
-  asks `Census.test_files` instead of keeping its own glob. **The gate command in
-  the RIF loop below does keep its own glob**, so running it by hand gives 547, not
-  602; the two spellings of "the suite" are a finding of 0.4.0o and aligning them
-  changes the documented command, which is dan's call.
+- **Full Suite**: 602 runs, 6,530 assertions, 0 failures, 0 errors, 0 skips in one
+  process — and that includes the example apps' own suites, because both the Suite
+  leg *and* the gate command below now ask `Census.test_files`. They did not agree
+  until 2026-10-03: the command kept its own `Dir["test/**/*_test.rb"]` glob and ran
+  547, so a session could run the gate by hand, see green, and never touch the
+  example apps' suites at all. One spelling of "the suite" now, in one home.
 - **Check Grammar**: `1,289 sentences checked, 96 words defined, 0 problems`.
 - **Check Shape**: 62 canonical words, 0 problems.
 - **Check Styles**: 27 emittable classes, 59 rendering, 113 rules, 0 problems.
@@ -252,7 +252,7 @@ The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is agent-managed.
 You must execute every step of this loop per round, not at the end of the session:
 1. **Implement & Verify**: Ensure suite is 100% green. The gate has **twelve legs**
    (the same ten `/status` runs live):
-   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby check_spiff.rb && ruby check_spiff_scope.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb && ruby -Ilib:test -e 'Dir["test/**/*_test.rb"].each { |f| require "./#{f}" }'`
+   `ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb && ruby check_spiff.rb && ruby check_spiff_scope.rb && ruby bin/check_promises.rb && ruby bin/check_conventions.rb && ruby bin/check_card.rb && ruby bin/verify_pages.rb && ruby bin/census.rb && ruby -Ilib:test -e 'require "slim_pickins/census"; SlimPickins::Census.test_files.each { |f| require File.expand_path(f) }'`
 2. **Commit**: Leave the tree clean. Commit with an intention-revealing message. (Push only when dan says so).
 3. **Update `PROJECT.md`**: Update `status`, `last_touched`, and advance `next_step`.
 4. **Validate `PROJECT.md` YAML**:
