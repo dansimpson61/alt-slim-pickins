@@ -1207,13 +1207,26 @@ many there are.
 - **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page)
 
 ```
-tab "Raw HTML"
-tab "Visual", active: true
+tabs
+  tab "Raw HTML"
+  tab "Visual", active: true
 ```
 
-The content is the tab's label; `active:` says which panel opens first. A
-`tab` outside a `tabs` renders its panel and no nav, which is the honest
-degradation rather than an error.
+The content is the tab's label; `active:` says which panel opens first.
+
+A `tab` **belongs inside `tabs`** and is refused outside it. Until 2026-10-03
+this entry said the opposite — that a stray `tab` "renders its panel and no
+nav, which is the honest degradation rather than an error" — and the
+measurement only half agrees. A stray `tab` holding children does degrade that
+way. A stray `tab` holding only content renders
+`<div class="tab-panel" role="tabpanel"></div>` — empty — because the content
+*is* the label and the label is drawn by the `tabs` that
+is not there. Everything the writer said is discarded, silently, and the
+writer cannot tell from the sentence which of the two cases they are in. So
+`tab` joined the nine other structural children that are refused by name —
+`column`, `total`, `band`, `line`, `level`, `when`, `otherwise`, `option`,
+`item` — and the degradation argument is recorded here as the thing it
+replaced.
 
 
 ### `scroll`

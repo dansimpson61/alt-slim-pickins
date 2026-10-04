@@ -427,8 +427,15 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :variant, children: :any, shape: :encloses
     end
 
+    # `parents:` since 2026-10-03, which makes `tab` the tenth structural child
+    # held to its gatherer rather than the one exception. A stray `tab` used to
+    # render an empty `<div class="tab-panel">` and throw its content away: the
+    # content maps to `:label`, and the label is rendered by the enclosing
+    # `tabs`, which was not there to render it. Silent loss, where a stray
+    # `item` has always been refused by name.
     class Tab < Encloses
-      contract content: true, children: :any, modifiers: [:active], shape: :encloses, lazy: [], infers: [:label]
+      contract content: true, children: :any, modifiers: [:active], parents: [:tabs],
+               shape: :encloses, lazy: [], infers: [:label]
       maps content: :label
     end
 

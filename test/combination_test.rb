@@ -145,10 +145,16 @@ class CombinationTest < Minitest::Test
     assert_equal 2, html.scan('selected="selected"').size
   end
 
+  # `tab` joined this list on 2026-10-03. It was the one structural child with
+  # no `parents:`, and a stray one did not merely render oddly — it rendered an
+  # empty `<div class="tab-panel">` and dropped its content, because `tab` maps
+  # content to `:label` and the label is rendered by the `tabs` that was not
+  # there. Silent loss is worse than a wall, so now it is a wall.
   def test_registering_words_refuse_to_stand_alone
     { 'column name' => '`column` belongs inside `table`',
       'band qty' => '`band` belongs inside `chart`',
       'level .qty, "x"' => '`level` belongs inside `chart`',
+      'tab "Stray"' => '`tab` belongs inside `tabs`',
       'when .yes' => '`when` belongs inside `choose`' }.each do |source, message|
       error = assert_raises(SlimPickins::Error) { draw("#{source}\n", qty: 1) }
       assert_match(/\A#{Regexp.escape(message)}\n/, error.message)
