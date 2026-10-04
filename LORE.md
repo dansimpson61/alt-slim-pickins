@@ -1348,3 +1348,13 @@ The writing-dsls audit over all 62 words. Three lessons; the first is about gate
 **'Declared and unused' and 'the mechanism is dead' are different claims; the second needs an instrument.** The obvious inference was that `Chain#container_value` was dead code. Wrong: a prepended counter over all 34 pages showed it works (proved with a two-partial pair) and fires nowhere. Dead-by-design wants a deletion; working-but-unexercised wants a test and honest prose.
 
 The reassuring half: **the grammar is regular.** 31 modifier spellings, every shared one holding one meaning — `from:` means the collection to read instead of the inferred one on both `each` and `line`, the likeliest to have drifted and had not.
+
+## 2026-10-03 — Claude (eighth entry: how much of a prea
+
+Two measurements from answering dan's two questions.
+
+**`input`'s name slot doubles as the attribute to fetch, so a partial's modifier spelling can be load-bearing.** `Input#evaluate` does `shown = value.nil? ? subject.fetch(name) : value`. So an `input` given no value goes looking for an attribute named after its *name slot*. `search`'s `q:` modifier worked only because its spelling matched `input q`: the lookup landed on the search partial's own declared-but-unset `q` parameter instead of walking up to the page and raising. Rename the modifier to `query:` and the workbench's `search placeholder: "Search the library"` — which passes no query — dies with `this page has no q`. Four pages broke; reverted. The wire name cannot move either: `params[:q]` is read by word_graph, dashboard and lore_reader. **A modifier whose name must equal another word's name slot is a coupling nothing declares.**
+
+**Most of an `expects` preamble is already in the body.** Measured over all 23 vocabulary partials: `children: any` agrees with whether the body says `children` 23 times out of 23; `subject: shift` and `expects subject` co-occur 2 of 2, so one implies the other; and `takes:` matches the body's `.foo` reads in 20 of 23 (the three exceptions being `takes: empty`, which is a flag not a modifier, `section`, whose content arrives as `.label`, and `paragraph`). What is *not* inferable is the judgement half — `shape:`, `parents:`, `speech:`, `infers:`. Note also that the preamble-free form already exists: a `def` partial has **no contract at all** (`CONTRACTS[:word]` is nil), so it is ungoverned by the gate. That is the real price of dropping the preamble, not convenience.
+
+And a small alias: in a `name: :variant` partial both `.name` and `.variant` read the same slot, interchangeably. Seven of eight say `.name`; `paragraph` alone says `.variant`.
