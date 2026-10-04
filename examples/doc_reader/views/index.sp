@@ -7,7 +7,7 @@ def catalog, documents, title
     empty "No markdown documents in ~/dev/alt-slim-pickins."
     list
       each document
-        link .name, .path
+        link .name, .href
 
 def reading_pane, document
   box document, .name

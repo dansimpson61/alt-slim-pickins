@@ -1,0 +1,7 @@
+nav
+  link home, "Doc Reader", to: "/"
+  link shelf
+  link audiences
+  link search
+contents
+footer "Every document this repository is explained in, read as a reader meets it."

@@ -1,12 +1,12 @@
 {
   "docs": [
-    { "name": "README.md", "path": "/docs/README.md", "content": "# Welcome to Slim-Pickins\nA joyful view templating language." },
-    { "name": "SPIFF.md", "path": "/docs/SPIFF.md", "content": "# Spiff\nSlim-pickins' design idiom, written for human beings." },
-    { "name": "ODE.md", "path": "/docs/ODE.md", "content": "# Ode to Joy\nHonest, clear, kind." }
+    { "name": "README.md", "href": "/docs/README.md", "content": "# Welcome to Slim-Pickins\nA joyful view templating language." },
+    { "name": "SPIFF.md", "href": "/docs/SPIFF.md", "content": "# Spiff\nSlim-pickins' design idiom, written for human beings." },
+    { "name": "ODE.md", "href": "/docs/ODE.md", "content": "# Ode to Joy\nHonest, clear, kind." }
   ],
   "selected_doc": {
     "name": "SPIFF.md",
-    "path": "/docs/SPIFF.md",
+    "href": "/docs/SPIFF.md",
     "content": "# Spiff\nSlim-pickins' design idiom, written for human beings.\n\nSubstance declares *what*; Spiff declares *how* it sits."
   }
 }
