@@ -1336,3 +1336,15 @@ recreated the entries as bare stubs, losing their prose. Sixth round running tha
 measuring a premise changed the work, and the second in a row where acting on it would
 have destroyed something unrecoverable. **The check is cheap and specific: before
 moving a section, ask what else is inside it, with the same reader the gate uses.**
+
+## 2026-10-03 — Claude (seventh entry: the regularity au
+
+The writing-dsls audit over all 62 words. Three lessons; the first is about gates, not grammar.
+
+**A ledger that names its readers inherits the weakness it was built to cure.** The promise ledger exists because a name search finds the wrong reader — its header says so. But the gate held each recorded reader to one condition: `File.file?`. So `action.sp` could be named reader of anything. It was named reader of `path:` and `return_to:`, which it declared and never said: accepted and discarded, byte-identically, from the ledger's first day (2026-09-17) until now. The catch is four lines — for a reader written in the language, drop the `expects` preamble and require the key in the body. It found exactly the two entries found by hand; every other `.sp` reader passed. The hole was narrow, which is why nobody looked.
+
+**Agreement among documents is not evidence.** Three places said `action` read them: the ledger, `promises.rb`'s header (offering it as the headline proof of why the ledger must be data), and `test_action_inherits_path_and_return_to_from_enclosing_actions_container` — whose every assertion was satisfied by `actions.sp` alone, which says both hidden fields itself. The test passed unchanged after the declarations were deleted. Only its name ever claimed the mechanism.
+
+**'Declared and unused' and 'the mechanism is dead' are different claims; the second needs an instrument.** The obvious inference was that `Chain#container_value` was dead code. Wrong: a prepended counter over all 34 pages showed it works (proved with a two-partial pair) and fires nowhere. Dead-by-design wants a deletion; working-but-unexercised wants a test and honest prose.
+
+The reassuring half: **the grammar is regular.** 31 modifier spellings, every shared one holding one meaning — `from:` means the collection to read instead of the inferred one on both `each` and `line`, the likeliest to have drifted and had not.

@@ -14,7 +14,7 @@ Resume work on `~/dev/alt-slim-pickins`.
    card is updated every round and this file has lagged it by a week before. It is
    also short now, and deliberately — `bin/check_card.rb` holds it to a budget.
 4. `HANDOFF.md` — this document, specifically the active next step below
-5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0n.md` — one per round, each the record
+5. `DAYTRIP-0.4.0a.md` through `DAYTRIP-0.4.0o.md` — one per round, each the record
    of its own. **Read `0.4.0h` first if you are picking up a thread from the audit's
    list**: it carries the prioritized list, and its *What landed* says what was done
    at the time. For the connected account of every round in order, read
@@ -61,9 +61,12 @@ this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
 - **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 7 apps, 28 app words, 34 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
-- **Full Suite**: 600 runs, 0 failures, 0 errors, 0 skips in one process — and
-  that now includes the example apps' own suites, because the Suite leg asks
-  `Census.test_files` instead of keeping its own glob.
+- **Full Suite**: 602 runs, 6,527 assertions, 0 failures, 0 errors, 0 skips in one
+  process — and that includes the example apps' own suites, because the Suite leg
+  asks `Census.test_files` instead of keeping its own glob. **The gate command in
+  the RIF loop below does keep its own glob**, so running it by hand gives 547, not
+  602; the two spellings of "the suite" are a finding of 0.4.0o and aligning them
+  changes the documented command, which is dan's call.
 - **Check Grammar**: `1,289 sentences checked, 96 words defined, 0 problems`.
 - **Check Shape**: 62 canonical words, 0 problems.
 - **Check Styles**: 27 emittable classes, 59 rendering, 113 rules, 0 problems.
@@ -98,7 +101,42 @@ was not. Tier 7 was the sharpest case — both this file and the audit said the 
 duplicated the daytrips, and sampling twenty-four phrases found none of them
 anywhere else. Acting on the premise would have deleted the only copy.
 
-**Three proposals awaiting dan's word**, each named rather than performed:
+0.4.0o made it six, in a new shape worth knowing: the defect was real — `action`
+declared two modifiers and discarded them — but the obvious inference, that the
+forwarding mechanism behind them was dead code, was false. Instrumenting
+`Chain#container_value` and rendering all 34 pages proved the mechanism **works**
+and **fires nowhere**, which is a different finding and a different fix. So
+measure the mechanism, not only its usage.
+
+**Five more from the regularity audit (`DAYTRIP-0.4.0o.md`)**, each measured, each
+a language decision and so none performed. The audit itself found the grammar
+regular: 31 modifier spellings over 62 words, and every shared one holds a single
+meaning, `from:` on `each` and `line` included. These five are what it did find:
+
+1. **`link` has a second sentence shape and the grammar denies it.** `Link#evaluate`
+   swaps the positional arguments when the first is not a Symbol, so
+   `link "View", "/products"` works alongside `link show, "View"`. `DESIGN.md` says
+   *the order never varies*; the shape is documented nowhere and spoken nowhere —
+   all 55 string-leading `link` sentences say `to:`. Deleting the branch removes a
+   sentence nothing speaks, which is still a change to the language.
+2. **`tab` is the one structural child with no `parents:`.** Ten words declare the
+   parent they belong inside; a stray `item` is refused by name, a stray `tab`
+   renders `<div class="tab-panel" role="tabpanel"></div>` and **silently drops its
+   content**, because content maps to `:label` and `tabs` is not there to render it.
+   `parents: [:tabs]` is the fix. It is a defect, not a preference — listed here
+   only because it narrows what the language accepts.
+3. **The `field`/`input`/`textarea` modifier sets are arbitrary** — `required:` on
+   field and textarea not input, `placeholder:` on input not field, `readonly:` only
+   textarea, `step:` only field. No rule predicts the table; four of six reasonable
+   guesses are refused.
+4. **`variant` has two spellings.** Fourteen words take it as a bare name; `card`
+   must use `variant:` because its name slot is the subject, but **`action`'s name
+   slot is empty**, so `action primary, "Commit"` was available. `item.sp` shows a
+   partial can take a variant as a name.
+5. **`search`'s `q:` holds a value under a parameter's name** — the only
+   abbreviation among the 31 modifiers.
+
+**Three older proposals awaiting dan's word**, each named rather than performed:
 
 - **The word registry is global and last-compile-wins**, and `DAYTRIP-0.4.0n.md`
   measured it properly: a `Library` does not scope its words, and merely

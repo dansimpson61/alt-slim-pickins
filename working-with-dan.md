@@ -59,6 +59,16 @@ working manual that should be better after every session than it was before.
   from a bad cut (`LORE.md`, "whether the dashboard uses icons and markdown").
   Treat a question as an instruction to go measure. The worst possible answer
   is a reassuring one.
+- **A skill invoked with no argument is a lens, not a brief.** 2026-10-03: he
+  ran `/writing-dsls` against a project whose grammar has been written down
+  since v0.3 and whose every sentence is already gated against it. Read as a
+  commission it would have meant redesigning a settled language; read as a lens
+  it meant *run this method's audit and tell me what it finds*, which is what
+  the skill itself prescribes for an existing DSL. The audit found the grammar
+  regular and one gate checking the wrong thing (`DAYTRIP-0.4.0o.md`). The
+  general form: when he hands you a method rather than a task, the deliverable
+  is the method's findings — and the fixes you perform are the ones where the
+  code lies, with everything that changes the language named for him instead.
 - **He is the decision-maker for judgement; you are not.** Renames, cuts,
   promotions, the exam's page, the push: he decides, you bring evidence plus a
   recommendation (`ROADMAP-0.2.md`, *How this stays accountable*;
