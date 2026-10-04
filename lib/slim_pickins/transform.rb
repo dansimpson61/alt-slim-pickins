@@ -22,6 +22,14 @@ module SlimPickins
   # a leading dot becomes the subject.
   class Transform
     def contract_for(word) = CONTRACTS[word.to_sym]
+
+    # A sentence lands when its word moves "it" and the sentence names where
+    # to. Gatherers are left out: `table` and `chart` declare a shift, but
+    # their children run against each row and nothing beneath them sees the
+    # collection as "it", so there is nowhere for their content to land.
+    def lands?(contract, ranks)
+      contract && contract.subject == :shift && contract.shape != :gathers && ranks.include?(0)
+    end
     WORD    = /\A[a-z][a-z0-9_]*\z/
     NAME    = /\A[a-z][a-z0-9_]*\z/
     DOTTED  = /\A\.([a-z_][a-z0-9_-]*\??)\z/
@@ -135,11 +143,16 @@ module SlimPickins
       raw = split_args(rest)
       compiled = raw.map { |a| argument(a, sentence) }
       ranks = raw.map { |a| rank(a) }
-      if contract_for(word)&.lazy&.include?(:content)
+      contract = contract_for(word)
+      if contract&.lazy&.include?(:content) || lands?(contract, ranks)
         # A word whose shape declares lazy content receives it unevaluated,
         # so its guard can fire before the argument runs. `when` was the one
         # hardcoded case; now laziness is a declared capability any word —
         # built-in, vocabulary partial, or an app's own — may claim.
+        #
+        # And a sentence that names where it lands reads its content there:
+        # `page document, .title` is the document's title, because a dot
+        # means "it" and this sentence is about the document (2026-10-04).
         raw.each_with_index do |arg, i|
           compiled[i] = "-> { #{compiled[i]} }" if ranks[i] == 1
         end

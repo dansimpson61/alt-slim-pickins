@@ -1,7 +1,7 @@
 choose
   when .first_item
     text .queue_intro
-    card first_item, first_item.path
+    card first_item, .path
       badge .status_variant, .status
       text .purpose
       choose

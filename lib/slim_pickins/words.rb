@@ -10,7 +10,7 @@ module SlimPickins
       def evaluate
         favicon = @kwargs.key?(:favicon) ? @kwargs[:favicon] : nil
         name, title = arguments(@args)
-        heading = title || Inference.label(name)
+        heading = nil
 
         # The stylesheets a page gets by convention go in first, so anything
         # the page or its tin says is said later and lands later — a default
@@ -24,7 +24,10 @@ module SlimPickins
         # stylesheet and its scripts. Reading `head_nodes` before it ran meant
         # a tin's assets never reached the document, which is the one thing a
         # tin exists to hold.
-        value, empty, body = about(name) { wrapped_in_tin(&@block) }
+        value, empty, body = about(name) do
+          heading = landed(title) || Inference.label(name)
+          wrapped_in_tin(&@block)
+        end
         emit_node(Node[:page, { heading: heading, head: head_nodes,
                             favicon: favicon },
                    prune(body, empty)])
@@ -175,10 +178,8 @@ unless items.nil? || Inference.collection?(items)
 end
 
 collected = (items || []).to_a.map do |item|
-  bind(name, item)
-  chain.with(item, described_as: "this #{name}") { capture(&@block) }
+  naming(name, item) { chain.with(item, described_as: "this #{name}") { capture(&@block) } }
 end
-unbind(name)
 emit_node(Node[:each, { name: name }, collected])
 
       end

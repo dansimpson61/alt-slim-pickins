@@ -84,7 +84,25 @@ page account
 
 `metric balance` asks the page for `balance`; `.market_value` asks the holding.
 A typo raises — naming the attribute and the subject that lacked it — rather
-than rendering blank. Nothing ever resolves to nothing.
+than rendering blank. Nothing ever resolves to nothing. A dot never borrows
+from further out: it means *it*.
+
+A sentence that names where it lands reads its own dots there, so
+`page pattern, .title` is the pattern's title.
+
+**Reaching further out is by name.** Every word that changes the subject also
+names it, for everything beneath — `page account` names `account`, and
+`each holding` names `holding` — and the nearest name wins:
+
+```
+page account
+  each holding
+    text .symbol
+    note account.name
+```
+
+Inside the loop, `.symbol` is the holding's and `account.name` reaches the
+page's account by the name `page account` gave it.
 
 A bare name is never evaluated. The words that take a subject — `page`,
 `section`, `form`, `table`, `each` — resolve the name against this same chain,
@@ -362,14 +380,6 @@ level 1000000.0, "A million"    # refused — not a sentence
 level .standard_deduction, "Standard deduction"
 ```
 
-**A word's arguments are evaluated before the word runs.** `.foo` asks the
-*enclosing* subject, not the one the word is about to establish. So
-`page pattern, .title` reads perfectly and cannot work; `pattern.title` is the
-spelling:
-
-```
-page pattern, pattern.title
-```
 
 **Items are text, not objects.** A word cannot be handed a row from the
 database; a collection finds its own data from its name, and reaching out by

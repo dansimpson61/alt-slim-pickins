@@ -102,6 +102,48 @@ class Phase0Test < Minitest::Test
     end
   end
 
+  # --- reaching out by name (2026-10-04, the scoping rules) ------------
+  #
+  # A dot means "it". Reaching further out is by name: every word that
+  # changes the subject names it for everything beneath, and the nearest
+  # name wins. Until this date only `each` named what it shifted to, so the
+  # page's subject was unreachable after the first `section`.
+
+  Portfolio = Struct.new(:owner, :account, :accounts, keyword_init: true)
+
+  def portfolio
+    Portfolio.new(owner: 'dan',
+                  account: Account.new(name: 'Roth', holdings: [Holding.new(symbol: 'VTI')]),
+                  accounts: [Account.new(name: 'IRA', holdings: []), Account.new(name: '401k', holdings: [])])
+  end
+
+  def test_every_shift_names_its_subject_for_everything_beneath
+    html = render("page portfolio\n  section account\n    each holding\n      text portfolio.owner\n" \
+                  "      text account.name\n", portfolio: portfolio)
+    assert_includes html, '<p class="text">dan</p>'
+    assert_includes html, '<p class="text">Roth</p>'
+  end
+
+  def test_the_nearest_name_wins_and_the_one_it_shadowed_returns
+    html = render("page portfolio\n  section account\n    each account, from: portfolio.accounts\n" \
+                  "      note account.name\n    text account.name\n", portfolio: portfolio)
+    assert_equal %w[IRA 401k], html.scan(%r{<p class="note">([^<]*)</p>}).flatten
+    assert_includes html, '<p class="text">Roth</p>'
+  end
+
+  def test_a_dot_never_borrows_from_further_out
+    error = assert_raises(SlimPickins::UnknownAttribute) do
+      render("page portfolio\n  section account\n    text .owner\n", portfolio: portfolio)
+    end
+    assert_match(/\Athis account has no owner/, error.message)
+  end
+
+  def test_a_sentence_that_names_where_it_lands_reads_its_dots_there
+    html = render("page portfolio, .owner\n  section account, .name\n    text \"x\"\n", portfolio: portfolio)
+    assert_includes html, '<h1>dan</h1>'
+    assert_includes html, '<h2 class="section-title">Roth</h2>'
+  end
+
   # --- inference: the whole bet ---------------------------------------
 
   def test_one_word_derives_label_name_value_and_type

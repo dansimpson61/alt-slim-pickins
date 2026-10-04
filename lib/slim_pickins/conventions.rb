@@ -84,7 +84,7 @@ module SlimPickins
                      grade: :structural),
       Convention.new(name: :title, when_silent: '`page portfolio`',
                      decides: 'the `<title>` and the top heading, humanised from the name',
-                     file: 'lib/slim_pickins/words.rb', marker: 'heading = title || Inference.label(name)',
+                     file: 'lib/slim_pickins/words.rb', marker: 'heading = landed(title) || Inference.label(name)',
                      inference: nil, override: '`page portfolio, "Your retirement"`',
                      principle: :name_as_text,
                      grade: :structural),

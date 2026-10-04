@@ -59,6 +59,7 @@ module SlimPickins
       push = !contract.nil? || @kwargs.any? || !content.nil? || (!shifts && !name.nil?)
 
       body_block = lambda do
+        landing(content, parameters, contract)
         if contract&.gathers
           with_open
           collected = @collected
@@ -112,6 +113,17 @@ module SlimPickins
 
     private
 
+    # A sentence that names where it lands reads its content there
+    # (`section account, .name` is the account's name), so the content is
+    # read now — inside the shift — and becomes the label it was said as.
+    def landing(content, parameters, contract)
+      return unless content.is_a?(Proc)
+
+      said = landed(content)
+      parameters[:content] = said if parameters.key?(:content)
+      parameters[:label] = said if contract&.label && !said.nil?
+    end
+
     def parameters_for(contract, name, content, kwargs, shift_target = nil)
       return { content: content, name: name }.merge(kwargs) unless contract
 
@@ -144,7 +156,10 @@ module SlimPickins
                           @builder.send(:card_id)
                         end
                       end
-      declared[:label] = label_for(name, content) if contract.label
+      # Content that waits to land is not a label yet: the fallback is asked
+      # here, of the parent, as it always was, and `#landing` overrides it
+      # with what the page said once that has been read.
+      declared[:label] = label_for(name, content.is_a?(Proc) ? nil : content) if contract.label
       if contract.modifiers.include?(:variant) || contract.name == :variant
         declared[:variant] = kwargs[:variant] || (name && !subject.has?(name) ? name : nil)
       end

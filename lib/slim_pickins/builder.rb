@@ -324,7 +324,11 @@ module SlimPickins
       was = @empty_active
       begin
         @empty_active = empty
-        [value, empty, @chain.with(value, described_as: description, &block)]
+        # Every word that changes what "it" is also names it, for everything
+        # beneath — `page portfolio` names `portfolio` as `each holding`
+        # names `holding` (2026-10-04, the scoping rules).
+        named = name if name.is_a?(Symbol) || name.is_a?(String)
+        [value, empty, naming(named, value) { @chain.with(value, described_as: description, &block) }]
       ensure
         @empty_active = was
       end
@@ -358,8 +362,22 @@ module SlimPickins
       @library ? @library.stylesheets_for(view_name, path: @path, url: @library.public_url) : []
     end
 
-    def bind(name, value) = @bindings[name] = value
-    def unbind(name) = @bindings.delete(name)
+    # A name, for everything beneath: the nearest naming wins, and the one it
+    # shadowed comes back when the block ends. `bind`/`unbind` were a flat
+    # hash, so an inner `each account` under an outer one deleted the outer
+    # binding on its way out instead of restoring it.
+    def naming(name, value)
+      return yield if name.nil?
+
+      name = name.to_sym
+      had, was = @bindings.key?(name), @bindings[name]
+      @bindings[name] = value
+      yield
+    ensure
+      if name
+        had ? @bindings[name] = was : @bindings.delete(name)
+      end
+    end
 
     # The tin's splice point — the contents word takes what page stowed.
     def stow_contents(nodes) = @contents = nodes

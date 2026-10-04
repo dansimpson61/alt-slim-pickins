@@ -103,6 +103,9 @@ end
 
     def arguments(args) = @builder.arguments(args)
 
+    # Content that waited to be read where its sentence landed — read now.
+    def landed(content) = content.is_a?(Proc) ? content.call : content
+
     private
 
     def subject = @builder.subject
@@ -125,8 +128,7 @@ end
     # The stylesheets this page gets without saying so, in precedence order.
     def inferred_stylesheets = @builder.inferred_stylesheets
     def collection_for(name) = @builder.collection_for(name)
-    def bind(name, value) = @builder.bind(name, value)
-    def unbind(name) = @builder.unbind(name)
+    def naming(...) = @builder.naming(...)
     def spliced = @builder.spliced
     def contents_stowed? = @builder.contents_stowed?
     def take_contents = @builder.take_contents
