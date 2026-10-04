@@ -235,6 +235,10 @@ abstractions that make the language holdable *was* the pedagogy work.
   being healed. That is improvement, not a problem.
 - **doc_reader stays, as an exemplar, not just an example.** Its pages should show
   the language at its best, so it is held to a higher bar than the demo apps.
+  *Revised the same day:* doc_reader is **an example**, like the others. It began
+  in the studio as a proof of concept, with `data.json` as filler and no Ruby app
+  behind it. Raising the bar is for every example app at once, in a session of
+  its own, not for one.
 
 **Next, in order:**
 
@@ -243,13 +247,14 @@ abstractions that make the language holdable *was* the pedagogy work.
    is served, and its two partials through the pages that speak them. The
    playground's census holds all seven, through a provider that names each
    document and shelf field by field. The item said four pages; there were five.
-   Two defects surfaced for the exemplar bar and are fixed: `Document#id` kept
-   spaces, and a heading's markdown rode into `title`; headings now render
-   through `Markdown.spans` and are read as text. Still open: dan ruled the
-   playground should hand doc_reader its **real objects**, so its labels and
-   formats show. The census could, but the live render posts the editor's JSON
-   text to `/render.json` and nothing tells it which page is loaded, so a
-   census-only fix would bring back the verdict nobody sees (W1, 2026-09-17).
+   Two defects surfaced and are fixed: `Document#id` kept spaces, and a
+   heading's markdown rode into `title`; headings now render through
+   `Markdown.spans` and are read as text. The playground shows doc_reader as it
+   shows every example: plain JSON, so the app's own labels and formats do not
+   show there. Giving the playground real objects was considered and dropped
+   when doc_reader became an example; it would need a channel the live render
+   does not have (`/render.json` receives only JSON text). If it returns, it
+   returns for every example app.
 2. **The namespace.** A binding named like a word loses to the word, silently,
    because words are Ruby methods. Words should be the outermost scope (built-ins,
    then the app's words, then the page's `def`s), with the nearest winning. This
@@ -259,6 +264,8 @@ abstractions that make the language holdable *was* the pedagogy work.
 
 **Still open, not yet scheduled:**
 
+- **Elevate every example app to exemplary slim-pickins** (dan, 2026-10-04), in a
+  session of its own. doc_reader is one of eight, not the model for the others.
 - the contract decides what a bare name means, not `subject.has?` (about 20 sites)
 - `actions` nests a form inside a form, which is broken on `main` in
   milestone_planner

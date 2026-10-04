@@ -41,7 +41,7 @@ way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
 milestone_planner = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
 planner = MilestonePlanner::Planner.new
 m1_sample = planner.find('m1')
-# The exemplar. Its pages are proved against the locals its routes serve, asked
+# doc_reader. Its pages are proved against the locals its routes serve, asked
 # of the app itself, so the gate and the browser cannot disagree about them.
 doc_reader = SlimPickins::Library.from(File.expand_path('../examples/doc_reader/views', __dir__))
 word_graph = SlimPickins::Library.from(File.expand_path('../examples/word_graph/views', __dir__))

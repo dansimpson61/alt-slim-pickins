@@ -33,13 +33,12 @@ next_step: >-
   doc_reader rebuilt as the app the principles are played against; the scoping
   rules built (dots mean "it"; every shift names its subject; a sentence that
   names where it lands reads its dots there), with the corpus byte-identical.
-  doc_reader is registered as an exemplar, and the gate is green again (all
+  doc_reader is registered as an example, and the gate is green again (all
   twelve legs; 606 runs, 0 failures). **Next, in order:** (1) The namespace: a
   binding named like a word loses to the word, silently; words should be the
   outermost scope, with the nearest winning. (2) Rulings dan still owes: the
-  grouping, three mis-grades, the format overlap. dan ruled the playground
-  should hand doc_reader its real objects; the live render posts JSON text, so
-  that needs a channel it does not have, and the shape of it is his to choose.
+  grouping, three mis-grades, the format overlap. Later, in a session of its
+  own: elevate all eight example apps to exemplary slim-pickins.
   The field family has not started. HANDOFF carries the detail.
 kind: project
 run: ruby examples/roth/app.rb
