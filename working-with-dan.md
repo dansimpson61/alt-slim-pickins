@@ -59,6 +59,24 @@ working manual that should be better after every session than it was before.
   from a bad cut (`LORE.md`, "whether the dashboard uses icons and markdown").
   Treat a question as an instruction to go measure. The worst possible answer
   is a reassuring one.
+- **When he rejects work, get the principle, not the list.** 2026-10-05: he rejected
+  `DAYTRIP-0.4.0p.md` in one sentence — it "was requiring the author to take care of
+  the compiler rather than the other way around." That single test did more design
+  work than any enumeration of its faults would have: it decided D1 through D8 of the
+  replacement, and it is the reason `expects` goes. Ask what the principle is and then
+  apply it everywhere, rather than fixing the objections one at a time.
+- **He out-designs the options he is offered. Give him the forks, not a
+  recommendation to rubber-stamp.** 2026-10-05: offered rename-vs-library-lookup, he
+  proposed a third thing — a namespace per file, families nesting lexically — that was
+  better than both and that neither agent had reached. His own account of why:
+  "We returned to first principles and asked, 'What would Matz do?', and that paid
+  dividends." When a design question is open, the useful contribution is the measured
+  constraints and the honest forks; he supplies the idea.
+- **"Present this simply" is a measurement, and it means the last answer failed.**
+  2026-10-05, while ill, he asked three times for simplicity and then said plainly "I
+  don't understand where that leaves us." The dense, well-organised answer was the
+  problem. What worked: one sentence of what the thing is, then the two or three
+  choices, then a recommendation. Lead with where it leaves him.
 - **A skill invoked with no argument is a lens, not a brief.** 2026-10-03: he
   ran `/writing-dsls` against a project whose grammar has been written down
   since v0.3 and whose every sentence is already gated against it. Read as a

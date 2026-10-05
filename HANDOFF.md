@@ -54,7 +54,7 @@ What stays here is what a fresh session needs and cannot get elsewhere: the read
 list above, the vitals below, the active next step, the protocols and the standing
 principles.
 
-### Current Vitals (measured 2026-10-04)
+### Current Vitals (measured 2026-10-05)
 
 Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
@@ -76,12 +76,78 @@ measure are quoted as the gate output they are.
 - **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
 - **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): a digest over every page the gate proves. No number is written down here on purpose — `examples/lore_reader` renders a live count of `LORE.md`'s entries, so the digest moves whenever lore is left. Compare snapshots within a session, which is what `bin/byte_diff.rb`'s own header says.
 - **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.
+- **A trap worth knowing before you leave a note on disk**: `check_vitals` reads
+  prose claims from every non-exempt document, and an untracked file at the repo
+  root is not exempt. A scratch document stating a count the census disagrees with
+  turns the suite red — it did, for a day, on 2026-10-04. Quote a forward-looking
+  number (`` `37 conventions` ``) and the gate masks it as exhibited rather than
+  asserted; `DAYTRIP-*.md` is exempt by glob, so a round's record never has this
+  problem.
 
 ---
 
 ---
 
-### The active next step — DOCS AND PEDAGOGY, dan's top priority
+### The active next step — IMPLEMENT `DAYTRIP-0.4.0q.md` (families)
+
+**By dan's instruction of 2026-10-05.** `DAYTRIP-0.4.0p.md` was **rejected** — dan's
+reason, and it is the test every decision in its replacement is measured against:
+
+> it "was requiring the author to take care of the compiler rather than the other way
+> around."
+
+`DAYTRIP-0.4.0q.md` replaces it. Read that document; it is the plan, and it carries
+the rationale, the eight decisions, seven ordered steps, what it closes, what it does
+not touch, and the risks. The short of it:
+
+- **Each `.sp` file is a namespace** holding any number of `def`s; conflicts refused
+  within a file, allowed across them. **Calling a word opens its family for the words
+  nested under it** — lexically, from the written indentation, never from the runtime
+  call stack. Then the app, then the language.
+- **Each file begins `def [word], param, param`**, and a parameter's *name* declares
+  its kind (`def card, subject, content`). That is what lets the sixteen-slot
+  `expects` preamble go, and it makes a declared-but-unread modifier unrepresentable.
+- `item` moving inside `list.sp` means **containment is the rule** — which is also the
+  answer to the question dan could not hold: *why does `list` need `item`*.
+
+**Rulings already made (2026-10-05), recorded in the document:**
+
+| | |
+|---|---|
+| **D3** | `shape:` is required only where a word gathers. Four words say it; 58 say nothing. |
+| **D6** | An app **may** shadow a language word; the gate reports it. |
+| **D6a** | Therefore `super` — the shadowing word reaches the shadowed one along the chain. Ruby's own answer, no new punctuation. |
+
+**Step 0 is done**: the suite is green (606 runs, 0 failures) as of 2026-10-05. **Start
+at Step 1**, and do not skip Step 3 — it builds the chain and only *reports* what
+would resolve differently, changing no behaviour. That step either confirms or kills
+the design, and it should find exactly `editor` plus the eleven parent-bound words. If
+it finds more, stop and report rather than adjusting the chain until the list is short.
+
+**Two things in the plan are dan's and not started:** the `link` positional alias
+(0.4.0o finding 1 — removing it and making `name_and_content` refuse a dropped value
+are *one* change, see Step 5b), and parts (i) and (ii) of the variants proposal, which
+should be their own round *after* families lands.
+
+**A correction that belongs here**, because it is the eighth time a list item's
+premise has not survived measurement in this project and the first time the reviewer
+wrote the bad item: I reported `queue.sp:5` — `badge .status_variant, .status` — as a
+live defect dropping the status text. **It is not.** The app's `status_variant`
+returns a Symbol, so it binds to the name slot correctly, and `test/dashboard_test.rb`
+covers the branch with a real `first_item`. The record is corrected in
+`DAYTRIP-0.4.0q.md`. The latent hazard behind it is real but harmless today.
+
+### Queued behind it — docs and pedagogy, which was top priority on 2026-10-04
+
+> **On the ordering, so nobody has to guess whether it was a slip.** Dan made docs and
+> pedagogy the top priority on 2026-10-04, ahead of the field family and scoping. On
+> 2026-10-05 he returned to first principles, rejected 0.4.0p, and directed the
+> families plan — so families is the active work and this section is queued behind it.
+> That is his sequencing, not a drift. The two are less opposed than they look:
+> families *is* pedagogy, since `item` living in `list.sp` is what makes the
+> `list`/`item` question answerable by looking. What this section still holds and
+> families does not touch: the eleven principles, the three rulings on the conventions
+> register above, and the field family.
 
 > **Read *The route, as it went on 2026-10-04* below before acting on this
 > section.** The work moved on the same day, by dan's direction: the
@@ -277,6 +343,69 @@ abstractions that make the language holdable *was* the pedagogy work.
 - the interpolation splitter refuses `"in #{x}"`: DAYTRIP-0.4.0p phase 2
 - an empty page subject prunes unrelated sections
 - headings skip levels
+
+### Three rulings dan owes on the conventions register
+
+**Written by the pedagogy session (2026-10-04) and moved here verbatim on 2026-10-05**,
+because it was sitting untracked at the repo root where a `git clean` would have taken
+it — and because its one forward-looking count (`37 conventions`) was turning the suite
+red: `check_vitals` reads prose claims from every non-exempt document, and an untracked
+file at root is not exempt. The count is now quoted, which is the form the gate masks
+as exhibited rather than asserted. Nothing else is changed.
+
+These are **not** part of `DAYTRIP-0.4.0q.md` and do not block it. They belong to the
+conventions register and so to the docs-and-pedagogy discussion.
+
+#### R1. The principle grouping
+
+On this branch, the 38 conventions are filed under 11 principles. The question is whether those 11 become the rules users are taught. As it stands:
+
+| Principle | Entries |
+|---|---|
+| A value chooses its form | **10** |
+| A collection walks itself… | 5 |
+| A name is its own text / A word owns its element | 4 each |
+| A name inflects / How deep a heading sits | 3 each |
+| Page frame / Where a word sits / A gatherer collects / Nearest wins | 2 each |
+| The theme owns the look | 1 |
+
+To decide:
+- **Accept the eleven as the user-facing rules?** They would go into PRIMER.
+- **"A value chooses its form" holds a quarter of the register.** It could split cleanly into *a value chooses its control* (input type, step, boolean field, selected option) and *a value chooses its text* (number, time, format, alignment, badge status). That would make 12 principles. R3 also changes how many entries this principle has.
+- **"What is said nearest wins" could also be the home for the scoping rule.** Then "the nearest name wins" isn't a new rule, just an existing one applied to names. Option N1(b) fits there too. With N1(a) it isn't needed.
+
+#### R2. The three mis-grades
+
+The grade says who decides, and it isn't hidden. The studio's Inspect panel shows it as the owner: "Language (Structure)" or "Language (Shape)". The grades are: **structural** (the tree decides), **shape** (the value's class decides), **domain** (the app decides) and **axiomatic** (the theme decides).
+
+| Convention | Graded | What actually decides |
+|---|---|---|
+| `option_selected` | structural | The value: the option whose value equals the field's value is the selected one |
+| `badge_status` | structural | The value: a body that reads `ok`, `warning`, … picks the variant |
+| `leaf_tag` | shape | The word: `money` is always a `<span>` and `time` a `<time>` |
+
+Here's the catch. The first two are decided by the value's *content*, not its *class*, so neither existing grade fits them exactly. The options:
+- **(a) Widen "shape" to "the value decides" and move both there (my recommendation).** It's a one-line change to the definition, and it's how users already think about it.
+- **(b) Add a fifth grade for the value's content.**
+
+`leaf_tag` should be graded structural either way, so it matches its siblings `box_tag`, `card_id` and `root_class`, which are also decided by the word.
+
+#### R3. The format overlap
+
+What the code does is one chain, but the register lists it as three conventions:
+
+1. **Which form?** `as:` on the page, then the app's `format_for`, then the value's shape. This is `format` (graded domain) in [builder.rb:207](lib/slim_pickins/builder.rb#L207). `format_family` (graded shape) is the last step of the same decision, in `Generator.format`.
+2. **How is that form written?** Grouped digits, the currency sign, the percent scale. This is `number_text`, and `time_text` does the same job for dates.
+
+The register also understates what happens: `format_family` says "number, percent or money", but its fallback formats dates as well (doc_reader found this).
+
+- **(a) Two stages (my recommendation).** `format` keeps the whole decision: which form, as `as:`, then the app, then the value's shape, dates included. `format_family` folds into it. `number_text` and `time_text` stay as the "how it's written" stage. That's `37 conventions` instead of the 38 the census measures today.
+- **(b) One entry** that owns the whole chain. That reads more simply, but it loses the difference between deciding a form and writing it.
+- **(c) Keep three, and fix the false claim.**
+
+Two notes on how these connect: R3(a) brings "a value chooses its form" down to 9 entries, which bears on R1's split, and R2's leaf_tag move takes it down to 8.
+
+**Order:** N1 first, because it decides whether "nearest wins" has to carry the scoping rule. The others are independent of each other. None of this is in HANDOFF yet. Should I record this framing there, so a later session doesn't re-measure it? It would be one commit, and I wouldn't push.
 
 ### The two discussions this one precedes
 

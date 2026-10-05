@@ -6,40 +6,35 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 38
   rendered pages. Roadmaps 0.1 to 0.3 are closed; 0.4 is running as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0o`). Twelve gate legs green, 606 runs / 6,628
+  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 606 runs / 6,628
   assertions / 0 failures, `ruby -w -c` clean. DAYTRIP-0.4.0h's prioritized list is
   landed in full. The round-by-round account lives in `history/CHRONICLE.md` and each
   round's own record in its `DAYTRIP-*.md`; this field carries the present, which is
   what a resume card is for, and `bin/check_card.rb` holds it to a budget.
-  0.4.0o ran the `writing-dsls` regularity audit over the whole vocabulary and found
-  the grammar regular — 31 modifier spellings, each shared one holding one meaning.
-  What it found instead was a promise the gate could not check: `action` declared
-  `path:` and `return_to:`, never said either, and three documents, one test name and
-  the gate all recorded a reader that did not read. Fixed, with the gate's hole
-  closed. Of the five language irregularities it named, three landed on dan's word,
-  two were escalated as larger than reported, and three questions became queued
-  daytrip discussions.
-last_touched: 2026-10-04
+  0.4.0p was **rejected** — it "was requiring the author to take care of the compiler
+  rather than the other way around" — and `DAYTRIP-0.4.0q.md` replaces it, written to
+  that test. It is the families design: each `.sp` file is a namespace of `def`s, a
+  word opens its family for what nests under it, lexically; `def card, subject,
+  content` lets the sixteen-slot `expects` preamble go, and `item` inside `list.sp`
+  makes containment the rule rather than a declaration. Decisions D3 (shape only when
+  it gathers), D6 (shadowing allowed, gate reports) and D6a (`super`) are ruled.
+  Nothing is implemented: 0.4.0q is a plan with seven ordered steps.
+last_touched: 2026-10-05
 next_step: >-
-  **DOCS AND PEDAGOGY is the top priority (dan, 2026-10-04), and it is proceeding
-  through the language itself.** dan's observation that he could not hold the
-  safeguard layer of his own DSL is the evidence; his redirection the same day,
-  "we are reasoning from the compiler to the language, rather than the other way
-  around", is the route. Finding the higher abstractions that make the language
-  holdable *is* the pedagogy work. The audience lists were drafted and dan
-  reacted to them, so **do not draft them again**: they, his six impressions and
-  the route are in HANDOFF under *The route, as it went on 2026-10-04*. On
-  branch `conventions-as-principles`, pushed: 38 conventions under 11 principles;
-  doc_reader rebuilt as the app the principles are played against; the scoping
-  rules built (dots mean "it"; every shift names its subject; a sentence that
-  names where it lands reads its dots there), with the corpus byte-identical.
-  doc_reader is registered as an example, and the gate is green again (all
-  twelve legs; 606 runs, 0 failures). **Next, in order:** (1) DAYTRIP-0.4.0p,
-  words, names and the new `.sp` format: dan has ruled N1-N3a, so ask him to
-  confirm its C1-C12, then build phase 1 (names by position). (2) Rulings dan
-  still owes: the grouping, three mis-grades, the format overlap. Later, in a session of its
-  own: elevate all eight example apps to exemplary slim-pickins.
-  The field family has not started. HANDOFF carries the detail.
+  **Implement `DAYTRIP-0.4.0q.md` — families — starting at Step 1.** Step 0 is done:
+  the suite is green (606 runs, 0 failures) after an untracked scratch document at the
+  repo root, which `check_vitals` is not exempt from, was folded into HANDOFF. 0.4.0q
+  replaces the rejected 0.4.0p and carries the rationale, eight decisions, seven
+  ordered steps, risks. **Do not skip Step 3**: it builds the lexical chain and only
+  *reports* what would resolve differently, changing no behaviour, and it should find
+  exactly `editor` plus the eleven parent-bound words — if it finds more, stop and
+  report rather than adjusting the chain until the list looks short. D3, D6 and D6a
+  are ruled; nothing else in the plan needs dan. **Still his and not started**: the
+  `link` positional alias (removing it and making `name_and_content` refuse a dropped
+  value are one change — Step 5b), and parts (i) and (ii) of the variants proposal,
+  which are their own round after families. Queued behind families: docs and pedagogy,
+  which holds the eleven principles, the three conventions rulings now in HANDOFF, and
+  the field family. `HANDOFF.md` carries the detail.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
@@ -59,7 +54,11 @@ notes: >-
   0.4.0o made it six, and in a new shape: the dead declaration was real, but the
   obvious inference — that the mechanism behind it was dead code — was wrong.
   Instrumenting it proved it works and fires nowhere, which is a different finding
-  and a different fix. Measure the mechanism, not only the usage.
+  and a different fix. Measure the mechanism, not only the usage. On 2026-10-05 it
+  happened an eighth time, and to the reviewer: a "live defect" reported in
+  `queue.sp` was an artefact of a probe passing a String where the app passes a
+  Symbol. **Probe with the data the application actually produces, not with data of
+  the right shape.**
 conventions: >-
   Views speak the slim-pickins DSL; the best JavaScript is the least
   JavaScript.
