@@ -255,21 +255,26 @@ abstractions that make the language holdable *was* the pedagogy work.
    when doc_reader became an example; it would need a channel the live render
    does not have (`/render.json` receives only JSON text). If it returns, it
    returns for every example app.
-2. **The namespace.** A binding named like a word loses to the word, silently,
-   because words are Ruby methods. Words should be the outermost scope (built-ins,
-   then the app's words, then the page's `def`s), with the nearest winning. This
-   is where the `editor` collision and the scoping discussion below meet.
+2. **Words, names and the `.sp` format: [DAYTRIP-0.4.0p.md](DAYTRIP-0.4.0p.md).**
+   dan ruled on 2026-10-04: names by position (N1); interpolation holds one
+   argument, fixed with the `"in #{x}"` bug (N2); each `.sp` file is a family
+   of words (N3); every word file begins with `def` (N3a). The document proposes
+   answers to the twelve questions those left open (C1-C12; **C1 and C2 touch
+   earlier rulings**) and a six-phase plan. **Start by asking dan to confirm or
+   overturn the C-questions**, then build phase 1. Do not re-measure what the
+   document already measured.
 3. **Rulings still owed:** the principle grouping, the three mis-grades, and the
-   `format` / `format_family` / `number_text` overlap.
+   `format` / `format_family` / `number_text` overlap, framed with their evidence
+   in `three-rulings-dan-owes.md`, which dan is holding for later.
 
 **Still open, not yet scheduled:**
 
 - **Elevate every example app to exemplary slim-pickins** (dan, 2026-10-04), in a
   session of its own. doc_reader is one of eight, not the model for the others.
-- the contract decides what a bare name means, not `subject.has?` (about 20 sites)
+- the contract decides what a bare name means, not `subject.has?` (17 sites, measured 2026-10-04): DAYTRIP-0.4.0p phase 4 closes it for every `.sp` word; Ruby words remain
 - `actions` nests a form inside a form, which is broken on `main` in
   milestone_planner
-- the interpolation splitter refuses `"in #{x}"`
+- the interpolation splitter refuses `"in #{x}"`: DAYTRIP-0.4.0p phase 2
 - an empty page subject prunes unrelated sections
 - headings skip levels
 

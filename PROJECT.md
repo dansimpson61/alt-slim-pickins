@@ -34,10 +34,10 @@ next_step: >-
   rules built (dots mean "it"; every shift names its subject; a sentence that
   names where it lands reads its dots there), with the corpus byte-identical.
   doc_reader is registered as an example, and the gate is green again (all
-  twelve legs; 606 runs, 0 failures). **Next, in order:** (1) The namespace: a
-  binding named like a word loses to the word, silently; words should be the
-  outermost scope, with the nearest winning. (2) Rulings dan still owes: the
-  grouping, three mis-grades, the format overlap. Later, in a session of its
+  twelve legs; 606 runs, 0 failures). **Next, in order:** (1) DAYTRIP-0.4.0p,
+  words, names and the new `.sp` format: dan has ruled N1-N3a, so ask him to
+  confirm its C1-C12, then build phase 1 (names by position). (2) Rulings dan
+  still owes: the grouping, three mis-grades, the format overlap. Later, in a session of its
   own: elevate all eight example apps to exemplary slim-pickins.
   The field family has not started. HANDOFF carries the detail.
 kind: project
