@@ -9,27 +9,28 @@ status: >-
   (`DAYTRIP-0.4.0a` through `0.4.0q`) and, since 2026-10-10, has a question in
   `ROADMAP-0.4.md`: do the conventions keep their promises, so that an author only has
   to name things? It closes when `CONVENTIONS.md`'s weak-spots table is empty and
-  every documented override is proved by a test. Twelve gate legs green, 613 runs /
-  6,676 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
+  every documented override is proved by a test. Twelve gate legs green, 615 runs /
+  6,686 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
   in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
   carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
   rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
   question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Work `ROADMAP-0.4.md`'s definition of success, starting with criterion 1**: count
-  which of the fourteen documented overrides no test exercises, and add a test that
-  fails if the convention wins for each one that has none. Done 2026-10-10: the
-  `BigDecimal` row (`Generator.plain` is the one home for writing a value as text),
-  and the dead `Builder#parameters_for`/`#evaluate_body` deleted. One commit per fix,
-  each with a test that fails on the old code. Probe with the data the apps produce,
-  and diff the corpus with `bin/byte_diff.rb` before and after. dan ruled
-  `heading_level`'s and `choose`'s overrides inadequate, so they are table rows, not
-  overrides. Then walk the table's three patterns with dan. Rule, accepted by dan 2026-10-10: **no new design document until
-  the last one has shipped code or been withdrawn.** Rejected as configuration:
-  `word.x` (R2), and a bare name carrying no meaning (A1). Still dan's: the `link`
-  positional alias, variants parts (i) and (ii), and 0.4.0p's N1 and N2 on their own
-  merits.
+  **Walk `CONVENTIONS.md`'s three patterns with dan**: a convention that fails
+  silently; an override that does not override; a convention that knows too little.
+  Then work the weak-spots table row by row, toward `ROADMAP-0.4.md`'s criterion 2.
+  Criterion 1 is met (2026-10-10). Each of the fourteen documented overrides was
+  broken in turn and the suite run. Three nothing caught (`metric as:`, `button
+  type:`, a value said on the inner word); all worked, and each now has a test that
+  fails if the convention wins. Open for dan: whether `box_body_over_children`'s
+  "give the box children and no content" is an override or, like `heading_level`'s
+  and `choose`'s, an inadequate one. One commit per fix, each with a test that fails
+  on the old code; diff the corpus with `bin/byte_diff.rb` before and after. Rule,
+  accepted by dan 2026-10-10: **no new design document until the last one has
+  shipped code or been withdrawn.** Rejected as configuration: `word.x` (R2), and a
+  bare name carrying no meaning (A1). Still dan's: the `link` positional alias,
+  variants parts (i) and (ii), and 0.4.0p's N1 and N2 on their own merits.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

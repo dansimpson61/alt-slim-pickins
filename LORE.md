@@ -1415,3 +1415,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **A value becomes text in more than one place, and `Builder#tag` is one of them.** The generator escapes text and attribute values, but `Builder#tag` stringifies its content with `to_s` before the generator sees it. Every `.sp` word built on `tag` (`paragraph`, and through it `text`) takes that path. Fixing how a value is written in the generator alone left `text` at `0.25e1`. Since 2026-10-10 `Generator.plain` is the one home for writing a value as text. A new rule about how values read belongs there, and a probe should check a `tag`-built word as well as a generator-built one.
+
+## 2026-10-10 — Claude
+
+**To prove an override is tested, break it and watch the suite.** Finding a test that mentions an override proves nothing about whether any test would notice it failing. On 2026-10-10 each documented override was mutated to lose to its convention (twenty mutations, a full suite plus verify_pages each, about six minutes). Three went unnoticed, though all three worked. Two traps in reading the results. A mutation can crash at load time, as dropping the said label made doc_reader's `label_for` receive nil, and a crash is not a test catching the fault; mutate so the convention wins without crashing. And `CheckRubyTest#test_the_whole_tree_is_clean` goes red whenever a mutation leaves a variable unused, which is noise, not proof. The script was a scratch file and was not kept.
