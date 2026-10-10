@@ -17,14 +17,15 @@ status: >-
   question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Work `ROADMAP-0.4.md`'s definition of success, starting by deleting
-  `Builder#parameters_for` and `#evaluate_body`**, proved dead. The `BigDecimal` row is
-  fixed (2026-10-10): `Generator.plain` is the one home for writing a value as text.
-  One commit per fix, each with a test that fails on the old code. Probe with
-  the data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and
-  after. Then: count which of the fourteen documented overrides no test exercises (criterion 1;
-  dan ruled `heading_level`'s and `choose`'s overrides inadequate, so they are table rows); and walk the table's three
-  patterns with dan. Rule, accepted by dan 2026-10-10: **no new design document until
+  **Work `ROADMAP-0.4.md`'s definition of success, starting with criterion 1**: count
+  which of the fourteen documented overrides no test exercises, and add a test that
+  fails if the convention wins for each one that has none. Done 2026-10-10: the
+  `BigDecimal` row (`Generator.plain` is the one home for writing a value as text),
+  and the dead `Builder#parameters_for`/`#evaluate_body` deleted. One commit per fix,
+  each with a test that fails on the old code. Probe with the data the apps produce,
+  and diff the corpus with `bin/byte_diff.rb` before and after. dan ruled
+  `heading_level`'s and `choose`'s overrides inadequate, so they are table rows, not
+  overrides. Then walk the table's three patterns with dan. Rule, accepted by dan 2026-10-10: **no new design document until
   the last one has shipped code or been withdrawn.** Rejected as configuration:
   `word.x` (R2), and a bare name carrying no meaning (A1). Still dan's: the `link`
   positional alias, variants parts (i) and (ii), and 0.4.0p's N1 and N2 on their own
