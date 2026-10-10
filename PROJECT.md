@@ -22,8 +22,8 @@ next_step: >-
   step). One commit per fix, each with a test that fails on the old code. Probe with
   the data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and
   after. Then: delete `Builder#parameters_for` and `#evaluate_body`, proved dead;
-  count which of the sixteen documented overrides no test exercises (criterion 1;
-  dan to rule whether `heading_level` and `choose` count); and walk the table's three
+  count which of the fourteen documented overrides no test exercises (criterion 1;
+  dan ruled `heading_level`'s and `choose`'s overrides inadequate, so they are table rows); and walk the table's three
   patterns with dan. Rule, accepted by dan 2026-10-10: **no new design document until
   the last one has shipped code or been withdrawn.** Rejected as configuration:
   `word.x` (R2), and a bare name carrying no meaning (A1). Still dan's: the `link`

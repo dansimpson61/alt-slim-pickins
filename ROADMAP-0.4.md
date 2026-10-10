@@ -29,9 +29,11 @@ promises are weakest. 0.4 is finished when that table is.
 ## The definition of success
 
 1. **Every override works.** CONVENTIONS.md has twenty *To override* lines.
-   Four of them answer "nothing", and the other sixteen name a way to overrule
-   the convention. Each of the sixteen is proved by a test, or by a page in the
-   corpus, that fails if the convention wins instead. The guide's second
+   Four of them answer "nothing". dan ruled two more inadequate on 2026-10-10:
+   `heading_level`'s "nest it differently" and `choose`'s "write two `choose`s".
+   Those two are now rows in the weak-spots table. The other fourteen name a way
+   to overrule the convention. Each of the fourteen is proved by a test, or by a
+   page in the corpus, that fails if the convention wins instead. The guide's second
    pattern asks how many documented overrides no page exercises. That question
    gets a count, and the count is zero.
 2. **The weak-spots table is empty.** Each row is either fixed or ruled by dan
@@ -74,7 +76,8 @@ The gate saw none of the four, because no page in the corpus holds those
 inputs. That is the same blind spot criterion 5 names. At close of 2026-10-10
 the gate was green: twelve legs, 612 runs, 0 failures.
 
-The table had fourteen rows at writing. One of them was found while probing
+The table had fourteen rows at writing, and sixteen once dan's ruling on the two
+inadequate overrides added theirs. One of them was found while probing
 `input_step`: a `BigDecimal` field reads `0.25e1` and gets no step.
 `PROJECT.md`'s `next_step` keeps the working order. This document does not.
 

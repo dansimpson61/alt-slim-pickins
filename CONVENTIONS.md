@@ -907,6 +907,8 @@ them. Each was found by rendering, not by reading.
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | `nil` is empty, but an `each` under it raises | have the app give `[]` |
 | `collection_detection` | A Struct of all-`nil` fields counts as empty | avoid Structs that can be all-`nil` |
+| `heading_level` | No page can say a level. The override, "nest it differently", is inadequate (dan, 2026-10-10) | restructure the page |
+| `first_truthy_branch` | Only one branch can render. The override, "write two `choose`s", is inadequate (dan, 2026-10-10) | split the choice |
 | `box_title` | A `heading` inside a section makes a second title | say the words on the section |
 | `box_body_over_children` | Children are dropped silently | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
