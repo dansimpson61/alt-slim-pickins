@@ -1387,3 +1387,15 @@ Three things; the first corrects my own finding.
 **The language has no punctuation left for a namespace, and that is the design, not a gap.** `WORD` is `/\A[a-z][a-z0-9_]*\z/`, and at the head of a sentence every separator is refused — `workbench.editor`, `workbench:editor`, `workbench/editor`, `workbench-editor`. The dot is taken by data, the colon by modifiers. So a qualified name cannot be typed, which forces the namespace to be inferred from where a file lives and never spoken. That absence is load-bearing: the only word a page could want and not have on its chain is another family's private helper, so a qualified spelling would undo the containment families exist to create. The one real need to reach outward — an app shadowing a language word and wanting the one it shadowed — is `super`, which needs no punctuation and is already in `Transform::RESERVED`.
 
 **An untracked document at the repo root turns the suite red.** `check_vitals` reads prose claims from every non-exempt document; `DAYTRIP-*.md` is exempt by glob, a scratch file is not. A note stating `37 conventions` against a census of 38 failed the suite for a day. Quote a forward-looking number and the gate masks it as exhibited.
+
+## 2026-10-09 — Claude
+
+Four things learned while probing the def line and the conventions (2026-10-06 to 10-09).
+
+**The chain is dynamic scoping for values.** A word's parameters are pushed over the subject while its body runs; `def` words also push them over the *caller's* children, and `.sp` words push the call's modifiers there. So an unsaid `def greet, name` blanks `.name` in a line the page author wrote, and `card x, id: "z"` changes `.id` for the card's children while the card itself discards it. Capturing the caller's children before pushing parameters costs nothing (corpus byte-identical, suite green); for `.sp` files it breaks only the two `partial_slot_forwarding` tests.
+
+**Declaring anything closes a word.** With no `expects` a partial accepts everything and is checked for nothing; with one, every capability is off until declared. `twig`'s `takes: nodes` exists only to reopen what `shape: encloses` closed.
+
+**Names are the power, not a burden** (dan's correction). I proposed reaching a word's inputs as `card.content` to separate them from the subject; dan rejected it as configuration that ignores convention over configuration. Conventions act on names — `documents` lets `each document` work, `title` becomes the heading — so a fix that strips or qualifies names removes what the conventions run on. Shadowing by a name the author chose is nearest-wins working; the hazard is names the author did not choose or cannot see.
+
+**Probe gotchas.** `page p` moves the subject into `p`, and a dot never looks outward, so page-level probe data needs `page "Demo"`. And `bin/verify_pages.rb` builds its pages at require time: an experiment that requires it reports nothing when a render raises there, which once read as "0 pages changed".

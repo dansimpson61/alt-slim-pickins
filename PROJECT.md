@@ -18,23 +18,24 @@ status: >-
   content` lets the sixteen-slot `expects` preamble go, and `item` inside `list.sp`
   makes containment the rule rather than a declaration. Decisions D3 (shape only when
   it gathers), D6 (shadowing allowed, gate reports) and D6a (`super`) are ruled.
-  Nothing is implemented: 0.4.0q is a plan with seven ordered steps.
-last_touched: 2026-10-05
+  Nothing is implemented. On 2026-10-09 dan put a conventions-first step ahead of it:
+  `CONVENTIONS.md`, an author's guide to every registered convention, measured, with
+  its weak spots in one table.
+last_touched: 2026-10-09
 next_step: >-
-  **Implement `DAYTRIP-0.4.0q.md` — families — starting at Step 1.** Step 0 is done:
-  the suite is green (606 runs, 0 failures) after an untracked scratch document at the
-  repo root, which `check_vitals` is not exempt from, was folded into HANDOFF. 0.4.0q
-  replaces the rejected 0.4.0p and carries the rationale, eight decisions, seven
-  ordered steps, risks. **Do not skip Step 3**: it builds the lexical chain and only
-  *reports* what would resolve differently, changing no behaviour, and it should find
-  exactly `editor` plus the eleven parent-bound words — if it finds more, stop and
-  report rather than adjusting the chain until the list looks short. D3, D6 and D6a
-  are ruled; nothing else in the plan needs dan. **Still his and not started**: the
-  `link` positional alias (removing it and making `name_and_content` refuse a dropped
-  value are one change — Step 5b), and parts (i) and (ii) of the variants proposal,
-  which are their own round after families. Queued behind families: docs and pedagogy,
-  which holds the eleven principles, the three conventions rulings now in HANDOFF, and
-  the field family. `HANDOFF.md` carries the detail.
+  **Start from `CONVENTIONS.md`, not 0.4.0q Step 1.** dan redirected the round on
+  2026-10-09: before families, strengthen the conventions and what they give an author.
+  A `def` parameter is optional and earns its place because conventions act on its
+  name. Rejected as configuration: reaching inputs as `word.x` (R2) and making a bare
+  name carry no meaning (A1). Next: walk the guide's "Where the conventions are
+  weakest" table with dan, beginning with its three patterns (a convention that fails
+  silently; an override that does not override, `card id:`; a convention that knows
+  too little), then draft `DAYTRIP-0.4.0q-pre.md`. Kept from the probing: a word's
+  inputs should be invisible to its caller's children (R1) — free for `def` words,
+  and for `.sp` files it costs only `partial_slot_forwarding`, which could move into
+  families. 0.4.0q's D1 should be withdrawn: kind names (`name`, `subject`) shadow
+  the subject's own fields. The rest of 0.4.0q stands, unstarted. Still dan's: the
+  `link` positional alias (Step 5b) and variants parts (i) and (ii).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
