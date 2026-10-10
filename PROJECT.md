@@ -9,20 +9,20 @@ status: >-
   (`DAYTRIP-0.4.0a` through `0.4.0q`) and, since 2026-10-10, has a question in
   `ROADMAP-0.4.md`: do the conventions keep their promises, so that an author only has
   to name things? It closes when `CONVENTIONS.md`'s weak-spots table is empty and
-  every documented override is proved by a test. Twelve gate legs green, 612 runs /
-  6,670 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
+  every documented override is proved by a test. Twelve gate legs green, 613 runs /
+  6,676 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
   in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
   carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
   rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
   question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Work `ROADMAP-0.4.md`'s definition of success, starting with the `BigDecimal`
-  row** in `CONVENTIONS.md`'s weak-spots table (a field reads `0.25e1` and gets no
-  step). One commit per fix, each with a test that fails on the old code. Probe with
+  **Work `ROADMAP-0.4.md`'s definition of success, starting by deleting
+  `Builder#parameters_for` and `#evaluate_body`**, proved dead. The `BigDecimal` row is
+  fixed (2026-10-10): `Generator.plain` is the one home for writing a value as text.
+  One commit per fix, each with a test that fails on the old code. Probe with
   the data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and
-  after. Then: delete `Builder#parameters_for` and `#evaluate_body`, proved dead;
-  count which of the fourteen documented overrides no test exercises (criterion 1;
+  after. Then: count which of the fourteen documented overrides no test exercises (criterion 1;
   dan ruled `heading_level`'s and `choose`'s overrides inadequate, so they are table rows); and walk the table's three
   patterns with dan. Rule, accepted by dan 2026-10-10: **no new design document until
   the last one has shipped code or been withdrawn.** Rejected as configuration:

@@ -1411,3 +1411,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **Four defects, one blind spot.** The 2026-10-10 fixes (`money` cents, `card id:`, `input_step`, `plural_collection`) all left the 38-page corpus byte-identical. Every one lived in an input the corpus never holds: fractional money, a said card id, a decimal of one or more, a name ending in a hiss. The apps were written alongside the conventions, so they use the conventions where they already work. That makes the corpus a poor sample of what an author will try. A convention's tests should include the inputs its own guide warns about, since those are exactly the ones the apps avoided.
+
+## 2026-10-10 — Claude
+
+**A value becomes text in more than one place, and `Builder#tag` is one of them.** The generator escapes text and attribute values, but `Builder#tag` stringifies its content with `to_s` before the generator sees it. Every `.sp` word built on `tag` (`paragraph`, and through it `text`) takes that path. Fixing how a value is written in the generator alone left `text` at `0.25e1`. Since 2026-10-10 `Generator.plain` is the one home for writing a value as text. A new rule about how values read belongs there, and a probe should check a `tag`-built word as well as a generator-built one.
