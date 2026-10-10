@@ -32,11 +32,13 @@ module SlimPickins
       end
     end
 
-    # A float that is clearly a rate wants finer steps than a count does.
+    # A decimal field must take a decimal: with no step the browser counts in
+    # whole numbers and refuses 2.5 on submit. A rate wants hundredths, so its
+    # arrows move it sensibly; any larger decimal is allowed as it stands.
     def step_for(value)
       return nil unless value.is_a?(Float)
 
-      value.abs < 1 ? 0.01 : nil
+      value.abs < 1 ? 0.01 : 'any'
     end
 
     def boolean?(value) = value == true || value == false

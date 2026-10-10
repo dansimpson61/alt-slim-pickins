@@ -501,14 +501,18 @@ with `age: 61`, `growth_rate: 0.05`, `retired: false` and a date for
 <input id="born_on" name="born_on" type="date" value="1965-03-01">
 ```
 
-A number is a number field. A fraction below one steps by hundredths. True or
-false is a checkbox. A date is a date picker. Anything else is text.
+A number is a number field. A fraction below one steps by hundredths; a larger
+decimal, like `2.5`, takes `step="any"`, so the browser accepts it as it
+stands. True or false is a checkbox. A date is a date picker. Anything else is
+text.
 
 **To override** — `type:` and `step:` — `field retired, type: text`,
 `field rate, step: 0.5`.
 
-**Watch for** — a decimal of one or more, like `2.5`, gets no `step`, so the
-browser expects whole numbers and will refuse to submit it. Say `step:`.
+**Watch for** — a rate steps by hundredths, so `0.055` in a field that held
+`0.05` will not submit. Say `step:` when a rate needs finer places. Only a
+Ruby `Float` gets a step. A `BigDecimal` 2.5 renders as `value="0.25e1"`,
+with no step, and the form will not submit it.
 
 ### `numeric_alignment` — numbers line up on the right
 
@@ -904,7 +908,7 @@ them. Each was found by rendering, not by reading.
 | `box_body_over_children` | Children are dropped silently | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
-| `input_step` | `2.5` gets no step, so the form will not submit | say `step:` |
+| `input_step` | A `BigDecimal` reads `0.25e1` and gets no step, so the form will not submit | give the field a `Float` |
 | `time_text` | `relative` cannot speak of the future | the full date is shown |
 | `link_href` | `link home` is `/home`, not `/` | `to: "/"` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |

@@ -163,6 +163,16 @@ class Phase0Test < Minitest::Test
     assert_nil            SlimPickins::Inference.step_for(30)
   end
 
+  # A field holding 2.5 once got no step, so the browser counted in whole
+  # numbers and refused to submit the form with the value it was given.
+  def test_a_decimal_field_accepts_the_decimal_it_holds
+    html = render("page account\n  form\n    field years\n    field years, step: 0.5\n",
+                  account: { years: 2.5 })
+    assert_includes html, 'name="years" type="number" value="2.5" step="any"'
+    assert_includes html, 'name="years" type="number" value="2.5" step="0.5"'
+    assert_equal 'any', SlimPickins::Inference.step_for(80_000.0)
+  end
+
   # A value that is already true or false knows the shape it wants (dan's
   # ruling, 2026-09-17). This is the reader `Inference.boolean?` was written
   # for and did not have until then.
