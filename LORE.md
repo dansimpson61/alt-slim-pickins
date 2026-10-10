@@ -1407,3 +1407,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **A partial's parameters are built in `PartialWord#parameters_for`, and only there.** `Builder` carries a twin `parameters_for` and `evaluate_body`, which nothing calls. Instrumented to raise, they were reached by none of 609 runs and none of 38 pages (2026-10-10). Editing the twin changes nothing, so a fix to how a word receives its arguments belongs in `PartialWord`. Also, an override can be broken for as long as no page says it: `card id:` was discarded on every call, and the gate stayed green because the corpus never wrote one.
+
+## 2026-10-10 — Claude
+
+**Four defects, one blind spot.** The 2026-10-10 fixes (`money` cents, `card id:`, `input_step`, `plural_collection`) all left the 38-page corpus byte-identical. Every one lived in an input the corpus never holds: fractional money, a said card id, a decimal of one or more, a name ending in a hiss. The apps were written alongside the conventions, so they use the conventions where they already work. That makes the corpus a poor sample of what an author will try. A convention's tests should include the inputs its own guide warns about, since those are exactly the ones the apps avoided.

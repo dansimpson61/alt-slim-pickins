@@ -6,7 +6,7 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 38
   rendered pages. Roadmaps 0.1 to 0.3 are closed; 0.4 is running as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 610 runs / 6,654
+  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 612 runs / 6,670
   assertions / 0 failures, `ruby -w -c` clean. DAYTRIP-0.4.0h's prioritized list is
   landed in full. The round-by-round account lives in `history/CHRONICLE.md` and each
   round's own record in its `DAYTRIP-*.md`; this field carries the present, which is
@@ -19,25 +19,24 @@ status: >-
   `CONVENTIONS.md`, an author's guide to every registered convention, measured, with
   its weak spots in one table. On 2026-10-10 a review found paper outrunning code, and
   dan accepted four corrections: commit the guide (done), fix the table's plain
-  defects one commit each (`money`, `card id:`, `input_step` done), write a definition of
+  defects one commit each (all four done), write a definition of
   success for 0.4, and **no new design document until the last one has shipped code
   or been withdrawn**.
 last_touched: 2026-10-10
 next_step: >-
-  **Fix the weak-spots table's plain defects in `CONVENTIONS.md`, one commit each, each
-  with a test that fails on the old code.** `money`, `card id:` and `input_step`
-  are done (2026-10-10). Next: `plural_collection` making `address` into `addresss`.
-  A new row, from probing: a `BigDecimal` field reads `0.25e1` and gets no step. Proposed, not
-  started: delete `Builder#parameters_for` and `#evaluate_body`, proved dead. Probe with the
-  data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and after.
-  Then write a five-line definition of success for 0.4 (the steward agent can draft
-  it). After that, walk the table's three patterns with dan. Rule, accepted by dan
-  2026-10-10: **no new design document (`DAYTRIP-0.4.0q-pre.md` included) until the
-  last one has shipped code or been withdrawn.** 0.4.0q stands, unstarted. Its D1
-  should be withdrawn: kind names (`name`, `subject`) shadow the subject's own
-  fields. Rejected as configuration: `word.x` (R2), and a bare name carrying no
-  meaning (A1). Still dan's: the `link` positional alias (Step 5b), and variants
-  parts (i) and (ii).
+  **Write a five-line definition of success for 0.4** (the steward agent can draft
+  it). The four plain defects the 2026-10-10 review named are fixed, one commit each,
+  each with a test that fails on the old code: `money`, `card id:`, `input_step`,
+  `plural_collection`. Then, in order: the `BigDecimal` row the probing added (a field
+  reads `0.25e1` and gets no step); deleting `Builder#parameters_for` and
+  `#evaluate_body`, proved dead; and walking the table's three patterns with dan. Probe
+  with the data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and
+  after. Rule, accepted by dan 2026-10-10: **no new design document
+  (`DAYTRIP-0.4.0q-pre.md` included) until the last one has shipped code or been
+  withdrawn.** 0.4.0q stands, unstarted. Its D1 should be withdrawn: kind names
+  (`name`, `subject`) shadow the subject's own fields. Rejected as configuration:
+  `word.x` (R2), and a bare name carrying no meaning (A1). Still dan's: the `link`
+  positional alias (Step 5b), and variants parts (i) and (ii).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
