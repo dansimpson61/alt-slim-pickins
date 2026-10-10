@@ -926,8 +926,13 @@ first:
    its job, should it say so?
 2. **An override that does not override.** A convention you cannot overrule
    is a trap. `card id:` was the one found, and it is fixed (2026-10-10). No
-   page in the corpus said it, so the gate never saw the fault. The open
-   question is how many other documented overrides no page exercises.
+   page in the corpus said it, so the gate never saw the fault. The question
+   it raised, how many other documented overrides nothing exercises, was
+   answered the same day by breaking each override in turn and running the
+   suite. Three went unnoticed: `as:` on a `metric`, `type:` on a `button`,
+   and a value said on the inner word over one forwarded from outside. All
+   three worked; none was tested. Each now has a test that fails if the
+   convention wins, so the count is zero.
 3. **A convention that knows too little.** Three irregular plurals; a number
    that cannot tell a rate from a count; `relative` time with no future.
    Each is a place where teaching the convention one more thing would save

@@ -71,6 +71,21 @@ class UiWordsTest < Minitest::Test
     assert_includes html, '<a href="/library" class="link">Library</a>'
   end
 
+  # A button in a form submits it unless the page says otherwise. No test held
+  # the "otherwise" until 2026-10-10: `type:` could have been ignored and the
+  # gate would have stayed green.
+  def test_a_button_in_a_form_takes_the_type_the_page_says
+    html = render(%(page account
+  form to: "/x"
+    button "Save"
+    button "Preview", type: button
+    button "Clear", type: reset
+), account: {})
+    assert_includes html, '<button type="submit" class="button">Save</button>'
+    assert_includes html, '<button type="button" class="button">Preview</button>'
+    assert_includes html, '<button type="reset" class="button">Clear</button>'
+  end
+
   def test_a_button_takes_a_size
     html = render(%(page account
   button "Save", size: sm

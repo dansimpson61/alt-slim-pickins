@@ -240,6 +240,15 @@ class Phase2Test < Minitest::Test
     assert_includes html, '<td class="column--numeric">117,760</td>'
   end
 
+  # The same precedence on a metric, which no test held until 2026-10-10:
+  # the app says money, and the page's `as:` wins.
+  def test_the_page_overrides_the_app_on_a_metric_too
+    fund = Struct.new(:rate) { def format_for(attribute) = attribute == :rate ? :money : nil }
+    html = render("page fund\n  metric rate\n  metric rate, as: percent\n", fund: fund.new(0.075))
+    assert_includes html, '<div class="metric-value">$0.08</div>'
+    assert_includes html, '<div class="metric-value">7.5%</div>'
+  end
+
   # --- title infers its level from depth --------------------------------
 
   def test_a_title_knows_how_deep_it_is

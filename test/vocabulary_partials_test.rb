@@ -278,6 +278,7 @@ class VocabularyPartialsTest < Minitest::Test
   # 2026-10-03, when `action.sp` turned out never to say the forwarded value —
   # so the mechanism is proved here, by the smallest pair that can show it,
   # and the convention's prose points at this test rather than at a word.
+  # The second inner word proves the override: what it says itself wins.
   def test_a_partial_finds_a_declared_modifier_on_the_enclosing_partial
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, 'partials'))
@@ -294,10 +295,12 @@ class VocabularyPartialsTest < Minitest::Test
         page p
           outer_slot slot: "forwarded"
             inner_slot
+            inner_slot slot: "said"
       SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
-      assert_includes html, '<div class="box outer_slot"><p class="note inner_slot">forwarded</p></div>'
+      assert_includes html, '<div class="box outer_slot"><p class="note inner_slot">forwarded</p>' \
+                            '<p class="note inner_slot">said</p></div>'
     ensure
       %i[outer_slot inner_slot].each do |word|
         SlimPickins::Word.registry.delete(word)
