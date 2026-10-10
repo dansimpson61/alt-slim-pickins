@@ -147,15 +147,7 @@ module SlimPickins
                                nil
                              end
       end
-      declared[:id] = if contract.id
-                        if shift_target && subject.has?(shift_target)
-                          target_obj = subject.fetch(shift_target)
-                          target_subj = target_obj.is_a?(Subject) ? target_obj : Subject.new(target_obj, described_as: "this #{shift_target}")
-                          target_subj.has?(:id) ? "#{target_subj.noun}-#{target_subj.fetch(:id)}" : nil
-                        else
-                          @builder.send(:card_id)
-                        end
-                      end
+      declared[:id] = kwargs.fetch(:id) { inferred_id(shift_target) } if contract.id
       # Content that waits to land is not a label yet: the fallback is asked
       # here, of the parent, as it always was, and `#landing` overrides it
       # with what the page said once that has been read.
@@ -164,6 +156,16 @@ module SlimPickins
         declared[:variant] = kwargs[:variant] || (name && !subject.has?(name) ? name : nil)
       end
       declared
+    end
+
+    # The id a card infers from what it shifts to, or else from the subject.
+    # Only asked when the page said no `id:` — what is said nearest wins.
+    def inferred_id(shift_target)
+      return @builder.send(:card_id) unless shift_target && subject.has?(shift_target)
+
+      target = subject.fetch(shift_target)
+      target = Subject.new(target, described_as: "this #{shift_target}") unless target.is_a?(Subject)
+      target.has?(:id) ? "#{target.noun}-#{target.fetch(:id)}" : nil
     end
 
     def evaluate_body(evaluate_proc, parameters, word, push, contract)

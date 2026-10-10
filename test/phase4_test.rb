@@ -48,6 +48,30 @@ class Phase4Test < Minitest::Test
 
   end
 
+  # The register named `id:` as the override for `card_id`, and the card threw
+  # it away: the inferred id was written over whatever the page said, and a
+  # card with nothing to infer from rendered no id at all.
+  def test_the_id_a_page_says_wins_over_the_id_a_card_infers
+    holding = Struct.new(:id, :symbol)
+    html = render(<<~PAGE, book: { holdings: [holding.new(3, 'VTI')], top: holding.new(7, 'BND') })
+      page book
+        each holding
+          card
+            text .symbol
+          card id: "featured"
+            text .symbol
+        card top, id: "pinned"
+          text .symbol
+        card id: "lonely"
+          text "Nothing to infer from"
+    PAGE
+    assert_includes html, '<article class="card" id="holding-3">'
+    assert_includes html, '<article class="card" id="featured">'
+    assert_includes html, '<article class="card" id="pinned">'
+    assert_includes html, '<article class="card" id="lonely">'
+    refute_includes html, 'id="top-7"'
+  end
+
   # --- content ----------------------------------------------------------
 
   def test_note_badge_fact_and_snippet

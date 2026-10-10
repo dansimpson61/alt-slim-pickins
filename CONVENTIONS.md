@@ -462,11 +462,9 @@ each holding
 **You get** `<article class="card" id="holding-3">` — the subject's noun and
 its id. A card over something with no id gets no id.
 
-**To override** — the register says to say `id:` yourself.
-
-**Watch for** — **that override does not work today.** `card id: "featured"`
-still renders `id="holding-3"`; the id you said is thrown away. This is a
-defect, not a design.
+**To override** — say `id:` yourself. `card id: "featured"` is
+`id="featured"`, inside an `each` or out of one, and a card with nothing to
+infer from takes the id you give it.
 
 ---
 
@@ -897,7 +895,6 @@ them. Each was found by rendering, not by reading.
 
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
-| `card_id` | The documented override, `id:`, is thrown away | none — a defect |
 | `format_family` | A rate with no `as:` reads `0` | `as: percent`, or `format_for` |
 | `plural_collection` | Only three irregulars; `address` → `addresss` | `from:` |
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
@@ -919,8 +916,10 @@ first:
 1. **A convention that fails silently.** `empty` with nothing above it, a box
    that drops its children, an unknown status. When a convention cannot do
    its job, should it say so?
-2. **An override that does not override.** `card id:`. A convention you cannot
-   overrule is a trap.
+2. **An override that does not override.** A convention you cannot overrule
+   is a trap. `card id:` was the one found, and it is fixed (2026-10-10). No
+   page in the corpus said it, so the gate never saw the fault. The open
+   question is how many other documented overrides no page exercises.
 3. **A convention that knows too little.** Three irregular plurals; a number
    that cannot tell a rate from a count; `relative` time with no future.
    Each is a place where teaching the convention one more thing would save
