@@ -10,6 +10,7 @@ Resume work on `~/dev/alt-slim-pickins`.
 
 1. `curl http://127.0.0.1:4000/brief/alt-slim-pickins` (or `PROJECT.md` if the dashboard is down)
 2. `README.md` — what the project is, and **How roadmaps go**, which governs how roadmaps transition
+   - `ROADMAP-0.4.md` — 0.4's question and the definition of success that closes it
 3. `PROJECT.md` — `next_step`. **Trust it over this file** if the two disagree: the
    card is updated every round and this file has lagged it by a week before. It is
    also short now, and deliberately — `bin/check_card.rb` holds it to a budget.
@@ -88,7 +89,26 @@ measure are quoted as the gate output they are.
 
 ---
 
-### The active next step — IMPLEMENT `DAYTRIP-0.4.0q.md` (families)
+### The active next step — 0.4's question, in `ROADMAP-0.4.md`
+
+**As of 2026-10-10, families is not the next step.** dan redirected the round on
+2026-10-09 (conventions first), and on 2026-10-10 he gave 0.4 its question: *do the
+conventions keep their promises, so that an author only has to name things?*
+`ROADMAP-0.4.md` holds that question and the definition of success that closes 0.4.
+`PROJECT.md`'s `next_step` names the next concrete fix. `CONVENTIONS.md`'s
+weak-spots table is the work list. The four plain defects (`money`, `card id:`,
+`input_step`, `plural_collection`) are fixed.
+
+**One rule, accepted by dan 2026-10-10:** no new design document until the last one
+has shipped code or been withdrawn.
+
+### Families — withdrawn from 0.4 on 2026-10-10, carried to 0.5
+
+The section below was the active next step from 2026-10-05 to 10-09. It stays as the
+record of what families is and what was ruled. **Do not start Step 1.** dan ruled
+that families is 0.5's question, not 0.4's work. When 0.5 opens, re-measure the
+plan's premises before building: Step 0 is done, and D1 should be withdrawn, because
+kind names shadow the subject's own fields.
 
 **By dan's instruction of 2026-10-05.** `DAYTRIP-0.4.0p.md` was **rejected** — dan's
 reason, and it is the test every decision in its replacement is measured against:
@@ -137,7 +157,11 @@ returns a Symbol, so it binds to the name slot correctly, and `test/dashboard_te
 covers the branch with a real `first_item`. The record is corrected in
 `DAYTRIP-0.4.0q.md`. The latent hazard behind it is real but harmless today.
 
-### Queued behind it — docs and pedagogy, which was top priority on 2026-10-04
+### Queued — docs and pedagogy, which was top priority on 2026-10-04
+
+> **Since 2026-10-10:** the note below says this was queued behind families.
+> Families has moved to 0.5, so this is queued behind 0.4's conventions work.
+
 
 > **On the ordering, so nobody has to guess whether it was a slip.** Dan made docs and
 > pedagogy the top priority on 2026-10-04, ahead of the field family and scoping. On
@@ -411,8 +435,8 @@ Two notes on how these connect: R3(a) brings "a value chooses its form" down to 
 
 Both were queued on 2026-10-03 and were *after* docs and pedagogy by dan's word.
 **Scoping has since begun, as part of that work** (see *The route, as it went*): the
-scoping rules are built, and the namespace is the next step. The field family has
-not started.
+scoping rules are built. The namespace was to be the next step, but it is families,
+which moved to 0.5 on 2026-10-10. The field family has not started.
 
 1. **Scoping.** The word registry is global and last-compile-wins; a `Library` does
    not scope its words, and merely constructing one takes a colliding name

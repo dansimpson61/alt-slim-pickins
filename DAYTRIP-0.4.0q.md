@@ -1,5 +1,13 @@
 # Daytrip 0.4.0q — Families: One Namespace Per File
 
+**Withdrawn from 0.4 on 2026-10-10, and carried to 0.5 as its question.** dan ruled
+that families is new design, not something 0.4's look back asked for. 0.4's question
+is whether the conventions keep their promises (see `ROADMAP-0.4.md`). This document
+stays as a dated record. When 0.5 opens, it is that roadmap's starting material, not
+its plan. Re-measure its premises before building: Step 0 is already done, and D1
+should be withdrawn, because kind names (`name`, `subject`) shadow the subject's own
+fields. Nothing below has been implemented.
+
 **This replaces `DAYTRIP-0.4.0p.md`, which dan rejected.** 0.4.0p is kept as a dated
 record; nothing below depends on it.
 

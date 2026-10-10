@@ -1,5 +1,12 @@
 # Daytrip 0.4.0p — Words, Names, and the File That Holds Them
 
+**Rejected by dan on 2026-10-05.** In his words, it "was requiring the author to take
+care of the compiler rather than the other way around." `DAYTRIP-0.4.0q.md` replaced
+it, and has since been withdrawn to 0.5 itself (see `ROADMAP-0.4.md`). This document
+stays as a dated record. 0.4.0q asked that its rulings N1 (names by position) and N2
+(interpolation) be weighed on their own merits rather than die with it. That has not
+happened yet.
+
 Written 2026-10-04 on `conventions-as-principles`. **Nothing here is built.** This
 is the paper half of "paper first, then reality": the intent, the rules a user
 would hold, the new `.sp` format, and the plan to get there one step at a time.

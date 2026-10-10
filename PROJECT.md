@@ -5,38 +5,30 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 38
-  rendered pages. Roadmaps 0.1 to 0.3 are closed; 0.4 is running as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 612 runs / 6,670
-  assertions / 0 failures, `ruby -w -c` clean. DAYTRIP-0.4.0h's prioritized list is
-  landed in full. The round-by-round account lives in `history/CHRONICLE.md` and each
-  round's own record in its `DAYTRIP-*.md`; this field carries the present, which is
-  what a resume card is for, and `bin/check_card.rb` holds it to a budget.
-  0.4.0p was **rejected** — it "was requiring the author to take care of the compiler
-  rather than the other way around" — and `DAYTRIP-0.4.0q.md` replaces it, written to
-  that test: families, each `.sp` file a namespace of `def`s. Decisions D3 (shape only when
-  it gathers), D6 (shadowing allowed, gate reports) and D6a (`super`) are ruled.
-  Nothing is implemented. On 2026-10-09 dan put a conventions-first step ahead of it:
-  `CONVENTIONS.md`, an author's guide to every registered convention, measured, with
-  its weak spots in one table. On 2026-10-10 a review found paper outrunning code, and
-  dan accepted four corrections: commit the guide (done), fix the table's plain
-  defects one commit each (all four done), write a definition of
-  success for 0.4, and **no new design document until the last one has shipped code
-  or been withdrawn**.
+  rendered pages. Roadmaps 0.1 to 0.3 are closed. 0.4 ran as daytrips
+  (`DAYTRIP-0.4.0a` through `0.4.0q`) and, since 2026-10-10, has a question in
+  `ROADMAP-0.4.md`: do the conventions keep their promises, so that an author only has
+  to name things? It closes when `CONVENTIONS.md`'s weak-spots table is empty and
+  every documented override is proved by a test. Twelve gate legs green, 612 runs /
+  6,670 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
+  in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
+  carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
+  rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
+  question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Write a five-line definition of success for 0.4** (the steward agent can draft
-  it). The four plain defects the 2026-10-10 review named are fixed, one commit each,
-  each with a test that fails on the old code: `money`, `card id:`, `input_step`,
-  `plural_collection`. Then, in order: the `BigDecimal` row the probing added (a field
-  reads `0.25e1` and gets no step); deleting `Builder#parameters_for` and
-  `#evaluate_body`, proved dead; and walking the table's three patterns with dan. Probe
-  with the data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and
-  after. Rule, accepted by dan 2026-10-10: **no new design document
-  (`DAYTRIP-0.4.0q-pre.md` included) until the last one has shipped code or been
-  withdrawn.** 0.4.0q stands, unstarted. Its D1 should be withdrawn: kind names
-  (`name`, `subject`) shadow the subject's own fields. Rejected as configuration:
+  **Work `ROADMAP-0.4.md`'s definition of success, starting with the `BigDecimal`
+  row** in `CONVENTIONS.md`'s weak-spots table (a field reads `0.25e1` and gets no
+  step). One commit per fix, each with a test that fails on the old code. Probe with
+  the data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and
+  after. Then: delete `Builder#parameters_for` and `#evaluate_body`, proved dead;
+  count which of the sixteen documented overrides no test exercises (criterion 1;
+  dan to rule whether `heading_level` and `choose` count); and walk the table's three
+  patterns with dan. Rule, accepted by dan 2026-10-10: **no new design document until
+  the last one has shipped code or been withdrawn.** Rejected as configuration:
   `word.x` (R2), and a bare name carrying no meaning (A1). Still dan's: the `link`
-  positional alias (Step 5b), and variants parts (i) and (ii).
+  positional alias, variants parts (i) and (ii), and 0.4.0p's N1 and N2 on their own
+  merits.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
