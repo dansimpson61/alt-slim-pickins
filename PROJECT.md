@@ -6,7 +6,7 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 38
   rendered pages. Roadmaps 0.1 to 0.3 are closed; 0.4 is running as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 608 runs / 6,639
+  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 609 runs / 6,649
   assertions / 0 failures, `ruby -w -c` clean. DAYTRIP-0.4.0h's prioritized list is
   landed in full. The round-by-round account lives in `history/CHRONICLE.md` and each
   round's own record in its `DAYTRIP-*.md`; this field carries the present, which is
@@ -19,15 +19,16 @@ status: >-
   `CONVENTIONS.md`, an author's guide to every registered convention, measured, with
   its weak spots in one table. On 2026-10-10 a review found paper outrunning code, and
   dan accepted four corrections: commit the guide (done), fix the table's plain
-  defects one commit each (`money` done: 12.99 was `$12`), write a definition of
+  defects one commit each (`money` and `card id:` done), write a definition of
   success for 0.4, and **no new design document until the last one has shipped code
   or been withdrawn**.
 last_touched: 2026-10-10
 next_step: >-
   **Fix the weak-spots table's plain defects in `CONVENTIONS.md`, one commit each, each
-  with a test that fails on the old code.** `money` is done (2026-10-10). Next, in
-  order: `card id:` thrown away; `input_step` giving `2.5` no step, so the form will
-  not submit; `plural_collection` making `address` into `addresss`. Probe with the
+  with a test that fails on the old code.** `money` and `card id:` are done
+  (2026-10-10). Next, in order: `input_step` giving `2.5` no step, so the form will
+  not submit; `plural_collection` making `address` into `addresss`. Proposed, not
+  started: delete `Builder#parameters_for` and `#evaluate_body`, proved dead. Probe with the
   data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and after.
   Then write a five-line definition of success for 0.4 (the steward agent can draft
   it). After that, walk the table's three patterns with dan. Rule, accepted by dan

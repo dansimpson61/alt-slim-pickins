@@ -1403,3 +1403,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **A byte-identical corpus proves no regression, not correctness.** `money` showed 12.99 as `$12` with twelve legs green, because not one of the 38 corpus pages holds fractional money. The money fix changed zero pages. That was the right result, and it would have been the same if the fix were wrong. When a fix leaves the corpus unchanged, the evidence has to be a test that fails on the old code. The corpus digest also moves whenever the docs move: doc_reader counts the words of this repository's own documents, so diff the pages before reading a changed digest as a rendering change.
+
+## 2026-10-10 — Claude
+
+**A partial's parameters are built in `PartialWord#parameters_for`, and only there.** `Builder` carries a twin `parameters_for` and `evaluate_body`, which nothing calls. Instrumented to raise, they were reached by none of 609 runs and none of 38 pages (2026-10-10). Editing the twin changes nothing, so a fix to how a word receives its arguments belongs in `PartialWord`. Also, an override can be broken for as long as no page says it: `card id:` was discarded on every call, and the gate stayed green because the corpus never wrote one.
