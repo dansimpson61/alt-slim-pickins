@@ -96,6 +96,12 @@ module SlimPickins
       [word.to_s, variant && "#{word}--#{variant}"].compact.join(' ')
     end
 
+    # A value as a page writes it. A BigDecimal's own `to_s` is scientific,
+    # so 2.5 would read `0.25e1`; it is written as a person would write it.
+    def self.plain(value)
+      defined?(BigDecimal) && value.is_a?(BigDecimal) ? value.to_s('F') : value.to_s
+    end
+
     # The same three levels the words used at build time — `as:` said in the
     # page, else the app's own answer, else the value's shape. The one home
     # for formatting: the words that need it at build time (a chart's
@@ -184,10 +190,11 @@ module SlimPickins
     def token(word, variant = nil)
       [self.class.token(word, variant), @current_app_class].compact.join(' ')
     end
-    def esc(text) = CGI.escapeHTML(text.to_s)
+    def plain(value) = self.class.plain(value)
+    def esc(text) = CGI.escapeHTML(plain(text))
     def attrs_html(pairs)
       pairs.reject { |_, v| v.nil? || v == '' || v == false }
-           .map { |k, v| v == true ? %( #{k}) : %( #{k}="#{CGI.escapeHTML(v.to_s)}") }.join
+           .map { |k, v| v == true ? %( #{k}) : %( #{k}="#{CGI.escapeHTML(plain(v))}") }.join
     end
 
     # --- Document ---------------------------------------------------------
@@ -505,7 +512,7 @@ module SlimPickins
                id: attrs[:name].to_s,
                name: attrs[:name].to_s,
                type: attrs[:kind].to_s,
-               value: attrs[:value]&.to_s,
+               value: plain(attrs[:value]),
                step: attrs[:step],
                required: attrs[:required] ? 'required' : nil)
       @out << '</div>'
@@ -516,7 +523,7 @@ module SlimPickins
                id: attrs[:name].to_s,
                name: attrs[:name].to_s,
                type: attrs[:kind].to_s,
-               value: attrs[:value]&.to_s,
+               value: plain(attrs[:value]),
                placeholder: attrs[:placeholder]&.to_s)
     end
 
@@ -531,7 +538,7 @@ module SlimPickins
     end
 
     def hidden(attrs, _children)
-      void_tag('input', type: 'hidden', name: attrs[:name].to_s, value: attrs[:value]&.to_s)
+      void_tag('input', type: 'hidden', name: attrs[:name].to_s, value: plain(attrs[:value]))
     end
 
     def checkbox(attrs, _children)
@@ -590,7 +597,7 @@ module SlimPickins
                formaction: attrs[:to]&.to_s,
                formtarget: attrs[:target]&.to_s,
                name: attrs[:name]&.to_s,
-               value: attrs[:value]&.to_s,
+               value: plain(attrs[:value]),
                class: classes)
     end
 

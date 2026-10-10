@@ -246,7 +246,7 @@ module SlimPickins
                      inference: :input_type, override: '`type:`',
                      principle: :value_shapes,
                      grade: :shape),
-      Convention.new(name: :input_step, when_silent: 'a float',
+      Convention.new(name: :input_step, when_silent: 'a decimal',
                      decides: '`step="0.01"` below one, `step="any"` above',
                      file: 'lib/slim_pickins/inference.rb', marker: 'def step_for',
                      inference: :step_for, override: '`step:`',

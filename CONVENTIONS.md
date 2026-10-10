@@ -513,9 +513,9 @@ text.
 `field rate, step: 0.5`.
 
 **Watch for** — a rate steps by hundredths, so `0.055` in a field that held
-`0.05` will not submit. Say `step:` when a rate needs finer places. Only a
-Ruby `Float` gets a step. A `BigDecimal` 2.5 renders as `value="0.25e1"`,
-with no step, and the form will not submit it.
+`0.05` will not submit. Say `step:` when a rate needs finer places. A
+`BigDecimal` is a decimal like a `Float`: 2.5 is written `2.5` and gets
+`step="any"`.
 
 ### `numeric_alignment` — numbers line up on the right
 
@@ -913,7 +913,6 @@ them. Each was found by rendering, not by reading.
 | `box_body_over_children` | Children are dropped silently | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
-| `input_step` | A `BigDecimal` reads `0.25e1` and gets no step, so the form will not submit | give the field a `Float` |
 | `time_text` | `relative` cannot speak of the future | the full date is shown |
 | `link_href` | `link home` is `/home`, not `/` | `to: "/"` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |

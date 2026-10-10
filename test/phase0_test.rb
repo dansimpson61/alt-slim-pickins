@@ -173,6 +173,17 @@ class Phase0Test < Minitest::Test
     assert_equal 'any', SlimPickins::Inference.step_for(80_000.0)
   end
 
+  # A BigDecimal 2.5 once read `0.25e1`, its own `to_s`, in a field and in a
+  # line of text, and its field got no step, so the form would not submit.
+  def test_a_big_decimal_is_written_plainly_and_its_field_takes_it
+    require 'bigdecimal'
+    html = render("page account\n  form\n    field years\n  text .years\n",
+                  account: { years: BigDecimal('2.5') })
+    assert_includes html, 'name="years" type="number" value="2.5" step="any"'
+    assert_includes html, '<p class="text">2.5</p>'
+    refute_includes html, '0.25e1'
+  end
+
   # A value that is already true or false knows the shape it wants (dan's
   # ruling, 2026-09-17). This is the reader `Inference.boolean?` was written
   # for and did not have until then.

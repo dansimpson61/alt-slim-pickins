@@ -534,7 +534,7 @@ module SlimPickins
         elsif arg.is_a?(Array)
           passed_children = arg
         else
-          content = arg.nil? ? nil : arg.to_s
+          content = arg.nil? ? nil : Generator.plain(arg)
         end
       end
       attrs.merge!(kwargs)

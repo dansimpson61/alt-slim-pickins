@@ -34,9 +34,10 @@ module SlimPickins
 
     # A decimal field must take a decimal: with no step the browser counts in
     # whole numbers and refuses 2.5 on submit. A rate wants hundredths, so its
-    # arrows move it sensibly; any larger decimal is allowed as it stands.
+    # arrows move it sensibly; any larger decimal is allowed as it stands. A
+    # decimal is any number but an Integer: a Float, or a BigDecimal.
     def step_for(value)
-      return nil unless value.is_a?(Float)
+      return nil if value.is_a?(Integer) || !value.is_a?(Numeric)
 
       value.abs < 1 ? 0.01 : 'any'
     end
