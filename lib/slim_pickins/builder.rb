@@ -470,42 +470,6 @@ module SlimPickins
       root
     end
 
-    # The optionality spelling (dan, 2026-09-02): slots a preamble declares —
-    # name, content, each modifier — are keys of the parameters subject, nil
-    # when the call did not say them. A preamble-less partial keeps the old
-    # subject: whatever the call carried, nothing more.
-    #
-    # Two declarations derive a slot from the situation, the way the Ruby
-    # words they replace did: `# id: true` names the subject's id (`card`),
-    # `# label: true` the app contract's label (`section`'s heading). The
-    # derivation is runtime inference — a page never writes either.
-    def parameters_for(contract, name, content, kwargs)
-      return { content: content, name: name }.merge(kwargs) unless contract
-
-      declared = {}
-      declared[:name] = name if contract.name != :none
-      declared[:content] = content if contract.content
-      contract.modifiers.each do |modifier|
-        if kwargs.key?(modifier)
-          declared[modifier] = kwargs[modifier]
-        else
-          found, val = @chain.container_value(modifier)
-          declared[modifier] = found ? val : nil
-        end
-      end
-      declared[:id] = card_id if contract.id
-      declared[:label] = label_for(name, content) if contract.label
-      declared
-    end
-
-    def evaluate_body(evaluate, parameters, word, push, contract)
-      if push
-        @chain.with(parameters, described_as: "this #{word}", overlay: !contract.nil?) { evaluate.call }
-      else
-        evaluate.call
-      end
-    end
-
     # --- the escape hatch -------------------------------------------------
     #
     # The language has no `div`, deliberately. When an app needs something the

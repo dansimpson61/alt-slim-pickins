@@ -124,6 +124,16 @@ module SlimPickins
       parameters[:label] = said if contract&.label && !said.nil?
     end
 
+    # The optionality spelling (dan, 2026-09-02): slots a preamble declares —
+    # name, content, each modifier — are keys of the parameters subject, nil
+    # when the call did not say them. A preamble-less partial keeps the old
+    # subject: whatever the call carried, nothing more.
+    #
+    # Two declarations derive a slot from the situation, the way the Ruby
+    # words they replace did: `# id: true` names the subject's id (`card`),
+    # unless the page said `id:` itself, and `# label: true` the app
+    # contract's label (`section`'s heading). The derivation is runtime
+    # inference — a page never writes either.
     def parameters_for(contract, name, content, kwargs, shift_target = nil)
       return { content: content, name: name }.merge(kwargs) unless contract
 
