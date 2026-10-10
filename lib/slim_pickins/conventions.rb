@@ -265,7 +265,7 @@ module SlimPickins
                      principle: :value_shapes,
                      grade: :shape),
       Convention.new(name: :number_text, when_silent: 'a formatted value',
-                     decides: 'grouped digits, the currency sign, the percent scale',
+                     decides: 'grouped digits, the currency sign, cents when the value has them, the percent scale',
                      file: 'lib/slim_pickins/inference.rb', marker: 'def money',
                      inference: %i[money percent number],
                      override: 'nothing a page should say',
@@ -330,6 +330,8 @@ module SlimPickins
     INTERNAL = {
       relative: 'reached only by `moment`, through the `relative` variant',
       separated: 'the digit grouping `money` and `number` share',
+      sign: 'the minus sign `money` and `number` share',
+      cents: 'reached only by `money`, as its default precision',
       truthy?: 'internal truthiness check used by sentence guards and when conditions'
     }.freeze
 

@@ -121,16 +121,25 @@ module SlimPickins
       :text
     end
 
-    def separated(number)
-      whole, fraction = format('%.10f', number.abs).split('.')
+    # Digits grouped in thousands, rounded — never cut — to the places shown.
+    def separated(number, precision)
+      whole, fraction = format("%.#{precision}f", number.abs.round(precision)).split('.')
       grouped = whole.reverse.scan(/\d{1,3}/).join(',').reverse
-      [grouped, fraction]
+      [grouped, fraction].compact.join('.')
     end
 
-    def money(value, precision: 0)
-      grouped, fraction = separated(value)
-      body = precision.zero? ? grouped : "#{grouped}.#{fraction[0, precision]}"
-      "#{value.negative? ? '−' : ''}$#{body}"
+    def sign(value)
+      value.negative? ? '−' : ''
+    end
+
+    # Money shows cents when the value has them: 12.99 is $12.99, and a whole
+    # amount stays whole.
+    def cents(value)
+      (value % 1).zero? ? 0 : 2
+    end
+
+    def money(value, precision: cents(value))
+      "#{sign(value)}$#{separated(value, precision)}"
     end
 
     def percent(value, precision: 1)
@@ -138,9 +147,7 @@ module SlimPickins
     end
 
     def number(value, precision: 0)
-      grouped, fraction = separated(value)
-      body = precision.zero? ? grouped : "#{grouped}.#{fraction[0, precision]}"
-      "#{value.negative? ? '−' : ''}#{body}"
+      "#{sign(value)}#{separated(value, precision)}"
     end
   end
 end

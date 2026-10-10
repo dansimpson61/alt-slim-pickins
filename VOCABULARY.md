@@ -559,7 +559,7 @@ snippet ruby, .example
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the `<span>` element
+- **conventions** — `number_text` — grouped digits, the currency sign, cents when the value has them, the percent scale; `leaf_tag` — the `<span>` element
 - **infers** — whole dollars unless cents matter; a class on negatives so
   red is CSS's job, not the template's
 - **renders** — `<span class="money money--negative">−$1,234</span>`
@@ -581,7 +581,7 @@ currency" — not a domain noun. A portfolio has balances, not prices, and
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the `<span>` element
+- **conventions** — `number_text` — grouped digits, the currency sign, cents when the value has them, the percent scale; `leaf_tag` — the `<span>` element
 - **infers** — one decimal place
 - **renders** — `<span class="percent">4.5%</span>`
 
@@ -597,7 +597,7 @@ percent .weight, precision: 2
 - **modifiers** — `precision:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `number_text` — grouped digits, the currency sign, the percent scale; `leaf_tag` — the `<span>` element
+- **conventions** — `number_text` — grouped digits, the currency sign, cents when the value has them, the percent scale; `leaf_tag` — the `<span>` element
 - **infers** — none
 - **renders** — `<span class="number">750,000</span>`
 

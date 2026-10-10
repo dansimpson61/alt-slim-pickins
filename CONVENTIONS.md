@@ -557,9 +557,10 @@ for decimal places.
 
 **Watch for**
 
-- **Whole numbers truncate, they do not round.** `money` of `12.99` is `$12`;
-  of `0.6` is `$0`. `number` of `2.7` is `2`. Say `precision:` when cents
-  matter.
+- **Money shows the cents a value has.** `money` of `12.99` is `$12.99`; of
+  `0.6` is `$0.60`; a whole amount stays whole. Whatever is not shown is
+  rounded, never cut: `money .a, precision: 0` of `12.99` is `$13`, and
+  `number` of `2.7` is `3`.
 - **A rate needs to be named.** A column of `0.083` with no `as:` and no
   `format_for` reads `0`, because the value only says "number", and a number
   shows whole. Say `as: percent`, or have the app answer `format_for`.
@@ -897,7 +898,6 @@ them. Each was found by rendering, not by reading.
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
 | `card_id` | The documented override, `id:`, is thrown away | none — a defect |
-| `number_text` | Whole numbers truncate: `12.99` is `$12` | say `precision:` |
 | `format_family` | A rate with no `as:` reads `0` | `as: percent`, or `format_for` |
 | `plural_collection` | Only three irregulars; `address` → `addresss` | `from:` |
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |

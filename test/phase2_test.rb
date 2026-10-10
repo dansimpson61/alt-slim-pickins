@@ -167,6 +167,24 @@ class Phase2Test < Minitest::Test
     assert_equal '1,240', SlimPickins::Inference.number(1240)
   end
 
+  # 12.99 once rendered as $12: the places shown were cut, not rounded, and a
+  # whole-dollar default threw the cents away without a word.
+  def test_money_shows_the_cents_a_value_has_and_rounds_what_it_drops
+    assert_equal '$12.99', SlimPickins::Inference.money(12.99)
+    assert_equal '$0.60', SlimPickins::Inference.money(0.6)
+    assert_equal '−$12.50', SlimPickins::Inference.money(-12.5)
+    assert_equal '$1,234,567', SlimPickins::Inference.money(1_234_567.0)
+    assert_equal '$13', SlimPickins::Inference.money(12.99, precision: 0)
+    assert_equal '$13.00', SlimPickins::Inference.money(12.999, precision: 2)
+    assert_equal '3', SlimPickins::Inference.number(2.7)
+  end
+
+  def test_a_page_s_money_keeps_its_cents_unless_the_page_says_otherwise
+    html = render("page book\n  money .price\n  money .price, precision: 0\n", book: { price: 12.99 })
+    assert_includes html, '<span class="money">$12.99</span>'
+    assert_includes html, '<span class="money">$13</span>'
+  end
+
   def test_a_negative_amount_is_classed_so_red_is_css_s_job
     html = render("page book\n  money .loss\n", book: { loss: -12 })
     assert_includes html, 'class="money money--negative"'

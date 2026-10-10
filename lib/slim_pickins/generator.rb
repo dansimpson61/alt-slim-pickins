@@ -379,8 +379,7 @@ module SlimPickins
       body = attrs[:body]
       case base
       when :money, :percent, :number
-        precision = attrs[:precision] || (base == :percent ? 1 : 0)
-        text = Inference.send(base, body, precision: precision)
+        text = Inference.send(base, body, **attrs.slice(:precision).compact)
         negative = body.respond_to?(:negative?) && body.negative?
         full_tag('span', text, class: token(base, negative ? 'negative' : nil))
       when :badge
