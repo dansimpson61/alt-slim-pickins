@@ -60,11 +60,15 @@ module SlimPickins
 
     IRREGULAR_SINGULARS = IRREGULAR_PLURALS.invert.freeze
 
-    # `each holding` looks for `holdings`.
+    # A word that ends in a hiss takes `es`: address, tax, match, wish.
+    HISSING = /(s|x|ch|sh)\z/
+
+    # `each holding` looks for `holdings`; `each address`, for `addresses`.
     def plural(name)
       s = name.to_s
       return IRREGULAR_PLURALS[s] if IRREGULAR_PLURALS.key?(s)
       return "#{s[0..-2]}ies" if s.end_with?('y') && !%w[a e i o u].include?(s[-2])
+      return "#{s}es" if s.match?(HISSING)
 
       "#{s}s"
     end
@@ -78,6 +82,7 @@ module SlimPickins
       s = name.to_s
       return IRREGULAR_SINGULARS[s].to_sym if IRREGULAR_SINGULARS.key?(s)
       return :"#{s[0..-4]}y" if s.end_with?('ies')
+      return s.delete_suffix('es').to_sym if s.match?(/(ss|x|ch|sh)es\z/)
 
       s.end_with?('s') ? s[0..-2].to_sym : nil
     end

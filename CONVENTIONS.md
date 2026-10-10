@@ -232,10 +232,11 @@ each place, from: .addresses
 
 **Watch for**
 
-- **Plurals are simple.** A `y` after a consonant becomes `ies`; everything
-  else gains an `s`. Only `child`, `person` and `datum` are known irregulars.
-  `each address` looks for `addresss` and fails:
-  "this page has no addresss to go through". Use `from:`.
+- **Plurals are simple.** A `y` after a consonant becomes `ies`; a word that
+  ends in a hiss (`s`, `x`, `ch`, `sh`) gains `es`, so `each address` finds
+  `addresses`; everything else gains an `s`. Only `child`, `person` and
+  `datum` are known irregulars, so `each leaf` looks for `leafs`. Use
+  `from:`.
 - **You cannot bind a word of the language.** `each item` is refused, because
   `item` is a word. The error tells you the fix:
   `each row, from: .items`.
@@ -255,8 +256,10 @@ labelled "Amount".
 **To override** — `over:` names the attribute: `chart shapes, over: name`.
 
 **Watch for** — when the name is not a plural (`chart history`), there is no
-singular to read, and the chart numbers its points 1, 2, 3… instead. Say
-`over:`.
+singular to read, and the chart numbers its points 1, 2, 3… instead. The same
+happens when the singular guesses wrong: `chart caches` looks for `cach` and
+`chart statuses` for `statuse`, because `es` after `ch` or a single `s` could
+have come from either spelling. Say `over:`.
 
 ---
 
@@ -900,7 +903,7 @@ them. Each was found by rendering, not by reading.
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
 | `format_family` | A rate with no `as:` reads `0` | `as: percent`, or `format_for` |
-| `plural_collection` | Only three irregulars; `address` → `addresss` | `from:` |
+| `plural_collection` | Only three irregulars; `leaf` → `leafs` | `from:` |
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | `nil` is empty, but an `each` under it raises | have the app give `[]` |
 | `collection_detection` | A Struct of all-`nil` fields counts as empty | avoid Structs that can be all-`nil` |

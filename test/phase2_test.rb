@@ -44,6 +44,27 @@ class Phase2Test < Minitest::Test
     assert_equal 'days', SlimPickins::Inference.plural(:day)
   end
 
+  # `each address` once looked for `addresss` and failed, and the only way
+  # through was to name the collection with `from:`.
+  def test_a_word_that_ends_in_a_hiss_pluralises_with_es
+    html = render("page person\n  each address\n    text .street\n",
+                  person: { addresses: [{ street: '1 Elm' }, { street: '2 Oak' }] })
+    assert_includes html, '<p class="text">1 Elm</p>'
+    assert_includes html, '<p class="text">2 Oak</p>'
+    { address: 'addresses', tax: 'taxes', match: 'matches', wish: 'wishes',
+      status: 'statuses', house: 'houses' }.each do |singular, plural|
+      assert_equal plural, SlimPickins::Inference.plural(singular)
+    end
+  end
+
+  # The same rule runs backwards, where the ending can only have come from it.
+  def test_a_hissing_plural_singularises_by_dropping_es
+    { addresses: :address, taxes: :tax, matches: :match, wishes: :wish,
+      houses: :house, expenses: :expense }.each do |plural, singular|
+      assert_equal singular, SlimPickins::Inference.singular(plural)
+    end
+  end
+
   # Under `section accounts` the subject *is* the collection, which is what
   # lets `empty` know what is empty. `each` iterates it rather than looking
   # for `accounts` on an array.

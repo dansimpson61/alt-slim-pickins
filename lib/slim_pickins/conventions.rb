@@ -131,7 +131,7 @@ module SlimPickins
                      principle: :name_inflects,
                      grade: :structural),
       Convention.new(name: :plural_collection, when_silent: '`each holding`, `table holdings`',
-                     decides: 'which collection to read — `y`→`ies`, otherwise `+s`',
+                     decides: 'which collection to read — `y`→`ies`, a hiss→`+es`, otherwise `+s`',
                      file: 'lib/slim_pickins/inference.rb', marker: 'def plural',
                      inference: :plural, override: '`from:` on the collection word',
                      principle: :name_inflects,

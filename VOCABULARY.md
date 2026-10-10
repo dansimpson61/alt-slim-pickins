@@ -941,7 +941,7 @@ choice conversion_strategy
 - **modifiers** — `from:`
 - **children** — anything
 - **subject** — each element in turn
-- **conventions** — `plural_collection` — which collection to read — `y`→`ies`, otherwise `+s` (override: `from:` on the collection word); `singular_binding` — that the bound name is `holding`, reachable from inside (override: name it something else and say `from:`); `subject_or_collection` — that the subject *is* the collection, so it iterates itself
+- **conventions** — `plural_collection` — which collection to read — `y`→`ies`, a hiss→`+es`, otherwise `+s` (override: `from:` on the collection word); `singular_binding` — that the bound name is `holding`, reachable from inside (override: name it something else and say `from:`); `subject_or_collection` — that the subject *is* the collection, so it iterates itself
 - **infers** — none
 - **renders** — nothing of its own; the children repeat
 
