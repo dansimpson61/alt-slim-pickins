@@ -6,36 +6,37 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 38
   rendered pages. Roadmaps 0.1 to 0.3 are closed; 0.4 is running as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 606 runs / 6,628
+  (`DAYTRIP-0.4.0a` through `0.4.0q`). Twelve gate legs green, 608 runs / 6,639
   assertions / 0 failures, `ruby -w -c` clean. DAYTRIP-0.4.0h's prioritized list is
   landed in full. The round-by-round account lives in `history/CHRONICLE.md` and each
   round's own record in its `DAYTRIP-*.md`; this field carries the present, which is
   what a resume card is for, and `bin/check_card.rb` holds it to a budget.
   0.4.0p was **rejected** — it "was requiring the author to take care of the compiler
   rather than the other way around" — and `DAYTRIP-0.4.0q.md` replaces it, written to
-  that test. It is the families design: each `.sp` file is a namespace of `def`s, a
-  word opens its family for what nests under it, lexically; `def card, subject,
-  content` lets the sixteen-slot `expects` preamble go, and `item` inside `list.sp`
-  makes containment the rule rather than a declaration. Decisions D3 (shape only when
+  that test: families, each `.sp` file a namespace of `def`s. Decisions D3 (shape only when
   it gathers), D6 (shadowing allowed, gate reports) and D6a (`super`) are ruled.
   Nothing is implemented. On 2026-10-09 dan put a conventions-first step ahead of it:
   `CONVENTIONS.md`, an author's guide to every registered convention, measured, with
-  its weak spots in one table.
-last_touched: 2026-10-09
+  its weak spots in one table. On 2026-10-10 a review found paper outrunning code, and
+  dan accepted four corrections: commit the guide (done), fix the table's plain
+  defects one commit each (`money` done: 12.99 was `$12`), write a definition of
+  success for 0.4, and **no new design document until the last one has shipped code
+  or been withdrawn**.
+last_touched: 2026-10-10
 next_step: >-
-  **Start from `CONVENTIONS.md`, not 0.4.0q Step 1.** dan redirected the round on
-  2026-10-09: before families, strengthen the conventions and what they give an author.
-  A `def` parameter is optional and earns its place because conventions act on its
-  name. Rejected as configuration: reaching inputs as `word.x` (R2) and making a bare
-  name carry no meaning (A1). Next: walk the guide's "Where the conventions are
-  weakest" table with dan, beginning with its three patterns (a convention that fails
-  silently; an override that does not override, `card id:`; a convention that knows
-  too little), then draft `DAYTRIP-0.4.0q-pre.md`. Kept from the probing: a word's
-  inputs should be invisible to its caller's children (R1) — free for `def` words,
-  and for `.sp` files it costs only `partial_slot_forwarding`, which could move into
-  families. 0.4.0q's D1 should be withdrawn: kind names (`name`, `subject`) shadow
-  the subject's own fields. The rest of 0.4.0q stands, unstarted. Still dan's: the
-  `link` positional alias (Step 5b) and variants parts (i) and (ii).
+  **Fix the weak-spots table's plain defects in `CONVENTIONS.md`, one commit each, each
+  with a test that fails on the old code.** `money` is done (2026-10-10). Next, in
+  order: `card id:` thrown away; `input_step` giving `2.5` no step, so the form will
+  not submit; `plural_collection` making `address` into `addresss`. Probe with the
+  data the apps produce, and diff the corpus with `bin/byte_diff.rb` before and after.
+  Then write a five-line definition of success for 0.4 (the steward agent can draft
+  it). After that, walk the table's three patterns with dan. Rule, accepted by dan
+  2026-10-10: **no new design document (`DAYTRIP-0.4.0q-pre.md` included) until the
+  last one has shipped code or been withdrawn.** 0.4.0q stands, unstarted. Its D1
+  should be withdrawn: kind names (`name`, `subject`) shadow the subject's own
+  fields. Rejected as configuration: `word.x` (R2), and a bare name carrying no
+  meaning (A1). Still dan's: the `link` positional alias (Step 5b), and variants
+  parts (i) and (ii).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

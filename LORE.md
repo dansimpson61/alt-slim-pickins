@@ -1399,3 +1399,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 **Names are the power, not a burden** (dan's correction). I proposed reaching a word's inputs as `card.content` to separate them from the subject; dan rejected it as configuration that ignores convention over configuration. Conventions act on names — `documents` lets `each document` work, `title` becomes the heading — so a fix that strips or qualifies names removes what the conventions run on. Shadowing by a name the author chose is nearest-wins working; the hazard is names the author did not choose or cannot see.
 
 **Probe gotchas.** `page p` moves the subject into `p`, and a dot never looks outward, so page-level probe data needs `page "Demo"`. And `bin/verify_pages.rb` builds its pages at require time: an experiment that requires it reports nothing when a render raises there, which once read as "0 pages changed".
+
+## 2026-10-10 — Claude
+
+**A byte-identical corpus proves no regression, not correctness.** `money` showed 12.99 as `$12` with twelve legs green, because not one of the 38 corpus pages holds fractional money. The money fix changed zero pages. That was the right result, and it would have been the same if the fix were wrong. When a fix leaves the corpus unchanged, the evidence has to be a test that fails on the old code. The corpus digest also moves whenever the docs move: doc_reader counts the words of this repository's own documents, so diff the pages before reading a changed digest as a rendering change.
