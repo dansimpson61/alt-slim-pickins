@@ -910,7 +910,7 @@ them. Each was found by rendering, not by reading.
 | `heading_level` | No page can say a level. The override, "nest it differently", is inadequate (dan, 2026-10-10) | restructure the page |
 | `first_truthy_branch` | Only one branch can render. The override, "write two `choose`s", is inadequate (dan, 2026-10-10) | split the choice |
 | `box_title` | A `heading` inside a section makes a second title | say the words on the section |
-| `box_body_over_children` | Children are dropped silently | children, or content — not both |
+| `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `time_text` | `relative` cannot speak of the future | the full date is shown |

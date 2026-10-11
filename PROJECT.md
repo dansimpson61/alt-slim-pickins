@@ -20,12 +20,11 @@ next_step: >-
   **Walk `CONVENTIONS.md`'s three patterns with dan**: a convention that fails
   silently; an override that does not override; a convention that knows too little.
   Then work the weak-spots table row by row, toward `ROADMAP-0.4.md`'s criterion 2.
-  Criterion 1 is met (2026-10-10). Each of the fourteen documented overrides was
+  Criterion 1 is met (2026-10-10). Each of the thirteen documented overrides was
   broken in turn and the suite run. Three nothing caught (`metric as:`, `button
   type:`, a value said on the inner word); all worked, and each now has a test that
-  fails if the convention wins. Open for dan: whether `box_body_over_children`'s
-  "give the box children and no content" is an override or, like `heading_level`'s
-  and `choose`'s, an inadequate one. One commit per fix, each with a test that fails
+  fails if the convention wins. dan ruled three overrides inadequate
+  (`heading_level`, `choose`, `box_body_over_children`): they are table rows. One commit per fix, each with a test that fails
   on the old code; diff the corpus with `bin/byte_diff.rb` before and after. Rule,
   accepted by dan 2026-10-10: **no new design document until the last one has
   shipped code or been withdrawn.** Rejected as configuration: `word.x` (R2), and a

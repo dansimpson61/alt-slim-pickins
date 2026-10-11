@@ -29,10 +29,11 @@ promises are weakest. 0.4 is finished when that table is.
 ## The definition of success
 
 1. **Every override works.** CONVENTIONS.md has twenty *To override* lines.
-   Four of them answer "nothing". dan ruled two more inadequate on 2026-10-10:
-   `heading_level`'s "nest it differently" and `choose`'s "write two `choose`s".
-   Those two are now rows in the weak-spots table. The other fourteen name a way
-   to overrule the convention. Each of the fourteen is proved by a test, or by a
+   Four of them answer "nothing". dan ruled three more inadequate on 2026-10-10:
+   `heading_level`'s "nest it differently", `choose`'s "write two `choose`s",
+   and `box_body_over_children`'s "give the box children and no content". Those
+   three are rows in the weak-spots table. The other thirteen name a way to
+   overrule the convention. Each of the thirteen is proved by a test, or by a
    page in the corpus, that fails if the convention wins instead. The guide's second
    pattern asks how many documented overrides no page exercises. That question
    gets a count, and the count is zero.
