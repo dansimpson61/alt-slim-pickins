@@ -181,18 +181,17 @@ is a beautifully organised runtime for the wrong language.
 
 ## Status
 
-**Roadmaps 0.1, 0.2, and 0.3 are completed.**
+**Roadmaps 0.1 to 0.4 are completed.**
 - [ROADMAP-0.1.md](history/ROADMAP-0.1.md) proved the one-sentence grammar.
 - [ROADMAP-0.2.md](ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
 - [ROADMAP-0.3.md](ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
 
-**Roadmap 0.4 is underway**, and since 2026-10-10 it has a question:
-[ROADMAP-0.4.md](ROADMAP-0.4.md) asks whether the conventions keep their
-promises, so that an author only has to name things, and says what closes it.
-It ran first as a sequence of daytrips, `DAYTRIP-0.4.0a` through `0.4.0q`,
-with no stated question. The roadmap tells how the question emerged from them.
-Families (`DAYTRIP-0.4.0q.md`) is withdrawn from 0.4 and carried to 0.5 as its
-question. `PROJECT.md`'s `next_step` names the next concrete fix.
+- [ROADMAP-0.4.md](ROADMAP-0.4.md) asked whether the conventions keep their promises, so that an author only has to name things. Every documented override is proved by a test, and the weak-spots table in [CONVENTIONS.md](CONVENTIONS.md) is empty. It ran first as seventeen daytrips (`DAYTRIP-0.4.0a` to `0.4.0q`), and the roadmap tells how its question emerged from them. It closed on 2026-10-11.
+
+**Roadmap 0.5 is next, and not yet written.** It is an odd roadmap, so it leads
+with the forward eye, and its question is families: each `.sp` file as a
+namespace of words, found nearest-first. `DAYTRIP-0.4.0q.md` is its starting
+material, not its plan. `PROJECT.md`'s `next_step` says where planning begins.
 
 Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 30 app words, 38 verified pages, 38 conventions, 35 promises, and 113 style rules.
 

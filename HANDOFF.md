@@ -89,35 +89,42 @@ measure are quoted as the gate output they are.
 
 ---
 
-### The active next step — close 0.4, then open 0.5
+### The active next step — plan 0.5
 
-0.4's question, from dan on 2026-10-10: *do the conventions keep their promises,
-so that an author only has to name things?* `ROADMAP-0.4.md` holds it, with five
-criteria and a record of where each stands. Four are met. The fifth waits only on
-dan looking at the pages the fixes changed. `CONVENTIONS.md`'s weak-spots table is
-empty, and its place in the guide lists the stated limits.
+**0.4 closed on 2026-10-11** (`ROADMAP-0.4.md` records each criterion and how it was
+met). 0.5 is an odd roadmap, so it leads with the forward eye, and its question is
+**families**: each `.sp` file a namespace of words, found nearest-first, lexically.
+dan withdrew families from 0.4 on 2026-10-10 as new design that the backward look had
+not asked for.
 
-Two things are open, in this order:
+Planning 0.5, in this order:
 
-1. **A proposal dan has not yet answered: bury the corpses in `pages/`.**
-   `pages/` is the Phase 0–2 payload, written before the apps existed, and the gate
-   still renders it.
-   - `partials/test_account_card.sp` is a byte-for-byte copy of portfolio's
-     `account_card.sp`.
-   - `account_detail.sp` and `portfolio_table.sp` are stale drafts of portfolio's
-     views.
-   - `roth_form.sp` is an older roth form.
-   - `pages.tin` copies portfolio's nav.
-   - `bin/show_portfolio.rb` is broken (`gsub` for nil), and `demo`,
-     `render_pages` and `diff_roth` only serve `pages/`.
-
-   Keep `pages/specimen.sp`, the every-word specimen that the studio and
-   `measure_cost` use. The studio's page ledger and four tests name these files.
-   The recommendation is to point the ledger at the live portfolio and roth views.
-2. **0.5: families.** `DAYTRIP-0.4.0q.md` is starting material, not a plan.
-   Re-measure its premises first, as its header says. Also carried there: the
-   `link` positional alias, the variants proposal, 0.4.0p's N1 and N2, and
+1. **Measure 0.4.0q's premises before writing anything.** `DAYTRIP-0.4.0q.md` is
+   starting material, not a plan. Its header lists what has moved: Step 0 is done, D1
+   should be withdrawn, and `partial_slot_forwarding` is carried in. Its own Step 3,
+   resolving the corpus through a lexical chain and reporting what would resolve
+   differently, is measurement and changes no behaviour. Round after round in this
+   project found a list item's premise wrong, and 2026-10-10's badge row was one more.
+   Measure the mechanism, with the data the apps actually produce.
+2. **Write `ROADMAP-0.5.md` first: the question and a definition of success, as 0.4's
+   was.** The steward agent can draft it (Mode 1, Articulate), and dan confirms the
+   question and the destination. Keep it a roadmap, not a plan.
+3. **Carried into 0.5, each awaiting dan:** the `link` positional alias (0.4.0q Step
+   5b), the variants proposal parts (i) and (ii), 0.4.0p's N1 and N2, and
    `partial_slot_forwarding`.
+
+Still open and separate from 0.5: **bury the corpses in `pages/`**. That is a proposal
+dan has not answered. `pages/` is the Phase 0–2 payload from before the apps.
+- `partials/test_account_card.sp` is a byte-for-byte copy of portfolio's
+  `account_card.sp`.
+- `account_detail.sp` and `portfolio_table.sp` are stale drafts of portfolio's views.
+- `roth_form.sp` is an older roth form, and `pages.tin` copies portfolio's nav.
+- `bin/show_portfolio.rb` is broken, and `demo`, `render_pages` and `diff_roth` only
+  serve `pages/`.
+
+Keep `specimen.sp`, and point the studio's page ledger at the live views. Families
+touches word names and partials, so settling this first leaves 0.5 less to measure
+around.
 
 **One rule, accepted by dan 2026-10-10:** no new design document until the last one
 has shipped code or been withdrawn.

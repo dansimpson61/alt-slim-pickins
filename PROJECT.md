@@ -5,29 +5,28 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 38
-  rendered pages. Roadmaps 0.1 to 0.3 are closed. 0.4 ran as daytrips
-  (`DAYTRIP-0.4.0a` through `0.4.0q`) and, since 2026-10-10, has a question in
-  `ROADMAP-0.4.md`: do the conventions keep their promises, so that an author only has
-  to name things? It closes when `CONVENTIONS.md`'s weak-spots table is empty and
-  every documented override is proved by a test. Twelve gate legs green, 627 runs /
-  6,764 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
-  in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
-  carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
-  rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
-  question, unbuilt. ROADMAP-0.4's criteria 1 to 4 are met, the weak-spots table is
-  empty, and 0.4 closes on dan's look at the pages its fixes changed.
+  rendered pages. Roadmaps 0.1 to 0.4 are closed. 0.4 (closed 2026-10-11) asked whether
+  the conventions keep their promises, so that an author only has to name things:
+  every documented override is proved by a test, `CONVENTIONS.md`'s weak-spots table
+  is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 627
+  runs / 6,764 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
+  lives in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this
+  field carries the present, and `bin/check_card.rb` holds it to a budget. 0.5 is
+  next and unwritten: its question is families, from `DAYTRIP-0.4.0q.md` as starting
+  material.
 last_touched: 2026-10-11
 next_step: >-
-  **Close 0.4: dan looks at the pages the 2026-10-10 fixes changed** (ROADMAP-0.4
-  criterion 5; criteria 1 to 4 are met and recorded there). They are shown before and
-  after, with each link's live status, at
-  https://claude.ai/artifact/JAGXtd2SLWrd5rBmhBsxBg: portfolio's nav and Details
-  links, and word_graph's no-match message. Then, awaiting dan's
-  word: bury the corpses in `pages/` (HANDOFF lists them, and the recommendation is to
-  keep `specimen.sp` and point the studio's ledger at the live views). Then 0.5,
-  families, from DAYTRIP-0.4.0q as starting material with its premises re-measured.
-  Rule, accepted by dan 2026-10-10: **no new design document until the last one has
-  shipped code or been withdrawn.**
+  **Plan 0.5 (families). Measure before writing.** Re-measure `DAYTRIP-0.4.0q.md`'s
+  premises (its header lists what has moved since; its Step 3, the corpus resolved
+  through a lexical chain, is measurement). Then write `ROADMAP-0.5.md`: the question
+  and a definition of success, with the steward drafting and dan confirming, as for
+  0.4. Carried in, each dan's call: the `link` positional alias, variants (i) and (ii),
+  0.4.0p's N1 and N2, `partial_slot_forwarding`. Open and separate: dan's answer on
+  burying the corpses in `pages/` (HANDOFF lists them), which is best settled first,
+  because families touches word names and partials. Rule, accepted by dan 2026-10-10:
+  **no new design document until the last one has shipped code or been withdrawn.**
+  Both 0.4 design documents are now withdrawn or rejected, so ROADMAP-0.5 may be
+  written.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

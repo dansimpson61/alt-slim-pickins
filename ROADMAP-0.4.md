@@ -2,7 +2,7 @@
 
 **An even-numbered roadmap. It leads with the backward eye.**
 
-Status: **written 2026-10-10, on dan's word.** 0.4 ran for seventeen daytrips
+Status: **closed 2026-10-11, on dan's word.** Written 2026-10-10. 0.4 ran for seventeen daytrips
 before it had a written question. This document names the question late, says
 what success looks like, and records how the daytrips arrived at it. It is a
 roadmap and not a plan. It has no phases, and it must not grow any (see *What
@@ -90,9 +90,10 @@ inadequate overrides added theirs. One of them was found while probing
 | 2. The weak-spots table is empty | **Met.** dan walked the three patterns. Every row was fixed (a test fails on the old code) or ruled a stated limit, with the reason in its entry. |
 | 3. No fix makes the author write more | **Met.** Where refusing would have meant the author writing a `box` (`root_class`), the row closed as a stated limit instead. |
 | 4. Code leads paper | **Met.** 0.4.0p says on its own page that it was rejected. 0.4.0q is withdrawn to 0.5. No design document was opened since. |
-| 5. Green, and looked at | **Green** (twelve legs, 627 runs, 0 failures). **Waiting on dan's eye** for the pages fixes changed: portfolio's nav and Details links, and word_graph's no-match message. |
+| 5. Green, and looked at | **Met.** Green: twelve legs, 627 runs, 0 failures. On 2026-10-11 dan looked at before-and-after renders of every page the fixes changed, each with its links' live status: portfolio's nav and Details links, and word_graph's no-match message. |
 
-0.4 closes when dan has looked.
+**0.4 closed on 2026-10-11.** Its forward question goes to 0.5: families, from
+`DAYTRIP-0.4.0q.md` as starting material.
 
 ## How 0.4 arrived at its question
 
