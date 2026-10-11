@@ -109,7 +109,10 @@ and dan's ruling before any mechanical migration:
    with no new author bookkeeping: a parameter named after one of the language's own
    structural words (like `subject` or `name`) can collide with a real field the
    displayed record already has under that exact same name. This is new design and
-   needs dan's ruling before the 23 hand-written words are migrated.
+   needs dan's ruling before the migration. That migration covers every `.sp` file
+   that carries `expects`: twenty-three in `lib/vocabulary/` and five in the studio
+   (`shell`, `detail`, `tree`, `twig`, `why_card`) — dan ruled on 2026-10-11 that
+   the studio's five migrate too.
 2. **The nearest-first lookup chain, built first in reporting-only mode** — the way
    0.4.0q's Step 3 did. Resolve the corpus through the chain (file, then the word
    it's nested inside, then the app, then the language — the language is the
