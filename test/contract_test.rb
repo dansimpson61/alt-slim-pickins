@@ -65,11 +65,15 @@ class ContractTest < Minitest::Test
     assert_match(/\Athis account has no name\n/, error.message)
   end
 
-  # The failure is that the subject is empty, not that it lacks an attribute,
-  # and saying the second would send a reader looking in the wrong place.
-  def test_an_empty_subject_says_so_rather_than_blaming_the_attribute
-    error = assert_raises(SlimPickins::Nothing) { label(locals: { account: nil }) }
-    assert_match(/\Anothing to ask for name — the subject is empty\n/, error.message)
+  # A subject that is nil is nothing, as an empty list is: the page shows its
+  # empty situation rather than breaking. It used to raise "nothing to ask for
+  # name — the subject is empty". dan ruled on 2026-10-10 that what only the
+  # data can show gets a fallback, never a broken page.
+  def test_an_empty_subject_shows_its_empty_situation
+    html = SlimPickins.render("page account\n  form\n    field name\n  empty \"No account linked\"\n",
+                              path: '(test)', locals: { account: nil })
+    assert_includes html, '<p class="empty">No account linked</p>'
+    refute_includes html, '<form'
   end
 
   # `page account` is the line at fault. Skipping quietly would report the

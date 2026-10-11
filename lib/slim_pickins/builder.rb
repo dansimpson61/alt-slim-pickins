@@ -308,7 +308,7 @@ module SlimPickins
       # one that is not there is an error — skipping quietly would report the
       # missing attribute later, on a line that is not the cause.
       value = name.is_a?(Symbol) || name.is_a?(String) ? subject.fetch(name) : name
-      empty = Inference.collection?(value) && Inference.nothing_in?(value)
+      empty = Inference.nothing_in?(value) # nil is nothing, as an empty list is
       description = if name.is_a?(Symbol) || name.is_a?(String)
                       "this #{name}"
                     elsif value.respond_to?(:describe)

@@ -101,10 +101,17 @@ names the thing a reader should go and look at.
 | Situation | What is raised |
 |---|---|
 | The subject has no such attribute | `this account has no name` |
-| The subject is empty | `nothing to ask for name — the subject is empty` |
 | A word names a subject that is absent | `this page has no account` |
 
-The third is the one worth explaining. `page account` with no `account`
+A subject that is **there but `nil`** is not an error. `nil` is nothing, as an
+empty list is, so the page shows its `empty` situation and nothing else under
+that subject. Until 2026-10-10 it raised "nothing to ask for name — the subject
+is empty". dan ruled that a problem only the data can show gets a documented
+fallback, never a broken page: a live page must not fail because one record is
+missing. A subject that is *absent* is still an error, because that is the
+page's mistake, not the data's.
+
+The second is the one worth explaining. `page account` with no `account`
 available fails **on the line that named it**. An earlier draft skipped
 quietly and left the chain alone, so the failure surfaced three lines later as
 "this page has no name" — true, useless, and pointing at the wrong line. A

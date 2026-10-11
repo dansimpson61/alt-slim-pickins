@@ -337,10 +337,10 @@ When there are holdings, the `empty` line disappears instead. You never write
   "No words matched" was one such line. It never showed, even for a search
   with no matches, and its section now names `words`. A partial or a `def`
   is exempt, because its caller names the subject.
-- **`nil` is not quite nothing.** A section over `holdings: nil` goes
-  through nothing without raising (since 2026-10-10), but its `empty` line
-  does not show, where over `[]` it does. Which should win is open for
-  dan: see the weak-spots table.
+- **`nil` is nothing.** A section, or a page, over `nil` shows its `empty`
+  line exactly as over `[]` (dan's pattern-1 ruling, 2026-10-10: the data
+  never breaks the page). A subject that is *absent*, not there at all, is
+  still the page's mistake and is refused.
 - **A table may not hold `empty`.** Put the table inside a section and give
   the section the `empty`.
 
@@ -938,7 +938,6 @@ them. Each was found by rendering, not by reading.
 
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
-| `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
