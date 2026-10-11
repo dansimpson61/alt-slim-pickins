@@ -598,9 +598,14 @@ time relative, .t
 
 The machine-readable `datetime` is always there.
 
-**Watch for** — `relative` speaks only of the recent past: "today",
-"yesterday", "N days ago" up to a month. A future date, or an older one,
-shows the full date instead.
+`relative` counts calendar days, as a person does: "today", "yesterday",
+"N days ago", and the same forward, "tomorrow", "in N days". It does this up
+to a month either way. Beyond that the full date reads better, and it shows
+that.
+
+**Watch for** — nothing here since 2026-10-10. `relative` used to measure
+from the current moment to a date's midnight, so every afternoon it read
+three days ago as "4 days ago". It also had no words for the future.
 
 ### `option_selected` — a choice selects the current value
 
@@ -922,8 +927,6 @@ them. Each was found by rendering, not by reading.
 | `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
-| `time_text` | `relative` cannot speak of the future | the full date is shown |
-| `time_text` | `relative` reads a past date one day too old in the afternoon: three days ago is "4 days ago" | none — a defect |
 | `link_href` | `link home` is `/home`, not `/` | `to: "/"` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
@@ -973,5 +976,5 @@ first:
      *(built)*
    - `each` over `nil` shows nothing. *(built)*
    - A Struct is a record, never a collection. *(built)*
-   - `relative` counts calendar days and speaks of the future.
+   - `relative` counts calendar days and speaks of the future. *(built)*
    - `link home` goes to `/`.

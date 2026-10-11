@@ -232,6 +232,18 @@ class Phase2Test < Minitest::Test
     assert_equal '$13.00', SlimPickins::Inference.money(12.999, precision: 2)
   end
 
+  # Relative time counted from this moment to a date's midnight, so every
+  # afternoon three days ago read "4 days ago", and the future had no words.
+  # It counts calendar days now (dan, 2026-10-10).
+  def test_relative_time_counts_calendar_days_both_ways
+    today = Date.new(2026, 10, 10)
+    { 0 => 'today', 1 => 'yesterday', 3 => '3 days ago', -1 => 'tomorrow', -3 => 'in 3 days' }.each do |ago, text|
+      assert_equal text, SlimPickins::Inference.relative(today - ago, today: today)
+    end
+    assert_equal 'in 22 days', SlimPickins::Inference.relative(Date.new(2026, 11, 1), today: today)
+    assert_equal '1 December 2026', SlimPickins::Inference.relative(Date.new(2026, 12, 1), today: today)
+  end
+
   # A plain number once showed whole, so a rate of 0.083 read `0` and 2.7 read
   # `3`. It shows the fraction it has, up to two places (dan, 2026-10-10).
   def test_a_number_shows_the_fraction_it_has_up_to_two_places

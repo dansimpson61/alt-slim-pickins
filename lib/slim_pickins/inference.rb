@@ -116,14 +116,19 @@ module SlimPickins
       value.to_s
     end
 
-    def relative(value)
-      return value.to_s unless value.respond_to?(:to_time)
+    # Counted in calendar days, as a person counts them. Measuring from this
+    # moment to a date's midnight once made three days ago "4 days ago" every
+    # afternoon. Beyond a month either way, the date itself reads better.
+    def relative(value, today: Date.today)
+      return value.to_s unless value.respond_to?(:to_date)
 
-      days = ((Time.now - value.to_time) / 86_400).round
+      days = (today - value.to_date).to_i
       case days
       when 0 then 'today'
       when 1 then 'yesterday'
+      when -1 then 'tomorrow'
       when 2..30 then "#{days} days ago"
+      when -30..-2 then "in #{-days} days"
       else moment(value, nil)
       end
     end
