@@ -639,8 +639,13 @@ The statuses it knows are `warning`, `blocker`, `polish`, `ok`, `error`,
 
 **To override** — name the variant yourself: `badge warning, "Look"`.
 
-**Watch for** — a status it does not know gets no colour, silently.
-`archived` renders as a plain badge.
+A status it does not know, like `archived`, is a plain badge, and a plain
+badge *is* the neutral one. The theme draws `.badge` and `.badge--neutral`
+in the same soft ink, so an unknown status reads as grey. The page never
+breaks because an app grew a new status (dan's ruling, 2026-10-10).
+
+**Watch for** — grey is all an unknown status gets. If one should stand out,
+name its variant.
 
 ---
 
@@ -930,7 +935,6 @@ them. Each was found by rendering, not by reading.
 | `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
 | `box_title` | A `heading` inside a section makes a second title | say the words on the section |
 | `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
-| `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
@@ -950,7 +954,10 @@ first:
    word file with two top lines (`root_class`). A problem only the data can
    show gets a deliberate, documented fallback and never a broken page,
    because a live page must not fail when an app grows a new value. An
-   unknown status gets the `neutral` badge.
+   unknown status reads as the neutral badge. *(Measured: it already did.
+   The theme draws a plain badge and `badge--neutral` alike, so the row's
+   "no colour" was a premise that did not survive. The fix is the guide
+   saying so.)*
 2. **An override that does not override.** A convention you cannot overrule
    is a trap. `card id:` was the one found, and it is fixed (2026-10-10). No
    page in the corpus said it, so the gate never saw the fault. The question
