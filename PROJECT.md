@@ -19,10 +19,10 @@ status: >-
 last_touched: 2026-10-11
 next_step: >-
   **Close 0.4: dan looks at the pages the 2026-10-10 fixes changed** (ROADMAP-0.4
-  criterion 5; criteria 1 to 4 are met and recorded there). Portfolio (`ruby
-  examples/portfolio/app.rb`): the nav is just Overview, which goes to `/`, and each
-  account's Details opens it. word_graph (`ruby examples/word_graph/app.rb`): a
-  search with no matches says "No words matched your query." Then, awaiting dan's
+  criterion 5; criteria 1 to 4 are met and recorded there). They are shown before and
+  after, with each link's live status, at
+  https://claude.ai/artifact/JAGXtd2SLWrd5rBmhBsxBg: portfolio's nav and Details
+  links, and word_graph's no-match message. Then, awaiting dan's
   word: bury the corpses in `pages/` (HANDOFF lists them, and the recommendation is to
   keep `specimen.sp` and point the studio's ledger at the live views). Then 0.5,
   families, from DAYTRIP-0.4.0q as starting material with its premises re-measured.
