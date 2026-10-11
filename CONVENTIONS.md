@@ -466,9 +466,14 @@ each holding
 <article class="card holding_card" id="holding-3">
 ```
 
-**Watch for** — only a word with **one** top line gets the class. A word
-whose body is two lines side by side gets no class and no wrapper, so nothing
-can style it as a whole. Wrap the lines in a `box`.
+**A word with several top lines is a fragment, by design** (2026-10-10). It
+stands for those lines side by side, with nothing around them, so there is no
+one element to carry its name. The classic studio relies on this: its `editor`
+is two top lines, `palette` and `section`, and they are two panes of a
+two-column grid. A wrapper would merge them into one, and putting the class on
+each line would pull the palette into the editor's column. If you want a word
+you can style as a whole, give it one top line, a `box` around the rest. That
+is a choice about what the word is, not a workaround.
 
 ### `card_id` — a card over something with an id gets that id
 
@@ -938,7 +943,6 @@ them. Each was found by rendering, not by reading.
 
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
-| `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
 
@@ -955,7 +959,10 @@ first:
    with no collection above it, a box with written content and children, a
    `heading` that would make a second section title (`box_title`), and a
    word file with two top lines (`root_class`). *(Built for `empty`, the box
-   and the second title. `root_class` is open: see the table.)* A problem only the data can
+   and the second title. `root_class` closed as a stated limit instead:
+   refusing would make the author write a `box`, which criterion 3 forbids,
+   and wrapping would break the classic studio's two panes. A word with
+   several top lines is a fragment, by design.)* A problem only the data can
    show gets a deliberate, documented fallback and never a broken page,
    because a live page must not fail when an app grows a new value. An
    unknown status reads as the neutral badge. *(Measured: it already did.
