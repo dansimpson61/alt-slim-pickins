@@ -95,7 +95,9 @@ module SlimPickins
       s.end_with?('s') ? s[0..-2].to_sym : nil
     end
 
-    def collection?(value) = value.is_a?(Enumerable) && !value.is_a?(Hash)
+    # A Hash is an object with keys, and a Struct is a record; Ruby lets both
+    # be walked, but neither is a list of things.
+    def collection?(value) = value.is_a?(Enumerable) && !value.is_a?(Hash) && !value.is_a?(Struct)
 
     def nothing_in?(value)
       return true if value.nil?

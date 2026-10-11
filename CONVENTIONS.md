@@ -336,15 +336,15 @@ When there are holdings, the `empty` line disappears instead. You never write
 ### `collection_detection` and `nothing_detection` — what counts as a collection
 
 A value is a **collection** when it can be walked (it is `Enumerable`) and is
-not a `Hash`. A collection is **nothing** when it has no items, or is `nil`.
+not a `Hash` or a `Struct`: those are records, though Ruby lets you walk them.
+A collection is **nothing** when it has no items, or is `nil`.
 
 So `section settings` over a Hash moves into it like any object, and `.theme`
 reads its key.
 
-**Watch for** — a Ruby `Struct` can be walked, so it counts as a collection.
-A Struct whose fields are all `nil` or `false` counts as **empty**:
-`section holding` over such a Struct shows its `empty` line and drops the
-rest.
+**Watch for** — nothing here since 2026-10-10. A `Struct` used to count as a
+collection, so one whose fields were all `nil` counted as empty and its
+section showed only its `empty` line.
 
 ---
 
@@ -918,7 +918,6 @@ them. Each was found by rendering, not by reading.
 |---|---|---|
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
-| `collection_detection` | A Struct of all-`nil` fields counts as empty | avoid Structs that can be all-`nil` |
 | `box_title` | A `heading` inside a section makes a second title | say the words on the section |
 | `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
@@ -973,6 +972,6 @@ first:
    - A short list of common irregular plurals, with `from:` for the rest.
      *(built)*
    - `each` over `nil` shows nothing. *(built)*
-   - A Struct is a record, never a collection.
+   - A Struct is a record, never a collection. *(built)*
    - `relative` counts calendar days and speaks of the future.
    - `link home` goes to `/`.

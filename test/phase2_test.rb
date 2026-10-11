@@ -97,6 +97,17 @@ class Phase2Test < Minitest::Test
     refute_includes html, 'class="title"'
   end
 
+  # A Struct can be walked, so it once counted as a collection, and one whose
+  # fields were all nil counted as empty: its section showed only `empty`.
+  # A Struct is a record (dan, 2026-10-10).
+  def test_a_struct_is_a_record_never_a_collection
+    pair = Struct.new(:first, :second)
+    refute SlimPickins::Inference.collection?(pair.new(nil, nil))
+    html = render("page book\n  section pair\n    title \"Shown\"\n    empty \"None\"\n", book: { pair: pair.new(nil, nil) })
+    assert_includes html, 'Shown'
+    refute_includes html, 'None'
+  end
+
   def test_from_overrides_pluralising
     html = render("page book\n  each entry, from: .recent\n    title .name\n",
                   book: { recent: [{ name: 'Only' }] })
