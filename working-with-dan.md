@@ -92,6 +92,27 @@ working manual that should be better after every session than it was before.
   recommendation (`ROADMAP-0.2.md`, *How this stays accountable*;
   `HANDOFF.md`, *What was Phase 4*). Say "dan's call" where it is one, and
   don't slip it back to him when it isn't.
+- **A request to explain something gets the explanation, not the decision the
+  explanation would have produced.** (observed 2026-10-11). Asked "I don't
+  understand criterion 7," an agent tried the idea out concretely, found it didn't
+  hold up, dropped the criterion, and delivered the conclusion — written into the
+  roadmap file plus a one-line summary — rather than the walkthrough. His reply:
+  *"steward did not explain criterion 7."* He wasn't contesting the drop; he never
+  got what he asked for. Arriving at the right answer is not a substitute for
+  showing the reasoning when the reasoning itself is what was requested — deliver
+  it before acting on it, even when the action it leads to doesn't change.
+- **He audits the argument separately from the verdict, and will correct one while
+  leaving the other standing.** (observed 2026-10-11). After the walkthrough above
+  landed, he wrote: *"I don't think this changes anything in 0.5, but 'all words
+  are first-class citizens.' We don't carve out special privileges for the
+  language's 'own' words."* He was not reopening the dropped criterion — he was
+  rejecting the premise its explanation had leaned on (a protected tier for the
+  language's built-in words) while leaving the conclusion it supported untouched.
+  Checking the code confirmed he was right: `refuse_shadowing!` in
+  `lib/slim_pickins/library.rb` is exactly that protected tier today, and removing
+  it is already `ROADMAP-0.5.md`'s own criterion 4. Treat "this doesn't change the
+  outcome" as license to still audit the reasoning, never as permission to skip
+  the check.
 - **He proposes simpler layers and is usually right.** 2026-09-10: his "should
   we solve this with more creative use of CSS?" overturned an agent's
   recommendation of a new language mechanism — the house's own precedence
@@ -253,6 +274,17 @@ working manual that should be better after every session than it was before.
   time: before adding a parameter whose value names something the code
   already names elsewhere, ask what already knows this fact, not just
   whether repeating it is tolerable.
+- **Internal round-tracking shorthand is not shared memory — translate it every
+  time, not just the first time.** (observed 2026-10-11). Drafting `ROADMAP-0.5.md`,
+  an agent used "D1," "N1/N2," "variants (i) and (ii)," and `partial_slot_forwarding`
+  as if dan carried the daytrips' own bookkeeping between sessions. His answer was
+  flat: *"Let's not speak in code. E.g., I don't remember what D1 is, or N1/N2,
+  variants (i)/(ii), partial_slot_forwarding, etc."* He is not his own session's
+  cache for a project with eighteen `DAYTRIP-*.md` files. Before using a
+  project-internal code, say what it actually means in plain prose — the old
+  mechanism's concrete behaviour, with a named file or line — every time a document
+  or message is addressed to him, not once per conversation and never assumed held
+  over from an earlier round.
 
 ## Tells and habits
 

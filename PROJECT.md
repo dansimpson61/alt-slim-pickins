@@ -9,24 +9,25 @@ status: >-
   the conventions keep their promises, so that an author only has to name things:
   every documented override is proved by a test, `CONVENTIONS.md`'s weak-spots table
   is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 627
-  runs / 6,764 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
+  runs / 6,698 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
   lives in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this
   field carries the present, and `bin/check_card.rb` holds it to a budget. 0.5 is
-  next and unwritten: its question is families, from `DAYTRIP-0.4.0q.md` as starting
-  material.
+  next: `ROADMAP-0.5.md` holds its question (families) and definition of success,
+  confirmed by dan across several rounds of correction and closed 2026-10-11.
 last_touched: 2026-10-11
 next_step: >-
-  **Plan 0.5 (families). Measure before writing.** Re-measure `DAYTRIP-0.4.0q.md`'s
-  premises (its header lists what has moved since; its Step 3, the corpus resolved
-  through a lexical chain, is measurement). Then write `ROADMAP-0.5.md`: the question
-  and a definition of success, with the steward drafting and dan confirming, as for
-  0.4. Carried in, each dan's call: the `link` positional alias, variants (i) and (ii),
-  0.4.0p's N1 and N2, `partial_slot_forwarding`. The corpses in `pages/` were buried
-  on 2026-10-11, so families meets one copy of each word, not two. Rule, accepted by
-  dan 2026-10-10:
-  **no new design document until the last one has shipped code or been withdrawn.**
-  Both 0.4 design documents are now withdrawn or rejected, so ROADMAP-0.5 may be
-  written.
+  **Start 0.5's first daytrip, in a fresh session.** `ROADMAP-0.5.md` holds the
+  question and the definition of success; `HANDOFF.md`'s active next step points
+  here too. Two things need designing before any mechanical migration: what replaces
+  the old declaration line (dan's preferred shape is `def word, [param], [param],
+  ...`; the one problem to solve humanely, without new author bookkeeping, is a
+  parameter named after a structural kind colliding with a record's own field of
+  the same name), and the nearest-first lookup chain itself, built first in
+  reporting-only mode — the way 0.4.0q's Step 3 did — so it only confirms what
+  would resolve differently (expected: `editor`, plus the eleven parent-bound
+  words) before any behaviour changes. Carried in, still dan's call: the `link`
+  positional alias, the overloaded `variant` idea, two unconfirmed parsing rulings,
+  and `partial_slot_forwarding`'s relationship to formal containment.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

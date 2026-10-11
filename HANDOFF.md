@@ -92,26 +92,43 @@ measure are quoted as the gate output they are.
 ### The active next step — plan 0.5
 
 **0.4 closed on 2026-10-11** (`ROADMAP-0.4.md` records each criterion and how it was
-met). 0.5 is an odd roadmap, so it leads with the forward eye, and its question is
-**families**: each `.sp` file a namespace of words, found nearest-first, lexically.
-dan withdrew families from 0.4 on 2026-10-10 as new design that the backward look had
-not asked for.
+met). **`ROADMAP-0.5.md` is now written and confirmed by dan** (committed 4620baa,
+after several rounds of correction). 0.5 is an odd roadmap, leading with the forward
+eye, and its question is **families**: each page file a namespace of words, found
+nearest-first, so two authors (or two studio interfaces) can each write a word like
+`editor` and each get their own. **Read `ROADMAP-0.5.md` before anything below** — it
+carries the definition of success, how it got there, and what counts as drift; this
+section only orients a fresh session into starting the work.
 
-Planning 0.5, in this order:
+**Start the first daytrip, in a fresh session.** Two things need their own design
+and dan's ruling before any mechanical migration:
 
-1. **Measure 0.4.0q's premises before writing anything.** `DAYTRIP-0.4.0q.md` is
-   starting material, not a plan. Its header lists what has moved: Step 0 is done, D1
-   should be withdrawn, and `partial_slot_forwarding` is carried in. Its own Step 3,
-   resolving the corpus through a lexical chain and reporting what would resolve
-   differently, is measurement and changes no behaviour. Round after round in this
-   project found a list item's premise wrong, and 2026-10-10's badge row was one more.
-   Measure the mechanism, with the data the apps actually produce.
-2. **Write `ROADMAP-0.5.md` first: the question and a definition of success, as 0.4's
-   was.** The steward agent can draft it (Mode 1, Articulate), and dan confirms the
-   question and the destination. Keep it a roadmap, not a plan.
-3. **Carried into 0.5, each awaiting dan:** the `link` positional alias (0.4.0q Step
-   5b), the variants proposal parts (i) and (ii), 0.4.0p's N1 and N2, and
-   `partial_slot_forwarding`.
+1. **What replaces the old declaration line (`expects`).** Retiring it is required,
+   not optional (criterion 6). dan's preferred shape: name a parameter plainly for
+   what it is, `def word, [param], [param], ...`. The one problem to solve humanely,
+   with no new author bookkeeping: a parameter named after one of the language's own
+   structural words (like `subject` or `name`) can collide with a real field the
+   displayed record already has under that exact same name. This is new design and
+   needs dan's ruling before the 23 hand-written words are migrated.
+2. **The nearest-first lookup chain, built first in reporting-only mode** — the way
+   0.4.0q's Step 3 did. Resolve the corpus through the chain (file, then the word
+   it's nested inside, then the app, then the language — the language is the
+   outermost ring this chain reaches, not a protected tier) and report what would
+   resolve differently, changing no behaviour yet. It should find exactly `editor`,
+   plus the eleven parent-bound words. If it finds more, stop and report rather than
+   adjusting the chain until the list is short.
+
+**Carried into 0.5, each still awaiting dan** (criterion 7): the `link` positional
+alias, the overloaded `variant` idea (author-picked style vs. data-picked display,
+under one name), two small parsing fixes argued for but not separately confirmed,
+and `partial_slot_forwarding`'s relationship to formal containment once
+nearest-first lookup is the formal rule.
+
+**`account_card` → `card`, contained to the portfolio app**, is 0.5's concrete proof
+that families lets an author write the name they mean (criterion 4) — the shadowing
+restriction it depends on was already ruled on 2026-10-05 but never shipped as code.
+At least one of the eight example apps that no longer carries its weight should also
+be named and improved or retired during this roadmap; nobody has named which one yet.
 
 **Done before 0.5 began (2026-10-11): the corpses in `pages/` are buried.** That was
 the Phase 0–2 payload, from before the apps existed. Buried: copies and stale drafts
@@ -121,15 +138,17 @@ specimen. The corpus is now 35 pages, and no gate leg saw less: `check_styles`
 renders the live portfolio index in their place. The commit lists everything.
 
 **One rule, accepted by dan 2026-10-10:** no new design document until the last one
-has shipped code or been withdrawn.
+has shipped code or been withdrawn. `ROADMAP-0.5.md` is a roadmap, not a design
+document, so this didn't block writing it — but it governs whatever daytrip plan
+designs the declaration line's replacement next.
 
 ### Families — withdrawn from 0.4 on 2026-10-10, carried to 0.5
 
-The section below was the active next step from 2026-10-05 to 10-09. It stays as the
-record of what families is and what was ruled. **Do not start Step 1.** dan ruled
-that families is 0.5's question, not 0.4's work. When 0.5 opens, re-measure the
-plan's premises before building: Step 0 is done, and D1 should be withdrawn, because
-kind names shadow the subject's own fields.
+**Superseded by `ROADMAP-0.5.md` for current status (2026-10-11) — read that first.**
+The section below was the active next step from 2026-10-05 to 10-09 and stays as the
+historical record of what families is and the rationale `DAYTRIP-0.4.0q.md` carries.
+D1 (below) is confirmed withdrawn; the replacement for what it was going to retire is
+now 0.5's own required work, not an open question about whether to attempt it.
 
 **By dan's instruction of 2026-10-05.** `DAYTRIP-0.4.0p.md` was **rejected** — dan's
 reason, and it is the test every decision in its replacement is measured against:
