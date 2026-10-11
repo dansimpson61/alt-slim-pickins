@@ -1423,3 +1423,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **Survey before you refuse.** Before adding a compile-time refusal, walk every `.sp` and `.tin` in the repo through the candidate rule (`Transform.tree` plus a recursive walk takes seconds). On 2026-10-10 the survey separated the four page-visible errors cleanly. Two matched nothing. One matched a single real bug (word_graph's never-shown empty line). One matched five working partials, which made it a question for dan, not a fix. Also: `check_grammar.rb` and `Contracts.first_violation` are two walkers over one `complaints`, and any new context a rule needs (such as `named_above`) has to be threaded through both, plus the contract test's local walker.
+
+## 2026-10-10 — Claude
+
+**A rule that conflicts with a newer ruling is superseded. Don't hold it up as a question.** On 2026-10-10 I withdrew the nil-is-nothing fix because it broke ContractTest's "the subject is empty" raise, and I asked dan to choose. He pointed out that his pattern-1 ruling (the data never breaks the page) had already answered it. When a test encodes an older rule that a later ruling contradicts, update the test and its claim document (here CONTRACT.md) and name the change in the commit. Also: **use the app, not just the corpus.** Crawling every link portfolio renders found three dead links (`/accounts`, `/projections`, `/show`) that existed since its first commit. The corpus renders pages, but it never follows their links.

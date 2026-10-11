@@ -9,28 +9,27 @@ status: >-
   (`DAYTRIP-0.4.0a` through `0.4.0q`) and, since 2026-10-10, has a question in
   `ROADMAP-0.4.md`: do the conventions keep their promises, so that an author only has
   to name things? It closes when `CONVENTIONS.md`'s weak-spots table is empty and
-  every documented override is proved by a test. Twelve gate legs green, 625 runs /
-  6,755 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
+  every documented override is proved by a test. Twelve gate legs green, 627 runs /
+  6,764 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
   in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
   carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
   rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
   question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Ask dan about `root_class`**, the last pattern-1 error: five working partials
-  (portfolio's and pages' account_card, why_card, editor, documents_list) have two
-  top lines, so refusing them means wrapping each in a `box`, which changes markup.
-  Built 2026-10-10, one commit each: all six pattern-3 rulings; pattern 1's errors for
-  `empty` with nothing named above (it fixed word_graph's never-shown "No words
-  matched"), a box's dropped lines, and a second title. The badge row proved already
-  true. Open rows for dan: `empty` under a section over `nil` stays hidden (vs.
-  `ContractTest`'s "the subject is empty" rule); a bare `section` renders an empty
-  `<h2>`; a table may not hold `empty`; `partial_slot_forwarding`. Also: whether to add
-  `badge--neutral` to unknown statuses' markup; portfolio's `link accounts` and `link
-  projections` have no routes; five apps' `to: "/"` on `link home` is now redundant.
-  Rule, accepted by dan 2026-10-10: **no new design document until the last one has
-  shipped code or been withdrawn.** Still dan's: the `link` positional alias, variants
-  (i) and (ii), 0.4.0p's N1 and N2.
+  **dan looks at the pages today's fixes changed (ROADMAP-0.4 criterion 5); then 0.4
+  can close.** Criteria 1 to 4 are met as of 2026-10-10: every override proved, the
+  weak-spots table empty (fixed, or stated limits with reasons), no fix asked the
+  author to write more, 0.4.0p rejected and 0.4.0q withdrawn to 0.5. Pages to look at:
+  portfolio (`ruby examples/portfolio/app.rb`), where the nav is just Overview, which
+  now goes to `/`, and each account card's Details opens its account. word_graph
+  (`ruby examples/word_graph/app.rb`), where a search with no matches now says "No
+  words matched your query." The pages corpus nav lost the same two dead links. When
+  0.4 closes, 0.5 opens with families: DAYTRIP-0.4.0q is starting material, with
+  `partial_slot_forwarding` added, and its premises re-measured first. Rule, accepted
+  by dan 2026-10-10: **no new design document until the last one has shipped code or
+  been withdrawn.** Still dan's: the `link` positional alias, variants (i) and (ii),
+  0.4.0p's N1 and N2.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
