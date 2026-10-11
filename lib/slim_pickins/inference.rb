@@ -154,8 +154,13 @@ module SlimPickins
       format("%.#{precision}f%%", value * 100)
     end
 
-    def number(value, precision: 0)
-      "#{sign(value)}#{separated(value, precision)}"
+    # A number shows the fraction it has, up to two places: 0.083 is 0.08 and
+    # 2.7 is 2.7, where a whole-number default once made both of them less.
+    # `precision:` says exactly how many places, zeros included.
+    def number(value, precision: nil)
+      return "#{sign(value)}#{separated(value, precision)}" if precision
+
+      "#{sign(value)}#{separated(value, 2).sub(/(\.\d*?)0+\z/, '\1').chomp('.')}"
     end
   end
 end

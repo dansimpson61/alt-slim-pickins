@@ -197,7 +197,18 @@ class Phase2Test < Minitest::Test
     assert_equal '$1,234,567', SlimPickins::Inference.money(1_234_567.0)
     assert_equal '$13', SlimPickins::Inference.money(12.99, precision: 0)
     assert_equal '$13.00', SlimPickins::Inference.money(12.999, precision: 2)
-    assert_equal '3', SlimPickins::Inference.number(2.7)
+  end
+
+  # A plain number once showed whole, so a rate of 0.083 read `0` and 2.7 read
+  # `3`. It shows the fraction it has, up to two places (dan, 2026-10-10).
+  def test_a_number_shows_the_fraction_it_has_up_to_two_places
+    { 0.083 => '0.08', 2.7 => '2.7', 12.999 => '13', 1240 => '1,240',
+      -2.5 => '−2.5', 1_234_567.891 => '1,234,567.89' }.each do |value, text|
+      assert_equal text, SlimPickins::Inference.number(value)
+    end
+    assert_equal '2.70', SlimPickins::Inference.number(2.7, precision: 2)
+    html = render("page fund\n  table holdings\n    column rate\n", fund: { holdings: [{ rate: 0.083 }] })
+    assert_includes html, '<td class="column--numeric">0.08</td>'
   end
 
   def test_a_page_s_money_keeps_its_cents_unless_the_page_says_otherwise

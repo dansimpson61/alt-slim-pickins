@@ -567,11 +567,14 @@ for decimal places.
 
 - **Money shows the cents a value has.** `money` of `12.99` is `$12.99`; of
   `0.6` is `$0.60`; a whole amount stays whole. Whatever is not shown is
-  rounded, never cut: `money .a, precision: 0` of `12.99` is `$13`, and
-  `number` of `2.7` is `3`.
-- **A rate needs to be named.** A column of `0.083` with no `as:` and no
-  `format_for` reads `0`, because the value only says "number", and a number
-  shows whole. Say `as: percent`, or have the app answer `format_for`.
+  rounded, never cut: `money .a, precision: 0` of `12.99` is `$13`.
+- **A number shows the fraction it has, up to two places.** `number` of
+  `2.7` is `2.7`, of `0.083` is `0.08`, of `12.999` is `13`. Trailing zeros
+  are dropped. Below `0.005` it reads `0`: two places is the limit, and
+  `precision:` says more.
+- **A rate still needs to be named.** A column of `0.083` with no `as:` reads
+  `0.08`, not `8.3%`. Whether a fraction is a rate is a domain fact the value
+  cannot tell. Say `as: percent`, or have the app answer `format_for`.
 - A negative percent uses a hyphen (`-1.2%`); money and number use a true
   minus sign (`−`).
 
@@ -911,7 +914,6 @@ them. Each was found by rendering, not by reading.
 
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
-| `format_family` | A rate with no `as:` reads `0` | `as: percent`, or `format_for` |
 | `plural_collection` | Only three irregulars; `leaf` → `leafs` | `from:` |
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | `nil` is empty, but an `each` under it raises | have the app give `[]` |
@@ -963,8 +965,7 @@ first:
    every author the same workaround.
 
    **Ruled (dan, 2026-10-10): teach all six.** A number with a fraction
-   shows up to two decimals, trailing zeros dropped, and never rounds a
-   fraction away to `0`. A short list of common irregular plurals, with
+   shows up to two decimals, trailing zeros dropped (built). A short list of common irregular plurals, with
    `from:` for the rest. `each` over `nil` shows nothing. A Struct is a
    record, never a collection. `relative` counts calendar days and speaks of
    the future. `link home` goes to `/`. None of them gives the author
