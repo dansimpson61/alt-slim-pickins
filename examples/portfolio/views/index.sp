@@ -10,4 +10,4 @@ page portfolio, "Your retirement"
       card
         account_card
         actions
-          link show, "Details"
+          link show, "Details", to: "/accounts/#{account.id}"
