@@ -6,7 +6,9 @@ is whether the conventions keep their promises (see `ROADMAP-0.4.md`). This docu
 stays as a dated record. When 0.5 opens, it is that roadmap's starting material, not
 its plan. Re-measure its premises before building: Step 0 is already done, and D1
 should be withdrawn, because kind names (`name`, `subject`) shadow the subject's own
-fields. Nothing below has been implemented.
+fields. Also carried here from 0.4: `partial_slot_forwarding`, whose cost is the one
+price of making a word's inputs invisible to its caller's children (`CONVENTIONS.md`,
+and LORE.md for 2026-10-09). Nothing below has been implemented.
 
 **This replaces `DAYTRIP-0.4.0p.md`, which dan rejected.** 0.4.0p is kept as a dated
 record; nothing below depends on it.

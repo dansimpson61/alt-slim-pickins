@@ -802,6 +802,13 @@ outer_slot slot: "forwarded"
 **Watch for** — the value reaches into lines its author never wrote, by a
 name the page does not show. No word in the language relies on it today.
 
+**A stated limit for 0.4, carried to 0.5** (2026-10-10). The probing of
+2026-10-09 (LORE.md, that date) concluded that a word's inputs should be
+invisible to its caller's children. For `def` words that costs nothing. For
+`.sp` words it costs exactly this convention. That is a change to how words
+receive their inputs, which is families' ground, and families is 0.5's
+question. So the convention stays as described until then.
+
 ---
 
 ## 11. The theme owns the look
@@ -940,12 +947,22 @@ cannot tell it from a word of the language.
 
 ## Where the conventions are weakest
 
-Every risk above, in one place. This is the starting list for strengthening
-them. Each was found by rendering, not by reading.
+Every risk above, in one place. This was the starting list for
+strengthening them. Each was found by rendering, not by reading.
 
-| Convention | What goes wrong | Today's workaround |
-|---|---|---|
-| `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
+**Empty since 2026-10-10.** Every row was either fixed, with a test that
+fails on the old code, or ruled a stated limit, with the reason given in its
+convention's entry above. The stated limits:
+
+- `heading_level`, `first_truthy_branch`, `box_body_over_children`: not
+  guesses, so no override.
+- A word with several top lines is a fragment (`root_class`).
+- A table may not hold `empty`.
+- Plurals past the common irregulars need `from:`.
+- A number shows two places at most.
+- `partial_slot_forwarding`: carried to 0.5 with families.
+
+A new weak spot goes back into a table here, found the same way.
 
 Three patterns run through the list, and they are the questions worth asking
 first:
