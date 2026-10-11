@@ -57,6 +57,18 @@ class Phase2Test < Minitest::Test
     end
   end
 
+  # `each leaf` once looked for `leafs`. The common irregulars are a list,
+  # since English has too many exceptions for rules (dan, 2026-10-10).
+  def test_the_common_irregular_plurals_are_known_both_ways
+    { leaf: 'leaves', man: 'men', woman: 'women', analysis: 'analyses',
+      criterion: 'criteria' }.each do |singular, plural|
+      assert_equal plural, SlimPickins::Inference.plural(singular)
+      assert_equal singular, SlimPickins::Inference.singular(plural)
+    end
+    html = render("page tree\n  each leaf\n    text .name\n", tree: { leaves: [{ name: 'oak' }] })
+    assert_includes html, '<p class="text">oak</p>'
+  end
+
   # The same rule runs backwards, where the ending can only have come from it.
   def test_a_hissing_plural_singularises_by_dropping_es
     { addresses: :address, taxes: :tax, matches: :match, wishes: :wish,

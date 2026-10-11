@@ -53,10 +53,17 @@ module SlimPickins
 
     # --- Collections ----------------------------------------------------
 
+    # The common ones a collection is named with. English has too many
+    # exceptions for rules, so this is a list, and `from:` covers the rest.
     IRREGULAR_PLURALS = {
       'child' => 'children',
       'person' => 'people',
-      'datum' => 'data'
+      'datum' => 'data',
+      'leaf' => 'leaves',
+      'man' => 'men',
+      'woman' => 'women',
+      'analysis' => 'analyses',
+      'criterion' => 'criteria'
     }.freeze
 
     IRREGULAR_SINGULARS = IRREGULAR_PLURALS.invert.freeze

@@ -234,9 +234,11 @@ each place, from: .addresses
 
 - **Plurals are simple.** A `y` after a consonant becomes `ies`; a word that
   ends in a hiss (`s`, `x`, `ch`, `sh`) gains `es`, so `each address` finds
-  `addresses`; everything else gains an `s`. Only `child`, `person` and
-  `datum` are known irregulars, so `each leaf` looks for `leafs`. Use
-  `from:`.
+  `addresses`; everything else gains an `s`. The common irregulars are a
+  list: child, person, datum, leaf, man, woman, analysis, criterion. English
+  has too many exceptions for rules, so anything else, like `each knife`
+  looking for `knifes`, needs `from:`. That is a stated limit, by dan's
+  ruling of 2026-10-10.
 - **You cannot bind a word of the language.** `each item` is refused, because
   `item` is a word. The error tells you the fix:
   `each row, from: .items`.
@@ -914,7 +916,6 @@ them. Each was found by rendering, not by reading.
 
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
-| `plural_collection` | Only three irregulars; `leaf` → `leafs` | `from:` |
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | `nil` is empty, but an `each` under it raises | have the app give `[]` |
 | `collection_detection` | A Struct of all-`nil` fields counts as empty | avoid Structs that can be all-`nil` |
@@ -964,9 +965,14 @@ first:
    Each is a place where teaching the convention one more thing would save
    every author the same workaround.
 
-   **Ruled (dan, 2026-10-10): teach all six.** A number with a fraction
-   shows up to two decimals, trailing zeros dropped (built). A short list of common irregular plurals, with
-   `from:` for the rest. `each` over `nil` shows nothing. A Struct is a
-   record, never a collection. `relative` counts calendar days and speaks of
-   the future. `link home` goes to `/`. None of them gives the author
-   anything new to write.
+   **Ruled (dan, 2026-10-10): teach all six.** None of them gives the
+   author anything new to write.
+
+   - A number with a fraction shows up to two decimals, trailing zeros
+     dropped. *(built)*
+   - A short list of common irregular plurals, with `from:` for the rest.
+     *(built)*
+   - `each` over `nil` shows nothing.
+   - A Struct is a record, never a collection.
+   - `relative` counts calendar days and speaks of the future.
+   - `link home` goes to `/`.
