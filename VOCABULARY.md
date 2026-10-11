@@ -417,7 +417,7 @@ button, an id, a data attribute, a CSS class and a JavaScript handler on it.
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `heading_level` — its level, from how deep it sits (override: nest it differently; no page says a level)
+- **conventions** — `heading_level` — its level, from how deep it sits (override: none, by design: the nesting is the outline)
 - **infers** — none
 - **renders** — `<h2>`, `<h3>` …
 
@@ -976,7 +976,7 @@ situation instead of writing the branch, and the enclosing `section` or
 - **modifiers** — none
 - **children** — `when`, `otherwise`
 - **subject** — unchanged
-- **conventions** — `first_truthy_branch` — that exactly one branch renders — the first that holds (override: two sequential `choose`s for two independent rows)
+- **conventions** — `first_truthy_branch` — that exactly one branch renders — the first that holds (override: none, by design: picking one is what `choose` means)
 - **infers** — none
 - **renders** — nothing of its own
 
@@ -1120,7 +1120,7 @@ paragraph quiet, "A quieter line."
 - **modifiers** — `open:`, `id:`
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `box_body_over_children` — that the body renders *instead of* the children (override: give the box children and no content)
+- **conventions** — `box_body_over_children` — that the body renders *instead of* the children (override: none, by design: the box shows one of the two)
 
 The atom under the wrappers — the box a word owns. Classes still derive
 from the word, so nothing a human could style by hand comes back.
@@ -1138,7 +1138,7 @@ box shelf
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `heading_level` — its level, from how deep it sits (override: nest it differently; no page says a level); `box_title` — that it is the box's title, at the box's own level (override: use `title` or `text` instead)
+- **conventions** — `heading_level` — its level, from how deep it sits (override: none, by design: the nesting is the outline); `box_title` — that it is the box's title, at the box's own level (override: use `title` or `text` instead)
 
 The atom under `title` — the heading level derives from where it sits,
 which is a tree fact the interpreter reads.

@@ -378,8 +378,11 @@ section accounts
 The section titles itself from its name at level 2; the card's heading is the
 card's title at level 3.
 
-**To override** — nest it differently. No page says a level. To keep a
-heading from becoming the box's title, use `title` or `text`.
+**No override, by design** (dan, 2026-10-10). The level comes from the nesting
+because that is what makes the page's outline true for a screen reader. A page
+that could say `level: 2` could write a wrong outline. To make a heading *look*
+bigger, ask the theme, which owns the look. To keep a heading from becoming
+the box's title, use `title` or `text`.
 
 **Watch for** — a section already titles itself. Add a `heading` inside it
 and you get **two** section titles:
@@ -713,7 +716,8 @@ choose
 
 **You get** exactly one branch: the first `when` that holds, or `otherwise`.
 
-**To override** — for two independent choices, write two `choose`s.
+**No override, by design** (dan, 2026-10-10). Picking one is what `choose`
+means. Two independent choices are two `choose`s.
 
 ---
 
@@ -736,9 +740,14 @@ box "Body"
 **You get** `<div class="box">Body</div>` — the content, and **not** the
 children.
 
-**To override** — give the box children and no content.
+**No override, by design** (dan, 2026-10-10). Content and children are two
+answers to one question, and the box shows one.
 
-**Watch for** — the children are dropped silently. Nothing tells you.
+**Watch for** — the children are dropped silently. Nothing tells you. Ruled
+on 2026-10-10, not yet built: content written in the page together with
+children will be refused, since they can never show. Content read from the data
+keeps the rule above. The children are what shows when that content is
+empty.
 
 ### `partial_slot_forwarding` — a word finds a value on the word around it
 
@@ -907,13 +916,12 @@ them. Each was found by rendering, not by reading.
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | `nil` is empty, but an `each` under it raises | have the app give `[]` |
 | `collection_detection` | A Struct of all-`nil` fields counts as empty | avoid Structs that can be all-`nil` |
-| `heading_level` | No page can say a level. The override, "nest it differently", is inadequate (dan, 2026-10-10) | restructure the page |
-| `first_truthy_branch` | Only one branch can render. The override, "write two `choose`s", is inadequate (dan, 2026-10-10) | split the choice |
 | `box_title` | A `heading` inside a section makes a second title | say the words on the section |
 | `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `time_text` | `relative` cannot speak of the future | the full date is shown |
+| `time_text` | `relative` reads a past date one day too old in the afternoon: three days ago is "4 days ago" | none — a defect |
 | `link_href` | `link home` is `/home`, not `/` | `to: "/"` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
@@ -924,6 +932,16 @@ first:
 1. **A convention that fails silently.** `empty` with nothing above it, a box
    that drops its children, an unknown status. When a convention cannot do
    its job, should it say so?
+
+   **Ruled (dan, 2026-10-10): it depends on who can know.** A mistake you
+   can see by reading the page is refused, with an error that names the
+   fix, the way `hidden` outside a `form` already is. That covers `empty`
+   with no collection above it, a box with written content and children, a
+   `heading` that would make a second section title (`box_title`), and a
+   word file with two top lines (`root_class`). A problem only the data can
+   show gets a deliberate, documented fallback and never a broken page,
+   because a live page must not fail when an app grows a new value. An
+   unknown status gets the `neutral` badge.
 2. **An override that does not override.** A convention you cannot overrule
    is a trap. `card id:` was the one found, and it is fixed (2026-10-10). No
    page in the corpus said it, so the gate never saw the fault. The question
@@ -933,7 +951,21 @@ first:
    and a value said on the inner word over one forwarded from outside. All
    three worked; none was tested. Each now has a test that fails if the
    convention wins, so the count is zero.
+
+   **Ruled (dan, 2026-10-10): three conventions are not guesses, so they
+   have no override.** `heading_level`, `first_truthy_branch` and
+   `box_body_over_children` decide what a word means, not what it probably
+   means. Their entries above now say so plainly, rather than offering a
+   restructuring that looks like an override.
 3. **A convention that knows too little.** Three irregular plurals; a number
    that cannot tell a rate from a count; `relative` time with no future.
    Each is a place where teaching the convention one more thing would save
    every author the same workaround.
+
+   **Ruled (dan, 2026-10-10): teach all six.** A number with a fraction
+   shows up to two decimals, trailing zeros dropped, and never rounds a
+   fraction away to `0`. A short list of common irregular plurals, with
+   `from:` for the rest. `each` over `nil` shows nothing. A Struct is a
+   record, never a collection. `relative` counts calendar days and speaks of
+   the future. `link home` goes to `/`. None of them gives the author
+   anything new to write.

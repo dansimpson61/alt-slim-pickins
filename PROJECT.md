@@ -17,19 +17,19 @@ status: >-
   question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Walk `CONVENTIONS.md`'s three patterns with dan**: a convention that fails
-  silently; an override that does not override; a convention that knows too little.
-  Then work the weak-spots table row by row, toward `ROADMAP-0.4.md`'s criterion 2.
-  Criterion 1 is met (2026-10-10). Each of the thirteen documented overrides was
-  broken in turn and the suite run. Three nothing caught (`metric as:`, `button
-  type:`, a value said on the inner word); all worked, and each now has a test that
-  fails if the convention wins. dan ruled three overrides inadequate
-  (`heading_level`, `choose`, `box_body_over_children`): they are table rows. One commit per fix, each with a test that fails
-  on the old code; diff the corpus with `bin/byte_diff.rb` before and after. Rule,
-  accepted by dan 2026-10-10: **no new design document until the last one has
-  shipped code or been withdrawn.** Rejected as configuration: `word.x` (R2), and a
-  bare name carrying no meaning (A1). Still dan's: the `link` positional alias,
-  variants parts (i) and (ii), and 0.4.0p's N1 and N2 on their own merits.
+  **Build the three patterns' rulings (dan, 2026-10-10), one commit each, each with a
+  test that fails on the old code.** Pattern 3, teach six things: `number` shows up to
+  two decimals; common irregular plurals; `each` over `nil` shows nothing; a Struct
+  is never a collection; `relative` counts calendar days (it reads 3 days ago as "4
+  days ago" in the afternoon) and speaks of the future; `link home` goes to `/`.
+  Pattern 1: an unknown badge status gets `neutral`; refuse, naming the fix, what the
+  page alone shows can never work (`empty` with no collection above, a box with
+  written content and children, `box_title`, `root_class`). Pattern 2 is closed:
+  three stated limits. The rulings are written in `CONVENTIONS.md`'s patterns section.
+  Diff the corpus with `bin/byte_diff.rb` before and after. Rule, accepted by dan
+  2026-10-10: **no new design document until the last one has shipped code or been
+  withdrawn.** Still dan's: the `link` positional alias, variants parts (i) and (ii),
+  0.4.0p's N1 and N2, a table holding `empty`, and `partial_slot_forwarding`.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
