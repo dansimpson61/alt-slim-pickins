@@ -2,5 +2,7 @@ expects subject, takes: content, children: any, takes: label, subject: shift, sh
 
 
 box .name
-  heading .label
+  choose
+    when .label
+      heading .label
   children

@@ -305,6 +305,17 @@ class Phase2Test < Minitest::Test
     assert_includes html, '<div class="metric-value">7.5%</div>'
   end
 
+  # A bare section wrote `heading .label` with no label, so it rendered an
+  # empty `<h2 class="section-title"></h2>`, and a heading inside it was a
+  # second title. It titles itself only when it has a title, as a card does.
+  def test_a_bare_section_has_no_empty_title_and_a_heading_becomes_its_title
+    html = render(%(page book\n  section\n    text "x"\n), book: {})
+    refute_includes html, '<h2 class="section-title"></h2>'
+    html = render(%(page book\n  section\n    heading "Part"\n), book: {})
+    assert_equal 1, html.scan('class="section-title"').size
+    assert_includes html, '<h2 class="section-title">Part</h2>'
+  end
+
   # --- title infers its level from depth --------------------------------
 
   def test_a_title_knows_how_deep_it_is

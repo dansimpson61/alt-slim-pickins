@@ -939,7 +939,6 @@ them. Each was found by rendering, not by reading.
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
 | `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
-| `box_title` | A bare `section`, with no name or words, renders an empty `<h2 class="section-title"></h2>` | give it a name or words |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
