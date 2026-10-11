@@ -74,13 +74,25 @@ byte-identical:
 - `plural_collection` turned `each address` into a search for `addresss`.
 
 The gate saw none of the four, because no page in the corpus holds those
-inputs. That is the same blind spot criterion 5 names. At close of 2026-10-10
-the gate was green: twelve legs, 612 runs, 0 failures.
+inputs. That is the same blind spot criterion 5 names. At writing the gate was
+green: twelve legs, 612 runs, 0 failures.
 
 The table had fourteen rows at writing, and sixteen once dan's ruling on the two
 inadequate overrides added theirs. One of them was found while probing
 `input_step`: a `BigDecimal` field reads `0.25e1` and gets no step.
 `PROJECT.md`'s `next_step` keeps the working order. This document does not.
+
+### Where it stands at the end of 2026-10-10
+
+| Criterion | State |
+|---|---|
+| 1. Every override works | **Met.** Each of the thirteen was broken in turn, and the suite went red. Three that nothing caught now have tests. dan ruled three more inadequate, and they became rows. |
+| 2. The weak-spots table is empty | **Met.** dan walked the three patterns. Every row was fixed (a test fails on the old code) or ruled a stated limit, with the reason in its entry. |
+| 3. No fix makes the author write more | **Met.** Where refusing would have meant the author writing a `box` (`root_class`), the row closed as a stated limit instead. |
+| 4. Code leads paper | **Met.** 0.4.0p says on its own page that it was rejected. 0.4.0q is withdrawn to 0.5. No design document was opened since. |
+| 5. Green, and looked at | **Green** (twelve legs, 627 runs, 0 failures). **Waiting on dan's eye** for the pages fixes changed: portfolio's nav and Details links, and word_graph's no-match message. |
+
+0.4 closes when dan has looked.
 
 ## How 0.4 arrived at its question
 

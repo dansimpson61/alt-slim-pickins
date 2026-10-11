@@ -89,15 +89,35 @@ measure are quoted as the gate output they are.
 
 ---
 
-### The active next step — 0.4's question, in `ROADMAP-0.4.md`
+### The active next step — close 0.4, then open 0.5
 
-**As of 2026-10-10, families is not the next step.** dan redirected the round on
-2026-10-09 (conventions first), and on 2026-10-10 he gave 0.4 its question: *do the
-conventions keep their promises, so that an author only has to name things?*
-`ROADMAP-0.4.md` holds that question and the definition of success that closes 0.4.
-`PROJECT.md`'s `next_step` names the next concrete fix. `CONVENTIONS.md`'s
-weak-spots table is the work list. The four plain defects (`money`, `card id:`,
-`input_step`, `plural_collection`) are fixed.
+0.4's question, from dan on 2026-10-10: *do the conventions keep their promises,
+so that an author only has to name things?* `ROADMAP-0.4.md` holds it, with five
+criteria and a record of where each stands. Four are met. The fifth waits only on
+dan looking at the pages the fixes changed. `CONVENTIONS.md`'s weak-spots table is
+empty, and its place in the guide lists the stated limits.
+
+Two things are open, in this order:
+
+1. **A proposal dan has not yet answered: bury the corpses in `pages/`.**
+   `pages/` is the Phase 0–2 payload, written before the apps existed, and the gate
+   still renders it.
+   - `partials/test_account_card.sp` is a byte-for-byte copy of portfolio's
+     `account_card.sp`.
+   - `account_detail.sp` and `portfolio_table.sp` are stale drafts of portfolio's
+     views.
+   - `roth_form.sp` is an older roth form.
+   - `pages.tin` copies portfolio's nav.
+   - `bin/show_portfolio.rb` is broken (`gsub` for nil), and `demo`,
+     `render_pages` and `diff_roth` only serve `pages/`.
+
+   Keep `pages/specimen.sp`, the every-word specimen that the studio and
+   `measure_cost` use. The studio's page ledger and four tests name these files.
+   The recommendation is to point the ledger at the live portfolio and roth views.
+2. **0.5: families.** `DAYTRIP-0.4.0q.md` is starting material, not a plan.
+   Re-measure its premises first, as its header says. Also carried there: the
+   `link` positional alias, the variants proposal, 0.4.0p's N1 and N2, and
+   `partial_slot_forwarding`.
 
 **One rule, accepted by dan 2026-10-10:** no new design document until the last one
 has shipped code or been withdrawn.

@@ -1427,3 +1427,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **A rule that conflicts with a newer ruling is superseded. Don't hold it up as a question.** On 2026-10-10 I withdrew the nil-is-nothing fix because it broke ContractTest's "the subject is empty" raise, and I asked dan to choose. He pointed out that his pattern-1 ruling (the data never breaks the page) had already answered it. When a test encodes an older rule that a later ruling contradicts, update the test and its claim document (here CONTRACT.md) and name the change in the commit. Also: **use the app, not just the corpus.** Crawling every link portfolio renders found three dead links (`/accounts`, `/projections`, `/show`) that existed since its first commit. The corpus renders pages, but it never follows their links.
+
+## 2026-10-11 — Claude
+
+**The gate can keep a corpse alive.** `pages/` is the Phase 0–2 payload (2026-08-30), written before the apps existed. It still renders in the 38-page corpus and the studio ledger, so it looks live. `partials/test_account_card.sp` is a byte-for-byte copy of portfolio's `account_card.sp`. `account_detail` and `portfolio_table` are stale drafts of portfolio's views, and `pages.tin` copies its nav. On 2026-10-10 a session fixed that nav twice, once in the app and once in the copy, before noticing it was a copy. A page in the corpus proves the language renders it, not that anyone still needs it. Before tending a file, check whether it duplicates a live one (`diff` against `examples/`).

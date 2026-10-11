@@ -14,22 +14,20 @@ status: >-
   in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
   carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
   rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
-  question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
-last_touched: 2026-10-10
+  question, unbuilt. ROADMAP-0.4's criteria 1 to 4 are met, the weak-spots table is
+  empty, and 0.4 closes on dan's look at the pages its fixes changed.
+last_touched: 2026-10-11
 next_step: >-
-  **dan looks at the pages today's fixes changed (ROADMAP-0.4 criterion 5); then 0.4
-  can close.** Criteria 1 to 4 are met as of 2026-10-10: every override proved, the
-  weak-spots table empty (fixed, or stated limits with reasons), no fix asked the
-  author to write more, 0.4.0p rejected and 0.4.0q withdrawn to 0.5. Pages to look at:
-  portfolio (`ruby examples/portfolio/app.rb`), where the nav is just Overview, which
-  now goes to `/`, and each account card's Details opens its account. word_graph
-  (`ruby examples/word_graph/app.rb`), where a search with no matches now says "No
-  words matched your query." The pages corpus nav lost the same two dead links. When
-  0.4 closes, 0.5 opens with families: DAYTRIP-0.4.0q is starting material, with
-  `partial_slot_forwarding` added, and its premises re-measured first. Rule, accepted
-  by dan 2026-10-10: **no new design document until the last one has shipped code or
-  been withdrawn.** Still dan's: the `link` positional alias, variants (i) and (ii),
-  0.4.0p's N1 and N2.
+  **Close 0.4: dan looks at the pages the 2026-10-10 fixes changed** (ROADMAP-0.4
+  criterion 5; criteria 1 to 4 are met and recorded there). Portfolio (`ruby
+  examples/portfolio/app.rb`): the nav is just Overview, which goes to `/`, and each
+  account's Details opens it. word_graph (`ruby examples/word_graph/app.rb`): a
+  search with no matches says "No words matched your query." Then, awaiting dan's
+  word: bury the corpses in `pages/` (HANDOFF lists them, and the recommendation is to
+  keep `specimen.sp` and point the studio's ledger at the live views). Then 0.5,
+  families, from DAYTRIP-0.4.0q as starting material with its premises re-measured.
+  Rule, accepted by dan 2026-10-10: **no new design document until the last one has
+  shipped code or been withdrawn.**
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
