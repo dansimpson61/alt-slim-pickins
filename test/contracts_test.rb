@@ -58,6 +58,22 @@ end
     assert_empty complaints(source)
   end
 
+  # What the page alone shows can never work is refused, naming the fix, rather
+  # than silently dropped (dan, 2026-10-10). What only the data can show is not.
+  def test_a_box_with_written_words_and_children_is_refused
+    assert_complaint(%(page p\n  box "Said"\n    text "child"\n), 'never both, so these lines would never show')
+    assert_empty complaints(%(page p\n  box .notes\n    text "child"\n))
+    assert_empty complaints(%(page p\n  box\n    text "child"\n))
+  end
+
+  def test_a_heading_that_would_be_a_second_title_is_refused
+    assert_complaint(%(page p\n  section accounts\n    heading "B"\n), '`section` already has a title')
+    assert_complaint(%(page p\n  card "Lit"\n    heading "B"\n), '`card` already has a title')
+    assert_empty complaints(%(page p\n  section\n    heading "B"\n))
+    assert_empty complaints(%(page p\n  card first\n    heading "B"\n))
+    assert_empty complaints(%(page p\n  section accounts\n    title "B"\n))
+  end
+
   def test_a_valid_page_has_no_complaints
     source = <<~PAGE
       page portfolio

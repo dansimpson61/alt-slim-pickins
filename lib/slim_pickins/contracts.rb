@@ -289,6 +289,24 @@ end
         out << "`#{node.word}` belongs inside #{allowed}"
       end
 
+      out.concat(never_shows(node, data))
+    end
+
+    # Sentences the page alone shows can never work (dan, 2026-10-10): what
+    # they say is refused, naming the fix, rather than silently dropped. What
+    # only the data can show is left to the runtime's documented fallbacks.
+    def never_shows(node, data)
+      out = []
+      written = data.any? { |arg| arg.start_with?('"') }
+      if node.word == 'box' && written && node.children.any?
+        out << '`box` shows its words or the lines under it, never both, so these lines ' \
+               'would never show. Put the words in a `text` line among them.'
+      end
+      titled = node.word == 'section' ? node.raw_args.any? : (node.word == 'card' && data.any?)
+      if titled && node.children.any? { |child| child.word == 'heading' }
+        out << "`#{node.word}` already has a title, so a `heading` directly inside it would be " \
+               "a second one. Say the title on the `#{node.word}` line, or use `title` or `text`."
+      end
       out
     end
 

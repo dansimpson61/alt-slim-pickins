@@ -391,8 +391,10 @@ that could say `level: 2` could write a wrong outline. To make a heading *look*
 bigger, ask the theme, which owns the look. To keep a heading from becoming
 the box's title, use `title` or `text`.
 
-**Watch for** — a section already titles itself. Add a `heading` inside it
-and you get **two** section titles:
+A section already titles itself, and a card with content titles itself from
+it. A `heading` directly inside either would be a **second** title, so it is
+refused (dan, 2026-10-10): "`section` already has a title, so a `heading`
+directly inside it would be a second one". Before that, it rendered:
 
 ```
 section accounts
@@ -763,11 +765,10 @@ children.
 **No override, by design** (dan, 2026-10-10). Content and children are two
 answers to one question, and the box shows one.
 
-**Watch for** — the children are dropped silently. Nothing tells you. Ruled
-on 2026-10-10, not yet built: content written in the page together with
-children will be refused, since they can never show. Content read from the data
-keeps the rule above. The children are what shows when that content is
-empty.
+Content written in the page together with children is refused, since the
+children could never show: "`box` shows its words or the lines under it, never
+both". Content read from the data keeps the rule above, and the children are
+what shows when that content is empty (dan, 2026-10-10).
 
 ### `partial_slot_forwarding` — a word finds a value on the word around it
 
@@ -933,8 +934,7 @@ them. Each was found by rendering, not by reading.
 |---|---|---|
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
-| `box_title` | A `heading` inside a section makes a second title | say the words on the section |
-| `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
+| `box_title` | A bare `section`, with no name or words, renders an empty `<h2 class="section-title"></h2>` | give it a name or words |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
@@ -951,7 +951,8 @@ first:
    fix, the way `hidden` outside a `form` already is. That covers `empty`
    with no collection above it, a box with written content and children, a
    `heading` that would make a second section title (`box_title`), and a
-   word file with two top lines (`root_class`). A problem only the data can
+   word file with two top lines (`root_class`). *(Built for the box and the
+   second title.)* A problem only the data can
    show gets a deliberate, documented fallback and never a broken page,
    because a live page must not fail when an app grows a new value. An
    unknown status reads as the neutral badge. *(Measured: it already did.
