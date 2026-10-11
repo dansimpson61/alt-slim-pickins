@@ -146,22 +146,22 @@ docs.each do |doc|
 
     # Walk the tree with the grammar itself, enforcing each word's declared
     # contract: what it takes, what it holds, and where it may live.
-    walk = lambda do |nodes, ancestry|
+    walk = lambda do |nodes, ancestry, named|
       nodes.each do |node|
         checked += 1
         used[node.word] << where
         used_full[node.word] << doc
 
         is_privileged = doc.include?('/lib/vocabulary/') || doc.start_with?('lib/vocabulary/')
-        SlimPickins::Contracts.complaints(node, ancestry, privileged: is_privileged).each do |complaint|
+        SlimPickins::Contracts.complaints(node, ancestry, privileged: is_privileged, named_above: named).each do |complaint|
           puts "  BAD CONTRACT  #{where}:#{first_line + node.lineno - 1}: `#{node.word}` — #{complaint}"
           problems += 1
         end
 
-        walk.call(node.children, ancestry + [node.word])
+        walk.call(node.children, ancestry + [node.word], named || SlimPickins::Contracts.names_something?(node))
       end
     end
-    walk.call(tree, [])
+    walk.call(tree, [], false)
   end
 end
 

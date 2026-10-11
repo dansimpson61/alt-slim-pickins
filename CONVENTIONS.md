@@ -330,11 +330,17 @@ When there are holdings, the `empty` line disappears instead. You never write
 
 **Watch for**
 
-- **`empty` needs a collection above it.** Directly under `page "…"`, there is
-  no collection, so `empty` renders nothing — silently.
-- **`nil` is not quite nothing.** A section over `holdings: nil` counts as
-  empty, but an `each` inside it still tries to walk and raises:
-  "nothing has no holdings to go through". An empty list (`[]`) works.
+- **`empty` needs something above it that could be empty.** In a page,
+  `empty` with no line above naming a collection (`page "…"` and
+  `section "…"` name nothing) could never show, so it is refused: "`empty`
+  has nothing above it that could be empty" (dan, 2026-10-10). word_graph's
+  "No words matched" was one such line. It never showed, even for a search
+  with no matches, and its section now names `words`. A partial or a `def`
+  is exempt, because its caller names the subject.
+- **`nil` is not quite nothing.** A section over `holdings: nil` goes
+  through nothing without raising (since 2026-10-10), but its `empty` line
+  does not show, where over `[]` it does. Which should win is open for
+  dan: see the weak-spots table.
 - **A table may not hold `empty`.** Put the table inside a section and give
   the section the `empty`.
 
@@ -932,7 +938,6 @@ them. Each was found by rendering, not by reading.
 
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
-| `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
 | `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
 | `box_title` | A bare `section`, with no name or words, renders an empty `<h2 class="section-title"></h2>` | give it a name or words |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
@@ -951,8 +956,8 @@ first:
    fix, the way `hidden` outside a `form` already is. That covers `empty`
    with no collection above it, a box with written content and children, a
    `heading` that would make a second section title (`box_title`), and a
-   word file with two top lines (`root_class`). *(Built for the box and the
-   second title.)* A problem only the data can
+   word file with two top lines (`root_class`). *(Built for `empty`, the box
+   and the second title. `root_class` is open: see the table.)* A problem only the data can
    show gets a deliberate, documented fallback and never a broken page,
    because a live page must not fail when an app grows a new value. An
    unknown status reads as the neutral badge. *(Measured: it already did.

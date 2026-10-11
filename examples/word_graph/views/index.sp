@@ -24,7 +24,7 @@ page "The Word Graph"
       link "View Shapes & Distribution Chart", to: "/shapes"
       link "View Tabular Connection Matrix", to: "/matrix"
 
-  section "Vocabulary Words"
+  section words, "Vocabulary Words"
     empty "No words matched your query."
     grid cards, columns: 2
       each word

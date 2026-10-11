@@ -10,12 +10,13 @@ require_relative '../lib/slim_pickins'
 class ContractsTest < Minitest::Test
   def complaints(source)
     tree = SlimPickins::Transform.tree(source, path: 'contracts.sp')
-    walk = lambda do |nodes, ancestry|
+    walk = lambda do |nodes, ancestry, named|
       nodes.flat_map do |node|
-        SlimPickins::Contracts.complaints(node, ancestry) + walk.call(node.children, ancestry + [node.word])
+        SlimPickins::Contracts.complaints(node, ancestry, named_above: named) +
+          walk.call(node.children, ancestry + [node.word], named || SlimPickins::Contracts.names_something?(node))
       end
     end
-    walk.call(tree, [])
+    walk.call(tree, [], false)
   end
 
   def assert_complaint(source, message)
@@ -72,6 +73,17 @@ end
     assert_empty complaints(%(page p\n  section\n    heading "B"\n))
     assert_empty complaints(%(page p\n  card first\n    heading "B"\n))
     assert_empty complaints(%(page p\n  section accounts\n    title "B"\n))
+  end
+
+  # word_graph's "No words matched" sat under sections that named nothing,
+  # so it could never show, and it never did, even for a search with no
+  # matches. A partial or a `def` is exempt: its caller names the subject.
+  def test_empty_with_nothing_named_above_it_is_refused
+    assert_complaint(%(page "Title"\n  section "Words"\n    empty "None"\n), '`empty` has nothing above it that could be empty')
+    assert_empty complaints(%(page "Title"\n  section words, "Words"\n    empty "None"\n))
+    assert_empty complaints(%(page p\n  empty "None"\n))
+    assert_empty complaints(%(page "Title"\n  section .items\n    empty "None"\n))
+    assert_empty complaints(%(empty "None"\nlist\n)) # a partial's top line
   end
 
   def test_a_valid_page_has_no_complaints

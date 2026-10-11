@@ -260,7 +260,7 @@ end
       "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?
     end
 
-    def complaints(node, ancestry, privileged: false)
+    def complaints(node, ancestry, privileged: false, named_above: true)
       if node.word == 'tag'
         return ["`tag` is a privileged primitive and may not be used in app pages"] unless privileged
         return []
@@ -289,14 +289,18 @@ end
         out << "`#{node.word}` belongs inside #{allowed}"
       end
 
-      out.concat(never_shows(node, data))
+      out.concat(never_shows(node, data, ancestry, named_above))
     end
 
     # Sentences the page alone shows can never work (dan, 2026-10-10): what
     # they say is refused, naming the fix, rather than silently dropped. What
     # only the data can show is left to the runtime's documented fallbacks.
-    def never_shows(node, data)
+    def never_shows(node, data, ancestry, named_above)
       out = []
+      if node.word == 'empty' && ancestry.first == 'page' && !ancestry.include?('def') && !named_above
+        out << '`empty` has nothing above it that could be empty: no line above names a collection. ' \
+               'Put it under the word that does, as in `section holdings`.'
+      end
       written = data.any? { |arg| arg.start_with?('"') }
       if node.word == 'box' && written && node.children.any?
         out << '`box` shows its words or the lines under it, never both, so these lines ' \
@@ -317,6 +321,13 @@ end
     # render composes its own.
     Violation = Struct.new(:lineno, :body, :complaint, keyword_init: true)
 
+    # Whether a sentence names something that could turn out empty: a bare
+    # name (`section holdings`) or data (`section .items`). Words and quoted
+    # text cannot. The walkers carry it down, so `empty` knows what is above.
+    def names_something?(node)
+      node.raw_args.zip(node.ranks).any? { |arg, rank| rank.zero? || (rank == 1 && arg.start_with?('.')) }
+    end
+
     # The gate, walked: the first sentence that violates its word's
     # contract, or nil. The report half of this truth is check_grammar's
     # walk, which reports every complaint; the refusal half — the raise,
@@ -324,15 +335,15 @@ end
     # verdict so the walk runs once per source, not once per render.
     def first_violation(tree, privileged: false)
       catch(:violation) do
-        walk = lambda do |nodes, ancestry|
+        walk = lambda do |nodes, ancestry, named|
           nodes.each do |node|
-            complaint = complaints(node, ancestry, privileged: privileged).first
+            complaint = complaints(node, ancestry, privileged: privileged, named_above: named).first
             throw :violation, Violation.new(lineno: node.lineno, body: node.body, complaint: complaint) if complaint
 
-            walk.call(node.children, ancestry + [node.word])
+            walk.call(node.children, ancestry + [node.word], named || names_something?(node))
           end
         end
-        walk.call(tree, [])
+        walk.call(tree, [], false)
         nil
       end
     end

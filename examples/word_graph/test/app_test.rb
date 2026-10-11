@@ -33,6 +33,16 @@ class WordGraphAppTest < Minitest::Test
     refute_includes last_response.body, 'money'
   end
 
+  # The empty line sat under a section that named nothing, so it never
+  # showed, even for a search with no matches (found 2026-10-10).
+  def test_a_search_with_no_matches_says_so
+    get '/?q=nonexistent_xyz_query_404'
+    assert last_response.ok?
+    assert_includes last_response.body, 'No words matched your query.'
+    get '/'
+    refute_includes last_response.body, 'No words matched your query.'
+  end
+
   def test_index_shape_filter
     get '/?shape=gathers'
     assert last_response.ok?
