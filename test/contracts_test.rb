@@ -86,6 +86,12 @@ end
     assert_empty complaints(%(empty "None"\nlist\n)) # a partial's top line
   end
 
+  # A table holding `empty` was refused without saying what to do instead.
+  def test_a_word_that_may_not_hold_empty_says_where_empty_goes
+    assert_complaint(%(page p\n  table holdings\n    column name\n    empty "None"\n),
+                     'Put the `table` inside a `section` and give the section the `empty`')
+  end
+
   def test_a_valid_page_has_no_complaints
     source = <<~PAGE
       page portfolio

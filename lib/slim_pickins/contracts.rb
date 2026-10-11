@@ -281,7 +281,7 @@ end
       children = node.children.map(&:word).uniq
       case contract.children
       when :none then out << "`#{node.word}` holds nothing — a `#{children.first}` has nowhere to go" if children.any?
-      when Array then (children - contract.children.map(&:to_s)).each { |c| out << "`#{node.word}` may not hold `#{c}`" }
+      when Array then (children - contract.children.map(&:to_s)).each { |c| out << may_not_hold(node.word, c) }
       end
 
       if contract.parents != :any && (ancestry & contract.parents.map(&:to_s)).empty?
@@ -320,6 +320,14 @@ end
     # (roth's report.sp renders as a partial and as a page), and each
     # render composes its own.
     Violation = Struct.new(:lineno, :body, :complaint, keyword_init: true)
+
+    # Why a word may not hold a child. `empty` gets the fix as well, because
+    # the fix is always the same: it belongs to the word around the collection.
+    def may_not_hold(word, child)
+      return "`#{word}` may not hold `#{child}`" unless child == 'empty'
+
+      "`#{word}` may not hold `empty`. Put the `#{word}` inside a `section` and give the section the `empty`."
+    end
 
     # Whether a sentence names something that could turn out empty: a bare
     # name (`section holdings`) or data (`section .items`). Words and quoted

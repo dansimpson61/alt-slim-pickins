@@ -341,8 +341,10 @@ When there are holdings, the `empty` line disappears instead. You never write
   line exactly as over `[]` (dan's pattern-1 ruling, 2026-10-10: the data
   never breaks the page). A subject that is *absent*, not there at all, is
   still the page's mistake and is refused.
-- **A table may not hold `empty`.** Put the table inside a section and give
-  the section the `empty`.
+- **A table may not hold `empty`, by design.** The table's job is its rows,
+  and saying what nothing looks like belongs to the word around the
+  collection. It is refused, and the error names the fix: "Put the `table`
+  inside a `section` and give the section the `empty`" (2026-10-10).
 
 ### `collection_detection` and `nothing_detection` — what counts as a collection
 
@@ -944,7 +946,6 @@ them. Each was found by rendering, not by reading.
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
-| `empty_situation` | A table may not hold `empty` | put it in a section |
 
 Three patterns run through the list, and they are the questions worth asking
 first:
