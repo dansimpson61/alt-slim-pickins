@@ -1,5 +1,5 @@
 page entry, .title
-  link home, "← Back to Timeline", to: "/"
+  link home, "← Back to Timeline"
   card
     time .date
     badge .author

@@ -1,5 +1,5 @@
 nav
-  link home, "Doc Reader", to: "/"
+  link home, "Doc Reader"
   link shelf
   link audiences
   link search

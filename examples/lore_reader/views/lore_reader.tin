@@ -1,5 +1,5 @@
 nav
-  link home, "The Lore Reader", to: "/"
+  link home, "The Lore Reader"
   link timeline, "Timeline", to: "/"
 contents
 footer "The Lore Reader · Documenting the Slim-Pickins Way"

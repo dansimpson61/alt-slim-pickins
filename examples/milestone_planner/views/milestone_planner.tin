@@ -1,5 +1,5 @@
 nav
-  link home, "Milestone Planner", to: "/"
+  link home, "Milestone Planner"
   link milestones, "All Milestones", to: "/"
 contents
 footer "Milestone Planner · Authentic Conditional Situation Showcase"

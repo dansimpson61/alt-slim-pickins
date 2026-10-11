@@ -1,6 +1,6 @@
 page "Milestone Detail"
   actions
-    link home, "← Back to Planner", to: "/"
+    link home, "← Back to Planner"
   card
     title .title
     choose

@@ -1,5 +1,5 @@
 nav
-  link home, "~/dev", to: "/"
+  link home, "~/dev"
   link studio, to: "/", active: nav_state.studio
   link library, to: "/library", active: nav_state.library
   link reconcile, to: "/reconcile", active: nav_state.reconcile
