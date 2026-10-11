@@ -154,9 +154,9 @@ class StudioDocsTest < Minitest::Test
 
   def test_seed_for_wraps_the_example_in_a_page
     seed = StudioDocs.seed_for('money', 0)
-    assert_match(/\Apage portfolio, "Your retirement"\n/, seed,
+    assert_match(/\Apage specimen, "slim-pickins — every word"\n/, seed,
                  'a page-rooted example seeds the real opening, subject included')
-    assert_includes seed, 'section "Where you stand"'
+    assert_includes seed, 'section "Numbers"'
     assert_includes seed, 'money'
     assert_nil StudioDocs.seed_for('money', 99), 'an index past the list seeds nothing'
   end
@@ -170,12 +170,12 @@ class StudioDocsTest < Minitest::Test
   def test_examples_carry_context_and_the_pages_payload
     examples = StudioDocs.examples_of('money') { |path| StudioPages.data_json_for(path) }
     first = examples.first
-    assert_includes first.context, 'page portfolio, "Your retirement"'
-    assert_includes first.context, 'section "Where you stand"'
+    assert_includes first.context, 'page specimen, "slim-pickins — every word"'
+    assert_includes first.context, 'section "Numbers"'
     assert_includes first.context, 'money .total_value'
-    assert_equal 'pages/portfolio_table.sp', first.path
+    assert_equal 'pages/specimen.sp', first.path
     parsed = JSON.parse(first.data)
-    assert_equal 1_284_506, parsed['portfolio']['total_value']
+    assert_equal 1_284_506, parsed['specimen']['total_value']
   end
 
   def test_a_partial_internal_example_gets_synthetic_payload

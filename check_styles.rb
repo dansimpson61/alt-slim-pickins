@@ -92,6 +92,19 @@ rescue StandardError => e
   problems += 1
 end
 
+# The portfolio's live index, through its own tin. pages/ held older copies of
+# it until 2026-10-11; rendering the original keeps what this check sees.
+begin
+  views = File.join(__dir__, 'examples', 'portfolio', 'views')
+  path = File.join(views, 'index.sp')
+  html = SlimPickins.render(File.read(path), path: path, locals: { portfolio: Fixtures.portfolio },
+                                             library: SlimPickins::Library.from(views))
+  html.scan(/class="([^"]*)"/).flatten.each { |c| emitted.merge(c.split) }
+rescue StandardError => e
+  fail!("COULD NOT RENDER portfolio index: #{e.message}")
+  problems += 1
+end
+
 # --- 0. every presentational value lives in the theme ----------------------
 # The claim is that a theme is one :root and can miss nothing. That is only
 # true if no rule below :root carries a value a theme might want to change.

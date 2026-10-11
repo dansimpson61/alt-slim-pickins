@@ -4,7 +4,7 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
-  nests, everything is a word — proved across 62 canonical words, 8 apps and 38
+  nests, everything is a word — proved across 62 canonical words, 8 apps and 35
   rendered pages. Roadmaps 0.1 to 0.4 are closed. 0.4 (closed 2026-10-11) asked whether
   the conventions keep their promises, so that an author only has to name things:
   every documented override is proved by a test, `CONVENTIONS.md`'s weak-spots table
@@ -21,9 +21,9 @@ next_step: >-
   through a lexical chain, is measurement). Then write `ROADMAP-0.5.md`: the question
   and a definition of success, with the steward drafting and dan confirming, as for
   0.4. Carried in, each dan's call: the `link` positional alias, variants (i) and (ii),
-  0.4.0p's N1 and N2, `partial_slot_forwarding`. Open and separate: dan's answer on
-  burying the corpses in `pages/` (HANDOFF lists them), which is best settled first,
-  because families touches word names and partials. Rule, accepted by dan 2026-10-10:
+  0.4.0p's N1 and N2, `partial_slot_forwarding`. The corpses in `pages/` were buried
+  on 2026-10-11, so families meets one copy of each word, not two. Rule, accepted by
+  dan 2026-10-10:
   **no new design document until the last one has shipped code or been withdrawn.**
   Both 0.4 design documents are now withdrawn or rejected, so ROADMAP-0.5 may be
   written.

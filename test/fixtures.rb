@@ -2,8 +2,8 @@
 
 require 'date'
 
-# The objects the repo's own pages render against. Shared by bin/render_pages.rb
-# and check_styles.rb so there is one definition rather than two that drift.
+# The objects the repo's own pages render against. Shared by the gate, the
+# studio and check_styles.rb so there is one definition rather than several that drift.
 #
 # Every one is a plain Struct — that is the app contract being satisfied with
 # no ceremony, which is the point.
@@ -172,11 +172,9 @@ module Fixtures
   # — `[name].tin` is chrome, not something that renders alone.
   def for(name)
     case name
-    when 'portfolio', 'portfolio_table' then { portfolio: portfolio }
-    when 'account_detail' then { account: portfolio.accounts.last }
+    when 'portfolio' then { portfolio: portfolio }
     when 'content' then { pattern: pattern }
     when 'figures' then { review: review }
-    when 'roth_form' then { scenario: scenario }
     when 'specimen' then { specimen: specimen }
     end
   end

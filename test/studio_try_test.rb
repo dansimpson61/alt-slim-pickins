@@ -33,7 +33,7 @@ class StudioTryTest < Minitest::Test
     'band' => 'svg',
     'line' => 'svg',
     'level' => 'svg',
-    'each' => 'Traditional IRA',
+    'each' => 'Exploring a view DSL', # the dashboard pattern page's canned project
     'choose' => 'Allocation has drifted.',
     'when' => 'Allocation has drifted.',
     'column' => 'Symbol',

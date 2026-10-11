@@ -55,9 +55,8 @@ module SlimPickins
     def verified_pages_count
       verify_script = File.read(File.join(ROOT, 'bin', 'verify_pages.rb'))
       explicit_pages = verify_script.scan(/^\s*\['(pages|examples|studio)\//).size
-      mapped_pages = verify_script.scan(/%w\[portfolio_table account_detail roth_form specimen\]/).any? ? 4 : 0
       studio_count = verify_script.include?('*STUDIO_PAGES') ? 8 : 0
-      explicit_pages + mapped_pages + studio_count
+      explicit_pages + studio_count
     end
 
     def styles

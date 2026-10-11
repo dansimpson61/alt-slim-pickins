@@ -54,10 +54,6 @@ module StudioPages
 
   PAGES = {
     'pages/specimen' => 'pages/specimen.sp',
-    'pages/portfolio_table' => 'pages/portfolio_table.sp',
-    'pages/account_detail' => 'pages/account_detail.sp',
-    'pages/roth_form' => 'pages/roth_form.sp',
-    'pages/partials/test_account_card' => 'pages/partials/test_account_card.sp',
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
     'portfolio/partials/account_card' => 'examples/portfolio/views/partials/account_card.sp',
@@ -197,8 +193,7 @@ module StudioPages
   # The studio's own furniture plus every example app's partials, merged —
   # a loaded page and its data now render end-to-end. A name shared by two
   # apps refuses loudly here rather than rendering one app's word in
-  # another's place. pages/partials is included: its test_account_card is a
-  # real partial — account_detail renders it — whatever else uses it.
+  # another's place.
   #
   # The sandbox library: the repo's pages, the shared furniture and the
   # example apps' partials — but *no UI's* partials, because a UI's fragments
@@ -355,15 +350,13 @@ module StudioPages
   # and that is itself a true answer, not a crash.
   def self.data_for(rel)
     case rel
-    when 'pages/portfolio_table.sp', 'pages/specimen.sp',
-         'pages/account_detail.sp', 'pages/roth_form.sp'
-      Fixtures.for(File.basename(rel, '.sp')) || {}
+    when 'pages/specimen.sp'
+      Fixtures.for('specimen')
     when 'examples/portfolio/views/index.sp'
       { portfolio: Fixtures.portfolio }
     when 'examples/portfolio/views/account.sp'
       { account: Fixtures.portfolio.accounts.last }
-    when 'examples/portfolio/views/partials/account_card.sp',
-         'pages/partials/test_account_card.sp'
+    when 'examples/portfolio/views/partials/account_card.sp'
       # Rendered standalone, the card's subject is the page — so the
       # account's own fields are the locals, not a wrapper around them.
       Fixtures.portfolio.accounts.last.to_h

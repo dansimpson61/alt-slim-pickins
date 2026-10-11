@@ -55,14 +55,14 @@ What stays here is what a fresh session needs and cannot get elsewhere: the read
 list above, the vitals below, the active next step, the protocols and the standing
 principles.
 
-### Current Vitals (measured 2026-10-05)
+### Current Vitals (measured 2026-10-11)
 
 Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 30 app words, 38 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
-- **Full Suite**: 606 runs, 6,628 assertions, 0 failures, 0 errors, 0 skips in one
+- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 57 test files.
+- **Full Suite**: 627 runs, 6,698 assertions, 0 failures, 0 errors, 0 skips in one
   process — and that includes the example apps' own suites, because both the Suite
   leg *and* the gate command below now ask `Census.test_files`. They did not agree
   until 2026-10-03: the command kept its own `Dir["test/**/*_test.rb"]` glob and ran
@@ -73,7 +73,7 @@ measure are quoted as the gate output they are.
 - **Check Styles**: 28 emittable classes, 59 rendering, 113 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
 - **Spiff Scope**: `3 spiff(s), 15 compiled classes held to the HTML their pages render, 0 problems` — it holds compiled selectors to rendered HTML now, not zone names to sources.
-- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 38 pages, 0 problems.
+- **Promises / Conventions / Card / Pages**: 35 / 38 / 7 fields / 35 pages, 0 problems.
 - **Twelve gate legs** on `/status`, which re-runs them live: Grammar, Shape, Styles, Spiff, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby, Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are inside the gate now.
 - **Byte-diff corpus digest** (`ruby bin/byte_diff.rb`): a digest over every page the gate proves. No number is written down here on purpose — `examples/lore_reader` renders a live count of `LORE.md`'s entries, so the digest moves whenever lore is left. Compare snapshots within a session, which is what `bin/byte_diff.rb`'s own header says.
 - **`ruby -w -c`** is clean over `lib/`, `studio/`, `bin/`, the checkers, the suite and the example apps.
@@ -113,18 +113,12 @@ Planning 0.5, in this order:
    5b), the variants proposal parts (i) and (ii), 0.4.0p's N1 and N2, and
    `partial_slot_forwarding`.
 
-Still open and separate from 0.5: **bury the corpses in `pages/`**. That is a proposal
-dan has not answered. `pages/` is the Phase 0–2 payload from before the apps.
-- `partials/test_account_card.sp` is a byte-for-byte copy of portfolio's
-  `account_card.sp`.
-- `account_detail.sp` and `portfolio_table.sp` are stale drafts of portfolio's views.
-- `roth_form.sp` is an older roth form, and `pages.tin` copies portfolio's nav.
-- `bin/show_portfolio.rb` is broken, and `demo`, `render_pages` and `diff_roth` only
-  serve `pages/`.
-
-Keep `specimen.sp`, and point the studio's page ledger at the live views. Families
-touches word names and partials, so settling this first leaves 0.5 less to measure
-around.
+**Done before 0.5 began (2026-10-11): the corpses in `pages/` are buried.** That was
+the Phase 0–2 payload, from before the apps existed. Buried: copies and stale drafts
+of portfolio's card, views and nav; an old roth form; a broken script; and three
+instruments that only served `pages/`. `pages/specimen.sp` stays, as the every-word
+specimen. The corpus is now 35 pages, and no gate leg saw less: `check_styles`
+renders the live portfolio index in their place. The commit lists everything.
 
 **One rule, accepted by dan 2026-10-10:** no new design document until the last one
 has shipped code or been withdrawn.
@@ -566,10 +560,8 @@ own sentence has not survived being measured:
   `uis/workbench/workbench.spiff` and compiles it per request, so the generated
   stylesheet shadows the disk file of the same name. Deleting the file changes no
   render. Awaiting dan's word.
-- **The two byte-identical `.tin` files** — `pages/pages.tin` and
-  `examples/portfolio/views/portfolio.tin` share one md5
-  (`e2c8e71c7c5ddc0dcaa175130cb7b9f4`). Whether one frame should be shared or the
-  duplication is honest independence is dan's.
+- **The two byte-identical `.tin` files**: resolved 2026-10-11. `pages/pages.tin` was
+  buried with the rest of `pages/`'s copies, and portfolio's is the only one.
 
 ### Two instruments to use rather than rebuild (added in 0.4.0h)
 
@@ -598,9 +590,9 @@ own sentence has not survived being measured:
   `--footer-height` (2.8rem is corrected but still guessed, and Spiff's generated
   CSS still carries a stale 2rem fallback).
 - **Package D** below — re-read before starting; its item 1 is largely done.
-- **Two leftovers, dan's call**: `pages/pages.tin` and
-  `examples/portfolio/views/portfolio.tin` are byte-identical; the classic UI still
-  has no `.spiff`, so its presentation still pools in `slim-pickins.css`.
+- **A leftover, dan's call**: the classic UI still has no `.spiff`, so its
+  presentation still pools in `slim-pickins.css`. (The byte-identical tin it was
+  listed with was buried on 2026-10-11.)
 - **Retire a generated file that is committed and then gated** —
   `bin/generate_vocabulary.rb` writes five bullets per `VOCABULARY.md` entry from
   `contracts.rb`, and `check_grammar`'s whole `UNGENERATED` section then verifies

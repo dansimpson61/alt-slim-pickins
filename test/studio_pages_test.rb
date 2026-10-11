@@ -157,11 +157,7 @@ class StudioPagesTest < Minitest::Test
   # ledger's promise, held so a rotted payload is a red test, not a quietly
   # empty slot.
   LEDGER_PAGES = {
-    'pages/portfolio_table.sp' => 'Where you stand',
     'pages/specimen.sp' => 'Facts, badges, moments',
-    'pages/account_detail.sp' => 'Account detail',
-    'pages/roth_form.sp' => 'Directional Roth Conversion Sketch',
-    'pages/partials/test_account_card.sp' => 'Roth IRA',
     'examples/portfolio/views/index.sp' => 'Your retirement',
     'examples/portfolio/views/account.sp' => 'Account detail',
     'examples/portfolio/views/partials/account_card.sp' => 'Roth IRA',
@@ -219,7 +215,7 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_the_prefilled_json_parses_back_into_locals
-    json = StudioPages.data_json_for('pages/portfolio_table.sp')
+    json = StudioPages.data_json_for('examples/portfolio/views/index.sp')
     locals = StudioPages.data_locals(json)
     assert_equal 1_284_506, locals['portfolio']['total_value']
   end

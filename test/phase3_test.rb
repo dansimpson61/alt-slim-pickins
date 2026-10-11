@@ -125,9 +125,9 @@ class Phase3Test < Minitest::Test
   # --- loading from disk ------------------------------------------------
 
   def test_a_library_reads_a_tin_and_partials_from_a_directory
-    lib = SlimPickins::Library.from(File.expand_path('../pages', __dir__))
+    lib = SlimPickins::Library.from(File.expand_path('../examples/portfolio/views', __dir__))
     assert lib.tin
-    assert lib.word?(:test_account_card)
+    assert lib.word?(:account_card)
     refute lib.word?(:nonexistent)
   end
 end

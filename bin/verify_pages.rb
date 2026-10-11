@@ -112,9 +112,7 @@ STUDIO_PAGES = Uis.all.flat_map do |ui|
 end.freeze
 
 PAGES = [
-  *%w[portfolio_table account_detail roth_form specimen].map do |name|
-    ["pages/#{name}.sp", repo, Fixtures.for(name)]
-  end,
+  ['pages/specimen.sp', repo, Fixtures.for('specimen')],
   ['examples/portfolio/views/index.sp', portfolio, { portfolio: Fixtures.portfolio }],
   ['examples/portfolio/views/account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
   ['examples/roth/views/controls.sp', roth, { scenario: scenario, projection: projection }],

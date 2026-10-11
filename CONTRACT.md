@@ -171,9 +171,11 @@ Measured on the roth form, which has fourteen labelled controls:
 | humanising alone | **11 of 14** |
 | with `label_for` on the app | **0 of 14** |
 
-`bin/diff_roth.rb` shows it: a twelve-line `LABELS` hash on the app, and
-[pages/roth_form.sp](pages/roth_form.sp) has no field labels at all while
-rendering the same words as the hand-written page.
+`bin/diff_roth.rb` showed it: a twelve-line `LABELS` hash on the app, and
+`pages/roth_form.sp` had no field labels at all while rendering the same words as
+the hand-written page. Both were Phase 0 instruments, and both were retired on
+2026-10-11 once the live roth app had replaced them. The measurement stands, and
+`git show b9b97ef` brings both back to rerun it.
 
 The three humanising got right unaided — `roth_balance`, `base_income`,
 `growth_rate` — are the ones whose attribute names were already English. That

@@ -193,7 +193,7 @@ with the forward eye, and its question is families: each `.sp` file as a
 namespace of words, found nearest-first. `DAYTRIP-0.4.0q.md` is its starting
 material, not its plan. `PROJECT.md`'s `next_step` says where planning begins.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 30 app words, 38 verified pages, 38 conventions, 35 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
