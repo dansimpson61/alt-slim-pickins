@@ -9,27 +9,28 @@ status: >-
   (`DAYTRIP-0.4.0a` through `0.4.0q`) and, since 2026-10-10, has a question in
   `ROADMAP-0.4.md`: do the conventions keep their promises, so that an author only has
   to name things? It closes when `CONVENTIONS.md`'s weak-spots table is empty and
-  every documented override is proved by a test. Twelve gate legs green, 615 runs /
-  6,686 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
+  every documented override is proved by a test. Twelve gate legs green, 625 runs /
+  6,755 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account lives
   in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this field
   carries the present, and `bin/check_card.rb` holds it to a budget. 0.4.0p was
   rejected; 0.4.0q (families) is withdrawn from 0.4 and carried to 0.5 as its
   question, unbuilt. The four plain defects the 2026-10-10 review named are fixed.
 last_touched: 2026-10-10
 next_step: >-
-  **Build the three patterns' rulings (dan, 2026-10-10), one commit each, each with a
-  test that fails on the old code.** Pattern 3, teach six things: `number` shows up to
-  two decimals; common irregular plurals; `each` over `nil` shows nothing; a Struct
-  is never a collection; `relative` counts calendar days (it reads 3 days ago as "4
-  days ago" in the afternoon) and speaks of the future; `link home` goes to `/`.
-  Pattern 1: an unknown badge status gets `neutral`; refuse, naming the fix, what the
-  page alone shows can never work (`empty` with no collection above, a box with
-  written content and children, `box_title`, `root_class`). Pattern 2 is closed:
-  three stated limits. The rulings are written in `CONVENTIONS.md`'s patterns section.
-  Diff the corpus with `bin/byte_diff.rb` before and after. Rule, accepted by dan
-  2026-10-10: **no new design document until the last one has shipped code or been
-  withdrawn.** Still dan's: the `link` positional alias, variants parts (i) and (ii),
-  0.4.0p's N1 and N2, a table holding `empty`, and `partial_slot_forwarding`.
+  **Ask dan about `root_class`**, the last pattern-1 error: five working partials
+  (portfolio's and pages' account_card, why_card, editor, documents_list) have two
+  top lines, so refusing them means wrapping each in a `box`, which changes markup.
+  Built 2026-10-10, one commit each: all six pattern-3 rulings; pattern 1's errors for
+  `empty` with nothing named above (it fixed word_graph's never-shown "No words
+  matched"), a box's dropped lines, and a second title. The badge row proved already
+  true. Open rows for dan: `empty` under a section over `nil` stays hidden (vs.
+  `ContractTest`'s "the subject is empty" rule); a bare `section` renders an empty
+  `<h2>`; a table may not hold `empty`; `partial_slot_forwarding`. Also: whether to add
+  `badge--neutral` to unknown statuses' markup; portfolio's `link accounts` and `link
+  projections` have no routes; five apps' `to: "/"` on `link home` is now redundant.
+  Rule, accepted by dan 2026-10-10: **no new design document until the last one has
+  shipped code or been withdrawn.** Still dan's: the `link` positional alias, variants
+  (i) and (ii), 0.4.0p's N1 and N2.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

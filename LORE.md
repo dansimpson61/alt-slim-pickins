@@ -1419,3 +1419,7 @@ Four things learned while probing the def line and the conventions (2026-10-06 t
 ## 2026-10-10 — Claude
 
 **To prove an override is tested, break it and watch the suite.** Finding a test that mentions an override proves nothing about whether any test would notice it failing. On 2026-10-10 each documented override was mutated to lose to its convention (twenty mutations, a full suite plus verify_pages each, about six minutes). Three went unnoticed, though all three worked. Two traps in reading the results. A mutation can crash at load time, as dropping the said label made doc_reader's `label_for` receive nil, and a crash is not a test catching the fault; mutate so the convention wins without crashing. And `CheckRubyTest#test_the_whole_tree_is_clean` goes red whenever a mutation leaves a variable unused, which is noise, not proof. The script was a scratch file and was not kept.
+
+## 2026-10-10 — Claude
+
+**Survey before you refuse.** Before adding a compile-time refusal, walk every `.sp` and `.tin` in the repo through the candidate rule (`Transform.tree` plus a recursive walk takes seconds). On 2026-10-10 the survey separated the four page-visible errors cleanly. Two matched nothing. One matched a single real bug (word_graph's never-shown empty line). One matched five working partials, which made it a question for dan, not a fix. Also: `check_grammar.rb` and `Contracts.first_violation` are two walkers over one `complaints`, and any new context a rule needs (such as `named_above`) has to be threaded through both, plus the contract test's local walker.
