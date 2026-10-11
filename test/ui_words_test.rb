@@ -67,7 +67,21 @@ class UiWordsTest < Minitest::Test
     link home, active: true
     link library
 ), account: {})
-    assert_includes html, '<a href="/home" class="link link--active" aria-current="page">Home</a>'
+    assert_includes html, '<a href="/" class="link link--active" aria-current="page">Home</a>'
+    assert_includes html, '<a href="/library" class="link">Library</a>'
+  end
+
+  # `link home` once went to `/home`, which no app serves: portfolio's
+  # "Overview" was a dead link, and five other apps wrote `to: "/"` every time.
+  # Home is the root (dan, 2026-10-10); `to:` still says otherwise.
+  def test_link_home_goes_to_the_root
+    html = render(%(page account
+  link home, "Overview"
+  link home, "Elsewhere", to: "/start"
+  link library
+), account: {})
+    assert_includes html, '<a href="/" class="link">Overview</a>'
+    assert_includes html, '<a href="/start" class="link">Elsewhere</a>'
     assert_includes html, '<a href="/library" class="link">Library</a>'
   end
 

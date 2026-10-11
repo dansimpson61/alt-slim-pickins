@@ -143,8 +143,13 @@ link show, "Details"
 
 **To override** — `to:` — `link back, to: "/x"`.
 
-**Watch for** — the address is always `/` plus the name. `link home` is
-`/home`.
+The address is `/` plus the name, except `home`, which is the root: `link
+home` is `/`. No app serves `/home`, and before 2026-10-10 every app that
+said `link home` had to add `to: "/"`.
+
+**Watch for** — any other name becomes an address whether or not the app
+serves it. `link projections` is `/projections` even where no such route
+exists.
 
 ### `label` — a field, column or metric labels itself
 
@@ -927,7 +932,6 @@ them. Each was found by rendering, not by reading.
 | `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
 | `badge_status` | An unknown status gets no colour, silently | name the variant |
 | `root_class` | A word with two top lines gets no class | wrap them in a `box` |
-| `link_href` | `link home` is `/home`, not `/` | `to: "/"` |
 | `partial_slot_forwarding` | A value reaches lines its author did not write | say it on the inner word |
 | `empty_situation` | A table may not hold `empty` | put it in a section |
 
@@ -977,4 +981,4 @@ first:
    - `each` over `nil` shows nothing. *(built)*
    - A Struct is a record, never a collection. *(built)*
    - `relative` counts calendar days and speaks of the future. *(built)*
-   - `link home` goes to `/`.
+   - `link home` goes to `/`. *(built)*

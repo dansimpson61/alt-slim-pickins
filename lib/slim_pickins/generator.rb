@@ -279,9 +279,13 @@ module SlimPickins
 
     def link(attrs, _children)
       classes = [token(:link), attrs[:active] ? 'link--active' : nil].compact.join(' ')
-      full_tag('a', attrs[:label], href: attrs[:to]&.to_s || "/#{attrs[:name]}",
+      full_tag('a', attrs[:label], href: attrs[:to]&.to_s || address_of(attrs[:name]),
                class: classes, 'aria-current': attrs[:active] ? 'page' : nil)
     end
+
+    # A link's name is its address, and `home` is the root: no app serves
+    # `/home`, and every app that said `link home` had to add `to: "/"`.
+    def address_of(name) = name.to_s == 'home' ? '/' : "/#{name}"
 
     # --- Structure --------------------------------------------------------
 
