@@ -917,7 +917,7 @@ them. Each was found by rendering, not by reading.
 | Convention | What goes wrong | Today's workaround |
 |---|---|---|
 | `empty_situation` | With no collection above, `empty` vanishes silently | put it under the collection's word |
-| `nothing_detection` | `nil` is empty, but an `each` under it raises | have the app give `[]` |
+| `nothing_detection` | An `empty` line under a section over `nil` does not show, though over `[]` it does. A word over `nil` that reads a field raises "the subject is empty" by design (`ContractTest`), so which should win is open for dan | have the app give `[]` |
 | `collection_detection` | A Struct of all-`nil` fields counts as empty | avoid Structs that can be all-`nil` |
 | `box_title` | A `heading` inside a section makes a second title | say the words on the section |
 | `box_body_over_children` | Children are dropped silently. The override, "give the box children and no content", is inadequate (dan, 2026-10-10) | children, or content — not both |
@@ -972,7 +972,7 @@ first:
      dropped. *(built)*
    - A short list of common irregular plurals, with `from:` for the rest.
      *(built)*
-   - `each` over `nil` shows nothing.
+   - `each` over `nil` shows nothing. *(built)*
    - A Struct is a record, never a collection.
    - `relative` counts calendar days and speaks of the future.
    - `link home` goes to `/`.

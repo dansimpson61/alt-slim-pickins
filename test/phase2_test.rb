@@ -87,6 +87,16 @@ class Phase2Test < Minitest::Test
     assert_includes html, '<h3 class="title">Roth</h3>'
   end
 
+  # `nil` is nothing, but an `each` under a section over nil raised "nothing
+  # has no holdings", and `from:` reading nil fell back to pluralising the
+  # binding. Both now go through nothing (dan, 2026-10-10).
+  def test_each_over_nil_goes_through_nothing
+    html = render("page book\n  section holdings\n    each holding\n      title .name\n", book: { holdings: nil })
+    assert_includes html, '<section class="section section--holdings">'
+    html = render("page book\n  each entry_row, from: .rows\n    title .name\n", book: { rows: nil })
+    refute_includes html, 'class="title"'
+  end
+
   def test_from_overrides_pluralising
     html = render("page book\n  each entry, from: .recent\n    title .name\n",
                   book: { recent: [{ name: 'Only' }] })

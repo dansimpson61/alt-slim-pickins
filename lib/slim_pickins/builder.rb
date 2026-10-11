@@ -237,6 +237,7 @@ module SlimPickins
         raise Error, "#{subject.describe}'s #{plural} is not a collection to go through"
       end
       return subject.object if Inference.collection?(subject.object)
+      return nil if subject.object.nil? # nothing has nothing to go through
 
       raise Error, "#{subject.describe} has no #{plural} to go through"
     end

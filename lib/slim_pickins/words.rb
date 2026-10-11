@@ -165,12 +165,13 @@ if Word.registry.key?(name)
                "`from:` — `each row, from: .#{Inference.plural(name)}`."
 end
 
-items = if from.is_a?(Symbol)
-          subject.fetch(from)
-        elsif from
-          from
-        else
+# `from:` said is `from:` meant, even when what it reads is nil.
+items = if !@kwargs.key?(:from)
           collection_for(name)
+        elsif from.is_a?(Symbol)
+          subject.fetch(from)
+        else
+          from
         end
 
 unless items.nil? || Inference.collection?(items)
