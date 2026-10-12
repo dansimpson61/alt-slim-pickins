@@ -16,18 +16,15 @@ status: >-
   confirmed by dan across several rounds of correction and closed 2026-10-11.
 last_touched: 2026-10-11
 next_step: >-
-  **Start 0.5's first daytrip, in a fresh session.** `ROADMAP-0.5.md` holds the
-  question and the definition of success; `HANDOFF.md`'s active next step points
-  here too. Two things need designing before any mechanical migration: what replaces
-  the old declaration line (dan's preferred shape is `def word, [param], [param],
-  ...`; the one problem to solve humanely, without new author bookkeeping, is a
-  parameter named after a structural kind colliding with a record's own field of
-  the same name), and the nearest-first lookup chain itself, built first in
-  reporting-only mode — the way 0.4.0q's Step 3 did — so it only confirms what
-  would resolve differently (expected: `editor`, plus the eleven parent-bound
-  words) before any behaviour changes. Carried in, still dan's call: the `link`
-  positional alias, the overloaded `variant` idea, two unconfirmed parsing rulings,
-  and `partial_slot_forwarding`'s relationship to formal containment.
+  **`DAYTRIP-0.5.0a.md` is closed.** dan ruled on Part 1 on 2026-10-11: Option A
+  (parameters strictly lexical to the `def` body, never leaking into caller blocks)
+  plus Option B1 (free parameter names, data-flow inference for kinds, with `subject`
+  reserved for subject-shift). Part 2 confirmed by `bin/probe_lookup_chain.rb` over all
+  1,056 sentences across 97 files: exactly `editor` resolves differently (classic vs
+  workbench each reaching their own partial), exactly the eleven contained words resolve
+  through parent families (178 calls, 0 outside parents), and 0 unresolved sentences.
+  Next step is Daytrip 0.5.0b: enforce the nearest-first chain in `Compilation` and
+  `Transform`, and delete the global write (`Word.registry[word] = klass`).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
