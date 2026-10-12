@@ -1460,3 +1460,7 @@ Option B1 data-flow inference requires contract-aware parameter routing: when an
 ## 2026-10-12 — Antigravity
 
 The foundational law of slim-pickins parameter binding is that names are symbols and content is anything else. When contract-aware bind_parameters attempted positional array indexing, strings like "open" in paragraph "open", .content erroneously bound to variant instead of content. Binding symbols to name slots and non-symbols to content slots aligns runtime def binding with the language grammar. Furthermore, words declared with def only declare positional parameters; defaulting undeclared modifiers to container values or nil prevents modifiers like .open or .precision from erroneously escaping into outer subject scopes.
+
+## 2026-10-12 — Antigravity
+
+When allowing an app to shadow built-in language words (Dan's 2026-10-05 ruling), sandbox and playground harnesses that merge multi-app libraries (like StudioPages.merge_libraries) must exclude app partials that share a name with built-in words. Otherwise, the app's shadowed partial pollutes the global sandbox and overrides the language primitive for unrelated pages (such as specimen.sp). The owning app's family must evaluate against its own Library instance via a dedicated seam (e.g. StudioPages.library_for), preserving strict containment.

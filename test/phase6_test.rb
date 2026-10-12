@@ -71,12 +71,10 @@ class Phase6Test < Minitest::Test
     refute_includes page, '<'
   end
 
-  def test_a_ruby_word_may_not_shadow_a_slim_pickins_word
+  def test_a_ruby_word_may_shadow_a_slim_pickins_word
     shadow = Module.new { def table; end }
-    error = assert_raises(SlimPickins::Error) do
-      SlimPickins::Library.new(words: shadow)
-    end
-    assert_equal '`table` is already a slim-pickins word — an app cannot redefine it', error.message
+    lib = SlimPickins::Library.new(words: shadow)
+    assert_includes lib.shadowed_words, :table
   end
 
   def test_a_word_defined_twice_is_refused

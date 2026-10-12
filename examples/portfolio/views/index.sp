@@ -8,6 +8,5 @@ page portfolio, "Your retirement"
     empty "No accounts linked yet."
     each account
       card
-        account_card
         actions
           link show, "Details", to: "/accounts/#{account.id}"

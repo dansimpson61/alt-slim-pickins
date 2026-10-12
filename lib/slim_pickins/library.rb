@@ -93,10 +93,6 @@ module SlimPickins
       @dir = dir
       app_partials = partials.transform_keys(&:to_sym)
       vocabulary = self.class.builtin_partials
-      dupes = app_partials.keys & vocabulary.keys
-      unless dupes.empty?
-        raise Error, "`#{dupes.first}` is already a slim-pickins word — an app cannot redefine it"
-      end
 
       @app_partials = app_partials
       @partials = vocabulary.merge(app_partials)
@@ -275,27 +271,32 @@ module SlimPickins
       SlimPickins.render(source, path: path || "(#{name})", locals: locals, helpers: helpers, library: self, filter: filter)
     end
 
+    # The language words this library shadows.
+    # An app may define a partial or Ruby word that shares a name with a
+    # vocabulary partial or Ruby primitive (ruled 2026-10-05) — the app's
+    # word wins inside this library (nearest wins), and the gate reports it.
+    def shadowed_words
+      builtins = self.class.builtin_partials.keys | self.class.primitive_keys
+      (@app_partials.keys | word_names) & builtins
+    end
+
+    def self.primitive_keys
+      @primitive_keys ||= SlimPickins::Words.constants.map do |c|
+        c.to_s.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+              .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+              .tr('-', '_')
+              .downcase.to_sym
+      end
+    end
+
     private
 
-    # Two meanings for one word is the alias problem wearing a new hat, so a
-    # collision is an error rather than an override. The vocabulary's own
-    # partials are words, not app words — they pass the check by right.
+    # An app may shadow a language word (ruled 2026-10-05: allowed, nearest
+    # wins, and the gate reports it). But within the app itself, one word may
+    # not have two definitions — defining it both as a partial and in Ruby
+    # is refused because one name must have one home.
     def refuse_shadowing!
-      vocabulary = self.class.builtin_partial_paths.keys
-      app_words = (@partials.keys - vocabulary) + word_names
-      
-      app_words.each do |name|
-        primitive_keys = SlimPickins::Words.constants.map do |c|
-          c.to_s.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-                 gsub(/([a-z\d])([A-Z])/,'\1_\2').
-                 tr("-", "_").
-                 downcase.to_sym
-        end
-        if primitive_keys.include?(name)
-          raise Error, "`#{name}` is already a slim-pickins word — an app cannot redefine it"
-        end
-      end
-
+      app_words = @app_partials.keys + word_names
       duplicated = app_words.tally.select { |_, n| n > 1 }.keys
       return if duplicated.empty?
 

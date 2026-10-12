@@ -56,7 +56,7 @@ module StudioPages
     'pages/specimen' => 'pages/specimen.sp',
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
-    'portfolio/partials/account_card' => 'examples/portfolio/views/partials/account_card.sp',
+    'portfolio/partials/card' => 'examples/portfolio/views/partials/card.sp',
     'dashboard/triage' => 'examples/dashboard/views/triage.sp',
     'dashboard/confirm_archive' => 'examples/dashboard/views/confirm_archive.sp',
     'dashboard/brief' => 'examples/dashboard/views/brief.sp',
@@ -155,7 +155,7 @@ module StudioPages
       # with the sandbox, which carries no UI's tin — because that is what
       # the load gives it. Measuring a loaded page inside the workbench's frame
       # is how every entry went red asking a specimen for `words_count`.
-      engine = rel.start_with?('studio/uis/') ? library : (pages_library || library)
+      engine = rel.start_with?('studio/uis/') ? library : library_for(rel, default: (pages_library || library))
       status, refusal =
         begin
           SlimPickins.render(File.read(File.join(ROOT, rel)), path: rel,
@@ -225,12 +225,29 @@ module StudioPages
     @library ||= merge_libraries(library_dirs, words: [AppWords, *Uis.all.map(&:words)])
   end
 
+  # The library for evaluating a specific page. Most pages render against
+  # the default (the playground sandbox library or UI library). But an app
+  # whose family defines words that shadow language words — like portfolio's
+  # `card` — must evaluate against its own library so that shadowing remains
+  # contained to that app's own family (ROADMAP-0.5 Criterion 4).
+  def self.library_for(rel, default: library)
+    if rel.to_s.start_with?('examples/portfolio/')
+      @portfolio_library ||= SlimPickins::Library.from(
+        File.join(ROOT, 'examples', 'portfolio', 'views'),
+        words: AppWords
+      )
+    else
+      default
+    end
+  end
+
   # The merge, its own seam so the collision refusal is testable: two apps
   # naming the same partial would otherwise render one app's word in
   # another's place, silently.
   def self.merge_libraries(dirs, words: nil, tin: nil)
     partials = {}
     partial_paths = {}
+    builtins = SlimPickins::Library.builtin_partials.keys | SlimPickins::Library.primitive_keys
     dirs.each do |dir|
       Dir[File.join(dir, 'partials', '*.sp')].each do |path|
         name = File.basename(path, '.sp').to_sym
@@ -238,6 +255,12 @@ module StudioPages
           raise SlimPickins::Error,
                 "`#{name}` is a partial in two apps — the playground refuses to guess which one a page means"
         end
+
+        # An app partial that shadows a language word belongs to that app's
+        # family alone. It must not leak into the studio's shared playground
+        # library, where it would shadow the language word for specimen and
+        # other apps.
+        next if builtins.include?(name)
 
         partials[name] = File.read(path)
         partial_paths[name] = path
@@ -362,7 +385,7 @@ module StudioPages
       { portfolio: Fixtures.portfolio }
     when 'examples/portfolio/views/account.sp'
       { account: Fixtures.portfolio.accounts.last }
-    when 'examples/portfolio/views/partials/account_card.sp'
+    when 'examples/portfolio/views/partials/card.sp'
       # Rendered standalone, the card's subject is the page — so the
       # account's own fields are the locals, not a wrapper around them.
       Fixtures.portfolio.accounts.last.to_h

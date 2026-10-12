@@ -68,9 +68,10 @@ class StudioPagesTest < Minitest::Test
       # The render the load gives — the same locals the route builds.
       complaint =
         begin
+          page_lib = StudioPages.library_for(entry.path, default: LIBRARY)
           SlimPickins.render(File.read(File.join(ROOT, entry.path)), path: entry.path,
                              locals: StudioPages.load_locals(entry.path),
-                             library: LIBRARY)
+                             library: page_lib)
           nil
         rescue SlimPickins::Error => e
           e.message
@@ -160,7 +161,7 @@ class StudioPagesTest < Minitest::Test
     'pages/specimen.sp' => 'Facts, badges, moments',
     'examples/portfolio/views/index.sp' => 'Your retirement',
     'examples/portfolio/views/account.sp' => 'Account detail',
-    'examples/portfolio/views/partials/account_card.sp' => 'Roth IRA',
+    'examples/portfolio/views/partials/card.sp' => 'Roth IRA',
     'examples/roth/views/controls.sp' => 'Directional Roth Conversion Sketch',
     'examples/roth/views/partials/report.sp' => 'Your projection',
     'examples/dashboard/views/triage.sp' => 'needs attention',
@@ -206,9 +207,10 @@ class StudioPagesTest < Minitest::Test
     LEDGER_PAGES.each do |rel, needle|
       json = StudioPages.data_json_for(rel)
       refute_empty json, "#{rel} has no payload"
+      page_lib = StudioPages.library_for(rel, default: library)
       html = SlimPickins.render(File.read(File.join(ROOT, rel)), path: rel,
                                 locals: StudioPages.playground_locals(json),
-                                library: library)
+                                library: page_lib)
       refute_includes html, 'note--error', "#{rel} refuses its own payload"
       assert_includes html, needle, "#{rel} rendered without its needle"
     end

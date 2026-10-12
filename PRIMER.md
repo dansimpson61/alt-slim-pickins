@@ -262,11 +262,11 @@ the call site which vocabulary a word came from:
 
 ```
 each account
-  account_card
+  card
 ```
 
-An app word that collides with a slim-pickins word is an error, refused at
-load — two meanings for one word is the alias problem wearing a new hat.
+An app word may share a name with a slim-pickins word — within that app's
+family the app's word wins (nearest wins), and the gate reports the shadow.
 
 ## The escape hatch
 

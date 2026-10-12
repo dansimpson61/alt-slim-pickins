@@ -97,5 +97,31 @@ app_used = used.reject { |w| vocabulary.key?(w.to_sym) }
 # quantity under two names was three numbers in three places (DAYTRIP-0.4.0h).
 puts "  words used in real pages: #{used.size - app_used.size} of #{vocabulary.size} " \
      "(plus #{app_used.size} the apps define: #{app_used.sort.join(', ')})"
+
+# An app may shadow a language word (ruled 2026-10-05) — the gate reports every
+# shadowed language word so the override is visible rather than silent.
+shadowed = Dir[File.join(__dir__, '{examples,pages,studio}', '**', 'partials', '*.sp')].filter_map do |path|
+  word = File.basename(path, '.sp').to_sym
+  next unless vocabulary.key?(word)
+
+  parts = path.sub("#{__dir__}/", '').split('/')
+  app = parts.first == 'examples' ? parts[1] : parts.first
+  "#{word} (#{app})"
+end
+
+Dir[File.join(__dir__, '{examples,studio}', '**', '*.rb')].each do |f|
+  File.read(f).scan(/^([ \t]*)module (\w*Words|StudioUI)\b(.*?)^\1end/m).each do |_indent, _name, body|
+    body.scan(/^\s*def ([a-z_]+)/).flatten.each do |w|
+      sym = w.to_sym
+      if vocabulary.key?(sym)
+        parts = f.sub("#{__dir__}/", '').split('/')
+        app = parts.first == 'examples' ? parts[1] : parts.first
+        shadowed << "#{sym} (#{app})"
+      end
+    end
+  end
+end
+shadowed = shadowed.uniq.sort
+puts "  shadowed language words: #{shadowed.empty? ? 'none' : shadowed.join(', ')}"
 puts "  #{problems} problems"
 exit(problems.zero? ? 0 : 1)

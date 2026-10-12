@@ -6,3 +6,4 @@ table holdings
   column gain
   column weight
   total market_value, "Account total"
+children

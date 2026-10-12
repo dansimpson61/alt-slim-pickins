@@ -1,3 +1,3 @@
 page account, "Account detail"
-  account_card
+  card
   video .tour_url

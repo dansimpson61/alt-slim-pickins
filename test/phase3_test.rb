@@ -113,13 +113,12 @@ class Phase3Test < Minitest::Test
     assert_match(/\Athere is no word `sparkline`\n/, error.message)
   end
 
-  # --- shadowing is an error, not an override ---------------------------
+  # --- shadowing is allowed; nearest wins (ruled 2026-10-05) ------------
 
-  def test_an_app_may_not_redefine_a_slim_pickins_word
-    error = assert_raises(SlimPickins::Error) do
-      SlimPickins::Library.new(partials: { table: 'title .name' })
-    end
-    assert_equal '`table` is already a slim-pickins word — an app cannot redefine it', error.message
+  def test_an_app_may_shadow_a_slim_pickins_word
+    lib = SlimPickins::Library.new(partials: { table: "title .name\n" })
+    assert_equal "title .name\n", lib.source_for(:table)
+    assert_includes lib.shadowed_words, :table
   end
 
   # --- loading from disk ------------------------------------------------
@@ -127,7 +126,7 @@ class Phase3Test < Minitest::Test
   def test_a_library_reads_a_tin_and_partials_from_a_directory
     lib = SlimPickins::Library.from(File.expand_path('../examples/portfolio/views', __dir__))
     assert lib.tin
-    assert lib.word?(:account_card)
+    assert lib.word?(:card)
     refute lib.word?(:nonexistent)
   end
 end

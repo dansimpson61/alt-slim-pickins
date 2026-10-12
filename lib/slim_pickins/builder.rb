@@ -46,7 +46,18 @@ module SlimPickins
         end
       end
 
-      Array(@library.words).each { |mod| extend mod }
+      Array(@library.words).each do |mod|
+        next unless mod.is_a?(Module)
+
+        extend mod
+        mod.ancestors.each do |ancestor|
+          next unless ancestor.is_a?(Module)
+
+          ancestor.public_instance_methods(false).each do |m|
+            define_singleton_method(m, ancestor.instance_method(m))
+          end
+        end
+      end
       @library.partials.each do |word, source|
         if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
           ruby = @library.compiled_partial(word)&.compilation&.ruby || Transform.call(source, path: "partials/#{word}.sp")
@@ -235,6 +246,7 @@ module SlimPickins
 
     def render(ruby, path, source: nil)
       @nodes = []
+      @spliced = [] if path.to_s.include?('partials/')
       eval_with(ruby, path, source&.lines)
       @nodes
     end

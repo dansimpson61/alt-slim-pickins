@@ -8,18 +8,18 @@ status: >-
   rendered pages. Roadmaps 0.1 to 0.4 are closed. 0.4 (closed 2026-10-11) asked whether
   the conventions keep their promises, so that an author only has to name things:
   every documented override is proved by a test, `CONVENTIONS.md`'s weak-spots table
-  is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 630
-  runs / 6,810 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
+  is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 636
+  runs / 6,840 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
   lives in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this
   field carries the present, and `bin/check_card.rb` holds it to a budget. 0.5 is
   active: `ROADMAP-0.5.md` holds its question (families) and definition of success.
 last_touched: 2026-10-12
 next_step: >-
-  **`DAYTRIP-0.5.0d.md` is closed.** Retired the legacy `expects` declaration line across
-  all remaining nineteen vocabulary partials in `lib/vocabulary/` (twenty-eight total across the repo)
-  using Option B1 Data-Flow Inference and Option A Lexical Scope. Twelve gate legs green,
-  630 runs / 6,810 assertions / 0 failures, 35 pages byte-identical, 0 vocabulary drift.
-  Criterion 6 of `ROADMAP-0.5.md` is fully satisfied. Next step is reviewing Roadmap 0.5's remaining criteria.
+  **`DAYTRIP-0.5.0e.md` is closed.** Shipped Dan's 2026-10-05 ruling: permitted app partials
+  and Ruby words to shadow built-in words cleanly, contained to their owning app's family;
+  migrated portfolio's `account_card` to plain `card` and reported shadowing in the gate.
+  Twelve gate legs green, 636 runs / 6,840 assertions / 0 failures, 35 pages verified.
+  Criterion 4 of `ROADMAP-0.5.md` is satisfied. Next: advance Roadmap 0.5 criteria 1-3.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

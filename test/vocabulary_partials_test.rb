@@ -76,12 +76,12 @@ class VocabularyPartialsTest < Minitest::Test
     end
   end
 
-  def test_an_app_may_not_redefine_a_vocabulary_partial
+  def test_an_app_may_shadow_a_vocabulary_partial
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, 'partials'))
       File.write(File.join(dir, 'partials', 'flash.sp'), "text \"mine\"\n")
-      error = assert_raises(SlimPickins::Error) { library_for(dir) }
-      assert_match(/`flash` is already a slim-pickins word/, error.message)
+      lib = library_for(dir)
+      assert_equal %i[flash], lib.shadowed_words
     end
   end
 
