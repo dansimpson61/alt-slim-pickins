@@ -88,7 +88,8 @@ module Vitals
     'DAYTRIP.md' => 'the first daytrip, and a record of the vitals as they stood that day',
     'Tight Coupling in Ruby DSLs.md' => "a transcript of someone else's critique, not this project's prose",
     'ROADMAP-*.md' => 'each phase records what was true at that phase, which is the value',
-    'DAYTRIP-*.md' => "a round's record — that it is never updated is the whole point"
+    'DAYTRIP-*.md' => "a round's record — that it is never updated is the whole point",
+    'WISHLIST.md' => 'loose ends, wishlist items, and flights of imagination'
   }.freeze
 
   # `apps` is the one vital the snapshot answers with a list rather than a count.

@@ -46,6 +46,11 @@ working manual that should be better after every session than it was before.
    standing instruction; nothing here is sacred.
 8. **Update it in the housekeeping pass of every round**, beside `PROJECT.md`
    and lore. An observation that stays in your head is lost.
+9. **Maintain and consult `WISHLIST.md`.** Consult it whenever planning a roadmap
+   or daytrip for relevant loose ends, wishlist items, or flights of imagination.
+   Record ideas or design frictions there during sessions whenever they fall out
+   of immediate scope. At the close of each roadmap, systematically ask whether
+   there is anything to add to the wishlist before opening the next phase.
 
 ## What he is actually doing when he asks
 

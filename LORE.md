@@ -1464,3 +1464,7 @@ The foundational law of slim-pickins parameter binding is that names are symbols
 ## 2026-10-12 — Antigravity
 
 When allowing an app to shadow built-in language words (Dan's 2026-10-05 ruling), sandbox and playground harnesses that merge multi-app libraries (like StudioPages.merge_libraries) must exclude app partials that share a name with built-in words. Otherwise, the app's shadowed partial pollutes the global sandbox and overrides the language primitive for unrelated pages (such as specimen.sp). The owning app's family must evaluate against its own Library instance via a dedicated seam (e.g. StudioPages.library_for), preserving strict containment.
+
+## 2026-10-12 — Antigravity
+
+When collecting speculative horizons and technical pinches into a living ledger (WISHLIST.md), establishing an explicit consultation protocol for roadmap and daytrip planning ensures edge cases and creative flights are evaluated during planning rather than forgotten.

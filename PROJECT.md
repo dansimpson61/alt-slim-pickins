@@ -15,11 +15,11 @@ status: >-
   active: `ROADMAP-0.5.md` holds its question (families) and definition of success.
 last_touched: 2026-10-12
 next_step: >-
-  **`DAYTRIP-0.5.0e.md` is closed.** Shipped Dan's 2026-10-05 ruling: permitted app partials
-  and Ruby words to shadow built-in words cleanly, contained to their owning app's family;
-  migrated portfolio's `account_card` to plain `card` and reported shadowing in the gate.
+  **`DAYTRIP-0.5.0f.md` is closed.** Collected the repository's forward horizon into
+  `WISHLIST.md` (pinches, wishlist items, bluesky flights of imagination) and codified
+  a standing consultation rule in `working-with-dan.md` for roadmap/daytrip planning.
   Twelve gate legs green, 636 runs / 6,840 assertions / 0 failures, 35 pages verified.
-  Criterion 4 of `ROADMAP-0.5.md` is satisfied. Next: advance Roadmap 0.5 criteria 1-3.
+  Next: consult `WISHLIST.md` and advance Roadmap 0.5 criteria 1-3.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
