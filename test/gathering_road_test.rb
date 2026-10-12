@@ -52,8 +52,8 @@ class GatheringRoadTest < Minitest::Test
   def test_every_word_answers_its_own_name
     assert_equal :table, SlimPickins::Words::Table.new(nil, [:rows], {}, nil).word
 
-    library # compiling the partials registers them
-    partial = SlimPickins::Word.registry.fetch(:my_gatherer)
+    lib = library
+    partial = lib.compiled_partial(:my_gatherer)
 
     assert_equal :my_gatherer, partial.new(nil, [], {}, nil).word
   end

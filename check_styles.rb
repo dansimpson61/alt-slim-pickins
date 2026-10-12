@@ -44,7 +44,7 @@ def fail!(line) = (puts "  #{line}")
 # The registry is the vocabulary's one home, and it is not complete until the
 # built-in library has loaded the words that are written as `.sp` partials.
 SlimPickins::Library.builtin
-words = SlimPickins::Word.registry.keys.map(&:to_s).to_set
+words = (SlimPickins::Word.registry.keys + SlimPickins::Library.builtin.compiled_partials.keys).map(&:to_s).to_set
 # Words an app defines for itself. Every app in this repo renders through the
 # one stylesheet, so a rule may belong to any of their partials — the studio's
 # as much as the pages'. Reading every `partials/` there is stops this list

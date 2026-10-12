@@ -267,14 +267,20 @@ module StudioPages
   # structurally unrelated bodies. Rebuilding here re-registers the serving UI's
   # partials immediately before its render, so that UI wins the slot just in time.
   #
-  # Memoize it and the classic UI renders the workbench's `editor`, silently, with
-  # every gate green: nothing compares one UI's partial to another's.
-  # `test/studio_try_test.rb` depends on the same mechanism and says so.
+  # Memoized across calls: each UI's library owns its own compiled partials, so
+  # `classic` and `workbench` can each define `editor` without clobbering the other.
   def self.ui_library(ui)
-    tin_path = SlimPickins::Library.tin_path(ui.dir)
-    merge_libraries([*library_dirs, ui.views],
-                    words: [AppWords, *Uis.all.map(&:words)],
-                    tin: (File.read(tin_path) if tin_path))
+    @ui_libraries ||= {}
+    @ui_libraries[ui.name] ||= begin
+      tin_path = SlimPickins::Library.tin_path(ui.dir)
+      merge_libraries([*library_dirs, ui.views],
+                      words: [AppWords, *Uis.all.map(&:words)],
+                      tin: (File.read(tin_path) if tin_path))
+    end
+  end
+
+  def self.clear_ui_libraries!
+    @ui_libraries&.clear
   end
 
   # --- the data ledger: what the playground pre-fills ------------------------

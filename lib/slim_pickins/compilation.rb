@@ -31,27 +31,27 @@ module SlimPickins
       contract = VocabularyShapes.parse(source)
       klass.instance_variable_set(:@contract, contract) if contract
 
-      SlimPickins::Word.registry[word] = klass
+      klass
     end
 
-    def self.of(source, path, privileged: false)
+    def self.of(source, path, library: nil, privileged: false)
       # The cache is read without the lock first: under MRI a Hash read is
       # atomic, and the common path is a hit — every partial invocation pays
       # this call, so the lock only belongs to the miss that builds.
-      key = [source, privileged]
+      key = [source, privileged, library]
       cached = (@cache ||= {})[key]
       return cached if cached
 
-      (@mutex ||= Mutex.new).synchronize { @cache[key] ||= new(source, path, privileged: privileged) }
+      (@mutex ||= Mutex.new).synchronize { @cache[key] ||= new(source, path, library: library, privileged: privileged) }
     end
 
     # The instrument's reach: bin/measure_cost.rb empties it to measure the
     # cold path.
     def self.clear! = @cache&.clear
 
-    def initialize(source, path, privileged: false)
+    def initialize(source, path, library: nil, privileged: false)
       transform = Transform.new(source, path)
-      @violation = Contracts.first_violation(transform.tree, privileged: privileged)
+      @violation = Contracts.first_violation(transform.tree, library: library, privileged: privileged)
       @ruby = transform.call
     end
 

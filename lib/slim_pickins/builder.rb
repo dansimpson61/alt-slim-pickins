@@ -40,6 +40,12 @@ module SlimPickins
       end
       return unless @library
 
+      @library.compiled_partials.each do |word, klass|
+        define_singleton_method(word) do |*args, **kwargs, &block|
+          klass.new(self, args, kwargs, block).evaluate
+        end
+      end
+
       Array(@library.words).each { |mod| extend mod }
       @library.partials.each do |word, source|
         if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
@@ -91,12 +97,12 @@ module SlimPickins
       param_names = Array(param_names).map(&:to_sym)
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
+        captured = capture(&caller_block) if caller_block
         bound = Builder.bind_parameters(param_names, args, kwargs, subject)
 
         body = capture do
           chain.with(bound, described_as: "this #{word_name}", overlay: true) do
-            if caller_block
-              captured = capture(&caller_block)
+            if captured
               with_splice(captured) { definition_block.call }
             else
               definition_block.call
@@ -413,7 +419,7 @@ module SlimPickins
 
       stow_contents(capture(&block))
       path = @library.dir ? "#{view || File.basename(@library.dir)}.tin" : 'tin'
-      compilation = Compilation.of(tin, path)
+      compilation = Compilation.of(tin, path, library: @library)
       compilation.refuse!(path)
       nodes = capture { eval_with(compilation.ruby, path, tin.lines) }
       raise Error, 'this tin never says `contents`' if @contents

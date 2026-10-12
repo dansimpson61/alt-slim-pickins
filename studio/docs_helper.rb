@@ -63,7 +63,7 @@ module StudioDocs
   def self.words(ui = Uis.default_ui)
     require_relative '../lib/slim_pickins'
     SlimPickins::Library.builtin
-    vocabulary.select { |word| SlimPickins::Word.registry.key?(word.to_sym) }.sort
+    vocabulary.select { |word| SlimPickins::Word.registry.key?(word.to_sym) || SlimPickins::Library.builtin.word?(word.to_sym) }.sort
       .map { |word| Entry.new(name: word, path: ui.path(ui.paths[:word], word: word)) }
   end
 
@@ -78,7 +78,7 @@ module StudioDocs
     SlimPickins::Taxonomy.tiers.map do |tier_key, meta|
       words_in_tier = SlimPickins::Taxonomy.words_for_tier(tier_key)
       valid_words = words_in_tier.select do |word|
-        vocabulary.include?(word.to_s) && SlimPickins::Word.registry.key?(word.to_sym)
+        vocabulary.include?(word.to_s) && (SlimPickins::Word.registry.key?(word.to_sym) || SlimPickins::Library.builtin.word?(word.to_sym))
       end
 
       entries = valid_words.map do |word|
@@ -121,7 +121,7 @@ module StudioDocs
       require_relative '../lib/slim_pickins'
       SlimPickins::Library.builtin
       vocabulary.filter_map do |word|
-        klass = SlimPickins::Word.registry[word.to_sym]
+        klass = SlimPickins::Word.registry[word.to_sym] || SlimPickins::Library.builtin.compiled_partial(word.to_sym)
         next unless klass
 
         [word, { contract: contract_of(word),

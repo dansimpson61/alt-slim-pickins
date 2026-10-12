@@ -30,7 +30,7 @@ module SlimPickins
   # here because this signature is the only published extension point the tree
   # has.
   def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
-    compilation = Compilation.of(source, path)
+    compilation = Compilation.of(source, path, library: library)
     compilation.refuse!(path)
     builder = Builder.new(Page.new(locals: locals, helpers: helpers), library)
     nodes = builder.render(compilation.ruby, path, source: source)
@@ -42,7 +42,7 @@ module SlimPickins
   # seeing what a page means — and the tree a second interpreter (an API)
   # would walk.
   def evaluate(source, path: '(page)', locals: {}, helpers: nil, library: nil)
-    compilation = Compilation.of(source, path)
+    compilation = Compilation.of(source, path, library: library)
     compilation.refuse!(path)
     Builder.new(Page.new(locals: locals, helpers: helpers), library)
            .render(compilation.ruby, path, source: source)

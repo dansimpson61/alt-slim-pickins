@@ -159,7 +159,7 @@ module SlimPickins
       def evaluate
 from = @kwargs.key?(:from) ? @kwargs[:from] : nil
 name, = arguments(@args)
-if Word.registry.key?(name)
+if Word.registry.key?(name) || Library.builtin.word?(name)
   raise Error, "`each #{name}` cannot bind `#{name}` — it is a word of " \
                "the language. Name the binding something else and say " \
                "`from:` — `each row, from: .#{Inference.plural(name)}`."

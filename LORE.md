@@ -1443,3 +1443,12 @@ Drafted ROADMAP-0.5.md (families) via the steward agent's articulation mode, acr
 ## 2026-10-11 — Claude
 
 **What the nearest-first probe and parameter collision showed (0.5.0a).** (1) An unsaid `def` parameter silently clobbered caller children: `def framed, name` overlaid `name: nil` onto `point.name` inside caller blocks, blanking text without raising an error. Option A isolates parameters to the word's own body, keeping caller children cleanly in the caller's lexical context. (2) The nearest-first lookup chain resolver (`bin/probe_lookup_chain.rb`) confirmed its predictions across all 1,056 sentences in 97 files: exactly `editor` resolves differently (classic and workbench studio interfaces reaching their own partials rather than clobbering a global registry key), exactly the eleven contained words resolve only through their enclosing parent word's family (178 calls, 0 outside parents), and zero unresolved sentences.
+
+## 2026-10-11 — Claude
+
+**Deleting the global write isolates partials cleanly (0.5.0b).** (1) `Compilation.compile_partial` previously wrote `Word.registry[word] = klass`. Because `Word.registry` was global, whichever library compiled an identically named partial last overwrote the word globally for all libraries. Deleting that write kept partials strictly in their owning `Library` instance (`@compiled_partials`). (2) Nearest-first lookup on the `Builder` naturally defines primitives, then library partials, then library words, so local partials shadow globals cleanly. (3) Option A in `Builder#define_local_word` captures the caller block in caller scope before chaining parameter bindings, guaranteeing parameters never leak into caller blocks. (4) With global pollution gone, Studio UI libraries can be safely memoized across requests without cross-contamination between `classic` and `workbench`.
+
+
+## 2026-10-11 — Claude
+
+Deleting the global write in Compilation.compile_partial isolates partials to their owning Library instance, enabling safe memoization in StudioPages and preventing classic/workbench editor cross-contamination.

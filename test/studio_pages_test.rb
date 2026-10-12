@@ -325,4 +325,38 @@ class StudioPagesTest < Minitest::Test
     refute_includes res[:visual], 'NoMethodError'
     refute_includes res[:visual], "undefined method 'map' for nil"
   end
+
+  def test_editor_partial_collision_is_isolated_across_memoized_libraries
+    classic_ui = Uis['classic']
+    workbench_ui = Uis['workbench']
+
+    classic_lib = StudioPages.ui_library(classic_ui)
+    workbench_lib = StudioPages.ui_library(workbench_ui)
+
+    # Prove memoization
+    assert_same classic_lib, StudioPages.ui_library(classic_ui)
+    assert_same workbench_lib, StudioPages.ui_library(workbench_ui)
+
+    locals = StudioPages.ui_locals('index').merge(editor_title: 'Title', source: 'page p', design: '', data: '{}', data_note: '')
+
+    classic_html = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: classic_lib)
+    workbench_html = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: workbench_lib)
+
+    # Classic contains classic's editor elements and none of workbench's
+    assert_includes classic_html, 'palette'
+    assert_includes classic_html, 'editor_form'
+    refute_includes classic_html, 'Page (Substance)'
+
+    # Workbench contains workbench's editor elements and none of classic's
+    assert_includes workbench_html, 'Page (Substance)'
+    refute_includes workbench_html, 'palette'
+    refute_includes workbench_html, 'editor_form'
+
+    # Re-render in reverse order to prove memoized instances never leak across renders
+    workbench_html2 = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: workbench_lib)
+    classic_html2 = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: classic_lib)
+
+    assert_includes classic_html2, 'palette'
+    assert_includes workbench_html2, 'Page (Substance)'
+  end
 end

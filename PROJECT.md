@@ -8,23 +8,20 @@ status: >-
   rendered pages. Roadmaps 0.1 to 0.4 are closed. 0.4 (closed 2026-10-11) asked whether
   the conventions keep their promises, so that an author only has to name things:
   every documented override is proved by a test, `CONVENTIONS.md`'s weak-spots table
-  is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 627
-  runs / 6,698 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
+  is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 629
+  runs / 6,718 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
   lives in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this
   field carries the present, and `bin/check_card.rb` holds it to a budget. 0.5 is
-  next: `ROADMAP-0.5.md` holds its question (families) and definition of success,
-  confirmed by dan across several rounds of correction and closed 2026-10-11.
+  active: `ROADMAP-0.5.md` holds its question (families) and definition of success.
 last_touched: 2026-10-11
 next_step: >-
-  **`DAYTRIP-0.5.0a.md` is closed.** dan ruled on Part 1 on 2026-10-11: Option A
-  (parameters strictly lexical to the `def` body, never leaking into caller blocks)
-  plus Option B1 (free parameter names, data-flow inference for kinds, with `subject`
-  reserved for subject-shift). Part 2 confirmed by `bin/probe_lookup_chain.rb` over all
-  1,056 sentences across 97 files: exactly `editor` resolves differently (classic vs
-  workbench each reaching their own partial), exactly the eleven contained words resolve
-  through parent families (178 calls, 0 outside parents), and 0 unresolved sentences.
-  Next step is Daytrip 0.5.0b: enforce the nearest-first chain in `Compilation` and
-  `Transform`, and delete the global write (`Word.registry[word] = klass`).
+  **`DAYTRIP-0.5.0b.md` is closed.** Enforced nearest-first lookup, deleted the global write
+  in `Compilation.compile_partial` (`Word.registry[word] = klass`), applied Option A lexical
+  scoping in `Builder`, and memoized `StudioPages.ui_library(ui)`. Verified with proof test
+  that `classic` and `workbench` each render their own `editor` partial cleanly. Twelve gate
+  legs green, 629 runs / 6,718 assertions / 0 failures. Next step is Daytrip 0.5.0c:
+  measuring Option B1 data-flow inference across the twenty-eight files carrying `expects`
+  and migrating the first vocabulary partials.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

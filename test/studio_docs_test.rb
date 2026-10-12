@@ -41,8 +41,8 @@ class StudioDocsTest < Minitest::Test
       impl = entry[:implementation]
       next unless impl.include?('App Partial')
 
-      klass = SlimPickins::Word.registry[word.to_sym]
-      next unless klass.source_path # declared inline — there is no file to point at
+      klass = SlimPickins::Library.builtin.compiled_partial(word.to_sym) || SlimPickins::Word.registry[word.to_sym]
+      next unless klass&.source_path # declared inline — there is no file to point at
 
       assert_includes impl, "`#{klass.source_path.sub("#{ROOT}/", '')}`",
                       "#{word} names a file that is not its own"

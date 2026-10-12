@@ -275,4 +275,21 @@ class DefTest < Minitest::Test
     assert_match(/this documents's documents is not a collection to go through/, error.message)
     refute_match(/NoMethodError/, error.message)
   end
+
+  def test_def_parameters_do_not_leak_into_caller_blocks
+    source = <<~SP
+      def framed, name
+        box
+          children
+
+      page "Demo"
+        each point
+          framed
+            paragraph .name
+    SP
+
+    point_class = Struct.new(:name)
+    html = render(source, locals: { points: [point_class.new('encloses')] })
+    assert_includes html, '<div class="box framed"><p class="paragraph">encloses</p></div>'
+  end
 end

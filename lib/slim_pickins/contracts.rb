@@ -260,13 +260,14 @@ end
       "`#{word}` has no `#{unknown.first}:` modifier" if unknown.any?
     end
 
-    def complaints(node, ancestry, privileged: false, named_above: true)
+    def complaints(node, ancestry, library: nil, privileged: false, named_above: true)
       if node.word == 'tag'
         return ["`tag` is a privileged primitive and may not be used in app pages"] unless privileged
         return []
       end
 
-      contract = CONTRACTS[node.word.to_sym]
+      contract = library&.compiled_partial(node.word.to_sym)&.instance_variable_get(:@contract) ||
+                 CONTRACTS[node.word.to_sym]
       return [] unless contract
 
       out = []
@@ -341,11 +342,11 @@ end
     # walk, which reports every complaint; the refusal half — the raise,
     # with the render's own path — lives in Compilation, which caches this
     # verdict so the walk runs once per source, not once per render.
-    def first_violation(tree, privileged: false)
+    def first_violation(tree, library: nil, privileged: false)
       catch(:violation) do
         walk = lambda do |nodes, ancestry, named|
           nodes.each do |node|
-            complaint = complaints(node, ancestry, privileged: privileged, named_above: named).first
+            complaint = complaints(node, ancestry, library: library, privileged: privileged, named_above: named).first
             throw :violation, Violation.new(lineno: node.lineno, body: node.body, complaint: complaint) if complaint
 
             walk.call(node.children, ancestry + [node.word], named || names_something?(node))

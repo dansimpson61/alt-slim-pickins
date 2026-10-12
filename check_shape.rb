@@ -28,7 +28,7 @@ SlimPickins::Library.builtin
 # whose `values` are only whatever has been asked for so far, so counting them
 # counts this script's own curiosity. The vocabulary is gathered once, from the
 # registry, and every vital below is measured over that.
-vocabulary = SlimPickins::Word.registry.keys.to_h { |word| [word, contracts[word]] }
+vocabulary = (SlimPickins::Word.registry.keys + SlimPickins::Library.builtin.compiled_partials.keys).uniq.to_h { |word| [word, contracts[word]] }
 
 vocabulary.each do |word, contract|
   unless contract

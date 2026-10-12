@@ -14,7 +14,7 @@ module SlimPickins
   # idiom now owns; a tin is the modest metal over the building, and
   # `[name].tin` sits beside `[name].spiff` as one concern per file.
   class Library
-    attr_reader :tin, :partials, :words, :app_partials, :dir, :public_url
+    attr_reader :tin, :partials, :words, :app_partials, :compiled_partials, :dir, :public_url
 
     # The language's own vocabulary, written as partials — the dogfood made
     # visible: new words are drafted in the language itself, in
@@ -107,11 +107,21 @@ module SlimPickins
       @words = words.nil? ? [] : Array(words)
       refuse_shadowing!
       
-      @partials.each do |word, source|
+      @compiled_partials = self.class.builtin_compiled_partials.dup
+      @app_partials.each do |word, source|
         # `fetch(word, nil)`: a partial declared inline (Library.new with
         # bare sources) has no file, and that is a real state — its docs
         # say so — not a reason to refuse the library.
-        Compilation.compile_partial(word, source, vocabulary.key?(word), @partial_paths[word])
+        @compiled_partials[word] = Compilation.compile_partial(word, source, false, @partial_paths[word])
+      end
+    end
+
+    def self.builtin_compiled_partials
+      @builtin_compiled_partials ||= begin
+        paths = builtin_partial_paths
+        builtin_partials.to_h do |word, source|
+          [word, Compilation.compile_partial(word, source, true, paths[word])]
+        end
       end
     end
 
@@ -131,6 +141,8 @@ module SlimPickins
     def self.builtin
       @builtin ||= new
     end
+
+    def compiled_partial(word) = @compiled_partials[word.to_sym]
 
     def word?(name) = @partials.key?(name)
 
