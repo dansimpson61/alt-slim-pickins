@@ -181,17 +181,17 @@ is a beautifully organised runtime for the wrong language.
 
 ## Status
 
-**Roadmaps 0.1 to 0.4 are completed.**
+**Roadmaps 0.1 to 0.5 are completed.**
 - [ROADMAP-0.1.md](history/ROADMAP-0.1.md) proved the one-sentence grammar.
 - [ROADMAP-0.2.md](ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
 - [ROADMAP-0.3.md](ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
-
 - [ROADMAP-0.4.md](ROADMAP-0.4.md) asked whether the conventions keep their promises, so that an author only has to name things. Every documented override is proved by a test, and the weak-spots table in [CONVENTIONS.md](CONVENTIONS.md) is empty. It ran first as seventeen daytrips (`DAYTRIP-0.4.0a` to `0.4.0q`), and the roadmap tells how its question emerged from them. It closed on 2026-10-11.
+- [ROADMAP-0.5.md](ROADMAP-0.5.md) answered whether words can nest in namespaces and files rather than a single global registry: nearest-first compiler walk, editor collision eliminated, the eleven contained words scoped lexically in Ruby and `list.sp`, the legacy declaration line retired across all partials, and language words open to app shadowing. It ran as seven daytrips (`DAYTRIP-0.5.0a` to `0.5.0g`) and closed on 2026-10-12.
 
-**Roadmap 0.5 is next, and not yet written.** It is an odd roadmap, so it leads
-with the forward eye, and its question is families: each `.sp` file as a
-namespace of words, found nearest-first. `DAYTRIP-0.4.0q.md` is its starting
-material, not its plan. `PROJECT.md`'s `next_step` says where planning begins.
+**[ROADMAP-0.6.md](ROADMAP-0.6.md) is next.** It is an even roadmap, so it leads with the backward eye:
+asking whether what was built deserves to stand, studying the code and DSL as
+objects in their own right, and building nothing the backward look did not ask for.
+`PROJECT.md`'s `next_step` says where planning begins.
 
 Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, and 113 style rules.
 

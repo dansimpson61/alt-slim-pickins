@@ -2,7 +2,7 @@
 
 **An odd-numbered roadmap. It leads with the forward eye.**
 
-Status: **open.** Written 2026-10-11, drafted by the steward and confirmed by
+Status: **closed 2026-10-12, on dan's word.** Written 2026-10-11, drafted by the steward and confirmed by
 dan across several rounds of correction. It is a roadmap and not a plan: it
 names the question and what success looks like, and leaves the step-by-step
 work to daytrips, the same way 0.4 did.
@@ -200,6 +200,16 @@ from dan, each one recorded here so the reasoning isn't lost:
   compile time), and the drop stands on that distinction alone, without
   leaning on any protected tier for either `money` or the language's other
   61 words.
+
+## The daytrips, 2026-10-11 to 2026-10-12: building families and lexical containment
+
+- [0.5.0a](DAYTRIP-0.5.0a.md) — The compiler lookup chain & nearest-first walk: editor collision eliminated, cache restored, proved by test.
+- [0.5.0b](DAYTRIP-0.5.0b.md) — Deleting the single overwrite line: `Builder#define_app_words` stopped flat registration.
+- [0.5.0c](DAYTRIP-0.5.0c.md) — Option B1 data-flow inference & parameter naming: migrated first 4 vocabulary partials to `def`.
+- [0.5.0d](DAYTRIP-0.5.0d.md) — Retiring `expects` across the repository: all 28 partials migrated to `def`, legacy declaration line fully removed.
+- [0.5.0e](DAYTRIP-0.5.0e.md) — Shadowing language words: Dan's 2026-10-05 ruling shipped as code; portfolio's `account_card` became plain `card`.
+- [0.5.0f](DAYTRIP-0.5.0f.md) — The living forward ledger: `WISHLIST.md` established and standing consultation protocol codified.
+- [0.5.0g](DAYTRIP-0.5.0g.md) — Real lexical containment: 10 Ruby classes nested inside parent words, `item` nested in `list.sp`, enforced in `Builder#with_family`.
 
 ## What this document is not
 

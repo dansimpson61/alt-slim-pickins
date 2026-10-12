@@ -219,6 +219,53 @@ authors to think in slim-pickins.
     that reflect current architecture and intent, clearing out stale jargon and contradictory
     labels.
 
+- [ ] **Polysemy & Overloaded Terms Audit (Disambiguating Words with Multiple Roles):**
+  - *Origin:* Dan (Wishlist Intake & Roadmap 0.6 framing, 2026-10-12).
+  - *Concept:* Key terms in slim-pickins are heavily overloaded, serving two, three, or four
+    distinct jobs across the `.sp` language itself, the compiler internals, the stylesheet/design
+    idiom, and the pedagogical documentation. This polysemy creates subtle cognitive friction
+    for authors and readers alike.
+  - *Examples identified for audit:*
+    1. **`variant`**:
+       - *Job A (Styling choice):* An author-chosen stylistic or weight modifier (e.g. `button primary`, `note quiet`).
+       - *Job B (Data-driven status):* A status or tone derived automatically from domain models (e.g. `badge status` turning red for `danger`).
+       - *Job C (Grammar/Contract):* A formal sentence slot name (`name_slot = :variant`).
+       - *Job D (CSS/Spiff):* CSS typography property (`font-variant-numeric: tabular-nums`).
+    2. **`children`**:
+       - *Job A (Template word):* The language word/keyword that renders the yielded block/children of a partial or wrapper (equivalent to Ruby's `yield` or web components' `<slot>`).
+       - *Job B (AST structure):* The node list of nested child nodes on `SlimPickins::Node[:word, :attributes, :children]`.
+       - *Job C (Contract slot):* `contract.children` (:any | :none | list of allowed nested words).
+       - *Job D (Family containment):* Contained child words nesting lexically inside parent words (`Table::Column`, `item` in `list.sp`).
+       - *Job E (DOM):* Rendered HTML element children.
+    3. **`content`**:
+       - *Job A (Slot):* The positional inline text/payload argument (`tag p, .content`, `badge .label`).
+       - *Job B (Contract):* The boolean flag `contract.content` indicating whether a word accepts inline content.
+       - *Job C (Domain model):* An entity's text or markdown body (`document.content`).
+       - *Job D (CSS/Spiff):* CSS rules such as `display: contents` or generated content `content: ""`.
+    4. **`subject`**:
+       - *Job A (Target record):* The domain model or record an author passes to frame a page or card (`page document`, `card account`).
+       - *Job B (Evaluation context):* The active evaluation receiver in `Builder#subject` where `.attribute` calls resolve.
+       - *Job C (Slot):* The positional parameter slot in contracts and signatures.
+    5. **`name`**:
+       - *Job A (Word identifier):* The symbol identifying a word in the registry (`Word.name`).
+       - *Job B (Sentence slot):* The bare identifier slot in a sentence (`word name, ...`).
+       - *Job C (HTML input attribute):* `<input name="...">` or `<button name="...">` parameter.
+       - *Job D (Domain model attribute):* A record's `#name` attribute (`account.name`), which collides with slot names.
+    6. **`word` vs. `primitive` vs. `partial` vs. `built-in` vs. `tag` vs. `app word` vs. `def` vs. `tin` vs. `spiff`**:
+       - "Everything is a word" is the grammatical foundation, yet docs and code switch between
+         "primitives", "partials", "built-in words", "canonical words", and "app words" without a single shared conceptual model.
+       - `tin` names the application frame/chrome (`[app].tin`), while `spiff` names the spatial companion
+         stylesheet language (`[app].spiff`, `SlimPickins::Spiff`, `docs/SPIFF.md`). Both sit beside `.sp` files,
+         but their conceptual boundaries and relationship to words, layout primitives, and theme roles need a
+         unified taxonomy.
+    7. **`body`**:
+       - An indented block nested beneath a word vs. HTML `<body>` element vs. domain model attribute (`document.body`).
+    8. **`parent` / `parents`**:
+       - Lexical/family class namespace (`Table` is parent of `Column`) vs. AST container in container-value lookup vs. DOM parent node.
+  - *Wish:* Perform a comprehensive audit across the language grammar, compiler symbols, and documentation to
+    catalog every overloaded term. Establish clear, unambiguous names and conceptual distinctions so docs and
+    pedagogy never use the same word for two different ideas.
+
 - [ ] **Project Identity: Dropping `alt-` and Consolidating `slim-pickins`:**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
   - *Concept:* The repository is still named `alt-slim-pickins`, reflecting its historical
