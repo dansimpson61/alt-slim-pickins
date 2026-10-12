@@ -1456,3 +1456,7 @@ Deleting the global write in Compilation.compile_partial isolates partials to th
 ## 2026-10-12 — Antigravity
 
 Option B1 data-flow inference requires contract-aware parameter routing: when an author writes `def note, tone, text`, a call site writing `note "Hello"` passes one argument for two parameters. Strict positional binding would map the string to `tone` (emitting `note--Hello`). Because the contract distinguishes a Symbol name slot from data content, single arguments route to content when non-Symbol, defaulting the omitted variant to nil without burdening the author.
+
+## 2026-10-12 — Antigravity
+
+The foundational law of slim-pickins parameter binding is that names are symbols and content is anything else. When contract-aware bind_parameters attempted positional array indexing, strings like "open" in paragraph "open", .content erroneously bound to variant instead of content. Binding symbols to name slots and non-symbols to content slots aligns runtime def binding with the language grammar. Furthermore, words declared with def only declare positional parameters; defaulting undeclared modifiers to container values or nil prevents modifiers like .open or .precision from erroneously escaping into outer subject scopes.

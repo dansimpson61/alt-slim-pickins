@@ -98,6 +98,18 @@ module VocabularyShapes
     section: { label: true }
   }.freeze
 
+  CANONICAL_MODIFIERS = {
+    action: %i[to variant status],
+    actions: %i[path return_to],
+    card: [:variant],
+    disclosure: [:open],
+    money: [:precision],
+    number: [:precision],
+    percent: [:precision],
+    search: %i[q placeholder to],
+    section: []
+  }.freeze
+
   CANONICAL_SHAPES = {
     action: :encloses,
     actions: :encloses,
@@ -199,22 +211,7 @@ module VocabularyShapes
       end
     end
 
-    case word_sym
-    when :money, :number, :percent
-      modifiers |= [:precision]
-    when :action
-      modifiers |= %i[to variant status]
-    when :actions
-      modifiers |= %i[path return_to]
-    when :card
-      modifiers |= %i[id variant]
-    when :disclosure
-      modifiers |= [:open]
-    when :search
-      modifiers |= %i[q placeholder to]
-    when :section
-      modifiers |= [:label]
-    end
+    resolved_modifiers = CANONICAL_MODIFIERS[word_sym] || modifiers.sort
 
     subject_action = if params.include?(:subject) || word_sym == :card || word_sym == :section
                        :shift
@@ -230,7 +227,7 @@ module VocabularyShapes
     Contract.new(
       name: name_slot,
       content: has_content,
-      modifiers: modifiers.sort,
+      modifiers: resolved_modifiers,
       children: has_children ? :any : :none,
       parents: parents,
       subject: subject_action,

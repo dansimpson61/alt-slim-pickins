@@ -1,8 +1,6 @@
-expects subject, takes: content, children: any, takes: label, subject: shift, shape: encloses, infers: label, infers: box_tag, infers: box_depth
-
-
-box .name
-  choose
-    when .label
-      heading .label
-  children
+def section, subject, content
+  box .name
+    choose
+      when .label
+        heading .label
+    children

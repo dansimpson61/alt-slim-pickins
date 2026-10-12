@@ -1,4 +1,2 @@
-expects attribute, takes: content, shape: presents, infers: heading_level
-
-
-heading .content
+def title, attribute, content
+  heading .content

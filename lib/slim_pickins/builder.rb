@@ -77,22 +77,25 @@ module SlimPickins
         bound[k.to_sym] = val
       end
 
-      if contract && contract.name != :none && contract.content && param_names.size >= 2 && args.size == 1
+      if contract && contract.name != :none && contract.content && param_names.size >= 2
         name_param = param_names[0]
         content_param = param_names[1]
-        arg = args.first
-
-        if arg.is_a?(Symbol)
-          bound[name_param] = subject.has?(arg) && contract.name == :subject ? subject.fetch(arg) : arg
-        else
-          bound[content_param] = arg.is_a?(Proc) ? arg.call : arg
-        end
+        bound[name_param] = args.find { |a| a.is_a?(Symbol) }
+        bound[content_param] = args.find { |a| !a.nil? && !a.is_a?(Symbol) }
+      elsif contract && contract.name != :none && !contract.content && param_names.size >= 1
+        bound[param_names[0]] = args.find { |a| a.is_a?(Symbol) }
+      elsif contract && contract.content && contract.name == :none && param_names.size >= 1
+        bound[param_names[0]] = args.find { |a| !a.nil? && !a.is_a?(Symbol) }
       else
         args.each_with_index do |arg, i|
           next if i >= param_names.size || bound.key?(param_names[i])
 
           val = if arg.is_a?(Symbol)
-                  subject.has?(arg) ? subject.fetch(arg) : arg
+                  if contract && (contract.name != :none || contract.subject == :shift) && i.zero?
+                    arg
+                  else
+                    subject.has?(arg) ? subject.fetch(arg) : arg
+                  end
                 elsif arg.is_a?(Proc)
                   arg.call
                 else
@@ -115,18 +118,78 @@ module SlimPickins
       contract = @library&.compiled_partial(word_name)&.instance_variable_get(:@contract) || CONTRACTS[word_name]
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
-        captured = capture(&caller_block) if caller_block
         bound = Builder.bind_parameters(param_names, args, kwargs, subject, contract: contract)
 
-        body = capture do
-          chain.with(bound, described_as: "this #{word_name}", overlay: true) do
-            if captured
-              with_splice(captured) { definition_block.call }
+        name_val = bound[:subject] || bound[:variant] || bound[:name] || (args.first if args.first.is_a?(Symbol))
+
+        shifts = contract&.subject == :shift || contract&.name == :subject
+        shift_target = if shifts && name_val
+                         if contract&.modifiers&.include?(:variant)
+                           subject.has?(name_val) ? name_val : nil
+                         else
+                           name_val
+                         end
+                       end
+
+        if contract&.id
+          bound[:id] ||= kwargs.fetch(:id) do
+            if shift_target && subject.has?(shift_target)
+              tgt = subject.fetch(shift_target)
+              tgt = Subject.new(tgt, described_as: "this #{shift_target}") unless tgt.is_a?(Subject)
+              tgt.has?(:id) ? "#{tgt.noun}-#{tgt.fetch(:id)}" : card_id
             else
-              definition_block.call
+              card_id
             end
           end
         end
+
+        if contract&.label
+          content_val = bound[:content]
+          bound[:label] ||= kwargs.fetch(:label) { label_for(name_val, content_val.is_a?(Proc) ? nil : content_val) }
+        end
+
+        if contract && (contract.modifiers.include?(:variant) || contract.name == :variant)
+          bound[:variant] ||= kwargs[:variant] || (name_val && !subject.has?(name_val) ? name_val : nil)
+        end
+
+        if contract&.name == :attribute && bound[:content].nil? && name_val && subject.has?(name_val)
+          bound[:content] = subject.fetch(name_val)
+        end
+
+        contract&.modifiers&.each do |modifier|
+          unless bound.key?(modifier)
+            found, val = chain.container_value(modifier)
+            bound[modifier] = found ? val : nil
+          end
+        end
+
+        bound[:name] = name_val if contract&.name != :none || bound.key?(:name)
+
+        body_block = lambda do
+          if bound[:content].is_a?(Proc)
+            said = bound[:content].call
+            bound[:content] = said
+            bound[:label] = said if contract&.label && !said.nil?
+          end
+
+          captured = caller_block ? capture(&caller_block) : []
+
+          chain.with(bound, described_as: "this #{word_name}", overlay: true) do
+            with_splice(captured) { definition_block.call }
+          end
+        end
+
+        body = if contract&.empty && !empty_active?
+                 []
+               else
+                 capture do
+                   if shifts && shift_target
+                     about(shift_target) { body_block.call }
+                   else
+                     body_block.call
+                   end
+                 end
+               end
 
         if body.size == 1 && body.first.is_a?(Node)
           root = Builder.box_root(body)

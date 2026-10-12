@@ -1,8 +1,6 @@
-expects takes: content, shape: encloses, takes: to, takes: variant, takes: status
-
-choose
-  when .status
-    button .variant, .content, to: .to, name: status, value: .status
-  otherwise
-    button .variant, .content, to: .to
-
+def action, label
+  choose
+    when .status
+      button .variant, .label, to: .to, name: status, value: .status
+    otherwise
+      button .variant, .label, to: .to

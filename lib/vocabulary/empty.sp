@@ -1,4 +1,2 @@
-expects takes: empty, takes: content, speech: adjective, shape: says, infers: empty_situation
-
-
-paragraph .content
+def empty, message
+  paragraph .message

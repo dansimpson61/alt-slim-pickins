@@ -1,5 +1,3 @@
-expects variant, children: any, shape: encloses, infers: box_tag
-
-
-box .name
-  children
+def aside, variant
+  box .variant
+    children

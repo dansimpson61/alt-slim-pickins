@@ -239,7 +239,11 @@ module StudioDocs
                        ancestors + [node],
                        ancestors.last ? ancestors.last.children : []]
             end
-            visit.call(node.children, ancestors + [node]) unless node.word.to_sym == :def
+            if node.word.to_sym == :def
+              visit.call(node.children, ancestors) if file.include?('lib/vocabulary')
+            else
+              visit.call(node.children, ancestors + [node])
+            end
           end
         end
         visit.call(tree, [])

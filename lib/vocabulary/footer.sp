@@ -1,5 +1,3 @@
-expects takes: content, children: any, shape: encloses, infers: box_tag
-
-
-box .content
-  children
+def footer, content
+  box .content
+    children

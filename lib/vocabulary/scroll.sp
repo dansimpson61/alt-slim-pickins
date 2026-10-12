@@ -1,4 +1,3 @@
-expects variant, children: any, shape: encloses
-
-box .name
-  children
+def scroll, variant
+  box .variant
+    children

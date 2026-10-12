@@ -1,6 +1,4 @@
-expects takes: content, children: any, shape: encloses, infers: box_tag
-
-
-box
-  children
-  tag figcaption, .content
+def figure, caption
+  box
+    children
+    tag figcaption, .caption

@@ -168,20 +168,15 @@ end
   end
 
   def test_def_data_flow_inference_produces_identical_contracts
-    %i[flash text note badge].each do |word|
-      expected = SlimPickins::CONTRACTS[word]
-      inferred = case word
-                 when :flash
-                   SlimPickins::VocabularyShapes.parse("def flash, text\n  note .text\n", word: :flash)
-                 when :text
-                   SlimPickins::VocabularyShapes.parse("def text, words\n  paragraph .words\n", word: :text)
-                 when :note
-                   SlimPickins::VocabularyShapes.parse("def note, tone, text\n  paragraph .tone, .text\n", word: :note)
-                 when :badge
-                   SlimPickins::VocabularyShapes.parse("def badge, status, label\n  span .status, .label\n", word: :badge)
-                 end
-
-      assert_equal expected.to_h, inferred.to_h
+    dir = File.expand_path('../lib/vocabulary', __dir__)
+    Dir[File.join(dir, '*.sp')].sort.each do |path|
+      word = File.basename(path, '.sp').to_sym
+      source = File.read(path)
+      assert_match(/\A(?:\s*|#.*?\n)*def\b/, source, "#{word}.sp should declare with def")
+      contract = SlimPickins::CONTRACTS[word]
+      refute_nil contract, "expected a contract for #{word}"
+      inferred = SlimPickins::VocabularyShapes.parse(source, word: word)
+      assert_equal contract.to_h, inferred.to_h, "contract mismatch for #{word}"
     end
   end
 end
