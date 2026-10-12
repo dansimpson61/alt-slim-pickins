@@ -28,7 +28,7 @@ module SlimPickins
       klass.compilation = of(source, "partials/#{word}.sp", privileged: is_builtin)
       
       # Now parse the contract from the AST
-      contract = VocabularyShapes.parse(source)
+      contract = VocabularyShapes.parse(source, word: word) if is_builtin || source.match?(/\A(?:\s*|#.*?\n)*expects\b/)
       klass.instance_variable_set(:@contract, contract) if contract
 
       klass

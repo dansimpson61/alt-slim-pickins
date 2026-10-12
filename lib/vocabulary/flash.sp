@@ -1,4 +1,2 @@
-expects takes: content, shape: presents
-
-
-note .content
+def flash, text
+  note .text

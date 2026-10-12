@@ -166,4 +166,22 @@ end
     assert_equal [:precision], parsed.modifiers
     refute_predicate parsed, :label, 'a flag nobody named stays off'
   end
+
+  def test_def_data_flow_inference_produces_identical_contracts
+    %i[flash text note badge].each do |word|
+      expected = SlimPickins::CONTRACTS[word]
+      inferred = case word
+                 when :flash
+                   SlimPickins::VocabularyShapes.parse("def flash, text\n  note .text\n", word: :flash)
+                 when :text
+                   SlimPickins::VocabularyShapes.parse("def text, words\n  paragraph .words\n", word: :text)
+                 when :note
+                   SlimPickins::VocabularyShapes.parse("def note, tone, text\n  paragraph .tone, .text\n", word: :note)
+                 when :badge
+                   SlimPickins::VocabularyShapes.parse("def badge, status, label\n  span .status, .label\n", word: :badge)
+                 end
+
+      assert_equal expected.to_h, inferred.to_h
+    end
+  end
 end

@@ -49,7 +49,8 @@ module SlimPickins
       Array(@library.words).each { |mod| extend mod }
       @library.partials.each do |word, source|
         if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
-          eval_with(Transform.call(source, path: "partials/#{word}.sp"), "partials/#{word}.sp", source.lines)
+          ruby = @library.compiled_partial(word)&.compilation&.ruby || Transform.call(source, path: "partials/#{word}.sp")
+          eval_with(ruby, "partials/#{word}.sp", source.lines)
         end
       end
     end
@@ -58,21 +59,12 @@ module SlimPickins
     # An in-buffer domain word defined with `def <word>, *params`.
     # Flexible argument binding:
     #   - Positional args map in order to declared parameter names.
+    #   - Contract-aware routing maps name vs content when declared.
     #   - Named kwargs map by key, order-independent.
     #   - Undeclared named args forward into chain scope.
     #   - Omitted declared parameters default to nil.
-    def self.bind_parameters(param_names, args, kwargs, subject)
+    def self.bind_parameters(param_names, args, kwargs, subject, contract: nil)
       bound = {}
-      args.each_with_index do |arg, i|
-        val = if arg.is_a?(Symbol)
-                subject.has?(arg) ? subject.fetch(arg) : arg
-              elsif arg.is_a?(Proc)
-                arg.call
-              else
-                arg
-              end
-        bound[param_names[i]] = val if i < param_names.size
-      end
 
       kwargs.each do |k, v|
         val = if v.is_a?(Symbol)
@@ -85,6 +77,31 @@ module SlimPickins
         bound[k.to_sym] = val
       end
 
+      if contract && contract.name != :none && contract.content && param_names.size >= 2 && args.size == 1
+        name_param = param_names[0]
+        content_param = param_names[1]
+        arg = args.first
+
+        if arg.is_a?(Symbol)
+          bound[name_param] = subject.has?(arg) && contract.name == :subject ? subject.fetch(arg) : arg
+        else
+          bound[content_param] = arg.is_a?(Proc) ? arg.call : arg
+        end
+      else
+        args.each_with_index do |arg, i|
+          next if i >= param_names.size || bound.key?(param_names[i])
+
+          val = if arg.is_a?(Symbol)
+                  subject.has?(arg) ? subject.fetch(arg) : arg
+                elsif arg.is_a?(Proc)
+                  arg.call
+                else
+                  arg
+                end
+          bound[param_names[i]] = val
+        end
+      end
+
       param_names.each do |p|
         bound[p.to_sym] = nil unless bound.key?(p.to_sym)
       end
@@ -95,10 +112,11 @@ module SlimPickins
     def define_local_word(word_name, param_names = [], &definition_block)
       word_name = word_name.to_sym
       param_names = Array(param_names).map(&:to_sym)
+      contract = @library&.compiled_partial(word_name)&.instance_variable_get(:@contract) || CONTRACTS[word_name]
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
         captured = capture(&caller_block) if caller_block
-        bound = Builder.bind_parameters(param_names, args, kwargs, subject)
+        bound = Builder.bind_parameters(param_names, args, kwargs, subject, contract: contract)
 
         body = capture do
           chain.with(bound, described_as: "this #{word_name}", overlay: true) do
@@ -115,8 +133,12 @@ module SlimPickins
           if root && root.attributes.is_a?(Hash)
             # The one mutation in the runtime, and it writes to the hash the node
             # holds rather than to the node, which is why a frozen `Data` is fine.
-            was = root.attributes[:app_class]
-            root.attributes[:app_class] = was ? "#{was} #{word_name}" : word_name
+            if Library.builtin_partial_paths.key?(word_name)
+              root.attributes[:class_base] = word_name
+            else
+              was = root.attributes[:app_class]
+              root.attributes[:app_class] = was ? "#{was} #{word_name}" : word_name
+            end
           end
         end
 

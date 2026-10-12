@@ -1,5 +1,3 @@
-expects takes: nodes, shape: encloses
-
 # A list of nodes and, under each, its own children — the same word again.
 #
 # Rooted at `list` rather than `item` because `item` must be lexically inside a
@@ -13,10 +11,12 @@ expects takes: nodes, shape: encloses
 #
 # Each node is a `link` to its own detail card, and that link is the whole
 # selection mechanism — `:target` in the theme does what two ad-hoc listeners did.
-list
-  each node, from: .nodes
-    item
-      link .named, .anchor
-      span word, .variant
-      span preview, .preview
-      twig nodes: .children
+def twig, nodes
+  list
+    each node, from: .nodes
+      item
+        link .named, .anchor
+        span word, .variant
+        span preview, .preview
+        twig nodes: .children
+

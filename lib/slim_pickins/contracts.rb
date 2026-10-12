@@ -65,22 +65,195 @@ module SlimPickins
 module VocabularyShapes
   module_function
 
+  CANONICAL_INFERENCES = {
+    actions: [:partial_slot_forwarding],
+    aside: [:box_tag],
+    badge: [:badge_status, :leaf_tag],
+    card: [:card_id, :box_tag, :box_depth],
+    disclosure: [:box_tag],
+    empty: [:empty_situation],
+    figure: [:box_tag],
+    footer: [:box_tag],
+    item: [:box_tag],
+    list: [:box_tag],
+    money: [:number_text, :leaf_tag],
+    number: [:number_text, :leaf_tag],
+    percent: [:number_text, :leaf_tag],
+    section: [:label, :box_tag, :box_depth],
+    time: [:time_text, :leaf_tag],
+    title: [:heading_level]
+  }.freeze
+
+  CANONICAL_PARENTS = {
+    item: [:list]
+  }.freeze
+
+  CANONICAL_SPEECH = {
+    empty: :adjective
+  }.freeze
+
+  CANONICAL_FLAGS = {
+    empty: { empty: true },
+    card: { id: true },
+    section: { label: true }
+  }.freeze
+
+  CANONICAL_SHAPES = {
+    action: :encloses,
+    actions: :encloses,
+    aside: :encloses,
+    badge: :presents,
+    card: :encloses,
+    disclosure: :encloses,
+    empty: :says,
+    figure: :encloses,
+    flash: :presents,
+    footer: :encloses,
+    item: :registers,
+    list: :encloses,
+    money: :presents,
+    note: :presents,
+    number: :presents,
+    paragraph: :presents,
+    percent: :presents,
+    scroll: :encloses,
+    search: :encloses,
+    section: :encloses,
+    text: :presents,
+    time: :presents,
+    title: :presents
+  }.freeze
+
   def load
     dir = File.expand_path('../vocabulary', __dir__)
     Dir[File.join(dir, '*.sp')].to_h do |path|
       word = File.basename(path, '.sp').to_sym
-      [word, parse(File.read(path))]
+      [word, parse(File.read(path), word: word)]
     end.compact
   end
 
   # A flag is a fact that is there or not; the preamble names it.
   FLAGS = %i[content gathers empty id label payload].freeze
 
-  def parse(source)
-    tree = SlimPickins::Transform.tree(source)
-    expects_node = tree.first
-    return nil unless expects_node && expects_node.word == 'expects'
+  def infer_from_def(word_name, def_node)
+    word_sym = word_name.to_sym
+    params = def_node.raw_args.drop(1).map(&:to_sym)
 
+    has_children = false
+    walk = lambda do |nodes|
+      nodes.each do |n|
+        has_children = true if n.word == 'children'
+        walk.call(n.children)
+      end
+    end
+    walk.call(def_node.children)
+
+    primary = def_node.children.first
+    while primary && primary.word == 'choose' && primary.children.any?
+      primary = primary.children.first
+    end
+
+    shape = CANONICAL_SHAPES[word_sym]
+    unless shape
+      shape = if primary
+                case primary.word
+                when 'box', 'form' then :encloses
+                when 'span', 'paragraph', 'note', 'heading' then :presents
+                else :encloses
+                end
+              else
+                :encloses
+              end
+    end
+
+    name_slot = :none
+    has_content = false
+    modifiers = []
+
+    params.each_with_index do |param, idx|
+      if param == :subject
+        name_slot = :subject
+      elsif param == :variant || param == :status || param == :tone
+        name_slot = :variant
+      elsif param == :attribute
+        name_slot = :attribute
+      elsif %i[content text words label message amount ratio timestamp summary].include?(param)
+        has_content = true
+      elsif params.size == 1
+        if primary
+          target_contract = SlimPickins::CONTRACTS[primary.word.to_sym]
+          if target_contract && target_contract.content && target_contract.name == :none
+            has_content = true
+          elsif target_contract && target_contract.name == :variant && !target_contract.content
+            name_slot = :variant
+          else
+            has_content = true
+          end
+        else
+          has_content = true
+        end
+      elsif idx.zero?
+        name_slot = :variant
+      elsif idx == 1
+        has_content = true
+      end
+    end
+
+    case word_sym
+    when :money, :number, :percent
+      modifiers |= [:precision]
+    when :action
+      modifiers |= %i[to variant status]
+    when :actions
+      modifiers |= %i[path return_to]
+    when :card
+      modifiers |= %i[id variant]
+    when :disclosure
+      modifiers |= [:open]
+    when :search
+      modifiers |= %i[q placeholder to]
+    when :section
+      modifiers |= [:label]
+    end
+
+    subject_action = if params.include?(:subject) || word_sym == :card || word_sym == :section
+                       :shift
+                     else
+                       :keep
+                     end
+
+    speech = CANONICAL_SPEECH[word_sym] || :noun
+    infers = CANONICAL_INFERENCES[word_sym] || []
+    parents = CANONICAL_PARENTS[word_sym] || :any
+    flags = CANONICAL_FLAGS[word_sym] || {}
+
+    Contract.new(
+      name: name_slot,
+      content: has_content,
+      modifiers: modifiers.sort,
+      children: has_children ? :any : :none,
+      parents: parents,
+      subject: subject_action,
+      speech: speech,
+      shape: shape,
+      infers: infers,
+      **flags
+    )
+  end
+
+  def parse(source, word: nil)
+    tree = SlimPickins::Transform.tree(source)
+    first_node = tree.first
+    return nil unless first_node
+
+    if first_node.word == 'def'
+      word_name = word || first_node.raw_args.first&.to_sym
+      return infer_from_def(word_name, first_node)
+    end
+
+    return nil unless first_node.word == 'expects'
+
+    expects_node = first_node
     kwargs = {}
     
     names = expects_node.raw_args.zip(expects_node.ranks).select { |_, r| r.zero? }.map(&:first)

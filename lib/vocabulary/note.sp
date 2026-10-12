@@ -1,4 +1,2 @@
-expects variant, takes: content, shape: presents
-
-
-paragraph .name, .content
+def note, tone, text
+  paragraph .tone, .text

@@ -1,4 +1,2 @@
-expects takes: content, shape: presents
-
-
-paragraph .content
+def text, words
+  paragraph .words
