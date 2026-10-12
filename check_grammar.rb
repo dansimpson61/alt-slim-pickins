@@ -48,7 +48,7 @@ renamed = File.read(File.join(here, 'VOCABULARY.md'))
 
 app_words = Set.new
 app_words |= SlimPickins::Library.from(File.join(here, 'pages')).partials.keys.map(&:to_s)
-app_words |= Dir[File.join(here, 'lib', 'vocabulary', '*.sp')].map { |f| File.basename(f, '.sp') }
+app_words |= SlimPickins::Library.builtin.partials.keys.map(&:to_s)
 Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
   app_words |= SlimPickins::Library.from(dir).partials.keys.map(&:to_s)
 end
@@ -85,7 +85,7 @@ Dir[File.join(here, '{examples,studio}', '**', '*.rb')].each do |f|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end
-Dir[File.join(here, '{pages,examples,studio}', '**', '*.{sp,tin}')].each do |f|
+Dir[File.join(here, '{pages,examples,studio,lib/vocabulary}', '**', '*.{sp,tin}')].each do |f|
   app_words |= File.read(f).scan(/^\s*def\s+([a-z_][a-z0-9_]*)/).flatten.to_set
 end
 vocab |= app_words

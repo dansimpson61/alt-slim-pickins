@@ -30,12 +30,9 @@ CONTAINED = {
 
 ALL_CONTAINED = CONTAINED.values.flatten.freeze
 
-CANONICAL_PRIMITIVES = SlimPickins::Words.constants.map do |c|
-  c.to_s.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
-         gsub(/([a-z\d])([A-Z])/, '\1_\2').
-         tr('-', '_').
-         downcase
-end
+CANONICAL_PRIMITIVES = SlimPickins::Word.registry.select do |_, k|
+  k.name.to_s.start_with?('SlimPickins::Words::')
+end.keys.map(&:to_s)
 
 CANONICAL_PARTIALS = SlimPickins::Library.builtin_partials.keys.map(&:to_s)
 CANONICAL_ALL = (CANONICAL_PRIMITIVES + CANONICAL_PARTIALS).uniq

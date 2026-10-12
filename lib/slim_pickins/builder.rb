@@ -26,6 +26,7 @@ module SlimPickins
       @contents = nil       # the page's own nodes, while a tin renders
       @head_nodes = []      # words that belong in <head>, wherever they are said
       @nodes = []
+      @family_definitions = {}
       define_app_words
     end
 
@@ -34,6 +35,8 @@ module SlimPickins
     # apart, and an unknown word should still fail with its own name.
     def define_app_words
       SlimPickins::Word.registry.each do |word, klass|
+        next if SlimPickins::Word.contained?(word)
+
         define_singleton_method(word) do |*args, **kwargs, &block|
           klass.new(self, args, kwargs, block).evaluate
         end
@@ -41,6 +44,8 @@ module SlimPickins
       return unless @library
 
       @library.compiled_partials.each do |word, klass|
+        next if SlimPickins::Word.contained?(word)
+
         define_singleton_method(word) do |*args, **kwargs, &block|
           klass.new(self, args, kwargs, block).evaluate
         end
@@ -59,6 +64,8 @@ module SlimPickins
         end
       end
       @library.partials.each do |word, source|
+        next if SlimPickins::Word.contained?(word)
+
         if source.match?(/\A(?:\s*|#.*?\n)*def\b/)
           ruby = @library.compiled_partial(word)&.compilation&.ruby || Transform.call(source, path: "partials/#{word}.sp")
           eval_with(ruby, "partials/#{word}.sp", source.lines)
@@ -126,6 +133,20 @@ module SlimPickins
     def define_local_word(word_name, param_names = [], &definition_block)
       word_name = word_name.to_sym
       param_names = Array(param_names).map(&:to_sym)
+
+      if SlimPickins::Word.contained?(word_name)
+        parent = SlimPickins::Word.parent_of(word_name)
+        @family_definitions[parent] ||= {}
+        @family_definitions[parent][word_name] = [param_names, definition_block]
+        return
+      end
+
+      define_single_local_word(word_name, param_names, &definition_block)
+    end
+
+    def define_single_local_word(word_name, param_names, &definition_block)
+      word_name = word_name.to_sym
+      param_names = Array(param_names).map(&:to_sym)
       contract = @library&.compiled_partial(word_name)&.instance_variable_get(:@contract) || CONTRACTS[word_name]
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
@@ -183,7 +204,7 @@ module SlimPickins
             bound[:label] = said if contract&.label && !said.nil?
           end
 
-          captured = caller_block ? capture(&caller_block) : []
+          captured = caller_block ? with_family(word_name) { capture(&caller_block) } : []
 
           chain.with(bound, described_as: "this #{word_name}", overlay: true) do
             with_splice(captured) { definition_block.call }
@@ -217,6 +238,52 @@ module SlimPickins
         end
 
         body.each { |n| emit_node(n) }
+      end
+    end
+
+    def with_family(family_parent)
+      return yield unless family_parent
+
+      parent_sym = family_parent.to_sym
+      ruby_family = SlimPickins::Word.family_for(parent_sym)
+      local_family = @family_definitions[parent_sym] || {}
+
+      return yield if ruby_family.empty? && local_family.empty?
+
+      previous_methods = {}
+      added = []
+
+      begin
+        ruby_family.each do |child_name, klass|
+          next unless klass
+
+          if singleton_class.method_defined?(child_name)
+            previous_methods[child_name] = singleton_class.instance_method(child_name)
+            singleton_class.remove_method(child_name)
+          end
+          define_singleton_method(child_name) do |*args, **kwargs, &block|
+            klass.new(self, args, kwargs, block).evaluate
+          end
+          added << child_name
+        end
+
+        local_family.each do |child_name, (param_names, definition_block)|
+          if singleton_class.method_defined?(child_name)
+            previous_methods[child_name] = singleton_class.instance_method(child_name)
+            singleton_class.remove_method(child_name)
+          end
+          define_single_local_word(child_name, param_names, &definition_block)
+          added << child_name
+        end
+
+        yield
+      ensure
+        added.each do |child_name|
+          singleton_class.remove_method(child_name) if singleton_class.method_defined?(child_name)
+          if previous_methods.key?(child_name)
+            define_singleton_method(child_name, previous_methods[child_name])
+          end
+        end
       end
     end
 

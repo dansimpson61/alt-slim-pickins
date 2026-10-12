@@ -84,10 +84,6 @@ module VocabularyShapes
     title: [:heading_level]
   }.freeze
 
-  CANONICAL_PARENTS = {
-    item: [:list]
-  }.freeze
-
   CANONICAL_SPEECH = {
     empty: :adjective
   }.freeze
@@ -138,10 +134,16 @@ module VocabularyShapes
 
   def load
     dir = File.expand_path('../vocabulary', __dir__)
-    Dir[File.join(dir, '*.sp')].to_h do |path|
-      word = File.basename(path, '.sp').to_sym
-      [word, parse(File.read(path), word: word)]
-    end.compact
+    shapes = {}
+    Dir[File.join(dir, '*.sp')].sort.each do |path|
+      source = File.read(path)
+      tree = SlimPickins::Transform.tree(source)
+      tree.select { |n| n.word == 'def' }.each do |def_node|
+        word_name = def_node.raw_args.first&.to_sym
+        shapes[word_name] = infer_from_def(word_name, def_node)
+      end
+    end
+    shapes
   end
 
   # A flag is a fact that is there or not; the preamble names it.
@@ -221,7 +223,11 @@ module VocabularyShapes
 
     speech = CANONICAL_SPEECH[word_sym] || :noun
     infers = CANONICAL_INFERENCES[word_sym] || []
-    parents = CANONICAL_PARENTS[word_sym] || :any
+    parents = if (p = SlimPickins::Word.parent_of(word_sym))
+                [p]
+              else
+                :any
+              end
     flags = CANONICAL_FLAGS[word_sym] || {}
 
     Contract.new(
@@ -240,17 +246,21 @@ module VocabularyShapes
 
   def parse(source, word: nil)
     tree = SlimPickins::Transform.tree(source)
-    first_node = tree.first
-    return nil unless first_node
+    target_node = if word
+                    tree.find { |n| n.word == 'def' && n.raw_args.first&.to_sym == word.to_sym } || tree.first
+                  else
+                    tree.first
+                  end
+    return nil unless target_node
 
-    if first_node.word == 'def'
-      word_name = word || first_node.raw_args.first&.to_sym
-      return infer_from_def(word_name, first_node)
+    if target_node.word == 'def'
+      word_name = word || target_node.raw_args.first&.to_sym
+      return infer_from_def(word_name, target_node)
     end
 
-    return nil unless first_node.word == 'expects'
+    return nil unless target_node.word == 'expects'
 
-    expects_node = first_node
+    expects_node = target_node
     kwargs = {}
     
     names = expects_node.raw_args.zip(expects_node.ranks).select { |_, r| r.zero? }.map(&:first)

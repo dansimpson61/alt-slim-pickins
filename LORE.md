@@ -1468,3 +1468,7 @@ When allowing an app to shadow built-in language words (Dan's 2026-10-05 ruling)
 ## 2026-10-12 — Antigravity
 
 When collecting speculative horizons and technical pinches into a living ledger (WISHLIST.md), establishing an explicit consultation protocol for roadmap and daytrip planning ensures edge cases and creative flights are evaluated during planning rather than forgotten.
+
+## 2026-10-12 — Antigravity
+
+When nesting child word classes inside parent Word subclasses (e.g., Table::Column), anchoring class registries to the root class (SlimPickins::Word) is essential in Ruby to prevent subclass instance variable isolation. Enforcing runtime containment via stack save/restore in Builder#with_family makes child words exist only within their parent block while leaving them completely undefined outside.

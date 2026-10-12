@@ -5,21 +5,18 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 35
-  rendered pages. Roadmaps 0.1 to 0.4 are closed. 0.4 (closed 2026-10-11) asked whether
-  the conventions keep their promises, so that an author only has to name things:
-  every documented override is proved by a test, `CONVENTIONS.md`'s weak-spots table
-  is empty, and `ROADMAP-0.4.md` records each criterion. Twelve gate legs green, 636
-  runs / 6,840 assertions / 0 failures, `ruby -w -c` clean. The round-by-round account
-  lives in `history/CHRONICLE.md` and each round's record in its `DAYTRIP-*.md`; this
-  field carries the present, and `bin/check_card.rb` holds it to a budget. 0.5 is
-  active: `ROADMAP-0.5.md` holds its question (families) and definition of success.
+  rendered pages. Roadmaps 0.1 to 0.4 are closed. 0.5 (families & lexical containment)
+  has delivered all criteria: editor collision gone, nearest-first lookup active,
+  10 child classes nested in Ruby and `item` in `list.sp` with real lexical
+  containment in Builder, and the legacy declaration line retired. Twelve gate
+  legs green, 637 runs / 6,869 assertions / 0 failures, `ruby -w -c` clean.
+  The round-by-round account lives in `history/CHRONICLE.md` and each round's
+  record in its `DAYTRIP-*.md`.
 last_touched: 2026-10-12
 next_step: >-
-  **`DAYTRIP-0.5.0f.md` is closed.** Collected the repository's forward horizon into
-  `WISHLIST.md` (pinches, wishlist items, bluesky flights of imagination) and codified
-  a standing consultation rule in `working-with-dan.md` for roadmap/daytrip planning.
-  Twelve gate legs green, 636 runs / 6,840 assertions / 0 failures, 35 pages verified.
-  Next: consult `WISHLIST.md` and advance Roadmap 0.5 criteria 1-3.
+  **Daytrip 0.5.0g closed; Roadmap 0.5 criteria satisfied.** Review Roadmap 0.5
+  close with Dan, conduct retrospective intake for `WISHLIST.md`, and formulate
+  the focus for the next roadmap. All 12 gate legs green, 35 pages byte-identical.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

@@ -310,11 +310,9 @@ module WordGraph
 
     def self.vocabulary_words
       @vocabulary_words ||= begin
-        ruby_words = SlimPickins::Words.constants.map { |c| SlimPickins::Words.const_get(c) }
-                      .select { |k| k.is_a?(Class) && k < SlimPickins::Word }
-                      .map { |k| k.name.split('::').last.downcase.to_sym }
-        vocab_dir = File.expand_path('../../../lib/vocabulary', __dir__)
-        sp_words = Dir[File.join(vocab_dir, '*.sp')].map { |p| File.basename(p, '.sp').to_sym }
+        SlimPickins::Library.builtin
+        ruby_words = SlimPickins::Word.registry.select { |_, k| k.name.to_s.start_with?('SlimPickins::Words::') }.keys
+        sp_words = SlimPickins::Library.builtin.partials.keys.map(&:to_sym)
         (ruby_words + sp_words).uniq.sort
       end
     end

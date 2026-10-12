@@ -148,7 +148,8 @@ module StudioDocs
   def self.implementation_of(word, klass)
     if klass.respond_to?(:partial_name)
       if (path = klass.source_path)
-        "**Type:** App Partial\n(`#{word}.sp`)\n\n**Defined in**\n" \
+        base = File.basename(path)
+        "**Type:** App Partial\n(`#{base}`)\n\n**Defined in**\n" \
           "`#{path.sub("#{ROOT}/", '')}`\n\n```sp\n#{File.read(path) rescue 'Source not found'}\n```"
       else
         "**Type:** App Partial\n(declared inline)\n\n**Defined in**\nnowhere on disk"
@@ -172,7 +173,7 @@ module StudioDocs
     parent = klass.name.split('::')[-2]
     pattern = /^\s*class #{Regexp.escape(simple)}\b/
     library_files.each do |file|
-      next unless File.read(file).include?("module #{parent}")
+      next unless File.read(file).match?(/\b(module|class)\s+#{Regexp.escape(parent)}\b/)
 
       line = File.readlines(file).index { |l| l =~ pattern }
       return [file.sub("#{ROOT}/", ''), line + 1] if line

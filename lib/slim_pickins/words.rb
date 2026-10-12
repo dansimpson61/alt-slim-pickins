@@ -241,26 +241,23 @@ emit_node(Node[:each, { name: name }, collected])
         end
       end
 
-    end
+      class Column < Word
+        contract name: :attribute, content: true, modifiers: [:as], subject: :row, shape: :registers, lazy: [], infers: [:column_registration, :table_header, :numeric_alignment, :format]
 
-    class Column < Word
-      contract name: :attribute, content: true, modifiers: [:as], parents: [:table], subject: :row, shape: :registers, lazy: [], infers: [:column_registration, :table_header, :numeric_alignment, :format]
-
-      def evaluate
-        as = @kwargs.key?(:as) ? @kwargs[:as] : nil
-      name, header = arguments(@args)
-      register!(SlimPickins::Words::Table, { name: name, header: header, as: as }, 'column')
-
+        def evaluate
+          as = @kwargs.key?(:as) ? @kwargs[:as] : nil
+          name, header = arguments(@args)
+          register!(SlimPickins::Words::Table, { name: name, header: header, as: as }, 'column')
+        end
       end
-    end
 
-    class Total < Word
-      contract name: :attribute, content: true, parents: [:table], shape: :registers, lazy: [], infers: [:column_registration, :format]
+      class Total < Word
+        contract name: :attribute, content: true, shape: :registers, lazy: [], infers: [:column_registration, :format]
 
-      def evaluate
-      name, label = arguments(@args)
-      register!(SlimPickins::Words::Table, { name: name, header: label, as: nil, total: true }, 'total')
-
+        def evaluate
+          name, label = arguments(@args)
+          register!(SlimPickins::Words::Table, { name: name, header: label, as: nil, total: true }, 'total')
+        end
       end
     end
 
@@ -374,85 +371,74 @@ emit_node(Node[:each, { name: name }, collected])
         rows.map { |row| Subject.new(row).fetch(attribute).to_s }
       end
 
-    end
+      class Band < Word
+        contract name: :attribute, content: true, shape: :registers, lazy: [], infers: [:column_registration]
 
-    class Band < Word
-      contract name: :attribute, content: true, parents: [:chart], shape: :registers, lazy: [], infers: [:column_registration]
-
-      def evaluate
-      name, label = arguments(@args)
-      register!(SlimPickins::Words::Chart, { kind: :band, name: name, label: label }, 'band')
-
+        def evaluate
+          name, label = arguments(@args)
+          register!(SlimPickins::Words::Chart, { kind: :band, name: name, label: label }, 'band')
+        end
       end
-    end
 
-    class Line < Word
-      contract name: :attribute, content: true, modifiers: [:from], parents: [:chart], shape: :registers, lazy: [], infers: [:column_registration]
+      class Line < Word
+        contract name: :attribute, content: true, modifiers: [:from], shape: :registers, lazy: [], infers: [:column_registration]
 
-      def evaluate
-        from = @kwargs.key?(:from) ? @kwargs[:from] : nil
-      name, label = arguments(@args)
-      register!(SlimPickins::Words::Chart, { kind: :line, name: name, label: label, from: from }, 'line')
-
+        def evaluate
+          from = @kwargs.key?(:from) ? @kwargs[:from] : nil
+          name, label = arguments(@args)
+          register!(SlimPickins::Words::Chart, { kind: :line, name: name, label: label, from: from }, 'line')
+        end
       end
-    end
 
-    class Level < Word
-      contract content: true, parents: [:chart], shape: :registers, lazy: [], infers: [:column_registration]
+      class Level < Word
+        contract content: true, shape: :registers, lazy: [], infers: [:column_registration]
 
-      def evaluate
-      register!(SlimPickins::Words::Chart,
-                { value: @args.find { |a| a.is_a?(Numeric) }.to_f,
-                  label: @args.find { |a| a.is_a?(String) } },
-                'level')
-
-      end
-    end
-
-    class When < Word
-      contract content: true, children: :any, parents: [:choose], speech: :conjunction, shape: :encloses, lazy: [:content]
-
-      def evaluate
-      target = open_gatherer(SlimPickins::Words::Choose)
-      raise Error, 'when belongs inside a choose' unless target
-
-      # The transform sends the condition as a lambda, unevaluated — so this
-      # guard can refuse a `when` outside a `choose` before the argument
-      # runs, instead of reporting the argument's problem.
-        condition = @args.first
-        target.add_branch(Inference.truthy?(condition&.call), @block)
-
+        def evaluate
+          register!(SlimPickins::Words::Chart,
+                    { value: @args.find { |a| a.is_a?(Numeric) }.to_f,
+                      label: @args.find { |a| a.is_a?(String) } },
+                    'level')
+        end
       end
     end
 
     class Tabs < Encloses
       contract name: :variant, children: :any, shape: :encloses
-    end
 
-    # `parents:` since 2026-10-03, which makes `tab` the tenth structural child
-    # held to its gatherer rather than the one exception. A stray `tab` used to
-    # render an empty `<div class="tab-panel">` and throw its content away: the
-    # content maps to `:label`, and the label is rendered by the enclosing
-    # `tabs`, which was not there to render it. Silent loss, where a stray
-    # `item` has always been refused by name.
-    class Tab < Encloses
-      contract content: true, children: :any, modifiers: [:active], parents: [:tabs],
-               shape: :encloses, lazy: [], infers: [:label]
-      maps content: :label
+      # `parents:` since 2026-10-03, which makes `tab` the tenth structural child
+      # held to its gatherer rather than the one exception. A stray `tab` used to
+      # render an empty `<div class="tab-panel">` and throw its content away: the
+      # content maps to `:label`, and the label is rendered by the enclosing
+      # `tabs`, which was not there to render it. Silent loss, where a stray
+      # `item` has always been refused by name.
+      class Tab < Encloses
+        contract content: true, children: :any, modifiers: [:active],
+                 shape: :encloses, lazy: [], infers: [:label]
+        maps content: :label
+      end
     end
 
     class Form < Word
       contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :children, :box], subject: :shift, shape: :encloses, lazy: []
 
+      class Hidden < Word
+        contract name: :name, content: true, shape: :says, lazy: []
+
+        def evaluate
+          name, value = arguments(@args)
+          shown = value.nil? ? subject.fetch(name) : value
+          emit_node(Node[:hidden, { name: name, value: shown }, []])
+        end
+      end
+
       def evaluate
         to = @kwargs.key?(:to) ? @kwargs[:to] : nil
         method = @kwargs.key?(:method) ? @kwargs[:method] : nil
         target = @kwargs.key?(:target) ? @kwargs[:target] : nil
-      name, = arguments(@args)
-      value, empty, children = about(name) { capture(&@block) }
-      emit_node(Node[:form, { name: name, to: to, method: method, target: target }, prune(children, empty)])
-      value
-
+        name, = arguments(@args)
+        value, empty, children = about(name) { @builder.with_family(:form) { capture(&@block) } }
+        emit_node(Node[:form, { name: name, to: to, method: method, target: target }, prune(children, empty)])
+        value
       end
     end
 
@@ -515,18 +501,6 @@ emit_node(Node[:each, { name: name }, collected])
         emit_node(Node[:textarea, { name: name, label: label_for(name, label),
                                 value: value, rows: (rows || 4).to_s,
                                 required: required, readonly: readonly }, []])
-
-      end
-    end
-
-    class Hidden < Word
-      contract name: :name, content: true, parents: [:form], shape: :says, lazy: []
-
-      def evaluate
-      name, value = arguments(@args)
-      shown = value.nil? ? subject.fetch(name) : value
-      emit_node(Node[:hidden, { name: name, value: shown }, []])
-
       end
     end
 
@@ -570,18 +544,16 @@ emit_node(Node[:each, { name: name }, collected])
         end
         emit_node(Node[:choice, { name: name, label: label_for(name, label), selected: selected, variant: variant },
                    options])
-
       end
-    end
 
-    class Option < Word
-      contract name: :value, content: true, parents: [:choice], shape: :registers, lazy: []
+      class Option < Word
+        contract name: :value, content: true, shape: :registers, lazy: []
 
-      def evaluate
-        value = @args[0]
-        label = @args[1] || (value.is_a?(Symbol) ? label_for(value, nil) : value.to_s)
-        register!(SlimPickins::Words::Choice, { value: value, label: label }, 'option')
-
+        def evaluate
+          value = @args[0]
+          label = @args[1] || (value.is_a?(Symbol) ? label_for(value, nil) : value.to_s)
+          register!(SlimPickins::Words::Choice, { value: value, label: label }, 'option')
+        end
       end
     end
 
@@ -607,6 +579,32 @@ emit_node(Node[:each, { name: name }, collected])
     class Choose < Word
       contract children: [:when, :otherwise], speech: :verb, shape: :gathers, lazy: [], infers: [:first_truthy_branch]
 
+      class When < Word
+        contract content: true, children: :any, speech: :conjunction, shape: :encloses, lazy: [:content]
+
+        def evaluate
+          target = open_gatherer(SlimPickins::Words::Choose)
+          raise Error, 'when belongs inside a choose' unless target
+
+          # The transform sends the condition as a lambda, unevaluated — so this
+          # guard can refuse a `when` outside a `choose` before the argument
+          # runs, instead of reporting the argument's problem.
+          condition = @args.first
+          target.add_branch(Inference.truthy?(condition&.call), @block)
+        end
+      end
+
+      class Otherwise < Word
+        contract children: :any, speech: :adverb, shape: :encloses, lazy: []
+
+        def evaluate
+          target = open_gatherer(SlimPickins::Words::Choose)
+          raise Error, 'otherwise belongs inside a choose' unless target
+
+          target.add_branch(nil, @block)
+        end
+      end
+
       def evaluate
         with_open
         chosen = @collected.find { |c, _| c } || @collected.find { |c, _| c.nil? }
@@ -615,19 +613,6 @@ emit_node(Node[:each, { name: name }, collected])
 
       def add_branch(condition, block)
         @collected << [condition, block]
-      end
-
-    end
-
-    class Otherwise < Word
-      contract children: :any, parents: [:choose], speech: :adverb, shape: :encloses, lazy: []
-
-      def evaluate
-      target = open_gatherer(SlimPickins::Words::Choose)
-      raise Error, 'otherwise belongs inside a choose' unless target
-
-      target.add_branch(nil, @block)
-
       end
     end
 

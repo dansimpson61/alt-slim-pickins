@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'errors'
+require_relative 'word'
 
 module SlimPickins
   # An app's own vocabulary. A partial is not a new construct — it is a word
@@ -124,8 +125,20 @@ module SlimPickins
     # The vocabulary is built in — a promoted word is a word everywhere, not
     # something an app opts into by loading a library.
     def self.builtin_partial_paths
-      @builtin_partial_paths ||= Dir[File.join(VOCABULARY_DIR, '*.sp')].to_h do |path|
-        [File.basename(path, '.sp').to_sym, path]
+      @builtin_partial_paths ||= begin
+        paths = {}
+        Dir[File.join(VOCABULARY_DIR, '*.sp')].sort.each do |path|
+          base = File.basename(path, '.sp').to_sym
+          paths[base] = path
+          File.read(path).scan(/^\s*def\s+([a-zA-Z0-9_]+)/).flatten.each do |child|
+            child_sym = child.to_sym
+            paths[child_sym] = path
+            if child_sym != base
+              Word.register_family(base, child_sym)
+            end
+          end
+        end
+        paths
       end
     end
 
@@ -281,12 +294,9 @@ module SlimPickins
     end
 
     def self.primitive_keys
-      @primitive_keys ||= SlimPickins::Words.constants.map do |c|
-        c.to_s.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-              .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-              .tr('-', '_')
-              .downcase.to_sym
-      end
+      @primitive_keys ||= SlimPickins::Word.registry.select do |_, klass|
+        klass.name.to_s.start_with?('SlimPickins::Words::')
+      end.keys
     end
 
     private
@@ -338,5 +348,7 @@ module SlimPickins
         names << name
       end
     end
+
+    builtin_partial_paths
   end
 end

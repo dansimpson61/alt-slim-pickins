@@ -76,10 +76,10 @@ module SlimPickins
           captured =
             if @kwargs.any?
               chain.with(@kwargs, described_as: "this #{self.class.partial_name}", overlay: true) do
-                prune(capture(&@block), empty_active?)
+                @builder.with_family(self.class.partial_name) { prune(capture(&@block), empty_active?) }
               end
             else
-              prune(capture(&@block), empty_active?)
+              @builder.with_family(self.class.partial_name) { prune(capture(&@block), empty_active?) }
             end
           with_splice(captured) do
             evaluate_body(evaluate_proc, parameters, self.class.partial_name, push, contract)

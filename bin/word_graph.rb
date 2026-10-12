@@ -28,9 +28,7 @@ module WordGraph
   # --- what is true now --------------------------------------------------
 
   def partials
-    @partials ||= Dir[File.join(VOCABULARY, '*.sp')].sort.to_h do |path|
-      [File.basename(path, '.sp').to_sym, File.read(path)]
-    end
+    @partials ||= SlimPickins::Library.builtin.partials
   end
 
   # A partial's dependencies are the words its sentences name — read with the

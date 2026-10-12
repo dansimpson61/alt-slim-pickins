@@ -9,22 +9,62 @@ module SlimPickins
         SlimPickins::Word.instance_variable_get(:@registry) || SlimPickins::Word.instance_variable_set(:@registry, {})
       end
 
+      def family_registry
+        SlimPickins::Word.instance_variable_get(:@family_registry) ||
+          SlimPickins::Word.instance_variable_set(:@family_registry, {})
+      end
+
+      def parent_registry
+        SlimPickins::Word.instance_variable_get(:@parent_registry) ||
+          SlimPickins::Word.instance_variable_set(:@parent_registry, {})
+      end
+
+      def register_family(parent, child, klass = nil)
+        parent = parent.to_sym
+        child = child.to_sym
+        family_registry[parent] ||= {}
+        family_registry[parent][child] = klass
+        parent_registry[child] = parent
+      end
+
+      def family_for(parent)
+        family_registry[parent.to_sym] || {}
+      end
+
+      def parent_of(child)
+        parent_registry[child.to_sym]
+      end
+
+      def contained?(child)
+        parent_registry.key?(child.to_sym)
+      end
+
       def inherited(subclass)
-return unless subclass.name
-name = subclass.name.split('::').last
-unless name.nil? || %w[AppWord Gatherer PartialWord Encloses Says Registers Head].include?(name)
-  word_name = name.gsub(/([A-Z]+)([A-Z][a-z])/,'_').
-                   gsub(/([a-z\d])([A-Z])/,'_').
-                   tr("-", "_").
-                   downcase.to_sym
-  SlimPickins::Word.registry[word_name] = subclass
-end
+        return unless subclass.name
+
+        parts = subclass.name.split('::')
+        name = parts.last
+        return if name.nil? || %w[AppWord Gatherer PartialWord Encloses Says Registers Head].include?(name)
+
+        word_name = name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
+                         gsub(/([a-z\d])([A-Z])/, '\1_\2').
+                         tr('-', '_').
+                         downcase.to_sym
+        SlimPickins::Word.registry[word_name] = subclass
+
+        if parts.size > 3 && parts[-3] == 'Words'
+          parent_name = parts[-2].gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
+                                  gsub(/([a-z\d])([A-Z])/, '\1_\2').
+                                  tr('-', '_').
+                                  downcase.to_sym
+          register_family(parent_name, word_name, subclass)
+        end
       end
 
       def word_name
-        name.split('::').last.gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-             gsub(/([a-z\d])([A-Z])/,'\1_\2').
-             tr("-", "_").
+        name.split('::').last.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
+             gsub(/([a-z\d])([A-Z])/, '\1_\2').
+             tr('-', '_').
              downcase.to_sym
       end
 
@@ -36,6 +76,9 @@ end
       end
 
       def contract(**kwargs)
+        if (parent = parent_of(word_name))
+          kwargs[:parents] ||= [parent]
+        end
         @contract = Contract.new(**kwargs)
       end
 
@@ -98,7 +141,9 @@ end
     end
 
     def with_open
-      @builder.with_gatherer(self) { @builder.evaluate(&@block) }
+      @builder.with_family(word) do
+        @builder.with_gatherer(self) { @builder.evaluate(&@block) }
+      end
     end
 
     def arguments(args) = @builder.arguments(args)
@@ -136,7 +181,8 @@ end
 
 class Encloses < Word
   def evaluate
-    emit_node(Node[self.class.word_name, unpack_arguments, capture(&@block)])
+    children = @builder.with_family(word) { capture(&@block) }
+    emit_node(Node[self.class.word_name, unpack_arguments, children])
   end
 end
 

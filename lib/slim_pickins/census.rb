@@ -22,9 +22,9 @@ module SlimPickins
       primitives = SlimPickins::Word.registry.select do |_word, klass|
         klass.name.to_s.start_with?('SlimPickins::Words::')
       end.keys
-      partials = Dir[File.join(ROOT, 'lib', 'vocabulary', '*.sp')].map do |f|
-        File.basename(f, '.sp').to_sym
-      end
+      partials = Dir[File.join(ROOT, 'lib', 'vocabulary', '*.sp')].flat_map do |f|
+        File.read(f).scan(/^\s*def\s+([a-zA-Z0-9_]+)/).flatten
+      end.map(&:to_sym).uniq
       {
         primitives: primitives.sort,
         partials: partials.sort,

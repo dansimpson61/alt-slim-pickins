@@ -59,6 +59,35 @@ end
     assert_empty complaints(source)
   end
 
+  def test_contained_words_are_not_available_at_top_level_and_scoped_to_parents
+    builder = SlimPickins::Builder.new(Object.new)
+    families = {
+      table: %i[column total],
+      chart: %i[band line level],
+      choose: %i[when otherwise],
+      tabs: %i[tab],
+      form: %i[hidden],
+      choice: %i[option],
+      list: %i[item]
+    }
+    all_children = families.values.flatten
+
+    all_children.each do |child|
+      refute builder.respond_to?(child), "expected `#{child}` not to be in top-level builder"
+    end
+
+    families.each do |parent, children|
+      builder.with_family(parent) do
+        children.each do |child|
+          assert builder.respond_to?(child), "expected `#{child}` to be available inside `#{parent}`"
+        end
+      end
+      children.each do |child|
+        refute builder.respond_to?(child), "expected `#{child}` to be removed after exiting `#{parent}`"
+      end
+    end
+  end
+
   # What the page alone shows can never work is refused, naming the fix, rather
   # than silently dropped (dan, 2026-10-10). What only the data can show is not.
   def test_a_box_with_written_words_and_children_is_refused
