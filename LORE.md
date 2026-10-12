@@ -1472,3 +1472,7 @@ When collecting speculative horizons and technical pinches into a living ledger 
 ## 2026-10-12 — Antigravity
 
 When nesting child word classes inside parent Word subclasses (e.g., Table::Column), anchoring class registries to the root class (SlimPickins::Word) is essential in Ruby to prevent subclass instance variable isolation. Enforcing runtime containment via stack save/restore in Builder#with_family makes child words exist only within their parent block while leaving them completely undefined outside.
+
+## 2026-10-12 — Antigravity
+
+The quadruple duty of variant (style modifier vs data status vs format switch vs contract slot) was fundamentally caused by treating key-value association as an ad-hoc compiler feature rather than a general primitive. Pairing dictionary (the table of meanings) with map (the lookup and dispatch) handles both word routing and value translation without compiler heuristics. Similarly, tins saying contents while partials said children obscured that both are the exact same splice pronoun: in English, boxes, cards, and tins hold contents, not children.

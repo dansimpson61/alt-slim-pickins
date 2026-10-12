@@ -5,17 +5,15 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 62 canonical words, 8 apps and 35
-  rendered pages. Roadmaps 0.1 to 0.5 are closed. 0.5 (families & lexical containment)
-  delivered all criteria on 2026-10-12: editor collision gone, nearest-first lookup
-  active, 10 child classes nested in Ruby and `item` in `list.sp` with real lexical
-  containment in Builder, and the legacy declaration line retired. Twelve gate
-  legs green, 637 runs / 6,869 assertions / 0 failures, `ruby -w -c` clean.
-  The round-by-round account lives in `history/CHRONICLE.md` and each round's
-  record in its `DAYTRIP-*.md`.
+  rendered pages. Roadmaps 0.1 to 0.5 are closed. Roadmap 0.6 (the backward eye)
+  is underway: Daytrip 0.6.0a closed on 2026-10-12 (Polysemy Census & Disambiguation,
+  establishing `dictionary`/`map` to retire `variant` and unifying the splice pronoun
+  on `contents`). Twelve gate legs green, 637 runs / 6,869 assertions / 0 failures,
+  `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
 last_touched: 2026-10-12
 next_step: >-
-  **Roadmap 0.6 drafted (`ROADMAP-0.6.md`).** Review Roadmap 0.6 with Dan and
-  plan the opening daytrip (Daytrip 0.6.0a: Polysemy & Vocabulary Taxonomy Audit).
+  **Daytrip 0.6.0a closed; proceed to Daytrip 0.6.0b.** Implement the `dictionary`
+  and `map` primitive, retiring `variant` as a privileged compiler slot.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
