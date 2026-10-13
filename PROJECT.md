@@ -12,9 +12,9 @@ status: >-
   `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
 last_touched: 2026-10-13
 next_step: >-
-  **Daytrip 0.6.0c closed; proceed to Daytrip 0.6.0d.** Clarify `content`,
-  `subject`, and positional parameter slots versus compiler state, and formalize
-  the vocabulary taxonomy definitions.
+  **Daytrip 0.6.0d planned; proceed to implementation in fresh session.** Execute
+  `DAYTRIP-0.6.0d.md`: universal convention slot model (target, override, kwargs),
+  decouple parameter binding, formalize 7 taxonomy terms, and retire obsolete gate checks.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

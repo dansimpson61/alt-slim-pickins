@@ -1488,3 +1488,7 @@ Lexical namespaces require multi-parent tracking in Word.parent_registry and con
 ## 2026-10-13 — Antigravity
 
 Unifying the template splice pronoun on `contents` across both `.tin` chrome files and `.sp` partials eliminates the collision where `children` previously meant AST nodes, lexical members, and spliced callers. In `Contents.evaluate`, checking `!spliced.nil?` before `contents_stowed?` ensures nested partials splice their caller block without draining an enclosing tin.
+
+## 2026-10-13 — Antigravity
+
+Ad-hoc named slots (:variant, :destination, :topic, :notation, :attribute, :subject) proliferated as ad-hoc attempts to map positional bare symbols to keyword arguments. The universal convention law "that which can be inferred need not be spoken" replaces them: a bare positional target resolves in context and infers .label, .id, and .noun; an optional second string overrides the label; and kwargs serve as the open configuration mechanism.
