@@ -1,3 +1,3 @@
 def footer, content
   box .content
-    children
+    contents

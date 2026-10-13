@@ -1,4 +1,4 @@
 def figure, caption
   box
-    children
+    contents
     tag figcaption, .caption

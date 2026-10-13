@@ -1,3 +1,3 @@
 def scroll, variant
   box .variant
-    children
+    contents

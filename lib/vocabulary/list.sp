@@ -1,7 +1,7 @@
 def list, variant
   box .variant
-    children
+    contents
 
 def item, variant, content
   box .variant, .content
-    children
+    contents

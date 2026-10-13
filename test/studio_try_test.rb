@@ -9,12 +9,12 @@ require_relative '../studio/pages'
 # exactly as the try-it would. A useful word must show the word's own
 # effect — the word's class by default, a named needle where the effect is
 # an element or a content line — and the structural words carry their note
-# and no link at all. Re-measured 2026-09-15: 62 useful, 2 structural, 0
+# and no link at all. Re-measured 2026-10-13: 63 useful, 1 structural, 0
 # refusals; a regression flips a row, and this test is the ledger.
 class StudioTryTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
 
-  STRUCTURAL = %w[contents children].freeze
+  STRUCTURAL = %w[contents].freeze
 
   # Words whose effect is not their own class — an element tag, a content
   # line, or a note beside a working link.

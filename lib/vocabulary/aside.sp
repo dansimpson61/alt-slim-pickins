@@ -1,3 +1,3 @@
 def aside, variant
   box .variant
-    children
+    contents

@@ -173,7 +173,7 @@ class DiskDefPartialTest < Minitest::Test
         def enclosure, title
           box
             heading .title
-            children
+            contents
       SP
     }
 

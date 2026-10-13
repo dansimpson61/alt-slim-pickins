@@ -7,5 +7,5 @@
 # surface is what this wrapper makes real.
 def shell
   box
-    children
+    contents
 

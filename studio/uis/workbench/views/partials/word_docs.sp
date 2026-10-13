@@ -2,4 +2,4 @@
 # page of their own. It exists as a partial so the class it carries is a word
 # the stylesheet can hold — the same shape `library` already has.
 box
-  children
+  contents

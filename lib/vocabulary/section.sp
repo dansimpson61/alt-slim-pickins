@@ -3,4 +3,4 @@ def section, subject, content
     choose
       when .label
         heading .label
-    children
+    contents

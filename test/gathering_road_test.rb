@@ -17,7 +17,7 @@ require_relative '../lib/slim_pickins'
 # may now gather and be registered into. These tests are the pin dan asked for —
 # without one the road closes again the moment nothing walks it.
 class GatheringRoadTest < Minitest::Test
-  GATHERER = "expects children: any, takes: gathers, shape: encloses\n\nbox\n  children\n"
+  GATHERER = "expects children: any, takes: gathers, shape: encloses\n\nbox\n  contents\n"
   REGISTRAR = "expects content: true, inside: my_gatherer, shape: registers\n\ntext .content\n"
 
   def library

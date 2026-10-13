@@ -7,4 +7,4 @@ def actions
       choose
         when .return_to
           hidden return_to, .return_to
-      children
+      contents

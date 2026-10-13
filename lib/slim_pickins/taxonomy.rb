@@ -81,19 +81,10 @@ module SlimPickins
         word: :contents,
         tiers: %i[structural],
         primary_tier: :structural,
-        role: 'Layout hole marker where view template splices into chrome',
+        role: 'Universal layout and partial composition slot marker for stowed page or caller block',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Pure single-purpose structural reuse primitive.'
-      ),
-      children: Entry.new(
-        word: :children,
-        tiers: %i[structural],
-        primary_tier: :structural,
-        role: 'Partial composition slot marker for caller block content',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Pure partial composition primitive.'
+        note: 'Unified single-purpose structural reuse and block composition primitive across tins and partials.'
       ),
       section: Entry.new(
         word: :section,

@@ -3,4 +3,4 @@ def card, subject, content
     choose
       when .content
         heading .content
-    children
+    contents

@@ -4,17 +4,16 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
-  nests, everything is a word — proved across 65 canonical words, 8 apps and 35
+  nests, everything is a word — proved across 64 canonical words, 8 apps and 35
   rendered pages. Roadmaps 0.1 to 0.5 are closed. Roadmap 0.6 (the backward eye)
-  is underway: Daytrip 0.6.0b closed on 2026-10-13 (`dictionary`, `on` and `map`
-  implemented, undergirded by `Dictionary.resolve`, retiring `variant` as a
-  privileged compiler slot). Twelve gate legs green, 649 runs / 7,045 assertions / 0 failures,
+  is underway: Daytrip 0.6.0c ready to close on 2026-10-13 (splice pronoun unified
+  on `contents` across `.tin` chrome files and `.sp` partials, retiring `children`
+  as a template keyword). Twelve gate legs green, 649 runs / 6,997 assertions / 0 failures,
   `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
 last_touched: 2026-10-13
 next_step: >-
-  **Daytrip 0.6.0b closed; proceed to Daytrip 0.6.0c.** Unify the splice pronoun
-  on `contents` across `.tin` files and `.sp` partials, retiring `children` as a
-  template keyword.
+  **Daytrip 0.6.0c ready to close.** Await dan's review to commit and push,
+  then advance to the next Roadmap 0.6 inquiry.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
@@ -46,7 +45,7 @@ conventions: >-
 
 # alt-slim-pickins
 
-A working view language: one-sentence grammar, 65 words, its own stylesheet,
+A working view language: one-sentence grammar, 64 words, its own stylesheet,
 and seven example apps plus the studio that speak it. See [README.md](README.md)
 — its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.5.md](ROADMAP-0.5.md)
 closed on 2026-10-12, delivering families and lexical containment; roadmap 0.6 is next,

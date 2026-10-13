@@ -45,7 +45,7 @@ class CheckVitalsTest < Minitest::Test
   end
 
   def test_a_number_the_prose_spells_out_is_a_claim
-    assert_equal 1, stale('sixty-four words, and no apology').size,
+    assert_equal 1, stale('sixty-five words, and no apology').size,
                  'a gate blind to spelled numbers teaches the project to spell them out'
   end
 
@@ -90,9 +90,9 @@ class CheckVitalsTest < Minitest::Test
 
   # --- the elided form that hid inside a gate for a month -------------------
   def test_n_of_m_names_the_total_and_the_block_names_the_vital
-    found = stale('every word declares a part of speech — the language is a noun language (59 of 64)')
+    found = stale('every word declares a part of speech — the language is a noun language (59 of 65)')
     assert_equal 1, found.size
-    assert_equal 64, found.first.stated
+    assert_equal 65, found.first.stated
   end
 
   def test_n_of_m_holds_to_the_same_twenty_floor
@@ -102,7 +102,7 @@ class CheckVitalsTest < Minitest::Test
 
   # --- Ruby is prose in two places -----------------------------------------
   def test_a_string_an_app_shows_a_reader_is_prose
-    found = Vitals.claims_in('exercising different regions of the frozen 64 words.',
+    found = Vitals.claims_in('exercising different regions of the frozen 65 words.',
                              file: 'planner.rb', start: 1)
     assert_equal 1, found.reject(&:true?).size
   end

@@ -419,7 +419,7 @@ emit_node(Node[:each, { name: name }, collected])
     end
 
     class Form < Word
-      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :children, :box], subject: :shift, shape: :encloses, lazy: []
+      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :contents, :box], subject: :shift, shape: :encloses, lazy: []
 
       class Hidden < Word
         contract name: :name, content: true, shape: :says, lazy: []
@@ -616,25 +616,17 @@ emit_node(Node[:each, { name: name }, collected])
       end
     end
 
-    class Children < Word
-      contract shape: :document, lazy: []
-
-      def evaluate
-      raise Error, '`children` has nothing to splice — this word took no children' if spliced.nil?
-
-      spliced.each { |n| emit_node(n) }
-
-      end
-    end
-
     class Contents < Word
       contract shape: :document, lazy: []
 
       def evaluate
-      raise Error, '`contents` belongs in a tin' unless contents_stowed?
-
-      take_contents&.each { |n| emit_node(n) }
-
+        if !spliced.nil?
+          spliced.each { |n| emit_node(n) }
+        elsif contents_stowed?
+          take_contents&.each { |n| emit_node(n) }
+        else
+          raise Error, '`contents` belongs in a tin'
+        end
       end
     end
 

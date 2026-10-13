@@ -1,6 +1,6 @@
 # Vocabulary — draft 3
 
-Status: **implemented.** Sixty-five words — 42 declared as Ruby classes and 23
+Status: **implemented.** Sixty-four words — 41 declared as Ruby classes and 23
 written in the language — every one of them declared in its own file and every
 one exercised by a sentence somewhere in the repo, which `check_grammar.rb`
 fails if either stops being true. (The count is measured, not remembered. It
@@ -92,15 +92,15 @@ rule. It is not a keyword; it is something `page` knows.
 - **children** — none
 - **subject** — unchanged
 - **infers** — nothing; it marks a place rather than presenting anything
-- **renders** — the page's own sentences
+- **renders** — the page's or block's own sentences
 
 ```
 contents
 ```
 
-Only a tin has one, and a tin must have exactly one. It is the single
-word that reuse needed: the chrome is written once in `[name].tin`, `contents`
-says where the page goes, and no page mentions the tin at all.
+Marks where enclosed content goes — in a `[name].tin` chrome file, it splices
+the page into the outer chrome; inside a partial's body, it splices the
+caller's block.
 
 
 ### `stylesheet`
@@ -802,7 +802,7 @@ button "Show baseline", to: baseline
 - **name** — the subject this word presents; it must be there
 - **content** — none
 - **modifiers** — `to:`, `method:`, `target:`
-- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`, `children`, `box`
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`, `contents`, `box`
 - **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`
@@ -1131,22 +1131,6 @@ during 0.1; the list is a record, not a to-do.
 - **Under-tested by this page.** Prose and media, navigation chrome, and
   collections nested more than one deep were exercised by the original paper
   pages (retired in Phase 6).
-
-### `children`
-
-- **name** — none
-- **content** — none
-- **modifiers** — none
-- **children** — none
-- **subject** — unchanged
-
-Marks where the caller's children go, inside a partial's body. A partial
-that took no children has nothing to splice, and says so.
-
-```
-children
-```
-
 ### `paragraph`
 
 - **name** — the variant

@@ -1484,3 +1484,7 @@ In SlimPickins grammar, positional words like `true`, `false`, and `nil` compile
 ## 2026-10-12 — Antigravity
 
 Lexical namespaces require multi-parent tracking in Word.parent_registry and context-aware contract resolution in Contracts.complaints so that identical word names (such as otherwise in choose and dictionary) can be defined within distinct parents without collision, ensuring words are scoped to their active parent family rather than a flat global registry.
+
+## 2026-10-13 — Antigravity
+
+Unifying the template splice pronoun on `contents` across both `.tin` chrome files and `.sp` partials eliminates the collision where `children` previously meant AST nodes, lexical members, and spliced callers. In `Contents.evaluate`, checking `!spliced.nil?` before `contents_stowed?` ensures nested partials splice their caller block without draining an enclosing tin.

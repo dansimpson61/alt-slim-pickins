@@ -61,7 +61,7 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 65 canonical words (42 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 59 test files.
+- **Census SSOT (`bin/census.rb`)**: 64 canonical words (41 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 59 test files.
 - **Full Suite**: 627 runs, 6,698 assertions, 0 failures, 0 errors, 0 skips in one
   process — and that includes the example apps' own suites, because both the Suite
   leg *and* the gate command below now ask `Census.test_files`. They did not agree
@@ -69,7 +69,7 @@ measure are quoted as the gate output they are.
   547, so a session could run the gate by hand, see green, and never touch the
   example apps' suites at all. One spelling of "the suite" now, in one home.
 - **Check Grammar**: `1359 sentences checked, 98 words defined, 0 problems`.
-- **Check Shape**: 65 canonical words, 0 problems.
+- **Check Shape**: 64 canonical words, 0 problems.
 - **Check Styles**: 28 emittable classes, 59 rendering, 113 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
 - **Spiff Scope**: `3 spiff(s), 15 compiled classes held to the HTML their pages render, 0 problems` — it holds compiled selectors to rendered HTML now, not zone names to sources.
@@ -309,10 +309,9 @@ with the corrections the day's measurements made:
      61 roles no page can say).
   3. The seven shapes: what a word does with what is beneath it.
   4. The subject: kept, shifted, or walked item by item.
-  5. The 65 words, looked up, not memorised.
+  5. The 64 words, looked up, not memorised.
   6. Making your own word: a `.sp` file whose first line `expects …` is its
-     contract, with `takes:` one key on that line. `children` has three meanings,
-     and `contents` is the tin's version of one of them.
+     contract, with `takes:` one key on that line. `contents` splices what was passed.
 
   Never on a user's path: promises, gate legs, taxonomy tiers, any daytrip.
 - **Devs:**
@@ -693,7 +692,7 @@ You must execute every step of this loop per round, not at the end of the sessio
   adds vocabulary, never syntax. A dot means data; a bare word is language.
   There is no numeric literal. A name is a subject and must exist. Mechanical
   facts are free; judgements belong to the app. A line that states the
-  inferable should not exist. This is a noun language — 58 of 65.
+  inferable should not exist. This is a noun language — 57 of 64.
 - **Every truth has one home** (the grammar in Transform, the vocabulary in
   contracts, the checkers consuming, never mirroring).
 - **A rule must outlive its reason** — when a proscription blocks empowerment

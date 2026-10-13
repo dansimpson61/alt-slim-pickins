@@ -10,4 +10,4 @@
 # dissolves a `panes` wrapper inside a `horizon`, so the zones reach the shell
 # grid directly.
 box
-  children
+  contents

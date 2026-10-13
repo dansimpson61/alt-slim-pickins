@@ -285,7 +285,7 @@ class VocabularyPartialsTest < Minitest::Test
       File.write(File.join(dir, 'partials', 'outer_slot.sp'), <<~SP)
         expects children: any, takes: slot, shape: encloses
         box
-          children
+          contents
       SP
       File.write(File.join(dir, 'partials', 'inner_slot.sp'), <<~SP)
         expects takes: slot, shape: says
@@ -341,7 +341,7 @@ class VocabularyPartialsTest < Minitest::Test
       File.write(File.join(dir, 'partials', 'custom_actions.sp'), <<~SP)
         expects children: any, takes: project_id, shape: encloses
         box
-          children
+          contents
       SP
       File.write(File.join(dir, 'partials', 'custom_action.sp'), <<~SP)
         expects takes: content, takes: project_id, shape: encloses

@@ -140,7 +140,7 @@ class DefTest < Minitest::Test
       def enclosure, title
         box
           heading .title
-          children
+          contents
     SP
     html = render(source)
     assert_includes html, '<h2 class="heading">Custom Box</h2>'
@@ -280,7 +280,7 @@ class DefTest < Minitest::Test
     source = <<~SP
       def framed, name
         box
-          children
+          contents
 
       page "Demo"
         each point
