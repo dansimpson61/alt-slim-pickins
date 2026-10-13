@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'slim_pickins/version'
 require_relative 'slim_pickins/errors'
 require_relative 'slim_pickins/node'
 require_relative 'slim_pickins/transform'

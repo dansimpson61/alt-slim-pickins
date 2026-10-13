@@ -1500,3 +1500,7 @@ Decoupling Builder parameter binding by slot index rather than hardcoded magic k
 ## 2026-10-13 — Antigravity
 
 Pedagogy from first principles requires removing defensive historical sediment from primary guides: opening a primer by arguing against an obsolete precursor or reciting past refactor tickets (like Phase 1 verb renames) burdens the new author with compiler developer concerns. Teaching declaratively from authentic .sp outline idioms and the 7 formal system taxonomy terms lets the language stand on its own merits.
+
+## 2026-10-13 — Antigravity
+
+Verifying standalone gem packaging and isolated load paths requires testing execution in a pristine subprocess where $LOAD_PATH retains Ruby standard library directories while excluding all local development harness, test, and studio paths. This proves slim_pickins renders canonical primitives and vocabulary partials and compiles Spiff stylesheets as a self-contained gem with zero runtime dependencies.
