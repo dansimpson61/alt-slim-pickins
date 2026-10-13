@@ -482,6 +482,8 @@ working manual that should be better after every session than it was before.
 
 - **He will ask for a thing by name that does not exist yet, and expects you not to assume it does.** (observed 2026-09-26). *"Let's rename the extension .spiff"* and *"ok, build it"* (of a gate that had no specification) both assume the agent will work out what is actually there, say so if the premise is off, and only then build. The one time this session answered a premise rather than checking it — "the file extension stays `.design`, since the language is named and not the format" — he corrected it the next turn. Check the premise out loud, in one sentence, before building on it.
 
+- **Framing options with clear trade-offs lets Dan make clean architectural calls directly.** (observed 2026-10-13). When deciding whether to relocate Studio JS tooling assets out of root `assets/` or delete unserved files, presenting the concrete forks (move & delete, move & retain, or leave as-is) enabled Dan to choose Option 3 in a single sentence, keeping root `assets/` for Studio assets without churn.
+
 ## Proposed deletions — nothing here yet
 
 

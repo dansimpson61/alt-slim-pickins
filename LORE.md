@@ -1512,3 +1512,7 @@ Stowing past milestone daytrips and DAYTRIP.md into history/daytrips/, alongside
 ## 2026-10-13 — Antigravity
 
 In StudioDocs, corpus_files order is significant: example extraction takes the first EXAMPLES_PER_WORD occurrences across the tree. Moving pages/ into examples/pages/ placed examples/doc_reader and examples/dashboard first alphabetically, which altered primary excerpts and data expectations in StudioTryTest. Scanning examples/pages first restores specimen.sp as the canonical primary example source.
+
+## 2026-10-13 — Antigravity
+
+Root assets/ evaluation: stimulus.umd.js and studio.js serve the Studio UI while workbench.css is dynamically generated from workbench.spiff. Retained root assets/ directory and stowed DAYTRIP-0.6.0g.md to history/daytrips/.

@@ -10,7 +10,7 @@ status: >-
   into `examples/roth/`, and canonical stylesheet moved to `lib/slim_pickins/assets/slim-pickins.css`.
   Twelve gate legs green, 651 runs / 7,045 assertions / 0 failures, 35 pages verified OK.
 last_touched: 2026-10-13
-next_step: Consider moving Studio tooling assets (stimulus.umd.js, studio.js) to studio/assets/ to complete decoupling.
+next_step: Plan next daytrip (modernize way_exam example app or resolve context-sensitive actions pinch).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
