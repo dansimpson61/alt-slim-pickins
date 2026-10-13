@@ -1476,3 +1476,11 @@ When nesting child word classes inside parent Word subclasses (e.g., Table::Colu
 ## 2026-10-12 — Antigravity
 
 The quadruple duty of variant (style modifier vs data status vs format switch vs contract slot) was fundamentally caused by treating key-value association as an ad-hoc compiler feature rather than a general primitive. Pairing dictionary (the table of meanings) with map (the lookup and dispatch) handles both word routing and value translation without compiler heuristics. Similarly, tins saying contents while partials said children obscured that both are the exact same splice pronoun: in English, boxes, cards, and tins hold contents, not children.
+
+## 2026-10-12 — Antigravity
+
+In SlimPickins grammar, positional words like `true`, `false`, and `nil` compile into Symbols (`:true`, `:false`, `:nil`), while runtime evaluations on subject (like `.drifted?`) yield Ruby Booleans (`TrueClass`/`FalseClass`) or nil. For associative lookup primitives (`dictionary` and `map`) to seamlessly connect declarative template mappings with runtime model attributes, key resolution must provide symmetric indifference across Booleans, Symbols, and Strings.
+
+## 2026-10-12 — Antigravity
+
+Lexical namespaces require multi-parent tracking in Word.parent_registry and context-aware contract resolution in Contracts.complaints so that identical word names (such as otherwise in choose and dictionary) can be defined within distinct parents without collision, ensuring words are scoped to their active parent family rather than a flat global registry.

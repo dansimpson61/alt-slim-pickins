@@ -1,6 +1,6 @@
 # Vocabulary — draft 3
 
-Status: **implemented.** Sixty-two words — 39 declared as Ruby classes and 23
+Status: **implemented.** Sixty-five words — 42 declared as Ruby classes and 23
 written in the language — every one of them declared in its own file and every
 one exercised by a sentence somewhere in the repo, which `check_grammar.rb`
 fails if either stops being true. (The count is measured, not remembered. It
@@ -1012,6 +1012,56 @@ choose
 ```
 choose
   otherwise
+```
+
+```
+dictionary .status
+  otherwise
+```
+
+### `dictionary`
+
+- **name** — the topic
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — `on`, `otherwise`
+- **subject** — unchanged
+- **infers** — none
+- **renders** — nothing of its own
+
+```
+dictionary .status
+  on active, badge
+  otherwise
+```
+
+### `on`
+
+- **name** — a name
+- **content** — text or data, when there is any
+- **modifiers** — none
+- **children** — anything
+- **subject** — unchanged
+- **infers** — none
+- **renders** — nothing of its own
+
+```
+dictionary .status
+  on active, badge
+```
+
+### `map`
+
+- **name** — the topic
+- **content** — text or data, when there is any
+- **modifiers** — any
+- **children** — none
+- **subject** — unchanged
+- **infers** — none
+- **renders** — nothing of its own
+
+```
+map .status, active: badge, dormant: note
 ```
 
 ---

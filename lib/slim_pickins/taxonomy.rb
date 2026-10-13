@@ -555,10 +555,37 @@ module SlimPickins
         word: :otherwise,
         tiers: %i[behavioral],
         primary_tier: :behavioral,
-        role: 'Fallback conditional branch executing when no preceding when branch matched',
+        role: 'Fallback branch executing when no preceding when or on branch matched',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Default branch in choose.'
+        note: 'Default branch in choose and dictionary.'
+      ),
+      dictionary: Entry.new(
+        word: :dictionary,
+        tiers: %i[behavioral],
+        primary_tier: :behavioral,
+        role: 'Key-value association table and dispatch gatherer',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Gathers key-to-target branch definitions for multi-line outline dispatch or reusable lookup tables.'
+      ),
+      on: Entry.new(
+        word: :on,
+        tiers: %i[behavioral],
+        primary_tier: :behavioral,
+        role: 'Branch registration mapping a match key to a target word or block inside a dictionary',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Registers a single association entry within an enclosing dictionary gatherer.'
+      ),
+      map: Entry.new(
+        word: :map,
+        tiers: %i[behavioral],
+        primary_tier: :behavioral,
+        role: 'Query, lookup, and dispatch across key-value associations',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Resolves an input key against an inline mapping hash or reusable dictionary, dispatching the matching target word or returning its value.'
       ),
       form: Entry.new(
         word: :form,

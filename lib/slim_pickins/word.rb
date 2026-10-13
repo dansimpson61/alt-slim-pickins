@@ -24,19 +24,25 @@ module SlimPickins
         child = child.to_sym
         family_registry[parent] ||= {}
         family_registry[parent][child] = klass
-        parent_registry[child] = parent
+        parent_registry[child] ||= []
+        parent_registry[child] << parent unless parent_registry[child].include?(parent)
       end
 
       def family_for(parent)
         family_registry[parent.to_sym] || {}
       end
 
+      def parents_of(child)
+        parents = parent_registry[child.to_sym]
+        parents.is_a?(Array) ? parents : [parents].compact
+      end
+
       def parent_of(child)
-        parent_registry[child.to_sym]
+        parents_of(child).first
       end
 
       def contained?(child)
-        parent_registry.key?(child.to_sym)
+        parents_of(child).any?
       end
 
       def inherited(subclass)
@@ -76,8 +82,8 @@ module SlimPickins
       end
 
       def contract(**kwargs)
-        if (parent = parent_of(word_name))
-          kwargs[:parents] ||= [parent]
+        if (parents = parents_of(word_name)).any?
+          kwargs[:parents] ||= parents.dup
         end
         @contract = Contract.new(**kwargs)
       end

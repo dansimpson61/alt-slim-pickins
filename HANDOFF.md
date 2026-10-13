@@ -61,7 +61,7 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 62 canonical words (39 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 58 test files.
+- **Census SSOT (`bin/census.rb`)**: 65 canonical words (42 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, 113 stylesheet rules, 59 test files.
 - **Full Suite**: 627 runs, 6,698 assertions, 0 failures, 0 errors, 0 skips in one
   process — and that includes the example apps' own suites, because both the Suite
   leg *and* the gate command below now ask `Census.test_files`. They did not agree
@@ -69,7 +69,7 @@ measure are quoted as the gate output they are.
   547, so a session could run the gate by hand, see green, and never touch the
   example apps' suites at all. One spelling of "the suite" now, in one home.
 - **Check Grammar**: `1359 sentences checked, 98 words defined, 0 problems`.
-- **Check Shape**: 62 canonical words, 0 problems.
+- **Check Shape**: 65 canonical words, 0 problems.
 - **Check Styles**: 28 emittable classes, 59 rendering, 113 rules, 0 problems.
 - **Spiff (lexicon)**: 16 entries, 84 documented declarations, 0 problems.
 - **Spiff Scope**: `3 spiff(s), 15 compiled classes held to the HTML their pages render, 0 problems` — it holds compiled selectors to rendered HTML now, not zone names to sources.
@@ -276,7 +276,7 @@ a user has to read the project's biography to learn its vocabulary.
 
 The scale, measured 2026-10-04, so the discussion starts from facts:
 
-- **Three registers**: `CONTRACTS` (62 words x 16 slots), `Promises::ALL` (35),
+- **Three registers**: `CONTRACTS` (`62` words x 16 slots), `Promises::ALL` (35),
   `Conventions::ALL` (38). Plus 7 shapes and a 16-entry Spiff lexicon.
 - **Twelve gate legs.**
 - **3,054 lines of prose** a reader may face before writing a page: `README.md` 217,
@@ -309,7 +309,7 @@ with the corrections the day's measurements made:
      61 roles no page can say).
   3. The seven shapes: what a word does with what is beneath it.
   4. The subject: kept, shifted, or walked item by item.
-  5. The 62 words, looked up, not memorised.
+  5. The 65 words, looked up, not memorised.
   6. Making your own word: a `.sp` file whose first line `expects …` is its
      contract, with `takes:` one key on that line. `children` has three meanings,
      and `contents` is the tin's version of one of them.
@@ -560,7 +560,7 @@ two were each presented to dan as small and are not.
 **The two older proposals became discussions 1 and 2** at the top of this section,
 by dan's ruling of 2026-10-03; the detail that fed them is in `DAYTRIP-0.4.0n.md`
 (the registry's `editor` collision and the `ui_library` memoization trap) and in the
-declined appendix relocation (12 of 62 entries live under those two headings).
+declined appendix relocation (12 of `62` entries live under those two headings).
 `word_count`/`words_count` is done — one name, verified by rendering.
 
 **And the smaller open calls, re-measured 2026-10-03** — dan asked what they were,
@@ -693,7 +693,7 @@ You must execute every step of this loop per round, not at the end of the sessio
   adds vocabulary, never syntax. A dot means data; a bare word is language.
   There is no numeric literal. A name is a subject and must exist. Mechanical
   facts are free; judgements belong to the app. A line that states the
-  inferable should not exist. This is a noun language — 57 of 62.
+  inferable should not exist. This is a noun language — 58 of 65.
 - **Every truth has one home** (the grammar in Transform, the vocabulary in
   contracts, the checkers consuming, never mirroring).
 - **A rule must outlive its reason** — when a proscription blocks empowerment

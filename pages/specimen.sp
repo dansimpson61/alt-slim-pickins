@@ -48,6 +48,12 @@ page specimen, "slim-pickins — every word"
         note warning, "Allocation has drifted."
       otherwise
         note quiet, "Allocation is on target."
+    dictionary .drifted?
+      on true
+        note warning, "Allocation has drifted."
+      on false
+        note quiet, "Allocation is on target."
+    map .drifted?, "Allocation status", true: note, false: text
 
   section nothing, "An empty section"
     empty "Nothing here yet — and the siblings are suppressed."

@@ -135,9 +135,10 @@ module SlimPickins
       param_names = Array(param_names).map(&:to_sym)
 
       if SlimPickins::Word.contained?(word_name)
-        parent = SlimPickins::Word.parent_of(word_name)
-        @family_definitions[parent] ||= {}
-        @family_definitions[parent][word_name] = [param_names, definition_block]
+        SlimPickins::Word.parents_of(word_name).each do |parent|
+          @family_definitions[parent] ||= {}
+          @family_definitions[parent][word_name] = [param_names, definition_block]
+        end
         return
       end
 

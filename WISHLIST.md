@@ -202,6 +202,16 @@ what slim-pickins is as a coherent software system.
   - *Wish:* Establish a clean, shared house standard for domain model presentation
     contracts across all example apps.
 
+- [ ] **App-Specific Ruby Words (`app-words.rb` / Authoring Words in Ruby):**
+  - *Origin:* Dan (Wishlist Intake, 2026-10-12).
+  - *Concept:* Today, authors can define application-specific words in `.sp` partials
+    via `def`, but defining first-class words in Ruby requires either writing into
+    the core language (`lib/slim_pickins/words.rb`) or using an informal Ruby mixin module.
+  - *Wish:* A first-class facility allowing authors to write words directly in Ruby scoped
+    to an application (e.g. an app-specific `words.rb` or `[app]/words.rb`), complementing
+    `.sp` partials with full Ruby capabilities, explicit contracts, and family nesting—without
+    needing to modify the core library.
+
 ---
 
 ## III. Pedagogy, Terminology & Repository Health

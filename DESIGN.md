@@ -3,7 +3,7 @@
 Status: **settled and implemented.** This was written as a wish, before any
 code existed, so that every later extension could be reviewed against it. It
 has not needed to change: the grammar below is the grammar the transform
-implements, and the phases added sixty-two words without adding a rule.
+implements, and the phases added sixty-five words without adding a rule.
 
 Everything here is exercised — `check_grammar.rb` holds every sentence in this
 document and every `.sp` file in the repo to the table in it.

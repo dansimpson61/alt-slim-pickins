@@ -79,6 +79,16 @@ class GraphTest < Minitest::Test
     when_node = @graph.find('when')
     assert when_node
     assert_includes when_node.explicit_parents, :choose
+
+    dict = @graph.find('dictionary')
+    assert dict
+    assert_includes dict.explicit_children, :on
+    assert_includes dict.explicit_children, :otherwise
+
+    otherwise_node = @graph.find('otherwise')
+    assert otherwise_node
+    assert_includes otherwise_node.explicit_parents, :choose
+    assert_includes otherwise_node.explicit_parents, :dictionary
   end
 
   def test_control_flow_and_parts_of_speech
@@ -94,9 +104,9 @@ class GraphTest < Minitest::Test
     assert_equal :verb, choose_node.speech
     assert choose_node.is_control
 
-    assert_equal 5, @graph.control_words.size
-    assert_equal 4, @graph.gatherers.size
-    assert_equal 7, @graph.registers.size
+    assert_equal 7, @graph.control_words.size
+    assert_equal 5, @graph.gatherers.size
+    assert_equal 8, @graph.registers.size
   end
 
   def test_search_and_filters
@@ -105,12 +115,12 @@ class GraphTest < Minitest::Test
     assert_includes table_search.map(&:name), :column
 
     gathers = @graph.by_shape(:gathers)
-    assert_equal 4, gathers.size
-    assert_equal %i[chart choice choose table], gathers.map(&:name).sort
+    assert_equal 5, gathers.size
+    assert_equal %i[chart choice choose dictionary table], gathers.map(&:name).sort
 
     registers = @graph.by_shape(:registers)
-    assert_equal 7, registers.size
-    assert_equal %i[band column item level line option total], registers.map(&:name).sort
+    assert_equal 8, registers.size
+    assert_equal %i[band column item level line on option total], registers.map(&:name).sort
   end
 
   def test_serialization_to_h

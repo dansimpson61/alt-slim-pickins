@@ -127,9 +127,10 @@ module PolysemyCensus
     puts "  4. Family Class Containment: `10` nested Ruby classes (Table::Column) & 1 partial (list.sp/item)"
 
     puts "\n[TAXONOMY] Current System Boundaries:"
-    puts "  - Words: 62 canonical (39 Ruby primitives + 23 .sp partials), 29 app words"
-    puts "  - Primitives: 39 classes inheriting SlimPickins::Word"
-    puts "  - Partials: 23 .sp templates with `def` in lib/vocabulary/ + `29` app partials"
+    words_info = SlimPickins::Census.words
+    puts "  - Words: #{words_info[:total].size} canonical (#{words_info[:primitives].size} Ruby primitives + #{words_info[:partials].size} .sp partials), #{SlimPickins::Census.app_words.size} app words"
+    puts "  - Primitives: #{words_info[:primitives].size} classes inheriting SlimPickins::Word"
+    puts "  - Partials: #{words_info[:partials].size} .sp templates with `def` in lib/vocabulary/ + `#{SlimPickins::Census.app_words.size}` app partials"
     puts "  - Tins: 9 [app].tin files providing outer document chrome"
     puts "  - Spiff: [app].spiff companion stylesheets compiled to spatial CSS"
     puts '========================================================================'

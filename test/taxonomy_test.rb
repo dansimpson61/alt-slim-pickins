@@ -12,8 +12,8 @@ class TaxonomyTest < Minitest::Test
   end
 
   def test_exact_parity_with_canonical_census
-    assert_equal 62, @census_words.size
-    assert_equal 62, @entries.size
+    assert_equal 65, @census_words.size
+    assert_equal 65, @entries.size
     assert_equal @census_words.sort, @entries.keys.sort
   end
 

@@ -223,8 +223,8 @@ module VocabularyShapes
 
     speech = CANONICAL_SPEECH[word_sym] || :noun
     infers = CANONICAL_INFERENCES[word_sym] || []
-    parents = if (p = SlimPickins::Word.parent_of(word_sym))
-                [p]
+    parents = if (plist = SlimPickins::Word.parents_of(word_sym)).any?
+                plist
               else
                 :any
               end
@@ -345,6 +345,10 @@ end
 CONTRACTS = Hash.new do |h, k|
   contract = SlimPickins::Word.registry[k]&.instance_variable_get(:@contract)
   if contract
+    if (parents = SlimPickins::Word.parents_of(k)).size > 1
+      contract = contract.dup
+      contract.parents = parents
+    end
     # Don't cache Word.registry contracts in the Hash so tests can redefine them
     next contract
   end
@@ -446,8 +450,19 @@ end
         return []
       end
 
-      contract = library&.compiled_partial(node.word.to_sym)&.instance_variable_get(:@contract) ||
-                 CONTRACTS[node.word.to_sym]
+      word_sym = node.word.to_sym
+      contract = nil
+      if ancestry.any? && SlimPickins::Word.contained?(word_sym)
+        ancestry.reverse.each do |parent|
+          family = SlimPickins::Word.family_for(parent.to_sym)
+          if family.key?(word_sym) && family[word_sym]
+            contract = family[word_sym].instance_variable_get(:@contract)
+            break if contract
+          end
+        end
+      end
+      contract ||= library&.compiled_partial(word_sym)&.instance_variable_get(:@contract) ||
+                   CONTRACTS[word_sym]
       return [] unless contract
 
       out = []

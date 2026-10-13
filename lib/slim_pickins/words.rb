@@ -638,5 +638,140 @@ emit_node(Node[:each, { name: name }, collected])
       end
     end
 
+    class Dictionary < Word
+      contract name: :topic, content: true, children: [:on, :otherwise], speech: :noun, shape: :gathers, lazy: []
+
+      def initialize(builder, args, kwargs, block)
+        super
+        @table = {}
+        @fallback = nil
+      end
+
+      def add_entry(key, target = nil, block = nil)
+        @table[key] = block || target
+      end
+
+      def set_fallback(target = nil, block = nil)
+        @fallback = block || target
+      end
+
+      def table = @table
+      def fallback = @fallback
+
+      def evaluate
+        with_open if @block
+
+        return self if @args.empty?
+
+        key = @args.first
+        Dictionary.resolve(@builder, key, @table, fallback: @fallback, forward_args: @args.drop(1))
+      end
+
+      def resolve_key(key)
+        target = self.class.find_entry(@table, key)
+        target.nil? ? @fallback : target
+      end
+
+      def self.find_entry(table, key)
+        return nil unless table.is_a?(Hash)
+
+        candidates = [key]
+        if key == true || key == :true || key == 'true'
+          candidates = [true, :true, 'true']
+        elsif key == false || key == :false || key == 'false'
+          candidates = [false, :false, 'false']
+        elsif key.nil? || key == :nil || key == 'nil'
+          candidates = [nil, :nil, 'nil']
+        else
+          candidates << key.to_sym if key.respond_to?(:to_sym)
+          candidates << key.to_s if key.respond_to?(:to_s)
+        end
+
+        candidates.uniq.each do |k|
+          return table[k] if table.key?(k)
+        end
+        nil
+      end
+
+      def self.resolve(builder, key, table, fallback: nil, forward_args: [], &block)
+        raw_table = if table.is_a?(Dictionary)
+                      table.table
+                    elsif table.is_a?(Hash)
+                      table
+                    end
+        effective_fallback = table.is_a?(Dictionary) ? (table.fallback || fallback) : fallback
+
+        target = find_entry(raw_table, key)
+        target = effective_fallback if target.nil?
+
+        return nil if target.nil?
+
+        if target.is_a?(Proc)
+          nodes = builder.capture { target.call(*forward_args, &block) }
+          nodes.each { |n| builder.emit_node(n) }
+          nodes
+        elsif target.is_a?(Symbol) && (builder.respond_to?(target) || Library.builtin.word?(target) || Word.registry.key?(target))
+          builder.public_send(target, *forward_args, &block)
+        else
+          target
+        end
+      end
+
+      class On < Word
+        contract name: :name, content: true, children: :any, speech: :preposition, shape: :registers, lazy: []
+
+        def evaluate
+          target = open_gatherer(SlimPickins::Words::Dictionary)
+          raise Error, 'on belongs inside a dictionary' unless target
+
+          key = @args[0]
+          target_action = @args[1]
+          if key == :default || key == :otherwise
+            target.set_fallback(target_action, @block)
+          else
+            target.add_entry(key, target_action, @block)
+          end
+        end
+      end
+
+      class Otherwise < Word
+        contract children: :any, speech: :adverb, shape: :encloses, lazy: []
+
+        def evaluate
+          target = open_gatherer(SlimPickins::Words::Dictionary)
+          raise Error, 'otherwise belongs inside a dictionary' unless target
+
+          target.set_fallback(@args.first, @block)
+        end
+      end
+    end
+
+    class Map < Word
+      contract name: :topic, content: true, open: true, speech: :verb, shape: :presents, lazy: []
+
+      def evaluate
+        first = @args.first
+        if @kwargs.any?
+          if @kwargs.key?(:in)
+            dict = @kwargs[:in]
+            Dictionary.resolve(@builder, first, dict, forward_args: @args.drop(1), &@block)
+          else
+            fallback = @kwargs[:default] || @kwargs[:otherwise]
+            mapping = @kwargs.reject { |k, _| k == :default || k == :otherwise }
+            Dictionary.resolve(@builder, first, mapping, fallback: fallback, forward_args: @args.drop(1), &@block)
+          end
+        elsif @args.size >= 2
+          dict = first
+          key = @args[1]
+          resolved_dict = if dict.is_a?(Symbol) && @builder.respond_to?(dict)
+                            @builder.public_send(dict)
+                          else
+                            dict
+                          end
+          Dictionary.resolve(@builder, key, resolved_dict, forward_args: @args.drop(2), &@block)
+        end
+      end
+    end
+
   end
 end

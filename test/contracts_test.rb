@@ -38,8 +38,12 @@ end
     assert_complaint("when .x\n", '`when` belongs inside `choose`')
   end
 
-  def test_otherwise_belongs_inside_choose
-    assert_complaint("otherwise\n", '`otherwise` belongs inside `choose`')
+  def test_otherwise_belongs_inside_choose_or_dictionary
+    assert_complaint("otherwise\n", '`otherwise` belongs inside `choose` or `dictionary`')
+  end
+
+  def test_on_belongs_inside_dictionary
+    assert_complaint("on active, badge_active\n", '`on` belongs inside `dictionary`')
   end
 
   def test_option_belongs_inside_choice
@@ -68,7 +72,8 @@ end
       tabs: %i[tab],
       form: %i[hidden],
       choice: %i[option],
-      list: %i[item]
+      list: %i[item],
+      dictionary: %i[on otherwise]
     }
     all_children = families.values.flatten
 
