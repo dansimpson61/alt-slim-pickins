@@ -17,7 +17,7 @@
 require_relative '../lib/slim_pickins'
 require_relative '../lib/slim_pickins/vocabulary'
 
-path = File.expand_path('../VOCABULARY.md', __dir__)
+path = File.expand_path('../docs/VOCABULARY.md', __dir__)
 source = File.read(path)
 changed = 0
 

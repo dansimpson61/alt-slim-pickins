@@ -133,7 +133,7 @@ class StudioDocsTest < Minitest::Test
   # drift guard iterates that, not the live Word.registry other tests may
   # have loaded with their own app words.
   def test_every_vocabulary_word_has_at_least_one_real_example
-    vocab = File.read(File.join(ROOT, 'VOCABULARY.md')).scan(/^### `([a-z_]+)`/).flatten
+    vocab = File.read(File.join(ROOT, 'docs', 'VOCABULARY.md')).scan(/^### `([a-z_]+)`/).flatten
     vocab.each do |word|
       examples = StudioDocs.examples_of(word)
       refute_empty examples, "#{word} has no real usage in the corpus"
@@ -173,7 +173,7 @@ class StudioDocsTest < Minitest::Test
     assert_includes first.context, 'page specimen, "slim-pickins — every word"'
     assert_includes first.context, 'section "Numbers"'
     assert_includes first.context, 'money .total_value'
-    assert_equal 'pages/specimen.sp', first.path
+    assert_equal 'examples/pages/specimen.sp', first.path
     parsed = JSON.parse(first.data)
     assert_equal 1_284_506, parsed['specimen']['total_value']
   end
@@ -188,8 +188,8 @@ class StudioDocsTest < Minitest::Test
 
   def test_the_docs_page_renders_with_canned_examples
     examples = [StudioDocs::Example.new(body: "badge ok, \"x\"",
-                                        where: 'pages/specimen.sp:13',
-                                        path: 'pages/specimen.sp',
+                                        where: 'examples/pages/specimen.sp:13',
+                                        path: 'examples/pages/specimen.sp',
                                         context: "section \"Facts, badges, moments\"\n  badge ok, \"x\"",
                                         try_path: '/docs/badge?try=0', data: '')]
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'docs.sp')),

@@ -25,9 +25,10 @@
 #
 # Exits non-zero when anything is wrong.
 
-require_relative 'lib/slim_pickins'
+require_relative '../lib/slim_pickins'
 
-LEXICON = File.join(__dir__, 'docs', 'SPIFF.md')
+ROOT = File.expand_path('..', __dir__)
+LEXICON = File.join(ROOT, 'docs', 'SPIFF.md')
 
 # Words that honestly emit no CSS of their own, so their entries carry no
 # compiled block and `surface`'s example compiles to an empty string on
@@ -216,7 +217,7 @@ module SpiffCheck
     # no reader is not a word anyone can say. `air`, `flank`, `stack` and
     # `horizon` are readable at surface scope as well as stage scope; that is
     # one word with two doors, not eight words.
-    source = File.read(File.join(__dir__, 'lib', 'slim_pickins', 'compiler', 'spiff.rb'))
+    source = File.read(File.join(ROOT, 'lib', 'slim_pickins', 'compiler', 'spiff.rb'))
     documented = entries.map(&:word).to_set
     implemented = source.scan(/^        def ([a-z_]+)\(/).flatten.to_set - MACHINERY
     (implemented - documented).sort.each do |word|

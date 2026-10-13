@@ -70,12 +70,12 @@
 # Exits non-zero on any problem, so it can gate a commit.
 
 require 'set'
-require_relative 'lib/slim_pickins/census'
+require_relative '../lib/slim_pickins/census'
 
 # A module rather than a straight script, so the suite can ask it questions the
 # real corpus cannot pose — the idiom `check_spiff_scope.rb` already uses.
 module Vitals
-  ROOT = __dir__
+  ROOT = File.expand_path('..', __dir__)
 
   # --- the dated record, and why each entry is not a claim about now ---------
   EXEMPT = {
@@ -282,8 +282,7 @@ module Vitals
   def all_documents = (Dir[File.join(ROOT, '*.md')] + Dir[File.join(ROOT, 'docs', '*.md')]).sort
 
   def all_ruby_files
-    (Dir[File.join(ROOT, '{lib,bin,studio,test,examples}', '**', '*.rb')] +
-      Dir[File.join(ROOT, 'check_*.rb')]).sort
+    Dir[File.join(ROOT, '{lib,bin,studio,test,examples,checkers}', '**', '*.rb')].sort
   end
 
   def census_home = File.join(ROOT, 'lib', 'slim_pickins', 'census.rb')

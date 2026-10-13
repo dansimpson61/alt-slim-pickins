@@ -28,7 +28,7 @@ require_relative '../studio/inspector'
 require '/home/dan/dev/dashboard/lib/workspace'
 require '/home/dan/dev/dashboard/lib/scan'
 
-repo = SlimPickins::Library.from(File.expand_path('../pages', __dir__))
+repo = SlimPickins::Library.from(File.expand_path('../examples/pages', __dir__))
 portfolio = SlimPickins::Library.from(File.expand_path('../examples/portfolio/views', __dir__),
                                       words: AppWords)
 roth = SlimPickins::Library.from(File.expand_path('../examples/roth/views', __dir__))
@@ -112,7 +112,7 @@ STUDIO_PAGES = Uis.all.flat_map do |ui|
 end.freeze
 
 PAGES = [
-  ['pages/specimen.sp', repo, Fixtures.for('specimen')],
+  ['examples/pages/specimen.sp', repo, Fixtures.for('specimen')],
   ['examples/portfolio/views/index.sp', portfolio, { portfolio: Fixtures.portfolio }],
   ['examples/portfolio/views/account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
   ['examples/roth/views/controls.sp', roth, { scenario: scenario, projection: projection }],

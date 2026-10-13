@@ -135,12 +135,12 @@ def library_for(file, libs)
   when %r{^studio/views/} then libs[:inspector]
   when %r{^studio/shared/} then libs[:classic]
   when %r{^lib/vocabulary/} then libs[:builtin]
-  when %r{^pages/} then libs[:builtin]
+  when %r{^examples/pages/}, %r{^pages/} then libs[:builtin]
   else libs[:builtin]
   end
 end
 
-all_files = Dir.glob('{examples,studio,lib/vocabulary,pages}/**/*.{sp,tin}').sort
+all_files = Dir.glob('{examples,studio,lib/vocabulary}/**/*.{sp,tin}').sort
 
 results = []
 all_files.each do |file|

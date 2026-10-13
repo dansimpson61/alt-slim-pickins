@@ -18,10 +18,11 @@
 # Exits non-zero when anything is wrong.
 
 require 'set'
-require_relative 'lib/slim_pickins'
-require_relative 'test/fixtures'
+require_relative '../lib/slim_pickins'
+require_relative '../test/fixtures'
 
-CSS = File.join(__dir__, 'assets', 'slim-pickins.css')
+ROOT = File.expand_path('..', __dir__)
+CSS = File.join(ROOT, 'lib', 'slim_pickins', 'assets', 'slim-pickins.css')
 
 # .word | .word--variant | .word-part | .word-part--variant
 #
@@ -50,7 +51,7 @@ words = (SlimPickins::Word.registry.keys + SlimPickins::Library.builtin.compiled
 # as much as the pages'. Reading every `partials/` there is stops this list
 # needing an edit each time an app arrives, which is how the studio's own
 # words came to look like orphans.
-app_words = Dir[File.join(__dir__, '**', 'partials', '*.sp')]
+app_words = Dir[File.join(ROOT, '**', 'partials', '*.sp')]
             .map { |f| File.basename(f, '.sp') }.to_set
 
 # --- what the stylesheet defines -------------------------------------------
@@ -71,7 +72,7 @@ defined = selectors.join(' ').scan(/\.([a-z][a-z0-9_-]*)/).flatten.to_set
 # `class="..."` literal that `studio/inspector.rb` wrote in a heredoc and demanded
 # of this theme. The Inspect surface is a page in the language now, so its classes
 # are words, and the literals are gone.
-source = Dir[File.join(__dir__, '{lib,studio}', '**', '*.rb')].flat_map { |f| File.read(f).lines }.join
+source = Dir[File.join(ROOT, '{lib,studio}', '**', '*.rb')].flat_map { |f| File.read(f).lines }.join
 can_emit = source.scan(/token\(:([a-z_]+)/).flatten.to_set
 # A promoted partial carries its own name as the class base, so every
 # composed word's name is emittable — and must have a rule.
@@ -79,9 +80,10 @@ can_emit |= (SlimPickins::CONTRACTS.keys - SlimPickins::Words.instance_methods(f
 can_emit |= source.scan(/class="([a-z][a-z0-9-]*)/).flatten.map { |c| c.split.first }.to_set
 
 # --- what the runtime emits, by rendering every page in the repo ------------
-library = SlimPickins::Library.from(File.join(__dir__, 'pages'))
+pages_dir = File.directory?(File.join(ROOT, 'pages')) ? File.join(ROOT, 'pages') : File.join(ROOT, 'examples', 'pages')
+library = SlimPickins::Library.from(pages_dir)
 emitted = Set.new
-Dir[File.join(__dir__, 'pages', '*.sp')].sort.each do |path|
+Dir[File.join(pages_dir, '*.sp')].sort.each do |path|
   locals = Fixtures.for(File.basename(path, '.sp'))
   next unless locals
 
@@ -95,7 +97,7 @@ end
 # The portfolio's live index, through its own tin. pages/ held older copies of
 # it until 2026-10-11; rendering the original keeps what this check sees.
 begin
-  views = File.join(__dir__, 'examples', 'portfolio', 'views')
+  views = File.join(ROOT, 'examples', 'portfolio', 'views')
   path = File.join(views, 'index.sp')
   html = SlimPickins.render(File.read(path), path: path, locals: { portfolio: Fixtures.portfolio },
                                              library: SlimPickins::Library.from(views))
@@ -162,7 +164,7 @@ end
 # than left empty — an exemption mechanism with nothing to exempt is a rule
 # quietly weakened, and the next unstylable variant should simply fail.
 said_variants = Hash.new { |h, k| h[k] = [] }
-Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].each do |path|
+Dir[File.join(ROOT, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].each do |path|
   walk = lambda do |nodes, current_params = []|
     nodes.each do |node|
       if node.word == 'def'
@@ -174,7 +176,7 @@ Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.sp')].
       if contract&.name == :variant
         variant = node.raw_args.zip(node.ranks).find { |_, rank| rank.zero? }&.first
         if variant && !current_params.include?(variant)
-          said_variants["#{node.word}--#{variant}"] << "#{path.sub("#{__dir__}/", '')}:#{node.lineno}"
+          said_variants["#{node.word}--#{variant}"] << "#{path.sub("#{ROOT}/", '')}:#{node.lineno}"
         end
       end
       walk.call(node.children, current_params)

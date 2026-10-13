@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] = spec.homepage
 
   spec.files = Dir.chdir(__dir__) do
-    Dir['lib/**/*', 'assets/slim-pickins.css', 'README.md', 'CONTRACT.md', 'PRIMER.md', 'CONVENTIONS.md', 'VOCABULARY.md']
+    Dir['lib/**/*', 'README.md', 'docs/**/*']
       .select { |f| File.file?(f) }
   end
   spec.require_paths = ['lib']

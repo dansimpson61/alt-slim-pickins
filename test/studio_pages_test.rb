@@ -30,7 +30,7 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_the_census_is_complete
-    expected = Dir[File.join(ROOT, 'pages', '**', '*.sp')]
+    expected = Dir[File.join(ROOT, 'examples', 'pages', '**', '*.sp')]
                .reject { |f| File.basename(f).end_with?('.tin') } # chrome, not a page
                .map { |f| f.sub("#{ROOT}/", '') }
     expected += Dir[File.join(ROOT, 'examples', '**', 'views', '**', '*.sp')]
@@ -158,7 +158,7 @@ class StudioPagesTest < Minitest::Test
   # ledger's promise, held so a rotted payload is a red test, not a quietly
   # empty slot.
   LEDGER_PAGES = {
-    'pages/specimen.sp' => 'Facts, badges, moments',
+    'examples/pages/specimen.sp' => 'Facts, badges, moments',
     'examples/portfolio/views/index.sp' => 'Your retirement',
     'examples/portfolio/views/account.sp' => 'Account detail',
     'examples/portfolio/views/partials/card.sp' => 'Roth IRA',

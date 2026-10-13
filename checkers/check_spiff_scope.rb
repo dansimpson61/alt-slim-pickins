@@ -42,8 +42,8 @@
 
 require 'set'
 require 'stringio'
-require_relative 'lib/slim_pickins'
-require_relative 'lib/slim_pickins/compiler/spiff'
+require_relative '../lib/slim_pickins'
+require_relative '../lib/slim_pickins/compiler/spiff'
 
 # Reaching `PAGES` boots the example apps, and an app proves its own pages aloud
 # on boot (`SlimPickins.prove!`). That output belongs to the app and not to this
@@ -51,13 +51,13 @@ require_relative 'lib/slim_pickins/compiler/spiff'
 begin
   spoken = $stdout
   $stdout = StringIO.new
-  require_relative 'bin/verify_pages'
+  require_relative '../bin/verify_pages'
 ensure
   $stdout = spoken
 end
 
 module SpiffScope
-  ROOT = __dir__
+  ROOT = File.expand_path('..', __dir__)
 
   # A rule's selector, up to its brace. `@media`/`@container` lines open a block
   # without selecting anything, so they are not selectors.

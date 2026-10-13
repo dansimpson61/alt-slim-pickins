@@ -53,7 +53,7 @@ module StudioPages
   end
 
   PAGES = {
-    'pages/specimen' => 'pages/specimen.sp',
+    'pages/specimen' => 'examples/pages/specimen.sp',
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
     'portfolio/partials/card' => 'examples/portfolio/views/partials/card.sp',
@@ -323,7 +323,7 @@ module StudioPages
       words: StudioDocs.words,
       vocabulary_tiers: StudioDocs.words_by_tier,
       guides: StudioDocs.guides,
-      palette: [Entry.new(id: 'pages/specimen', name: 'pages/specimen.sp', path: 'pages/specimen.sp',
+      palette: [Entry.new(id: 'pages/specimen', name: 'pages/specimen.sp', path: 'examples/pages/specimen.sp',
                           load_path: '/?load=:id&ui=:ui', status: 'ok', refusal: nil, here: false)],
       ui_names: Uis.all.map { |u| { name: u.name, title: u.title, current: u.name == Uis.default } },
       ui: Uis.default,
@@ -379,7 +379,7 @@ module StudioPages
   # and that is itself a true answer, not a crash.
   def self.data_for(rel)
     case rel
-    when 'pages/specimen.sp'
+    when 'examples/pages/specimen.sp', 'pages/specimen.sp'
       Fixtures.for('specimen')
     when 'examples/portfolio/views/index.sp'
       { portfolio: Fixtures.portfolio }

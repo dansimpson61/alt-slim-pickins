@@ -103,7 +103,7 @@ module Roth
 
     get '/assets/slim-pickins.css' do
       cache_control :no_store
-      send_file File.expand_path('../../assets/slim-pickins.css', __dir__)
+      send_file File.expand_path('../../lib/slim_pickins/assets/slim-pickins.css', __dir__)
     end
 
     private

@@ -1508,3 +1508,7 @@ Verifying standalone gem packaging and isolated load paths requires testing exec
 ## 2026-10-13 — Antigravity
 
 Stowing past milestone daytrips and DAYTRIP.md into history/daytrips/, alongside closed roadmaps and discussion notes in history/planning/, uncluttered the root working tree to 14 active, living documents. Updating StudioDocs to map guide relative paths and extending DocReader::Shelf discovery to history/**/*.md ensured guides continue serving and indexing seamlessly without disturbing audience classification or verified page digests.
+
+## 2026-10-13 — Antigravity
+
+In StudioDocs, corpus_files order is significant: example extraction takes the first EXAMPLES_PER_WORD occurrences across the tree. Moving pages/ into examples/pages/ placed examples/doc_reader and examples/dashboard first alphabetically, which altered primary excerpts and data expectations in StudioTryTest. Scanning examples/pages first restores specimen.sp as the canonical primary example source.

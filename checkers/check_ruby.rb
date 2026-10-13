@@ -37,7 +37,7 @@
 # Exits non-zero on any warning, so it can gate a commit.
 
 module RubyShape
-  ROOT = __dir__
+  ROOT = File.expand_path('..', __dir__)
 
   Finding = Struct.new(:file, :line, :kind, :message, keyword_init: true)
 
@@ -50,8 +50,7 @@ module RubyShape
   # Every Ruby file the project owns: the runtime, the studio, the gates
   # themselves, the suite, and the example apps' domain code.
   def all_files
-    (Dir[File.join(ROOT, '{lib,bin,studio,test,examples}', '**', '*.rb')] +
-      Dir[File.join(ROOT, 'check_*.rb')]).sort
+    Dir[File.join(ROOT, '{lib,bin,studio,test,examples,checkers}', '**', '*.rb')].sort
   end
 
   # `ruby -w -c` exits 0 for a file whose syntax is fine however much it warns,

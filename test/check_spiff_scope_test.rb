@@ -4,7 +4,7 @@ require 'minitest/autorun'
 require 'stringio'
 require 'fileutils'
 require 'tmpdir'
-require_relative '../check_spiff_scope'
+require_relative '../checkers/check_spiff_scope'
 
 # The Spiff gate, retargeted in DAYTRIP-0.4.0j: a compiled selector against the
 # HTML the pages it governs really render.
@@ -38,7 +38,7 @@ class CheckSpiffScopeTest < Minitest::Test
   # renders needs the same. The fixture tests below stay in-process because an
   # in-buffer `def` is page-local and owes the registry nothing.
   def test_the_real_corpus_passes
-    output = IO.popen(['ruby', File.join(SpiffScope::ROOT, 'check_spiff_scope.rb')],
+    output = IO.popen(['ruby', File.join(SpiffScope::ROOT, 'checkers', 'check_spiff_scope.rb')],
                       err: %i[child out], &:read)
     assert_match(/0 problems/, output, output)
     # The counts are not pinned: a Spiff added tomorrow moves them, and that is

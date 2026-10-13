@@ -5,17 +5,12 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 64 canonical words, 8 apps and 35
-  rendered pages. Roadmaps 0.1 to 0.5 are closed. Roadmap 0.6 (the backward eye)
-  is completed: Daytrips 0.6.0a–g closed on 2026-10-13 (polysemy disentangled, formal
-  7-term system taxonomy, pedagogy guides cleansed, standalone gemification with versioning
-  and zero runtime dependencies, repository hygiene stowing historical daytrips to
-  history/daytrips/, and full garden audit). Twelve gate legs green, 651 runs / 7,045 assertions / 0 failures,
-  35 pages byte-identical, `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
+  rendered pages. Repository tree reorganized: pedagogical docs stowed in `docs/`,
+  checkers stowed in `checkers/`, `pages/` moved to `examples/pages/`, `roth/` merged
+  into `examples/roth/`, and canonical stylesheet moved to `lib/slim_pickins/assets/slim-pickins.css`.
+  Twelve gate legs green, 651 runs / 7,045 assertions / 0 failures, 35 pages verified OK.
 last_touched: 2026-10-13
-next_step: >-
-  **Roadmap 0.6 complete; await dan's ruling on example apps and close 0.6.**
-  All four movements delivered; review garden recommendations (modernize `way_exam`,
-  keep `word_graph`) to close Roadmap 0.6 and draft Roadmap 0.7.
+next_step: Consider moving Studio tooling assets (stimulus.umd.js, studio.js) to studio/assets/ to complete decoupling.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

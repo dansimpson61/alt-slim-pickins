@@ -49,7 +49,7 @@ class StudioTryTest < Minitest::Test
   NOTED = %w[empty otherwise].freeze
 
   def vocabulary
-    File.read(File.join(ROOT, 'VOCABULARY.md')).scan(/^### `([a-z_]+)`/).flatten
+    File.read(File.join(ROOT, 'docs', 'VOCABULARY.md')).scan(/^### `([a-z_]+)`/).flatten
   end
 
   def test_every_words_try_it_yields

@@ -13,7 +13,7 @@ module SlimPickins
   # computes the living census directly from the tree.
   module Census
     ROOT = File.expand_path('../..', __dir__)
-    CSS_PATH = File.join(ROOT, 'assets', 'slim-pickins.css')
+    CSS_PATH = File.join(ROOT, 'lib', 'slim_pickins', 'assets', 'slim-pickins.css')
 
     module_function
 
@@ -109,7 +109,7 @@ module SlimPickins
         "  verified pages: #{s[:verified_pages]} checked by verify_pages.rb",
         "  conventions: #{s[:conventions]} registered in SlimPickins::Conventions::ALL",
         "  promises: #{s[:promises]} tracked in SlimPickins::Promises::ALL",
-        "  styles: #{s[:css_rules]} rules/classes defined in assets/slim-pickins.css",
+        "  styles: #{s[:css_rules]} rules/classes defined in lib/slim_pickins/assets/slim-pickins.css",
         "  test suite: #{s[:test_files]} test files"
       ].join("\n")
     end

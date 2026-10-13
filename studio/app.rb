@@ -236,6 +236,8 @@ get '/assets/:file' do
   if spiff
     SlimPickins::Spiff.compiled_stylesheet(File.read(File.expand_path(spiff, __dir__)),
                                            provenance: "automatically from studio/#{spiff}")
+  elsif name == 'slim-pickins.css'
+    File.read(File.expand_path('../lib/slim_pickins/assets/slim-pickins.css', __dir__))
   else
     File.read(File.expand_path("../assets/#{name}", __dir__))
   end

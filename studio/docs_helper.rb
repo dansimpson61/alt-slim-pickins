@@ -30,6 +30,11 @@ module StudioDocs
   # the URL — the registry *is* the guard.
   DOCUMENTS = GUIDES.to_h { |name| [name, "#{name}.md"] }
                       .merge('SPIFF' => 'docs/SPIFF.md',
+                             'PRIMER' => 'docs/PRIMER.md',
+                             'VOCABULARY' => 'docs/VOCABULARY.md',
+                             'CONVENTIONS' => 'docs/CONVENTIONS.md',
+                             'DESIGN' => 'docs/DESIGN.md',
+                             'CONTRACT' => 'docs/CONTRACT.md',
                              'SPIFF_DISCUSSION' => 'history/planning/spiff_discussion.md',
                              'DAYTRIP' => 'history/daytrips/DAYTRIP.md',
                              'ROADMAP-0.2' => 'history/planning/ROADMAP-0.2.md',
@@ -57,7 +62,7 @@ module StudioDocs
   # "registry minus the studio's furniture" is no longer enough: the docs
   # document the language, and the language's one home is VOCABULARY.md.
   def self.vocabulary
-    @vocabulary ||= File.read(File.join(ROOT, 'VOCABULARY.md'))
+    @vocabulary ||= File.read(File.join(ROOT, 'docs', 'VOCABULARY.md'))
                         .scan(/^### `([a-z_]+)`/).flatten.to_set
   end
 
@@ -225,7 +230,8 @@ module StudioDocs
   # their own — `contents`, most of all), so an example exists exactly where
   # the language is really used.
   def self.corpus_files
-    Dir[File.join(ROOT, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
+    (Dir[File.join(ROOT, 'examples', 'pages', '**', '*.sp')] +
+     Dir[File.join(ROOT, '{examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]).uniq
   end
 
   # Built once per boot: walking the whole corpus per docs page would be a

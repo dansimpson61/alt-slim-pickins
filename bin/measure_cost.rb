@@ -14,8 +14,8 @@ require_relative '../test/fixtures'
 RUNS = 200
 ROWS = 50
 
-pages = SlimPickins::Library.from(File.expand_path('../pages', __dir__))
-source = File.read(File.expand_path('../pages/specimen.sp', __dir__))
+pages = SlimPickins::Library.from(File.expand_path('../examples/pages', __dir__))
+source = File.read(File.expand_path('../examples/pages/specimen.sp', __dir__))
 locals = Fixtures.for('specimen')
 
 def ms(&block) = Benchmark.realtime(&block) * 1000
@@ -23,14 +23,14 @@ def ms(&block) = Benchmark.realtime(&block) * 1000
 cold = ms do
   SlimPickins::Compilation.clear!
   RUNS.times do
-    SlimPickins.render(source, path: 'pages/specimen.sp', locals: locals, library: pages)
+    SlimPickins.render(source, path: 'examples/pages/specimen.sp', locals: locals, library: pages)
     SlimPickins::Compilation.clear!
   end
 end
 
 warm = ms do
-  SlimPickins.render(source, path: 'pages/specimen.sp', locals: locals, library: pages) # warm it
-  RUNS.times { SlimPickins.render(source, path: 'pages/specimen.sp', locals: locals, library: pages) }
+  SlimPickins.render(source, path: 'examples/pages/specimen.sp', locals: locals, library: pages) # warm it
+  RUNS.times { SlimPickins.render(source, path: 'examples/pages/specimen.sp', locals: locals, library: pages) }
 end
 
 rows = (1..ROWS).map { |i| Fixtures.account("A#{i}", i, 100, 7_000, 'Pre-tax', []) }

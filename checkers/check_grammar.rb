@@ -18,19 +18,20 @@
 # Exits non-zero when anything is wrong, so it can gate a commit.
 
 require 'set'
-require_relative 'lib/slim_pickins'
-require_relative 'lib/slim_pickins/vocabulary'
-require_relative 'lib/slim_pickins/conventions'
+require_relative '../lib/slim_pickins'
+require_relative '../lib/slim_pickins/vocabulary'
+require_relative '../lib/slim_pickins/conventions'
 
-DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md
+here = File.expand_path('..', __dir__)
+
+DOCS = (%w[docs/DESIGN.md docs/VOCABULARY.md README.md docs/PRIMER.md
             history/planning/ROADMAP-0.2.md history/planning/ROADMAP-0.3.md
             history/planning/BLUESKY.md
             history/ROADMAP-0.1.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +
-         Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
-           .map { |f| f.sub("#{__dir__}/", '') }).freeze
+         Dir[File.join(here, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
+           .map { |f| f.sub("#{here}/", '') }).freeze
 
-here = File.expand_path(__dir__)
 docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 
 # The vocabulary, plus the app's own. A partial file defines a word, and it
@@ -38,17 +39,18 @@ docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 # checker's own. Words defined in Ruby through the escape hatch live in a
 # module named *Words; the scan below is *discovery only*, and the runtime's
 # registry (Builder extends the module's methods) is what makes them words.
-vocab = File.read(File.join(here, 'VOCABULARY.md'))
+vocab = File.read(File.join(here, 'docs', 'VOCABULARY.md'))
             .scan(/^### `([a-z_]+)`/).flatten.to_set
 
 # Words the language has renamed. The records in history/ speak the language
 # as it was when each phase closed, and a record that updates itself is not a
 # record — so a renamed word stays legal there, and only there.
-renamed = File.read(File.join(here, 'VOCABULARY.md'))
+renamed = File.read(File.join(here, 'docs', 'VOCABULARY.md'))
               .scan(/^Formerly `([a-z_]+)`/).flatten.to_set
 
 app_words = Set.new
-app_words |= SlimPickins::Library.from(File.join(here, 'pages')).partials.keys.map(&:to_s)
+pages_dir = File.join(here, 'pages')
+app_words |= SlimPickins::Library.from(pages_dir).partials.keys.map(&:to_s) if File.directory?(pages_dir)
 app_words |= SlimPickins::Library.builtin.partials.keys.map(&:to_s)
 Dir[File.join(here, 'examples', '**', 'views')].select { |d| File.directory?(d) }.each do |dir|
   app_words |= SlimPickins::Library.from(dir).partials.keys.map(&:to_s)
@@ -58,7 +60,7 @@ end
 # The checker asks the registry rather than listing directories, so a UI added
 # tomorrow is checked the moment it exists; a hardcoded list is how the studio
 # read as full of UNDEFINED words the first time.
-require_relative 'studio/uis'
+require_relative '../studio/uis'
 Uis.all.each do |ui|
   app_words |= SlimPickins::Library.from(ui.views).partials.keys.map(&:to_s)
 end
@@ -192,7 +194,7 @@ end
 # differ only in what they do with the answer: it repairs the drift, this refuses
 # it. The splitting regex, the bullet lookup and the conventions comparison used
 # to live in both.
-SlimPickins::Vocabulary.entries(File.read(File.join(here, 'VOCABULARY.md'))).each do |word, body|
+SlimPickins::Vocabulary.entries(File.read(File.join(here, 'docs', 'VOCABULARY.md'))).each do |word, body|
   contract = SlimPickins::CONTRACTS[word.to_sym]
   next unless contract
 

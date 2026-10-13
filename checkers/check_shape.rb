@@ -15,7 +15,9 @@
 # that moves is not a failure — it is a conversation.
 
 require 'set'
-require_relative 'lib/slim_pickins'
+require_relative '../lib/slim_pickins'
+
+ROOT = File.expand_path('..', __dir__)
 
 problems = 0
 contracts = SlimPickins::CONTRACTS
@@ -48,7 +50,7 @@ nouns = declared.count { |c| c.speech == :noun }
 non_nouns = declared.reject { |c| c.speech == :noun }.map { |c| c.speech.to_s }.uniq.sort
 
 # --- the vitals, measured over the .sp corpus --------------------------------
-files = Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
+files = Dir[File.join(ROOT, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
 sentences = 0
 args = 0
 max_args = 0

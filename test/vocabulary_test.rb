@@ -13,7 +13,7 @@ require_relative '../lib/slim_pickins/census'
 # differently eventually, so the question is held here.
 class VocabularyTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
-  DOCUMENT = File.read(File.join(ROOT, 'VOCABULARY.md'))
+  DOCUMENT = File.read(File.join(ROOT, 'docs', 'VOCABULARY.md'))
 
   def setup
     SlimPickins::Library.builtin

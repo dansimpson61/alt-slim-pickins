@@ -59,14 +59,14 @@ module DocReader
 
     def name = File.basename(path)
     def relative = path.delete_prefix("#{root}/")
-    def id = relative.delete_suffix('.md').downcase.gsub(%r{[/\s]+}, '-')
+    def id = relative.delete_prefix('docs/').delete_suffix('.md').downcase.gsub(%r{[/\s]+}, '-')
     def href = "/docs/#{id}"
     def content = @content ||= File.read(path)
 
     def title = headings.first&.text || name
 
     def audience
-      if FOR_USERS.include?(relative) then 'users'
+      if FOR_USERS.include?(name) || FOR_USERS.include?(relative) then 'users'
       elsif relative.start_with?('history/') || name.match?(HISTORY) then 'history'
       else 'devs'
       end
@@ -114,7 +114,7 @@ module DocReader
     ROOT = File.expand_path('../../..', __dir__)
 
     def self.of(root = ROOT)
-      paths = Dir[File.join(root, '*.md')] + Dir[File.join(root, 'history', '**', '*.md')]
+      paths = Dir[File.join(root, '*.md')] + Dir[File.join(root, 'docs', '*.md')] + Dir[File.join(root, 'history', '**', '*.md')]
       new(paths.sort.map { |path| Document.new(path, root) })
     end
 

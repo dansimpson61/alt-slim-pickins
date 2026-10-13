@@ -315,7 +315,7 @@ module SlimPickins
                      when_silent: 'a page wants a different measure, density or emphasis',
                      decides: 'NOTHING — the theme owns 61 roles and no page can say one. ' \
                               'This is the absent grade, registered so it cannot be forgotten',
-                     file: 'assets/slim-pickins.css', marker: '--measure',
+                     file: 'lib/slim_pickins/assets/slim-pickins.css', marker: '--measure',
                      inference: nil,
                      override: 'none exists — a word must carry it, or an app word through the hatch',
                      principle: :theme_owns_look,

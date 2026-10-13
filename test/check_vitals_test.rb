@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require 'stringio'
 require 'tmpdir'
-require_relative '../check_vitals'
+require_relative '../checkers/check_vitals'
 
 # The eleventh gate: a number this project states about itself against the
 # census that measures it.

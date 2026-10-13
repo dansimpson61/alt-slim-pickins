@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require 'stringio'
 require 'tempfile'
-require_relative '../check_spiff'
+require_relative '../checkers/check_spiff'
 
 # The design-docs checker is an instrument, and `check_styles`, `check_promises`
 # and `bin/check_conventions` are all held by tests for the same reason: an

@@ -290,12 +290,12 @@ module DashboardPort
 
     get '/assets/stylesheets/slim-pickins.css' do
       content_type 'text/css'
-      File.read(File.expand_path('../../assets/slim-pickins.css', __dir__))
+      File.read(File.expand_path('../../lib/slim_pickins/assets/slim-pickins.css', __dir__))
     end
 
     get '/assets/slim-pickins.css' do
       content_type 'text/css'
-      File.read(File.expand_path('../../assets/slim-pickins.css', __dir__))
+      File.read(File.expand_path('../../lib/slim_pickins/assets/slim-pickins.css', __dir__))
     end
 
     run! if app_file == $PROGRAM_NAME

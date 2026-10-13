@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require 'stringio'
 require 'tmpdir'
-require_relative '../check_ruby'
+require_relative '../checkers/check_ruby'
 
 # The twelfth gate: `ruby -w -c` over every Ruby file the project owns.
 #
@@ -30,7 +30,7 @@ class CheckRubyTest < Minitest::Test
   def test_the_gate_reaches_the_runtime_the_gates_the_suite_and_the_examples
     files = RubyShape.all_files.map { |path| path.delete_prefix("#{ROOT}/") }
     %w[lib/slim_pickins/builder.rb studio/app.rb bin/verify_pages.rb
-       check_vitals.rb test/check_ruby_test.rb examples/word_graph/lib/graph.rb].each do |expected|
+       checkers/check_vitals.rb test/check_ruby_test.rb examples/word_graph/lib/graph.rb].each do |expected|
       assert_includes files, expected
     end
   end
