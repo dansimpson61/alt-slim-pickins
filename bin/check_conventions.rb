@@ -73,14 +73,12 @@ declared_inferences = SlimPickins::Promises.language_words.select do |word|
   contract = SlimPickins::CONTRACTS[word]
   contract && (contract.id || contract.label)
 end.sort
-missing = declared_inferences - %i[card section]
+missing = declared_inferences.reject do |word|
+  contract = SlimPickins::CONTRACTS[word]
+  (Array(contract&.infers) & entries.map(&:name)).any?
+end
 unless missing.empty?
   puts "  UNREGISTERED #{missing.join(', ')} declare an inference and have no entry"
-  problems += 1
-end
-unless declared_inferences == %i[card section]
-  puts "  CHANGED      the words declaring an inference are #{declared_inferences.join(', ')}; " \
-       'the register was written for card and section'
   problems += 1
 end
 

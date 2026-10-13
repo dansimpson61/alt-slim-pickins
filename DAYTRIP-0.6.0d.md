@@ -1,6 +1,6 @@
 # Daytrip 0.6.0d — The Action of Conventions: Universal Slots, Taxonomy & Gate Hygiene
 
-**Status: planned 2026-10-13, ready for implementation in a fresh session.**
+**Status: closed 2026-10-13.** All movements implemented, verified across all 12 gate legs, 35 pages byte-identical, full test suite passing (650 runs, 7,044 assertions, 0 failures).
 
 Fulfilling the fourth movement of Roadmap 0.6:
 1. **The Action of Conventions & Universal Slot Model**:

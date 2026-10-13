@@ -116,4 +116,19 @@ class TaxonomyTest < Minitest::Test
     end
     assert_empty pure_decorative, "No vocabulary word exists solely as decorative paint"
   end
+
+  def test_system_taxonomy_terms
+    expected = %i[word primitive partial def contract tin spiff].sort
+    system_terms = SlimPickins::Taxonomy.system_terms
+
+    assert_equal expected, system_terms.keys.sort
+    assert_equal 7, system_terms.size
+
+    system_terms.each do |key, term|
+      assert_equal key, term.name
+      refute_empty term.summary
+      refute_empty term.definition
+      assert_equal term, SlimPickins::Taxonomy.system_term(key)
+    end
+  end
 end

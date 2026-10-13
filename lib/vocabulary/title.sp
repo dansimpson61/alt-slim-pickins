@@ -1,2 +1,2 @@
-def title, attribute, content
-  heading .content
+def title, target, text
+  heading .text

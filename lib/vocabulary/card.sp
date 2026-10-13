@@ -1,6 +1,6 @@
-def card, subject, content
+def card, target, title
   box .variant, id: .id
     choose
-      when .content
-        heading .content
+      when .title
+        heading .title
     contents

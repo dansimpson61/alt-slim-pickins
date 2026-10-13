@@ -98,12 +98,12 @@ module SlimPickins
       if contract && contract.name != :none && contract.content && param_names.size >= 2
         name_param = param_names[0]
         content_param = param_names[1]
-        bound[name_param] = args.find { |a| a.is_a?(Symbol) }
-        bound[content_param] = args.find { |a| !a.nil? && !a.is_a?(Symbol) }
+        bound[name_param] ||= args.find { |a| a.is_a?(Symbol) }
+        bound[content_param] ||= args.find { |a| !a.nil? && !a.is_a?(Symbol) }
       elsif contract && contract.name != :none && !contract.content && param_names.size >= 1
-        bound[param_names[0]] = args.find { |a| a.is_a?(Symbol) }
+        bound[param_names[0]] ||= args.find { |a| a.is_a?(Symbol) }
       elsif contract && contract.content && contract.name == :none && param_names.size >= 1
-        bound[param_names[0]] = args.find { |a| !a.nil? && !a.is_a?(Symbol) }
+        bound[param_names[0]] ||= args.find { |a| !a.nil? && !a.is_a?(Symbol) } || args.first
       else
         args.each_with_index do |arg, i|
           next if i >= param_names.size || bound.key?(param_names[i])
@@ -153,7 +153,23 @@ module SlimPickins
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
         bound = Builder.bind_parameters(param_names, args, kwargs, subject, contract: contract)
 
-        name_val = bound[:subject] || bound[:variant] || bound[:name] || (args.first if args.first.is_a?(Symbol))
+        target_param = if contract
+                         (contract.name != :none && param_names.size >= 1) ? param_names[0] : nil
+                       else
+                         param_names[0]
+                       end
+
+        content_param = if contract
+                          if contract.content
+                            (contract.name != :none && param_names.size >= 2) ? param_names[1] : (param_names.size >= 1 ? param_names[0] : nil)
+                          end
+                        else
+                          param_names[1]
+                        end
+
+        target_val = target_param ? bound[target_param] : (bound[:target] || bound[:subject] || bound[:name])
+        content_val = content_param ? bound[content_param] : bound[:content]
+        name_val = target_val || bound[:variant] || bound[:name] || (args.first if args.first.is_a?(Symbol))
 
         shifts = contract&.subject == :shift || contract&.name == :subject
         shift_target = if shifts && name_val
@@ -164,29 +180,35 @@ module SlimPickins
                          end
                        end
 
-        if contract&.id
-          bound[:id] ||= kwargs.fetch(:id) do
-            if shift_target && subject.has?(shift_target)
-              tgt = subject.fetch(shift_target)
-              tgt = Subject.new(tgt, described_as: "this #{shift_target}") unless tgt.is_a?(Subject)
-              tgt.has?(:id) ? "#{tgt.noun}-#{tgt.fetch(:id)}" : card_id
-            else
-              card_id
-            end
+        if shift_target && subject.has?(shift_target)
+          target_obj = subject.fetch(shift_target)
+          tgt = target_obj.is_a?(Subject) ? target_obj : Subject.new(target_obj, described_as: "this #{shift_target}")
+          bound[:target] ||= target_obj
+          bound[:noun] ||= tgt.noun
+          if contract&.id
+            bound[:id] ||= kwargs.fetch(:id) { tgt.has?(:id) ? "#{tgt.noun}-#{tgt.fetch(:id)}" : card_id }
           end
+        elsif contract&.id
+          bound[:id] ||= kwargs.fetch(:id) { card_id }
         end
 
+        raw_content = content_val.is_a?(Proc) ? nil : content_val
         if contract&.label
-          content_val = bound[:content]
-          bound[:label] ||= kwargs.fetch(:label) { label_for(name_val, content_val.is_a?(Proc) ? nil : content_val) }
+          bound[:label] ||= kwargs.fetch(:label) { label_for(name_val, raw_content) }
+          bound[content_param] ||= bound[:label] if content_param && bound[content_param].nil?
+        elsif name_val || content_val
+          inferred_label = kwargs[:label] || raw_content || (name_val ? label_for(name_val, nil) : nil)
+          bound[:label] ||= inferred_label if inferred_label
         end
 
         if contract && (contract.modifiers.include?(:variant) || contract.name == :variant)
           bound[:variant] ||= kwargs[:variant] || (name_val && !subject.has?(name_val) ? name_val : nil)
         end
 
-        if contract&.name == :attribute && bound[:content].nil? && name_val && subject.has?(name_val)
-          bound[:content] = subject.fetch(name_val)
+        if contract&.name == :attribute && content_val.nil? && name_val && subject.has?(name_val)
+          content_val = subject.fetch(name_val)
+          bound[content_param] = content_val if content_param
+          bound[:content] = content_val if bound.key?(:content)
         end
 
         contract&.modifiers&.each do |modifier|
@@ -199,10 +221,14 @@ module SlimPickins
         bound[:name] = name_val if contract&.name != :none || bound.key?(:name)
 
         body_block = lambda do
-          if bound[:content].is_a?(Proc)
+          if content_param && bound[content_param].is_a?(Proc)
+            said = bound[content_param].call
+            bound[content_param] = said
+            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil?
+          elsif bound[:content].is_a?(Proc)
             said = bound[:content].call
             bound[:content] = said
-            bound[:label] = said if contract&.label && !said.nil?
+            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil?
           end
 
           captured = caller_block ? with_family(word_name) { capture(&caller_block) } : []

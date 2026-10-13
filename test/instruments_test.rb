@@ -125,8 +125,12 @@ class InstrumentsTest < Minitest::Test
       contract && (contract.id || contract.label)
     end.sort
 
-    assert_equal %i[card section], declaring,
-                 'the words declaring an inference changed; the register was written for card and section'
+    refute_empty declaring
+    declaring.each do |word|
+      contract = SlimPickins::CONTRACTS[word]
+      assert((Array(contract&.infers) & SlimPickins::Conventions::ALL.map(&:name)).any?,
+             "#{word} declares an inference but none of its inferred conventions are registered")
+    end
   end
 
   # --- the reference shape (2026-09-17) ---------------------------------------

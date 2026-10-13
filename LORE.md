@@ -1492,3 +1492,7 @@ Unifying the template splice pronoun on `contents` across both `.tin` chrome fil
 ## 2026-10-13 — Antigravity
 
 Ad-hoc named slots (:variant, :destination, :topic, :notation, :attribute, :subject) proliferated as ad-hoc attempts to map positional bare symbols to keyword arguments. The universal convention law "that which can be inferred need not be spoken" replaces them: a bare positional target resolves in context and infers .label, .id, and .noun; an optional second string overrides the label; and kwargs serve as the open configuration mechanism.
+
+## 2026-10-13 — Antigravity
+
+Decoupling Builder parameter binding by slot index rather than hardcoded magic keys (:subject, :content) eliminated subtle model shadowing: previously, injecting nil for undeclared slots shadowed underlying domain attributes (e.g. document.content) because Subject#fetch stopped fallback whenever the bound hash contained the key. Binding only what the contract declares keeps the lookup chain honest. Furthermore, dynamic convention gate checks prevent inference registration from calcifying into hardcoded whitelists.

@@ -6,15 +6,15 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 64 canonical words, 8 apps and 35
   rendered pages. Roadmaps 0.1 to 0.5 are closed. Roadmap 0.6 (the backward eye)
-  is underway: Daytrip 0.6.0c closed on 2026-10-13 (splice pronoun unified
-  on `contents` across `.tin` chrome files and `.sp` partials, retiring `children`
-  as a template keyword). Twelve gate legs green, 649 runs / 6,997 assertions / 0 failures,
-  `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
+  is underway: Daytrip 0.6.0d closed on 2026-10-13 (universal convention slot model
+  [target, override, kwargs], decoupled parameter binding, formal 7-term system taxonomy,
+  and retired obsolete gate checks). Twelve gate legs green, 650 runs / 7,044 assertions / 0 failures,
+  35 pages byte-identical, `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
 last_touched: 2026-10-13
 next_step: >-
-  **Daytrip 0.6.0d planned; proceed to implementation in fresh session.** Execute
-  `DAYTRIP-0.6.0d.md`: universal convention slot model (target, override, kwargs),
-  decouple parameter binding, formalize 7 taxonomy terms, and retire obsolete gate checks.
+  **Daytrip 0.6.0d closed; plan Daytrip 0.6.0e.** Address Roadmap 0.6 success
+  criteria: pedagogy & guide sediment audit (PRIMER.md, VOCABULARY.md) and repository
+  hygiene (archiving root DAYTRIP files to `history/daytrips/`).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

@@ -1,6 +1,6 @@
-def section, subject, content
+def section, target, heading
   box .name
     choose
-      when .label
-        heading .label
+      when .heading
+        heading .heading
     contents

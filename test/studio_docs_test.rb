@@ -164,7 +164,7 @@ class StudioDocsTest < Minitest::Test
   def test_a_partial_internal_seed_gets_a_page_of_its_own
     seed = StudioDocs.seed_for('heading', 0)
     assert_match(/\Apage "Try: heading"\n/, seed)
-    assert_includes seed, 'heading .content'
+    assert_includes seed, 'heading .title'
   end
 
   def test_examples_carry_context_and_the_pages_payload

@@ -1,3 +1,3 @@
-def paragraph, variant, content
-  tag p, .content, variant: .variant
+def paragraph, variant, text
+  tag p, .text, variant: .variant
     contents

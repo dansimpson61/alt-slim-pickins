@@ -31,6 +31,20 @@ conventions follow.
 
 ---
 
+## The Universal Convention Law
+
+> **That which can be inferred need not be spoken.**
+
+A sentence follows the universal structure:
+
+> `word [target], [override], [kwargs]`
+
+1. **Target**: A bare positional target (`my_word accounts`) resolves against context (`subject`, `locals`, `helpers`), automatically inferring and populating `.label` (humanized label or `label_for`), `.id` (DOM identifier `account-1`), `.noun` (singular entity noun `"account"`), and `.target` (the entity itself).
+2. **Override**: An explicit second positional argument overrides the inferred label directly: `my_word accounts, "Investments"` (or standalone `my_word "Investments"` when there is no target).
+3. **Kwargs**: Named keyword arguments (`key: value`) serve as the universal configuration mechanism for modifiers and options: `my_word accounts, variant: :primary, open: true`.
+
+---
+
 ## 1. A page wears its frame
 
 > *A page wears its frame: the document, and the tin around it.*

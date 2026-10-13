@@ -8,7 +8,13 @@ module SlimPickins
   # by check_grammar.rb and by VOCABULARY.md. The prose half — `infers` and
   # `renders` — stays in the document, because documentation is prose.
   #
-  # name      — :none | :subject | :binding | :variant | :attribute |
+  # **Word Contract vs App Contract:**
+  # This file defines the **Word Contract** — compile-time grammatical
+  # constraints governing what a view word takes, holds, and where it may live.
+  # This is distinct from the **App Contract** (CONTRACT.md), which defines how
+  # domain models answer attributes and optional label/format queries.
+  #
+  # name      — :none | :target | :subject | :binding | :variant | :attribute |
   #             :destination | :topic | :notation | :value | :name
   #             whether a bare name is legal, and what kind of name it is —
   #             which is what the word makes of it.
@@ -185,13 +191,15 @@ module VocabularyShapes
     modifiers = []
 
     params.each_with_index do |param, idx|
-      if param == :subject
+      if param == :subject || (param == :target && %i[card section].include?(word_sym))
         name_slot = :subject
+      elsif param == :attribute || (param == :target && word_sym == :title)
+        name_slot = :attribute
       elsif param == :variant || param == :status || param == :tone
         name_slot = :variant
-      elsif param == :attribute
-        name_slot = :attribute
-      elsif %i[content text words label message amount ratio timestamp summary].include?(param)
+      elsif param == :target
+        name_slot = :target
+      elsif %i[content text words label message amount ratio timestamp summary title heading stamp].include?(param)
         has_content = true
       elsif params.size == 1
         if primary
@@ -215,7 +223,7 @@ module VocabularyShapes
 
     resolved_modifiers = CANONICAL_MODIFIERS[word_sym] || modifiers.sort
 
-    subject_action = if params.include?(:subject) || word_sym == :card || word_sym == :section
+    subject_action = if params.include?(:subject) || (params.include?(:target) && %i[card section].include?(word_sym)) || word_sym == :card || word_sym == :section
                        :shift
                      else
                        :keep
@@ -387,7 +395,7 @@ end
     UNIVERSAL_MODIFIERS = %i[if class id].freeze
 
     NAME_TEXT = {
-      none: 'none', subject: 'the subject this word presents; it must be there',
+      none: 'none', target: 'the target', subject: 'the subject this word presents; it must be there',
       binding: 'the singular of the collection; also binds that name',
       variant: 'the variant', attribute: 'the attribute',
       destination: 'the destination', topic: 'the topic', notation: 'the notation',

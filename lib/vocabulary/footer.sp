@@ -1,3 +1,3 @@
-def footer, content
-  box .content
+def footer, text
+  box .text
     contents

@@ -1,2 +1,2 @@
-def time, variant, content
-  span .variant, .content
+def time, variant, stamp
+  span .variant, .stamp

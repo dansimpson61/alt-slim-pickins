@@ -127,6 +127,18 @@ Which job a word's name slot does is fixed per word. `page`, `section`,
 not there fails **on the line that named it** — quiet tolerance would relocate
 the error away from its origin.
 
+## The universal convention model
+
+The universal convention law is: **that which can be inferred need not be spoken.**
+
+A sentence follows a universal structure:
+
+> `word [target], [override], [kwargs]`
+
+1. **Target**: A bare positional target (`card accounts`, `section accounts`) resolves against context (`subject`, `locals`, `helpers`), automatically inferring and populating `.label` (humanized name or `label_for`), `.id` (DOM identifier `account-1`), `.noun` (`"account"`), and `.target` (the entity object).
+2. **Override**: An explicit second positional argument overrides the inferred label directly: `section accounts, "Your accounts"` (or standalone `section "Where you stand"`).
+3. **Kwargs**: Named keyword arguments (`key: value`) serve as the universal configuration mechanism for modifiers and options: `card accounts, variant: :primary`.
+
 ## One rule of government
 
 A name is interpreted by the word to its left. A word is interpreted by the

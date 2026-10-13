@@ -3,6 +3,13 @@
 What an object must do to be renderable by this language, and what happens
 when it does not.
 
+## Two Kinds of Contract
+
+In slim-pickins, the word **contract** has two distinct meanings:
+
+1. **The Word Contract** ([`lib/slim_pickins/contracts.rb`](lib/slim_pickins/contracts.rb)): The compile-time grammatical specification of what a *view word* takes (name, content, modifiers) and holds (children, parents), enforced by the compiler gate before render.
+2. **The App Contract** (this document): What an *underlying domain model object* must do to be rendered by view words (responding to attribute methods, and optionally answering `label_for` or `format_for`).
+
 Everything marked **verified** is exercised by `test/contract_test.rb`.
 Everything marked **projected** is a claim the code does not yet make good on,
 and is named as such rather than implied.

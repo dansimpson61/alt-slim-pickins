@@ -43,9 +43,10 @@ explicitly `none`:
 
 1. **No blank slots.** An unanswered slot is a gap in the language, not a
    default. Write `none`.
-2. **A name slot names one job** — the subject, a variant, a destination, an
-   attribute. If it takes two, the word is doing two things and wants
-   splitting.
+2. **The universal convention model governs argument slots:**
+   - *Target*: A bare positional target (`word target`) resolves against context (`subject`, `locals`, `helpers`), automatically inferring `.label`, `.id`, `.noun`, and `.target`.
+   - *Inferred Label & Override*: An explicit second positional argument overrides the inferred label (`word target, "Override"`).
+   - *Kwargs*: Keyword arguments (`key: value`) serve as the universal configuration mechanism for options and modifiers.
 3. **Every inference is overridable by saying the thing**, and the entry says
    how. A convention you cannot override is a trap.
 4. **No word accepts the same information two ways.** Not as a name and a

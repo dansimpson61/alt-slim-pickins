@@ -740,5 +740,54 @@ module SlimPickins
     def missing_primitives
       MISSING_PRIMITIVES
     end
+
+    # The 7 core system taxonomy definitions codified for Roadmap 0.6
+    SystemTerm = Struct.new(:name, :summary, :definition, keyword_init: true)
+
+    SYSTEM = {
+      word: SystemTerm.new(
+        name: :word,
+        summary: 'Fundamental syntax unit',
+        definition: 'The fundamental syntax unit of slim-pickins (word arguments, indentation nests). Everything on a page is a word (64 canonical + app words).'
+      ),
+      primitive: SystemTerm.new(
+        name: :primitive,
+        summary: 'Ruby-implemented built-in word',
+        definition: 'A built-in word implemented directly in Ruby as a subclass of SlimPickins::Word (41 canonical primitives).'
+      ),
+      partial: SystemTerm.new(
+        name: :partial,
+        summary: 'Template-defined reusable word',
+        definition: 'A reusable word defined in slim-pickins itself in a .sp template file using def (23 canonical in lib/vocabulary/ + app partials).'
+      ),
+      def: SystemTerm.new(
+        name: :def,
+        summary: 'Partial definition keyword',
+        definition: "The language keyword that defines a partial's word and parameter list, opening its lexical family and binding call arguments."
+      ),
+      contract: SystemTerm.new(
+        name: :contract,
+        summary: 'Compile-time grammatical specification',
+        definition: 'The compile-time grammatical specification of what a word takes and holds, enforced by the gate before render.'
+      ),
+      tin: SystemTerm.new(
+        name: :tin,
+        summary: 'Outer document chrome layout',
+        definition: 'The outer HTML document chrome (.tin), splicing page contents.'
+      ),
+      spiff: SystemTerm.new(
+        name: :spiff,
+        summary: 'Spatial stylesheet language',
+        definition: 'Companion spatial and visual stylesheet language (.spiff), compiling layout declarations to CSS without runtime overhead.'
+      )
+    }.freeze
+
+    def system_terms
+      SYSTEM
+    end
+
+    def system_term(name)
+      SYSTEM[name.to_sym]
+    end
   end
 end

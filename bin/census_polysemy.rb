@@ -126,8 +126,12 @@ module PolysemyCensus
     puts "  3. Contract Slot: contract children: :any (20), :none (36), specific (6)"
     puts "  4. Family Class Containment: `10` nested Ruby classes (Table::Column) & 1 partial (list.sp/item)"
 
-    puts "\n[TAXONOMY] Current System Boundaries:"
+    puts "\n[TAXONOMY] Formal System Taxonomy Boundaries (SlimPickins::Taxonomy::SYSTEM):"
+    SlimPickins::Taxonomy.system_terms.each do |term, entry|
+      puts "  - #{term.to_s.ljust(10)} (#{entry.summary}): #{entry.definition}"
+    end
     words_info = SlimPickins::Census.words
+    puts "\n[COUNTS] Current System Counts:"
     puts "  - Words: #{words_info[:total].size} canonical (#{words_info[:primitives].size} Ruby primitives + #{words_info[:partials].size} .sp partials), #{SlimPickins::Census.app_words.size} app words"
     puts "  - Primitives: #{words_info[:primitives].size} classes inheriting SlimPickins::Word"
     puts "  - Partials: #{words_info[:partials].size} .sp templates with `def` in lib/vocabulary/ + `#{SlimPickins::Census.app_words.size}` app partials"
