@@ -1,29 +1,16 @@
-# Vocabulary — draft 3
+# Vocabulary
 
-Status: **implemented.** Sixty-four words — 41 declared as Ruby classes and 23
-written in the language — every one of them declared in its own file and every
-one exercised by a sentence somewhere in the repo, which `check_grammar.rb`
-fails if either stops being true. (The count is measured, not remembered. It
-said *fifty* for a fortnight after the vocabulary had grown; it said *64, in
-42 and 22*, after `figcaption` and `summary` were absorbed into their single
-consumers and the split moved to 39 and 23. `figcaption` and `summary` are
-each still exercised by a sentence — inside `figure` and `disclosure`, where
-they now live as privileged `tag` calls rather than as public words. Both
-drifts are why the promise ledger and the census exist.)
+Status: **implemented.** Sixty-four canonical words — 41 declared as Ruby classes and 23
+partials written in the language — every one declared in its own file and every
+one exercised by a sentence in the repository, held by `check_grammar.rb`.
 
-Every entry has now been drafted against a real page. `chart` was the last
-holdout — written on paper, unevidenced, and claiming inferences it did not
-make — and Phase 8 redrafted it against roth's two charts, adding `band`,
-`line` and `level` and cutting `pie`, `bar` and `area` for want of a page.
+Every entry is evidenced by an authentic page rather than invented examples:
+in a language where words are the only construct, every concept is a word, and
+every word answers what it means and how it renders.
 
-The grammar is settled and is one sentence ([DESIGN.md](DESIGN.md)). It cannot
-really be wrong any more. The vocabulary *can* be incomplete, and in a language
-where words are the only construct, every gap is a wall. So the vocabulary is
-the risk, and this is the discipline for writing it.
-
-Drafted against a real page — `roth/views/controls.slim`, a retirement
-conversion tool — rather than invented examples, because invented examples are
-the condition under which a vocabulary looks more complete than it is.
+The grammar is settled and is one sentence ([DESIGN.md](DESIGN.md)). The vocabulary
+is the language's substance, and this document defines the canonical contract for
+every word.
 
 ## What an entry must declare
 

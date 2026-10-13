@@ -98,18 +98,19 @@ this as money* and the formatting belongs to the word.
 
 ## The documents
 
+- **[PRIMER.md](PRIMER.md)** — The Way. The comprehensive tour of the language:
+  grammar, argument kinds, resolution, universal convention slots, five tiers, and ethos.
+- **[CONVENTIONS.md](CONVENTIONS.md)** — what the language decides when you say nothing:
+  principles, defaults, and overrides.
 - **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
   no open questions.
 - **[VOCABULARY.md](VOCABULARY.md)** — sixty-four words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
-- **[ROADMAP-0.1.md](history/ROADMAP-0.1.md)** — closed, and kept as the record
-  of what 0.1 set out to do and what it found.
-- **[ROADMAP-0.2.md](ROADMAP-0.2.md)** — the even-numbered, backward-leading
-  successor. Its phases begin with rewriting the Slim-Pickins Way and end with
-  subtraction; see *How roadmaps go* below for what that shape means.
 - **[CONTRACT.md](CONTRACT.md)** — what an app must promise to be renderable,
   which is one sentence plus two optional methods.
+- **[ROADMAP-0.6.md](ROADMAP-0.6.md)** — the active even-numbered roadmap
+  (earlier roadmaps preserved in root or `history/`).
 - **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
   conversation.
 - **`check_grammar.rb`**, **`check_styles.rb`** — keep every document

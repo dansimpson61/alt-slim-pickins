@@ -6,15 +6,16 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 64 canonical words, 8 apps and 35
   rendered pages. Roadmaps 0.1 to 0.5 are closed. Roadmap 0.6 (the backward eye)
-  is underway: Daytrip 0.6.0d closed on 2026-10-13 (universal convention slot model
-  [target, override, kwargs], decoupled parameter binding, formal 7-term system taxonomy,
-  and retired obsolete gate checks). Twelve gate legs green, 650 runs / 7,044 assertions / 0 failures,
-  35 pages byte-identical, `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
+  is underway: Daytrip 0.6.0e closed on 2026-10-13 (pedagogy from first principles:
+  cleansed PRIMER.md, VOCABULARY.md, and README.md of historical development narratives,
+  compiler jargon, and retired keywords; reinforced 7-term taxonomy and universal slot model).
+  Twelve gate legs green, 650 runs / 7,044 assertions / 0 failures, 35 pages byte-identical,
+  `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
 last_touched: 2026-10-13
 next_step: >-
-  **Daytrip 0.6.0d closed; plan Daytrip 0.6.0e.** Address Roadmap 0.6 success
-  criteria: pedagogy & guide sediment audit (PRIMER.md, VOCABULARY.md) and repository
-  hygiene (archiving root DAYTRIP files to `history/daytrips/`).
+  **Daytrip 0.6.0e closed; plan Daytrip 0.6.0f.** Address Roadmap 0.6 remaining
+  movements: clean gemification boundaries (`lib/slim_pickins` standalone gem packaging
+  and decoupling) and repository hygiene (stowing root DAYTRIP files to `history/daytrips/`).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

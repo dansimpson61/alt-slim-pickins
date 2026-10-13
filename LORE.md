@@ -1496,3 +1496,7 @@ Ad-hoc named slots (:variant, :destination, :topic, :notation, :attribute, :subj
 ## 2026-10-13 — Antigravity
 
 Decoupling Builder parameter binding by slot index rather than hardcoded magic keys (:subject, :content) eliminated subtle model shadowing: previously, injecting nil for undeclared slots shadowed underlying domain attributes (e.g. document.content) because Subject#fetch stopped fallback whenever the bound hash contained the key. Binding only what the contract declares keeps the lookup chain honest. Furthermore, dynamic convention gate checks prevent inference registration from calcifying into hardcoded whitelists.
+
+## 2026-10-13 — Antigravity
+
+Pedagogy from first principles requires removing defensive historical sediment from primary guides: opening a primer by arguing against an obsolete precursor or reciting past refactor tickets (like Phase 1 verb renames) burdens the new author with compiler developer concerns. Teaching declaratively from authentic .sp outline idioms and the 7 formal system taxonomy terms lets the language stand on its own merits.

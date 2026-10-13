@@ -4,10 +4,9 @@ A primer for the language in this repository. [`DESIGN.md`](DESIGN.md) is the
 grammar; [`VOCABULARY.md`](VOCABULARY.md) is the words; [`CONTRACT.md`](CONTRACT.md)
 is the promise an app makes. This is the tour.
 
-This document replaces the Slim-Pickins Way that described the old helper
-layer — a vocabulary of `ui_` helpers embedded in Slim. This language is not
-that. It has no Slim beneath it, no helpers to call, and no classes written by
-hand. What follows describes what it *is*.
+Slim-pickins is a direct view language: no HTML boilerplate, no framework scaffolding,
+and no hand-written CSS classes in templates. It has no intermediate templating layer
+beneath it. What follows describes how it works, what it values, and how to write it.
 
 ## The idea in one paragraph
 
@@ -169,10 +168,9 @@ page scenario
     metric tax_delta
 ```
 
-Two words broke the register — `check` and `select` were verbs, imperatives
-that described the user's action rather than the widget they render. Phase 1
-renamed them `checkbox` and `choice`, and the sweep that found them is now
-the instrument that keeps a third verb out.
+Interactive controls name the widget they represent rather than the user's imperative:
+`checkbox` and `choice`, not `check` and `select`. The vocabulary maintains this
+discipline so pages stay declarative.
 
 ## Inference, and the contract that makes it honest
 
@@ -268,16 +266,16 @@ contents
 footer "Approximate directional estimates. Not tax advice."
 ```
 
-A partial is **a word an app defines**, written in the language, invoked
-exactly like a built-in, taking the current subject. A reader cannot tell from
-the call site which vocabulary a word came from:
+A partial is **a word defined in the language itself**, written using `def` in a `.sp`
+file, invoked exactly like a built-in primitive, and taking the current subject. A
+reader cannot tell from the call site which vocabulary a word came from:
 
 ```
 each account
   card
 ```
 
-An app word may share a name with a slim-pickins word — within that app's
+An app partial may share a name with a canonical word — within that app's
 family the app's word wins (nearest wins), and the gate reports the shadow.
 
 ## The escape hatch
@@ -310,8 +308,7 @@ and an app's words eat the same food, which a test enforces.
 
 The hatch is for the genuinely missing word, and the vocabulary earns its keep
 by making that rare: across every page in this repository, one app word covers
-one need. (The older ratio-of-uses figure was retired in writing — it measured
-where rendering happened, never the vocabulary's coverage.)
+one need.
 
 ## The design system
 
@@ -342,7 +339,7 @@ when genuine repetition demands it.
 Authoring in the language proceeds top-down, answering five deductive questions:
 
 1. **Structure** (*What is the skeleton — the containers and their order?*):
-   `page`, `section`, `grid`, `box`, `card`, `list`, `item`, `aside`, `nav`, `footer`, `scroll`, `contents`, `children`.
+   `page`, `section`, `group`, `grid`, `box`, `card`, `list`, `item`, `aside`, `nav`, `footer`, `scroll`, `contents`.
 2. **Meaning & Domain** (*What does this content mean or represent?*):
    `title`, `heading`, `paragraph`, `prose`, `text`, `span`, `note`, `metric`, `fact`, `table`, `column`, `total`, `money`, `percent`, `number`, `time`, `chart` (`band`, `line`, `level`), `snippet`, `figure`.
 3. **Controls & Actions** (*How does the user interact, input data, or trigger an action?*):
@@ -354,7 +351,7 @@ Authoring in the language proceeds top-down, answering five deductive questions:
 
 ### Porosity and the visual standard
 
-Boundaries between tiers are porous. A `card` is simultaneously a structural container, an elevated visual surface, and an entity scope (`R3P2`). A `table` is semantic domain data, a structural grid, and an implicit behavioral loop. On the Studio shelf, words appear under **every** tier they participate in, marked with cross-category badges so authors find them wherever they naturally reach.
+Boundaries between tiers are porous. A `card` is simultaneously a structural container, an elevated visual surface, and an entity scope. A `table` is semantic domain data, a structural grid, and an implicit behavioral loop. On the Studio shelf, words appear under **every** tier they participate in, marked with cross-category badges so authors find them wherever they naturally reach.
 
 Crucially, **no word in the language exists solely for decorative paint.** Visual presentation belongs to the theme's semantic roles and to declared word variants (`note quiet`, `badge ok`). Words that appear in the visual tier represent chrome assets, isolated viewports, or semantic status dressed as a pill. The language describes *what is on the page*, never how to paint it.
 
