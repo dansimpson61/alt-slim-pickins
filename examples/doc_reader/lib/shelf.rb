@@ -114,7 +114,7 @@ module DocReader
     ROOT = File.expand_path('../../..', __dir__)
 
     def self.of(root = ROOT)
-      paths = Dir[File.join(root, '*.md')] + Dir[File.join(root, 'history', '*.md')]
+      paths = Dir[File.join(root, '*.md')] + Dir[File.join(root, 'history', '**', '*.md')]
       new(paths.sort.map { |path| Document.new(path, root) })
     end
 

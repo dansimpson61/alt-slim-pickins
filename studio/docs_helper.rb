@@ -30,7 +30,11 @@ module StudioDocs
   # the URL — the registry *is* the guard.
   DOCUMENTS = GUIDES.to_h { |name| [name, "#{name}.md"] }
                       .merge('SPIFF' => 'docs/SPIFF.md',
-                             'SPIFF_DISCUSSION' => 'spiff_discussion.md').freeze
+                             'SPIFF_DISCUSSION' => 'history/planning/spiff_discussion.md',
+                             'DAYTRIP' => 'history/daytrips/DAYTRIP.md',
+                             'ROADMAP-0.2' => 'history/planning/ROADMAP-0.2.md',
+                             'ROADMAP-0.3' => 'history/planning/ROADMAP-0.3.md',
+                             'BLUESKY' => 'history/planning/BLUESKY.md').freeze
 
   # The absolute path of a guide's document, or nil when the name names no
   # guide. `nil` is the honest answer to "is this a guide?": it keeps a

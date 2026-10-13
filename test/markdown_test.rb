@@ -179,16 +179,10 @@ end
 class GuideRenderingTest < Minitest::Test
   ROOT = File.expand_path('..', __dir__)
 
-  # Every document the studio serves as a guide, plus the design idiom's
-  # companion, since all of them are read through `prose`.
-  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
-              ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY].freeze
+require_relative '../studio/docs_helper'
 
   def documents
-    (GUIDES.map { |n| File.join(ROOT, "#{n}.md") } +
-      [File.join(ROOT, 'docs', 'SPIFF.md'),
-       File.join(ROOT, 'spiff_discussion.md')])
-      .select { |path| File.file?(path) }
+    StudioDocs::DOCUMENTS.values.map { |rel| File.join(ROOT, rel) }.select { |path| File.file?(path) }
   end
 
   def rendered(path)

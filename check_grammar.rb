@@ -22,8 +22,9 @@ require_relative 'lib/slim_pickins'
 require_relative 'lib/slim_pickins/vocabulary'
 require_relative 'lib/slim_pickins/conventions'
 
-DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md ROADMAP-0.2.md ROADMAP-0.3.md
-            BLUESKY.md
+DOCS = (%w[DESIGN.md VOCABULARY.md README.md PRIMER.md
+            history/planning/ROADMAP-0.2.md history/planning/ROADMAP-0.3.md
+            history/planning/BLUESKY.md
             history/ROADMAP-0.1.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +
          Dir[File.join(__dir__, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]

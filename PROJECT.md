@@ -6,16 +6,16 @@ status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
   nests, everything is a word — proved across 64 canonical words, 8 apps and 35
   rendered pages. Roadmaps 0.1 to 0.5 are closed. Roadmap 0.6 (the backward eye)
-  is underway: Daytrip 0.6.0f closed on 2026-10-13 (clean gemification and architectural
-  boundaries: defined SlimPickins::VERSION 0.6.0, created slim_pickins.gemspec with zero
-  runtime dependencies, verified pristine subprocess isolated load-path execution with no
-  studio/census/app leakage). Twelve gate legs green, 651 runs / 7,045 assertions / 0 failures,
+  is completed: Daytrips 0.6.0a–g closed on 2026-10-13 (polysemy disentangled, formal
+  7-term system taxonomy, pedagogy guides cleansed, standalone gemification with versioning
+  and zero runtime dependencies, repository hygiene stowing historical daytrips to
+  history/daytrips/, and full garden audit). Twelve gate legs green, 651 runs / 7,045 assertions / 0 failures,
   35 pages byte-identical, `ruby -w -c` clean. The round-by-round account lives in `history/CHRONICLE.md`.
 last_touched: 2026-10-13
 next_step: >-
-  **Daytrip 0.6.0f closed; plan Daytrip 0.6.0g.** Address Roadmap 0.6 movement 4:
-  repository hygiene (stowing past root DAYTRIP files to `history/daytrips/`)
-  and example app garden audit.
+  **Roadmap 0.6 complete; await dan's ruling on example apps and close 0.6.**
+  All four movements delivered; review garden recommendations (modernize `way_exam`,
+  keep `word_graph`) to close Roadmap 0.6 and draft Roadmap 0.7.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

@@ -1504,3 +1504,7 @@ Pedagogy from first principles requires removing defensive historical sediment f
 ## 2026-10-13 — Antigravity
 
 Verifying standalone gem packaging and isolated load paths requires testing execution in a pristine subprocess where $LOAD_PATH retains Ruby standard library directories while excluding all local development harness, test, and studio paths. This proves slim_pickins renders canonical primitives and vocabulary partials and compiles Spiff stylesheets as a self-contained gem with zero runtime dependencies.
+
+## 2026-10-13 — Antigravity
+
+Stowing past milestone daytrips and DAYTRIP.md into history/daytrips/, alongside closed roadmaps and discussion notes in history/planning/, uncluttered the root working tree to 14 active, living documents. Updating StudioDocs to map guide relative paths and extending DocReader::Shelf discovery to history/**/*.md ensured guides continue serving and indexing seamlessly without disturbing audience classification or verified page digests.
