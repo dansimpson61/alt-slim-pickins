@@ -8,9 +8,10 @@ status: >-
   rendered pages. Repository tree reorganized: pedagogical docs stowed in `docs/`,
   checkers stowed in `checkers/`, `pages/` moved to `examples/pages/`, `roth/` merged
   into `examples/roth/`, and canonical stylesheet moved to `lib/slim_pickins/assets/slim-pickins.css`.
-  Twelve gate legs green, 651 runs / 7,045 assertions / 0 failures, 35 pages verified OK.
-last_touched: 2026-10-13
-next_step: Plan next daytrip (modernize way_exam example app or resolve context-sensitive actions pinch).
+  Actions purified of domain form transport into a pure semantic register (Daytrip 0.6.0h).
+  Twelve gate legs green, 652 runs / 7,041 assertions / 0 failures, 35 pages verified OK.
+last_touched: 2026-10-14
+next_step: Plan next daytrip (modernize way_exam example app).
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

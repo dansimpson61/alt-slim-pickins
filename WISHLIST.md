@@ -345,6 +345,19 @@ Visual quality, diversity of design, and the developer environment.
   - *Wish:* Content-aware sizing or flexible split thresholds so large source templates,
     diffs, and rendered documents receive space appropriate to their content.
 
+- [ ] **Capabilities for Micro-Layout and Component-Level Styling:**
+  - *Origin:* Dan (Session 2026-10-14, evaluating `actions` and `cluster`).
+  - *Concept:* Today, macro-layout across major application zones is cleanly governed by
+    Spiff (`horizon`, `flank`, `stack`), while micro-layout within components (inline horizontal
+    wrapping flex flows, tags, badge clusters, button bars, compact rhythm) lacks a declarative
+    vocabulary. Authors currently rely on hardcoded CSS classes (`.actions`, `.card`, custom rules)
+    or unopinionated `.box`.
+  - *Wish:* Develop first-class capabilities for micro-layout and component styling—whether as an
+    extension of Spiff (enabling Spiff to reach inside components/zones or govern micro-rhythm)
+    or another intermediation/abstraction of CSS that preserves the core principle ("templates declare
+    substance; styling remains an unpolluted abstraction"). Authors need to express inline wrapping
+    and micro-flow without littering `.sp` templates with geometric scaffolding like `<div class="sp-cluster">`.
+
 ---
 
 ## V. Bluesky & Flights of Imagination (The Forward Eye)

@@ -95,13 +95,6 @@ module SlimPickins
       Promise.new(name: :over, kind: :modifier, declared_by: [:chart],
                   read_by: ['lib/slim_pickins/words.rb'], verdict: :read,
                   note: 'names the axis when the plural is not the row\'s name'),
-      Promise.new(name: :path, kind: :modifier, declared_by: [:actions],
-                  read_by: ['lib/vocabulary/actions.sp'], verdict: :read,
-                  note: '`actions` says it into a hidden field itself. It was ' \
-                        'recorded until 2026-10-03 as forwarded to a descendant ' \
-                        '`action`, which declared it and never said it — so the ' \
-                        'value was accepted and discarded. `Generator#stylesheet` ' \
-                        'has an `attrs[:path]` too, and it is a different key'),
       Promise.new(name: :placeholder, kind: :modifier,
                   declared_by: %i[input search],
                   read_by: ['lib/slim_pickins/generator.rb',
@@ -122,10 +115,6 @@ module SlimPickins
                         '`required: false` meant required — `false` arrived as the ' \
                         'truthy name `:false`. A boolean literal in modifier ' \
                         'position closed it (E3)'),
-      Promise.new(name: :return_to, kind: :modifier, declared_by: [:actions],
-                  read_by: ['lib/vocabulary/actions.sp'], verdict: :read,
-                  note: 'as `path:` — said into a hidden field by `actions`, and ' \
-                        'recorded as forwarded for as long as `action` declared it'),
       Promise.new(name: :rows, kind: :modifier, declared_by: [:textarea],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/slim_pickins/words.rb'], verdict: :read, note: nil),

@@ -237,7 +237,7 @@ module SlimPickins
                      file: 'lib/slim_pickins/subject.rb', marker: 'def container_value',
                      inference: nil, override: 'say it on the child instead',
                      principle: :nearest_wins,
-                     grade: :structural),
+                     grade: :structural, owned_by: :runtime),
 
       # --- shape: the value's class decides ---------------------------------
       Convention.new(name: :input_type, when_silent: '`field x` over a value',

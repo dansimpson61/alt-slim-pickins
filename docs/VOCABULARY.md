@@ -344,10 +344,9 @@ card compact
 
 - **name** — none
 - **content** — none
-- **modifiers** — `path:`, `return_to:`
+- **modifiers** — none
 - **children** — anything
 - **subject** — unchanged
-- **conventions** — `partial_slot_forwarding` — that the value is sought on the enclosing partial that did say it — a lookup every omitted modifier makes, and that no vocabulary word is today nested so as to win, so it is proved by test not by a word (override: say it on the child instead)
 - **infers** — that its children are the operations on the enclosing thing;
   their layout and spacing
 - **renders** — `<div class="actions">`

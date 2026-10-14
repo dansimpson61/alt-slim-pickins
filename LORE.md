@@ -1516,3 +1516,7 @@ In StudioDocs, corpus_files order is significant: example extraction takes the f
 ## 2026-10-13 — Antigravity
 
 Root assets/ evaluation: stimulus.umd.js and studio.js serve the Studio UI while workbench.css is dynamically generated from workbench.spiff. Retained root assets/ directory and stowed DAYTRIP-0.6.0g.md to history/daytrips/.
+
+## 2026-10-14 — Antigravity
+
+Actions is a semantic affordance container, not a form transport mechanism. Coupling it to POST submission and hidden triage fields leaked transport into a semantic word, causing invalid nested forms in roth, milestone_planner, and way_exam, and wrapping links in spurious forms. Purifying actions to emit a pure toolbar container (`<div class="actions">`) keeps the DSL honest and requires forms to be declared explicitly where submission semantics actually live.

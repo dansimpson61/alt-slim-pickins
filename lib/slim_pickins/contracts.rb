@@ -72,7 +72,6 @@ module VocabularyShapes
   module_function
 
   CANONICAL_INFERENCES = {
-    actions: [:partial_slot_forwarding],
     aside: [:box_tag],
     badge: [:badge_status, :leaf_tag],
     card: [:card_id, :box_tag, :box_depth],
@@ -102,7 +101,7 @@ module VocabularyShapes
 
   CANONICAL_MODIFIERS = {
     action: %i[to variant status],
-    actions: %i[path return_to],
+    actions: [],
     card: [:variant],
     disclosure: [:open],
     money: [:precision],

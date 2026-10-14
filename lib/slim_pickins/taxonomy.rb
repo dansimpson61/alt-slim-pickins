@@ -416,12 +416,12 @@ module SlimPickins
       ),
       actions: Entry.new(
         word: :actions,
-        tiers: %i[interactive structural behavioral],
+        tiers: %i[interactive structural],
         primary_tier: :interactive,
-        role: 'Action toolbar clustering buttons and unifying multi-action submissions (R3P3)',
+        role: 'Action toolbar grouping buttons and navigation affordances',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Cohesive multi-category word: cluster layout + action group + single-form dispatch.'
+        note: 'Toolbar container grouping actions and affordances (purified of form dispatch in 0.6.0h).'
       ),
       field: Entry.new(
         word: :field,

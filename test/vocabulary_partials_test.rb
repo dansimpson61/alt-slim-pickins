@@ -22,30 +22,36 @@ class VocabularyPartialsTest < Minitest::Test
     end
   end
 
-  def test_action_is_the_minimal_post_form
+  def test_action_in_post_form
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'),
-                 %(page p\n  actions path: .name, return_to: "/triage"\n    action "Commit", to: "/actions/commit", variant: primary\n))
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          form method: post
+            hidden path, .name
+            hidden return_to, "/triage"
+            actions
+              action "Commit", to: "/actions/commit", variant: primary
+      SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
       assert_includes html, '<form class="form" method="post">'
       assert_includes html, '<input type="hidden" name="path" value="ode-to-joy">'
       assert_includes html, '<input type="hidden" name="return_to" value="/triage">'
+      assert_includes html, '<div class="actions">'
       assert_includes html, '<button type="submit" formaction="/actions/commit" class="button button--primary">Commit</button>'
     end
   end
 
-  # Named for `actions` rather than for `action` since 2026-10-03: every
-  # assertion below is satisfied by the container alone, which says both
-  # hidden fields itself. The old name claimed `action` inherited them, and
-  # `action.sp` never said either value — it declared them and dropped them.
-  def test_actions_says_the_path_and_return_to_its_children_post
+  def test_actions_multi_action_post_form
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
         page p
-          actions path: .name, return_to: "/triage"
-            action "Commit", to: "/actions/commit", variant: primary
-            action "Archive", to: "/actions/archive", variant: neutral
+          form method: post
+            hidden path, .name
+            hidden return_to, "/triage"
+            actions
+              action "Commit", to: "/actions/commit", variant: primary
+              action "Archive", to: "/actions/archive", variant: neutral
       SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
@@ -64,8 +70,11 @@ class VocabularyPartialsTest < Minitest::Test
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
         page p
-          actions path: .name, return_to: "/triage"
-            action "Set dormant", to: "/actions/status", status: "dormant", variant: neutral
+          form method: post
+            hidden path, .name
+            hidden return_to, "/triage"
+            actions
+              action "Set dormant", to: "/actions/status", status: "dormant", variant: neutral
       SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: { name: 'ode-to-joy' } }, library: library_for(dir))
@@ -185,23 +194,40 @@ class VocabularyPartialsTest < Minitest::Test
     end
   end
 
-  def test_action_with_only_path_modifier
+  def test_actions_as_pure_semantic_container
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  actions path: "my-file"\n    action "Delete", to: "/delete"\n))
+      File.write(File.join(dir, 'one.sp'), <<~SP)
+        page p
+          actions
+            action "Save", to: "/save"
+            link "Cancel", to: "/cancel"
+      SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
-      assert_includes html, '<input type="hidden" name="path" value="my-file">'
-      refute_includes html, 'name="return_to"'
+      assert_includes html, '<div class="actions">'
+      assert_includes html, '<button type="button" formaction="/save" class="button">Save</button>'
+      assert_includes html, '<a href="/cancel" class="link">Cancel</a>'
+      refute_includes html, '<form'
     end
   end
 
-  def test_action_with_only_return_to_modifier
+  def test_actions_refuses_legacy_path_modifier
+    Dir.mktmpdir do |dir|
+      File.write(File.join(dir, 'one.sp'), %(page p\n  actions path: "my-file"\n    action "Delete", to: "/delete"\n))
+      assert_raises(SlimPickins::SyntaxError) do
+        SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                           locals: { p: {} }, library: library_for(dir))
+      end
+    end
+  end
+
+  def test_actions_refuses_legacy_return_to_modifier
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), %(page p\n  actions return_to: "/home"\n    action "Back", to: "/back"\n))
-      html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
-                                locals: { p: {} }, library: library_for(dir))
-      assert_includes html, '<input type="hidden" name="return_to" value="/home">'
-      refute_includes html, 'name="path"'
+      assert_raises(SlimPickins::SyntaxError) do
+        SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
+                           locals: { p: {} }, library: library_for(dir))
+      end
     end
   end
 
@@ -215,8 +241,8 @@ class VocabularyPartialsTest < Minitest::Test
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<div class="actions">'
-      assert_includes html, '<form class="form" method="post">'
-      assert_includes html, '<button type="submit" formaction="/logout" class="button">Log out</button>'
+      assert_includes html, '<button type="button" formaction="/logout" class="button">Log out</button>'
+      refute_includes html, '<form'
       refute_includes html, 'name="path"'
       refute_includes html, 'name="return_to"'
     end

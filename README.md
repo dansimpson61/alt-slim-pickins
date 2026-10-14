@@ -194,7 +194,7 @@ asking whether what was built deserves to stand, studying the code and DSL as
 objects in their own right, and building nothing the backward look did not ask for.
 `PROJECT.md`'s `next_step` says where planning begins.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (41 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 35 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (41 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
