@@ -20,8 +20,8 @@ module WayExam
       case name
       when 'index'
         {
-          overview: { questions_count: 5, passing_score: '80%' },
-          q1: nil, q2: nil, q3: nil, q4: nil, q5: nil
+          overview: { questions_count: Exam.questions.size, passing_score: '80%' },
+          questions: Exam.questions
         }
       when 'results'
         result = Exam.grade(Exam.sample_answers)
@@ -32,18 +32,15 @@ module WayExam
     get '/' do
       sp :index, locals: {
         overview: { questions_count: Exam.questions.size, passing_score: '80%' },
-        q1: nil, q2: nil, q3: nil, q4: nil, q5: nil
+        questions: Exam.questions
       }
     end
 
     post '/grade' do
-      answers = {
-        'q1' => params[:q1],
-        'q2' => params[:q2],
-        'q3' => params[:q3],
-        'q4' => params[:q4],
-        'q5' => params[:q5]
-      }
+      answers = {}
+      Exam.questions.each do |q|
+        answers[q.id] = params[q.id] || params[q.id.to_sym]
+      end
       result = Exam.grade(answers)
       sp :results, locals: { result: result, reviews: result.reviews }
     end

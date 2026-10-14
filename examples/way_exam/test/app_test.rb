@@ -27,17 +27,13 @@ class WayExamAppTest < Minitest::Test
     assert_includes last_response.body, 'Subject Shifting'
     assert_includes last_response.body, 'Design Discipline'
     assert_includes last_response.body, 'The Vocabulary'
+    assert_includes last_response.body, 'Taxonomy Terms'
+    assert_includes last_response.body, 'Slots &amp; Containment'
     assert_includes last_response.body, 'Submit Exam for Grading'
   end
 
   def test_grade_perfect_score
-    post '/grade', {
-      q1: 'a',
-      q2: 'b',
-      q3: 'c',
-      q4: 'b',
-      q5: 'c'
-    }, default_env
+    post '/grade', WayExam::Exam.sample_answers, default_env
 
     assert_equal 200, last_response.status
     assert_includes last_response.body, 'Exam Results'

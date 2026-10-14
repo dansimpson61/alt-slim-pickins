@@ -789,7 +789,7 @@ button "Show baseline", to: baseline
 - **name** — the subject this word presents; it must be there
 - **content** — none
 - **modifiers** — `to:`, `method:`, `target:`
-- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`, `contents`, `box`
+- **children** — `group`, `field`, `checkbox`, `choice`, `actions`, `disclosure`, `button`, `hidden`, `input`, `textarea`, `choose`, `contents`, `box`, `each`
 - **subject** — the named thing
 - **infers** — the action from the subject and the method from whether it
   exists yet. Override with `to:` and `method:`

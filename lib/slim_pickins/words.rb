@@ -419,7 +419,7 @@ emit_node(Node[:each, { name: name }, collected])
     end
 
     class Form < Word
-      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :contents, :box], subject: :shift, shape: :encloses, lazy: []
+      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :contents, :box, :each], subject: :shift, shape: :encloses, lazy: []
 
       class Hidden < Word
         contract name: :name, content: true, shape: :says, lazy: []

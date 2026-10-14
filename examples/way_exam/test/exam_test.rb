@@ -7,14 +7,14 @@ require_relative '../../../lib/slim_pickins/census'
 class ExamTest < Minitest::Test
   def test_questions_are_populated
     questions = WayExam::Exam.questions
-    assert_equal 5, questions.size
+    assert_equal 7, questions.size
     assert questions.all? { |q| q.options.size >= 3 }
   end
 
   def test_grading_perfect_score_with_keys
     result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
-    assert_equal 5, result.score
-    assert_equal 5, result.total
+    assert_equal 7, result.score
+    assert_equal 7, result.total
     assert_equal 100, result.percentage
     assert result.passed
     assert_equal 'Master of the Way', result.verdict
@@ -27,10 +27,12 @@ class ExamTest < Minitest::Test
       'q2' => 'Conditionals dissolve into vocabulary (like empty) describing the situation.',
       'q3' => 'Child sentences resolve dotted attributes (e.g. .balance) directly on that account.',
       'q4' => 'In theme roles and word variants, refusing raw inline styles.',
-      'q5' => "#{SlimPickins::Census.words[:total].size} words"
+      'q5' => "#{SlimPickins::Census.words[:total].size} words",
+      'q6' => 'word, primitive, partial, def, contract, tin, spiff',
+      'q7' => 'Via contents and group, retiring the legacy children keyword.'
     }
     result = WayExam::Exam.grade(answers)
-    assert_equal 5, result.score
+    assert_equal 7, result.score
     assert_equal 100, result.percentage
     assert result.passed
   end
@@ -39,7 +41,7 @@ class ExamTest < Minitest::Test
   # this question carried. Distinctness is asserted too: a distractor that
   # drifted onto the live number would make two options right.
   def test_the_vocabulary_question_is_measured_not_recorded
-    q5 = WayExam::Exam.questions.find { |q| q.id == 'q5' }
+    q5 = WayExam::Exam.find('q5')
 
     assert_equal "#{SlimPickins::Census.words[:total].size} words", q5.correct_answer
     assert_equal 3, q5.options.values.uniq.size, 'no two options may say the same thing'

@@ -452,8 +452,22 @@ module StudioPages
       entry = lore.all.first.to_h
       entry.merge('entry' => entry)
     when 'examples/way_exam/views/index.sp'
-      { 'overview' => { 'questions_count' => 5, 'passing_score' => '80%' },
-        'q1' => nil, 'q2' => nil, 'q3' => nil, 'q4' => nil, 'q5' => nil }
+      questions = WayExam::Exam.questions.map do |q|
+        {
+          'id' => q.id.to_s,
+          'number' => q.number,
+          'topic' => q.topic,
+          'title' => q.title,
+          'prompt' => q.prompt,
+          'option_a' => q.option_a,
+          'option_b' => q.option_b,
+          'option_c' => q.option_c
+        }
+      end
+      {
+        'overview' => { 'questions_count' => WayExam::Exam.questions.size, 'passing_score' => '80%' },
+        'questions' => questions
+      }
     when 'examples/way_exam/views/results.sp'
       result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
       { 'result' => result.to_h, 'reviews' => result.reviews.map(&:to_h) }

@@ -3,7 +3,9 @@
 require_relative '../../../lib/slim_pickins/census'
 
 module WayExam
-  Question = Struct.new(:id, :number, :prompt, :options, :correct_key, :explanation, keyword_init: true) do
+  Question = Struct.new(:id, :number, :topic, :prompt, :options, :correct_key, :explanation, keyword_init: true) do
+    def id = self[:id].to_sym
+    def title = "Question #{number} — #{topic}"
     def option_a = options[:a]
     def option_b = options[:b]
     def option_c = options[:c]
@@ -18,6 +20,7 @@ module WayExam
       Question.new(
         id: 'q1',
         number: 1,
+        topic: 'Morphology',
         prompt: 'What is the core morphological rule of alt-slim-pickins?',
         options: {
           a: 'A dot means data, a bare word is language.',
@@ -30,6 +33,7 @@ module WayExam
       Question.new(
         id: 'q2',
         number: 2,
+        topic: 'Conditionals',
         prompt: 'How are conditionals idiomatically handled in slim-pickins?',
         options: {
           a: 'Using standard Ruby if/else control tags with <% %>.',
@@ -42,6 +46,7 @@ module WayExam
       Question.new(
         id: 'q3',
         number: 3,
+        topic: 'Subject Shifting',
         prompt: 'What happens when a collection is iterated via `each account`?',
         options: {
           a: 'A global Ruby variable $account is set across all templates.',
@@ -54,6 +59,7 @@ module WayExam
       Question.new(
         id: 'q4',
         number: 4,
+        topic: 'Design Discipline',
         prompt: 'Where do visual styles belong according to the design discipline?',
         options: {
           a: 'In tag style attributes on every DOM element.',
@@ -78,6 +84,7 @@ module WayExam
       Question.new(
         id: 'q5',
         number: 5,
+        topic: 'The Vocabulary',
         prompt: 'How many words comprise the alt-slim-pickins vocabulary?',
         options: {
           a: "#{SlimPickins::Census.words[:primitives].size} words",
@@ -89,6 +96,32 @@ module WayExam
                      "#{SlimPickins::Census.words[:primitives].size} Ruby primitives + " \
                      "#{SlimPickins::Census.words[:partials].size} .sp partials. " \
                      'Measured, not recorded — which is why this option is computed too.'
+      ),
+      Question.new(
+        id: 'q6',
+        number: 6,
+        topic: 'Taxonomy Terms',
+        prompt: 'Which set represents the 7 canonical system taxonomy terms defined in alt-slim-pickins?',
+        options: {
+          a: 'word, primitive, partial, def, contract, tin, spiff',
+          b: 'page, component, helper, route, template, view, css',
+          c: 'model, view, controller, layout, asset, router, schema'
+        },
+        correct_key: :a,
+        explanation: 'Taxonomy (DAYTRIP-0.4.0d): The 7 formal system terms are word, primitive, partial, def, contract, tin, and spiff, partitioning the entire architecture without jargon.'
+      ),
+      Question.new(
+        id: 'q7',
+        number: 7,
+        topic: 'Slots & Containment',
+        prompt: 'How do words define composition slots in modern alt-slim-pickins?',
+        options: {
+          a: 'Via yield and ERB block captures.',
+          b: 'Via contents and group, retiring the legacy children keyword.',
+          c: 'By injecting arbitrary raw HTML fragments into named placeholders.'
+        },
+        correct_key: :b,
+        explanation: 'PRIMER.md & 0.6: The universal slot model uses contents for body continuation and group for named semantic slots, replacing the legacy children keyword across all partials.'
       )
     ].freeze
 
@@ -97,7 +130,7 @@ module WayExam
     end
 
     def self.find(id)
-      QUESTIONS.find { |q| q.id == id.to_s }
+      QUESTIONS.find { |q| q.id.to_s == id.to_s }
     end
 
     def self.sample_answers
@@ -106,13 +139,15 @@ module WayExam
         'q2' => 'b',
         'q3' => 'c',
         'q4' => 'b',
-        'q5' => 'c'
+        'q5' => 'c',
+        'q6' => 'a',
+        'q7' => 'b'
       }
     end
 
     def self.grade(answers = {})
       reviews = QUESTIONS.map do |q|
-        raw_ans = answers[q.id] || answers[q.id.to_sym]
+        raw_ans = answers[q.id] || answers[q.id.to_s] || answers[q.id.to_sym]
         user_key = raw_ans.to_s.strip.downcase.to_sym
         resolved_text = q.options[user_key] || raw_ans.to_s.strip
 

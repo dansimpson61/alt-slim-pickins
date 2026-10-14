@@ -8,10 +8,10 @@ status: >-
   rendered pages. Repository tree reorganized: pedagogical docs stowed in `docs/`,
   checkers stowed in `checkers/`, `pages/` moved to `examples/pages/`, `roth/` merged
   into `examples/roth/`, and canonical stylesheet moved to `lib/slim_pickins/assets/slim-pickins.css`.
-  Actions purified of domain form transport into a pure semantic register (Daytrip 0.6.0h).
-  Twelve gate legs green, 652 runs / 7,041 assertions / 0 failures, 35 pages verified OK.
+  Actions purified into a pure semantic register (0.6.0h); WayExam modernized to dynamic loop and 0.6 curriculum (0.6.0i).
+  Twelve gate legs green, 652 runs / 7,055 assertions / 0 failures, 35 pages verified OK.
 last_touched: 2026-10-14
-next_step: Plan next daytrip (modernize way_exam example app).
+next_step: Revisit vocabulary taxonomy and deductive authoring structure.
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

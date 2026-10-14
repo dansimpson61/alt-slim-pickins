@@ -1520,3 +1520,7 @@ Root assets/ evaluation: stimulus.umd.js and studio.js serve the Studio UI while
 ## 2026-10-14 — Antigravity
 
 Actions is a semantic affordance container, not a form transport mechanism. Coupling it to POST submission and hidden triage fields leaked transport into a semantic word, causing invalid nested forms in roth, milestone_planner, and way_exam, and wrapping links in spurious forms. Purifying actions to emit a pure toolbar container (`<div class="actions">`) keeps the DSL honest and requires forms to be declared explicitly where submission semantics actually live.
+
+## 2026-10-14 — Antigravity
+
+Forms naturally enclose dynamic collection iterations. Adding each to Form children unlocks looping over question or row sets in forms without artificial container boilerplate. Dotted identifiers passed to choice radio (.id) must resolve as Symbols so the argument classifier recognizes them as field names rather than selected values.
