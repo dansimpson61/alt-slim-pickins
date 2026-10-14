@@ -9,9 +9,9 @@ status: >-
   checkers stowed in `checkers/`, `pages/` moved to `examples/pages/`, `roth/` merged
   into `examples/roth/`, and canonical stylesheet moved to `lib/slim_pickins/assets/slim-pickins.css`.
   Actions purified into a pure semantic register (0.6.0h); WayExam modernized to dynamic loop and 0.6 curriculum (0.6.0i).
-  Twelve gate legs green, 652 runs / 7,055 assertions / 0 failures, 35 pages verified OK.
+  Twelve gate legs green, 652 runs / 7,048 assertions / 0 failures, 35 pages verified OK.
 last_touched: 2026-10-14
-next_step: Revisit vocabulary taxonomy and deductive authoring structure.
+next_step: 'Daytrip 0.6.0j: Meta-architecture renaming (.frame, .layout), composed words, and ontology audit.'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

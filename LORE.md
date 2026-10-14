@@ -1524,3 +1524,7 @@ Actions is a semantic affordance container, not a form transport mechanism. Coup
 ## 2026-10-14 — Antigravity
 
 Forms naturally enclose dynamic collection iterations. Adding each to Form children unlocks looping over question or row sets in forms without artificial container boilerplate. Dotted identifiers passed to choice radio (.id) must resolve as Symbols so the argument classifier recognizes them as field names rather than selected values.
+
+## 2026-10-14 — Antigravity
+
+Chrome vs substance separation: the .sp template is pure route substance splicing into contents, while page belongs exclusively in .frame (formerly .tin). Partials are an anachronism: words defined via def in .sp are first-class composed words invoked identically to primitives.

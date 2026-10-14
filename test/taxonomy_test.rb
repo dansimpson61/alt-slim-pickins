@@ -82,12 +82,11 @@ class TaxonomyTest < Minitest::Test
 
   def test_cohesion_and_split_assessments
     ledger = SlimPickins::Taxonomy.cohesion_ledger
-    assert ledger[:cohesive].size >= 50, "Most words should be cohesive concepts"
+    assert_equal 64, ledger[:cohesive].size, "All 64 words are cohesive concepts"
 
     # Split / overload candidates
     split_words = SlimPickins::Taxonomy.split_candidates
-    assert_includes split_words, :box, "box is diagnosed as an overloaded container/div"
-    assert_includes split_words, :span, "span is diagnosed as an inline styling leak"
+    assert_empty split_words, "box and span are recognized as essential primitives; no candidates for split"
 
     # Single-consumer ad-hoc words (absorbed into figure and disclosure in Volet 5)
     ad_hoc = SlimPickins::Taxonomy.ad_hoc_words

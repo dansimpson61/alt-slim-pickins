@@ -346,17 +346,38 @@ Visual quality, diversity of design, and the developer environment.
     diffs, and rendered documents receive space appropriate to their content.
 
 - [ ] **Capabilities for Micro-Layout and Component-Level Styling:**
-  - *Origin:* Dan (Session 2026-10-14, evaluating `actions` and `cluster`).
+  - *Origin:* Dan (Session 2026-10-14, evaluating `actions`, `cluster`, and taxonomy `MISSING_PRIMITIVES`).
   - *Concept:* Today, macro-layout across major application zones is cleanly governed by
     Spiff (`horizon`, `flank`, `stack`), while micro-layout within components (inline horizontal
     wrapping flex flows, tags, badge clusters, button bars, compact rhythm) lacks a declarative
     vocabulary. Authors currently rely on hardcoded CSS classes (`.actions`, `.card`, custom rules)
-    or unopinionated `.box`.
+    or unopinionated `.box`. The taxonomy previously diagnosed `stack`, `cluster`, and `sidebar`
+    as missing template primitives; however, geometry and scaffolding belong outside the substance
+    template language.
   - *Wish:* Develop first-class capabilities for micro-layout and component styling—whether as an
     extension of Spiff (enabling Spiff to reach inside components/zones or govern micro-rhythm)
     or another intermediation/abstraction of CSS that preserves the core principle ("templates declare
-    substance; styling remains an unpolluted abstraction"). Authors need to express inline wrapping
-    and micro-flow without littering `.sp` templates with geometric scaffolding like `<div class="sp-cluster">`.
+    substance; styling remains an unpolluted abstraction"). Consider the patterns diagnosed by
+    `MISSING_PRIMITIVES` (`stack` vertical flow, `cluster` inline flex wrapping, `sidebar` intrinsic
+    two-element flow) when designing layout and styling abstractions rather than littering `.sp`
+    templates with geometric scaffolding like `<div class="sp-cluster">`.
+
+- [ ] **Bandpass Filter Analysis of Vocabulary Taxonomy:**
+  - *Origin:* Dan (Session 2026-10-14, revisiting taxonomy).
+  - *Concept:* The 5-tier authoring taxonomy (`structural`, `semantic`, `interactive`, `behavioral`,
+    `visual`) was formulated off the top of the head for pedagogy and presentation. To evolve
+    it into an analytical instrument that helps resolve stretched or unexpressed concepts, treat
+    each category as a bandpass filter.
+  - *Wish:* Assess each tier through filter theory:
+    1. *Passband (Scope & Width)*: What range of concepts does each tier naturally admit? Where are
+       the cutoffs?
+    2. *Selectivity (Boundary Strictness & Attenuation)*: How sharply does a tier reject non-qualifying
+       words? Where is the boundary fuzzy?
+    3. *Crossover, Overlap & Polyhierarchy*: Where do two passbands legitimately overlap (such as
+       `form`, `disclosure`, `card`, `actions`), and is the crossover a constructive resonant frequency
+       or muddy interference?
+    Use this analysis to resolve stretched or unexpressed concepts and formulate a refined, multi-axial
+    taxonomy.
 
 ---
 

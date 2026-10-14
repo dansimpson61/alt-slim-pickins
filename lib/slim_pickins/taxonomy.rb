@@ -117,10 +117,10 @@ module SlimPickins
         word: :box,
         tiers: %i[structural visual],
         primary_tier: :structural,
-        role: 'Generic layout container, surface wrapper, or title host',
-        diagnostic: :candidate_for_split,
-        cohesion: :overloaded,
-        note: 'Overloaded: serves as a div fallback, layout box, and box_title host. Candidate for splitting into stack and surface.'
+        role: 'Essential generic layout container, surface wrapper, or title host',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Essential structural primitive: provides a generic container, surface boundary, and title host without prescriptive semantics.'
       ),
       aside: Entry.new(
         word: :aside,
@@ -236,10 +236,10 @@ module SlimPickins
         word: :span,
         tiers: %i[semantic visual],
         primary_tier: :semantic,
-        role: 'Inline phrasing run with variant styling',
-        diagnostic: :candidate_for_split,
-        cohesion: :styling_leak,
-        note: 'Frequently abused as a styling escape hatch; points toward missing semantic variants.'
+        role: 'Essential inline phrasing run with variant styling or semantic annotation',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Essential inline phrasing primitive: wraps targeted text runs for semantic classes, status colors, or visual accents.'
       ),
       note: Entry.new(
         word: :note,
@@ -654,25 +654,29 @@ module SlimPickins
       )
     }.freeze
 
-    # Missing primitives diagnosed through the taxonomy
+    # Layout and styling capabilities surfaced through the taxonomy.
+    # Geometry and scaffolding belong outside the substance template language;
+    # these entries represent layout and styling capabilities to be considered
+    # in Spiff or layout/styling abstractions (see WISHLIST.md) rather than
+    # template-level primitives.
     MISSING_PRIMITIVES = [
       {
         name: :stack,
         tier: :structural,
-        role: 'Vertical rhythm layout primitive injecting consistent gap between children',
-        rationale: 'Every Layout axiom: authors currently abuse box or ad-hoc margins to achieve vertical flow.'
+        role: 'Vertical rhythm layout capability injecting consistent gap between elements',
+        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for Spiff or layout styling abstractions.'
       },
       {
         name: :cluster,
         tier: :structural,
-        role: 'Horizontal wrapping flex layout with uniform gap',
-        rationale: 'Currently only available for buttons via actions; general inline wrapping lacks a word.'
+        role: 'Horizontal wrapping flex layout capability with uniform gap',
+        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for Spiff or micro-layout styling abstractions.'
       },
       {
         name: :sidebar,
         tier: :structural,
         role: 'Two-element arrangement where one element has intrinsic width and the other fills remaining space',
-        rationale: 'Common layout pattern currently hand-rolled in apps (e.g. shell in studio).'
+        rationale: 'Macro-layout pattern; belongs in Spiff spatial zoning (horizon/grid) rather than template primitives.'
       }
     ].freeze
 
