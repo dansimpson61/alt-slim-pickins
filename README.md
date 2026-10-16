@@ -98,36 +98,44 @@ this as money* and the formatting belongs to the word.
 
 ## The documents
 
-- **[PRIMER.md](PRIMER.md)** — The Way. The comprehensive tour of the language:
-  grammar, argument kinds, resolution, universal convention slots, five tiers, and ethos.
-- **[CONVENTIONS.md](CONVENTIONS.md)** — what the language decides when you say nothing:
+The author-facing guides live in `docs/`; the working documents — the roadmap,
+the handoff — live at the root.
+
+- **[PRIMER.md](docs/PRIMER.md)** — The Way. The comprehensive tour of the language:
+  the three canvases (`.frame`, `.sp`, `.layout`), the one-sentence grammar, the
+  universal slot model, composed words, and the five vocabulary categories.
+- **[CONVENTIONS.md](docs/CONVENTIONS.md)** — what the language decides when you say nothing:
   principles, defaults, and overrides.
-- **[DESIGN.md](DESIGN.md)** — the grammar. One sentence, one resolution rule,
-  no open questions.
-- **[VOCABULARY.md](VOCABULARY.md)** — sixty-four words, seven slots each.
+- **[VOCABULARY.md](docs/VOCABULARY.md)** — sixty-four words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
-- **[CONTRACT.md](CONTRACT.md)** — what an app must promise to be renderable,
+- **[DESIGN.md](docs/DESIGN.md)** — the grammar. One sentence, one resolution rule,
+  no open questions.
+- **[CONTRACT.md](docs/CONTRACT.md)** — what an app must promise to be renderable,
   which is one sentence plus two optional methods.
-- **[ROADMAP-0.6.md](ROADMAP-0.6.md)** — the active even-numbered roadmap
-  (earlier roadmaps preserved in root or `history/`).
+- **[LAYOUT.md](docs/LAYOUT.md)** — the `.layout` spatial companion: the postures,
+  zones, and rhythm a page's presentation is written in.
+- **[ONTOLOGY.md](docs/ONTOLOGY.md)** — the Tri-Plane ontology a steward holds: the
+  linguistic, spatial, and mechanical planes.
+- **[STRETCH_PROTOCOL.md](docs/STRETCH_PROTOCOL.md)** — the Stretch Exam: how an odd
+  roadmap opens on paper, and what closes it.
+- **[ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md)** — the just-closed even-numbered
+  roadmap (closed roadmaps are preserved in `history/planning/`).
 - **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
   conversation.
-- **`check_grammar.rb`**, **`check_styles.rb`** — keep every document
+- **`checkers/check_grammar.rb`**, **`checkers/check_styles.rb`** — keep every document
   accountable to the code and to each other. Every sentence must obey the
   grammar table; every word used must be defined; every word defined must have
   a sentence; every class emitted must have a rule.
-- **`check_vitals.rb`**, **`check_ruby.rb`** — the two legs
-  [DAYTRIP-0.4.0h.md](DAYTRIP-0.4.0h.md) added after measuring what the other
-  ten could not see. The first holds every number the living prose and the
-  `.rb` comments state about this project to `SlimPickins::Census`, and exempts
-  the dated record with a written reason per entry. The second runs `ruby -w -c`
-  over every Ruby file, because a mismatched indentation and an assignment
-  nothing reads are warnings, and nothing was listening.
-- **[docs/SPIFF.md](docs/SPIFF.md)** — Spiff, the design idiom: the
-  spatial companion language a `.spiff` file is written in, and the lexicon of
-  its words. `check_spiff.rb` holds every compiled-CSS example in it to
-  the compiler, and `check_spiff_scope.rb` holds every zone it names to the
+- **`checkers/check_vitals.rb`**, **`checkers/check_ruby.rb`** — the two legs that
+  hold the prose to the census and Ruby to the interpreter's warnings. The first
+  holds every number the living prose and the `.rb` comments state about this
+  project to `SlimPickins::Census`, and exempts the dated record with a written
+  reason per entry. The second runs `ruby -w -c` over every Ruby file, because
+  a mismatched indentation and an assignment nothing reads are warnings, and
+  nothing was listening.
+- **`checkers/check_layout.rb`**, **`checkers/check_layout_scope.rb`** — hold every
+  compiled-`.layout` example to the compiler, and every zone it names to the
   pages that must render it — a selector matching nothing real is a defect,
   however short it is.
 
@@ -180,23 +188,24 @@ cheap to fall into: a runtime reshaped without knowing what it must next carry
 is a beautifully organised runtime for the wrong language.
 
 **0.2 is the first even-numbered roadmap**, and it is written —
-[ROADMAP-0.2.md](ROADMAP-0.2.md) is the protocol above, executed.
+[ROADMAP-0.2.md](history/planning/ROADMAP-0.2.md) is the protocol above, executed.
 
 ## Status
 
-**Roadmaps 0.1 to 0.5 are completed.**
+**Roadmaps 0.1 to 0.6 are completed.**
 - [ROADMAP-0.1.md](history/ROADMAP-0.1.md) proved the one-sentence grammar.
-- [ROADMAP-0.2.md](ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
-- [ROADMAP-0.3.md](ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
-- [ROADMAP-0.4.md](ROADMAP-0.4.md) asked whether the conventions keep their promises, so that an author only has to name things. Every documented override is proved by a test, and the weak-spots table in [CONVENTIONS.md](CONVENTIONS.md) is empty. It ran first as seventeen daytrips (`DAYTRIP-0.4.0a` to `0.4.0q`), and the roadmap tells how its question emerged from them. It closed on 2026-10-11.
-- [ROADMAP-0.5.md](ROADMAP-0.5.md) answered whether words can nest in namespaces and files rather than a single global registry: nearest-first compiler walk, editor collision eliminated, the eleven contained words scoped lexically in Ruby and `list.sp`, the legacy declaration line retired across all partials, and language words open to app shadowing. It ran as seven daytrips (`DAYTRIP-0.5.0a` to `0.5.0g`) and closed on 2026-10-12.
+- [ROADMAP-0.2.md](history/planning/ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
+- [ROADMAP-0.3.md](history/planning/ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
+- [ROADMAP-0.4.md](history/planning/ROADMAP-0.4.md) asked whether the conventions keep their promises, so that an author only has to name things. Every documented override is proved by a test, and the weak-spots table in [CONVENTIONS.md](docs/CONVENTIONS.md) is empty. It ran first as seventeen daytrips (`DAYTRIP-0.4.0a` to `0.4.0q`), and the roadmap tells how its question emerged from them. It closed on 2026-10-11.
+- [ROADMAP-0.5.md](history/planning/ROADMAP-0.5.md) answered whether words can nest in namespaces and files rather than a single global registry: nearest-first compiler walk, editor collision eliminated, the eleven contained words scoped lexically in Ruby and `list.sp`, the legacy declaration line retired across all composed words, and language words open to app shadowing. It ran as seven daytrips (`DAYTRIP-0.5.0a` to `0.5.0g`) and closed on 2026-10-12.
+- [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md) asked whether the language says what it means and means what it says: the polysemy audit, pedagogy from first principles, clean gemification, and repository hygiene. It ran as eleven daytrips (`DAYTRIP-0.6.0a` to `0.6.0k`) and closed on 2026-10-16.
 
-**[ROADMAP-0.6.md](ROADMAP-0.6.md) is next.** It is an even roadmap, so it leads with the backward eye:
-asking whether what was built deserves to stand, studying the code and DSL as
-objects in their own right, and building nothing the backward look did not ask for.
-`PROJECT.md`'s `next_step` says where planning begins.
+**Roadmap 0.7 is next.** It is an odd roadmap, so it leads with the forward eye, and it
+opens with the Stretch Exam: *the Editorial & Micro-Layout Publication* — uniting
+`doc_reader` and `lore_reader` into one publication-grade reader. `PROJECT.md`'s
+`next_step` says where planning begins.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (38 Ruby primitives + 26 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (38 Ruby primitives + 26 `.sp` composed words), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 
@@ -204,11 +213,10 @@ The gate — twelve legs and the suite, run in the order `StudioStatus::LEGS`
 names them, which is the one home for that list:
 
 ```sh
-ruby check_grammar.rb && ruby check_shape.rb && ruby check_styles.rb &&
-ruby check_spiff.rb && ruby check_spiff_scope.rb && ruby bin/check_promises.rb &&
+ruby checkers/check_grammar.rb && ruby checkers/check_shape.rb && ruby checkers/check_styles.rb &&
+ruby checkers/check_layout.rb && ruby checkers/check_layout_scope.rb && ruby bin/check_promises.rb &&
 ruby bin/check_conventions.rb && ruby bin/check_card.rb &&
-ruby bin/verify_pages.rb && ruby check_vitals.rb && ruby check_ruby.rb &&
-ruby bin/census.rb &&
+ruby bin/verify_pages.rb && ruby checkers/check_vitals.rb && ruby checkers/check_ruby.rb &&
 ruby -Ilib:test -e 'require "slim_pickins/census"; SlimPickins::Census.test_files.sort.each { |f| require f }'
 ```
 

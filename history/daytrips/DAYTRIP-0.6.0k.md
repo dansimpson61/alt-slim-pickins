@@ -1,6 +1,6 @@
 # Daytrip 0.6.0k — First-Principles Pedagogy, Ontology Sweep & Roadmap 0.6 Close
 
-**Status: in progress (Pre-Movement & Movement 1 landed).** The closing movement of Roadmap 0.6.
+**Status: complete.** The closing movement of Roadmap 0.6.
 
 ## Objective
 Bring every author-facing guide (`PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`) and repository entrypoint (`README.md`, `HANDOFF.md`, `WISHLIST.md`, `slim_pickins.gemspec`) into 100% alignment with the Daytrip 0.6.0j Tri-Plane Ontology, register `docs/STRETCH_PROTOCOL.md`, prune historical session bloat from `HANDOFF.md`, and close Roadmap 0.6 cleanly with Roadmap 0.7's Stretch Exam target named.
@@ -65,3 +65,43 @@ Before editing `PRIMER.md`, `CONVENTIONS.md`, or `VOCABULARY.md`, establish and 
   
 ### Movement 5: Full 12-Leg Gate & Live Verification
 - Run all 12 gate legs, `check_vitals.rb`, `check_ruby.rb`, `bin/verify_pages.rb` (35 pages), and the full single-process test suite.
+
+---
+
+## What landed (Movements 2–5)
+
+- **Movement 2 — entrypoints swept.** `README.md` relinked every guide to
+  `docs/`, replaced `.tin`/`.spiff`/`partials` with `.frame`/`.layout`/`composed
+  words`, rewrote the gate command to the `StudioStatus::LEGS` names, and linked
+  `docs/ONTOLOGY.md` + `docs/STRETCH_PROTOCOL.md`. `slim_pickins.gemspec`
+  description now names `.frame` envelopes and `.layout` spatial stylesheets.
+  `WISHLIST.md` census counts realigned (64 words, 26 composed words) and
+  terminology aligned to `.frame`/`.layout`/`composed words`. `StudioDocs`
+  registered `STRETCH_PROTOCOL` beside `ONTOLOGY`.
+- **A measured correction the plan's own sentence got wrong.** The plan said
+  "61 `:root` theme roles"; the single `:root` block now holds **65** (the four
+  `--grade-*` roles and `--positive`/`--negative` arrived after 2026-09-26's
+  count of 61, plus `--sidebar-width` → `--shelf-width`). Corrected in
+  `conventions.rb` (both spots), `docs/CONVENTIONS.md`, and written as 65 in
+  `WISHLIST.md`. `working-with-dan.md`'s dated 2026-09-26 lesson keeps its
+  historical "61".
+- **Movement 3 — `HANDOFF.md` pruned.** 707 lines → 90: reading list, vitals,
+  the Roadmap 0.7 next step, studio/RIF protocol, standing principles. Verified
+  the excised 0.4/0.5 queues, rulings (D3/D6/D6a, R1/R2/R3) and candidate list
+  survive in `history/CHRONICLE.md` and the daytrip files; the one truly-unique
+  loose end (the classic UI's missing `.layout`) was carried into `WISHLIST.md`.
+- **Movement 4 — Roadmap 0.6 closed.** All six criteria marked met with
+  evidence; `ROADMAP-0.6.md` stowed to `history/planning/`; Roadmap 0.7's
+  Stretch Exam named (the Editorial & Micro-Layout Publication) and recorded in
+  `PROJECT.md` + `HANDOFF.md`.
+- **Movement 5 — green.** Twelve gate legs, 656 runs / 7,156 assertions /
+  0 failures, 35 pages verified.
+- **Follow-ups before close (dan's word).** `docs/LAYOUT.md`'s content still
+  said "Spiff"/`.spiff` — the `.layout` rename had reached only the filename —
+  so it was rewritten (`Spiff`→`Layout`, `` `.spiff` ``→`` `.layout` ``,
+  `Spiff::COLLAPSE_TOKENS`→`SlimPickins::Compiler::Layout::COLLAPSE_TOKENS`,
+  `check_spiff_scope.rb`→`checkers/check_layout_scope.rb`), and
+  `checkers/check_pedagogy.rb`'s retired-term regex was fixed (`/\b\.spiff\b/`
+  could not match a backtick-quoted `` `.spiff` ``) so the drift is now caught.
+  `WISHLIST.md`'s two completed audit items (Terminology, Polysemy) graduated
+  to Section VI and the Section III catalogue was stripped to a short note.

@@ -1,10 +1,10 @@
-# Spiff — slim-pickins' design idiom
+# Layout — slim-pickins' spatial companion
 
-> **Purpose & Ethos**: Spiff is the visual companion to slim-pickins — a design
+> **Purpose & Ethos**: Layout is the spatial companion to slim-pickins — a design
 > idiom, in the sense the language means it: its own small vocabulary for saying how
 > things sit. It separates *substance* from *presentation* so authors only ever have
 > to reason about one domain at a time. Substance declares **what** knowledge is;
-> Spiff declares **how** that knowledge sits in space.
+> Layout declares **how** that knowledge sits in space.
 >
 > It speaks slim-pickins's one-sentence grammar and indentation rules, but uses its own
 > vocabulary of spatial posture, breathing room, and visual temperament. The compiler
@@ -15,12 +15,12 @@
 
 ## 1. Syntax: 100% Shared Grammar with Slim-Pickins
 
-Spiff uses `SlimPickins::Transform` directly:
+Layout uses `SlimPickins::Transform` directly:
 - **One-sentence grammar**: Each line begins with a word.
 - **Indentation nests it**: Blocks are indented; no `do ... end`, no curly braces, no semicolons.
 - **Bare identifiers become symbols**: `air generous` compiles to `air(:generous)`; `frame quiet` compiles to `frame(:quiet)`.
 - **Keyword modifiers**: `beside: reading_pane, balance: subordinate, collapse: cozy`.
-- **Line tracking**: Errors pinpoint the exact line number of the `.spiff` file.
+- **Line tracking**: Errors pinpoint the exact line number of the `.layout` file.
 
 ### Substance vs. Layout Side-by-Side
 
@@ -48,11 +48,11 @@ def reading_pane document                frame quiet
 
 ## 2. The Lexicon
 
-Every word in Spiff models exemplary lexical practice:
+Every word in Layout models exemplary lexical practice:
 1. **What it is**: The conceptual essence.
 2. **What it is for**: The design problem it solves and intent it declares.
 3. **How to use it**: Syntax, options, and constraints.
-4. **Examples**: Code snippet in pure `.spiff` syntax.
+4. **Examples**: Code snippet in pure `.layout` syntax.
 5. **Compiled CSS**: the exact modern CSS emitted under the hood, in a fenced
    block under its own heading — real output, not a sketch.
 
@@ -203,7 +203,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 
 ### `collapse`
 - **What it is**: The container width below which a horizontal arrangement gives up and stacks.
-- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `Spiff::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.spiff` file. It is the reason a `.spiff` never holds a raw CSS length.
+- **What it is for**: Deciding when a row of zones becomes a column, as a *qualitative* threshold rather than a length. The author says `tight` or `roomy`; the scale lives once in `SlimPickins::Compiler::Layout::COLLAPSE_TOKENS`, so retuning it does not mean editing every `.layout` file. It is the reason a `.layout` never holds a raw CSS length.
 - **How to use it**: a modifier of both `flank` and `horizon`.
   ```
   flank catalog, beside: reading_pane, collapse: tight
@@ -239,7 +239,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
   - `collapse`: Qualitative container query threshold token below which columns
     collapse into a vertical stack — `tight` (26rem), `cozy` (48rem, the
     default), `roomy` (56rem), or `wide` (64rem). Never a raw CSS length; the
-    scale lives once in `Spiff::COLLAPSE_TOKENS`.
+    scale lives once in `SlimPickins::Compiler::Layout::COLLAPSE_TOKENS`.
 - **Example**:
   ```
   flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy
@@ -342,7 +342,7 @@ body {
 ```
 A zone's selector is its own bare class — the same class its `.sp` partial
 already renders via this project's app_class-promotion convention, and
-already scoped safely because a compiled `.spiff` stylesheet is only ever
+already scoped safely because a compiled `.layout` stylesheet is only ever
 loaded by the pages that use it.
 
 ---
@@ -435,7 +435,7 @@ font-size: 1.05rem;
   - `own` — the zone becomes a scroll container and nothing else is said. Say this when it does not.
   - Omitted, the zone does not scroll; its content contributes to the page's height, which is what a document surface wants.
 
-  `internal` was the only token for its first month, and it did both jobs whether or not the zone had tabs — so a zone without them compiled a `.zone .tab-panel` rule that matched nothing. That is the defensive-selector defect the 2026-09-25 round set out to remove, and it was still in the compiler; `check_spiff_scope.rb` found it the first time a new Spiff was held to the HTML its pages render (DAYTRIP-0.4.0k). An unknown token now raises rather than compiling to silence.
+  `internal` was the only token for its first month, and it did both jobs whether or not the zone had tabs — so a zone without them compiled a `.zone .tab-panel` rule that matched nothing. That is the defensive-selector defect the 2026-09-25 round set out to remove, and it was still in the compiler; `checkers/check_layout_scope.rb` found it the first time a new Layout was held to the HTML its pages render (DAYTRIP-0.4.0k). An unknown token now raises rather than compiling to silence.
 - **Example**:
   ```
   zone library

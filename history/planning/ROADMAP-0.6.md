@@ -2,7 +2,7 @@
 
 **An even-numbered roadmap. It leads with the backward eye.**
 
-Status: **open.** Written 2026-10-12, drafted by the steward and confirmed by
+Status: **closed 2026-10-16, on dan's word.** Written 2026-10-12, drafted by the steward and confirmed by
 dan. It is a roadmap and not a plan: it names the question and what success looks
 like, leaving the step-by-step work to daytrips, the same way 0.4 and 0.5 did.
 
@@ -123,6 +123,43 @@ Because 0.6 is an even-numbered roadmap, its duty is the backward look: not
 racing ahead to add speculative features, but pausing to ensure that what has been
 built is honest, clear, and kind — in its code, in its structure, and in the words
 it speaks to its authors.
+
+## How 0.6 closed, 2026-10-12 to 2026-10-16
+
+Eleven daytrips, one per round, each the record of its own:
+
+- [0.6.0a](DAYTRIP-0.6.0a.md) — Polysemy census & the great disambiguation.
+- [0.6.0b](DAYTRIP-0.6.0b.md) — The primitives of association: `dictionary`, `on`, `map`.
+- [0.6.0c](DAYTRIP-0.6.0c.md) — Unifying the splice pronoun: retiring `children` for `contents`.
+- [0.6.0d](DAYTRIP-0.6.0d.md) — Universal slots, taxonomy & gate hygiene.
+- [0.6.0e](DAYTRIP-0.6.0e.md) — Pedagogy from first principles: guides cleanse & taxonomy alignment.
+- [0.6.0f](DAYTRIP-0.6.0f.md) — Clean gemification & architectural boundaries.
+- [0.6.0g](DAYTRIP-0.6.0g.md) — Repository hygiene: daytrip stowing & example garden audit.
+- [0.6.0h](DAYTRIP-0.6.0h.md) — Actions purification: semantic toolbar register & form transport decoupling.
+- [0.6.0i](DAYTRIP-0.6.0i.md) — Example app modernization: dynamic loop & 0.6 curriculum for `way_exam`.
+- [0.6.0j](DAYTRIP-0.6.0j.md) — Meta-architecture renaming: `partial`→`composed word`, `tin`→`.frame`, `spiff`→`.layout`, and the Tri-Plane ontology.
+- [0.6.0k](DAYTRIP-0.6.0k.md) — First-principles pedagogy, ontology sweep & roadmap close.
+
+The six criteria, measured at close:
+
+1. **Polysemy & taxonomy audit — met.** `variant` split into author-chosen
+   presentational weight and data-driven status (`dictionary`/`on`/`map` carry
+   association); `children` the template word retired for `contents`, the AST
+   and family senses left distinct; `word`/`primitive`/`composed word`/`def`/
+   `contract`/`frame`/`layout` each given one definition in `docs/ONTOLOGY.md`.
+2. **Pedagogy from first principles — met.** `docs/PRIMER.md`, `docs/CONVENTIONS.md`,
+   `docs/VOCABULARY.md`, `docs/LAYOUT.md` rewritten from the author's viewpoint;
+   historical drafting notes preserved verbatim in `history/CHRONICLE.md`.
+3. **Clean gemification — met.** `lib/slim_pickins` is a standalone, zero-runtime-
+   dependency gem; `slim_pickins.gemspec` carries no studio, harness, or example
+   assets; the engine, vocabulary, studio, and examples are decoupled.
+4. **Repository hygiene & example app audit — met.** `DAYTRIP-*.md` stowed into
+   `history/daytrips/`, planning scratch into `history/planning/`; `way_exam`
+   modernized rather than retired, the garden audited with dan.
+5. **No author bookkeeping added — met.** The author's sentences only got simpler:
+   comma-less `def`, no new keywords, no pragmas, no type hints.
+6. **Green, and looked at — met.** Twelve gate legs green; 656 runs / 7,154
+   assertions / 0 failures in one process; 35 pages verified live.
 
 ## What this document is not
 

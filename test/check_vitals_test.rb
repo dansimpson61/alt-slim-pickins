@@ -80,7 +80,7 @@ class CheckVitalsTest < Minitest::Test
 
   def test_a_number_more_than_one_word_from_the_noun_is_not_its_count
     assert_empty stale('Phase 0 built this word and measured it.')
-    assert_empty stale('the theme owns 61 roles and no page can say one')
+    assert_empty stale('the theme owns 65 roles and no page can say one')
   end
 
   def test_a_spelled_number_below_twenty_is_a_determiner

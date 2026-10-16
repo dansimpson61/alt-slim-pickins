@@ -176,8 +176,8 @@ what slim-pickins is as a coherent software system.
 - [ ] **The "Rubinius" Vision — Writing `sp` in `sp` to the Practical Limit:**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
   - *Concept:* Rubinius proved the elegance of self-hosting by implementing Ruby in Ruby.
-    Slim-pickins proved the first stage of this by migrating 23 canonical vocabulary words
-    from Ruby primitives into `.sp` partials with `def`.
+    Slim-pickins proved the first stage of this by migrating 26 canonical vocabulary words
+    from Ruby primitives into `.sp` composed words with `def`.
   - *Wish:* Continually investigate and push the boundary of self-hosting:
     How much of the studio (inspect views, error reporting, docs renderer), the debug
     tooling, and even internal AST/representation inspectors can be authored purely as `.sp`?
@@ -206,12 +206,12 @@ what slim-pickins is as a coherent software system.
 
 - [ ] **App-Specific Ruby Words (`app-words.rb` / Authoring Words in Ruby):**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
-  - *Concept:* Today, authors can define application-specific words in `.sp` partials
+  - *Concept:* Today, authors can define application-specific words in `.sp` composed words
     via `def`, but defining first-class words in Ruby requires either writing into
     the core language (`lib/slim_pickins/words.rb`) or using an informal Ruby mixin module.
   - *Wish:* A first-class facility allowing authors to write words directly in Ruby scoped
     to an application (e.g. an app-specific `words.rb` or `[app]/words.rb`), complementing
-    `.sp` partials with full Ruby capabilities, explicit contracts, and family nesting—without
+    `.sp` composed words with full Ruby capabilities, explicit contracts, and family nesting—without
     needing to modify the core library.
 
 ---
@@ -221,62 +221,8 @@ what slim-pickins is as a coherent software system.
 How the project presents itself, names its concepts, organizes its artifacts, and teaches
 authors to think in slim-pickins.
 
-- [ ] **Terminology Audit & Systematization:**
-  - *Origin:* Dan (Wishlist Intake, 2026-10-12).
-  - *Concept:* Terminology has accumulated haphazardly across different development eras:
-    `built-ins`, `partials`, `.sp`, `defs`, `tin`, `spiff`, `contracts`, `primitives`,
-    `words`. Document names (`PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`, `SPEC.md`,
-    `KERNEL.md`) reflect past phases rather than a coherent conceptual taxonomy.
-  - *Wish:* Conduct a thorough terminology audit. Establish unified, precise definitions
-    that reflect current architecture and intent, clearing out stale jargon and contradictory
-    labels.
-
-- [ ] **Polysemy & Overloaded Terms Audit (Disambiguating Words with Multiple Roles):**
-  - *Origin:* Dan (Wishlist Intake & Roadmap 0.6 framing, 2026-10-12).
-  - *Concept:* Key terms in slim-pickins are heavily overloaded, serving two, three, or four
-    distinct jobs across the `.sp` language itself, the compiler internals, the stylesheet/design
-    idiom, and the pedagogical documentation. This polysemy creates subtle cognitive friction
-    for authors and readers alike.
-  - *Examples identified for audit:*
-    1. **`variant`**:
-       - *Job A (Styling choice):* An author-chosen stylistic or weight modifier (e.g. `button primary`, `note quiet`).
-       - *Job B (Data-driven status):* A status or tone derived automatically from domain models (e.g. `badge status` turning red for `danger`).
-       - *Job C (Grammar/Contract):* A formal sentence slot name (`name_slot = :variant`).
-       - *Job D (CSS/Spiff):* CSS typography property (`font-variant-numeric: tabular-nums`).
-    2. **`children`**:
-       - *Job A (Template word):* The language word/keyword that renders the yielded block/children of a partial or wrapper (equivalent to Ruby's `yield` or web components' `<slot>`).
-       - *Job B (AST structure):* The node list of nested child nodes on `SlimPickins::Node[:word, :attributes, :children]`.
-       - *Job C (Contract slot):* `contract.children` (:any | :none | list of allowed nested words).
-       - *Job D (Family containment):* Contained child words nesting lexically inside parent words (`Table::Column`, `item` in `list.sp`).
-       - *Job E (DOM):* Rendered HTML element children.
-    3. **`content`**:
-       - *Job A (Slot):* The positional inline text/payload argument (`tag p, .content`, `badge .label`).
-       - *Job B (Contract):* The boolean flag `contract.content` indicating whether a word accepts inline content.
-       - *Job C (Domain model):* An entity's text or markdown body (`document.content`).
-       - *Job D (CSS/Spiff):* CSS rules such as `display: contents` or generated content `content: ""`.
-    4. **`subject`**:
-       - *Job A (Target record):* The domain model or record an author passes to frame a page or card (`page document`, `card account`).
-       - *Job B (Evaluation context):* The active evaluation receiver in `Builder#subject` where `.attribute` calls resolve.
-       - *Job C (Slot):* The positional parameter slot in contracts and signatures.
-    5. **`name`**:
-       - *Job A (Word identifier):* The symbol identifying a word in the registry (`Word.name`).
-       - *Job B (Sentence slot):* The bare identifier slot in a sentence (`word name, ...`).
-       - *Job C (HTML input attribute):* `<input name="...">` or `<button name="...">` parameter.
-       - *Job D (Domain model attribute):* A record's `#name` attribute (`account.name`), which collides with slot names.
-    6. **`word` vs. `primitive` vs. `partial` vs. `built-in` vs. `tag` vs. `app word` vs. `def` vs. `tin` vs. `spiff`**:
-       - "Everything is a word" is the grammatical foundation, yet docs and code switch between
-         "primitives", "partials", "built-in words", "canonical words", and "app words" without a single shared conceptual model.
-       - `tin` names the application frame/chrome (`[app].tin`), while `spiff` names the spatial companion
-         stylesheet language (`[app].spiff`, `SlimPickins::Spiff`, `docs/SPIFF.md`). Both sit beside `.sp` files,
-         but their conceptual boundaries and relationship to words, layout primitives, and theme roles need a
-         unified taxonomy.
-    7. **`body`**:
-       - An indented block nested beneath a word vs. HTML `<body>` element vs. domain model attribute (`document.body`).
-    8. **`parent` / `parents`**:
-       - Lexical/family class namespace (`Table` is parent of `Column`) vs. AST container in container-value lookup vs. DOM parent node.
-  - *Wish:* Perform a comprehensive audit across the language grammar, compiler symbols, and documentation to
-    catalog every overloaded term. Establish clear, unambiguous names and conceptual distinctions so docs and
-    pedagogy never use the same word for two different ideas.
+> **Graduated:** the terminology audit and the polysemy audit, once listed here,
+> closed with Roadmap 0.6 — see Section VI.
 
 - [ ] **Project Identity: Dropping `alt-` and Consolidating `slim-pickins`:**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
@@ -332,6 +278,13 @@ Visual quality, diversity of design, and the developer environment.
   - *Wish:* Audit the example apps in tandem with the repo cleanup; retire or modernize
     those that no longer carry their weight or fail to showcase current conventions cleanly.
 
+- [ ] **The Classic UI Has No `.layout` (Awaiting Dan's Call):**
+  - *Origin:* HANDOFF.md "Candidates still standing" (carried from 0.4.0h).
+  - *Symptom:* The classic studio UI wears a `.frame` but no `.layout`, so its
+    presentation still pools in `slim-pickins.css` rather than a spatial companion.
+  - *Desired shape:* Give the classic UI a `.layout`, or retire it in favour of
+    the workbench.
+
 - [ ] **Studio Editor Gutter & Inline Diagnostics:**
   - *Origin:* `BLUESKY.md` (Part 1, point 4).
   - *Concept:* The Studio editor is currently a plain `textarea`. While the compiler
@@ -350,14 +303,14 @@ Visual quality, diversity of design, and the developer environment.
 - [ ] **Capabilities for Micro-Layout and Component-Level Styling:**
   - *Origin:* Dan (Session 2026-10-14, evaluating `actions`, `cluster`, and taxonomy `MISSING_PRIMITIVES`).
   - *Concept:* Today, macro-layout across major application zones is cleanly governed by
-    Spiff (`horizon`, `flank`, `stack`), while micro-layout within components (inline horizontal
+    `.layout` (`horizon`, `flank`, `stack`), while micro-layout within components (inline horizontal
     wrapping flex flows, tags, badge clusters, button bars, compact rhythm) lacks a declarative
     vocabulary. Authors currently rely on hardcoded CSS classes (`.actions`, `.card`, custom rules)
     or unopinionated `.box`. The taxonomy previously diagnosed `stack`, `cluster`, and `sidebar`
     as missing template primitives; however, geometry and scaffolding belong outside the substance
     template language.
   - *Wish:* Develop first-class capabilities for micro-layout and component styling—whether as an
-    extension of Spiff (enabling Spiff to reach inside components/zones or govern micro-rhythm)
+    extension of `.layout` (enabling `.layout` to reach inside components/zones or govern micro-rhythm)
     or another intermediation/abstraction of CSS that preserves the core principle ("templates declare
     substance; styling remains an unpolluted abstraction"). Consider the patterns diagnosed by
     `MISSING_PRIMITIVES` (`stack` vertical flow, `cluster` inline flex wrapping, `sidebar` intrinsic
@@ -389,8 +342,8 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 
 - [ ] **Making the Theme Sayable (A Style DSL Without Machine Bloat):**
   - *Origin:* `BLUESKY.md` (Part 3).
-  - *Vision:* Slim-pickins has 62 canonical words for *what* and 53 theme CSS variables
-    in `:root` for *how it looks*, but the two cannot speak to each other.
+  - *Vision:* Slim-pickins has 64 canonical words for *what* and 65 `:root` theme roles
+    for *how it looks*, but the two cannot speak to each other.
   - *Flight:* Allow templates to express high-level design intents that map directly
     to semantic theme roles (`measure: wide`, `gap: loose`, `emphasis: quiet`), verified
     by `check_styles.rb` so every page role exists in `:root` and every `:root` role is
@@ -399,7 +352,7 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 - [ ] **Seeing the State: Visualizing the Inference Engine (Bret Victor / Moldable Development):**
   - *Origin:* `BLUESKY.md` (Part 2, Bret Victor / Tudor Gîrba).
   - *Vision:* The language performs sophisticated inference (data flow, subject shifts,
-    conventions, formatting, tin wrapping). Today, all of that magic is invisible—you
+    conventions, formatting, frame wrapping). Today, all of that magic is invisible—you
     see the input and the final HTML, but not the reasoning in between.
   - *Flight:* An interactive "Inference Inspector" pane in the Studio that visually maps
     the subject chain, reveals inferred labels and formatting decisions, and traces
@@ -421,11 +374,11 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
   - *Flight:* When a document's body begins with a heading, `page` automatically adopts
     that heading as its title and suppresses the duplicate prose heading.
 
-- [ ] **Modular Component Tins (Localized Framing):**
+- [ ] **Modular Component Frames (Localized Framing):**
   - *Origin:* Discussion in Daytrip 0.4.0q / 0.5.0a.
-  - *Vision:* Currently `[app].tin` provides chrome for whole pages. What if complex
+  - *Vision:* Currently `[app].frame` provides chrome for whole pages. What if complex
     sub-assemblies or widgets could wear localized frames or wrappers using the same
-    modest tin concept?
+    modest frame concept?
 
 ---
 
@@ -433,11 +386,21 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 
 - [x] **Shadowing Built-in Language Words (Dan's 2026-10-05 Ruling):**
   - *Graduated in:* `DAYTRIP-0.5.0e.md` (Commit `536684e`).
-  - *Resolution:* App partials and Ruby words may shadow language built-in words within
+  - *Resolution:* App composed words and Ruby words may shadow language built-in words within
     their owning library family. The gate reports shadowed words under vitals; Studio
     isolates multi-app playground libraries. Portfolio's `account_card` successfully
     became plain `card`.
 - [x] **Retire Legacy `expects` Declaration Line:**
   - *Graduated in:* `DAYTRIP-0.5.0d.md` (Commit `81b2a9d`).
-  - *Resolution:* All 28 `.sp` partials across the repository migrated to `def <word>, *params`
+  - *Resolution:* All 28 `.sp` composed words across the repository migrated to `def <word>, *params`
     with Option B1 Data-Flow Inference and Option A Lexical Scope.
+- [x] **Terminology Audit & Systematization:**
+  - *Graduated in:* Roadmap 0.6 (`DAYTRIP-0.6.0j.md`).
+  - *Resolution:* `partial` → `composed word`, `tin` → `.frame`, `spiff` → `.layout`;
+    one definition each for `word`, `primitive`, `composed word`, `def`, `contract`,
+    `frame`, and `layout` in `docs/ONTOLOGY.md`.
+- [x] **Polysemy & Overloaded Terms Audit:**
+  - *Graduated in:* Roadmap 0.6 (`DAYTRIP-0.6.0a.md`, `0.6.0b.md`, `0.6.0c.md`, `0.6.0d.md`).
+  - *Resolution:* `variant` split into author-chosen presentational weight and
+    data-driven status (`dictionary`/`on`/`map`); `children` the template word retired
+    for `contents`; `content`/`subject`/`name` delineated by the universal slot model.

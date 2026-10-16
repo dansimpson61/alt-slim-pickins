@@ -1544,3 +1544,7 @@ check_vitals.rb strips inline code to ~~~~~ before matching vital nouns, so phra
 ## 2026-10-16 — antigravity
 
 check_grammar.rb only checks AST node syntax and vocabulary membership via Transform, so broken code (e.g. `box documents, title`) and canvas plane violations (`page` in .sp route templates) compiled without error. check_pedagogy.rb enforces Tri-Plane ontology boundaries (.frame owns page/contents, .sp is pure substance, .layout is spatial CSS) and verifies word contracts in markdown code fences.
+
+## 2026-10-16 — antigravity
+
+Daytrip 0.6.0k Movements 2-5 landed and Roadmap 0.6 closed. Two findings worth keeping: (1) The plan’s own census parenthetical said “61 :root theme roles”, but the single :root block now holds 65 (four --grade-* roles and --positive/--negative arrived after the 2026-09-26 count of 61, plus --sidebar-width → --shelf-width). “Theme roles” is a hand-kept number no checker measures, so it drifted silently; corrected in conventions.rb (both spots), docs/CONVENTIONS.md, and WISHLIST.md. (2) check_pedagogy.rb’s retired-term check matches /\b\.spiff\b/, which is blind to backtick-quoted terms (no word boundary before the dot), so docs/LAYOUT.md’s “Spiff”/“.spiff” prose passed unflagged — the .layout rename did not reach LAYOUT.md’s content, only its filename.

@@ -20,7 +20,7 @@ module StudioDocs
   # Phase 5 answer names the studio's own md docs a dogfood target: a studio
   # that cannot show its own resume prompt and its own plan is a studio that
   # eats someone else's food.
-  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE ONTOLOGY
+  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE ONTOLOGY STRETCH_PROTOCOL
               ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY
               LAYOUT SPIFF_DISCUSSION].freeze
 
@@ -30,6 +30,7 @@ module StudioDocs
   # the URL — the registry *is* the guard.
   DOCUMENTS = GUIDES.to_h { |name| [name, "#{name}.md"] }
                       .merge('ONTOLOGY' => 'docs/ONTOLOGY.md',
+                             'STRETCH_PROTOCOL' => 'docs/STRETCH_PROTOCOL.md',
                              'LAYOUT' => 'docs/LAYOUT.md',
                              'PRIMER' => 'docs/PRIMER.md',
                              'VOCABULARY' => 'docs/VOCABULARY.md',

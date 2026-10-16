@@ -484,6 +484,8 @@ working manual that should be better after every session than it was before.
 
 - **Framing options with clear trade-offs lets Dan make clean architectural calls directly.** (observed 2026-10-13). When deciding whether to relocate Studio JS tooling assets out of root `assets/` or delete unserved files, presenting the concrete forks (move & delete, move & retain, or leave as-is) enabled Dan to choose Option 3 in a single sentence, keeping root `assets/` for Studio assets without churn.
 
+- **A plan's own census parenthetical can be stale — measure the number, not the sentence it sits in.** (observed 2026-10-16). The confirmed Daytrip 0.6.0k plan said "61 `:root` theme roles"; the single `:root` block now holds 65 (four `--grade-*` roles and `--positive`/`--negative` arrived after the 2026-09-26 count of 61). The correction went into the code (`conventions.rb`), the guide (`docs/CONVENTIONS.md`) and the ledger (`WISHLIST.md`), while the dated 2026-09-26 lesson's historical "61" stayed put. The new wrinkle: here the stale number lived in the *plan* rather than a document, and no checker measures "theme roles" at all, so nothing would have caught it — the same bare-number liability, now that the number's home is a plan.
+
 ## Proposed deletions — nothing here yet
 
 

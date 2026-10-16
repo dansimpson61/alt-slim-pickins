@@ -66,11 +66,11 @@ module PedagogyChecker
       # Ignore markdown links to historical files in history/
       next if line.include?('history/') || line.include?('DAYTRIP-')
 
-      if line.match?(/\b\.tin\b/)
+      if line.match?(/\.tin\b/)
         findings << Finding.new(file: rel_path, line: lineno, kind: :retired_term,
                                 message: "contains \".tin\" — use \".frame\"")
       end
-      if line.match?(/\b\.spiff\b/)
+      if line.match?(/\.spiff\b/)
         findings << Finding.new(file: rel_path, line: lineno, kind: :retired_term,
                                 message: "contains \".spiff\" — use \".layout\"")
       end

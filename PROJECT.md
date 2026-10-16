@@ -3,19 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  A view language whose grammar is one sentence — `word arguments`, indentation
-  nests, everything is a word — proved across 64 canonical words (38 primitives,
-  26 composed words), 8 apps and 35 rendered pages. Daytrip 0.6.0k Pre-Movement
-  and Movement 1 landed: audience partition codified, primary author guides
-  (docs/PRIMER.md, docs/VOCABULARY.md, docs/CONVENTIONS.md, docs/LAYOUT.md)
-  rewritten from first principles to the Tri-Plane Ontology (.frame, .sp, .layout,
-  composed words, dictionary/on/map, 5 categories, 38 conventions), historical
-  drafting notes preserved in history/CHRONICLE.md, .frame files included in
-  grammar/shape globs, and continuous checkers/check_pedagogy.rb instrument built
-  with 26 pedagogical defects resolved. Twelve gate legs green, 656 runs / 7,154
-  assertions / 0 failures, 35 pages verified OK.
+  Roadmap 0.6 closed: the language, its taxonomy, and its teaching are unified
+  and clean — 64 canonical words (38 primitives, 26 composed words), the
+  Tri-Plane ontology (.frame, .sp, .layout), author guides rewritten from first
+  principles, gem boundaries clean, and the repository stowed. Twelve gate legs
+  green, 656 runs / 7,156 assertions / 0 failures, 35 pages verified.
+  Roadmap 0.7 opens with the Editorial & Micro-Layout Publication Stretch Exam.
 last_touched: 2026-10-16
-next_step: 'Daytrip 0.6.0k (Movements 2-5): Repository entrypoint sweep, HANDOFF pruning, and Roadmap 0.6 close.'
+next_step: 'Daytrip 0.7.0a (Paper First): draft the uncompromised .frame, .sp, and .layout/.style templates for the unified doc_reader+lore_reader publication reader on paper, run them against the gate to inventory the Wall Ledger (landing evaluation, self-titling documents, inline metadata cluster micro-layout, sayable editorial theme roles, subject/class collision), and frame ROADMAP-0.7.md.'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
@@ -48,7 +43,7 @@ conventions: >-
 # alt-slim-pickins
 
 A working view language: one-sentence grammar, 64 words, its own stylesheet,
-and seven example apps plus the studio that speak it. See [README.md](README.md)
-— its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.5.md](ROADMAP-0.5.md)
-closed on 2026-10-12, delivering families and lexical containment; roadmap 0.6 is next,
-and `next_step` above is the live resume point.
+and eight example apps plus the studio that speak it. See [README.md](README.md)
+— its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md)
+closed on 2026-10-16, unifying the language's taxonomy and teaching; roadmap 0.7
+opens with the Stretch Exam, and `next_step` above is the live resume point.

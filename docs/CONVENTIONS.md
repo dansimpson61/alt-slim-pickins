@@ -740,7 +740,7 @@ back to `nil`.
 ### `theme_roles` — the axiomatic boundary
 
 A template cannot specify ad-hoc pixel widths, font sizes, or colors. The base
-stylesheet owns 61 `:root` theme roles (`--measure`, `--gap`, `--ink`,
+stylesheet owns 65 `:root` theme roles (`--measure`, `--gap`, `--ink`,
 `--surface`, and status tokens) across 113 style rules, and spatial composition
 lives in `.layout` files. When a concept requires distinct visual treatment, a
 word or variant carries it.
