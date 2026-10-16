@@ -427,7 +427,7 @@ module SlimPickins
     # replaced did.
     BOX_TAGS  = { footer: 'footer', aside: 'aside', item: 'li', list: 'ul',
                   card: 'article', section: 'section', figure: 'figure',
-                  disclosure: 'details' }.freeze
+                  disclosure: 'details', snippet: 'pre', fact: 'dl' }.freeze
     BOX_DEPTH = { card: 1, section: 1 }.freeze
 
     def box(attrs, children)

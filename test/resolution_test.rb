@@ -22,37 +22,39 @@ class ResolutionTest < Minitest::Test
       views = File.join(app, 'views')
       FileUtils.mkdir_p(File.join(app, 'partials'))
       FileUtils.mkdir_p(views)
-      File.write(File.join(app, 'demo.tin'), "nav\n  link home\ncontents\n")
-      File.write(File.join(app, 'demo.spiff'), "surface demo\n  stage\n    air generous\n")
-      File.write(File.join(views, 'own.tin'), "footer \"its own chrome\"\ncontents\n")
-      File.write(File.join(views, 'own.spiff'), "surface own\n  stage\n    air tight\n")
+      File.write(File.join(app, 'demo.frame'), "nav\n  link home\ncontents\n")
+      File.write(File.join(app, 'demo.layout'), "surface demo\n  stage\n    air generous\n")
+      File.write(File.join(views, 'own.frame'), "footer \"its own chrome\"\ncontents\n")
+      File.write(File.join(views, 'own.layout'), "surface own\n  stage\n    air tight\n")
       File.write(File.join(views, 'plain.sp'), "page plain\n  text \"x\"\n")
       File.write(File.join(views, 'own.sp'), "page own\n  text \"x\"\n")
       yield app, views
     end
   end
 
-  # --- the tin -------------------------------------------------------------
+  # --- the frame -----------------------------------------------------------
 
-  def test_a_view_with_its_own_tin_uses_it
+  def test_a_view_with_its_own_frame_uses_it
     with_app do |_app, views|
       lib = SlimPickins::Library.from(views)
+      assert_includes lib.frame_for('own'), 'its own chrome'
       assert_includes lib.tin_for('own'), 'its own chrome'
     end
   end
 
-  def test_a_view_without_one_inherits_the_apps_tin
+  def test_a_view_without_one_inherits_the_apps_frame
     with_app do |_app, views|
       lib = SlimPickins::Library.from(views)
+      assert_includes lib.frame_for('plain'), 'link home'
       assert_includes lib.tin_for('plain'), 'link home'
     end
   end
 
-  def test_the_app_tin_is_the_answer_when_the_view_is_unknown
+  def test_the_app_frame_is_the_answer_when_the_view_is_unknown
     with_app do |_app, views|
       lib = SlimPickins::Library.from(views)
-      assert_includes lib.tin_for(nil), 'link home'
-      assert_includes lib.tin_for('nowhere'), 'link home'
+      assert_includes lib.frame_for(nil), 'link home'
+      assert_includes lib.frame_for('nowhere'), 'link home'
     end
   end
 
@@ -67,58 +69,58 @@ class ResolutionTest < Minitest::Test
     end
   end
 
-  # --- the Spiff -----------------------------------------------------------
+  # --- the Layout ----------------------------------------------------------
 
-  def test_a_view_with_its_own_spiff_uses_it
+  def test_a_view_with_its_own_layout_uses_it
     with_app do |_app, views|
+      layout = SlimPickins::Library.layout_for('own', path: File.join(views, 'own.sp'))
+      assert_includes layout, 'surface own'
       spiff = SlimPickins::Library.spiff_for('own', path: File.join(views, 'own.sp'))
       assert_includes spiff, 'surface own'
     end
   end
 
-  def test_a_view_without_one_inherits_the_apps_spiff
+  def test_a_view_without_one_inherits_the_apps_layout
     with_app do |_app, views|
-      spiff = SlimPickins::Library.spiff_for('plain', path: File.join(views, 'plain.sp'))
-      assert_includes spiff, 'surface demo'
+      layout = SlimPickins::Library.layout_for('plain', path: File.join(views, 'plain.sp'))
+      assert_includes layout, 'surface demo'
     end
   end
 
-  def test_a_page_with_no_spiff_anywhere_is_not_an_error
+  def test_a_page_with_no_layout_anywhere_is_not_an_error
     Dir.mktmpdir('bare') do |root|
       app = File.join(root, 'bare')
       FileUtils.mkdir_p(app)
       view = File.join(app, 'one.sp')
       File.write(view, "page one\n  text \"x\"\n")
 
-      assert_nil SlimPickins::Library.spiff_for('one', path: view),
+      assert_nil SlimPickins::Library.layout_for('one', path: view),
                  'a page with nowhere to say how it sits wears the stylesheet as it is'
     end
   end
 
-  def test_the_apps_spiff_is_found_beside_the_app_when_views_are_nested
+  def test_the_apps_layout_is_found_beside_the_app_when_views_are_nested
     with_app do |app, views|
-      # `demo/demo.spiff`, one level above `demo/views/` — the shape
-      # doc_reader uses, and the reason the lookup tries the outer name too.
       plain = File.join(views, 'plain.sp')
-      assert_includes SlimPickins::Library.spiff_for('plain', path: plain), 'surface demo'
-      assert File.file?(File.join(app, 'demo.spiff'))
+      assert_includes SlimPickins::Library.layout_for('plain', path: plain), 'surface demo'
+      assert File.file?(File.join(app, 'demo.layout'))
     end
   end
 
   # --- the two rules agree -------------------------------------------------
 
-  def test_tin_and_spiff_resolve_by_the_same_precedence
+  def test_frame_and_layout_resolve_by_the_same_precedence
     with_app do |_app, views|
       lib = SlimPickins::Library.from(views)
-      own_tin = lib.tin_for('own')
-      own_spiff = SlimPickins::Library.spiff_for('own', path: File.join(views, 'own.sp'))
-      inherited_tin = lib.tin_for('plain')
-      inherited_spiff = SlimPickins::Library.spiff_for('plain', path: File.join(views, 'plain.sp'))
+      own_frame = lib.frame_for('own')
+      own_layout = SlimPickins::Library.layout_for('own', path: File.join(views, 'own.sp'))
+      inherited_frame = lib.frame_for('plain')
+      inherited_layout = SlimPickins::Library.layout_for('plain', path: File.join(views, 'plain.sp'))
 
-      assert_includes own_tin, 'its own chrome'
-      assert_includes own_spiff, 'surface own'
-      assert_includes inherited_tin, 'link home'
-      assert_includes inherited_spiff, 'surface demo'
+      assert_includes own_frame, 'its own chrome'
+      assert_includes own_layout, 'surface own'
+      assert_includes inherited_frame, 'link home'
+      assert_includes inherited_layout, 'surface demo'
     end
   end
 end

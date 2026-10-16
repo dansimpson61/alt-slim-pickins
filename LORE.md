@@ -1528,3 +1528,11 @@ Forms naturally enclose dynamic collection iterations. Adding each to Form child
 ## 2026-10-14 — Antigravity
 
 Chrome vs substance separation: the .sp template is pure route substance splicing into contents, while page belongs exclusively in .frame (formerly .tin). Partials are an anachronism: words defined via def in .sp are first-class composed words invoked identically to primitives.
+
+## 2026-10-14 — Antigravity
+
+In Words::Box, evaluating bare symbols on subject requires distinguishing candidate child models from attribute values: a symbol matching an attribute on subject whose value is a String is domain prose or an explicit variant (e.g. snippet override, .override where override is a string attribute), not a subject shift. Treating string values as subject targets falsely clears attrs[:variant].
+
+## 2026-10-14 — Antigravity
+
+Modeling a DSL vocabulary as a network of bandpass filters reveals its structural dynamics: passband width measures category capacity, boundary selectivity measures classification sharpness, and polyhierarchical resonance measures crossover across semantic planes. Structural bridge words (box, card, contents) naturally exhibit wider passbands and lower selectivity, anchoring the language grammar across planes.

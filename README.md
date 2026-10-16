@@ -166,6 +166,8 @@ deserves to stand. Three movements:
 3. **Study the DSL and the code beneath it as objects in their own right**, to
    the standard of excellent Ruby — not as a means to the next feature.
 
+**The Stretch Exam.** An odd roadmap does not invent examples to flatter the words we already have; it opens with a **Stretch Exam** ([docs/STRETCH_PROTOCOL.md](docs/STRETCH_PROTOCOL.md)). We draft a compelling reference application—or the next authentic tier of one—on paper first, in the cleanest `.sp`, `.frame`, and `.layout` we can imagine, before the language can run it. Where the paper page hits a wall (a grammar refusal, a compiler leak, a missing micro-layout, or a visual ceiling), those walls become the odd roadmap's daytrips. When the paper page renders live and looks exceptional without app-space workarounds, the odd roadmap closes—and the even roadmap that follows harvests the lessons and retires whatever older demo the new benchmark just made obsolete.
+
 It still has to know where the project is going, or the study is decoration.
 The constraint is not *build nothing*; it is **build nothing the backward look
 did not ask for.**
@@ -194,7 +196,7 @@ asking whether what was built deserves to stand, studying the code and DSL as
 objects in their own right, and building nothing the backward look did not ask for.
 `PROJECT.md`'s `next_step` says where planning begins.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (41 Ruby primitives + 23 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (38 Ruby primitives + 26 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 

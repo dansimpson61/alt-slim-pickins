@@ -5,7 +5,7 @@ require_relative 'word'
 module SlimPickins
   module Words
     class Page < Word
-      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: [], infers: [:document, :title, :tin]
+      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: [], infers: [:document, :title, :frame]
 
       def evaluate
         favicon = @kwargs.key?(:favicon) ? @kwargs[:favicon] : nil
@@ -26,7 +26,7 @@ module SlimPickins
         # tin exists to hold.
         value, empty, body = about(name) do
           heading = landed(title) || Inference.label(name)
-          wrapped_in_tin(&@block)
+          wrapped_in_frame(&@block)
         end
         emit_node(Node[:page, { heading: heading, head: head_nodes,
                             favicon: favicon },
@@ -92,7 +92,16 @@ module SlimPickins
         subject_target = nil
         title_arg = nil
 
-        if first.is_a?(Symbol) ? subject.has?(first) : (!first.nil? && !first.is_a?(String))
+        if first.is_a?(Symbol)
+          if subject.has?(first)
+            val = subject.fetch(first)
+            if !val.is_a?(String)
+              shifts_subject = true
+              subject_target = first
+              title_arg = second
+            end
+          end
+        elsif !first.nil? && !first.is_a?(String)
           shifts_subject = true
           subject_target = first
           title_arg = second
@@ -277,54 +286,8 @@ emit_node(Node[:each, { name: name }, collected])
       maps content: :body
     end
 
-    class Fact < Word
-      contract name: :attribute, content: true, shape: :presents, lazy: [], infers: [:label, :format]
-
-      def evaluate
-        name, value = arguments(@args)
-        if name
-          shown = value.nil? ? subject.fetch(name) : value
-          resolved_label = label_for(name, nil)
-          kind = format_of({ name: name, as: nil })
-        else
-          shown = @args[0]
-          resolved_label = @args[1]
-          kind = nil
-        end
-        emit_node(Node[:fact, { name: name, label: resolved_label,
-                            value: shown, kind: kind }, []])
-      end
-    end
-
-    class Snippet < Encloses
-      contract name: :notation, content: true, shape: :presents, lazy: []
-      maps name: :language, content: :body
-    end
-
     class Iframe < Says
       contract name: :name, modifiers: [:src, :srcdoc, :width, :height], shape: :presents, lazy: []
-    end
-
-
-
-    class Metric < Word
-      contract name: :attribute, content: true, modifiers: [:as], shape: :says, lazy: [], infers: [:label, :format]
-
-      def evaluate
-        as = @kwargs.key?(:as) ? @kwargs[:as] : nil
-        name, label = arguments(@args)
-        if name
-          value = subject.fetch(name)
-          resolved_label = label_for(name, label)
-          kind = as || subject.format_for(name)
-        else
-          value = @args[0]
-          resolved_label = @args[1] || 'Metric'
-          kind = as
-        end
-        emit_node(Node[:metric, { name: name, label: resolved_label,
-                              value: value, kind: kind }, []])
-      end
     end
 
     class Chart < Word
@@ -625,7 +588,7 @@ emit_node(Node[:each, { name: name }, collected])
         elsif contents_stowed?
           take_contents&.each { |n| emit_node(n) }
         else
-          raise Error, '`contents` belongs in a tin'
+          raise Error, '`contents` belongs in a frame'
         end
       end
     end

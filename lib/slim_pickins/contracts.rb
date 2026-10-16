@@ -77,14 +77,17 @@ module VocabularyShapes
     card: [:card_id, :box_tag, :box_depth],
     disclosure: [:box_tag],
     empty: [:empty_situation],
+    fact: [:box_tag, :label, :format],
     figure: [:box_tag],
     footer: [:box_tag],
     item: [:box_tag],
     list: [:box_tag],
+    metric: [:label, :format],
     money: [:number_text, :leaf_tag],
     number: [:number_text, :leaf_tag],
     percent: [:number_text, :leaf_tag],
     section: [:label, :box_tag, :box_depth],
+    snippet: [:box_tag],
     time: [:time_text, :leaf_tag],
     title: [:heading_level]
   }.freeze
@@ -96,7 +99,9 @@ module VocabularyShapes
   CANONICAL_FLAGS = {
     empty: { empty: true },
     card: { id: true },
-    section: { label: true }
+    section: { label: true },
+    fact: { label: true },
+    metric: { label: true }
   }.freeze
 
   CANONICAL_MODIFIERS = {
@@ -104,11 +109,14 @@ module VocabularyShapes
     actions: [],
     card: [:variant],
     disclosure: [:open],
+    fact: [],
+    metric: [:as],
     money: [:precision],
     number: [:precision],
     percent: [:precision],
     search: %i[q placeholder to],
-    section: []
+    section: [],
+    snippet: []
   }.freeze
 
   CANONICAL_SHAPES = {
@@ -119,11 +127,13 @@ module VocabularyShapes
     card: :encloses,
     disclosure: :encloses,
     empty: :says,
+    fact: :presents,
     figure: :encloses,
     flash: :presents,
     footer: :encloses,
     item: :registers,
     list: :encloses,
+    metric: :says,
     money: :presents,
     note: :presents,
     number: :presents,
@@ -132,6 +142,7 @@ module VocabularyShapes
     scroll: :encloses,
     search: :encloses,
     section: :encloses,
+    snippet: :presents,
     text: :presents,
     time: :presents,
     title: :presents
@@ -196,9 +207,11 @@ module VocabularyShapes
         name_slot = :attribute
       elsif param == :variant || param == :status || param == :tone
         name_slot = :variant
+      elsif param == :notation
+        name_slot = :notation
       elsif param == :target
         name_slot = :target
-      elsif %i[content text words label message amount ratio timestamp summary title heading stamp].include?(param)
+      elsif %i[content text words label message amount ratio timestamp summary title heading stamp value body].include?(param)
         has_content = true
       elsif params.size == 1
         if primary

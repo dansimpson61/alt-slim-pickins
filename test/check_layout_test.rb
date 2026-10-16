@@ -3,7 +3,7 @@
 require 'minitest/autorun'
 require 'stringio'
 require 'tempfile'
-require_relative '../checkers/check_spiff'
+require_relative '../checkers/check_layout'
 
 # The design-docs checker is an instrument, and `check_styles`, `check_promises`
 # and `bin/check_conventions` are all held by tests for the same reason: an
@@ -12,11 +12,11 @@ require_relative '../checkers/check_spiff'
 # lexicon's compiled-CSS blocks had drifted from the compiler with every gate
 # green; these tests are what make the new checker worth believing.
 class CheckDesignDocsTest < Minitest::Test
-  LEXICON = File.join(__dir__, '..', 'docs', 'SPIFF.md')
+  LEXICON = File.join(__dir__, '..', 'docs', 'LAYOUT.md')
 
   def run_check(files)
     out = StringIO.new
-    problems = SpiffCheck.run(files: files, out: out)
+    problems = LayoutCheck.run(files: files, out: out)
     [problems, out.string]
   end
 

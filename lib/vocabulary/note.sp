@@ -1,2 +1,2 @@
-def note, tone, text
+def note tone, text
   paragraph .tone, .text

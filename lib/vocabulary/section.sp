@@ -1,4 +1,4 @@
-def section, target, heading
+def section target, heading
   box .name
     choose
       when .heading

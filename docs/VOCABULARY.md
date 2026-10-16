@@ -1,6 +1,6 @@
 # Vocabulary
 
-Status: **implemented.** Sixty-four canonical words — 41 declared as Ruby classes and 23
+Status: **implemented.** Sixty-four canonical words — 38 declared as Ruby classes and 26
 partials written in the language — every one declared in its own file and every
 one exercised by a sentence in the repository, held by `check_grammar.rb`.
 
@@ -60,7 +60,7 @@ condition holds. It is not repeated in the entries below.
 - **modifiers** — `favicon:`
 - **children** — anything
 - **subject** — the named thing
-- **conventions** — `document` — the doctype, html/head/body, the charset and the viewport; `title` — the `<title>` and the top heading, humanised from the name (override: `page portfolio, "Your retirement"`); `tin` — the chrome every page wears, with `contents` marking the hole (override: delete the tin, or move the page)
+- **conventions** — `document` — the doctype, html/head/body, the charset and the viewport; `title` — the `<title>` and the top heading, humanised from the name (override: `page portfolio, "Your retirement"`); `frame` — the chrome every page wears, with `contents` marking the hole (override: delete the frame, or move the page)
 - **infers** — none
 - **renders** — the whole document
 
@@ -505,7 +505,7 @@ it was cut in 0.2 Phase 6, and this line went on naming it).
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
+- **conventions** — `box_tag` — the `<dl>` element; `label` — the human label — the page, then the app, then English (override: say the label in the page); `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
 - **infers** — the value from that attribute when content is omitted
 - **renders** — a `<dt>`/`<dd>` pair
 
@@ -528,8 +528,9 @@ that. A reader who knows HTML would have read `detail` as the singular of
 - **name** — the notation
 - **content** — text or data, when there is any
 - **modifiers** — none
-- **children** — none
+- **children** — anything
 - **subject** — unchanged
+- **conventions** — `box_tag` — the `<pre>` element
 - **infers** — that it is for copying: monospaced, selectable whole, not
   editable, with a copy control
 - **renders** — `<pre>` with a copy button

@@ -1,7 +1,7 @@
-def list, variant
+def list variant
   box .variant
     contents
 
-def item, variant, content
+def item variant, content
   box .variant, .content
     contents

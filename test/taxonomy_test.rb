@@ -17,23 +17,41 @@ class TaxonomyTest < Minitest::Test
     assert_equal @census_words.sort, @entries.keys.sort
   end
 
-  def test_all_tiers_valid_and_non_empty
-    expected_tiers = %i[structural semantic interactive behavioral visual]
-    assert_equal expected_tiers.sort, SlimPickins::Taxonomy.tiers.keys.sort
+  def test_the_three_ontological_planes
+    planes = SlimPickins::Taxonomy.planes
+    assert_equal %i[invariant linguistic spatial], planes.keys.sort
 
-    SlimPickins::Taxonomy.tiers.each do |key, meta|
-      assert meta[:name], "Tier #{key} has name"
-      assert meta[:title], "Tier #{key} has title"
-      assert meta[:question], "Tier #{key} has authoring question"
-      assert meta[:summary], "Tier #{key} has summary"
+    assert_equal %i[word primitive composed_word def], planes[:linguistic][:terms]
+    assert_equal %i[frame layout style substance], planes[:spatial][:terms]
+    assert_equal %i[contract convention promise], planes[:invariant][:terms]
+
+    planes.each do |key, meta|
+      assert meta[:name], "Plane #{key} has name"
+      assert meta[:title], "Plane #{key} has title"
+      assert meta[:summary], "Plane #{key} has summary"
+      refute_empty meta[:terms], "Plane #{key} has terms"
+    end
+  end
+
+  def test_all_refined_categories_valid_and_non_empty
+    expected = %i[affordances environment flow skeleton substance].sort
+    assert_equal expected, SlimPickins::Taxonomy.categories.keys.sort
+
+    SlimPickins::Taxonomy.categories.each do |key, meta|
+      assert meta[:name], "Category #{key} has name"
+      assert meta[:title], "Category #{key} has title"
+      assert meta[:question], "Category #{key} has authoring question"
+      assert meta[:summary], "Category #{key} has summary"
+      refute_empty meta[:sub_categories], "Category #{key} has sub-categories"
     end
   end
 
   def test_each_word_has_complete_entry_metadata
     @entries.each do |word, entry|
-      refute_empty entry.tiers, "Word #{word} must belong to at least one tier"
-      assert entry.primary_tier, "Word #{word} must declare a primary tier"
-      assert_includes entry.tiers, entry.primary_tier, "Primary tier must be among declared tiers"
+      refute_empty entry.categories, "Word #{word} must belong to at least one category"
+      assert entry.primary_category, "Word #{word} must declare a primary category"
+      assert_includes entry.categories, entry.primary_category, "Primary category must be among declared categories"
+      assert entry.sub_category, "Word #{word} must declare a sub-category"
       refute_empty entry.role, "Word #{word} must declare an authoring role"
       refute_empty entry.note, "Word #{word} must declare a diagnostic note"
       assert_includes %i[sits_well ad_hoc candidate_for_split], entry.diagnostic,
@@ -43,88 +61,77 @@ class TaxonomyTest < Minitest::Test
     end
   end
 
-  def test_words_for_tier_includes_all_applicable_words
-    by_tier = SlimPickins::Taxonomy.by_tier
+  def test_words_for_category_includes_all_applicable_words
+    by_cat = SlimPickins::Taxonomy.by_category
 
-    by_tier.each do |tier, words|
-      refute_empty words, "Tier #{tier} must have words"
+    by_cat.each do |cat, words|
+      refute_empty words, "Category #{cat} must have words"
       words.each do |word|
         entry = SlimPickins::Taxonomy.entry(word)
-        assert_includes entry.tiers, tier, "Word #{word} must declare tier #{tier}"
+        assert_includes entry.categories, cat, "Word #{word} must declare category #{cat}"
       end
     end
 
     # Specific multi-category members
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:structural), :card
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:visual), :card
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:semantic), :card
+    assert_includes SlimPickins::Taxonomy.words_for_category(:skeleton), :card
+    assert_includes SlimPickins::Taxonomy.words_for_category(:substance), :card
 
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:semantic), :table
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:structural), :table
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:behavioral), :table
+    assert_includes SlimPickins::Taxonomy.words_for_category(:skeleton), :table
+    assert_includes SlimPickins::Taxonomy.words_for_category(:substance), :table
 
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:interactive), :disclosure
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:behavioral), :disclosure
-    assert_includes SlimPickins::Taxonomy.words_for_tier(:structural), :disclosure
+    assert_includes SlimPickins::Taxonomy.words_for_category(:affordances), :actions
+    assert_includes SlimPickins::Taxonomy.words_for_category(:skeleton), :actions
+
+    assert_includes SlimPickins::Taxonomy.words_for_category(:flow), :disclosure
+    assert_includes SlimPickins::Taxonomy.words_for_category(:skeleton), :disclosure
   end
 
-  def test_multi_category_porosity
-    multi = SlimPickins::Taxonomy.multi_category_words
-    refute_empty multi
-    assert_includes multi, :card
-    assert_includes multi, :table
-    assert_includes multi, :disclosure
-    assert_includes multi, :actions
-    assert_includes multi, :form
-    assert_includes multi, :field
-    assert_includes multi, :empty
+  def test_filter_analysis_diagnostics
+    analysis = SlimPickins::Taxonomy.filter_analysis
+
+    # 1. Passband widths
+    widths = analysis.passband_widths
+    assert_equal 5, widths.size
+    assert_equal 22, widths[:substance][:count]
+    assert_equal 26, widths[:skeleton][:count]
+    assert_equal 19, widths[:affordances][:count]
+    assert_equal 6, widths[:flow][:count]
+    assert_equal 6, widths[:environment][:count]
+
+    # 2. Boundary selectivity
+    selectivity = analysis.boundary_selectivity
+    assert_equal 5, selectivity.size
+    assert selectivity[:environment][:selectivity] > 0.8, "Environment exhibits high selectivity"
+    assert selectivity[:skeleton][:selectivity] >= 0.5, "Skeleton has moderate selectivity due to container housing"
+
+    # 3. Polyhierarchical resonance
+    resonance = analysis.polyhierarchical_resonance
+    assert_equal 15, resonance.size, "15 words exhibit constructive multi-category resonance"
+    resonance_words = resonance.map { |r| r[:word] }
+    assert_includes resonance_words, :card
+    assert_includes resonance_words, :table
+    assert_includes resonance_words, :form
+    assert_includes resonance_words, :disclosure
+    assert_includes resonance_words, :empty
+    assert_includes resonance_words, :actions
+
+    # 4. Crossover matrix
+    matrix = analysis.crossover_matrix
+    refute_empty matrix
+    assert_equal %i[card chart dictionary fact table].sort, matrix[%i[substance skeleton]].sort
+    assert_equal %i[actions field form group nav tabs].sort, matrix[%i[skeleton affordances]].sort
   end
 
-  def test_cohesion_and_split_assessments
-    ledger = SlimPickins::Taxonomy.cohesion_ledger
-    assert_equal 64, ledger[:cohesive].size, "All 64 words are cohesive concepts"
-
-    # Split / overload candidates
-    split_words = SlimPickins::Taxonomy.split_candidates
-    assert_empty split_words, "box and span are recognized as essential primitives; no candidates for split"
-
-    # Single-consumer ad-hoc words (absorbed into figure and disclosure in Volet 5)
-    ad_hoc = SlimPickins::Taxonomy.ad_hoc_words
-    assert_empty ad_hoc, "figcaption and summary absorbed into figure and disclosure via privileged tag"
-  end
-
-  def test_missing_primitives_identified
-    missing = SlimPickins::Taxonomy.missing_primitives
-    names = missing.map { |m| m[:name] }
-    assert_includes names, :stack, "stack is diagnosed as a missing vertical rhythm primitive"
-    assert_includes names, :cluster, "cluster is diagnosed as a missing horizontal flow primitive"
-    assert_includes names, :sidebar, "sidebar is diagnosed as a missing two-column layout primitive"
-  end
-
-  def test_visual_tier_idiom_diagnosis
-    # Primary visual words must only be chrome/assets/status, not arbitrary paint
-    primary_visual = SlimPickins::Taxonomy.by_primary_tier[:visual]
-    assert_equal %i[badge iframe script stylesheet], primary_visual.sort
-
-    # Badge is semantic status dressed as a pill
-    assert_includes SlimPickins::Taxonomy.entry(:badge).tiers, :semantic
-
-    # No word in the language exists solely for visual decoration
-    pure_decorative = @entries.values.select do |e|
-      e.tiers == %i[visual] && !%i[stylesheet script iframe].include?(e.word)
-    end
-    assert_empty pure_decorative, "No vocabulary word exists solely as decorative paint"
-  end
-
-  def test_system_taxonomy_terms
-    expected = %i[word primitive partial def contract tin spiff].sort
+  def test_system_taxonomy_terms_across_the_three_planes
+    expected = %i[word primitive composed_word def frame layout style substance contract convention promise].sort
     system_terms = SlimPickins::Taxonomy.system_terms
 
     assert_equal expected, system_terms.keys.sort
-    assert_equal 7, system_terms.size
+    assert_equal 11, system_terms.size
 
     system_terms.each do |key, term|
       assert_equal key, term.name
+      assert_includes %i[linguistic spatial invariant], term.plane
       refute_empty term.summary
       refute_empty term.definition
       assert_equal term, SlimPickins::Taxonomy.system_term(key)

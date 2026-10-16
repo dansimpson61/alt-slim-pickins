@@ -46,13 +46,13 @@ class GateTest < Minitest::Test
                  error.message)
   end
 
-  def test_a_violating_tin_names_the_tin
-    tin = "money name\ncontents\n"
+  def test_a_violating_frame_names_the_frame
+    frame = "money name\ncontents\n"
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(tin: tin),
+      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(frame: frame),
              account: { name: 'Roth' })
     end
-    assert_match(/\A`money` takes no name — name\n  tin, line 1\n    money name\z/, error.message)
+    assert_match(/\A`money` takes no name — name\n  frame, line 1\n    money name\z/, error.message)
   end
 
   def test_evaluate_is_gated_too

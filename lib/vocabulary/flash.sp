@@ -1,2 +1,2 @@
-def flash, text
+def flash text
   note .text

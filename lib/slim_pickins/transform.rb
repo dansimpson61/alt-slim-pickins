@@ -140,6 +140,23 @@ module SlimPickins
         raise SyntaxError.new("#{word.inspect} is not a word", @path, sentence.lineno, sentence.body)
       end
 
+      if word == 'def'
+        def_target, params_str = if rest =~ /\A([a-z][a-z0-9_]*)(?:,\s*|\s+)(.*)\z/
+                                   [$1, $2]
+                                 elsif rest =~ /\A([a-z][a-z0-9_]*)\z/
+                                   [$1, '']
+                                 else
+                                   raise SyntaxError.new("invalid def signature #{rest.inspect}", @path, sentence.lineno, sentence.body)
+                                 end
+        params = split_args(params_str)
+        raw = [def_target, *params]
+        compiled = raw.map { |a| ":#{a}" }
+        ranks = [0] * raw.size
+        return Node.new(indent: sentence.indent, body: sentence.body, lineno: sentence.lineno,
+                        word: word, raw_args: raw, ranks: ranks, compiled: compiled, guard: nil,
+                        children: [])
+      end
+
       raw = split_args(rest)
       compiled = raw.map { |a| argument(a, sentence) }
       ranks = raw.map { |a| rank(a) }

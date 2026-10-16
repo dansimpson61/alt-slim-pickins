@@ -1,3 +1,3 @@
-def scroll, variant
+def scroll variant
   box .variant
     contents

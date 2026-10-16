@@ -43,7 +43,7 @@
 require 'set'
 require 'stringio'
 require_relative '../lib/slim_pickins'
-require_relative '../lib/slim_pickins/compiler/spiff'
+require_relative '../lib/slim_pickins/compiler/layout'
 
 # Reaching `PAGES` boots the example apps, and an app proves its own pages aloud
 # on boot (`SlimPickins.prove!`). That output belongs to the app and not to this
@@ -56,7 +56,7 @@ ensure
   $stdout = spoken
 end
 
-module SpiffScope
+module LayoutScope
   ROOT = File.expand_path('..', __dir__)
 
   # A rule's selector, up to its brace. `@media`/`@container` lines open a block
@@ -67,11 +67,9 @@ module SpiffScope
   module_function
 
   # The classes the compiled stylesheet targets. Read from the CSS the compiler
-  # emits rather than from the Spiff's parse tree: the parse tree names zones,
-  # but the stylesheet is what the browser applies and therefore the only thing
-  # that can match nothing.
-  def targeted_classes(spiff_path)
-    css = SlimPickins::Compiler::Spiff.compile(File.read(spiff_path), path: spiff_path)
+  # emits rather than from the layout's parse tree.
+  def targeted_classes(layout_path)
+    css = SlimPickins::Compiler::Layout.compile(File.read(layout_path), path: layout_path)
     css.scan(SELECTOR).flatten.join(' ').scan(CLASS).flatten.uniq.sort
   end
 
@@ -101,32 +99,35 @@ module SpiffScope
   end
 
   # Returns the problem count and prints the report to `out`.
-  def run(spiffs: nil, pages: PAGES, root: ROOT, out: $stdout)
+  def run(layouts: nil, spiffs: nil, pages: PAGES, root: ROOT, out: $stdout)
     problems = 0
     checked = 0
     report = ->(line) { out.puts "  #{line}" }
 
-    spiffs = (spiffs || Dir[File.join(root, '{pages,examples,studio}', '**', '*.spiff')]).sort
-    if spiffs.empty?
-      report.call('NO SPIFFS        no `.spiff` files found — the corpus or its shape changed')
+    files = layouts || spiffs || (
+      Dir[File.join(root, '{pages,examples,studio}', '**', '*.layout')] +
+      Dir[File.join(root, '{pages,examples,studio}', '**', '*.spiff')]
+    ).sort
+    if files.empty?
+      report.call('NO LAYOUTS       no `.layout` files found — the corpus or its shape changed')
       problems += 1
     end
 
-    spiffs.each do |spiff|
-      scope = scope_of(spiff, pages: pages, root: root)
+    files.each do |layout_file|
+      scope = scope_of(layout_file, pages: pages, root: root)
       if scope.empty?
-        report.call("UNRENDERED       `#{relative(spiff, root: root)}` governs no page the corpus renders, so its " \
+        report.call("UNRENDERED       `#{relative(layout_file, root: root)}` governs no page the corpus renders, so its " \
                     'selectors have nothing to answer to — give its pages to `bin/verify_pages.rb`')
         problems += 1
         next
       end
 
       rendered = rendered_classes(scope, root: root)
-      targeted = targeted_classes(spiff)
+      targeted = targeted_classes(layout_file)
       checked += targeted.size
 
       (targeted - rendered.to_a).each do |name|
-        report.call("MATCHES NOTHING  `#{relative(spiff, root: root)}` compiles a selector for `.#{name}`, " \
+        report.call("MATCHES NOTHING  `#{relative(layout_file, root: root)}` compiles a selector for `.#{name}`, " \
                     "and none " \
                     "of the #{scope.size} page(s) it governs renders that class")
         problems += 1
@@ -134,10 +135,11 @@ module SpiffScope
     end
 
     out.puts
-    out.puts "#{spiffs.size} spiff(s), #{checked} compiled classes held to the HTML their pages render, " \
+    out.puts "#{files.size} layout(s), #{checked} compiled classes held to the HTML their pages render, " \
              "#{problems} problems"
     problems
   end
 end
+SpiffScope = LayoutScope
 
-exit(SpiffScope.run.zero? ? 0 : 1) if $PROGRAM_NAME == __FILE__
+exit(LayoutScope.run.zero? ? 0 : 1) if $PROGRAM_NAME == __FILE__

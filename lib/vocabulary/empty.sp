@@ -1,2 +1,2 @@
-def empty, message
+def empty message
   paragraph .message

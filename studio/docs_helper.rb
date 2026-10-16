@@ -20,16 +20,17 @@ module StudioDocs
   # Phase 5 answer names the studio's own md docs a dogfood target: a studio
   # that cannot show its own resume prompt and its own plan is a studio that
   # eats someone else's food.
-  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE
+  GUIDES = %w[README PRIMER VOCABULARY CONTRACT DESIGN KERNEL LORE ONTOLOGY
               ROADMAP-0.2 ROADMAP-0.3 HANDOFF DAYTRIP BLUESKY
-              SPIFF SPIFF_DISCUSSION].freeze
+              LAYOUT SPIFF_DISCUSSION].freeze
 
   # Which document each guide name is. Most live at the root; the design
   # idiom lives in `docs/` beside its compiler. Named here, in one place, so
   # the route serves a known document instead of interpolating a path from
   # the URL — the registry *is* the guard.
   DOCUMENTS = GUIDES.to_h { |name| [name, "#{name}.md"] }
-                      .merge('SPIFF' => 'docs/SPIFF.md',
+                      .merge('ONTOLOGY' => 'docs/ONTOLOGY.md',
+                             'LAYOUT' => 'docs/LAYOUT.md',
                              'PRIMER' => 'docs/PRIMER.md',
                              'VOCABULARY' => 'docs/VOCABULARY.md',
                              'CONVENTIONS' => 'docs/CONVENTIONS.md',

@@ -1,2 +1,2 @@
-def money, amount
+def money amount
   span .amount, precision: .precision

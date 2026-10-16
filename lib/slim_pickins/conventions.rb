@@ -40,7 +40,7 @@ module SlimPickins
 
     PRINCIPLES = [
       Principle.new(name: :page_frame,
-                    rule: 'A page wears its frame: the document, and the tin around it.'),
+                    rule: 'A page wears its frame: the document, and the frame around it.'),
       Principle.new(name: :name_as_text,
                     rule: 'A name is its own text — the heading, the label, the address.'),
       Principle.new(name: :name_inflects,
@@ -88,10 +88,10 @@ module SlimPickins
                      inference: nil, override: '`page portfolio, "Your retirement"`',
                      principle: :name_as_text,
                      grade: :structural),
-      Convention.new(name: :tin, when_silent: 'a `[name].tin` sits beside the views',
+      Convention.new(name: :frame, when_silent: 'a `[name].frame` sits beside the views',
                      decides: 'the chrome every page wears, with `contents` marking the hole',
-                     file: 'lib/slim_pickins/builder.rb', marker: 'def wrapped_in_tin',
-                     inference: nil, override: 'delete the tin, or move the page',
+                     file: 'lib/slim_pickins/builder.rb', marker: 'def wrapped_in_frame',
+                     inference: nil, override: 'delete the frame, or move the page',
                      principle: :page_frame,
                      grade: :structural),
       Convention.new(name: :heading_level, when_silent: 'a heading is nested',

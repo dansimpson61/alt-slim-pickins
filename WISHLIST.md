@@ -34,7 +34,9 @@
    - **Retired:** When an item is formally rejected by Dan or superseded by a
      simpler Ruby idiom, move it to the *Retired* subsection with Dan's ruling
      and the rationale.
-
+6. **At Roadmap Conception (Framing the Stretch Exam):**
+   - For **odd-numbered (forward-eye) roadmaps**, select the next **Stretch Exam** (`docs/STRETCH_PROTOCOL.md`) by pulling mature pinches from Section I, architectural goals from Section II, and aesthetic targets from Section IV into a single authentic reference application drafted on paper first.
+   - For **even-numbered (backward-eye) roadmaps**, review Section III (Pedagogy & Repo) and audit the `examples/` garden to harvest generalizable words from the last Stretch Exam and retire dated prototype apps that no longer carry their weight.
 ---
 
 ## I. Loose Ends & Technical Pinches (The Pinch Ledger)

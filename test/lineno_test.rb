@@ -55,12 +55,12 @@ class LinenoTest < Minitest::Test
                  error.message)
   end
 
-  def test_an_error_in_the_tin_names_the_tin_not_the_page
+  def test_an_error_in_the_frame_names_the_frame_not_the_page
     layout = "nav\n  link home\ntitle .nmae\ncontents\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(tin: layout),
+      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(frame: layout),
              account: Account.new(name: 'Roth'))
     end
-    assert_match(/\Athis account has no nmae\n  tin, line 3\n    title \.nmae\z/, error.message)
+    assert_match(/\Athis account has no nmae\n  frame, line 3\n    title \.nmae\z/, error.message)
   end
 end

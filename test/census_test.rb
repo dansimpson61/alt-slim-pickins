@@ -9,8 +9,8 @@ class CensusTest < Minitest::Test
   def test_words_census_matches_canonical_source_of_truth
     words = SlimPickins::Census.words
 
-    assert_equal 41, words[:primitives].size
-    assert_equal 23, words[:partials].size
+    assert_equal 38, words[:primitives].size
+    assert_equal 26, words[:partials].size
     assert_equal 64, words[:total].size
   end
 

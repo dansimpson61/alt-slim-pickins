@@ -1,3 +1,3 @@
-def aside, variant
+def aside variant
   box .variant
     contents

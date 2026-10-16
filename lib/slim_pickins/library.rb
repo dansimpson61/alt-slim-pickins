@@ -15,7 +15,7 @@ module SlimPickins
   # idiom now owns; a tin is the modest metal over the building, and
   # `[name].tin` sits beside `[name].spiff` as one concern per file.
   class Library
-    attr_reader :tin, :partials, :words, :app_partials, :compiled_partials, :dir, :public_url
+    attr_reader :frame, :frames, :tin, :tins, :partials, :words, :app_partials, :compiled_partials, :dir, :public_url
 
     # The language's own vocabulary, written as partials — the dogfood made
     # visible: new words are drafted in the language itself, in
@@ -23,29 +23,27 @@ module SlimPickins
     # is a round-end decision, not an assumption.
     VOCABULARY_DIR = File.expand_path('../vocabulary', __dir__)
 
-    # The frame's home on disk: `[app].tin`, named for the app it frames, so
-    # it sits beside that app's views. Callers reach a library from either
-    # side of the `views/` line — an app boots with its `views/` directory, a
-    # studio UI with the UI's root — so both readings are tried, and each is
-    # named for the app it would belong to: `dashboard/views/dashboard.tin`
-    # when handed the views, `workbench/workbench.tin` when handed the root.
-    #
-    # nil is a real answer — a page may be standalone, and then it carries its
-    # own chrome rather than inheriting one.
-    def self.tin_path(dir)
+    # The frame's home on disk: `[app].frame` (formerly `[app].tin`), named for
+    # the app it frames, so it sits beside that app's views.
+    def self.frame_path(dir)
       dir = File.expand_path(dir)
       app = File.basename(dir)
       outer = File.basename(File.dirname(dir))
-      [File.join(dir, "#{app}.tin"),
+      [File.join(dir, "#{app}.frame"),
+       File.join(dir, 'views', "#{app}.frame"),
+       File.join(dir, "#{outer}.frame"),
+       File.join(File.dirname(dir), "#{outer}.frame"),
+       File.join(dir, "#{app}.tin"),
        File.join(dir, 'views', "#{app}.tin"),
        File.join(dir, "#{outer}.tin"),
        File.join(File.dirname(dir), "#{outer}.tin")].find { |path| File.file?(path) }
     end
+    singleton_class.alias_method :tin_path, :frame_path
 
     # Where a directory's views are: the directory itself when it holds `.sp`
     # files (a studio UI keeps its pages in `views/`, and is handed the root),
     # else a `views/` beneath it (an example app). One reading, used by both
-    # `from` and the per-view lookups so a page and its tin are never found by
+    # `from` and the per-view lookups so a page and its frame are never found by
     # two different rules.
     def self.views_dir(dir)
       dir = File.expand_path(dir)
@@ -55,19 +53,22 @@ module SlimPickins
       Dir.exist?(nested) ? nested : dir
     end
 
-    # Every view that carries its own tin, by view name. A view's tin is
-    # `<view>.tin` beside the app's, and it beats the app's — presentation may
-    # be decided once for the app or once for one page, and the page's word
-    # wins. Read in one glob so the name and the source cannot drift.
-    def self.view_tins(dir)
-      Dir[File.join(views_dir(dir), '*.tin')].to_h do |path|
+    # Every view that carries its own frame, by view name. A view's frame is
+    # `<view>.frame` beside the app's, and it beats the app's.
+    def self.view_frames(dir)
+      frames = Dir[File.join(views_dir(dir), '*.frame')].to_h do |path|
+        [File.basename(path, '.frame'), File.read(path)]
+      end
+      tins = Dir[File.join(views_dir(dir), '*.tin')].to_h do |path|
         [File.basename(path, '.tin'), File.read(path)]
       end
+      tins.merge(frames)
     end
+    singleton_class.alias_method :view_tins, :view_frames
 
     def self.from(dir, words: nil, public_url: nil)
       dir = File.expand_path(dir)
-      frame_path = tin_path(dir)
+      file = frame_path(dir)
       partials = {}
       partial_paths = {}
       Dir[File.join(dir, 'partials', '*.sp')].each do |path|
@@ -75,21 +76,18 @@ module SlimPickins
         partials[name] = File.read(path)
         partial_paths[name] = path
       end
-      new(tin: (File.read(frame_path) if frame_path),
-          tins: view_tins(dir),
+      new(frame: (File.read(file) if file),
+          frames: view_frames(dir),
           partials: partials, partial_paths: partial_paths, words: words,
           dir: dir, public_url: public_url)
     end
 
-    # `words:` is the escape hatch: one module whose methods become words —
-    # or several, in an array, so an app's words may be written in parts and
-    # delegate to each other — written in Ruby because the thing they render
-    # has no word yet. See Builder's "escape hatch" section for the surface
-    # they may use.
-    def initialize(tin: nil, tins: {}, partials: {}, partial_paths: {}, words: nil, dir: nil,
+    def initialize(frame: nil, frames: {}, tin: nil, tins: {}, partials: {}, partial_paths: {}, words: nil, dir: nil,
                    public_url: nil)
-      @tin = tin
-      @tins = tins
+      @frame = frame || tin
+      @frames = (tins || {}).merge(frames || {})
+      @tin = @frame
+      @tins = @frames
       @public_url = public_url
       @dir = dir
       app_partials = partials.transform_keys(&:to_sym)
@@ -162,54 +160,44 @@ module SlimPickins
     # This is the only place the rule lives. It used to live in the studio, so
     # the language did not know a page could have its own chrome and only the
     # studio could find the document that said so.
-    def tin_for(view = nil)
-      return @tin unless view
+    def frame_for(view = nil)
+      return @frame unless view
 
-      @tins.fetch(view.to_s) { @tin }
+      @frames.fetch(view.to_s) { @frame }
     end
+    alias_method :tin_for, :frame_for
 
-    # The Spiff a page is presented by: `[view].spiff` beside it, else the
-    # app's companion — the same rule as the tin, in the same place, so a page
-    # and its presentation are never found by two different rules.
-    #
-    # A class method because it needs no library: the lookup reads two files
-    # and is asked on every page load, while building a `Library` compiles the
-    # whole vocabulary. Reading what a page is presented by should not cost
-    # that.
-    #
-    # `nil` when neither exists, which is a real state: a page with nowhere to
-    # say how it sits is not an error, it wears the stylesheet as it is.
-    def self.spiff_for(view = nil, path: nil, app: nil)
-      found = view_spiff(view, path) || app || app_spiff(path)
+    # The Layout a page is presented by: `[view].layout` beside it, else the
+    # app's companion.
+    def self.layout_for(view = nil, path: nil, app: nil)
+      found = view_layout(view, path) || app || app_layout(path)
       found && File.read(found)
     end
+    singleton_class.alias_method :spiff_for, :layout_for
 
-    # A companion written for one view, beside that view. The names tried are
-    # the view's own and its directory's, because a view is named either by
-    # its file (`index.sp`) or by the app it belongs to (`doc_reader`), and a
-    # `[name].spiff` is written under one of those.
-    def self.view_spiff(view, path)
+    def self.view_layout(view, path)
       dir = path ? File.dirname(path.to_s) : nil
       return nil unless dir
 
-      [view, File.basename(dir)].compact.uniq.reject(&:empty?)
-                                 .map { |name| File.join(dir, "#{name}.spiff") }
-                                 .find { |file| File.file?(file) }
+      names = [view, File.basename(dir)].compact.uniq.reject(&:empty?)
+      candidates = names.map { |name| File.join(dir, "#{name}.layout") } +
+                   names.map { |name| File.join(dir, "#{name}.spiff") }
+      candidates.find { |file| File.file?(file) }
     end
+    singleton_class.alias_method :view_spiff, :view_layout
 
-    # An app's own companion, named for the app: beside the views
-    # (`dashboard/views/dashboard.spiff`) or one level up
-    # (`doc_reader/doc_reader.spiff`, where the app's directory holds the
-    # views).
-    def self.app_spiff(path)
+    def self.app_layout(path)
       return nil unless path
 
       dir = File.dirname(path.to_s)
       inner = File.basename(dir)
       outer = File.basename(File.dirname(dir))
-      [File.join(dir, "#{inner}.spiff"),
+      [File.join(dir, "#{inner}.layout"),
+       File.join(File.dirname(dir), "#{outer}.layout"),
+       File.join(dir, "#{inner}.spiff"),
        File.join(File.dirname(dir), "#{outer}.spiff")].find { |file| File.file?(file) }
     end
+    singleton_class.alias_method :app_spiff, :app_layout
 
     # An app's stylesheets live in its own public directory, named for what
     # they style: `public/css/[app].css`, or `public/css/[view].css` for one

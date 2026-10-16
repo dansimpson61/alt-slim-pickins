@@ -1,2 +1,2 @@
-def number, amount
+def number amount
   span .amount, precision: .precision

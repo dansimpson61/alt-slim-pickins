@@ -1,4 +1,4 @@
-def card, target, title
+def card target, title
   box .variant, id: .id
     choose
       when .title

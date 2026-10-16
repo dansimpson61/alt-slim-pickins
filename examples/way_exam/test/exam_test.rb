@@ -28,7 +28,7 @@ class ExamTest < Minitest::Test
       'q3' => 'Child sentences resolve dotted attributes (e.g. .balance) directly on that account.',
       'q4' => 'In theme roles and word variants, refusing raw inline styles.',
       'q5' => "#{SlimPickins::Census.words[:total].size} words",
-      'q6' => 'word, primitive, partial, def, contract, tin, spiff',
+      'q6' => 'linguistic, spatial, invariant',
       'q7' => 'Via contents and group, retiring the legacy children keyword.'
     }
     result = WayExam::Exam.grade(answers)

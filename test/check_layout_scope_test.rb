@@ -4,7 +4,7 @@ require 'minitest/autorun'
 require 'stringio'
 require 'fileutils'
 require 'tmpdir'
-require_relative '../checkers/check_spiff_scope'
+require_relative '../checkers/check_layout_scope'
 
 # The Spiff gate, retargeted in DAYTRIP-0.4.0j: a compiled selector against the
 # HTML the pages it governs really render.
@@ -15,7 +15,7 @@ require_relative '../checkers/check_spiff_scope'
 # Both are asked here by name, because the retarget's entire justification is
 # that those two cases now fail.
 class CheckSpiffScopeTest < Minitest::Test
-  WORKBENCH = File.expand_path('../studio/uis/workbench/workbench.spiff', __dir__)
+  WORKBENCH = File.expand_path('../studio/uis/workbench/workbench.layout', __dir__)
 
   def run_check(spiffs: nil, pages: nil, root: SpiffScope::ROOT)
     out = StringIO.new
@@ -38,12 +38,12 @@ class CheckSpiffScopeTest < Minitest::Test
   # renders needs the same. The fixture tests below stay in-process because an
   # in-buffer `def` is page-local and owes the registry nothing.
   def test_the_real_corpus_passes
-    output = IO.popen(['ruby', File.join(SpiffScope::ROOT, 'checkers', 'check_spiff_scope.rb')],
+    output = IO.popen(['ruby', File.join(SpiffScope::ROOT, 'checkers', 'check_layout_scope.rb')],
                       err: %i[child out], &:read)
     assert_match(/0 problems/, output, output)
     # The counts are not pinned: a Spiff added tomorrow moves them, and that is
     # not a failure. The shape of the verdict is what this holds.
-    assert_match(%r{\d+ spiff\(s\), \d+ compiled classes held to the HTML their pages render}, output)
+    assert_match(%r{\d+ (?:layout|spiff)\(s\), \d+ compiled classes held to the HTML their pages render}, output)
   end
 
   # The measurement that justified retargeting rather than deleting: the old
@@ -103,7 +103,7 @@ class CheckSpiffScopeTest < Minitest::Test
   def test_an_empty_corpus_is_refused_rather_than_passed
     problems, output = run_check(spiffs: [], pages: [])
     assert_equal 1, problems
-    assert_match(/NO SPIFFS/, output)
+    assert_match(/NO (?:LAYOUTS|SPIFFS)/, output)
   end
 
   def test_scope_is_the_spiffs_own_directory

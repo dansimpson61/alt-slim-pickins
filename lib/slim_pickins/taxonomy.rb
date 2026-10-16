@@ -3,138 +3,406 @@
 require 'set'
 
 module SlimPickins
-  # The Single Source of Truth for the language's deductive authoring taxonomy
-  # and empirical diagnostic instrument.
+  # The Single Source of Truth for the language's deductive authoring taxonomy,
+  # ontological meta-architecture, and empirical diagnostic instrument.
   #
-  # Formulated in DAYTRIP-0.4.0d (Volet 4) to solve Authoring Pain Point 1:
-  # moving beyond a flat, alphabetical word list into a structured,
-  # deductive authoring hierarchy.
-  #
-  # Crucially, this taxonomy is an EMPIRICAL DIAGNOSTIC TEST of the language:
-  #   1. Porosity: Words in multiple categories appear in all of them; boundaries
-  #      are recognized as naturally blurred rather than artificial silos.
-  #   2. Cohesion vs. Split: Every multi-category word is assessed for whether
-  #      it represents a unified concept or an overloaded candidate for splitting.
-  #   3. Missing Primitives: Surfaces missing structural axioms (e.g. `stack`).
-  #   4. Ad-hoc Anomalies: Pinpoints words that are single-consumer HTML element
-  #      leaks (e.g. `figcaption`, `summary`).
-  #   5. Visual Tier Idiom: Audits the principle that words describe meaning and
-  #      structure, not paint, confirming that visual presentation belongs to
-  #      the theme/variant idiom.
+  # Refined in DAYTRIP-0.6.0j to replace the preliminary 5-tier presentation filing
+  # cabinet with a multi-axial taxonomy governed by filter theory:
+  #   1. The Three Ontological Planes: Linguistic & Execution, Composition & Spatial,
+  #      and Mechanical Invariants.
+  #   2. The Refined Categories & Sub-Categories: Substance, Skeleton, Affordances,
+  #      Flow & Logic, and Environment.
+  #   3. Bandpass Filter Diagnostics: Passband width, boundary selectivity, and
+  #      polyhierarchical resonance across the 64 canonical words.
   module Taxonomy
-    TIERS = {
-      structural: {
-        name: :structural,
-        title: 'Structure & Layout',
-        question: 'What is the skeleton — the containers and their order?',
-        summary: 'Scaffolding, document regions, and composition slots.'
+    # The Three Ontological Planes of alt-slim-pickins
+    PLANES = {
+      linguistic: {
+        name: :linguistic,
+        title: 'Linguistic & Execution Plane',
+        summary: 'The lexicon, grammar, and execution tokens of the template language.',
+        terms: %i[word primitive composed_word def]
       },
-      semantic: {
-        name: :semantic,
-        title: 'Meaning & Domain',
-        question: 'What does this content mean or represent?',
-        summary: 'Domain data, typography, quantitative measures, and relational information.'
+      spatial: {
+        name: :spatial,
+        title: 'Composition & Spatial Plane',
+        summary: 'The spatial canvases, outer chrome envelopes, stylesheets, and route substance.',
+        terms: %i[frame layout style substance]
       },
-      interactive: {
-        name: :interactive,
-        title: 'Controls & Actions',
-        question: 'How does the user interact, input data, or trigger an action?',
-        summary: 'Affordances, buttons, input controls, query fields, and toggles.'
-      },
-      behavioral: {
-        name: :behavioral,
-        title: 'Flow, State & Dispatch',
-        question: 'How does the page react, branch, iterate, or submit?',
-        summary: 'Collection iteration, conditionals, emptiness presence, and form coordination.'
-      },
-      visual: {
-        name: :visual,
-        title: 'Surfaces & Chrome',
-        question: 'How is information surfaced, framed, or styled?',
-        summary: 'Bounded surfaces, chrome assets, viewport embeds, and status styling.'
+      invariant: {
+        name: :invariant,
+        title: 'Mechanical Invariant Plane',
+        summary: 'The three instruments of truth governing grammar, runtime inference, and feature verification.',
+        terms: %i[contract convention promise]
       }
+    }.freeze
+
+    # Refined Deductive Vocabulary Categories
+    CATEGORIES = {
+      substance: {
+        name: :substance,
+        title: 'Substance (Domain Content & Phrasing)',
+        question: 'What domain content, quantitative data, or phrasing does this express?',
+        summary: 'Domain data, typography, quantitative measures, and phrasing.',
+        sub_categories: {
+          typography: 'Typography, phrasing, and text annotations (heading, paragraph, text, note, flash, prose, snippet, title, span)',
+          data: 'Data, metrics, numbers, and value badges (metric, fact, number, money, percent, time, badge, dictionary, total)'
+        }
+      },
+      skeleton: {
+        name: :skeleton,
+        title: 'Skeleton (Structure & Framing)',
+        question: 'What structural skeleton, container boundary, or collection orders the canvas?',
+        summary: 'Landmark regions, containers, surfaces, collections, and tabular grids.',
+        sub_categories: {
+          landmarks: 'Document landmark regions (section, aside, nav, footer)',
+          containers: 'Surface boundaries, entity wrappers, and viewports (box, card, figure, group, scroll)',
+          collections: 'Sequential collections, tables, and relational grids (list, item, table, column, row, grid, chart, band, line, level)'
+        }
+      },
+      affordances: {
+        name: :affordances,
+        title: 'Affordances (Controls & Interactions)',
+        question: 'How does the user interact, input data, or navigate the application?',
+        summary: 'Interactive affordances, action triggers, navigation links, and input fields.',
+        sub_categories: {
+          actions: 'Action triggers, buttons, and navigation links (link, button, actions, action, tabs, tab)',
+          inputs: 'Form controls, user inputs, and transport fields (form, field, input, choice, option, search, checkbox, hidden, textarea, on)'
+        }
+      },
+      flow: {
+        name: :flow,
+        title: 'Flow & Logic (State & Behavior)',
+        question: 'How does the template iterate, branch, or disclose state?',
+        summary: 'Collection iteration, conditionals, emptiness fallback, and disclosure state.',
+        sub_categories: {
+          iteration: 'Collection loops and empty state handling (each, empty)',
+          branching: 'Condition evaluation and choice branches (choose, when, otherwise)',
+          disclosure: 'Interactive disclosure and collapsible state (disclosure)'
+        }
+      },
+      environment: {
+        name: :environment,
+        title: 'Environment (Document & Splicing)',
+        question: 'How is the document framed, resourced, and spliced into the outer context?',
+        summary: 'Document root, outer chrome, resource links, raw elements, and slot splicing.',
+        sub_categories: {
+          document: 'Document root container and application context host (page)',
+          resources: 'Document assets, external scripts, styles, and tags (stylesheet, script, iframe, tag)',
+          splicing: 'Slot splicing and collection mapping (contents, map)'
+        }
+      }
+    }.freeze
+
+    # Legacy alias for Studio shelf navigation
+    TIERS = CATEGORIES
+
+    # Single Source of Truth for System Taxonomy Terms across the 3 planes
+    SystemTerm = Struct.new(:name, :plane, :summary, :definition, keyword_init: true)
+
+    SYSTEM = {
+      word: SystemTerm.new(
+        name: :word,
+        plane: :linguistic,
+        summary: 'Fundamental syntax token',
+        definition: 'The fundamental syntax unit of slim-pickins (word arguments, indentation nests). Everything on a page is a word (64 canonical + app words).'
+      ),
+      primitive: SystemTerm.new(
+        name: :primitive,
+        plane: :linguistic,
+        summary: 'Ruby-implemented leaf word',
+        definition: 'An atomic leaf word implemented directly in Ruby as a subclass of SlimPickins::Word (38 canonical primitives).'
+      ),
+      composed_word: SystemTerm.new(
+        name: :composed_word,
+        plane: :linguistic,
+        summary: 'Template-defined first-class word',
+        definition: 'A first-class word defined in .sp syntax using def in lib/vocabulary/ (26 canonical composed words, formerly called partials).'
+      ),
+      def: SystemTerm.new(
+        name: :def,
+        plane: :linguistic,
+        summary: 'Word definition keyword',
+        definition: "The language keyword that defines a composed word and its parameter list: `def word_name subject, kwargs`."
+      ),
+      frame: SystemTerm.new(
+        name: :frame,
+        plane: :spatial,
+        summary: 'Document envelope chrome',
+        definition: 'The outer HTML document chrome (.frame, formerly .tin), defining <head>, shell, navigation, and asset envelopes with contents marking the body hole.'
+      ),
+      layout: SystemTerm.new(
+        name: :layout,
+        plane: :spatial,
+        summary: 'Spatial stylesheet companion',
+        definition: 'The spatial companion stylesheet language (.layout, formerly .spiff), compiling spatial declarations (horizon, flank, stack, grid) to CSS.'
+      ),
+      style: SystemTerm.new(
+        name: :style,
+        plane: :spatial,
+        summary: 'Reserved styling layer',
+        definition: 'The reserved future layer for micro-layout, component styling, and theme roles.'
+      ),
+      substance: SystemTerm.new(
+        name: :substance,
+        plane: :spatial,
+        summary: 'Route body template',
+        definition: 'The route-level body template (.sp) answering a request and filling contents inside the frame.'
+      ),
+      contract: SystemTerm.new(
+        name: :contract,
+        plane: :invariant,
+        summary: 'Compile-time syntactic grammar',
+        definition: 'The compile-time syntactic grammar (takes, holds, modifiers, shape), enforced by the gate before render.'
+      ),
+      convention: SystemTerm.new(
+        name: :convention,
+        plane: :invariant,
+        summary: 'Runtime inference engine',
+        definition: 'The runtime inference engine (38 conventions) governing defaults when an author stays silent.'
+      ),
+      promise: SystemTerm.new(
+        name: :promise,
+        plane: :invariant,
+        summary: 'Feature verification ledger',
+        definition: 'The feature verification ledger (33 promises) proving declared modifiers have active readers in code.'
+      )
     }.freeze
 
     Entry = Struct.new(
       :word,
-      :tiers,
-      :primary_tier,
+      :categories,
+      :primary_category,
+      :sub_category,
       :role,
       :diagnostic,
       :cohesion,
       :note,
       keyword_init: true
+    ) do
+      def tiers = categories
+      def primary_tier = primary_category
+    end
+
+    FilterAnalysis = Struct.new(
+      :passband_widths,
+      :boundary_selectivity,
+      :polyhierarchical_resonance,
+      :crossover_matrix,
+      keyword_init: true
     )
 
     ENTRIES = {
-      # --- Document & Scaffolding ---
-      page: Entry.new(
-        word: :page,
-        tiers: %i[structural behavioral],
-        primary_tier: :structural,
-        role: 'Document root container and application context host',
+      # --- Substance: Typography ---
+      heading: Entry.new(
+        word: :heading,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Direct heading element at specific or inferred level',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Naturally bridges document structure with root application state resolution.'
+        note: 'Core typography primitive.'
       ),
-      contents: Entry.new(
-        word: :contents,
-        tiers: %i[structural],
-        primary_tier: :structural,
-        role: 'Universal layout and partial composition slot marker for stowed page or caller block',
+      paragraph: Entry.new(
+        word: :paragraph,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Body prose paragraph',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Unified single-purpose structural reuse and block composition primitive across tins and partials.'
+        note: 'Core typography primitive.'
       ),
+      text: Entry.new(
+        word: :text,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Leaf text run without surrounding block element',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Raw text phrasing atom.'
+      ),
+      note: Entry.new(
+        word: :note,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Callout note or annotation with quiet or warning tone',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Typography phrasing atom.'
+      ),
+      flash: Entry.new(
+        word: :flash,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Notification and alert banner message',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Status message phrasing.'
+      ),
+      prose: Entry.new(
+        word: :prose,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Rich prose or markdown formatted text block',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Typography block presenter.'
+      ),
+      snippet: Entry.new(
+        word: :snippet,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Formatted code snippet block with language notation',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Typography block with code notation.'
+      ),
+      title: Entry.new(
+        word: :title,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Document or section heading inferring level from nesting depth',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'High-level title inferring heading level from tree structure.'
+      ),
+      span: Entry.new(
+        word: :span,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :typography,
+        role: 'Generic inline text or data span wrapper',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Inline typography leaf.'
+      ),
+
+      # --- Substance: Data & Metrics ---
+      metric: Entry.new(
+        word: :metric,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'High-visibility quantitative KPI and value presentation',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Quantitative data substance atom.'
+      ),
+      fact: Entry.new(
+        word: :fact,
+        categories: %i[substance skeleton],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Single key-value definition atom',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Data presentation atom mapped to definition list structure.'
+      ),
+      number: Entry.new(
+        word: :number,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Delimited numeric value with scale formatting',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Domain data presentation atom.'
+      ),
+      money: Entry.new(
+        word: :money,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Currency-formatted value with symbol and precision',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Domain data presentation atom.'
+      ),
+      percent: Entry.new(
+        word: :percent,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Percentage-formatted numeric value with scale sign',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Domain data presentation atom.'
+      ),
+      time: Entry.new(
+        word: :time,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Timestamp or relative date formatted value in time tag',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Domain data presentation atom.'
+      ),
+      badge: Entry.new(
+        word: :badge,
+        categories: %i[substance affordances],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Visual status indicator and quantitative badge',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Data presentation atom that may double as interactive pill.'
+      ),
+      dictionary: Entry.new(
+        word: :dictionary,
+        categories: %i[substance skeleton],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Key-value data presentation container',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Pairs structured data with definition layout.'
+      ),
+      total: Entry.new(
+        word: :total,
+        categories: %i[substance],
+        primary_category: :substance,
+        sub_category: :data,
+        role: 'Aggregate total summary row or cell',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Data aggregation atom.'
+      ),
+
+      # --- Skeleton: Landmarks ---
       section: Entry.new(
         word: :section,
-        tiers: %i[structural semantic],
-        primary_tier: :structural,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :landmarks,
         role: 'Major document region labelled by heading or subject',
         diagnostic: :sits_well,
         cohesion: :cohesive,
         note: 'Combines landmark structure with semantic heading inference.'
       ),
-      group: Entry.new(
-        word: :group,
-        tiers: %i[structural interactive],
-        primary_tier: :structural,
-        role: 'Logical grouping container or form fieldset',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Groups controls or sections together under a shared label.'
-      ),
-      grid: Entry.new(
-        word: :grid,
-        tiers: %i[structural],
-        primary_tier: :structural,
-        role: 'Multi-column 2D grid layout with column specification',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Core 2D layout primitive.'
-      ),
-      box: Entry.new(
-        word: :box,
-        tiers: %i[structural visual],
-        primary_tier: :structural,
-        role: 'Essential generic layout container, surface wrapper, or title host',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Essential structural primitive: provides a generic container, surface boundary, and title host without prescriptive semantics.'
-      ),
       aside: Entry.new(
         word: :aside,
-        tiers: %i[structural],
-        primary_tier: :structural,
-        role: 'Sidebar landmark region for secondary or tangential content',
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :landmarks,
+        role: 'Sidebar landmark region for secondary content',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Semantic HTML5 landmark structure.'
+        note: 'Semantic landmark structure.'
       ),
       nav: Entry.new(
         word: :nav,
-        tiers: %i[structural interactive],
-        primary_tier: :structural,
+        categories: %i[skeleton affordances],
+        primary_category: :skeleton,
+        sub_category: :landmarks,
         role: 'Navigation landmark region enclosing link affordances',
         diagnostic: :sits_well,
         cohesion: :cohesive,
@@ -142,17 +410,73 @@ module SlimPickins
       ),
       footer: Entry.new(
         word: :footer,
-        tiers: %i[structural],
-        primary_tier: :structural,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :landmarks,
         role: 'Footer landmark region for page or container metadata',
         diagnostic: :sits_well,
         cohesion: :cohesive,
         note: 'Standard document landmark.'
       ),
+
+      # --- Skeleton: Containers ---
+      box: Entry.new(
+        word: :box,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :containers,
+        role: 'Essential generic container, surface wrapper, or title host',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Core structural boundary primitive.'
+      ),
+      card: Entry.new(
+        word: :card,
+        categories: %i[skeleton substance],
+        primary_category: :skeleton,
+        sub_category: :containers,
+        role: 'Self-contained entity container and elevated visual surface',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Exemplary multi-category word: shifting subject scope and visual elevation.'
+      ),
+      figure: Entry.new(
+        word: :figure,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :containers,
+        role: 'Figure element container enclosing media and caption',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Self-contained semantic container.'
+      ),
+      group: Entry.new(
+        word: :group,
+        categories: %i[skeleton affordances],
+        primary_category: :skeleton,
+        sub_category: :containers,
+        role: 'Logical grouping container or form fieldset',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Groups controls or sections together under a shared label.'
+      ),
+      scroll: Entry.new(
+        word: :scroll,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :containers,
+        role: 'Overflow-constrained scrollable viewport container',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Constrains layout geometry and enables overflow scrolling.'
+      ),
+
+      # --- Skeleton: Collections & Tabular ---
       list: Entry.new(
         word: :list,
-        tiers: %i[structural],
-        primary_tier: :structural,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
         role: 'Sequential vertical container enclosing items',
         diagnostic: :sits_well,
         cohesion: :cohesive,
@@ -160,531 +484,406 @@ module SlimPickins
       ),
       item: Entry.new(
         word: :item,
-        tiers: %i[structural semantic],
-        primary_tier: :structural,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
         role: 'Individual element wrapper inside a list',
         diagnostic: :sits_well,
         cohesion: :cohesive,
         note: 'Structural member registering an item within a list.'
       ),
-      scroll: Entry.new(
-        word: :scroll,
-        tiers: %i[structural visual],
-        primary_tier: :structural,
-        role: 'Overflow-constrained scrollable viewport container',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Constrains layout geometry and enables visual overflow scrolling.'
-      ),
-      card: Entry.new(
-        word: :card,
-        tiers: %i[structural visual semantic],
-        primary_tier: :structural,
-        role: 'Self-contained entity container, subject-scope shifter, and elevated visual surface',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Exemplary multi-category word: shifting subject scope (R3P2) and visual elevation are one cohesive metaphor.'
-      ),
-
-      # --- Semantic & Typography ---
-      title: Entry.new(
-        word: :title,
-        tiers: %i[semantic structural],
-        primary_tier: :semantic,
-        role: 'Document or section heading inferring level from nesting depth',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'High-level title that infers HTML heading depth from tree structure.'
-      ),
-      heading: Entry.new(
-        word: :heading,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Explicit semantic heading block',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Atomic heading primitive under title.'
-      ),
-      paragraph: Entry.new(
-        word: :paragraph,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Paragraph block holding prose or sentences',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Standard atomic prose block.'
-      ),
-      prose: Entry.new(
-        word: :prose,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Rich text block rendering markdown or formatted copy',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Rich text presenter parsing markdown or raw text.'
-      ),
-      text: Entry.new(
-        word: :text,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Plain text line or inline phrasing run',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Leaf text presenter.'
-      ),
-      span: Entry.new(
-        word: :span,
-        tiers: %i[semantic visual],
-        primary_tier: :semantic,
-        role: 'Essential inline phrasing run with variant styling or semantic annotation',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Essential inline phrasing primitive: wraps targeted text runs for semantic classes, status colors, or visual accents.'
-      ),
-      note: Entry.new(
-        word: :note,
-        tiers: %i[semantic visual],
-        primary_tier: :semantic,
-        role: 'Advisory callout or annotation with tone variant (quiet, warning, alert)',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Domain advice with theme-governed visual tone.'
-      ),
-      metric: Entry.new(
-        word: :metric,
-        tiers: %i[semantic visual],
-        primary_tier: :semantic,
-        role: 'Key performance indicator (KPI) pairing label with prominent value',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Domain figure paired with prominent hero typography.'
-      ),
-      fact: Entry.new(
-        word: :fact,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Key-value metadata pair describing an attribute of the subject',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Compact metadata presentation.'
-      ),
       table: Entry.new(
         word: :table,
-        tiers: %i[semantic structural behavioral],
-        primary_tier: :semantic,
-        role: 'Relational data table inferring columns, row iteration, and layout',
+        categories: %i[skeleton substance],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Structured tabular data collection with columns and rows',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Richly multi-category: represents relational data, renders 2D grid, and iterates rows implicitly.'
+        note: 'Tabular structure holding data substance.'
       ),
       column: Entry.new(
         word: :column,
-        tiers: %i[semantic structural],
-        primary_tier: :semantic,
-        role: 'Data dimension specification registering header and formatting',
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Table column specification and alignment declaration',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Registers a named property on the enclosing table.'
+        note: 'Tabular structure member.'
       ),
-      total: Entry.new(
-        word: :total,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Summary row aggregating or summing a table column',
+      grid: Entry.new(
+        word: :grid,
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Multi-column 2D grid layout with column specification',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Calculates or displays column aggregation.'
-      ),
-      money: Entry.new(
-        word: :money,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Currency-formatted numeric amount with locale conventions',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Domain presentation word for financial amounts.'
-      ),
-      percent: Entry.new(
-        word: :percent,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Percentage-formatted ratio or fraction',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Domain presentation word for ratios.'
-      ),
-      number: Entry.new(
-        word: :number,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Formatted numeric value with thousands separators and precision',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'General formatted numeric value.'
-      ),
-      time: Entry.new(
-        word: :time,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Formatted timestamp, date, or relative elapsed interval',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Temporal value presenter.'
+        note: 'Core 2D layout primitive.'
       ),
       chart: Entry.new(
         word: :chart,
-        tiers: %i[semantic visual],
-        primary_tier: :semantic,
-        role: 'Quantitative data visualization gathering series and thresholds',
+        categories: %i[skeleton substance],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Visual data chart gathering quantitative bands and lines',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Gathers series into an SVG visual representation.'
+        note: 'Combines structural gathering with quantitative data substance.'
       ),
       band: Entry.new(
         word: :band,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Data range or confidence area registered within a chart',
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Horizontal reference band within a chart',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Chart layer registering a 2D range.'
+        note: 'Tabular / chart sub-primitive.'
       ),
       line: Entry.new(
         word: :line,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Data trend curve registered within a chart',
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Plotted line series inside a chart',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Chart layer registering a 1D trajectory.'
+        note: 'Chart sub-primitive.'
       ),
       level: Entry.new(
         word: :level,
-        tiers: %i[semantic],
-        primary_tier: :semantic,
-        role: 'Reference threshold or tax bracket registered within a chart',
+        categories: %i[skeleton],
+        primary_category: :skeleton,
+        sub_category: :collections,
+        role: 'Horizontal reference level inside a chart',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Chart layer registering a benchmark.'
-      ),
-      snippet: Entry.new(
-        word: :snippet,
-        tiers: %i[semantic visual],
-        primary_tier: :semantic,
-        role: 'Formatted code specimen with syntax display',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Technical code display.'
-      ),
-      figure: Entry.new(
-        word: :figure,
-        tiers: %i[semantic structural],
-        primary_tier: :semantic,
-        role: 'Self-contained visual illustration paired with an optional caption',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Structural enclosure for media and caption.'
+        note: 'Chart sub-primitive.'
       ),
 
-      # --- Interactive Controls & Affordances ---
-      button: Entry.new(
-        word: :button,
-        tiers: %i[interactive behavioral],
-        primary_tier: :interactive,
-        role: 'Clickable command trigger supporting variants and formaction dispatch',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Primary action trigger with HTML5 submission dispatch capability.'
-      ),
+      # --- Affordances: Actions & Navigation ---
       link: Entry.new(
         word: :link,
-        tiers: %i[interactive],
-        primary_tier: :interactive,
-        role: 'Hypertext navigation anchor pointing to destination URI',
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :actions,
+        role: 'Hyperlink navigation affordance',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Standard navigational affordance.'
+        note: 'Core navigation affordance.'
       ),
-      action: Entry.new(
-        word: :action,
-        tiers: %i[interactive],
-        primary_tier: :interactive,
-        role: 'Single action item registered inside an actions toolbar',
+      button: Entry.new(
+        word: :button,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :actions,
+        role: 'Clickable action affordance triggering command or form submission',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Toolbar item affordance.'
+        note: 'Direct interaction affordance.'
       ),
       actions: Entry.new(
         word: :actions,
-        tiers: %i[interactive structural],
-        primary_tier: :interactive,
-        role: 'Action toolbar grouping buttons and navigation affordances',
+        categories: %i[affordances skeleton],
+        primary_category: :affordances,
+        sub_category: :actions,
+        role: 'Action toolbar container grouping buttons and links',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Toolbar container grouping actions and affordances (purified of form dispatch in 0.6.0h).'
+        note: 'Bridges affordance grouping with container framing.'
       ),
-      field: Entry.new(
-        word: :field,
-        tiers: %i[interactive semantic],
-        primary_tier: :interactive,
-        role: 'Intelligent form control inferring input type, label, and value from subject',
+      action: Entry.new(
+        word: :action,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :actions,
+        role: 'Inline action link or button invocation',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Flagship interaction word: infers widget, label, and binding mechanically.'
-      ),
-      input: Entry.new(
-        word: :input,
-        tiers: %i[interactive],
-        primary_tier: :interactive,
-        role: 'Bare unlabelled form input element',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Elemental interactive atom under field.'
-      ),
-      textarea: Entry.new(
-        word: :textarea,
-        tiers: %i[interactive semantic],
-        primary_tier: :interactive,
-        role: 'Multi-line text input control with row height and label inference',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Multi-line text entry control.'
-      ),
-      checkbox: Entry.new(
-        word: :checkbox,
-        tiers: %i[interactive semantic],
-        primary_tier: :interactive,
-        role: 'Boolean toggle input control inferring checked state from subject',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Boolean affordance.'
-      ),
-      choice: Entry.new(
-        word: :choice,
-        tiers: %i[interactive semantic],
-        primary_tier: :interactive,
-        role: 'Dropdown or radio selection control gathering options',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Selection affordance over a discrete set of options.'
-      ),
-      option: Entry.new(
-        word: :option,
-        tiers: %i[interactive semantic],
-        primary_tier: :interactive,
-        role: 'Selectable value item registered within a choice control',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Child item of choice.'
-      ),
-      search: Entry.new(
-        word: :search,
-        tiers: %i[interactive structural],
-        primary_tier: :interactive,
-        role: 'Search query input box with target destination',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Specialized query input control.'
-      ),
-      tab: Entry.new(
-        word: :tab,
-        tiers: %i[interactive structural],
-        primary_tier: :interactive,
-        role: 'Clickable tab selector trigger and associated panel container',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Dual role: button affordance to switch views and structural panel.'
-      ),
-      disclosure: Entry.new(
-        word: :disclosure,
-        tiers: %i[interactive behavioral structural],
-        primary_tier: :interactive,
-        role: 'Collapsible details container with interactive open/close toggle',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Cohesive HTML5 details paradigm: toggle + open state + body container.'
-      ),
-
-      # --- Behavioral State & Dispatch ---
-      each: Entry.new(
-        word: :each,
-        tiers: %i[behavioral structural],
-        primary_tier: :behavioral,
-        role: 'Collection iteration binding each element as the innermost subject',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Grammar control flow: iterates collections and shifts subject scope.'
-      ),
-      empty: Entry.new(
-        word: :empty,
-        tiers: %i[behavioral semantic],
-        primary_tier: :behavioral,
-        role: 'Situation naming: renders only when enclosing collection is empty, suppressing siblings',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Quintessential Slim-Pickins word: names a state situation rather than writing a branch.'
-      ),
-      choose: Entry.new(
-        word: :choose,
-        tiers: %i[behavioral],
-        primary_tier: :behavioral,
-        role: 'Multi-branch conditional container evaluating first truthy branch',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Structured decision tree.'
-      ),
-      when: Entry.new(
-        word: :when,
-        tiers: %i[behavioral],
-        primary_tier: :behavioral,
-        role: 'Conditional branch executing when its predicate holds',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Truth branch in choose.'
-      ),
-      otherwise: Entry.new(
-        word: :otherwise,
-        tiers: %i[behavioral],
-        primary_tier: :behavioral,
-        role: 'Fallback branch executing when no preceding when or on branch matched',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Default branch in choose and dictionary.'
-      ),
-      dictionary: Entry.new(
-        word: :dictionary,
-        tiers: %i[behavioral],
-        primary_tier: :behavioral,
-        role: 'Key-value association table and dispatch gatherer',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Gathers key-to-target branch definitions for multi-line outline dispatch or reusable lookup tables.'
-      ),
-      on: Entry.new(
-        word: :on,
-        tiers: %i[behavioral],
-        primary_tier: :behavioral,
-        role: 'Branch registration mapping a match key to a target word or block inside a dictionary',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Registers a single association entry within an enclosing dictionary gatherer.'
-      ),
-      map: Entry.new(
-        word: :map,
-        tiers: %i[behavioral],
-        primary_tier: :behavioral,
-        role: 'Query, lookup, and dispatch across key-value associations',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Resolves an input key against an inline mapping hash or reusable dictionary, dispatching the matching target word or returning its value.'
-      ),
-      form: Entry.new(
-        word: :form,
-        tiers: %i[behavioral interactive structural],
-        primary_tier: :behavioral,
-        role: 'Form submission coordinator managing action, method, and input scoping',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Submission boundary and dispatch coordinator.'
-      ),
-      hidden: Entry.new(
-        word: :hidden,
-        tiers: %i[behavioral interactive],
-        primary_tier: :behavioral,
-        role: 'Silent state payload input passed through form submission',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Form submission state carrier.'
-      ),
-      flash: Entry.new(
-        word: :flash,
-        tiers: %i[behavioral semantic visual],
-        primary_tier: :behavioral,
-        role: 'Transient feedback state message from previous action',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Session state presentation.'
+        note: 'Affordance token for user-triggered interaction.'
       ),
       tabs: Entry.new(
         word: :tabs,
-        tiers: %i[behavioral structural],
-        primary_tier: :behavioral,
-        role: 'Tab group coordinator managing active tab switching state',
+        categories: %i[affordances skeleton],
+        primary_category: :affordances,
+        sub_category: :actions,
+        role: 'Tab navigation container and switcher',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Coordinates active tab selection across child panels.'
+        note: 'Tab container grouping tab affordances.'
+      ),
+      tab: Entry.new(
+        word: :tab,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :actions,
+        role: 'Individual tab control inside a tabs bar',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Tab navigation affordance.'
       ),
 
-      # --- Visual Surfaces & Assets ---
-      badge: Entry.new(
-        word: :badge,
-        tiers: %i[visual semantic],
-        primary_tier: :visual,
-        role: 'Visual status chip or pill with semantic state coloring (ok, warn, bad)',
+      # --- Affordances: Inputs & Transport ---
+      form: Entry.new(
+        word: :form,
+        categories: %i[affordances skeleton],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Interactive form submission boundary and parameter collector',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Visual indicator of domain status; demonstrates how visual dress serves semantic status.'
+        note: 'Bridges input affordance orchestration with container boundary.'
+      ),
+      field: Entry.new(
+        word: :field,
+        categories: %i[affordances skeleton],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Labelled form field wrapper with validation and inference',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Combines input affordance with label/container framing.'
+      ),
+      input: Entry.new(
+        word: :input,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Raw input field affordance',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Core input control.'
+      ),
+      choice: Entry.new(
+        word: :choice,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Radio or select input option picker',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Input selection affordance.'
+      ),
+      option: Entry.new(
+        word: :option,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Option element inside a choice picker',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Option member of a choice control.'
+      ),
+      search: Entry.new(
+        word: :search,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Specialized search query field affordance',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Dedicated search input affordance.'
+      ),
+      checkbox: Entry.new(
+        word: :checkbox,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Boolean toggle input affordance',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Form input control.'
+      ),
+      hidden: Entry.new(
+        word: :hidden,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Hidden form input transporting state',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'State transport affordance.'
+      ),
+      textarea: Entry.new(
+        word: :textarea,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Multi-line text input affordance',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Multi-line form input control.'
+      ),
+      on: Entry.new(
+        word: :on,
+        categories: %i[affordances],
+        primary_category: :affordances,
+        sub_category: :inputs,
+        role: 'Event listener binding on an affordance',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Event binding affordance.'
+      ),
+
+      # --- Flow & Logic: Iteration, Branching, Disclosure ---
+      each: Entry.new(
+        word: :each,
+        categories: %i[flow],
+        primary_category: :flow,
+        sub_category: :iteration,
+        role: 'Collection iteration loop binding each member to subject scope',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Core collection iteration primitive.'
+      ),
+      empty: Entry.new(
+        word: :empty,
+        categories: %i[flow substance],
+        primary_category: :flow,
+        sub_category: :iteration,
+        role: 'Empty collection fallback state presenter',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Emptiness flow gate that speaks phrasing substance.'
+      ),
+      choose: Entry.new(
+        word: :choose,
+        categories: %i[flow],
+        primary_category: :flow,
+        sub_category: :branching,
+        role: 'Conditional branching control selecting first truthy branch',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Core branching flow primitive.'
+      ),
+      when: Entry.new(
+        word: :when,
+        categories: %i[flow],
+        primary_category: :flow,
+        sub_category: :branching,
+        role: 'Conditional branch inside a choose block',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Conditional branch primitive.'
+      ),
+      otherwise: Entry.new(
+        word: :otherwise,
+        categories: %i[flow],
+        primary_category: :flow,
+        sub_category: :branching,
+        role: 'Fallback branch in a choose block',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Conditional fallback primitive.'
+      ),
+      disclosure: Entry.new(
+        word: :disclosure,
+        categories: %i[flow skeleton],
+        primary_category: :flow,
+        sub_category: :disclosure,
+        role: 'Collapsible disclosure details container',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Bridges container framing with open/close state flow.'
+      ),
+
+      # --- Environment: Document, Resources, Splicing ---
+      page: Entry.new(
+        word: :page,
+        categories: %i[environment skeleton],
+        primary_category: :environment,
+        sub_category: :document,
+        role: 'Document root container and application context host',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Root container bridging document chrome with application state.'
       ),
       stylesheet: Entry.new(
         word: :stylesheet,
-        tiers: %i[visual structural],
-        primary_tier: :visual,
-        role: 'Theme stylesheet inclusion linking CSS design tokens and rules',
+        categories: %i[environment],
+        primary_category: :environment,
+        sub_category: :resources,
+        role: 'Stylesheet link resource tag in document head',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Visual theme infrastructure.'
+        note: 'Document head environment resource.'
       ),
       script: Entry.new(
         word: :script,
-        tiers: %i[visual interactive],
-        primary_tier: :visual,
-        role: 'Client-side script inclusion linking behavior controllers',
+        categories: %i[environment],
+        primary_category: :environment,
+        sub_category: :resources,
+        role: 'External or inline script resource tag',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Client-side script asset.'
+        note: 'Document resource environment atom.'
       ),
       iframe: Entry.new(
         word: :iframe,
-        tiers: %i[visual structural],
-        primary_tier: :visual,
-        role: 'Isolated foreign viewport frame embedding external HTML document',
+        categories: %i[environment],
+        primary_category: :environment,
+        sub_category: :resources,
+        role: 'Embedded browsing context iframe viewport',
         diagnostic: :sits_well,
         cohesion: :cohesive,
-        note: 'Isolated visual viewport embed.'
+        note: 'External viewport embedding environment resource.'
+      ),
+      contents: Entry.new(
+        word: :contents,
+        categories: %i[environment],
+        primary_category: :environment,
+        sub_category: :splicing,
+        role: 'Universal layout and composed word slot marker for stowed body',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Composition and splicing primitive across frames and composed words.'
+      ),
+      map: Entry.new(
+        word: :map,
+        categories: %i[environment],
+        primary_category: :environment,
+        sub_category: :splicing,
+        role: 'Visual map embed or coordinate container',
+        diagnostic: :sits_well,
+        cohesion: :cohesive,
+        note: 'Geographic and coordinate embedding resource.'
       )
     }.freeze
 
-    # Layout and styling capabilities surfaced through the taxonomy.
-    # Geometry and scaffolding belong outside the substance template language;
-    # these entries represent layout and styling capabilities to be considered
-    # in Spiff or layout/styling abstractions (see WISHLIST.md) rather than
-    # template-level primitives.
+    # Layout and styling capabilities surfaced through the taxonomy diagnostics.
     MISSING_PRIMITIVES = [
       {
         name: :stack,
-        tier: :structural,
+        category: :skeleton,
         role: 'Vertical rhythm layout capability injecting consistent gap between elements',
-        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for Spiff or layout styling abstractions.'
+        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for .layout or styling layer.'
       },
       {
         name: :cluster,
-        tier: :structural,
+        category: :skeleton,
         role: 'Horizontal wrapping flex layout capability with uniform gap',
-        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for Spiff or micro-layout styling abstractions.'
+        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for .layout or styling layer.'
       },
       {
         name: :sidebar,
-        tier: :structural,
+        category: :skeleton,
         role: 'Two-element arrangement where one element has intrinsic width and the other fills remaining space',
-        rationale: 'Macro-layout pattern; belongs in Spiff spatial zoning (horizon/grid) rather than template primitives.'
+        rationale: 'Macro-layout pattern; belongs in .layout spatial zoning (horizon/flank) rather than template primitives.'
       }
     ].freeze
 
     module_function
 
-    def tiers
-      TIERS
+    def planes
+      PLANES
     end
+
+    def categories
+      CATEGORIES
+    end
+    def tiers = categories
 
     def entries
       ENTRIES
@@ -694,35 +893,73 @@ module SlimPickins
       ENTRIES[word.to_sym]
     end
 
-    # All words belonging to a tier (including multi-category words)
-    def words_for_tier(tier)
-      tier_sym = tier.to_sym
-      ENTRIES.values.select { |e| e.tiers.include?(tier_sym) }.map(&:word).sort
+    # Words belonging to a category (including polyhierarchical members)
+    def words_for_category(category)
+      cat_sym = category.to_sym
+      ENTRIES.values.select { |e| e.categories.include?(cat_sym) }.map(&:word).sort
     end
+    def words_for_tier(category) = words_for_category(category)
 
-    # Words grouped by their primary tier
-    def by_primary_tier
+    # Words grouped by their primary category
+    def by_primary_category
       grouped = Hash.new { |h, k| h[k] = [] }
       ENTRIES.each_value do |e|
-        grouped[e.primary_tier] << e.word
+        grouped[e.primary_category] << e.word
       end
       grouped.transform_values(&:sort)
     end
+    def by_primary_tier = by_primary_category
 
-    # Words grouped by every tier they belong to (words appear in all applicable tiers)
-    def by_tier
-      grouped = TIERS.keys.to_h { |k| [k, []] }
+    # Words grouped by every category they belong to
+    def by_category
+      grouped = CATEGORIES.keys.to_h { |k| [k, []] }
       ENTRIES.each_value do |e|
-        e.tiers.each do |t|
-          grouped[t] << e.word if grouped.key?(t)
+        e.categories.each do |c|
+          grouped[c] << e.word if grouped.key?(c)
         end
       end
       grouped.transform_values(&:sort)
     end
+    def by_tier = by_category
 
-    # Words that belong to multiple categories (porosity)
+    # Words that belong to multiple categories (polyhierarchical resonance)
     def multi_category_words
-      ENTRIES.values.select { |e| e.tiers.size > 1 }.map(&:word).sort
+      ENTRIES.values.select { |e| e.categories.size > 1 }.map(&:word).sort
+    end
+
+    # Filter Theory Diagnostic Analysis
+    def filter_analysis
+      total_words = ENTRIES.size
+      widths = CATEGORIES.keys.to_h do |cat|
+        words = words_for_category(cat)
+        [cat, { count: words.size, percentage: (words.size.to_f / total_words * 100).round(1), words: words }]
+      end
+
+      selectivity = CATEGORIES.keys.to_h do |cat|
+        words = words_for_category(cat)
+        exclusive = words.select { |w| entry(w).categories == [cat] }
+        ratio = words.empty? ? 1.0 : (exclusive.size.to_f / words.size).round(2)
+        [cat, { exclusive_count: exclusive.size, shared_count: words.size - exclusive.size, selectivity: ratio }]
+      end
+
+      resonance = multi_category_words.map do |w|
+        e = entry(w)
+        { word: w, categories: e.categories, primary: e.primary_category, cohesion: e.cohesion, note: e.note }
+      end
+
+      crossovers = {}
+      cats = CATEGORIES.keys
+      cats.combination(2) do |a, b|
+        common = words_for_category(a) & words_for_category(b)
+        crossovers[[a, b]] = common unless common.empty?
+      end
+
+      FilterAnalysis.new(
+        passband_widths: widths,
+        boundary_selectivity: selectivity,
+        polyhierarchical_resonance: resonance,
+        crossover_matrix: crossovers
+      )
     end
 
     # Assessment of cohesion vs split candidates
@@ -744,47 +981,6 @@ module SlimPickins
     def missing_primitives
       MISSING_PRIMITIVES
     end
-
-    # The 7 core system taxonomy definitions codified for Roadmap 0.6
-    SystemTerm = Struct.new(:name, :summary, :definition, keyword_init: true)
-
-    SYSTEM = {
-      word: SystemTerm.new(
-        name: :word,
-        summary: 'Fundamental syntax unit',
-        definition: 'The fundamental syntax unit of slim-pickins (word arguments, indentation nests). Everything on a page is a word (64 canonical + app words).'
-      ),
-      primitive: SystemTerm.new(
-        name: :primitive,
-        summary: 'Ruby-implemented built-in word',
-        definition: 'A built-in word implemented directly in Ruby as a subclass of SlimPickins::Word (41 canonical primitives).'
-      ),
-      partial: SystemTerm.new(
-        name: :partial,
-        summary: 'Template-defined reusable word',
-        definition: 'A reusable word defined in slim-pickins itself in a .sp template file using def (23 canonical in lib/vocabulary/ + app partials).'
-      ),
-      def: SystemTerm.new(
-        name: :def,
-        summary: 'Partial definition keyword',
-        definition: "The language keyword that defines a partial's word and parameter list, opening its lexical family and binding call arguments."
-      ),
-      contract: SystemTerm.new(
-        name: :contract,
-        summary: 'Compile-time grammatical specification',
-        definition: 'The compile-time grammatical specification of what a word takes and holds, enforced by the gate before render.'
-      ),
-      tin: SystemTerm.new(
-        name: :tin,
-        summary: 'Outer document chrome layout',
-        definition: 'The outer HTML document chrome (.tin), splicing page contents.'
-      ),
-      spiff: SystemTerm.new(
-        name: :spiff,
-        summary: 'Spatial stylesheet language',
-        definition: 'Companion spatial and visual stylesheet language (.spiff), compiling layout declarations to CSS without runtime overhead.'
-      )
-    }.freeze
 
     def system_terms
       SYSTEM

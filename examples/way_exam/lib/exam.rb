@@ -101,14 +101,14 @@ module WayExam
         id: 'q6',
         number: 6,
         topic: 'Taxonomy Terms',
-        prompt: 'Which set represents the 7 canonical system taxonomy terms defined in alt-slim-pickins?',
+        prompt: 'Which triad of planes constitutes the meta-architecture of alt-slim-pickins?',
         options: {
-          a: 'word, primitive, partial, def, contract, tin, spiff',
-          b: 'page, component, helper, route, template, view, css',
-          c: 'model, view, controller, layout, asset, router, schema'
+          a: 'linguistic, spatial, invariant',
+          b: 'model, view, controller',
+          c: 'structure, presentation, behavior'
         },
         correct_key: :a,
-        explanation: 'Taxonomy (DAYTRIP-0.4.0d): The 7 formal system terms are word, primitive, partial, def, contract, tin, and spiff, partitioning the entire architecture without jargon.'
+        explanation: 'Taxonomy (0.6.0j): The meta-architecture partitions into three ontological planes: linguistic & execution (lexicon), composition & spatial (canvases), and mechanical invariants (contracts, conventions, promises).'
       ),
       Question.new(
         id: 'q7',

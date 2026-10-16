@@ -28,7 +28,7 @@
 require_relative '../lib/slim_pickins'
 
 ROOT = File.expand_path('..', __dir__)
-LEXICON = File.join(ROOT, 'docs', 'SPIFF.md')
+LEXICON = File.join(ROOT, 'docs', 'LAYOUT.md')
 
 # Words that honestly emit no CSS of their own, so their entries carry no
 # compiled block and `surface`'s example compiles to an empty string on
@@ -201,7 +201,7 @@ module SpiffCheck
   # implements — a word it does not is a gap a reader cannot see — and every
   # documented word's example must compile, with every declaration in its
   # compiled-CSS block one the compiler really emits for that example.
-  def run(files: [LEXICON], compiler: SlimPickins::Compiler::Spiff, out: $stdout)
+  def run(files: [LEXICON], compiler: SlimPickins::Compiler::Layout, out: $stdout)
     problems = 0
     report = ->(line) { out.puts "  #{line}" }
 
@@ -217,7 +217,7 @@ module SpiffCheck
     # no reader is not a word anyone can say. `air`, `flank`, `stack` and
     # `horizon` are readable at surface scope as well as stage scope; that is
     # one word with two doors, not eight words.
-    source = File.read(File.join(ROOT, 'lib', 'slim_pickins', 'compiler', 'spiff.rb'))
+    source = File.read(File.join(ROOT, 'lib', 'slim_pickins', 'compiler', 'layout.rb'))
     documented = entries.map(&:word).to_set
     implemented = source.scan(/^        def ([a-z_]+)\(/).flatten.to_set - MACHINERY
     (implemented - documented).sort.each do |word|
@@ -274,5 +274,6 @@ module SpiffCheck
     problems
   end
 end
+LayoutCheck = SpiffCheck
 
-exit(SpiffCheck.run(files: ARGV.empty? ? [LEXICON] : ARGV).zero? ? 0 : 1) if $PROGRAM_NAME == __FILE__
+exit(LayoutCheck.run(files: ARGV.empty? ? [LEXICON] : ARGV).zero? ? 0 : 1) if $PROGRAM_NAME == __FILE__

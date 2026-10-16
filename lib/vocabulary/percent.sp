@@ -1,2 +1,2 @@
-def percent, ratio
+def percent ratio
   span .ratio, precision: .precision

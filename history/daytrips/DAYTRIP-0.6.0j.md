@@ -1,6 +1,6 @@
 # Daytrip 0.6.0j — Meta-Architecture Renaming, Conceptual Ontology & Vocabulary Purification
 
-**Status: Planned / In Flight (2026-10-14).**
+**Status: Complete (2026-10-14).**
 
 ## Context & Motivation
 
@@ -129,3 +129,12 @@ Rather than a single broad `semantic` bucket and an apologetic `visual` bucket, 
 - **Gate Status:** All 12 legs green.
 - **Suite:** 652 runs, 7,048 assertions, 0 failures.
 - **Vitals:** 64 canonical words (41 primitives, 23 partials), 33 promises, 38 conventions, 35 verified pages.
+
+---
+
+## Completed Verification State (2026-10-14)
+- **Gate Status:** All 12 legs green (`Grammar`, `Shape`, `Styles`, `Layout`, `Scope`, `Promises`, `Conventions`, `Card`, `Pages`, `Vitals`, `Ruby`, `Suite`).
+- **Suite:** 650 runs, 7,098 assertions, 0 failures, 0 errors, 0 skips.
+- **Pages:** 35 pages verified OK via `bin/verify_pages.rb`.
+- **Census / Vitals:** 64 canonical words (38 primitives, 26 composed words), 33 promises, 38 conventions, 35 verified pages, 8 apps, 113 CSS rules, 60 test files. 0 vitals problems.
+- **Treatise:** `docs/ONTOLOGY.md` authored and registered in `studio/docs_helper.rb`.

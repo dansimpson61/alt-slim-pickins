@@ -11,7 +11,7 @@
 #
 # Each node is a `link` to its own detail card, and that link is the whole
 # selection mechanism — `:target` in the theme does what two ad-hoc listeners did.
-def twig, nodes
+def twig nodes
   list
     each node, from: .nodes
       item

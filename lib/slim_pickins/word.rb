@@ -172,7 +172,8 @@ module SlimPickins
     def about(...) = @builder.about(...)
     def prune(...) = @builder.prune(...)
     def empty_active? = @builder.empty_active?
-    def wrapped_in_tin(&block) = @builder.wrapped_in_tin(&block)
+    def wrapped_in_frame(&block) = @builder.wrapped_in_frame(&block)
+    alias_method :wrapped_in_tin, :wrapped_in_frame
     def head_nodes = @builder.head_nodes
     def in_head(node) = @builder.in_head(node)
 

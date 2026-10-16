@@ -1,2 +1,2 @@
-def text, words
+def text words
   paragraph .words

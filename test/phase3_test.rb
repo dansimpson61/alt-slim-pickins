@@ -58,12 +58,12 @@ class Phase3Test < Minitest::Test
              library: library(tin: %(footer "Only chrome.")),
              account: Account.new(name: 'x', balance: 1))
     end
-    assert_match(/\Athis tin never says `contents`\n/, error.message)
+    assert_match(/\Athis frame never says `contents`\n/, error.message)
   end
 
   def test_contents_outside_a_layout_is_an_error
     error = assert_raises(SlimPickins::Error) { render("page account\n  contents\n", account: {}) }
-    assert_match(/\A`contents` belongs in a tin\n/, error.message)
+    assert_match(/\A`contents` belongs in a frame\n/, error.message)
   end
 
   # --- partials as app-defined words ------------------------------------

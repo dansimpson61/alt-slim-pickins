@@ -121,7 +121,7 @@ module SlimPickins
 
       said = landed(content)
       parameters[:content] = said if parameters.key?(:content)
-      parameters[:label] = said if contract&.label && !said.nil?
+      parameters[:label] = said if contract&.label && !said.nil? && !%i[fact metric].include?(self.class.partial_name)
     end
 
     # The optionality spelling (dan, 2026-09-02): slots a preamble declares —
@@ -136,6 +136,44 @@ module SlimPickins
     # inference — a page never writes either.
     def parameters_for(contract, name, content, kwargs, shift_target = nil)
       return { content: content, name: name }.merge(kwargs) unless contract
+
+      if self.class.partial_name == :fact
+        if name
+          val = content.nil? ? (subject.has?(name) ? subject.fetch(name) : nil) : content
+          val = landed(val) if val.is_a?(Proc)
+          lbl = label_for(name, nil)
+          kind = format_of({ name: name, as: nil })
+        else
+          val = landed(@args[0])
+          lbl = @args[1]
+          kind = nil
+        end
+        formatted_val = Generator.format(kind, val)
+        return { name: name, attribute: name, label: lbl, value: formatted_val, content: formatted_val }
+      end
+
+      if self.class.partial_name == :metric
+        as = kwargs[:as]
+        if name
+          val = subject.has?(name) ? subject.fetch(name) : nil
+          val = landed(val) if val.is_a?(Proc)
+          lbl = label_for(name, content.is_a?(Proc) ? landed(content) : content)
+          kind = as || (subject.has?(name) ? subject.format_for(name) : nil)
+        else
+          val = landed(@args[0])
+          lbl = @args[1] || 'Metric'
+          kind = as
+        end
+        formatted_val = Generator.format(kind, val)
+        return { name: name, attribute: name, label: lbl, value: formatted_val, content: formatted_val, as: as }
+      end
+
+      if self.class.partial_name == :snippet
+        lang = name
+        body_val = content.nil? ? @args.find { |a| !a.nil? && !a.is_a?(Symbol) } : content
+        body_val = landed(body_val) if body_val.is_a?(Proc)
+        return { notation: lang, body: body_val, content: body_val }
+      end
 
       declared = {}
       contract.modifiers.each do |modifier|

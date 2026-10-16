@@ -11,7 +11,7 @@
 #   - `name` (sentence slot vs. word identity vs. HTML parameter vs. model attribute)
 #   - `body` (block nodes vs. HTML tag vs. model text vs. convention)
 #   - `parent` (family namespace vs. container-value walk vs. DOM parent)
-#   - Taxonomy (`word`, `primitive`, `partial`, `def`, `contract`, `tin`, `spiff`)
+#   - Taxonomy (`word`, `primitive`, `composed_word`, `def`, `frame`, `layout`, `style`, `substance`, `contract`, `convention`, `promise`)
 
 require 'find'
 require_relative '../lib/slim_pickins'
@@ -20,7 +20,7 @@ require_relative '../lib/slim_pickins/census'
 module PolysemyCensus
   ROOT = File.expand_path('..', __dir__)
 
-  TERMS = %w[variant children content subject name body parent tin spiff].freeze
+  TERMS = %w[variant children content subject name body parent frame layout].freeze
 
   def self.scan_files
     matches = Hash.new { |h, k| h[k] = { rb: [], sp: [], md: [] } }
@@ -126,17 +126,17 @@ module PolysemyCensus
     puts "  3. Contract Slot: contract children: :any (20), :none (36), specific (6)"
     puts "  4. Family Class Containment: `10` nested Ruby classes (Table::Column) & 1 partial (list.sp/item)"
 
-    puts "\n[TAXONOMY] Formal System Taxonomy Boundaries (SlimPickins::Taxonomy::SYSTEM):"
+    puts "\n[TAXONOMY] Formal System Taxonomy Across the 3 Planes (SlimPickins::Taxonomy::SYSTEM):"
     SlimPickins::Taxonomy.system_terms.each do |term, entry|
-      puts "  - #{term.to_s.ljust(10)} (#{entry.summary}): #{entry.definition}"
+      puts "  - #{term.to_s.ljust(15)} [#{entry.plane}] (#{entry.summary}): #{entry.definition}"
     end
     words_info = SlimPickins::Census.words
     puts "\n[COUNTS] Current System Counts:"
-    puts "  - Words: #{words_info[:total].size} canonical (#{words_info[:primitives].size} Ruby primitives + #{words_info[:partials].size} .sp partials), #{SlimPickins::Census.app_words.size} app words"
+    puts "  - Words: #{words_info[:total].size} canonical (#{words_info[:primitives].size} Ruby primitives + #{words_info[:partials].size} .sp composed words), #{SlimPickins::Census.app_words.size} app words"
     puts "  - Primitives: #{words_info[:primitives].size} classes inheriting SlimPickins::Word"
-    puts "  - Partials: #{words_info[:partials].size} .sp templates with `def` in lib/vocabulary/ + `#{SlimPickins::Census.app_words.size}` app partials"
-    puts "  - Tins: 9 [app].tin files providing outer document chrome"
-    puts "  - Spiff: [app].spiff companion stylesheets compiled to spatial CSS"
+    puts "  - Composed Words: #{words_info[:partials].size} .sp templates with `def` in lib/vocabulary/ + `#{SlimPickins::Census.app_words.size}` app words"
+    puts "  - Frames: 9 [app].frame files providing outer document chrome"
+    puts "  - Layouts: 3 [app].layout companion stylesheets compiled to spatial CSS"
     puts '========================================================================'
   end
 end

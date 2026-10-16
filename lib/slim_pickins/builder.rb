@@ -220,15 +220,51 @@ module SlimPickins
 
         bound[:name] = name_val if contract&.name != :none || bound.key?(:name)
 
+        if word_name == :fact
+          fn_val = bound[:attribute] || (args.first if args.first.is_a?(Symbol))
+          if fn_val
+            f_val = content_val.nil? ? (subject.has?(fn_val) ? subject.fetch(fn_val) : nil) : content_val
+            f_val = f_val.call if f_val.is_a?(Proc)
+            f_kind = format_of({ name: fn_val, as: nil })
+            bound[:label] ||= label_for(fn_val, nil)
+          else
+            f_val = args[0].is_a?(Proc) ? args[0].call : args[0]
+            f_kind = nil
+            bound[:label] ||= args[1]
+          end
+          bound[:value] = Generator.format(f_kind, f_val)
+        elsif word_name == :metric
+          mn_val = bound[:attribute] || (args.first if args.first.is_a?(Symbol))
+          if mn_val
+            m_val = subject.has?(mn_val) ? subject.fetch(mn_val) : nil
+            m_val = m_val.call if m_val.is_a?(Proc)
+            m_lbl = label_for(mn_val, content_val.is_a?(Proc) ? content_val.call : content_val)
+            m_kind = kwargs[:as] || (subject.has?(mn_val) ? subject.format_for(mn_val) : nil)
+            bound[:label] ||= m_lbl
+          else
+            m_val = args[0].is_a?(Proc) ? args[0].call : args[0]
+            m_lbl = args[1] || 'Metric'
+            m_kind = kwargs[:as]
+            bound[:label] = m_lbl
+          end
+          bound[:value] = Generator.format(m_kind, m_val)
+        elsif word_name == :snippet
+          s_lang = bound[:notation] || (args.first if args.first.is_a?(Symbol))
+          s_body = bound[:body] || (content_val.nil? ? args.find { |a| !a.nil? && !a.is_a?(Symbol) } : content_val)
+          s_body = s_body.call if s_body.is_a?(Proc)
+          bound[:notation] = s_lang
+          bound[:body] = s_body
+        end
+
         body_block = lambda do
           if content_param && bound[content_param].is_a?(Proc)
             said = bound[content_param].call
             bound[content_param] = said
-            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil?
+            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil? && !%i[fact metric].include?(word_name)
           elsif bound[:content].is_a?(Proc)
             said = bound[:content].call
             bound[:content] = said
-            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil?
+            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil? && !%i[fact metric].include?(word_name)
           end
 
           captured = caller_block ? with_family(word_name) { capture(&caller_block) } : []
@@ -341,7 +377,27 @@ module SlimPickins
     def render(ruby, path, source: nil)
       @nodes = []
       @spliced = [] if path.to_s.include?('partials/')
-      eval_with(ruby, path, source&.lines)
+      view = path && File.basename(path.to_s, '.sp')
+      frame = @library&.frame_for(view)
+      is_substance = path && !path.to_s.include?('partials/') && !path.to_s.end_with?('.frame') && !path.to_s.end_with?('.tin')
+
+      if is_substance && frame
+        substance_nodes = capture { eval_with(ruby, path, source&.lines) }
+        if substance_nodes.any? { |n| n.is_a?(Node) && n.word == :page }
+          @nodes = substance_nodes
+        else
+          stow_contents(substance_nodes)
+          frame_name = @library.dir ? "#{view || File.basename(@library.dir)}.frame" : 'frame'
+          frame_compilation = Compilation.of(frame, frame_name, library: @library)
+          frame_compilation.refuse!(frame_name)
+          frame_nodes = capture { eval_with(frame_compilation.ruby, frame_name, frame.lines) }
+          raise Error, 'this frame never says `contents`' if @contents
+
+          @nodes = frame_nodes
+        end
+      else
+        eval_with(ruby, path, source&.lines)
+      end
       @nodes
     end
 
@@ -603,20 +659,23 @@ module SlimPickins
     # was built in memory and there is no file to name, which is honest: there
     # is no path, and inventing one would send a reader looking for a file
     # that never existed.
-    def wrapped_in_tin(&block)
+    def wrapped_in_frame(&block)
+      return capture(&block) if @path.to_s.end_with?('.frame') || @path.to_s.end_with?('.tin')
+
       view = @path && File.basename(@path.to_s, '.sp')
-      tin = @library&.tin_for(view)
-      return capture(&block) unless tin
+      frame = @library&.frame_for(view)
+      return capture(&block) unless frame
 
       stow_contents(capture(&block))
-      path = @library.dir ? "#{view || File.basename(@library.dir)}.tin" : 'tin'
-      compilation = Compilation.of(tin, path, library: @library)
+      path = @library.dir ? "#{view || File.basename(@library.dir)}.frame" : 'frame'
+      compilation = Compilation.of(frame, path, library: @library)
       compilation.refuse!(path)
-      nodes = capture { eval_with(compilation.ruby, path, tin.lines) }
-      raise Error, 'this tin never says `contents`' if @contents
+      nodes = capture { eval_with(compilation.ruby, path, frame.lines) }
+      raise Error, 'this frame never says `contents`' if @contents
 
       nodes
     end
+    alias_method :wrapped_in_tin, :wrapped_in_frame
 
     private
 

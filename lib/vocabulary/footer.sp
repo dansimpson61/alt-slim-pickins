@@ -1,3 +1,3 @@
-def footer, text
+def footer text
   box .text
     contents
