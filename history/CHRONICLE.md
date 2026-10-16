@@ -218,3 +218,148 @@ here as a record of how the work was sequenced while it was still open.
   characters and `bin/check_card.rb` prints the number every green run without an
   opinion. Give it a budget and fail over it; the narrative belongs in `LORE.md`,
   which already holds most of it.
+
+---
+
+# Historical drafting notes & convention rulings, moved from `VOCABULARY.md` and `CONVENTIONS.md` (Daytrip 0.6.0k)
+
+Preserved verbatim when `PRIMER.md`, `VOCABULARY.md`, and `CONVENTIONS.md` were
+rewritten in timeless present tense from the author's perspective in Daytrip
+0.6.0k.
+
+## From `VOCABULARY.md`: What drafting surfaced
+
+Predictions from the spec, and what actually happened.
+
+- **`heading` and `title` collapse.** Predicted, and confirmed — cut to
+  `title`, which infers its level from depth.
+- **`grid` and `list` collapse.** Predicted, and **wrong.** `grid` lays out
+  cells that are already blocks; `list` makes its children into items. They
+  govern their children differently, so they are two words.
+- **`doctype`.** Absorbed by `page`. It was never a keyword, it was something
+  `page` knows.
+- **`price` was a domain noun, not a presentation word.** Renamed to `money`.
+  Caught only by drafting against a portfolio, where "price" would have been
+  a category error against a balance.
+- **Three words the estimate missed entirely** — `metric`, `chart` and
+  `disclosure` — all found by reading `roth/views/controls.slim`. Every one of
+  them is hand-built there out of markup, classes and JavaScript.
+- **Thirty-eight of them**, against an estimate of forty. The estimate was
+  close, but three of the additions were invisible until a real page was read,
+  which is the argument against ever drafting this from imagination.
+
+## From `VOCABULARY.md`: What the drafts left open
+
+Every item below was open when this document was drafted. All of them landed
+during 0.1; the list is a record, not a to-do.
+
+- **The `?` case.** Closed in Phase 4 — a bare helper used as a value has
+  nowhere to live *because it should not*: the page is the outermost subject,
+  so it is `.signed_in?` like everything else. Three real pages never reached
+  the hole, which was the clue that it was not a hole in the language but a
+  missing object at the bottom of the chain.
+- **`chart`.** Redrafted in Phase 8 as the same shape as `table`; see its
+  entry above.
+- **What the app must promise.** Named in Phase 1, and written down in
+  `CONTRACT.md`: one sentence plus two optional methods.
+- **Under-tested by this page.** Prose and media, navigation chrome, and
+  collections nested more than one deep were exercised by the original paper
+  pages (retired in Phase 6).
+
+## From `VOCABULARY.md`: Entry-level historical notes
+
+- **`section`**: Six of ten sections across the drafted pages were headings
+  rather than subjects — `summary`, `allocation`, `projections`, `legend`,
+  `lore`, `specification`. They are now written as content, which is what
+  content is for, and they read the same. Phase 2 first tried making the name
+  shift the subject only when the subject had it. dan's question — *what if a
+  word can take a subject but it can also just take a label?* — found the
+  better answer, because the grammar already distinguishes the two. The
+  opportunistic version made a page's meaning depend on data no reader could
+  see, and would have let a new model attribute silently change an untouched
+  page.
+- **`list`**: Draft 1 said each child became an item without saying so. That
+  was cute and false: it breaks the moment an item holds more than one thing,
+  which is the ordinary case. `list` governs `item` instead.
+- **`fact`**: Called `detail` in draft 2, which was a misnomer: HTML's
+  `<details>` is the disclosure element, and this vocabulary already has
+  `disclosure` for exactly that.
+- **`field`**: Nine of these replace the eighteen hand-paired `label`/`input`
+  lines in `roth/views/controls.slim`, and none of them repeats the field's
+  name three times. Phase 0 built this word and measured it. The name, value
+  and type were right every time; the label was right about three times in ten,
+  which is why the `infers` slot above no longer promises it unconditionally.
+- **`checkbox`**: Formerly `check`. Renamed in Phase 1: a verb describes the
+  user's action rather than the widget, and this is a noun language.
+- **`choice`**: Formerly `select`. Renamed in Phase 1: `select` has no noun
+  sense in English outside HTML, and its children — `option` — already read as
+  nouns.
+- **`tab`**: Until 2026-10-03 this entry said the opposite — that a stray `tab`
+  "renders its panel and no nav, which is the honest degradation rather than an
+  error" — and the measurement only half agrees. A stray `tab` holding children
+  does degrade that way. A stray `tab` holding only content renders
+  `<div class="tab-panel" role="tabpanel"></div>` — empty — because the content
+  *is* the label and the label is drawn by the `tabs` that is not there. So
+  `tab` joined the nine other structural children that are refused by name.
+
+## From `CONVENTIONS.md`: Where the conventions are weakest (2026-10-10 rulings)
+
+**Empty since 2026-10-10.** Every row was either fixed, with a test that
+fails on the old code, or ruled a stated limit, with the reason given in its
+convention's entry.
+
+Three patterns run through the list, and they are the questions worth asking
+first:
+
+1. **A convention that fails silently.** `empty` with nothing above it, a box
+   that drops its children, an unknown status. When a convention cannot do
+   its job, should it say so?
+
+   **Ruled (dan, 2026-10-10): it depends on who can know.** A mistake you
+   can see by reading the page is refused, with an error that names the
+   fix, the way `hidden` outside a `form` already is. That covers `empty`
+   with no collection above it, a box with written content and children, a
+   `heading` that would make a second section title (`box_title`), and a
+   word file with two top lines (`root_class`). *(Built for `empty`, the box
+   and the second title. `root_class` closed as a stated limit instead:
+   refusing would make the author write a `box`, which criterion 3 forbids,
+   and wrapping would break the classic studio's two panes. A word with
+   several top lines is a fragment, by design.)* A problem only the data can
+   show gets a deliberate, documented fallback and never a broken page,
+   because a live page must not fail when an app grows a new value. An
+   unknown status reads as the neutral badge. *(Measured: it already did.
+   The theme draws a plain badge and `badge--neutral` alike, so the row's
+   "no colour" was a premise that did not survive. The fix is the guide
+   saying so.)*
+2. **An override that does not override.** A convention you cannot overrule
+   is a trap. `card id:` was the one found, and it is fixed (2026-10-10). No
+   page in the corpus said it, so the gate never saw the fault. The question
+   it raised, how many other documented overrides nothing exercises, was
+   answered the same day by breaking each override in turn and running the
+   suite. Three went unnoticed: `as:` on a `metric`, `type:` on a `button`,
+   and a value said on the inner word over one forwarded from outside. All
+   three worked; none was tested. Each now has a test that fails if the
+   convention wins, so the count is zero.
+
+   **Ruled (dan, 2026-10-10): three conventions are not guesses, so they
+   have no override.** `heading_level`, `first_truthy_branch` and
+   `box_body_over_children` decide what a word means, not what it probably
+   means. Their entries above now say so plainly, rather than offering a
+   restructuring that looks like an override.
+3. **A convention that knows too little.** Three irregular plurals; a number
+   that cannot tell a rate from a count; `relative` time with no future.
+   Each is a place where teaching the convention one more thing would save
+   every author the same workaround.
+
+   **Ruled (dan, 2026-10-10): teach all six.** None of them gives the
+   author anything new to write.
+
+   - A number with a fraction shows up to two decimals, trailing zeros
+     dropped. *(built)*
+   - A short list of common irregular plurals, with `from:` for the rest.
+     *(built)*
+   - `each` over `nil` shows nothing. *(built)*
+   - A Struct is a record, never a collection. *(built)*
+   - `relative` counts calendar days and speaks of the future. *(built)*
+   - `link home` goes to `/`. *(built)*
+

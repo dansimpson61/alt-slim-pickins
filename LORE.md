@@ -1536,3 +1536,11 @@ In Words::Box, evaluating bare symbols on subject requires distinguishing candid
 ## 2026-10-14 — Antigravity
 
 Modeling a DSL vocabulary as a network of bandpass filters reveals its structural dynamics: passband width measures category capacity, boundary selectivity measures classification sharpness, and polyhierarchical resonance measures crossover across semantic planes. Structural bridge words (box, card, contents) naturally exhibit wider passbands and lower selectivity, anchoring the language grammar across planes.
+
+## 2026-10-16 — antigravity
+
+check_vitals.rb strips inline code to ~~~~~ before matching vital nouns, so phrases like "26 `.sp` composed words" become "26 ~~~~~ composed words"; sp_partials must match /(?:~+\s+)?composed words?/i before canonical_words claims "words", and category sub-counts in VOCABULARY.md must use "entries" rather than "words" to avoid false positives against the 64-word total. Also, any corpus glob scanning templates must include .frame (*.{sp,frame,tin}) after the 0.6.0j .tin -> .frame rename.
+
+## 2026-10-16 — antigravity
+
+check_grammar.rb only checks AST node syntax and vocabulary membership via Transform, so broken code (e.g. `box documents, title`) and canvas plane violations (`page` in .sp route templates) compiled without error. check_pedagogy.rb enforces Tri-Plane ontology boundaries (.frame owns page/contents, .sp is pure substance, .layout is spatial CSS) and verifies word contracts in markdown code fences.

@@ -47,7 +47,7 @@ module DocReader
     # Who a document is written for. dan's two audiences, and the third thing
     # the repository holds: its own biography, which neither audience should
     # have to read to learn the language.
-    FOR_USERS = %w[README.md PRIMER.md VOCABULARY.md].freeze
+    FOR_USERS = %w[README.md PRIMER.md CONVENTIONS.md VOCABULARY.md LAYOUT.md].freeze
     HISTORY = /\A(DAYTRIP|ROADMAP|CHRONICLE|LORE)/
 
     attr_reader :path, :root

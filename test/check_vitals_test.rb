@@ -50,8 +50,8 @@ class CheckVitalsTest < Minitest::Test
   end
 
   def test_the_more_specific_vital_claims_the_text_first
-    found = claims('26 app words')
-    assert_equal [:app_words], found.map { |claim| claim.vital.key }
+    found = claims('26 app words and 26 `.sp` composed words')
+    assert_equal %i[app_words sp_partials], found.map { |claim| claim.vital.key }
   end
 
   def test_the_reverse_form_a_gates_vitals_row_uses_is_a_claim

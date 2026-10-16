@@ -51,8 +51,8 @@ The linguistic plane governs the syntax, tokens, and execution semantics of temp
    `SlimPickins::Word`. The runtime core contains thirty-eight primitives (`box`, `span`,
    `each`, `table`, `form`, etc.).
 3. **`composed_word`**: A first-class word authored in the language itself using `.sp`
-   templates in `lib/vocabulary/` or an application's own views. There are twenty-six .sp partials
-   (first-class composed words: `badge`, `card`, `metric`, `fact`, `snippet`, `note`, `flash`, etc.).
+   templates in `lib/vocabulary/` or an application's own views. There are twenty-six `.sp`
+   composed words (`badge`, `card`, `metric`, `fact`, `snippet`, `note`, `flash`, etc.).
 4. **`def`**: The definition keyword opening a word's lexical scope and parameter bindings:
    `def word_name subject, kwargs`. Composed words are invoked identically to primitives.
 

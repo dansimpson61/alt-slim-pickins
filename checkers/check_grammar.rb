@@ -24,12 +24,12 @@ require_relative '../lib/slim_pickins/conventions'
 
 here = File.expand_path('..', __dir__)
 
-DOCS = (%w[docs/DESIGN.md docs/VOCABULARY.md README.md docs/PRIMER.md
+DOCS = (%w[docs/DESIGN.md docs/VOCABULARY.md docs/CONVENTIONS.md README.md docs/PRIMER.md
             history/planning/ROADMAP-0.2.md history/planning/ROADMAP-0.3.md
             history/planning/BLUESKY.md
             history/ROADMAP-0.1.md history/PHASE0.md history/PHASE2.md
             history/PHASE7.md] +
-         Dir[File.join(here, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]
+         Dir[File.join(here, '{pages,examples,lib/vocabulary,studio}', '**', '*.{sp,frame,tin}')]
            .map { |f| f.sub("#{here}/", '') }).freeze
 
 docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
@@ -88,7 +88,7 @@ Dir[File.join(here, '{examples,studio}', '**', '*.rb')].each do |f|
     app_words |= body.scan(/^\s*def ([a-z_]+)/).flatten.to_set
   end
 end
-Dir[File.join(here, '{pages,examples,studio,lib/vocabulary}', '**', '*.{sp,tin}')].each do |f|
+Dir[File.join(here, '{pages,examples,studio,lib/vocabulary}', '**', '*.{sp,frame,tin}')].each do |f|
   app_words |= File.read(f).scan(/^\s*def\s+([a-z_][a-z0-9_]*)/).flatten.to_set
 end
 vocab |= app_words

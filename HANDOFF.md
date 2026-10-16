@@ -61,7 +61,7 @@ Every number below that the census measures is now held by `check_vitals.rb`, so
 this block cannot go stale without the gate saying so. The rows it does *not*
 measure are quoted as the gate output they are.
 
-- **Census SSOT (`bin/census.rb`)**: 64 canonical words (38 Ruby primitives + 26 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, 113 stylesheet rules, 60 test files.
+- **Census SSOT (`bin/census.rb`)**: 64 canonical words (38 Ruby primitives + 26 `.sp` partials), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, 113 stylesheet rules, 61 test files.
 - **Full Suite**: 627 runs, 6,698 assertions, 0 failures, 0 errors, 0 skips in one
   process — and that includes the example apps' own suites, because both the Suite
   leg *and* the gate command below now ask `Census.test_files`. They did not agree

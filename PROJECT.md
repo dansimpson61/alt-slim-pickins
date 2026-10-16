@@ -4,14 +4,18 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   A view language whose grammar is one sentence — `word arguments`, indentation
-  nests, everything is a word — proved across 64 canonical words, 8 apps and 35
-  rendered pages. Daytrip 0.6.0j landed: meta-architecture codified across 3 ontological
-  planes, .tin renamed to .frame, .spiff renamed to .layout, presentation atoms (metric,
-  fact, snippet) migrated to .sp composed words (38 primitives, 26 partials), archaic def
-  syntax banished, multi-axial bandpass taxonomy codified, and living treatise docs/ONTOLOGY.md
-  authored. Twelve gate legs green, 650 runs / 7,098 assertions / 0 failures, 35 pages verified OK.
+  nests, everything is a word — proved across 64 canonical words (38 primitives,
+  26 composed words), 8 apps and 35 rendered pages. Daytrip 0.6.0k Pre-Movement
+  and Movement 1 landed: audience partition codified, primary author guides
+  (docs/PRIMER.md, docs/VOCABULARY.md, docs/CONVENTIONS.md, docs/LAYOUT.md)
+  rewritten from first principles to the Tri-Plane Ontology (.frame, .sp, .layout,
+  composed words, dictionary/on/map, 5 categories, 38 conventions), historical
+  drafting notes preserved in history/CHRONICLE.md, .frame files included in
+  grammar/shape globs, and continuous checkers/check_pedagogy.rb instrument built
+  with 26 pedagogical defects resolved. Twelve gate legs green, 656 runs / 7,154
+  assertions / 0 failures, 35 pages verified OK.
 last_touched: 2026-10-16
-next_step: 'Daytrip 0.6.0k: First-principles pedagogy, ontology sweep, and Roadmap 0.6 close.'
+next_step: 'Daytrip 0.6.0k (Movements 2-5): Repository entrypoint sweep, HANDOFF pruning, and Roadmap 0.6 close.'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

@@ -2,32 +2,31 @@
 
 A **convention** is what the language decides when you say nothing.
 
-You write `page portfolio`, and you get a whole HTML document, a `<title>`, and
-a heading that says "Portfolio". You never asked for any of it. That is a
-convention working for you.
+You write `page portfolio`, and you get a complete HTML document, a `<title>`,
+an `<h1>` that says "Portfolio", and your application's outer `.frame` chrome
+and `.layout` spatial stylesheet. You never asked for any of it. That is the
+inference engine working for you.
 
 Every convention makes three promises:
 
-1. **You can look it up.** Each one has a name — written here in `code` — and
-   an entry in the register, `lib/slim_pickins/conventions.rb`.
-2. **You can override it by saying it.** What you say wins over what the
-   language would have decided. Where you *cannot* override one, this guide
-   says so.
-3. **It is the same everywhere.** A convention does not change its mind
-   between one page and the next.
+1. **You can look it up.** Each of the 38 conventions has a name — written here
+   in `code` — and a single entry in the convention register.
+2. **You can override it by saying it.** What you write in a template wins over
+   what the language would have inferred. Where a convention defines what a word
+   means and therefore has no override, this guide says so explicitly.
+3. **It is the same everywhere.** A convention never changes its mind from one
+   page to the next.
 
-Each entry below has the same four parts:
+Each entry below follows the same four-part structure:
 
 - **You write** — the shortest sentence that triggers it.
-- **You get** — what the language decides. Every example here was rendered;
-  the HTML is trimmed to the lines that matter.
-- **To override** — what to say instead.
-- **Watch for** — its limits and risks, where it has any. These are measured,
-  not guessed, and they are where the conventions most need strengthening.
+- **You get** — what the language decides and emits.
+- **To override** — what to write when you want something else.
+- **Watch for** — its boundaries and stated limits.
 
-The conventions are grouped by the **principle** they serve — one sentence each
-that you can hold in your head. Learn the principles and most of the
-conventions follow.
+The 38 conventions are grouped by the **eleven principles** they serve — one
+sentence each that you can hold in your head. Learn the principles and the
+individual conventions follow naturally.
 
 ---
 
@@ -35,31 +34,44 @@ conventions follow.
 
 > **That which can be inferred need not be spoken.**
 
-A sentence follows the universal structure:
+Every sentence follows the universal argument and inference structure:
 
 > `word [target], [override], [kwargs]`
 
-1. **Target**: A bare positional target (`my_word accounts`) resolves against context (`subject`, `locals`, `helpers`), automatically inferring and populating `.label` (humanized label or `label_for`), `.id` (DOM identifier `account-1`), `.noun` (singular entity noun `"account"`), and `.target` (the entity itself).
-2. **Override**: An explicit second positional argument overrides the inferred label directly: `my_word accounts, "Investments"` (or standalone `my_word "Investments"` when there is no target).
-3. **Kwargs**: Named keyword arguments (`key: value`) serve as the universal configuration mechanism for modifiers and options: `my_word accounts, variant: :primary, open: true`.
+1. **Target (`word target`):** A bare positional target (`section accounts`,
+   `card account`) resolves against the active context (`subject`, `locals`,
+   `helpers`), shifting the subject (for subject-taking words) and automatically
+   populating four inferred properties:
+   - `.target` — the resolved entity or collection
+   - `.noun` — the singular entity noun (`"account"`)
+   - `.id` — the DOM identifier (`"account-1"`) when the entity answers `id`
+   - `.label` — the human label (`label_for` from the model, or `"Accounts"` in English)
+2. **Override (`word target, "Your accounts"`):** An explicit second positional
+   argument overrides the inferred label directly (or serves as the standalone
+   label when no bare target is given, as in `section "Where you stand"`).
+3. **Kwargs (`key: value`):** Named keyword arguments configure modifiers and
+   options (`card account, variant: :primary`, `field rate, step: 0.005`).
 
 ---
 
 ## 1. A page wears its frame
 
-> *A page wears its frame: the document, and the tin around it.*
+> *A page wears its frame: the document, and the frame around it.*
 
 ### `document` — every page is a whole document
 
-**You write**
+In slim-pickins, `page` belongs strictly in `.frame`, where it establishes the
+outer HTML document envelope.
 
-```
+**You write** in a `.frame` envelope:
+
+```frame
 page "Hello"
-  text "Hi"
+  contents
 ```
 
-**You get** the doctype, `<html>`, `<head>`, the charset, the viewport, the
-stylesheet, and the body:
+**You get** the HTML5 doctype, `<html>`, `<head>`, the charset, the viewport,
+the base stylesheet, any compiled `.layout` stylesheet, and `<body>`:
 
 ```html
 <!DOCTYPE html>
@@ -72,53 +84,67 @@ stylesheet, and the body:
 </head>
 <body>
 <h1>Hello</h1>
-<p class="text">Hi</p>
 </body>
 </html>
 ```
 
-**To override** — nothing. It is what a page is.
+**To override** — nothing. It is what `page` means.
 
-### `tin` — the chrome every page wears
+### `frame` — the chrome every page wears
 
-A tin is the part of every page that is the same: the navigation, the footer.
-Write it once, in a file named after your app, beside your views —
-`views/my_app.tin`. The word `contents` marks the hole where each page goes.
+A frame is the outer chrome shared across routes: the navigation bar, shell
+landmarks, and footer. Write it once beside your views as `views/<app>.frame`,
+using `contents` to mark where each route's `.sp` template is spliced in. When a
+matching `<app>.layout` or `<page>.layout` file sits in the application, its
+compiled spatial CSS is linked into `<head>` automatically.
 
-**You write** `views/my_app.tin`:
+**You write** `views/my_app.frame`:
 
+```frame
+page "My App"
+  nav
+    link home
+    link accounts
+  contents
+  footer "Fine print"
 ```
-nav
-  link home
-  link accounts
-contents
-footer "Fine print"
-```
 
-and a page that never mentions it:
+and a route template `views/accounts.sp` that never mentions the frame or `page`:
 
-```
-page "Accounts"
+```sp
+section "Accounts"
   text "Body"
 ```
 
-**You get** the page inside the tin:
+**You get** the route spliced inside the frame:
 
 ```html
-<h1>Accounts</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My App</title>
+<link rel="stylesheet" href="/assets/slim-pickins.css">
+</head>
+<body>
+<h1>My App</h1>
 <nav class="nav" aria-label="Main">
-<a href="/home" class="link">Home</a>
+<a href="/" class="link">Home</a>
 <a href="/accounts" class="link">Accounts</a>
 </nav>
+<section class="section">
+<h2 class="section-title">Accounts</h2>
 <p class="text">Body</p>
+</section>
 <footer class="footer">Fine print</footer>
+</body>
+</html>
 ```
 
-**To override** — give one page its own tin: `views/<page>.tin` beats the app's
-for that page. Delete the tin to have none.
-
-**Watch for** — `link home` goes to `/home`, not `/`. Say `to: "/"` for the
-home link (see `link_href`).
+**To override** — give an individual route its own frame (`views/<page>.frame`),
+which takes precedence over `views/<app>.frame` for that page, or omit the
+`.frame` file when a standalone page needs no shared chrome.
 
 ---
 
@@ -126,8 +152,8 @@ home link (see `link_href`).
 
 > *A name is its own text — the heading, the label, the address.*
 
-A name you write is turned into words a reader can see: underscores become
-spaces and the first letter is capitalised. `base_income` reads "Base income".
+A bare name is turned into human words automatically: underscores become spaces
+and the first letter is capitalised (`base_income` reads `"Base income"`).
 
 ### `title` — the page's heading comes from its name
 
@@ -135,15 +161,16 @@ spaces and the first letter is capitalised. `base_income` reads "Base income".
 
 **You get** `<title>Portfolio</title>` and `<h1>Portfolio</h1>`.
 
-**To override** — say the words: `page portfolio, "Your retirement"` gives
-"Your retirement". Or read them from the data: `page account, .name` gives the
-account's own name.
+**To override** — pass the second positional argument: `page portfolio, "Your retirement"`
+renders `"Your retirement"`, and `page account, .name` reads the account's own
+`name`.
 
 ### `link_href` — a link's name is its address
 
 **You write**
 
 ```
+link home
 link accounts
 link show, "Details"
 ```
@@ -151,61 +178,62 @@ link show, "Details"
 **You get**
 
 ```html
+<a href="/" class="link">Home</a>
 <a href="/accounts" class="link">Accounts</a>
 <a href="/show" class="link">Details</a>
 ```
 
-**To override** — `to:` — `link back, to: "/x"`.
+The address is `/` plus the bare name, except `home`, which resolves to the root
+path `/`.
 
-The address is `/` plus the name, except `home`, which is the root: `link
-home` is `/`. No app serves `/home`, and before 2026-10-10 every app that
-said `link home` had to add `to: "/"`.
+**To override** — pass `to:`: `link back, "Back to overview", to: "/overview"`.
 
-**Watch for** — any other name becomes an address whether or not the app
-serves it. `link projections` is `/projections` even where no such route
-exists.
+**Watch for** — any bare name other than `home` becomes `/<name>` whether or not
+the application defines that route; use `to:` when linking to a parameterized
+path.
 
-### `label` — a field, column or metric labels itself
+### `label` — a field, column, metric, fact, or section labels itself
 
-The label comes from whoever knows best, in this order: **the page, then the
-app, then English**.
+The human label comes from whoever knows best, in three-level precedence:
+**the template override, then the model's `label_for(attribute)`, then English.**
 
 **You write**
 
-```
-page scenario
-  form to: "/save"
-    field age, "Your age"
-    field base_income
-    field growth_rate
+```sp
+form to: "/save"
+  field age, "Your age"
+  field base_income
+  field growth_rate
 ```
 
-where the app's `scenario` answers `label_for(:base_income)` with
-"Income before tax".
+where the application's `scenario` model answers `label_for(:base_income)` with
+`"Income before tax"`.
 
 **You get**
 
 ```html
-<label for="age">Your age</label>                      ← the page said it
-<label for="base_income">Income before tax</label>     ← the app said it
-<label for="growth_rate">Growth rate</label>           ← English
+<label for="age">Your age</label>                      ← the template said it
+<label for="base_income">Income before tax</label>     ← the model said it
+<label for="growth_rate">Growth rate</label>           ← English inferred it
 ```
 
-**To override** — say the label in the page, as `field age, "Your age"` does.
-To change it everywhere, answer `label_for` in the app.
+**To override** — pass a second positional argument on the sentence
+(`field age, "Your age"`), or implement `label_for` on the model to set the
+label across all templates.
 
-**Watch for** — English is simple: only the first word is capitalised, so
-`ira_balance` reads "Ira balance". A trailing `_on` or `_at` is dropped:
-`born_on` reads "Born". When English is wrong, the app should say the label
-once, in `label_for`, rather than every page saying it.
+**Watch for** — English humanization capitalises only the first word (so
+`ira_balance` reads `"Ira balance"`) and strips a trailing `_on` or `_at`
+(`born_on` reads `"Born"`). Acronyms and domain-specific phrasing belong in
+`label_for`.
 
-### `table_header` — a column's header
+### `table_header` — a column's header or chart series label
 
-The same idea as `label`, for tables and chart series: **the row, then the
-enclosing subject, then English**. `column market_value` heads its column
-"Market value".
+Follows the same three-level precedence for table columns and chart series:
+**the sentence's override, then the row or enclosing subject's `label_for`,
+then English.** `column market_value` heads its column `"Market value"`.
 
-**To override** — say the header on the column: `column market_value, "Value"`.
+**To override** — pass the label on the column or series:
+`column market_value, "Value"`.
 
 ---
 
@@ -217,33 +245,32 @@ enclosing subject, then English**. `column market_value` heads its column
 
 **You write**
 
-```
-page account
+```sp
+section account
   each holding
     text .symbol
 ```
 
-**You get** one line for every item in the account's `holdings`:
+**You get** one paragraph for each item in the account's `holdings`:
 
 ```html
 <p class="text">VTI</p>
 <p class="text">BND</p>
 ```
 
-`each holding` does two things from one word. It reads the **plural**,
-`holdings`, and it names each item by the **singular**, `holding`. Inside the
-loop, the dot means the holding. To reach further out, use a name:
+`each holding` does two things from one word: it looks up the **plural**
+collection (`holdings`), and it binds each element to the **singular** name
+(`holding`) while making it the innermost subject. Inside the loop, `.symbol`
+reads the holding, and outer subjects remain reachable by their bound names:
 
-```
-page account
+```sp
+section account
   each holding
-    text holding.symbol
+    text .symbol
     note account.name
 ```
 
-`account.name` reaches the page's account, because `page account` named it.
-
-**To override** — `from:` names the collection yourself:
+**To override** — pass `from:` to name the collection explicitly:
 
 ```
 each place, from: .addresses
@@ -251,18 +278,15 @@ each place, from: .addresses
 
 **Watch for**
 
-- **Plurals are simple.** A `y` after a consonant becomes `ies`; a word that
-  ends in a hiss (`s`, `x`, `ch`, `sh`) gains `es`, so `each address` finds
-  `addresses`; everything else gains an `s`. The common irregulars are a
-  list: child, person, datum, leaf, man, woman, analysis, criterion. English
-  has too many exceptions for rules, so anything else, like `each knife`
-  looking for `knifes`, needs `from:`. That is a stated limit, by dan's
-  ruling of 2026-10-10.
-- **You cannot bind a word of the language.** `each item` is refused, because
-  `item` is a word. The error tells you the fix:
-  `each row, from: .items`.
+- **Pluralization rules are intentionally compact:** a `y` after a consonant
+  becomes `ies`; a word ending in `s`, `x`, `ch`, or `sh` gains `es` (`each
+  address` finds `addresses`); eight common irregulars are built in (`child`,
+  `person`, `datum`, `leaf`, `man`, `woman`, `analysis`, `criterion`); everything
+  else gains `s`. For any other irregular plural, pass `from:`.
+- **A loop variable cannot shadow a canonical word.** Writing `each item` is
+  refused because `item` is a vocabulary word; write `each row, from: .items`.
 
-### `chart_axis` — a chart labels its axis from the singular
+### `chart_axis` — a chart labels its horizontal axis from the singular
 
 **You write**
 
@@ -271,16 +295,15 @@ chart years
   line amount
 ```
 
-**You get** an axis labelled with each row's `year` (2026, 2027) and a series
-labelled "Amount".
+**You get** an x-axis labelled with each row's `year` (`2026`, `2027`, …) and a
+series labelled `"Amount"`.
 
-**To override** — `over:` names the attribute: `chart shapes, over: name`.
+**To override** — pass `over:` to name the axis attribute explicitly:
+`chart history, over: year`.
 
-**Watch for** — when the name is not a plural (`chart history`), there is no
-singular to read, and the chart numbers its points 1, 2, 3… instead. The same
-happens when the singular guesses wrong: `chart caches` looks for `cach` and
-`chart statuses` for `statuse`, because `es` after `ch` or a single `s` could
-have come from either spelling. Say `over:`.
+**Watch for** — when the collection name is not a plural (`chart history`) or its
+singular does not match a row attribute, the chart numbers its points `1, 2, 3…`
+unless `over:` is given.
 
 ---
 
@@ -289,7 +312,7 @@ have come from either spelling. Say `over:`.
 > *A collection walks itself, and having nothing is a situation, not a false
 > value.*
 
-### `subject_or_collection` — a section over a collection walks it
+### `subject_or_collection` — a section or box over a collection walks it
 
 **You write**
 
@@ -299,9 +322,9 @@ section holdings
     text .symbol
 ```
 
-**You get** a section whose items are the holdings. `section holdings` moves
-the subject to the holdings; `each holding` then finds that the subject *is*
-the collection, and walks it.
+**You get** a section whose items are the holdings. `section holdings` shifts
+the subject to `holdings`; `each holding` sees that the current subject is
+already a collection and iterates it directly:
 
 ```html
 <section class="section section--holdings">
@@ -313,9 +336,8 @@ the collection, and walks it.
 
 ### `table_rows` — a table is its own loop
 
-**You write** `table holdings` and its columns. **You get** a row per holding.
-No page writes a loop for a table. (See `column_registration` for the
-columns.)
+**You write** `table holdings` and declare its columns. **You get** one `<tr>`
+per holding without writing `each`.
 
 ### `empty_situation` — say what nothing looks like
 
@@ -328,7 +350,8 @@ section holdings
     text .symbol
 ```
 
-**You get**, when there are no holdings, the message and nothing else:
+**You get**, when `holdings` is empty (or `nil`), the `empty` message and
+nothing else:
 
 ```html
 <section class="section section--holdings">
@@ -337,41 +360,27 @@ section holdings
 </section>
 ```
 
-When there are holdings, the `empty` line disappears instead. You never write
-`if holdings.empty?`.
+When `holdings` has items, `empty` disappears and its siblings render.
 
-**To override** — nothing. `empty` *is* the word for it.
+**To override** — nothing; `empty` is the dedicated word for an empty
+collection.
 
 **Watch for**
 
-- **`empty` needs something above it that could be empty.** In a page,
-  `empty` with no line above naming a collection (`page "…"` and
-  `section "…"` name nothing) could never show, so it is refused: "`empty`
-  has nothing above it that could be empty" (dan, 2026-10-10). word_graph's
-  "No words matched" was one such line. It never showed, even for a search
-  with no matches, and its section now names `words`. A partial or a `def`
-  is exempt, because its caller names the subject.
-- **`nil` is nothing.** A section, or a page, over `nil` shows its `empty`
-  line exactly as over `[]` (dan's pattern-1 ruling, 2026-10-10: the data
-  never breaks the page). A subject that is *absent*, not there at all, is
-  still the page's mistake and is refused.
-- **A table may not hold `empty`, by design.** The table's job is its rows,
-  and saying what nothing looks like belongs to the word around the
-  collection. It is refused, and the error names the fix: "Put the `table`
-  inside a `section` and give the section the `empty`" (2026-10-10).
+- **`empty` requires a named subject above it.** Placing `empty` inside a
+  label-only container (`section "Summary"`) in a route template is refused at
+  check time because no collection was named that could be empty. Inside a `def`
+  composed word, `empty` checks the subject passed by the caller.
+- **A `table` does not hold `empty` directly.** Wrap the `table` in a `section`
+  or `box` over the collection and place `empty` there so the empty message
+  replaces the entire table cleanly.
 
 ### `collection_detection` and `nothing_detection` — what counts as a collection
 
-A value is a **collection** when it can be walked (it is `Enumerable`) and is
-not a `Hash` or a `Struct`: those are records, though Ruby lets you walk them.
-A collection is **nothing** when it has no items, or is `nil`.
-
-So `section settings` over a Hash moves into it like any object, and `.theme`
-reads its key.
-
-**Watch for** — nothing here since 2026-10-10. A `Struct` used to count as a
-collection, so one whose fields were all `nil` counted as empty and its
-section showed only its `empty` line.
+A value is treated as a **collection** when it is `Enumerable` and is neither a
+`Hash` nor a `Struct` (which are key-value records even though Ruby includes
+`Enumerable` on them). A collection counts as **nothing** when it has no elements
+or is `nil`.
 
 ---
 
@@ -379,10 +388,11 @@ section showed only its `empty` line.
 
 > *How deep a heading sits decides its level.*
 
-### `heading_level`, `box_title` and `box_depth`
+### `heading_level`, `box_title`, and `box_depth`
 
-You never write `h2` or `h3`. A heading's level comes from where it sits, and
-a heading inside a section or card becomes that box's title.
+You never write `h2` or `h3`. A heading's tag level derives from its nesting
+depth inside landmarks and containers, and a `heading` directly inside a `box`
+or `card` becomes that container's title:
 
 **You write**
 
@@ -404,94 +414,75 @@ section accounts
 </section>
 ```
 
-The section titles itself from its name at level 2; the card's heading is the
-card's title at level 3.
+The `section` titles itself at level 2 (`<h2>`), and increases the heading depth
+for its children (`box_depth`), so the card's title renders at level 3 (`<h3>`).
 
-**No override, by design** (dan, 2026-10-10). The level comes from the nesting
-because that is what makes the page's outline true for a screen reader. A page
-that could say `level: 2` could write a wrong outline. To make a heading *look*
-bigger, ask the theme, which owns the look. To keep a heading from becoming
-the box's title, use `title` or `text`.
-
-A section already titles itself, and a card with content titles itself from
-it. A `heading` directly inside either would be a **second** title, so it is
-refused (dan, 2026-10-10): "`section` already has a title, so a `heading`
-directly inside it would be a second one". Before that, it rendered:
-
-```
-section accounts
-  heading "B"
-```
-
-```html
-<h2 class="section-title">Accounts</h2>
-<h2 class="section-title">B</h2>
-```
-
-To give the section different words, say them on the section instead:
-`section holdings, "Your holdings"`.
+**No override on `heading_level`, by design.** Deriving heading levels from tree
+depth guarantees a valid document outline for assistive technologies. To render
+a child heading inside a container without claiming the container's own title
+slot, use `title` instead of `heading`. Placing a `heading` directly inside a
+`section` or `card` that already has a title is refused as a duplicate title.
 
 ---
 
 ## 6. A word owns its element
 
-> *A word owns its element, its class and its id.*
+> *A word owns its element, its class, and its id.*
 
-### `box_tag` and `leaf_tag` — the right element, unasked
+### `box_tag` and `leaf_tag` — the semantic HTML element, unasked
 
-Each word becomes the HTML element that fits it.
+Each canonical word emits the semantic HTML element that matches its role:
 
-```
+```text
 section notes          → <section class="section section--notes">
   list                 → <ul class="list">
     item "one"         → <li class="item">
 aside                  → <aside class="aside">
 footer "end"           → <footer class="footer">
+card                   → <article class="card">
+figure "Caption"       → <figure class="figure">
+disclosure "More"      → <details class="disclosure">
+fact origin            → <dl class="fact">
+snippet .code          → <pre class="snippet">
 money .v               → <span class="money">
 badge ok, "Fine"       → <span class="badge badge--ok">
 time .t                → <time class="time" datetime="2026-10-09">
 ```
 
-`card` is an `<article>`, `figure` a `<figure>`, `disclosure` a `<details>`.
+**To override** — nothing. The word owns its element; a different element is a
+different word.
 
-**To override** — nothing. The word owns its element; if you need a
-different element, you need a different word.
+### `root_class` — a composed word with a single root carries its own class
 
-### `root_class` — your own word carries its own name
+When you define a composed word with `def` whose body has a single top-level
+container, that root element automatically receives your composed word's name as
+a CSS class so `.layout` zones and theme rules can target it.
 
-When you define a word of your own and it has a single top line, that line
-carries your word's name as a class, so your styles can find it.
+**You write**
 
-**You write** `partials/holding_card.sp`:
+```sp
+each document
+  document_card
 
-```
-card
-  text .symbol
-```
-
-and a page that uses it:
-
-```
-each holding
-  holding_card
+def document_card document
+  card
+    text .title
 ```
 
 **You get**
 
 ```html
-<article class="card holding_card" id="holding-3">
+<article class="card document_card" id="document-3">
+  <p class="text">The Way</p>
+</article>
 ```
 
-**A word with several top lines is a fragment, by design** (2026-10-10). It
-stands for those lines side by side, with nothing around them, so there is no
-one element to carry its name. The classic studio relies on this: its `editor`
-is two top lines, `palette` and `section`, and they are two panes of a
-two-column grid. A wrapper would merge them into one, and putting the class on
-each line would pull the palette into the editor's column. If you want a word
-you can style as a whole, give it one top line, a `box` around the rest. That
-is a choice about what the word is, not a workaround.
+**Watch for** — a composed word with multiple top-level lines renders as a
+multi-node fragment without a wrapper element, so no single node carries the
+composed word's class. When a composed word represents a distinct visual zone,
+give it a single root container (`box` or `card`).
 
-### `card_id` — a card over something with an id gets that id
+### `card_id` — a card over an identifiable subject gets its DOM `id`
 
 **You write**
 
@@ -501,12 +492,11 @@ each holding
     text .symbol
 ```
 
-**You get** `<article class="card" id="holding-3">` — the subject's noun and
-its id. A card over something with no id gets no id.
+**You get** `<article class="card" id="holding-3">` — combining the subject's
+singular noun and its `id`. A subject without an `id` produces no `id`
+attribute.
 
-**To override** — say `id:` yourself. `card id: "featured"` is
-`id="featured"`, inside an `each` or out of one, and a card with nothing to
-infer from takes the id you give it.
+**To override** — pass `id:` explicitly: `card id: "featured"`.
 
 ---
 
@@ -514,25 +504,25 @@ infer from takes the id you give it.
 
 > *A value chooses its form — the control, the alignment, the text.*
 
-The language looks at what a value *is* — a number, a date, true or false —
-and picks the form that fits. It never guesses what a value *means*: whether
-a number is money is the app's to say.
+The runtime inspects what a value *is* — an `Integer`, `Float`, `BigDecimal`,
+`Date`, `Time`, `true`, or `false` — and chooses the appropriate input control,
+table alignment, and number formatting. It never guesses domain meaning (such as
+whether a number is currency); domain meaning comes from the word (`money`,
+`percent`) or the model's `format_for`.
 
-### `input_type`, `input_step` and `boolean_field` — a field fits its value
+### `input_type`, `input_step`, and `boolean_field` — a field fits its value
 
 **You write**
 
-```
-page scenario
-  form to: "/save"
-    field age
-    field growth_rate
-    field retired
-    field born_on
+```sp
+form to: "/save"
+  field age
+  field growth_rate
+  field retired
+  field born_on
 ```
 
-with `age: 61`, `growth_rate: 0.05`, `retired: false` and a date for
-`born_on`.
+with `age: 61`, `growth_rate: 0.05`, `retired: false`, and `born_on: Date.new(1965, 3, 1)`.
 
 **You get**
 
@@ -543,25 +533,22 @@ with `age: 61`, `growth_rate: 0.05`, `retired: false` and a date for
 <input id="born_on" name="born_on" type="date" value="1965-03-01">
 ```
 
-A number is a number field. A fraction below one steps by hundredths; a larger
-decimal, like `2.5`, takes `step="any"`, so the browser accepts it as it
-stands. True or false is a checkbox. A date is a date picker. Anything else is
-text.
+- Integers and decimals become `type="number"`.
+- Decimals strictly between `-1` and `1` receive `step="0.01"`; larger decimals
+  receive `step="any"`.
+- Booleans (`true` or `false`) become `type="checkbox"`.
+- `Date` and `Time` values become `type="date"`.
+- Everything else becomes `type="text"`.
 
-**To override** — `type:` and `step:` — `field retired, type: text`,
-`field rate, step: 0.5`.
+**To override** — pass `type:` or `step:` (`field retired, type: text`,
+`field growth_rate, step: 0.001`).
 
-**Watch for** — a rate steps by hundredths, so `0.055` in a field that held
-`0.05` will not submit. Say `step:` when a rate needs finer places. A
-`BigDecimal` is a decimal like a `Float`: 2.5 is written `2.5` and gets
-`step="any"`.
+### `numeric_alignment` — numeric columns right-align
 
-### `numeric_alignment` — numbers line up on the right
+A table column or cell whose value is numeric receives `class="column--numeric"`
+and right-aligns automatically.
 
-A column or cell holding a number is right-aligned (`column--numeric`).
-Nothing to say; it follows from being a number.
-
-### `format`, `format_family` and `number_text` — how a number reads
+### `format`, `format_family`, and `number_text` — how numbers format
 
 **You write**
 
@@ -572,7 +559,7 @@ number .c
 money .d, precision: 2
 ```
 
-with `1234567`, `0.0825`, `98765` and `-12.5`.
+with `1234567`, `0.0825`, `98765`, and `-12.5`.
 
 **You get**
 
@@ -583,11 +570,9 @@ with `1234567`, `0.0825`, `98765` and `-12.5`.
 <span class="money money--negative">−$12.50</span>
 ```
 
-Digits are grouped, money has its sign, a percent is scaled by a hundred, and
-a negative number is marked.
-
-In a table, a column's form comes from **`as:`, then the app's `format_for`,
-then the value**:
+In a `table`, `metric`, or `fact`, formatting follows a three-level precedence:
+**`as:` on the sentence, then the model's `format_for(attribute)`, then the
+value's class:**
 
 ```
 table holdings
@@ -596,25 +581,18 @@ table holdings
   column gain, as: percent
 ```
 
-**To override** — `as:` in the page, or `format_for` in the app; `precision:`
-for decimal places.
+**To override** — pass `as:` (`as: money`, `as: percent`, `as: number`), define
+`format_for` on the model, or pass `precision:` to control decimal places.
 
 **Watch for**
 
-- **Money shows the cents a value has.** `money` of `12.99` is `$12.99`; of
-  `0.6` is `$0.60`; a whole amount stays whole. Whatever is not shown is
-  rounded, never cut: `money .a, precision: 0` of `12.99` is `$13`.
-- **A number shows the fraction it has, up to two places.** `number` of
-  `2.7` is `2.7`, of `0.083` is `0.08`, of `12.999` is `13`. Trailing zeros
-  are dropped. Below `0.005` it reads `0`: two places is the limit, and
-  `precision:` says more.
-- **A rate still needs to be named.** A column of `0.083` with no `as:` reads
-  `0.08`, not `8.3%`. Whether a fraction is a rate is a domain fact the value
-  cannot tell. Say `as: percent`, or have the app answer `format_for`.
-- A negative percent uses a hyphen (`-1.2%`); money and number use a true
+- `money` shows whole dollars when the amount is exact, or two decimal places
+  when cents are present, and marks negatives with `.money--negative` and a true
   minus sign (`−`).
+- `number` shows up to two fractional places with trailing zeros stripped; pass
+  `precision:` when finer precision is needed.
 
-### `time_text` — a date reads as a date
+### `time_text` — dates and timestamps format for humans and machines
 
 **You write**
 
@@ -630,18 +608,12 @@ time relative, .t
 <time class="time time--relative" datetime="2026-10-06">4 days ago</time>
 ```
 
-The machine-readable `datetime` is always there.
+The machine-readable ISO-8601 `datetime` attribute is always emitted. The
+`relative` variant counts calendar days up to 30 days in the past or future
+(`"today"`, `"yesterday"`, `"4 days ago"`, `"tomorrow"`, `"in 3 days"`), falling
+back to the full calendar date beyond 30 days.
 
-`relative` counts calendar days, as a person does: "today", "yesterday",
-"N days ago", and the same forward, "tomorrow", "in N days". It does this up
-to a month either way. Beyond that the full date reads better, and it shows
-that.
-
-**Watch for** — nothing here since 2026-10-10. `relative` used to measure
-from the current moment to a date's midnight, so every afternoon it read
-three days ago as "4 days ago". It also had no words for the future.
-
-### `option_selected` — a choice selects the current value
+### `option_selected` — `choice` marks the active option
 
 **You write**
 
@@ -651,30 +623,21 @@ choice plan
   option pro
 ```
 
-with `plan` set to `:pro` (or `"pro"`).
+with `plan` equal to `:pro` or `"pro"`.
 
 **You get** `<option value="pro" selected="selected">Pro</option>`.
 
-**To override** — nothing; it compares the value to each option.
-
-### `badge_status` — a badge colours itself from a status
+### `badge_status` — `badge` colours itself from known status values
 
 **You write** `badge .status` with `status: "warning"`.
 
 **You get** `<span class="badge badge--warning">warning</span>`.
 
-The statuses it knows are `warning`, `blocker`, `polish`, `ok`, `error`,
-`pending` and `neutral`.
+Known statuses are `ok`, `pending`, `neutral`, `warning`, `error`, `blocker`,
+and `polish`. Any other status string renders as a neutral badge so a new status
+value never breaks a page.
 
-**To override** — name the variant yourself: `badge warning, "Look"`.
-
-A status it does not know, like `archived`, is a plain badge, and a plain
-badge *is* the neutral one. The theme draws `.badge` and `.badge--neutral`
-in the same soft ink, so an unknown status reads as grey. The page never
-breaks because an app grew a new status (dan's ruling, 2026-10-10).
-
-**Watch for** — grey is all an unknown status gets. If one should stand out,
-name its variant.
+**To override** — name the variant in the first slot: `badge warning, .status`.
 
 ---
 
@@ -682,14 +645,14 @@ name its variant.
 
 > *Where a word sits chooses its form.*
 
-### `button_type` — a button in a form submits it
+### `button_type` — a button inside a form submits it
 
-`button "Save"` inside a `form` is `type="submit"`. Outside one it is
+`button "Save"` inside a `form` emits `type="submit"`. Outside a form it emits
 `type="button"`.
 
-**To override** — `type:`.
+**To override** — pass `type:`.
 
-### `group_shape` — a group in a form is a fieldset
+### `group_shape` — a group inside a form is a `<fieldset>`
 
 **You write**
 
@@ -701,18 +664,8 @@ group ages
   text "outside"
 ```
 
-**You get**
-
-```html
-<fieldset class="group">
-<legend>Ages</legend>
-…
-</fieldset>
-<div class="group">
-<h2>Ages</h2>
-…
-</div>
-```
+**You get** `<fieldset class="group"><legend>Ages</legend>…</fieldset>` inside
+the form, and `<div class="group"><h2>Ages</h2>…</div>` outside it.
 
 ---
 
@@ -720,36 +673,14 @@ group ages
 
 > *A gatherer collects what is beneath it before anything renders.*
 
-### `column_registration` — columns are announced, not drawn
+### `column_registration` — table columns and chart series register first
 
-Inside a `table`, `column` and `total` do not draw anything themselves. They
-tell the table what its columns are, so the header can be written before the
-first row exists.
+Inside `table` and `chart`, child declarations (`column`, `total`, `band`,
+`line`, `level`) register their metadata with the parent container before rows
+are iterated, allowing headers, scales, and legends to be emitted before the
+first row.
 
-**You write**
-
-```
-table holdings
-  column symbol
-  column market_value, as: money
-  total market_value
-```
-
-**You get** a header row, a row per holding, and a footer that sums the
-column:
-
-```html
-<th>Symbol</th>
-<th class="column--numeric">Market value</th>
-…
-<td>VTI</td>
-<td class="column--numeric">$12,500</td>
-…
-<td>Market value</td>
-<td class="column--numeric">$16,700</td>
-```
-
-### `first_truthy_branch` — `choose` picks one
+### `first_truthy_branch` — `choose` renders one branch
 
 **You write**
 
@@ -763,10 +694,11 @@ choose
     text "neither"
 ```
 
-**You get** exactly one branch: the first `when` that holds, or `otherwise`.
+**You get** only the first `when` branch whose condition holds, or `otherwise`
+if none holds.
 
-**No override, by design** (dan, 2026-10-10). Picking one is what `choose`
-means. Two independent choices are two `choose`s.
+**No override, by design.** Selecting a single branch is what `choose` means;
+two independent conditions belong in two separate sentences.
 
 ---
 
@@ -774,54 +706,30 @@ means. Two independent choices are two `choose`s.
 
 > *What is said nearest wins over what is inherited or inferred.*
 
-This is the principle behind every override in this guide. Two conventions
-belong to it directly.
+This principle governs every override in the language and two structural
+conventions directly.
 
-### `box_body_over_children` — content beats children
-
-**You write**
-
-```
-box "Body"
-  text "child"
-```
-
-**You get** `<div class="box">Body</div>` — the content, and **not** the
-children.
-
-**No override, by design** (dan, 2026-10-10). Content and children are two
-answers to one question, and the box shows one.
-
-Content written in the page together with children is refused, since the
-children could never show: "`box` shows its words or the lines under it, never
-both". Content read from the data keeps the rule above, and the children are
-what shows when that content is empty (dan, 2026-10-10).
-
-### `partial_slot_forwarding` — a word finds a value on the word around it
-
-When a word of your own expects a modifier and the call does not say it, the
-word looks for it on the enclosing word that did.
+### `box_body_over_children` — inline content and child blocks are mutually exclusive
 
 **You write**
 
 ```
-outer_slot slot: "forwarded"
-  inner_slot
+box .summary
+  text "Fallback when summary is nil"
 ```
 
-**You get** `inner_slot` reading `"forwarded"`, although nobody passed it.
+**You get** `<div class="box">Summary text</div>` when `.summary` is present, or
+the child block when `.summary` is `nil`. Writing a literal string together with
+an indented child block on a `box` is refused at check time because the child
+block could never render.
 
-**To override** — say it on the inner word.
+### `partial_slot_forwarding` — composed words resolve omitted modifiers from enclosing scopes
 
-**Watch for** — the value reaches into lines its author never wrote, by a
-name the page does not show. No word in the language relies on it today.
+When a composed word reads a slot or modifier that was not passed on the call
+line, the subject chain checks enclosing composed word scopes before falling
+back to `nil`.
 
-**A stated limit for 0.4, carried to 0.5** (2026-10-10). The probing of
-2026-10-09 (LORE.md, that date) concluded that a word's inputs should be
-invisible to its caller's children. For `def` words that costs nothing. For
-`.sp` words it costs exactly this convention. That is a change to how words
-receive their inputs, which is families' ground, and families is 0.5's
-question. So the convention stays as described until then.
+**To override** — pass the argument or keyword directly on the inner call.
 
 ---
 
@@ -829,206 +737,65 @@ question. So the convention stays as described until then.
 
 > *The theme owns the look, and no page can say otherwise.*
 
-### `theme_roles` — the convention that decides nothing
+### `theme_roles` — the axiomatic boundary
 
-A page cannot say "wider", "denser" or "more emphasis". The theme owns those
-decisions and no page sentence reaches them. This is registered as a
-convention so the gap is never forgotten: when a page needs a different look,
-a word must carry it.
+A template cannot specify ad-hoc pixel widths, font sizes, or colors. The base
+stylesheet owns 61 `:root` theme roles (`--measure`, `--gap`, `--ink`,
+`--surface`, and status tokens) across 113 style rules, and spatial composition
+lives in `.layout` files. When a concept requires distinct visual treatment, a
+word or variant carries it.
 
 ---
 
-## Conventions together
+## Conventions working together
 
-Conventions are meant to stack. Here is how much a short page gets from them.
+Conventions are designed to stack so a short template expresses a complete,
+accessible document.
 
-### A portfolio
+### A portfolio template
 
-```
-page portfolio
-  section accounts
-    empty "No accounts linked yet."
-    each account
-      card
-        heading .name
-        table holdings
-          column symbol
-          column market_value, as: money
-          total market_value
+```sp
+section accounts
+  empty "No accounts linked yet."
+  each account
+    card
+      heading .name
+      table holdings
+        column symbol
+        column market_value, as: money
+        total market_value
 ```
 
 Line by line:
 
-| You wrote | Conventions that fired |
+| Sentence | Conventions that fire |
 |---|---|
-| `page portfolio` | `document`, `title` |
-| `section accounts` | `label` (its title, "Accounts"), `box_tag` (a `<section>`) |
+| `section accounts` | `label` (`"Accounts"`), `box_tag` (`<section>`), `box_depth` |
 | `empty "…"` | `empty_situation`, `nothing_detection` |
 | `each account` | `subject_or_collection`, `singular_binding` |
-| `card` | `box_tag` (an `<article>`), `card_id` (`id="account-9"`) |
-| `heading .name` | `box_title`, `heading_level` (an `<h3>`) |
-| `table holdings` | `table_rows`, `plural_collection` (inside *this* account) |
-| `column …` | `column_registration`, `label`, `numeric_alignment` |
-| `as: money` | `format`, `number_text` |
-| `total market_value` | `column_registration`, `number_text` |
-
-You get a titled document, a titled section, one card per account with its
-own id and heading, and inside each a totalled, right-aligned money table.
-With no accounts, you get the section and the sentence "No accounts linked
-yet." — and nothing else.
-
-### A task board
-
-```
-page board, "This week"
-  section tasks
-    empty "Nothing due."
-    each task
-      card
-        heading .title
-        badge .status
-        time relative, .due_on
-```
-
-```html
-<article class="card" id="task-2">
-<h3 class="card-title">Ship</h3>
-<span class="badge badge--blocker">blocker</span>
-<time class="time time--relative" datetime="2026-10-08">2 days ago</time>
-</article>
-```
-
-The status colours its own badge (`badge_status`), the date speaks relatively
-(`time_text`), and each card is addressable by its task's id (`card_id`).
-Note the limit from `time_text`: a task due *next* week shows its full date,
-not "in 3 days".
-
-### A form
-
-```
-page scenario, "Plan your retirement"
-  form to: "/plan"
-    group about_you
-      field age
-      field retired
-    group money
-      field base_income
-      field growth_rate
-      choice plan
-        option basic
-        option pro
-    button "Save"
-```
-
-Every field labels itself (`label`, with the app's "Income before tax"
-winning over English), picks its control (`input_type`, `boolean_field`,
-`input_step`), each group becomes a fieldset (`group_shape`), the plan arrives
-already selected (`option_selected`), and the button submits
-(`button_type`). Apart from the form's address, the page writes no HTML
-attribute at all.
-
-### Your own word
-
-```
-# partials/holding_card.sp
-card
-  heading .symbol
-  money .market_value
-  percent .gain
-```
-
-```
-page account
-  section holdings
-    empty "Nothing held."
-    each holding
-      holding_card
-```
-
-```html
-<article class="card holding_card" id="holding-3">
-<h3 class="card-title">VTI</h3>
-<span class="money">$12,500</span>
-<span class="percent">8.3%</span>
-</article>
-```
-
-Your word is a card, so it inherits everything a card gets — the element, the
-id, the title — and adds its own class (`root_class`). The page that uses it
-cannot tell it from a word of the language.
+| `card` | `box_tag` (`<article>`), `card_id` (`id="account-9"`), `box_depth` |
+| `heading .name` | `box_title`, `heading_level` (`<h3>`) |
+| `table holdings` | `table_rows`, `plural_collection`, `collection_detection` |
+| `column …` | `column_registration`, `table_header`, `numeric_alignment` |
+| `as: money` | `format`, `format_family`, `number_text`, `leaf_tag` |
+| `total market_value` | `column_registration`, `format`, `number_text` |
 
 ---
 
-## Where the conventions are weakest
+## Stated limits of the inference engine
 
-Every risk above, in one place. This was the starting list for
-strengthening them. Each was found by rendering, not by reading.
+The weak-spots table is empty: every documented override is verified by test,
+and the boundaries below are intentional design limits:
 
-**Empty since 2026-10-10.** Every row was either fixed, with a test that
-fails on the old code, or ruled a stated limit, with the reason given in its
-convention's entry above. The stated limits:
-
-- `heading_level`, `first_truthy_branch`, `box_body_over_children`: not
-  guesses, so no override.
-- A word with several top lines is a fragment (`root_class`).
-- A table may not hold `empty`.
-- Plurals past the common irregulars need `from:`.
-- A number shows two places at most.
-- `partial_slot_forwarding`: carried to 0.5 with families.
-
-A new weak spot goes back into a table here, found the same way.
-
-Three patterns run through the list, and they are the questions worth asking
-first:
-
-1. **A convention that fails silently.** `empty` with nothing above it, a box
-   that drops its children, an unknown status. When a convention cannot do
-   its job, should it say so?
-
-   **Ruled (dan, 2026-10-10): it depends on who can know.** A mistake you
-   can see by reading the page is refused, with an error that names the
-   fix, the way `hidden` outside a `form` already is. That covers `empty`
-   with no collection above it, a box with written content and children, a
-   `heading` that would make a second section title (`box_title`), and a
-   word file with two top lines (`root_class`). *(Built for `empty`, the box
-   and the second title. `root_class` closed as a stated limit instead:
-   refusing would make the author write a `box`, which criterion 3 forbids,
-   and wrapping would break the classic studio's two panes. A word with
-   several top lines is a fragment, by design.)* A problem only the data can
-   show gets a deliberate, documented fallback and never a broken page,
-   because a live page must not fail when an app grows a new value. An
-   unknown status reads as the neutral badge. *(Measured: it already did.
-   The theme draws a plain badge and `badge--neutral` alike, so the row's
-   "no colour" was a premise that did not survive. The fix is the guide
-   saying so.)*
-2. **An override that does not override.** A convention you cannot overrule
-   is a trap. `card id:` was the one found, and it is fixed (2026-10-10). No
-   page in the corpus said it, so the gate never saw the fault. The question
-   it raised, how many other documented overrides nothing exercises, was
-   answered the same day by breaking each override in turn and running the
-   suite. Three went unnoticed: `as:` on a `metric`, `type:` on a `button`,
-   and a value said on the inner word over one forwarded from outside. All
-   three worked; none was tested. Each now has a test that fails if the
-   convention wins, so the count is zero.
-
-   **Ruled (dan, 2026-10-10): three conventions are not guesses, so they
-   have no override.** `heading_level`, `first_truthy_branch` and
-   `box_body_over_children` decide what a word means, not what it probably
-   means. Their entries above now say so plainly, rather than offering a
-   restructuring that looks like an override.
-3. **A convention that knows too little.** Three irregular plurals; a number
-   that cannot tell a rate from a count; `relative` time with no future.
-   Each is a place where teaching the convention one more thing would save
-   every author the same workaround.
-
-   **Ruled (dan, 2026-10-10): teach all six.** None of them gives the
-   author anything new to write.
-
-   - A number with a fraction shows up to two decimals, trailing zeros
-     dropped. *(built)*
-   - A short list of common irregular plurals, with `from:` for the rest.
-     *(built)*
-   - `each` over `nil` shows nothing. *(built)*
-   - A Struct is a record, never a collection. *(built)*
-   - `relative` counts calendar days and speaks of the future. *(built)*
-   - `link home` goes to `/`. *(built)*
+- **Outline and branching invariants (`heading_level`, `first_truthy_branch`,
+  `box_body_over_children`):** Define what those words mean rather than guessing,
+  so they have no override.
+- **Multi-root composed words (`root_class`):** A `def` word with multiple top
+  lines emits a fragment without a wrapper tag; wrap the body in `box` or `card`
+  when a single addressable root element is desired.
+- **Empty tables (`empty_situation`):** `empty` belongs on the enclosing
+  `section` or `box` around a `table`, not inside `table` itself.
+- **Irregular plurals (`plural_collection`):** Beyond standard English suffixes
+  and the eight built-in irregulars, pass `from:`.
+- **Default decimal places (`number_text`):** `number` displays up to two
+  fractional digits by default; pass `precision:` for more.

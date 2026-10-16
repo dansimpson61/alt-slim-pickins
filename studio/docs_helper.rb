@@ -232,7 +232,7 @@ module StudioDocs
   # the language is really used.
   def self.corpus_files
     (Dir[File.join(ROOT, 'examples', 'pages', '**', '*.sp')] +
-     Dir[File.join(ROOT, '{examples,lib/vocabulary,studio}', '**', '*.{sp,tin}')]).uniq
+     Dir[File.join(ROOT, '{examples,lib/vocabulary,studio}', '**', '*.{sp,frame,tin}')]).uniq
   end
 
   # Built once per boot: walking the whole corpus per docs page would be a

@@ -22,23 +22,25 @@ Spiff uses `SlimPickins::Transform` directly:
 - **Keyword modifiers**: `beside: reading_pane, balance: subordinate, collapse: cozy`.
 - **Line tracking**: Errors pinpoint the exact line number of the `.spiff` file.
 
-### Substance vs. Spiff Side-by-Side
+### Substance vs. Layout Side-by-Side
 
-```
-Substance (.sp)                      Spiff (.spiff)
+```text
+Substance (.sp)                      Layout (.layout)
 ──────────────────────────────       ──────────────────────────────────────────
-page "Doc Reader"                    surface doc_reader
-  catalog docs, "Documents"            stage
-  reading_pane selected_doc              air generous
+catalog docs, "Documents"            surface doc_reader
+reading_pane selected_doc              stage
+                                         air generous
                                          flank catalog, beside: reading_pane, balance: subordinate
-def catalog, documents, title
-  box documents, title                 zone catalog
-    list documents                       frame quiet
-      each document                      cadence compact
+
+def catalog documents, title
+  section documents, title             zone catalog
+    empty "No documents."                frame quiet
+    list                                 cadence compact
+      each document
         link .name, .path
                                        zone reading_pane
-def reading_pane, document               frame quiet
-  box document, .name                    treatment editorial
+def reading_pane document                frame quiet
+  card document, .name                   treatment editorial
     prose markdown, .content
 ```
 

@@ -1,6 +1,6 @@
 # Daytrip 0.6.0k — First-Principles Pedagogy, Ontology Sweep & Roadmap 0.6 Close
 
-**Status: planned.** The closing movement of Roadmap 0.6.
+**Status: in progress (Pre-Movement & Movement 1 landed).** The closing movement of Roadmap 0.6.
 
 ## Objective
 Bring every author-facing guide (`PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`) and repository entrypoint (`README.md`, `HANDOFF.md`, `WISHLIST.md`, `slim_pickins.gemspec`) into 100% alignment with the Daytrip 0.6.0j Tri-Plane Ontology, register `docs/STRETCH_PROTOCOL.md`, prune historical session bloat from `HANDOFF.md`, and close Roadmap 0.6 cleanly with Roadmap 0.7's Stretch Exam target named.
@@ -9,31 +9,37 @@ Bring every author-facing guide (`PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`)
 
 ## Movements
 
-### Pre-Movement: Characterizing the Audience & Specifying the Pedagogy
+### Pre-Movement: Characterizing the Audience & Specifying the Pedagogy (Completed)
 Before editing `PRIMER.md`, `CONVENTIONS.md`, or `VOCABULARY.md`, establish and confirm the pedagogical specification:
 1. **Strict Audience Partition:**
-   - **Authors (`PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`, `docs/LAYOUT.md`):** Learn how to think and write in `.frame`, `.sp`, and `.layout`. Zero compiler internals (`Builder`, `Transform`), zero gate mechanics (`Promises::ALL`), and zero development biography.
+   - **Authors (`PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`, `docs/LAYOUT.md`):** Learn how to think and write in `.frame`, `.sp`, and `.layout`. Zero compiler internals (`Builder`, `Transform`), zero gate mechanics (`Promises::ALL`), and zero development biography. Reflected in `DocReader::Document::FOR_USERS`.
    - **Stewards (`docs/ONTOLOGY.md`, `docs/STRETCH_PROTOCOL.md`, `KERNEL.md`, `LORE.md`):** Hold the Tri-Plane Meta-Architecture, the Mechanical Invariant Triad (`contract`, `convention`, `promise`), the bandpass filter diagnostics, and the roadmap evolution protocol.
 2. **The Five Pedagogical Laws for Author Guides:**
    - **Deductive Top-Down Order:** Canvas plane (`.frame`, `.sp`, `.layout`) -> One-sentence grammar -> Universal slot & inference model (`word [target], [override], [kwargs]`) -> Composed word authoring (`def` & `contents` & `dictionary`/`on`/`map`) -> The 5 Vocabulary Categories (`Substance`, `Skeleton`, `Affordances`, `Flow & Logic`, `Environment`).
    - **Idiomatic Shape:** Show significantly more written `.sp`, structured as short, outline-like route templates calling short, focused `def` words.
    - **Visible Inference:** Pair `.sp` sentences with what they infer (`.label`, `.id`, `.noun`, `.target`, input types, formatting) so conventions are predictable, never superstition.
-   - **Timeless Present Tense:** Purge all "formerly", phase numbers, and defensive justifications.
-   - **Dogfood Readability in `doc_reader`:** Verify that the rewritten guides render cleanly in `examples/doc_reader`, setting the baseline for Roadmap 0.7's Editorial Stretch Exam.
+   - **Timeless Present Tense:** Purge all "formerly", phase numbers, and defensive justifications (unique historical notes preserved verbatim in `history/CHRONICLE.md`).
+   - **Dogfood Readability in `doc_reader`:** Verified that all rewritten guides render cleanly in `examples/doc_reader`, setting the baseline for Roadmap 0.7's Editorial Stretch Exam.
    
-   ### Movement 1: Primary Guides Rewritten to the 0.6.0j Tri-Plane Ontology
+### Movement 1: Primary Guides Rewritten to the 0.6.0j Tri-Plane Ontology (Completed)
 1. **`PRIMER.md` (The Way):**
-   - Teach the Three Canvases up front: `.frame` (document chrome & `page`), `.sp` (route substance & `composed words`), and `.layout` (spatial posture).
-   - Update all `def` examples to modern comma-less syntax (`def card target, title`).
-   - Replace all lingering references to `partial`/`partials`, `.tin`, and `.spiff` with `composed word`, `.frame`, and `.layout`.
-   - Teach `dictionary` / `on` / `map` as the first-class association primitives replacing ad-hoc variants, and `contents` as the universal splice pronoun.
-   - Present the 5 refined bandpass vocabulary categories (`Substance`, `Skeleton`, `Affordances`, `Flow & Logic`, `Environment`) rather than the retired 5-tier list.
+   - Teaches the Three Canvases up front: `.frame` (document chrome & `page`), `.sp` (route substance & `composed words`), and `.layout` (spatial posture).
+   - Removed `page` from all `.sp` route substance snippets; `.frame` declares `page` enclosing `contents`.
+   - Replaced flawed `box documents, title` examples with `section documents, title` and `card document, .name`.
+   - Updated all `def` examples to modern comma-less syntax (`def card target, title`, `def catalog documents, title`).
+   - Replaced all lingering references to `partial`/`partials`, `.tin`, and `.spiff` with `composed word`, `.frame`, and `.layout`.
+   - Teaches `dictionary` / `on` / `map` as the first-class association primitives replacing ad-hoc variants, and `contents` as the universal splice pronoun.
+   - Presents the 5 refined bandpass vocabulary categories (`Substance`, `Skeleton`, `Affordances`, `Flow & Logic`, `Environment`).
 2. **`VOCABULARY.md` (The 64 Canonical Words):**
-   - Update header and category organization to reflect **38 Ruby primitives and 26 `.sp` composed words** (`metric`, `fact`, and `snippet` as composed words; `dictionary`, `on`, and `map` documented in full).
-   - Ensure `bin/generate_vocabulary.rb` and `check_grammar.rb` run with 0 drift.
+   - Updated header and category organization to reflect **38 Ruby primitives and 26 `.sp` composed words** across the 5 categories (`Substance`, `Skeleton`, `Affordances`, `Flow & Logic`, `Environment`), completing all 7 slots on all 64 words (`metric`, `fact`, and `snippet` as composed words; `dictionary`, `on`, and `map` documented in full).
+   - Clarified `page` as exclusive to `.frame` envelopes and `contents` as spoken in `.frame` or `def`.
+   - Verified `bin/generate_vocabulary.rb` and `check_grammar.rb` run with 0 drift.
 3. **`CONVENTIONS.md` (The Inference Engine):**
-   - Align all 38 convention descriptions with the universal slot model (`word [target], [override], [kwargs]` -> automatic `.label`, `.id`, `.noun`, `.target`) and `.frame` / `.layout` resolution rules.
-   - Strip internal compiler explanations; keep the Mechanical Invariant Triad analysis (`contract` vs. `convention` vs. `promise`) in `docs/ONTOLOGY.md`.
+   - Aligned all 38 convention descriptions (`frame` replacing `tin`) with the universal slot model (`word [target], [override], [kwargs]` -> automatic `.label`, `.id`, `.noun`, `.target`) and `.frame` / `.layout` resolution rules.
+   - Removed `page` from route substance convention examples (`form to: "/save"`, `section account`, `each document`, portfolio template).
+   - Stripped internal compiler explanations and preserved dated 2026-10-10 rulings in `history/CHRONICLE.md`.
+4. **`checkers/check_pedagogy.rb` & `test/check_pedagogy_test.rb` (The Pedagogy Instrument):**
+   - Built continuous automated checker verifying canvas plane separation (substance cannot speak `page`, frame must declare `page` and `contents`), contract reality (no multi-arg `box`), syntax, and terminology across all author guides. 0 problems across 5 guides, 6 tests passing in test suite.
 
 ### Movement 2: Repository Entrypoint & Gem Metadata Sweep
 - **`README.md`:** Replace all `.tin` / `.spiff` / `partials` references with `.frame` / `.layout` / `composed words`; update gate command leg names (`check_layout.rb`, `check_layout_scope.rb`); link `docs/ONTOLOGY.md` and `docs/STRETCH_PROTOCOL.md`.
