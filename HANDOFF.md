@@ -46,17 +46,22 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed.** Roadmap 0.7 is next: an odd roadmap, so it opens with
-a paper **Stretch Exam** (see `docs/STRETCH_PROTOCOL.md`).
+**Roadmap 0.6 is closed. Roadmap 0.7 is framed and awaiting dan's confirmation.**
+It is an odd roadmap, so it opens with a paper **Stretch Exam** (see
+`docs/STRETCH_PROTOCOL.md`).
 
-- **Roadmap 0.7 Stretch Exam: the Editorial & Micro-Layout Publication** — unite
-  `doc_reader` and `lore_reader` into one publication-grade reader, and retire
-  the standalone `lore_reader` when it lands.
-- **Daytrip 0.7.0a (Paper First):** draft the uncompromised `.frame`, `.sp`, and
-  `.layout`/`.style` templates for the unified reader on paper, run them against
-  the gate to inventory the Wall Ledger (landing evaluation, self-titling
-  documents, inline metadata cluster micro-layout, sayable editorial theme roles,
-  and subject/class collision), and frame `ROADMAP-0.7.md`.
+- **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
+  unified reader uncompromised and measures the Wall Ledger: three real walls
+  (self-titling documents, `cluster` micro-layout, sayable theme roles), one
+  already fixed (subject/class collision), and one framing decision — **Wall 1:
+  landing evaluation vs. the page-in-frame ontology.** `page document, .title`
+  works today only in the route (Shape A); the 0.6 ontology moved `page` into the
+  frame (Shape B), and Shape B cannot shift the subject for the substance it
+  splices. The guides teach Shape B; every app still writes Shape A;
+  `check_pedagogy.rb` checks only the guides, so the drift is invisible to the gate.
+- **Next:** dan rules on Wall 1 (does `page` live in the frame or the route?),
+  which opens Daytrip 0.7.0b to heal it. `ROADMAP-0.7.md` holds the question and
+  the success conditions.
 
 ## Studio Process & Verification Protocol
 
