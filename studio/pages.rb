@@ -541,7 +541,7 @@ module StudioPages
   end
 
   def self.plain_document(document, content: false)
-    fields = %i[id name title href audience word_count reading_minutes changed_on history? for_users?]
+    fields = %i[id name relative title href audience word_count reading_minutes changed_on history? for_users?]
     plain = fields.to_h { |field| [field.to_s, document.public_send(field)] }
     plain['chapters'] = document.chapters.map(&:to_h)
     content ? plain.merge('content' => document.content) : plain

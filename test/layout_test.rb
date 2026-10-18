@@ -24,6 +24,11 @@ class SpiffTest < Minitest::Test
     assert_includes css, 'grid-column: 1;'
     assert_includes css, 'body .reading_pane {'
     assert_includes css, 'grid-column: 2;'
+    # The chrome spans the flank: a title said `h1:first-child` alone once, and
+    # the nav and footer fell into the narrow lead column and wrapped.
+    assert_includes css, 'body > h1:first-child,'
+    assert_includes css, 'body > nav,'
+    assert_includes css, 'body > footer {'
     assert_includes css, '@container doc_reader (inline-size < 48rem) {'
     assert_includes css, 'grid-template-columns: 100%;'
   end

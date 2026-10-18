@@ -256,7 +256,9 @@ body {
   grid-template-columns: minmax(14rem, 1fr) minmax(0, 3fr);
 }
 
-body > h1:first-child {
+body > h1:first-child,
+body > nav,
+body > footer {
   grid-column: 1 / -1;
 }
 

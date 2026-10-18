@@ -76,6 +76,10 @@ module Publication
         SlimPickins::Layout.compiled_stylesheet(
           File.read(File.expand_path('publication.layout', __dir__)),
           provenance: 'automatically from examples/publication/publication.layout')
+      elsif params[:file] == 'index.css'
+        SlimPickins::Layout.compiled_stylesheet(
+          File.read(File.expand_path('views/index.layout', __dir__)),
+          provenance: 'automatically from examples/publication/views/index.layout')
       elsif params[:file] == 'publication.style.css'
         SlimPickins::Style.compiled_stylesheet(
           File.read(File.expand_path('publication.style', __dir__)),

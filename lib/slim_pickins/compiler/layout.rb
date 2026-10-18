@@ -355,7 +355,9 @@ module SlimPickins
                 grid-template-columns: #{cols};
               }
 
-              #{target} > h1:first-child {
+              #{target} > h1:first-child,
+              #{target} > nav,
+              #{target} > footer {
                 grid-column: 1 / -1;
               }
             CSS
