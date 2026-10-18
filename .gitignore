@@ -1,3 +1,4 @@
 *.gem
 .ruby-lsp/
 word_graph.html
+shots/
