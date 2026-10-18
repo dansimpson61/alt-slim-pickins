@@ -62,17 +62,27 @@ module SlimPickins
     Node = Struct.new(:indent, :body, :lineno, :word, :raw_args, :ranks, :compiled, :guard, :children,
                       keyword_init: true)
 
-    def self.call(source, path: '(page)')
-      new(source, path).call
+    # A `.sp` file that is not a partial is a route: its first sentence is the
+    # route's signature (subject, title, modifiers), and its filename is the
+    # word. The transform must know which files are routes to read that first
+    # sentence as arguments rather than as `word arguments`.
+    def self.route?(path)
+      p = path.to_s
+      p.end_with?('.sp') && !p.include?('partials/') && !p.include?('vocabulary/')
     end
 
-    def self.tree(source, path: '(page)')
-      new(source, path).tree
+    def self.call(source, path: '(page)', route: nil)
+      new(source, path, route: route).call
     end
 
-    def initialize(source, path)
+    def self.tree(source, path: '(page)', route: nil)
+      new(source, path, route: route).tree
+    end
+
+    def initialize(source, path, route: nil)
       @source = source
       @path = path
+      @route = route.nil? ? self.class.route?(path) : route
     end
 
     def call
@@ -84,8 +94,10 @@ module SlimPickins
       @tree ||= begin
         stack = []
         nodes = []
+        first = true
         sentences.each do |s|
-          node = build(s)
+          node = build(s, first: first)
+          first = false
           stack.pop while stack.any? && s.indent <= stack.last.indent
           (stack.any? ? stack.last.children : nodes) << node
           stack << node
@@ -110,6 +122,14 @@ module SlimPickins
             *emit(n.children, depth + 1),
             "#{pad}end"
           ]
+        elsif n.word == :route
+          ruby = "route(#{n.compiled.join(', ')})"
+          if n.children.any?
+            ["#{pad}with_line(#{n.lineno}) do", "#{pad}  #{ruby} do",
+             *emit(n.children, depth + 2), "#{pad}  end", "#{pad}end"]
+          else
+            ["#{pad}with_line(#{n.lineno}) do", "#{pad}  #{ruby}", "#{pad}end"]
+          end
         else
           ruby = if RESERVED.include?(n.word)
                    "send(#{([":#{n.word}", *n.compiled]).join(', ')})"
@@ -134,8 +154,20 @@ module SlimPickins
       end
     end
 
-    def build(sentence)
+    def build(sentence, first: false)
       word, _, rest = sentence.body.partition(' ')
+
+      # A route's leading sentence is its signature — no word, only arguments.
+      # Three shapes can only be a signature: a title alone (`"The Publication"`),
+      # which opens with a quote; a subject whose comma is part of the first
+      # token (`document, .title`); and a bare subject with no title and no
+      # comma (`portfolio`), which names nothing the vocabulary knows. A word
+      # invocation never takes any of the three, so a fragment that opens with a
+      # real word (`grid .name`, `section accounts`) reads as a word.
+      if first && @route && route_signature?(word, rest)
+        return route_signature(sentence)
+      end
+
       unless word =~ WORD
         raise SyntaxError.new("#{word.inspect} is not a word", @path, sentence.lineno, sentence.body)
       end
@@ -201,6 +233,37 @@ module SlimPickins
 
       Node.new(indent: sentence.indent, body: sentence.body, lineno: sentence.lineno,
                word: word, raw_args: raw, ranks: ranks, compiled: compiled, guard: guard,
+               children: [])
+    end
+
+    # Whether a route's first sentence is its signature rather than a word
+    # invocation. A signature is a quoted title, a comma-led subject, or a bare
+    # name the vocabulary does not know — never a word.
+    def route_signature?(word, rest)
+      return true if word.start_with?('"') || word.end_with?(',')
+
+      rest.empty? && word =~ WORD && contract_for(word).nil? && !SlimPickins::Word.registry.key?(word.to_sym)
+    end
+
+    # A route's leading sentence is its signature — subject, title, modifiers —
+    # with no word, because the filename is the word. It compiles to a `route`
+    # call the Builder reads, with content landed lazily under the subject the
+    # way `page`'s arguments did.
+    def route_signature(sentence)
+      raw = split_args(sentence.body)
+      compiled = raw.map { |a| argument(a, sentence) }
+      ranks = raw.map { |a| rank(a) }
+      if ranks != ranks.sort
+        late = ranks.each_cons(2).find_index { |earlier, later| earlier > later }
+        raise SyntaxError.new(
+          "#{KINDS[ranks[late + 1]]} may not come after #{KINDS[ranks[late]]} — " \
+          'a name, then content or data, then modifiers',
+          @path, sentence.lineno, sentence.body
+        )
+      end
+      compiled = compiled.each_with_index.map { |c, i| ranks[i] == 1 ? "-> { #{c} }" : c }
+      Node.new(indent: sentence.indent, body: sentence.body, lineno: sentence.lineno,
+               word: :route, raw_args: raw, ranks: ranks, compiled: compiled, guard: nil,
                children: [])
     end
 

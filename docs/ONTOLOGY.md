@@ -86,12 +86,16 @@ domain substance:
    The route-level template that answers an HTTP request. Substance templates express domain
    knowledge and data without document boilerplate or layout scaffolding.
 
-### Why `page` Belongs Exclusively in `.frame`
+### Why `page` dissolves
 
-In earlier versions of slim-pickins, route templates redundantly wrapped their substance in
-`page portfolio, "Your retirement"`. But the template itself *is* the substance answering the
-route. `page` is the document chrome concept and belongs in the `.frame`, where it frames
-`contents` and establishes the root document context.
+Earlier roadmaps split the document across two canvases and argued over which one owned the
+`page` word. Roadmap 0.7 dissolves the question: `page` was one word fusing two jobs — the
+document envelope, and the route's subject/title declaration — which is why no single home
+fitted it. The two jobs split cleanly. The `.frame` is the shell (`<!DOCTYPE html>`…`<body>`,
+chrome, and the `contents` slot); the route `.sp` is a word — its filename is the word name,
+its leading line the arguments — so a route is a `def` with its `def <name>` line elided and
+the grammar never changes. (The legacy `page` word remains, for the apps that have not yet
+migrated; it is retired when they do.)
 
 ---
 

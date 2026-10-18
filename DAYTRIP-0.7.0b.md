@@ -1,7 +1,7 @@
 # Daytrip 0.7.0b — Heal Wall 1: the frame is the shell, the route is the word
 
-**Status: confirmed by dan — the contract, ready to build.** This is the first
-movement of Roadmap 0.7, attacking Wall 1 from the ledger in
+**Status: built and verified — the specimen reader serves the new shape.** This
+is the first movement of Roadmap 0.7, attacking Wall 1 from the ledger in
 [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md).
 
 ## The decision Wall 1 wanted
@@ -164,3 +164,28 @@ it. The frame's envelope is where that link belongs.
 - Walls 2–4 (self-titling, `cluster`, sayable theme roles) — one wall per daytrip.
 - Migrating the eight existing apps off Shape A. That follows once the mechanism
   is proven on the specimen reader, so the byte-diff harness can certify it.
+
+## What landed
+
+- **The transform reads a route's signature.** `Transform.route?(path)` decides a
+  `.sp` that is not a partial is a route, and a route's leading sentence is read
+  as arguments, not `word arguments` — three shapes only: a quoted title
+  (`"The Publication"`), a comma-led subject (`document, .title`), or a bare
+  name the vocabulary does not know (`portfolio`). It compiles to `route(...)`
+  with content landed lazily under the subject, the way `page`'s did.
+- **`Builder#route` runs the signature.** It binds the subject, computes the
+  title, links the base stylesheet and the compiled `.layout`, and hands the body
+  to the frame. `stow_contents` now stows a lazy Proc (not rendered nodes), so
+  `contents` splices the body under the live subject; the envelope stays a
+  `page` node, but the route — not the `page` word — owns it.
+- **The frame is the shell; `page` dissolves.** The specimen reader's five routes
+  dropped `page` for signatures, and `doc_reader.app` now serves both the base
+  theme and the compiled `doc_reader.layout` at `/assets/…` — the "declared but
+  not served" state 0.7.0a found is fixed.
+- **The legacy `page` word stays**, for the eight apps that still write Shape A;
+  the guides and the pedagogy checker now teach the new shape, and `page` is
+  marked legacy in VOCABULARY.md.
+- **Certified by the byte-diff harness**: all five specimen pages render
+  byte-identically to the old `page` shape except the one intended addition, the
+  `<link>` to the compiled `.layout`. Twelve gate legs green; suite 657 runs /
+  7,157 assertions / 0 failures.

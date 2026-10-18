@@ -66,9 +66,15 @@ files.each do |f|
   # `takes`) as page modifiers, inflating the count with words no page writes.
   # Found 2026-09-17, in the round that changed the preamble's spelling.
   source = File.read(f).sub(/\Aexpects\b.*$/, '')
-  tree = SlimPickins::Transform.tree(source, path: File.basename(f))
+  tree = SlimPickins::Transform.tree(source, path: f)
   visit = lambda do |nodes, depth|
     nodes.each do |node|
+      # A route's signature is not a word — walk straight through it.
+      if node.word == :route
+        visit.call(node.children, depth)
+        next
+      end
+
       sentences += 1
       args += node.raw_args.size
       max_args = [max_args, node.raw_args.size].max

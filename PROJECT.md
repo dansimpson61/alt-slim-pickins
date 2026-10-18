@@ -3,14 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 opened with the Stretch Exam paper (DAYTRIP-0.7.0a.md, the Wall
-  Ledger) and ROADMAP-0.7.md framed. Wall 1 is settled: `page` dissolves — the
-  .frame becomes the shell, the route .sp becomes the word (filename = word name,
-  leading line = arguments), a grammar-preserving convention. DAYTRIP-0.7.0b.md
-  holds the confirmed contract, ready to build. Twelve gate legs green, 656 runs /
-  7,156 assertions / 0 failures, 35 pages verified.
-last_touched: 2026-10-16
-next_step: 'Build Daytrip 0.7.0b: heal Wall 1 per the DAYTRIP-0.7.0b.md contract — the frame becomes the shell, the route .sp becomes the word (filename = word name, leading line = arguments), and the title crosses via a lazy splice at `contents`.'
+  Roadmap 0.7 Wall 1 is healed: DAYTRIP-0.7.0b built the route-as-word mechanism —
+  the .frame is the shell, the route .sp is a word (filename = word name, leading
+  line = arguments), and the title crosses via a lazy splice at `contents`. Proven
+  on the specimen reader, certified byte-identical to the old `page` shape, and the
+  compiled .layout is now linked and served. Twelve gate legs green, 657 runs /
+  7,157 assertions / 0 failures.
+last_touched: 2026-10-17
+next_step: 'Migrate the eight example apps off Shape A (`page` in the route) onto the route signature, and retire the legacy `page` word and its docs together with them.'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

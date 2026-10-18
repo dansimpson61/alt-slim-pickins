@@ -42,6 +42,22 @@ module DocReader
       sp :search, locals: App.locals_for('search', q: params['q'].to_s,
                                                    include_history: params.key?('include_history'))
     end
+
+    # The base theme, and the compiled `.layout` the frame's `<head>` links.
+    # The layout is compiled per request, the same way the studio serves its
+    # `workbench.css` — it is not a file on disk.
+    get '/assets/:file' do
+      content_type 'text/css'
+      if params[:file] == 'slim-pickins.css'
+        File.read(File.expand_path('../../lib/slim_pickins/assets/slim-pickins.css', __dir__))
+      elsif params[:file] == 'doc_reader.css'
+        SlimPickins::Layout.compiled_stylesheet(
+          File.read(File.expand_path('doc_reader.layout', __dir__)),
+          provenance: 'automatically from examples/doc_reader/doc_reader.layout')
+      else
+        halt 404, "There is no asset called #{params[:file]}."
+      end
+    end
   end
 end
 

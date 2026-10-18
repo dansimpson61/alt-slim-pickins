@@ -7,9 +7,12 @@
 # LAYOUT.md, and README.md) held to the Tri-Plane ontology:
 #
 #   1. Canvas plane separation:
-#      - Substance (.sp): expresses domain content answering a route; must NEVER
-#        call `page` (which belongs strictly in .frame) or top-level `contents`.
-#      - Frame (.frame): defines document chrome; must declare `page` root and `contents`.
+#      - Substance (.sp): a route whose filename is the word and whose leading
+#        line is its signature (subject, title, modifiers); must NEVER call
+#        `page` or top-level `contents`.
+#      - Frame (.frame): the shell — document chrome around the `contents` slot;
+#        no `page`, because the runtime owns the envelope and the route owns its
+#        subject and title.
 #      - Layout (.layout): defines spatial posture; must compile cleanly.
 #   2. Contract & execution reality:
 #      - Every snippet must compile and follow word contracts (no multiple
@@ -134,9 +137,14 @@ module PedagogyChecker
     end
 
     if is_frame
-      unless src.match?(/^\s*page\b/)
-        findings << Finding.new(file: file, line: start_line, kind: :frame_missing_page,
-                                message: ".frame template must declare `page` document envelope at root")
+      # The frame is the shell (Roadmap 0.7, Wall 1): `<!DOCTYPE html>` … `<body>`,
+      # chrome, and the `contents` slot. `page` has dissolved — the frame's
+      # envelope is emitted by the runtime, and the route's subject/title are
+      # the route's own signature — so a frame that still says `page` is the
+      # old shape.
+      if src.match?(/^\s*page\b/)
+        findings << Finding.new(file: file, line: start_line, kind: :plane_violation,
+                                message: "`page` spoken in .frame template (the frame is the shell — no `page`; the route's leading line is its subject and title)")
       end
       unless src.match?(/^\s*contents\b/)
         findings << Finding.new(file: file, line: start_line, kind: :frame_missing_contents,
@@ -158,9 +166,11 @@ module PedagogyChecker
       end
     end
 
-    # Check syntax & contracts
+    # Check syntax & contracts. A `.sp` snippet is a route, so its leading line
+    # is a signature — parse it as one, or a title-only route reads as "not a
+    # word" and a subject-comma route as an unknown name.
     begin
-      tree = SlimPickins::Transform.tree(src, path: File.basename(file))
+      tree = SlimPickins::Transform.tree(src, path: File.basename(file), route: true)
       walk = lambda do |nodes|
         nodes.each do |n|
           if n.word == 'box'

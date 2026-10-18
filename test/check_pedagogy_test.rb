@@ -16,11 +16,18 @@ class CheckPedagogyTest < Minitest::Test
            "Expected plane_violation for `page` in .sp, got #{findings.map(&:kind)}"
   end
 
-  def test_frame_missing_page_is_refused
+  def test_frame_without_page_is_a_shell_and_passes
     snippet = "nav\n  link home\ncontents\nfooter 'fine'\n"
     findings = PedagogyChecker.verify_fence('test.md', snippet, 1, 'frame', '')
-    assert findings.any? { |f| f.kind == :frame_missing_page },
-           "Expected frame_missing_page, got #{findings.map(&:kind)}"
+    refute findings.any? { |f| f.kind == :frame_missing_page },
+           "A shell frame has no `page`; got #{findings.map(&:kind)}"
+  end
+
+  def test_page_spoken_in_frame_is_refused
+    snippet = "page 'Doc'\n  contents\n"
+    findings = PedagogyChecker.verify_fence('test.md', snippet, 1, 'frame', '')
+    assert findings.any? { |f| f.kind == :plane_violation },
+           "Expected plane_violation for `page` in .frame, got #{findings.map(&:kind)}"
   end
 
   def test_frame_missing_contents_is_refused

@@ -2,10 +2,10 @@
 
 A **convention** is what the language decides when you say nothing.
 
-You write `page portfolio`, and you get a complete HTML document, a `<title>`,
-an `<h1>` that says "Portfolio", and your application's outer `.frame` chrome
-and `.layout` spatial stylesheet. You never asked for any of it. That is the
-inference engine working for you.
+You write a route named `portfolio.sp` whose leading line is `portfolio`, and
+you get a complete HTML document, a `<title>`, an `<h1>` that says "Portfolio",
+and your application's outer `.frame` chrome and `.layout` spatial stylesheet.
+You never asked for any of it. That is the inference engine working for you.
 
 Every convention makes three promises:
 
@@ -54,20 +54,27 @@ Every sentence follows the universal argument and inference structure:
 
 ---
 
-## 1. A page wears its frame
+## 1. A route is a word; its frame is the shell
 
-> *A page wears its frame: the document, and the frame around it.*
+> *The frame is the shell; the route is the word it names.*
 
-### `document` — every page is a whole document
+A route is a `def` whose `def <name>` line is elided: its filename is the word,
+and its leading line is the signature — the subject, then the title. The frame
+is the document shell the runtime wraps that word in, and the runtime owns the
+envelope; no file ever says `page`.
 
-In slim-pickins, `page` belongs strictly in `.frame`, where it establishes the
-outer HTML document envelope.
+### `document` — every route is a whole document
 
-**You write** in a `.frame` envelope:
+**You write** the shell, `views/hello.frame`:
 
 ```frame
-page "Hello"
-  contents
+contents
+```
+
+and the word `hello`, in `views/hello.sp`:
+
+```sp
+"Hello"
 ```
 
 **You get** the HTML5 doctype, `<html>`, `<head>`, the charset, the viewport,
@@ -88,35 +95,36 @@ the base stylesheet, any compiled `.layout` stylesheet, and `<body>`:
 </html>
 ```
 
-**To override** — nothing. It is what `page` means.
+**To override** — nothing. The envelope is what a route means.
 
-### `frame` — the chrome every page wears
+### `frame` — the shell every route wears
 
 A frame is the outer chrome shared across routes: the navigation bar, shell
 landmarks, and footer. Write it once beside your views as `views/<app>.frame`,
-using `contents` to mark where each route's `.sp` template is spliced in. When a
-matching `<app>.layout` or `<page>.layout` file sits in the application, its
-compiled spatial CSS is linked into `<head>` automatically.
+using `contents` to mark where each route's body is spliced in. When a matching
+`<app>.layout` or `<page>.layout` file sits in the application, its compiled
+spatial CSS is linked into `<head>` automatically.
 
 **You write** `views/my_app.frame`:
 
 ```frame
-page "My App"
-  nav
-    link home
-    link accounts
-  contents
-  footer "Fine print"
+nav
+  link home
+  link accounts
+contents
+footer "Fine print"
 ```
 
-and a route template `views/accounts.sp` that never mentions the frame or `page`:
+and the word `accounts`, in `views/accounts.sp`, whose leading line is its
+signature:
 
 ```sp
-section "Accounts"
+accounts, "Accounts"
   text "Body"
 ```
 
-**You get** the route spliced inside the frame:
+**You get** the route's body spliced inside the shell, under the subject the
+signature bound:
 
 ```html
 <!DOCTYPE html>
@@ -124,19 +132,16 @@ section "Accounts"
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My App</title>
+<title>Accounts</title>
 <link rel="stylesheet" href="/assets/slim-pickins.css">
 </head>
 <body>
-<h1>My App</h1>
+<h1>Accounts</h1>
 <nav class="nav" aria-label="Main">
 <a href="/" class="link">Home</a>
 <a href="/accounts" class="link">Accounts</a>
 </nav>
-<section class="section">
-<h2 class="section-title">Accounts</h2>
 <p class="text">Body</p>
-</section>
 <footer class="footer">Fine print</footer>
 </body>
 </html>
@@ -157,13 +162,12 @@ and the first letter is capitalised (`base_income` reads `"Base income"`).
 
 ### `title` — the page's heading comes from its name
 
-**You write** `page portfolio`
+**You write** `portfolio.sp`, whose leading line is the bare name `portfolio`
 
 **You get** `<title>Portfolio</title>` and `<h1>Portfolio</h1>`.
 
-**To override** — pass the second positional argument: `page portfolio, "Your retirement"`
-renders `"Your retirement"`, and `page account, .name` reads the account's own
-`name`.
+**To override** — pass the title as the second positional: `portfolio, "Your retirement"`
+renders `"Your retirement"`, and `account, .name` reads the account's own `name`.
 
 ### `link_href` — a link's name is its address
 

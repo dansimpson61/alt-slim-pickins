@@ -243,17 +243,23 @@ module StudioDocs
     @examples ||= begin
       index = Hash.new { |h, k| h[k] = [] }
       corpus_files.each do |file|
-        tree = SlimPickins::Transform.tree(File.read(file), path: File.basename(file))
+        tree = SlimPickins::Transform.tree(File.read(file), path: file)
         visit = lambda do |nodes, ancestors|
           nodes.each do |node|
-            list = index[node.word.to_sym]
-            if list.size < EXAMPLES_PER_WORD
-              list << [file.sub("#{ROOT}/", ''), node.lineno, node.body,
-                       ancestors + [node],
-                       ancestors.last ? ancestors.last.children : []]
+            # A route's signature is not a word to show an example of — walk
+            # straight through it to the substance beneath.
+            unless node.word == :route
+              list = index[node.word.to_sym]
+              if list.size < EXAMPLES_PER_WORD
+                list << [file.sub("#{ROOT}/", ''), node.lineno, node.body,
+                         ancestors + [node],
+                         ancestors.last ? ancestors.last.children : []]
+              end
             end
             if node.word.to_sym == :def
               visit.call(node.children, ancestors) if file.include?('lib/vocabulary')
+            elsif node.word == :route
+              visit.call(node.children, ancestors)
             else
               visit.call(node.children, ancestors + [node])
             end

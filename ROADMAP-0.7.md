@@ -50,13 +50,14 @@ four conditions (STRETCH_PROTOCOL, *Visual Sign-Off & Gate Lock*):
 Measured in [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md), not assumed. Three real
 walls, one already fixed, one framing decision:
 
-1. **Landing evaluation vs. the page-in-frame ontology — ruled.** `page`
+1. **Landing evaluation vs. the page-in-frame ontology — healed.** `page`
    dissolves: it was one word fusing the document envelope with the route's
    subject/title declaration. The `.frame` takes the envelope, the route `.sp`
    becomes the word (filename = word name, leading line = arguments), and the
    grammar never changes — a route is a `def` with its `def <name>` line elided.
-   The confirmed contract is [DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md), the first
-   daytrip to build, because every other wall's sentences are written on top of it.
+   Built in [DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md), proven on the specimen
+   reader and certified by the byte-diff harness. The eight apps still write
+   Shape A; their migration is the daytrip that follows.
 
 2. **Self-titling documents.** `page document` should take the document's first
    heading as its title, and `prose` should start where the title ends. Today

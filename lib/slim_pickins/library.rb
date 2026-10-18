@@ -170,10 +170,18 @@ module SlimPickins
     # The Layout a page is presented by: `[view].layout` beside it, else the
     # app's companion.
     def self.layout_for(view = nil, path: nil, app: nil)
-      found = view_layout(view, path) || app || app_layout(path)
+      found = layout_path(view, path: path) || app
       found && File.read(found)
     end
     singleton_class.alias_method :spiff_for, :layout_for
+
+    # The `.layout` file a page is presented by, as a path — the compiled
+    # stylesheet is named for the file's basename, so the runtime needs the
+    # path rather than the content.
+    def self.layout_path(view = nil, path: nil)
+      view_layout(view, path) || app_layout(path)
+    end
+    singleton_class.alias_method :spiff_path, :layout_path
 
     def self.view_layout(view, path)
       dir = path ? File.dirname(path.to_s) : nil

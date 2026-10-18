@@ -1241,13 +1241,19 @@ disclosure using native HTML `<details>` and `<summary>` with zero JavaScript.
 - **infers** — the HTML5 doctype, `<head>`, charset, viewport, base stylesheet, `<title>`, `<h1>`, and automatic wrapping in the application's `.frame` chrome and `.layout` stylesheet
 - **renders** — the complete HTML document
 
-```frame
+```text
 page portfolio
-  contents
+  section accounts
+    list
+      each account
+        card
 ```
 
-A Ruby primitive spoken exclusively in `.frame` files. Establishes the document root,
-`<head>`, and `<body>` around `contents`.
+A Ruby primitive, the legacy route word: it opens a route with a subject and a
+title, establishes the document envelope, and wraps the route's body in the
+frame. Superseded by the route signature — the filename is the word, the leading
+line the arguments (see CONVENTIONS §1) — but still spoken by the eight example
+apps until they migrate.
 
 ## Resources
 
@@ -1258,7 +1264,7 @@ A Ruby primitive spoken exclusively in `.frame` files. Establishes the document 
 - **modifiers** — none
 - **children** — none
 - **subject** — unchanged
-- **infers** — hoisted into `<head>` by `page` (the base `slim-pickins.css` and compiled `.layout` stylesheets are included automatically)
+- **infers** — hoisted into `<head>` by the route's frame (the base `slim-pickins.css` and compiled `.layout` stylesheets are included automatically)
 - **renders** — `<link rel="stylesheet" href="…">`
 
 ```

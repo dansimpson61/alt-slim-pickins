@@ -38,11 +38,17 @@ module SlimPickins
       # The cache is read without the lock first: under MRI a Hash read is
       # atomic, and the common path is a hit — every partial invocation pays
       # this call, so the lock only belongs to the miss that builds.
-      key = [source, privileged, library]
+      #
+      # `route` joins the key because a route's leading sentence is read as a
+      # signature while a partial's or frame's is a word — the same source is
+      # never both, but the key must not hide the difference.
+      key = [source, privileged, library, Transform.route?(path)]
       cached = (@cache ||= {})[key]
       return cached if cached
 
-      (@mutex ||= Mutex.new).synchronize { @cache[key] ||= new(source, path, library: library, privileged: privileged) }
+      (@mutex ||= Mutex.new).synchronize do
+        @cache[key] ||= new(source, path, library: library, privileged: privileged)
+      end
     end
 
     # The instrument's reach: bin/measure_cost.rb empties it to measure the

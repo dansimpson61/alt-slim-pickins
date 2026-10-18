@@ -1,4 +1,4 @@
-page shelf, "Who each document is for"
+shelf, "Who each document is for"
   section users
     documents_list
   section devs

@@ -140,7 +140,7 @@ docs.each do |doc|
   where = File.basename(doc)
   each_block(doc) do |source, first_line|
     begin
-      tree = SlimPickins::Transform.tree(source, path: where)
+      tree = SlimPickins::Transform.tree(source, path: doc)
     rescue SlimPickins::SyntaxError => e
       puts "  BAD SENTENCE  #{where}:#{first_line + e.lineno - 1}: #{e.line.inspect} — #{e.message.lines.first.strip}"
       problems += 1
@@ -151,6 +151,14 @@ docs.each do |doc|
     # contract: what it takes, what it holds, and where it may live.
     walk = lambda do |nodes, ancestry, named|
       nodes.each do |node|
+        # A route's signature is not a word — it is the route itself, read from
+        # the filename — so it contributes nothing to the vocabulary and is
+        # walked straight through to the substance beneath it.
+        if node.word == :route
+          walk.call(node.children, ancestry, named)
+          next
+        end
+
         checked += 1
         used[node.word] << where
         used_full[node.word] << doc

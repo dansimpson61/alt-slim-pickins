@@ -633,14 +633,16 @@ module SlimPickins
       end
     end
 
-    # The tin's splice point — the contents word takes what page stowed.
-    def stow_contents(nodes) = @contents = nodes
+    # The frame's splice point — the contents word takes what the route stowed.
+    # A route stows its body lazily (a Proc evaluated under the live subject at
+    # the moment `contents` is said); a `page` stows already-rendered nodes.
+    def stow_contents(body) = @contents = body
     def contents_stowed? = !@contents.nil?
 
     def take_contents
-      nodes = @contents
+      body = @contents
       @contents = nil
-      nodes
+      body.respond_to?(:call) ? body.call : body
     end
 
     # Evaluate a block in the word's own context — what a gatherer's
@@ -666,7 +668,9 @@ module SlimPickins
       frame = @library&.frame_for(view)
       return capture(&block) unless frame
 
-      stow_contents(capture(&block))
+      # The body is stowed lazily — a Proc, not rendered nodes — so `contents`
+      # splices it under the live subject the route's signature already bound.
+      stow_contents(-> { capture(&block) })
       path = @library.dir ? "#{view || File.basename(@library.dir)}.frame" : 'frame'
       compilation = Compilation.of(frame, path, library: @library)
       compilation.refuse!(path)
@@ -676,6 +680,37 @@ module SlimPickins
       nodes
     end
     alias_method :wrapped_in_tin, :wrapped_in_frame
+
+    # The route's signature — the new `page`. The transform emits a route's
+    # leading sentence as `route(...)`, with the filename already supplying the
+    # word. This is where the signature runs: bind the subject, compute the
+    # title, and hand the body to the frame — which now owns the envelope —
+    # spliced lazily at `contents`.
+    def route(*args, **kwargs, &block)
+      favicon = kwargs.key?(:favicon) ? kwargs[:favicon] : nil
+      name, title = name_and_content(args)
+      heading = nil
+
+      inferred_stylesheets.each { |path| in_head(Node[:stylesheet, { path: path }, []]) }
+      layout_stylesheet_url.each { |url| in_head(Node[:stylesheet, { path: url }, []]) }
+
+      value, empty, body = about(name) do
+        heading = (title.is_a?(Proc) ? title.call : title) || Inference.label(name)
+        wrapped_in_frame(&block)
+      end
+
+      emit_node(Node[:page, { heading: heading, head: head_nodes, favicon: favicon }, prune(body, empty)])
+      value
+    end
+
+    # The compiled `.layout` beside this route, as the URL the frame's `<head>`
+    # links — `/assets/<basename>.css`, the same convention the studio serves.
+    def layout_stylesheet_url
+      path = @library && Library.layout_path(view_name, path: @path)
+      return [] unless path
+
+      ["/assets/#{File.basename(path, File.extname(path))}.css"]
+    end
 
     private
 

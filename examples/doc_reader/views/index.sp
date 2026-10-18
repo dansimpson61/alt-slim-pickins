@@ -1,4 +1,4 @@
-page "Doc Reader"
+"Doc Reader"
   catalog docs, "Documents"
   reading_pane selected_doc
 

@@ -39,27 +39,29 @@ job and all speaking the same indentation grammar:
 ### 1. The frame (`views/doc_reader.frame`)
 
 Written once per application (or overridden per page as `views/<route>.frame`),
-the frame wraps every route in document chrome without the route ever naming it:
+the frame is the shell every route wears — chrome and the `contents` slot, no
+envelope word — and the route never names it:
 
 ```frame
-page "Doc Reader"
-  nav
-    link home, "Doc Reader"
-    link shelf
-    link audiences
-    link search
-  contents
-  footer "Every document this repository is explained in, read as a reader meets it."
+nav
+  link home, "Doc Reader"
+  link shelf
+  link audiences
+  link search
+contents
+footer "Every document this repository is explained in, read as a reader meets it."
 ```
 
-### 2. The route substance (`views/index.sp`)
+### 2. The route word (`views/index.sp`)
 
-A route template reads like a table of contents at the top, delegating its
+A route is a word named by its filename: its leading line is the signature
+(here a title), and its body reads like a table of contents, delegating its
 regions to short, focused composed words defined with `def`:
 
 ```sp
-catalog docs, "Documents"
-reading_pane selected_doc
+"Doc Reader"
+  catalog docs, "Documents"
+  reading_pane selected_doc
 
 def catalog documents, title
   section documents, title
@@ -247,7 +249,7 @@ being asked:
 
 | Sentence | What it infers | How to override |
 |---|---|---|
-| `page portfolio` | Full HTML5 document, `<title>Portfolio</title>`, `<h1>Portfolio</h1>`, outer `.frame` chrome, and base stylesheet | `page portfolio, "Your retirement"` |
+| `portfolio` | Full HTML5 document, `<title>Portfolio</title>`, `<h1>Portfolio</h1>`, outer `.frame` chrome, and base stylesheet | `portfolio, "Your retirement"` |
 | `section accounts` | Shifts subject to `accounts`, wraps in `<section class="section section--accounts">`, renders `<h2>Accounts</h2>` | `section accounts, "Linked accounts"` |
 | `each holding` | Reads plural `holdings` (or current collection subject), binds singular `holding`, shifts subject per item | `each holding, from: .taxable_holdings` |
 | `card` (inside `each holding`) | Renders `<article class="card" id="holding-3">`, sets heading depth to `<h3>` | `card id: "featured"` |

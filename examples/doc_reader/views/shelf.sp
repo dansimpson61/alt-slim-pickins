@@ -1,4 +1,4 @@
-page shelf, "The shelf"
+shelf, "The shelf"
   grid metrics, columns: 3
     metric total_words
     metric total_minutes
