@@ -53,7 +53,7 @@ w_children = w_sample.explicit_children.map { |c| graph.find(c) }.compact
 
 # A real tree, so the Inspect surface is proved against what it is given rather
 # than against a hand-built imitation of it.
-inspect_tree = SlimPickins.evaluate("page \"Specimen\"\n  heading \"A heading\"\n  list\n    item \"one\"\n",
+inspect_tree = SlimPickins.evaluate("\"Specimen\"\n  heading \"A heading\"\n  list\n    item \"one\"\n",
                                     path: 'specimen.sp', locals: {})
 inspect_roots = StudioInspector.nodes_of(inspect_tree)
 INSPECT_LOCALS = { roots: inspect_roots, details: StudioInspector.flatten(inspect_roots),
@@ -92,11 +92,11 @@ def ui_locals(ui)
            pages_active: false, words_active: false, guides_active: false }
   {
     'index.sp' => base.merge(title: 'Workbench',
-                             source: "page \"Slim-Pickins Studio\"\n  heading \"Hello World\"\n",
+                             source: "\"Slim-Pickins Studio\"\n  heading \"Hello World\"\n",
                              editor_title: 'Write .sp Code', data: '', loaded: nil),
     'docs.sp' => base.merge(title: 'Docs: badge', contract: 'No contract.',
                             implementation: 'No implementation.', examples: [],
-                            source: "page \"Try: badge\"\n", editor_title: 'Try it: badge',
+                            source: "\"Try: badge\"\n", editor_title: 'Try it: badge',
                             data: ''),
     'guide.sp' => base.merge(title: 'Guide: PRIMER', content: 'A **guide** page.'),
     'status.sp' => base.merge(title: 'Status', **StudioStatus.canned_locals)

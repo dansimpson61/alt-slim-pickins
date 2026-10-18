@@ -17,7 +17,7 @@ require_relative '../studio/pages'
 # nothing is styled inline, and there is no JavaScript.
 class StudioInspectorTest < Minitest::Test
   SOURCE = <<~SP
-    page portfolio
+    portfolio
       section holdings
         card
           title .name
@@ -43,7 +43,6 @@ class StudioInspectorTest < Minitest::Test
 
     assert_includes html, ':page'
     assert_includes html, ':card_id', 'the card convention is registered in the Why pane'
-    assert_includes html, ':document', 'the page convention is registered in the Why pane'
     assert_includes html, ':number_text', 'the money convention is registered in the Why pane'
   end
 
@@ -121,7 +120,7 @@ class StudioInspectorTest < Minitest::Test
   end
 
   def test_render_json_still_carries_the_inspect_surface
-    res = StudioPages.render_json("page \"Overview\"\n  heading \"Hello\"\n")
+    res = StudioPages.render_json("\"Overview\"\n  heading \"Hello\"\n")
 
     assert res.key?(:visual)
     assert res.key?(:source)

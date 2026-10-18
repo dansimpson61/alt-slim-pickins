@@ -144,7 +144,7 @@ module PedagogyChecker
       # old shape.
       if src.match?(/^\s*page\b/)
         findings << Finding.new(file: file, line: start_line, kind: :plane_violation,
-                                message: "`page` spoken in .frame template (the frame is the shell — no `page`; the route's leading line is its subject and title)")
+                                message: "`page` is retired — a `.frame` is the shell, `contents` marks the hole, and the route's leading line is its signature")
       end
       unless src.match?(/^\s*contents\b/)
         findings << Finding.new(file: file, line: start_line, kind: :frame_missing_contents,
@@ -156,7 +156,7 @@ module PedagogyChecker
     # Default to .sp substance canvas
     if src.match?(/^\s*page\b/)
       findings << Finding.new(file: file, line: start_line, kind: :plane_violation,
-                              message: "`page` spoken in .sp substance template (`page` belongs exclusively in .frame)")
+                              message: "`page` is retired — a route's filename is the word and its leading line is the signature")
     end
 
     src.lines.each_with_index do |l, i|

@@ -1,7 +1,7 @@
-page "The Word Graph"
+"The Word Graph"
   card
     title "The Word Graph"
-    paragraph "Explore the 64 words of alt-slim-pickins, their structural shapes, parts of speech, and contract relationships."
+    paragraph "Explore the 63 words of alt-slim-pickins, their structural shapes, parts of speech, and contract relationships."
     grid metrics, columns: 4
       metric total_words, "Total Words"
       metric total_shapes, "Shapes"
@@ -19,7 +19,7 @@ page "The Word Graph"
         button "Search"
 
   section "Structural Shape Distribution"
-    paragraph "The 64 words partition into 7 structural shapes. View the distribution chart and shape analysis."
+    paragraph "The 63 words partition into 7 structural shapes. View the distribution chart and shape analysis."
     actions
       link "View Shapes & Distribution Chart", to: "/shapes"
       link "View Tabular Connection Matrix", to: "/matrix"

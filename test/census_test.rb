@@ -9,9 +9,9 @@ class CensusTest < Minitest::Test
   def test_words_census_matches_canonical_source_of_truth
     words = SlimPickins::Census.words
 
-    assert_equal 38, words[:primitives].size
+    assert_equal 37, words[:primitives].size
     assert_equal 26, words[:partials].size
-    assert_equal 64, words[:total].size
+    assert_equal 63, words[:total].size
   end
 
   def test_apps_census_identifies_all_demonstration_apps
@@ -41,7 +41,7 @@ class CensusTest < Minitest::Test
 
   def test_conventions_and_promises_match_registers
     assert_equal 38, SlimPickins::Census.conventions_count
-    assert_equal 33, SlimPickins::Census.promises_count
+    assert_equal 32, SlimPickins::Census.promises_count
   end
 
   def test_styles_census_matches_stylesheet_rules
@@ -54,7 +54,7 @@ class CensusTest < Minitest::Test
   def test_report_formats_all_metrics
     report = SlimPickins::Census.report
 
-    assert_match(/64 canonical/, report)
+    assert_match(/63 canonical/, report)
     # The report test is about the formatting, not the count — the count has its
     # own test, and pinning it twice is how one copy goes stale.
     assert_match(/#{SlimPickins::Census.verified_pages_count} checked by verify_pages/, report)

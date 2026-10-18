@@ -31,7 +31,7 @@ class CheckPedagogyTest < Minitest::Test
   end
 
   def test_frame_missing_contents_is_refused
-    snippet = "page 'Doc'\n  nav\n    link home\n"
+    snippet = "'Doc'\n  nav\n    link home\n"
     findings = PedagogyChecker.verify_fence('test.md', snippet, 1, 'frame', '')
     assert findings.any? { |f| f.kind == :frame_missing_contents },
            "Expected frame_missing_contents, got #{findings.map(&:kind)}"

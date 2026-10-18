@@ -1,4 +1,3 @@
-page "Inspect"
-  stylesheet "/assets/inspect.css"
+"Inspect"
   tree
   detail

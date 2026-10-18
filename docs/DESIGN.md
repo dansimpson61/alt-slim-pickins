@@ -3,7 +3,7 @@
 Status: **settled and implemented.** This was written as a wish, before any
 code existed, so that every later extension could be reviewed against it. It
 has not needed to change: the grammar below is the grammar the transform
-implements, and the phases added sixty-four words without adding a rule.
+implements, and the phases added sixty-three words without adding a rule.
 
 Everything here is exercised — `check_grammar.rb` holds every sentence in this
 document and every `.sp` file in the repo to the table in it.
@@ -139,7 +139,7 @@ So the rule is fixed per word and never runtime-dependent:
 > the named thing must be there, and its absence fails on the line that named
 > it.**
 
-`page`, `section`, `form`, `table` and `each` take subjects. Words like
+A route's leading line, `section`, `form`, `table` and `each` take subjects. Words like
 `button` and `badge` take variants instead, and words like `title` and `note`
 take no name at all. Each entry in [VOCABULARY.md](VOCABULARY.md) says which.
 
@@ -185,7 +185,7 @@ A `card` whose subject is a product already knows the product has an id, so
 ### 1. An index — the core characteristics
 
 ```
-page products
+products
   section products
     empty "Nothing here yet."
 
@@ -207,7 +207,7 @@ vocabulary:** do not write the branch, name the situation.
 ### 2. A form — conventions doing the work
 
 ```
-page account
+account
   form account
     field name
     field email, type: email
@@ -305,7 +305,7 @@ irregularity and the grammar is what gets fixed.
   single consumers, where they are still exercised, as privileged `tag`s.)
   The bet held: the grammar never changed to accommodate a word.
 - **`doctype`.** Solved by absorption rather than by a keyword: it is something
-  `page` knows. See its entry in [VOCABULARY.md](VOCABULARY.md).
+  the document envelope knows — the runtime emits `<!DOCTYPE html>` (see CONVENTIONS §1).
 - **Backend.** Settled as drafted. The transform is thin — indentation to
   blocks, `.foo` to `subject.foo`, every line a Ruby method call — and Temple
   was never needed. `Builder` escapes and generates directly, and every word is

@@ -3,14 +3,15 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 Wall 1 is healed: DAYTRIP-0.7.0b built the route-as-word mechanism —
-  the .frame is the shell, the route .sp is a word (filename = word name, leading
-  line = arguments), and the title crosses via a lazy splice at `contents`. Proven
-  on the specimen reader, certified byte-identical to the old `page` shape, and the
-  compiled .layout is now linked and served. Twelve gate legs green, 657 runs /
-  7,157 assertions / 0 failures.
-last_touched: 2026-10-17
-next_step: 'Migrate the eight example apps off Shape A (`page` in the route) onto the route signature, and retire the legacy `page` word and its docs together with them.'
+  Roadmap 0.7 Wall 1 fully closed: `page` is retired. The eight apps and the
+  studio moved onto the route signature, and the transform reads every signature
+  shape (a quoted title, a subject, a subject-and-title, a lone dotted title).
+  The legacy word, its contract, taxonomy entry and favicon promise are gone —
+  canonical words 64→63, primitives 38→37, promises 33→32, document shape 4→3.
+  The byte-diff certified the shape migration byte-identical before the word came
+  out. Twelve gate legs + pedagogy green, 657 runs / 7,084 assertions / 0 failures.
+last_touched: 2026-10-18
+next_step: 'Wall 2 — self-titling documents: a route that names a document should take the document''s first heading as its title, and `prose` should start where the title ends, so `document, .title` does not render the title twice (DAYTRIP-0.7.0a).'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
@@ -42,7 +43,7 @@ conventions: >-
 
 # alt-slim-pickins
 
-A working view language: one-sentence grammar, 64 words, its own stylesheet,
+A working view language: one-sentence grammar, 63 words, its own stylesheet,
 and eight example apps plus the studio that speak it. See [README.md](README.md)
 — its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md)
 closed on 2026-10-16, unifying the language's taxonomy and teaching. Roadmap 0.7

@@ -12,8 +12,8 @@ class TaxonomyTest < Minitest::Test
   end
 
   def test_exact_parity_with_canonical_census
-    assert_equal 64, @census_words.size
-    assert_equal 64, @entries.size
+    assert_equal 63, @census_words.size
+    assert_equal 63, @entries.size
     assert_equal @census_words.sort, @entries.keys.sort
   end
 
@@ -93,10 +93,10 @@ class TaxonomyTest < Minitest::Test
     widths = analysis.passband_widths
     assert_equal 5, widths.size
     assert_equal 22, widths[:substance][:count]
-    assert_equal 26, widths[:skeleton][:count]
+    assert_equal 25, widths[:skeleton][:count]
     assert_equal 19, widths[:affordances][:count]
     assert_equal 6, widths[:flow][:count]
-    assert_equal 6, widths[:environment][:count]
+    assert_equal 5, widths[:environment][:count]
 
     # 2. Boundary selectivity
     selectivity = analysis.boundary_selectivity
@@ -106,7 +106,7 @@ class TaxonomyTest < Minitest::Test
 
     # 3. Polyhierarchical resonance
     resonance = analysis.polyhierarchical_resonance
-    assert_equal 15, resonance.size, "15 words exhibit constructive multi-category resonance"
+    assert_equal 14, resonance.size, "14 words exhibit constructive multi-category resonance"
     resonance_words = resonance.map { |r| r[:word] }
     assert_includes resonance_words, :card
     assert_includes resonance_words, :table

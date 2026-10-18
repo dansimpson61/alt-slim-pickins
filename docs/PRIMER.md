@@ -1,7 +1,7 @@
 # The Way
 
 A primer for the language in this repository. [`DESIGN.md`](DESIGN.md) is the
-grammar; [`VOCABULARY.md`](VOCABULARY.md) is the sixty-four canonical words;
+grammar; [`VOCABULARY.md`](VOCABULARY.md) is the sixty-three canonical words;
 [`CONVENTIONS.md`](CONVENTIONS.md) is what the language decides when you stay
 silent; [`LAYOUT.md`](LAYOUT.md) is the spatial stylesheet companion;
 [`CONTRACT.md`](CONTRACT.md) is the promise an application makes. This is the
@@ -21,7 +21,7 @@ kind of line, and every piece of scaffolding — the markup, the classes, the
 escaping, the loop — lives in one place where it can be fixed once.
 
 A view in this language is a **description of what the page means**, in
-sixty-four canonical words (38 Ruby primitives and 26 `.sp` composed words),
+sixty-three canonical words (37 Ruby primitives and 26 `.sp` composed words),
 with every subject resolvable. What a template means is checkable before it
 renders.
 
@@ -215,7 +215,7 @@ section "Where you stand" # content — renders the heading "Where you stand", s
 ```
 
 Which role a word's first slot plays is fixed per word and listed in
-[`VOCABULARY.md`](VOCABULARY.md): `page`, `section`, `card`, `form`, `table`,
+[`VOCABULARY.md`](VOCABULARY.md): `section`, `card`, `form`, `table`,
 `chart`, and `each` take subjects; `button`, `badge`, and `note` take variants;
 `text` takes content only.
 
@@ -282,7 +282,7 @@ optional methods:
 
 ## The noun register
 
-Counted across the sixty-four canonical words: **57 carry the noun register** —
+Counted across the sixty-three canonical words: **56 carry the noun register** —
 two of them plural by nature (`actions`, `contents`) — and the seven non-nouns
 are control flow and association words (`each` a determiner, `empty` an
 adjective, `choose` and `map` verbs, `when` a conjunction, `on` a preposition,
@@ -358,7 +358,7 @@ choose
 ### Authoring composed words with `def`
 
 A **composed word** is a first-class word written in `.sp` using `def`. Twenty-six
-of the sixty-four canonical words (`card`, `section`, `metric`, `fact`,
+of the sixty-three canonical words (`card`, `section`, `metric`, `fact`,
 `snippet`, `badge`, `note`, `flash`, `figure`, `disclosure`, `list`, `item`,
 and others) are composed words in `lib/vocabulary/`, and applications define
 their own composed words either inline in a route `.sp` file or in shared `.sp`
@@ -512,7 +512,7 @@ Authoring in slim-pickins proceeds top-down across five categories defined in
    - *Branching:* `choose`, `when`, `otherwise`
    - *Disclosure:* `disclosure`
 5. **Environment — Document & Splicing** (*How is the document framed, resourced, and spliced into the outer context?*):
-   - *Document:* `page`
+   - *Document:* the route signature (the filename is the word, the leading line the arguments)
    - *Resources:* `stylesheet`, `script`, `iframe`
    - *Splicing:* `contents`, `map`
 
@@ -533,7 +533,7 @@ styling is derived from that meaning.
 The language ships with its own live authoring environment on port `4580`
 (`classic` and `workbench` UIs):
 
-- **The Shelf:** Organizes the 64 canonical words across the five vocabulary
+- **The Shelf:** Organizes the 63 canonical words across the five vocabulary
   categories, alongside the 8 example applications (35 verified pages) and the
   project guides.
 - **The Work Area:** Evaluates `.sp` source and JSON data payloads live as you

@@ -46,9 +46,9 @@ The linguistic plane governs the syntax, tokens, and execution semantics of temp
 
 1. **`word`**: The fundamental syntax unit. Every line begins with a word. A word invokes
    either a primitive or a composed word, binding arguments according to a declared contract.
-   The canonical vocabulary contains sixty-four words.
+   The canonical vocabulary contains sixty-three words.
 2. **`primitive`**: An atomic leaf word implemented directly in Ruby as a subclass of
-   `SlimPickins::Word`. The runtime core contains thirty-eight primitives (`box`, `span`,
+   `SlimPickins::Word`. The runtime core contains thirty-seven primitives (`box`, `span`,
    `each`, `table`, `form`, etc.).
 3. **`composed_word`**: A first-class word authored in the language itself using `.sp`
    templates in `lib/vocabulary/` or an application's own views. There are twenty-six `.sp`
@@ -94,8 +94,8 @@ document envelope, and the route's subject/title declaration — which is why no
 fitted it. The two jobs split cleanly. The `.frame` is the shell (`<!DOCTYPE html>`…`<body>`,
 chrome, and the `contents` slot); the route `.sp` is a word — its filename is the word name,
 its leading line the arguments — so a route is a `def` with its `def <name>` line elided and
-the grammar never changes. (The legacy `page` word remains, for the apps that have not yet
-migrated; it is retired when they do.)
+the grammar never changes. (The word is now retired: the apps and the studio have
+migrated onto the route signature, and `page` is no longer in the vocabulary.)
 
 ---
 
@@ -108,7 +108,7 @@ lifecycle stage:
 |---|---|---|---|
 | **`contract`** | Grammar | Compile-time | Enforces syntactic bounds: what a word takes, holds, allows as children, and modifies. Checked by `check_grammar.rb` and `check_shape.rb`. |
 | **`convention`** | Inference Engine | Runtime | Governs what the engine infers when an author stays silent (thirty-eight conventions across structure, shape, domain, and theme). |
-| **`promise`** | Feature Ledger | Verification | Proves that every declared modifier keyword has a live, active reader in Ruby or `.sp` code (thirty-three promises). |
+| **`promise`** | Feature Ledger | Verification | Proves that every declared modifier keyword has a live, active reader in Ruby or `.sp` code (thirty-two promises). |
 
 ### The Boundary Between the Instruments
 
@@ -150,7 +150,7 @@ organizes into five intuitive categories:
 
 ### Bandpass Filter Diagnostic Model
 
-Holding the sixty-four words against filter theory surfaces empirical truths:
+Holding the sixty-three words against filter theory surfaces empirical truths:
 
 1. **Passband Width (Filter Scope)**:
    - *Skeleton*: `26` words (40.6%) — The backbone of layout and tabular structure.
@@ -174,7 +174,6 @@ Holding the sixty-four words against filter theory surfaces empirical truths:
    - `disclosure` bridges *Skeleton* and *Flow* (a container whose open state controls visibility).
    - `badge` bridges *Substance* and *Affordances* (status pill doubling as interactive filter).
    - `empty` bridges *Flow* and *Substance* (conditional flow branch speaking fallback text).
-   - `page` bridges *Environment* and *Skeleton* (document root establishing layout context).
 
 ---
 

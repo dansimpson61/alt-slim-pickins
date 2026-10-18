@@ -488,6 +488,8 @@ working manual that should be better after every session than it was before.
 
 - **"What would we like the code to look like?" is how he closes a design fork — write the target, then test it against a standing claim.** (observed 2026-10-16). On the Wall 1 fork (`page` in the frame vs. the route) he did not pick a mechanism; he asked for the target code and invoked "we claim our grammar does not change, so the opening line should be easy to infer." The design that fell out dissolved the fork rather than choosing a side: `page` vanishes, the frame is the shell, the route is a word named by its filename. The move to reuse: answer "what would we like" with the concrete target, then hold it against what the project already claims is true — the fork resolves itself.
 
+- **"We have no sacred cows": when the language improves, the corpus follows, and no legacy code has standing to impede a universal improvement.** (observed 2026-10-18). Retiring `page` meant revising the eight apps, the studio, the test suite, the guides and the headline census number (64→63) in one movement, and Dan named it a principle rather than a cost. The corollary for a round: migrate the corpus to the improvement — do not special-case the legacy — and let the byte-diff certify the mechanical half before the semantic change lands.
+
 ## Proposed deletions — nothing here yet
 
 

@@ -26,8 +26,8 @@ class ResolutionTest < Minitest::Test
       File.write(File.join(app, 'demo.layout'), "surface demo\n  stage\n    air generous\n")
       File.write(File.join(views, 'own.frame'), "footer \"its own chrome\"\ncontents\n")
       File.write(File.join(views, 'own.layout'), "surface own\n  stage\n    air tight\n")
-      File.write(File.join(views, 'plain.sp'), "page plain\n  text \"x\"\n")
-      File.write(File.join(views, 'own.sp'), "page own\n  text \"x\"\n")
+      File.write(File.join(views, 'plain.sp'), "plain\n  text \"x\"\n")
+      File.write(File.join(views, 'own.sp'), "own\n  text \"x\"\n")
       yield app, views
     end
   end
@@ -62,7 +62,7 @@ class ResolutionTest < Minitest::Test
     Dir.mktmpdir('bare') do |root|
       app = File.join(root, 'bare')
       FileUtils.mkdir_p(app)
-      File.write(File.join(app, 'one.sp'), "page one\n  text \"x\"\n")
+      File.write(File.join(app, 'one.sp'), "one\n  text \"x\"\n")
 
       lib = SlimPickins::Library.from(app)
       assert_nil lib.tin_for('one'), 'a standalone page carries its own chrome'
@@ -92,7 +92,7 @@ class ResolutionTest < Minitest::Test
       app = File.join(root, 'bare')
       FileUtils.mkdir_p(app)
       view = File.join(app, 'one.sp')
-      File.write(view, "page one\n  text \"x\"\n")
+      File.write(view, "one\n  text \"x\"\n")
 
       assert_nil SlimPickins::Library.layout_for('one', path: view),
                  'a page with nowhere to say how it sits wears the stylesheet as it is'
@@ -204,7 +204,7 @@ class StylesheetResolutionTest < Minitest::Test
   # The convention is a default, not a rule the page cannot escape: a page's
   # own word is said later and lands later in the head.
   def test_a_page_may_still_say_a_stylesheet_of_its_own
-    html = SlimPickins.render("page p\n  stylesheet \"/css/special.css\"\n  text \"x\"\n",
+    html = SlimPickins.render("p\n  stylesheet \"/css/special.css\"\n  text \"x\"\n",
                               path: 'probe.sp', locals: { p: { name: 'Probe' } })
     links = html.scan(/<link rel="stylesheet" href="([^"]+)"/).flatten
 

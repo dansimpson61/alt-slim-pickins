@@ -4,7 +4,7 @@
 # sentences that use it; picking an example seeds the editor beside them. This
 # is why there is one editor: the classic UI's `try_it` pane was a second copy
 # of this form, and a copy is where a decision gets a second home.
-page .title
+.title
   word_docs
     section "Contract"
       prose markdown, .contract

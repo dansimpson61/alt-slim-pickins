@@ -1,4 +1,4 @@
-page entry, .title
+entry, .title
   link home, "← Back to Timeline"
   card
     time .date

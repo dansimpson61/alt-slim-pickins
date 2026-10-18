@@ -71,11 +71,11 @@ module SlimPickins
       p.end_with?('.sp') && !p.include?('partials/') && !p.include?('vocabulary/')
     end
 
-    def self.call(source, path: '(page)', route: nil)
+    def self.call(source, path: 'page.sp', route: nil)
       new(source, path, route: route).call
     end
 
-    def self.tree(source, path: '(page)', route: nil)
+    def self.tree(source, path: 'page.sp', route: nil)
       new(source, path, route: route).tree
     end
 
@@ -97,7 +97,10 @@ module SlimPickins
         first = true
         sentences.each do |s|
           node = build(s, first: first)
-          first = false
+          # A route's signature is its first top-level sentence that is not a
+          # `def` — a `def` word (and its indented body) may precede it, so
+          # "first" survives until the first indentation-zero non-def sentence.
+          first = false if s.indent.zero? && !s.body.start_with?('def ')
           stack.pop while stack.any? && s.indent <= stack.last.indent
           (stack.any? ? stack.last.children : nodes) << node
           stack << node
@@ -237,10 +240,11 @@ module SlimPickins
     end
 
     # Whether a route's first sentence is its signature rather than a word
-    # invocation. A signature is a quoted title, a comma-led subject, or a bare
-    # name the vocabulary does not know — never a word.
+    # invocation. A signature is a quoted title, a comma-led subject, a lone
+    # dotted value (a title read from the subject), or a bare name the
+    # vocabulary does not know — never a word.
     def route_signature?(word, rest)
-      return true if word.start_with?('"') || word.end_with?(',')
+      return true if word.start_with?('"') || word.end_with?(',') || word.match?(DOTTED)
 
       rest.empty? && word =~ WORD && contract_for(word).nil? && !SlimPickins::Word.registry.key?(word.to_sym)
     end

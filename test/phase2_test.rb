@@ -14,7 +14,7 @@ class Phase2Test < Minitest::Test
   Book = Struct.new(:entries, keyword_init: true)
 
   def render(source, **locals)
-    SlimPickins.render(source, path: '(test)', locals: locals)
+    SlimPickins.render(source, path: 'test.sp', locals: locals)
   end
 
   def portfolio(*accounts) = { accounts: accounts }
@@ -32,7 +32,7 @@ class Phase2Test < Minitest::Test
   # --- collections and nesting ----------------------------------------
 
   def test_each_finds_the_collection_by_pluralising_the_name
-    html = render("page book\n  each entry\n    title .name\n",
+    html = render("book\n  each entry\n    title .name\n",
                   book: Book.new(entries: [{ name: 'One' }, { name: 'Two' }]))
     assert_includes html, '<h2 class="title">One</h2>'
     assert_includes html, '<h2 class="title">Two</h2>'
@@ -47,7 +47,7 @@ class Phase2Test < Minitest::Test
   # `each address` once looked for `addresss` and failed, and the only way
   # through was to name the collection with `from:`.
   def test_a_word_that_ends_in_a_hiss_pluralises_with_es
-    html = render("page person\n  each address\n    text .street\n",
+    html = render("person\n  each address\n    text .street\n",
                   person: { addresses: [{ street: '1 Elm' }, { street: '2 Oak' }] })
     assert_includes html, '<p class="text">1 Elm</p>'
     assert_includes html, '<p class="text">2 Oak</p>'
@@ -65,7 +65,7 @@ class Phase2Test < Minitest::Test
       assert_equal plural, SlimPickins::Inference.plural(singular)
       assert_equal singular, SlimPickins::Inference.singular(plural)
     end
-    html = render("page tree\n  each leaf\n    text .name\n", tree: { leaves: [{ name: 'oak' }] })
+    html = render("tree\n  each leaf\n    text .name\n", tree: { leaves: [{ name: 'oak' }] })
     assert_includes html, '<p class="text">oak</p>'
   end
 
@@ -81,7 +81,7 @@ class Phase2Test < Minitest::Test
   # lets `empty` know what is empty. `each` iterates it rather than looking
   # for `accounts` on an array.
   def test_each_iterates_the_subject_when_the_subject_is_the_collection
-    html = render("page portfolio\n  section accounts\n    each account\n      title .name\n",
+    html = render("portfolio\n  section accounts\n    each account\n      title .name\n",
                   portfolio: two_accounts)
     assert_includes html, '<h3 class="title">Traditional</h3>'
     assert_includes html, '<h3 class="title">Roth</h3>'
@@ -91,9 +91,9 @@ class Phase2Test < Minitest::Test
   # has no holdings", and `from:` reading nil fell back to pluralising the
   # binding. Both now go through nothing (dan, 2026-10-10).
   def test_each_over_nil_goes_through_nothing
-    html = render("page book\n  section holdings\n    each holding\n      title .name\n", book: { holdings: nil })
+    html = render("book\n  section holdings\n    each holding\n      title .name\n", book: { holdings: nil })
     assert_includes html, '<section class="section section--holdings">'
-    html = render("page book\n  each entry_row, from: .rows\n    title .name\n", book: { rows: nil })
+    html = render("book\n  each entry_row, from: .rows\n    title .name\n", book: { rows: nil })
     refute_includes html, 'class="title"'
   end
 
@@ -103,34 +103,34 @@ class Phase2Test < Minitest::Test
   def test_a_struct_is_a_record_never_a_collection
     pair = Struct.new(:first, :second)
     refute SlimPickins::Inference.collection?(pair.new(nil, nil))
-    html = render("page book\n  section pair\n    title \"Shown\"\n    empty \"None\"\n", book: { pair: pair.new(nil, nil) })
+    html = render("book\n  section pair\n    title \"Shown\"\n    empty \"None\"\n", book: { pair: pair.new(nil, nil) })
     assert_includes html, 'Shown'
     refute_includes html, 'None'
   end
 
   def test_from_overrides_pluralising
-    html = render("page book\n  each entry, from: .recent\n    title .name\n",
+    html = render("book\n  each entry, from: .recent\n    title .name\n",
                   book: { recent: [{ name: 'Only' }] })
     assert_includes html, '<h2 class="title">Only</h2>'
   end
 
   def test_a_collection_that_is_not_there_says_so
     error = assert_raises(SlimPickins::Error) do
-      render("page book\n  each entry\n    title .name\n", book: { other: [] })
+      render("book\n  each entry\n    title .name\n", book: { other: [] })
     end
     assert_match(/\Athis book has no entries to go through\n/, error.message)
   end
 
   def test_a_non_collection_attribute_refuses_honestly
     error = assert_raises(SlimPickins::Error) do
-      render("page book\n  each entry\n    title .name\n", book: { entries: 'not a collection' })
+      render("book\n  each entry\n    title .name\n", book: { entries: 'not a collection' })
     end
     assert_match(/this book's entries is not a collection to go through/, error.message)
   end
 
   def test_each_from_non_collection_refuses_honestly
     error = assert_raises(SlimPickins::Error) do
-      render("page book\n  each entry, from: .count\n    title .name\n", book: { count: 42 })
+      render("book\n  each entry, from: .count\n    title .name\n", book: { count: 42 })
     end
     assert_match(/`each entry` expects a collection to go through, got integer/, error.message)
   end
@@ -139,7 +139,7 @@ class Phase2Test < Minitest::Test
 
   def test_collections_nest_and_reaching_out_by_name_still_works
     html = render(<<~PAGE, portfolio: two_accounts)
-      page portfolio
+      portfolio
         section accounts
           each account
             each holding
@@ -158,7 +158,7 @@ class Phase2Test < Minitest::Test
                          Holding.new(symbol: 'VTI', shares: 410, market_value: 117_760)
                        ])
     html = render(<<~PAGE, account: roth)
-      page account
+      account
         table holdings
           column symbol
           column market_value, "Value"
@@ -171,7 +171,7 @@ class Phase2Test < Minitest::Test
 
   def test_total_sums_the_column_over_the_collection
     html = render(<<~PAGE, account: two_accounts[:accounts].first)
-      page account
+      account
         table holdings
           column symbol
           column market_value
@@ -183,7 +183,7 @@ class Phase2Test < Minitest::Test
   end
 
   def test_column_outside_a_table_says_where_it_belongs
-    error = assert_raises(SlimPickins::Error) { render("page book\n  column name\n", book: {}) }
+    error = assert_raises(SlimPickins::Error) { render("book\n  column name\n", book: {}) }
     assert_match(/\A`column` belongs inside `table`\n/, error.message)
   end
 
@@ -191,7 +191,7 @@ class Phase2Test < Minitest::Test
 
   def test_empty_renders_and_suppresses_its_siblings_when_there_is_nothing
     html = render(<<~PAGE, portfolio: portfolio)
-      page portfolio
+      portfolio
         section accounts
           empty "No accounts linked yet."
           each account
@@ -202,7 +202,7 @@ class Phase2Test < Minitest::Test
 
   def test_empty_renders_nothing_when_there_is_something
     html = render(<<~PAGE, portfolio: two_accounts)
-      page portfolio
+      portfolio
         section accounts
           empty "No accounts linked yet."
           each account
@@ -252,25 +252,25 @@ class Phase2Test < Minitest::Test
       assert_equal text, SlimPickins::Inference.number(value)
     end
     assert_equal '2.70', SlimPickins::Inference.number(2.7, precision: 2)
-    html = render("page fund\n  table holdings\n    column rate\n", fund: { holdings: [{ rate: 0.083 }] })
+    html = render("fund\n  table holdings\n    column rate\n", fund: { holdings: [{ rate: 0.083 }] })
     assert_includes html, '<td class="column--numeric">0.08</td>'
   end
 
   def test_a_page_s_money_keeps_its_cents_unless_the_page_says_otherwise
-    html = render("page book\n  money .price\n  money .price, precision: 0\n", book: { price: 12.99 })
+    html = render("book\n  money .price\n  money .price, precision: 0\n", book: { price: 12.99 })
     assert_includes html, '<span class="money">$12.99</span>'
     assert_includes html, '<span class="money">$13</span>'
   end
 
   def test_a_negative_amount_is_classed_so_red_is_css_s_job
-    html = render("page book\n  money .loss\n", book: { loss: -12 })
+    html = render("book\n  money .loss\n", book: { loss: -12 })
     assert_includes html, 'class="money money--negative"'
   end
 
   # The whole point: shape says number, the app says money.
   def test_the_app_answers_what_shape_cannot_and_the_page_says_nothing
     html = render(<<~PAGE, account: two_accounts[:accounts].last)
-      page account
+      account
         table holdings
           column market_value
     PAGE
@@ -280,7 +280,7 @@ class Phase2Test < Minitest::Test
   def test_without_format_for_a_number_is_still_right_aligned
     plain = Account.new(name: 'x', holdings: [Plain.new(symbol: 'A', market_value: 5)])
     html = render(<<~PAGE, account: plain)
-      page account
+      account
         table holdings
           column market_value
     PAGE
@@ -289,7 +289,7 @@ class Phase2Test < Minitest::Test
 
   def test_the_page_still_overrides_the_app
     html = render(<<~PAGE, account: two_accounts[:accounts].last)
-      page account
+      account
         table holdings
           column market_value, as: number
     PAGE
@@ -300,7 +300,7 @@ class Phase2Test < Minitest::Test
   # the app says money, and the page's `as:` wins.
   def test_the_page_overrides_the_app_on_a_metric_too
     fund = Struct.new(:rate) { def format_for(attribute) = attribute == :rate ? :money : nil }
-    html = render("page fund\n  metric rate\n  metric rate, as: percent\n", fund: fund.new(0.075))
+    html = render("fund\n  metric rate\n  metric rate, as: percent\n", fund: fund.new(0.075))
     assert_includes html, '<div class="metric-value">$0.08</div>'
     assert_includes html, '<div class="metric-value">7.5%</div>'
   end
@@ -309,9 +309,9 @@ class Phase2Test < Minitest::Test
   # empty `<h2 class="section-title"></h2>`, and a heading inside it was a
   # second title. It titles itself only when it has a title, as a card does.
   def test_a_bare_section_has_no_empty_title_and_a_heading_becomes_its_title
-    html = render(%(page book\n  section\n    text "x"\n), book: {})
+    html = render(%(book\n  section\n    text "x"\n), book: {})
     refute_includes html, '<h2 class="section-title"></h2>'
-    html = render(%(page book\n  section\n    heading "Part"\n), book: {})
+    html = render(%(book\n  section\n    heading "Part"\n), book: {})
     assert_equal 1, html.scan('class="section-title"').size
     assert_includes html, '<h2 class="section-title">Part</h2>'
   end
@@ -319,7 +319,7 @@ class Phase2Test < Minitest::Test
   # --- title infers its level from depth --------------------------------
 
   def test_a_title_knows_how_deep_it_is
-    html = render(%(page book\n  title "Top"\n  section "Part"\n    title "Inner"\n), book: {})
+    html = render(%(book\n  title "Top"\n  section "Part"\n    title "Inner"\n), book: {})
     assert_includes html, '<h2 class="title">Top</h2>'
     assert_includes html, '<h3 class="title">Inner</h3>'
   end
@@ -331,29 +331,29 @@ class Phase2Test < Minitest::Test
   # hold. `section "Allocation"` cannot start shifting the subject because
   # someone later adds an `allocation` attribute.
   def test_a_section_named_with_content_is_a_label_and_shifts_nothing
-    html = render(%(page portfolio\n  section "Where you stand"\n    title .heading\n),
+    html = render(%(portfolio\n  section "Where you stand"\n    title .heading\n),
                   portfolio: { heading: 'Still the portfolio' })
     assert_includes html, '<h2 class="section-title">Where you stand</h2>'
     assert_includes html, '<h3 class="title">Still the portfolio</h3>'
   end
 
   def test_a_section_named_with_a_name_shifts_the_subject
-    html = render("page portfolio\n  section accounts\n    each account\n      title .name\n",
+    html = render("portfolio\n  section accounts\n    each account\n      title .name\n",
                   portfolio: two_accounts)
     assert_includes html, '<h3 class="title">Traditional</h3>'
   end
 
   def test_a_section_naming_a_subject_that_is_absent_fails_on_its_own_line
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page portfolio\n  section summary\n    title .x\n", portfolio: { x: 1 })
+      render("portfolio\n  section summary\n    title .x\n", portfolio: { x: 1 })
     end
-    assert_match(/\Athis portfolio has no summary\n  \(test\), line 2\n    section summary\z/, error.message)
+    assert_match(/\Athis portfolio has no summary\n  test\.sp, line 2\n    section summary\z/, error.message)
   end
 
   # --- unknown words ----------------------------------------------------
 
   def test_an_unknown_word_fails_with_its_own_name
-    error = assert_raises(SlimPickins::Error) { render(%(page book\n  sparkline "x"\n), book: {}) }
+    error = assert_raises(SlimPickins::Error) { render(%(book\n  sparkline "x"\n), book: {}) }
     assert_match(/\Athere is no word `sparkline`\n/, error.message)
   end
 
@@ -361,7 +361,7 @@ class Phase2Test < Minitest::Test
   # bad argument reports the argument first. Both messages are true and name
   # a real problem; this one just names the inner one.
   def test_an_unknown_word_with_a_bad_argument_reports_the_argument_first
-    error = assert_raises(SlimPickins::Error) { render("page book\n  sparkline .x\n", book: {}) }
+    error = assert_raises(SlimPickins::Error) { render("book\n  sparkline .x\n", book: {}) }
     assert_match(/\Athis book has no x\n/, error.message)
   end
 end

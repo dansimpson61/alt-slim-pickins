@@ -118,7 +118,7 @@ fallback, never a broken page: a live page must not fail because one record is
 missing. A subject that is *absent* is still an error, because that is the
 page's mistake, not the data's.
 
-The second is the one worth explaining. `page account` with no `account`
+The second is the one worth explaining. A route `account` with no `account`
 available fails **on the line that named it**. An earlier draft skipped
 quietly and left the chain alone, so the failure surfaced three lines later as
 "this page has no name" — true, useless, and pointing at the wrong line. A

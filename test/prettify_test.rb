@@ -79,7 +79,7 @@ class PrettifyTest < Minitest::Test
   # HTML tab would drift every time it re-rendered.
   def test_laying_out_twice_is_laying_out_once
     html = SlimPickins.render(<<~PAGE, locals: { thing: { origin: 'dashboard' } })
-      page thing
+      thing
         heading "Hi"
         list
           item "One"

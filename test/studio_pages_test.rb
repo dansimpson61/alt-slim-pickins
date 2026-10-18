@@ -111,7 +111,7 @@ class StudioPagesTest < Minitest::Test
     entries = StudioPages.entries(library: LIBRARY).first(2)
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'index.sp')),
                               path: 'index.sp',
-                              locals: { source: "page \"x\"\n", palette: entries,
+                              locals: { source: "\"x\"\n", palette: entries,
                                         editor_title: 'Write .sp Code', data: '',
                                         docs: StudioDocs.build, words: [], vocabulary_tiers: [], guides: [],
                                         ui_names: [],
@@ -225,7 +225,7 @@ class StudioPagesTest < Minitest::Test
   # --- the render contract: one response, both panes ------------------------
 
   def test_render_json_carries_both_panes
-    payload = StudioPages.render_json("page \"t\"\n  money .total_value\n",
+    payload = StudioPages.render_json("\"t\"\n  money .total_value\n",
                                       '{"total_value": 120}')
     assert_includes payload[:visual], '<span class="money">$120</span>'
     assert_includes payload[:source], '&lt;span class=&quot;money&quot;&gt;', 'the raw pane is escaped'
@@ -234,7 +234,7 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_render_json_refuses_in_the_languages_voice
-    payload = StudioPages.render_json("page \"t\"\n  money .total_value\n", '')
+    payload = StudioPages.render_json("\"t\"\n  money .total_value\n", '')
     assert_includes payload[:visual], 'note--error'
     assert_includes payload[:visual], 'this page has no total_value'
     assert_includes payload[:source], 'note--error', 'the raw pane shows the same refusal'
@@ -253,14 +253,14 @@ class StudioPagesTest < Minitest::Test
   end
 
   def test_the_writers_data_binds_as_locals
-    html = SlimPickins.render("page \"t\"\n  money .total_value\n", path: 'p.sp',
+    html = SlimPickins.render("\"t\"\n  money .total_value\n", path: 'p.sp',
                               locals: StudioPages.playground_locals('{"total_value": 12}'),
                               library: LIBRARY)
     assert_includes html, '$12'
   end
 
   def test_the_writers_data_binds_through_each
-    html = SlimPickins.render("page \"t\"\n  each holding\n    money .market_value\n",
+    html = SlimPickins.render("\"t\"\n  each holding\n    money .market_value\n",
                               path: 'p.sp',
                               locals: StudioPages.playground_locals('{"holdings": [{"market_value": 3}]}'),
                               library: LIBRARY)
@@ -311,7 +311,7 @@ class StudioPagesTest < Minitest::Test
 
   def test_render_json_with_specimen_and_missing_data_refuses_honestly_in_language_voice
     source = <<~SP
-      page "Doc Reader"
+      "Doc Reader"
         sidebar docs, "Documents"
 
       def sidebar, documents, title
@@ -341,8 +341,8 @@ class StudioPagesTest < Minitest::Test
 
     locals = StudioPages.ui_locals('index').merge(editor_title: 'Title', source: 'page p', design: '', data: '{}', data_note: '')
 
-    classic_html = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: classic_lib)
-    workbench_html = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: workbench_lib)
+    classic_html = SlimPickins.render("\"P\"\n  editor\n", locals: locals, library: classic_lib)
+    workbench_html = SlimPickins.render("\"P\"\n  editor\n", locals: locals, library: workbench_lib)
 
     # Classic contains classic's editor elements and none of workbench's
     assert_includes classic_html, 'palette'
@@ -355,8 +355,8 @@ class StudioPagesTest < Minitest::Test
     refute_includes workbench_html, 'editor_form'
 
     # Re-render in reverse order to prove memoized instances never leak across renders
-    workbench_html2 = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: workbench_lib)
-    classic_html2 = SlimPickins.render("page \"P\"\n  editor\n", locals: locals, library: classic_lib)
+    workbench_html2 = SlimPickins.render("\"P\"\n  editor\n", locals: locals, library: workbench_lib)
+    classic_html2 = SlimPickins.render("\"P\"\n  editor\n", locals: locals, library: classic_lib)
 
     assert_includes classic_html2, 'palette'
     assert_includes workbench_html2, 'Page (Substance)'

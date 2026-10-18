@@ -15,7 +15,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_every_app_gets_the_core_vocabulary_partials
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), "page p\n  flash \"Saved.\"\n")
+      File.write(File.join(dir, 'one.sp'), "p\n  flash \"Saved.\"\n")
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<p class="flash">Saved.</p>'
@@ -25,7 +25,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_action_in_post_form
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           form method: post
             hidden path, .name
             hidden return_to, "/triage"
@@ -45,7 +45,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_actions_multi_action_post_form
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           form method: post
             hidden path, .name
             hidden return_to, "/triage"
@@ -69,7 +69,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_action_emits_status_when_specified
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           form method: post
             hidden path, .name
             hidden return_to, "/triage"
@@ -100,7 +100,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_the_named_boxes_keep_their_tags
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           aside
             list plain
               item "One"
@@ -129,7 +129,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_the_leaf_family_formats_by_its_word
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           section "Numbers"
             money .amount
             percent .rate
@@ -153,7 +153,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_the_boxes_title_themselves
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           section "Held"
             title .deep
       SP
@@ -169,7 +169,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_empty_renders_only_while_the_subject_is_empty
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           section accounts
             empty "None."
       SP
@@ -184,7 +184,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_action_standalone_without_contextual_parameters
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Log out", to: "/logout"\n))
+      File.write(File.join(dir, 'one.sp'), %(p\n  action "Log out", to: "/logout"\n))
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                                 locals: { p: {} }, library: library_for(dir))
       assert_includes html, '<button type="button" formaction="/logout" class="button">Log out</button>'
@@ -197,7 +197,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_actions_as_pure_semantic_container
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           actions
             action "Save", to: "/save"
             link "Cancel", to: "/cancel"
@@ -213,7 +213,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_actions_refuses_legacy_path_modifier
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  actions path: "my-file"\n    action "Delete", to: "/delete"\n))
+      File.write(File.join(dir, 'one.sp'), %(p\n  actions path: "my-file"\n    action "Delete", to: "/delete"\n))
       assert_raises(SlimPickins::SyntaxError) do
         SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                            locals: { p: {} }, library: library_for(dir))
@@ -223,7 +223,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_actions_refuses_legacy_return_to_modifier
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  actions return_to: "/home"\n    action "Back", to: "/back"\n))
+      File.write(File.join(dir, 'one.sp'), %(p\n  actions return_to: "/home"\n    action "Back", to: "/back"\n))
       assert_raises(SlimPickins::SyntaxError) do
         SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
                            locals: { p: {} }, library: library_for(dir))
@@ -234,7 +234,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_bare_actions_container_enclosing_action
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           actions
             action "Log out", to: "/logout"
       SP
@@ -251,7 +251,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_card_shifts_subject_context
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           card item
             heading .name
             text .role
@@ -266,7 +266,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_card_with_variant_does_not_shift_if_variant_is_not_attribute
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           card compact
             text .title
       SP
@@ -286,7 +286,7 @@ class VocabularyPartialsTest < Minitest::Test
           text .content
       SP
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           wrapper "Hello", custom_opt: "123", extra: "yes"
       SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
@@ -318,7 +318,7 @@ class VocabularyPartialsTest < Minitest::Test
         note .slot
       SP
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page p
+        p
           outer_slot slot: "forwarded"
             inner_slot
             inner_slot slot: "said"
@@ -338,7 +338,7 @@ class VocabularyPartialsTest < Minitest::Test
   def test_action_does_not_leak_enclosing_model_path
     Dir.mktmpdir do |dir|
       File.write(File.join(dir, 'one.sp'), <<~SP)
-        page article
+        article
           action "Like", to: "/like"
       SP
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
@@ -351,7 +351,7 @@ class VocabularyPartialsTest < Minitest::Test
 
   def test_action_does_not_leak_sinatra_status_helper
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), %(page p\n  action "Save", to: "/save"\n))
+      File.write(File.join(dir, 'one.sp'), %(p\n  action "Save", to: "/save"\n))
       helpers = Object.new
       def helpers.status(_val = nil); 200; end
       html = SlimPickins.render(File.read(File.join(dir, 'one.sp')), path: 'one.sp',
@@ -378,7 +378,7 @@ class VocabularyPartialsTest < Minitest::Test
           button .content
       SP
       code = <<~SP
-        page p
+        p
           custom_actions project_id: "alpha-beta"
             custom_action "Run"
       SP

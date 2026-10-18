@@ -19,7 +19,7 @@ class MintingTest < Minitest::Test
 
   def test_extract_definitions_with_various_signatures
     source = <<~SP
-      page "Doc Reader"
+      "Doc Reader"
         sidebar docs, "Documents"
         reading_pane selected_doc
         app_header
@@ -75,7 +75,7 @@ class MintingTest < Minitest::Test
 
   def test_post_mint_endpoint_success
     source = <<~SP
-      page "App"
+      "App"
         sidebar docs, "Docs"
 
       def sidebar, documents, title
@@ -92,7 +92,7 @@ class MintingTest < Minitest::Test
       data = JSON.parse(last_response.body)
       assert data['ok']
       assert_equal 'sidebar', data['word']
-      assert_includes data['remaining_source'], 'page "App"'
+      assert_includes data['remaining_source'], '"App"'
       assert_includes data['remaining_source'], 'sidebar docs, "Docs"'
       refute_includes data['remaining_source'], 'def sidebar'
     end
@@ -100,7 +100,7 @@ class MintingTest < Minitest::Test
 
   def test_post_mint_endpoint_missing_word
     source = <<~SP
-      page "App"
+      "App"
         note "Hello"
     SP
 
@@ -116,7 +116,7 @@ class MintingTest < Minitest::Test
   def test_end_to_end_mint_and_render_flow
     Dir.mktmpdir do |dir|
       source = <<~SP
-        page "Docs App"
+        "Docs App"
           doc_card item
 
         def doc_card, item

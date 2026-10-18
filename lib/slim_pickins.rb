@@ -30,7 +30,7 @@ module SlimPickins
   # node was given a name — the one externally visible consequence of it, named
   # here because this signature is the only published extension point the tree
   # has.
-  def render(source, path: '(page)', locals: {}, helpers: nil, library: nil, filter: nil)
+  def render(source, path: 'page.sp', locals: {}, helpers: nil, library: nil, filter: nil)
     compilation = Compilation.of(source, path, library: library)
     compilation.refuse!(path)
     builder = Builder.new(Page.new(locals: locals, helpers: helpers), library)
@@ -42,7 +42,7 @@ module SlimPickins
   # The semantic tree a page evaluates to, without the HTML. Useful for
   # seeing what a page means — and the tree a second interpreter (an API)
   # would walk.
-  def evaluate(source, path: '(page)', locals: {}, helpers: nil, library: nil)
+  def evaluate(source, path: 'page.sp', locals: {}, helpers: nil, library: nil)
     compilation = Compilation.of(source, path, library: library)
     compilation.refuse!(path)
     Builder.new(Page.new(locals: locals, helpers: helpers), library)
@@ -50,7 +50,7 @@ module SlimPickins
   end
 
   # The Ruby a page compiles to. Useful for seeing what the transform did.
-  def compile(source, path: '(page)')
+  def compile(source, path: 'page.sp')
     Transform.call(source, path: path)
   end
 

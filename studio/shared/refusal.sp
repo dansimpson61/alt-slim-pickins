@@ -3,8 +3,7 @@
 # sentence that hit it, when the error knows one (a JSON parse error names
 # no sentence, so its rows stay absent by construction).
 
-page .title
-  stylesheet "/assets/slim-pickins.css"
+.title
   note error, .complaint
   choose
     when .where

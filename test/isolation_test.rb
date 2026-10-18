@@ -21,7 +21,7 @@ class IsolationTest < Minitest::Test
 
       # Render a template exercising both primitives and canonical partials
       template = <<~SP
-        page "Isolated"
+        "Isolated"
           section "Account Overview"
             card
               title "Balance"

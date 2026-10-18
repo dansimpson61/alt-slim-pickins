@@ -513,7 +513,7 @@ end
     # only the data can show is left to the runtime's documented fallbacks.
     def never_shows(node, data, ancestry, named_above)
       out = []
-      if node.word == 'empty' && ancestry.first == 'page' && !ancestry.include?('def') && !named_above
+      if node.word == 'empty' && (ancestry.first == :route || ancestry.first == 'page') && !ancestry.include?('def') && !named_above
         out << '`empty` has nothing above it that could be empty: no line above names a collection. ' \
                'Put it under the word that does, as in `section holdings`.'
       end

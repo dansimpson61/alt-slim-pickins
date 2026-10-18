@@ -1,9 +1,9 @@
-page "Vocabulary Connection Matrix"
+"Vocabulary Connection Matrix"
   card
     title "Vocabulary Connection Matrix"
-    paragraph "Tabular breakdown of the 64 words, structural shapes, speech, containment bounds, and connection counts."
+    paragraph "Tabular breakdown of the 63 words, structural shapes, speech, containment bounds, and connection counts."
 
-  section "All 64 Words"
+  section "All 63 Words"
     table words
       column word_name, "Word"
       column shape_name, "Shape"

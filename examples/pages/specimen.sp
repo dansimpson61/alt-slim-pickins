@@ -1,4 +1,5 @@
-page specimen, "slim-pickins — every word"
+specimen, "slim-pickins — every word"
+  stylesheet "/assets/specimen.css"
   section "Headings and prose"
     title "A title, one level down"
     text .blurb

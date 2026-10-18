@@ -168,7 +168,7 @@ class InstrumentsTest < Minitest::Test
 
     assert_empty names - entries, 'a word declares a convention the register does not hold'
     unowned = SlimPickins::Conventions::ALL.reject { |c| names.include?(c.name) }
-    assert_equal 5, unowned.size,
+    assert_equal 8, unowned.size,
                  "a convention is named by no word and does not say who owns it: #{unowned.map(&:name).inspect}"
     unowned.each { |convention| refute_nil convention.owned_by, "`#{convention.name}` has no owner" }
   end

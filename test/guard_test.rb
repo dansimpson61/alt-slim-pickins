@@ -22,27 +22,27 @@ class GuardTest < Minitest::Test
   # --- what the docs promised ------------------------------------------------
 
   def test_a_guarded_sentence_renders_when_the_condition_holds
-    html = render("page \"P\"\n  note \"KEEP\", if: .show\n", show: true)
+    html = render("\"P\"\n  note \"KEEP\", if: .show\n", show: true)
 
     assert_includes html, 'KEEP'
   end
 
   def test_a_guarded_sentence_is_absent_when_the_condition_does_not_hold
-    html = render("page \"P\"\n  note \"KEEP\", if: .show\n", show: false)
+    html = render("\"P\"\n  note \"KEEP\", if: .show\n", show: false)
 
     refute_includes html, 'KEEP'
     assert_includes html, '<h1>P</h1>', 'the page itself still renders'
   end
 
   def test_a_guarded_word_takes_its_children_with_it
-    html = render("page \"P\"\n  section \"S\", if: .show\n    note \"KEEP\"\n", show: false)
+    html = render("\"P\"\n  section \"S\", if: .show\n    note \"KEEP\"\n", show: false)
 
     refute_includes html, 'KEEP'
     refute_includes html, 'section', 'the guarded word never ran'
   end
 
   def test_the_guard_is_per_row_inside_each
-    html = render("page \"P\"\n  each row\n    note \"KEEP\", if: .ok?\n",
+    html = render("\"P\"\n  each row\n    note \"KEEP\", if: .ok?\n",
                   rows: [{ ok?: false }, { ok?: true }, { ok?: false }])
 
     assert_equal 1, html.scan('KEEP').size, 'one of three rows is kept'
@@ -55,7 +55,7 @@ class GuardTest < Minitest::Test
   # nothing and evaluates nothing — including the attribute a reader might have
   # mistyped. Pinned because it is invisible and could be changed by accident.
   def test_a_false_guard_runs_before_the_arguments_it_guards
-    html = render("page \"P\"\n  note .missing, if: .show\n", show: false)
+    html = render("\"P\"\n  note .missing, if: .show\n", show: false)
 
     refute_includes html, 'missing'
   end
@@ -72,9 +72,9 @@ class GuardTest < Minitest::Test
     end
     library = SlimPickins::Library.new(words: words)
 
-    kept = SlimPickins.render("page \"P\"\n  video .url, if: .ok?\n",
+    kept = SlimPickins.render("\"P\"\n  video .url, if: .ok?\n",
                               path: 'guard.sp', locals: { ok?: true, url: '/v.mp4' }, library: library)
-    dropped = SlimPickins.render("page \"P\"\n  video .url, if: .ok?\n",
+    dropped = SlimPickins.render("\"P\"\n  video .url, if: .ok?\n",
                                  path: 'guard.sp', locals: { ok?: false, url: '/v.mp4' }, library: library)
 
     assert_includes kept, '<video'
@@ -84,20 +84,20 @@ class GuardTest < Minitest::Test
   # --- and it stays out of the page's way ------------------------------------
 
   def test_the_guard_is_hoisted_out_of_the_arguments
-    ruby = SlimPickins.compile("page \"P\"\n  note \"x\", if: .ok?\n")
+    ruby = SlimPickins.compile("\"P\"\n  note \"x\", if: .ok?\n")
 
     refute_includes ruby, 'if:', 'the modifier must not reach the word'
     assert_includes ruby, 'next unless SlimPickins::Inference.truthy?(subject.ok?)'
   end
 
   def test_empty_string_and_empty_collection_guards_evaluate_as_falsy
-    html_empty_str = render("page \"P\"\n  note \"KEEP\", if: .q\n", q: "")
+    html_empty_str = render("\"P\"\n  note \"KEEP\", if: .q\n", q: "")
     refute_includes html_empty_str, 'KEEP'
 
-    html_empty_arr = render("page \"P\"\n  note \"KEEP\", if: .items\n", items: [])
+    html_empty_arr = render("\"P\"\n  note \"KEEP\", if: .items\n", items: [])
     refute_includes html_empty_arr, 'KEEP'
 
-    html_present = render("page \"P\"\n  note \"KEEP\", if: .q\n", q: "search")
+    html_present = render("\"P\"\n  note \"KEEP\", if: .q\n", q: "search")
     assert_includes html_present, 'KEEP'
   end
 
@@ -109,7 +109,7 @@ class GuardTest < Minitest::Test
 
   def test_a_word_whose_modifier_is_unknown_is_still_refused
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page \"P\"\n  note \"x\", style: \"red\"\n")
+      render("\"P\"\n  note \"x\", style: \"red\"\n")
     end
 
     assert_match(/no `style:` modifier/, error.message)

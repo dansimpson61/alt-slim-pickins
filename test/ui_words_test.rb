@@ -11,11 +11,11 @@ class UiWordsTest < Minitest::Test
   Account = Struct.new(:name, :notes, :q, keyword_init: true)
 
   def render(source, **locals)
-    SlimPickins.render(source, path: '(test)', locals: locals)
+    SlimPickins.render(source, path: 'test.sp', locals: locals)
   end
 
   def test_a_form_can_carry_an_action_button_and_hidden_inputs
-    html = render(%(page account
+    html = render(%(account
   form to: "/actions/commit", method: post
     hidden path, .name
     hidden return_to, "/triage"
@@ -29,7 +29,7 @@ class UiWordsTest < Minitest::Test
   end
 
   def test_hidden_reads_the_subject_when_no_value_is_said
-    html = render(%(page account
+    html = render(%(account
   form to: "/x", method: post
     hidden name
 ), account: Account.new(name: 'Roth'))
@@ -37,7 +37,7 @@ class UiWordsTest < Minitest::Test
   end
 
   def test_textarea_is_fields_multiline_sibling
-    html = render(%(page account
+    html = render(%(account
   form
     textarea notes, "What changed?", rows: 3, required: true
 ), account: Account.new(notes: 'Lots.'))
@@ -46,7 +46,7 @@ class UiWordsTest < Minitest::Test
   end
 
   def test_input_is_a_bare_field_with_a_placeholder
-    html = render(%(page account
+    html = render(%(account
   input q, placeholder: "search…"
 ), account: Account.new(q: 'tax'))
     assert_includes html, '<input id="q" name="q" type="text" value="tax" placeholder="search…">'
@@ -54,7 +54,7 @@ class UiWordsTest < Minitest::Test
   end
 
   def test_a_card_takes_a_title
-    html = render(%(page account
+    html = render(%(account
   card "Holdings"
     text "VTI"
 ), account: Account.new(name: 'Roth'))
@@ -62,7 +62,7 @@ class UiWordsTest < Minitest::Test
   end
 
   def test_a_link_can_say_where_you_are
-    html = render(%(page account
+    html = render(%(account
   nav
     link home, active: true
     link library
@@ -75,7 +75,7 @@ class UiWordsTest < Minitest::Test
   # "Overview" was a dead link, and five other apps wrote `to: "/"` every time.
   # Home is the root (dan, 2026-10-10); `to:` still says otherwise.
   def test_link_home_goes_to_the_root
-    html = render(%(page account
+    html = render(%(account
   link home, "Overview"
   link home, "Elsewhere", to: "/start"
   link library
@@ -89,7 +89,7 @@ class UiWordsTest < Minitest::Test
   # the "otherwise" until 2026-10-10: `type:` could have been ignored and the
   # gate would have stayed green.
   def test_a_button_in_a_form_takes_the_type_the_page_says
-    html = render(%(page account
+    html = render(%(account
   form to: "/x"
     button "Save"
     button "Preview", type: button
@@ -101,14 +101,14 @@ class UiWordsTest < Minitest::Test
   end
 
   def test_a_button_takes_a_size
-    html = render(%(page account
+    html = render(%(account
   button "Save", size: sm
 ), account: {})
     assert_includes html, '<button type="button" class="button button--sm">Save</button>'
   end
 
   def test_hidden_still_refuses_to_stand_outside_a_form
-    error = assert_raises(SlimPickins::SyntaxError) { render(%(page account\n  hidden path, .name\n), account: {}) }
+    error = assert_raises(SlimPickins::SyntaxError) { render(%(account\n  hidden path, .name\n), account: {}) }
     assert_match(/`hidden` belongs inside `form`/, error.message)
   end
 end

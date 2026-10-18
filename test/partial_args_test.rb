@@ -12,7 +12,7 @@ class PartialArgsTest < Minitest::Test
   Account = Struct.new(:name, :balance, keyword_init: true)
 
   def render(source, partials:, **locals)
-    SlimPickins.render(source, path: '(test)', locals: locals,
+    SlimPickins.render(source, path: 'test.sp', locals: locals,
                        library: SlimPickins::Library.new(tin: nil, partials: partials))
   end
 
@@ -33,7 +33,7 @@ class PartialArgsTest < Minitest::Test
   end
 
   def test_a_partial_reads_its_content
-    html = render("page account\n  test_test_shout \"hello\"\n",
+    html = render("account\n  test_test_shout \"hello\"\n",
                   partials: { test_test_shout: "title .content\n" },
                   account: Account.new(name: 'x', balance: 1))
     assert_includes html, '<h2 class="title test_test_shout">hello</h2>'
@@ -41,7 +41,7 @@ class PartialArgsTest < Minitest::Test
 
   def test_a_partial_reads_its_modifiers
     action = "form method: post, to: .to\n  hidden path, .path\n  button .content\n"
-    html = render(%(page account\n  test_test_go_form "Commit", to: "/actions/commit", path: .name\n),
+    html = render(%(account\n  test_test_go_form "Commit", to: "/actions/commit", path: .name\n),
                   partials: { test_test_go_form: action },
                   account: Account.new(name: 'ode-to-joy', balance: 1))
     assert_includes html, '<form class="form test_test_go_form" action="/actions/commit" method="post">'
@@ -51,7 +51,7 @@ class PartialArgsTest < Minitest::Test
 
   def test_a_bare_partial_still_reads_the_subject_it_was_invoked_against
     card = "title .name\nmoney .balance\n"
-    html = render("page account\n  test_test_account_card\n",
+    html = render("account\n  test_test_account_card\n",
                   partials: { test_test_account_card: card },
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<h2 class="title">Roth</h2>'
@@ -61,7 +61,7 @@ class PartialArgsTest < Minitest::Test
   def test_missing_parameters_name_the_partial
     action = "form method: post, to: .to\n  button .content\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render(%(page account\n  test_test_go_form "Go"\n), partials: { test_test_go_form: action }, account: {})
+      render(%(account\n  test_test_go_form "Go"\n), partials: { test_test_go_form: action }, account: {})
     end
     assert_match(/\Athis test_test_go_form has no to\n/, error.message)
   end
@@ -76,7 +76,7 @@ class PartialArgsTest < Minitest::Test
 
       paragraph .tone, .content
     PART
-    html = render("page account\n  test_chip \"hello\"\n", partials: { test_chip: badge },
+    html = render("account\n  test_chip \"hello\"\n", partials: { test_chip: badge },
                    account: Account.new(name: 'x', balance: 1))
     assert_includes html, '<p class="paragraph test_chip">hello</p>'
   end
@@ -91,9 +91,9 @@ class PartialArgsTest < Minitest::Test
         otherwise
           paragraph "closed", .content
     PART
-    open = render(%(page account\n  toggle "x", open: true\n), partials: { toggle: toggle },
+    open = render(%(account\n  toggle "x", open: true\n), partials: { toggle: toggle },
                   account: Account.new(name: 'x', balance: 1))
-    closed = render(%(page account\n  toggle "x"\n), partials: { toggle: toggle },
+    closed = render(%(account\n  toggle "x"\n), partials: { toggle: toggle },
                     account: Account.new(name: 'x', balance: 1))
     assert_includes open, '>open</p>'
     assert_includes closed, '>closed</p>'
@@ -109,9 +109,9 @@ class PartialArgsTest < Minitest::Test
         otherwise
           paragraph "plain", .content
     PART
-    named = render(%(page account\n  test_chip warning, "x"\n), partials: { test_chip: test_chip },
+    named = render(%(account\n  test_chip warning, "x"\n), partials: { test_chip: test_chip },
                    account: Account.new(name: 'x', balance: 1))
-    bare = render(%(page account\n  test_chip "x"\n), partials: { test_chip: test_chip },
+    bare = render(%(account\n  test_chip "x"\n), partials: { test_chip: test_chip },
                   account: Account.new(name: 'x', balance: 1))
     assert_includes named, '<p class="paragraph paragraph--warning test_chip">x</p>'
     assert_includes bare, '<p class="paragraph test_chip">plain</p>'
@@ -127,7 +127,7 @@ class PartialArgsTest < Minitest::Test
       money .balance
       paragraph .content
     PART
-    html = render(%(page account\n  test_test_account_card "note"\n), partials: { test_test_account_card: card },
+    html = render(%(account\n  test_test_account_card "note"\n), partials: { test_test_account_card: card },
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<h2 class="title">Roth</h2>'
     assert_includes html, '$1,500'
@@ -143,7 +143,7 @@ class PartialArgsTest < Minitest::Test
       paragraph .content
     PART
     error = assert_raises(SlimPickins::Error) do
-      render(%(page account\n  test_chip "x", wat: true\n), partials: { test_chip: badge },
+      render(%(account\n  test_chip "x", wat: true\n), partials: { test_chip: badge },
              account: Account.new(name: 'x', balance: 1))
     end
     assert_match(/`test_chip` has no `wat:` modifier/, error.message)

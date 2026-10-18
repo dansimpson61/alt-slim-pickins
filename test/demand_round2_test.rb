@@ -23,7 +23,7 @@ class DemandRound2Test < Minitest::Test
     assert_equal 'active', sub.to_s
     assert_equal 'active', sub.to_str
 
-    html = SlimPickins.render("page \"P\"\n  each row, from: rows\n    badge .to_s\n", locals: { rows: ['running'] })
+    html = SlimPickins.render("\"P\"\n  each row, from: rows\n    badge .to_s\n", locals: { rows: ['running'] })
     assert_includes html, 'running'
     refute_includes html, '#<SlimPickins::Subject:'
   end
@@ -36,11 +36,11 @@ class DemandRound2Test < Minitest::Test
     assert sub.has?(:done?)
     assert_equal true, sub.fetch(:done?)
 
-    html = SlimPickins.render("page \"P\"\n  note \"DONE\", if: .done?\n", locals: task)
+    html = SlimPickins.render("\"P\"\n  note \"DONE\", if: .done?\n", locals: task)
     assert_includes html, 'DONE'
 
     task_not_done = { 'name' => 'Design DSL', 'done' => false }
-    html_not_done = SlimPickins.render("page \"P\"\n  note \"DONE\", if: .done?\n", locals: task_not_done)
+    html_not_done = SlimPickins.render("\"P\"\n  note \"DONE\", if: .done?\n", locals: task_not_done)
     refute_includes html_not_done, 'DONE'
   end
 
@@ -61,7 +61,7 @@ class DemandRound2Test < Minitest::Test
 
   def test_each_accepts_bare_symbol_in_from
     family = Struct.new(:children).new(['Alice', 'Bob'])
-    html = SlimPickins.render("page family\n  each child, from: children\n    text .to_s\n",
+    html = SlimPickins.render("family\n  each child, from: children\n    text .to_s\n",
                               locals: { family: family })
     assert_includes html, 'Alice'
     assert_includes html, 'Bob'
@@ -71,7 +71,7 @@ class DemandRound2Test < Minitest::Test
 
   def test_when_treats_empty_string_and_empty_collection_as_falsy
     source = <<~SP
-      page "P"
+      "P"
         choose
           when .q
             note "HAS_QUERY"
@@ -91,12 +91,12 @@ class DemandRound2Test < Minitest::Test
 
   def test_metric_with_evaluated_expression_and_dotted_data
     stats = Struct.new(:total_entries).new(42)
-    html = SlimPickins.render("page \"P\"\n  metric stats.total_entries, \"Total\"\n",
+    html = SlimPickins.render("\"P\"\n  metric stats.total_entries, \"Total\"\n",
                               locals: { stats: stats })
     assert_includes html, '42'
     assert_includes html, 'Total'
 
-    html_dotted = SlimPickins.render("page stats\n  metric .total_entries, \"Total\"\n",
+    html_dotted = SlimPickins.render("stats\n  metric .total_entries, \"Total\"\n",
                                      locals: { stats: stats })
     assert_includes html_dotted, '42'
     assert_includes html_dotted, 'Total'
@@ -104,7 +104,7 @@ class DemandRound2Test < Minitest::Test
 
   def test_fact_with_evaluated_expression_and_dotted_data
     word = Struct.new(:speech_name).new('noun')
-    html = SlimPickins.render("page word\n  fact .speech_name\n",
+    html = SlimPickins.render("word\n  fact .speech_name\n",
                               locals: { word: word })
     assert_includes html, 'noun'
   end
@@ -113,7 +113,7 @@ class DemandRound2Test < Minitest::Test
 
   def test_title_with_bare_identifier_resolves_subject_attribute
     node = Struct.new(:word_name).new('each')
-    html = SlimPickins.render("page node\n  title word_name\n",
+    html = SlimPickins.render("node\n  title word_name\n",
                               locals: { node: node })
     assert_includes html, '<h2 class="title">each</h2>'
   end

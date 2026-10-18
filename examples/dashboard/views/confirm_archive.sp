@@ -1,4 +1,4 @@
-page .archive_heading
+.archive_heading
   text "Moves the project into archive/ — nothing is deleted, and it can be un-archived."
   form method: post, to: "/actions/archive"
     hidden path, .archive_path

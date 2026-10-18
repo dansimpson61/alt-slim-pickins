@@ -1,2 +1,2 @@
-page "Refusal"
+"Refusal"
   flash .message

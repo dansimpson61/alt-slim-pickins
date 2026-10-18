@@ -6,7 +6,7 @@ require_relative '../lib/slim_pickins'
 # Phase 1: the contract an app must satisfy to be renderable, and what happens
 # when it does not. Every case here is a claim made in CONTRACT.md.
 class ContractTest < Minitest::Test
-  PAGE = "page account\n  form\n    field name\n"
+  PAGE = "account\n  form\n    field name\n"
 
   Account = Struct.new(:name, keyword_init: true)
 
@@ -17,7 +17,7 @@ class ContractTest < Minitest::Test
   end
 
   def label(**locals)
-    SlimPickins.render(PAGE, path: '(test)', **locals)[%r{<label[^>]*>([^<]*)</label>}, 1]
+    SlimPickins.render(PAGE, path: 'test.sp', **locals)[%r{<label[^>]*>([^<]*)</label>}, 1]
   end
 
   # --- what satisfies it ----------------------------------------------
@@ -35,7 +35,7 @@ class ContractTest < Minitest::Test
   end
 
   def test_the_type_is_read_from_the_value_so_nothing_must_be_declared
-    html = SlimPickins.render("page account\n  form\n    field opened_on\n",
+    html = SlimPickins.render("account\n  form\n    field opened_on\n",
                               locals: { account: { opened_on: Date.new(2026, 8, 30) } })
     assert_includes html, 'type="date"'
   end
@@ -47,7 +47,7 @@ class ContractTest < Minitest::Test
   end
 
   def test_the_page_still_wins_over_the_app
-    html = SlimPickins.render(%(page account\n  form\n    field name, "Just here"\n),
+    html = SlimPickins.render(%(account\n  form\n    field name, "Just here"\n),
                               locals: { account: Nicknamed.new(name: 'Roth') })
     assert_includes html, '>Just here<'
   end
@@ -70,24 +70,24 @@ class ContractTest < Minitest::Test
   # name — the subject is empty". dan ruled on 2026-10-10 that what only the
   # data can show gets a fallback, never a broken page.
   def test_an_empty_subject_shows_its_empty_situation
-    html = SlimPickins.render("page account\n  form\n    field name\n  empty \"No account linked\"\n",
-                              path: '(test)', locals: { account: nil })
+    html = SlimPickins.render("account\n  form\n    field name\n  empty \"No account linked\"\n",
+                              path: 'test.sp', locals: { account: nil })
     assert_includes html, '<p class="empty">No account linked</p>'
     refute_includes html, '<form'
   end
 
-  # `page account` is the line at fault. Skipping quietly would report the
+  # `account` is the line at fault. Skipping quietly would report the
   # missing attribute three lines later, on a line that is not the cause.
   def test_a_named_subject_that_is_absent_fails_on_the_line_that_named_it
     error = assert_raises(SlimPickins::UnknownAttribute) { label(locals: {}) }
-    assert_match(/\Athis page has no account\n  \(test\), line 1\n    page account\z/, error.message)
+    assert_match(/\Athis page has no account\n  test\.sp, line 1\n    account\z/, error.message)
   end
 
   # --- the page is the outermost subject ------------------------------
 
   def test_helpers_are_page_attributes_like_any_other
     helpers = Class.new { def house_style = 'Ledger' }.new
-    html = SlimPickins.render("page account\n  form\n    field name\n",
+    html = SlimPickins.render("account\n  form\n    field name\n",
                               locals: { account: { name: 'Roth' } }, helpers: helpers)
     assert_includes html, '>Name<'
     page = SlimPickins::Page.new(locals: {}, helpers: helpers)

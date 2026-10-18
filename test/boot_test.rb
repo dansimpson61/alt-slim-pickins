@@ -42,8 +42,8 @@ class BootTest < Minitest::Test
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, 'views'))
       File.write(File.join(dir, 'views', "#{File.basename(dir)}.tin"), "nav\n  link home\ncontents\n")
-      File.write(File.join(dir, 'one.sp'), "page one\n  title .name\n")
-      File.write(File.join(dir, 'two.sp'), "page two\n  text .blurb\n")
+      File.write(File.join(dir, 'one.sp'), "one\n  title .name\n")
+      File.write(File.join(dir, 'two.sp'), "two\n  text .blurb\n")
       out, = capture_io do
         SlimPickins.prove!(dir) { |_name| { one: { name: 'A' }, two: { blurb: 'B' } } }
       end
@@ -55,7 +55,7 @@ class BootTest < Minitest::Test
 
   def test_a_view_the_block_answers_nothing_for_is_refused_loudly
     Dir.mktmpdir do |dir|
-      File.write(File.join(dir, 'one.sp'), "page one\n  title .name\n")
+      File.write(File.join(dir, 'one.sp'), "one\n  title .name\n")
       error = assert_raises(SlimPickins::Error) do
         capture_io { SlimPickins.prove!(dir) { |_name| nil } }
       end

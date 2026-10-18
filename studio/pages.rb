@@ -339,13 +339,13 @@ module StudioPages
     }
     case page
     when 'index'
-      base.merge(title: 'Studio', source: "page \"Studio\"\n  heading \"Hello\"\n",
+      base.merge(title: 'Studio', source: "\"Studio\"\n  heading \"Hello\"\n",
                  editor_title: 'Write .sp Code', data: '', loaded: nil,
                  data_note: StudioDocs::DATA_NOTE)
     when 'docs'
       base.merge(title: 'Docs: badge', contract: 'No contract.',
                  implementation: 'No implementation.', examples: [],
-                 source: "page \"Try: badge\"\n", editor_title: 'Try it: badge',
+                 source: "\"Try: badge\"\n", editor_title: 'Try it: badge',
                  data: '', data_note: StudioDocs::DATA_NOTE)
     when 'guide'
       base.merge(title: 'Guide: PRIMER', content: 'A **guide** page.')

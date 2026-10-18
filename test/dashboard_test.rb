@@ -130,8 +130,8 @@ class DashboardTest < Minitest::Test
   end
 
   def test_element_returns_and_tag_emits_doubly_when_composed
-    bug = SlimPickins.render("page p\n  nav_bug\n", locals: { p: {} }, library: hatch_library)
-    ok  = SlimPickins.render("page p\n  nav_ok\n", locals: { p: {} }, library: hatch_library)
+    bug = SlimPickins.render("p\n  nav_bug\n", locals: { p: {} }, library: hatch_library)
+    ok  = SlimPickins.render("p\n  nav_ok\n", locals: { p: {} }, library: hatch_library)
     assert_equal 2, bug.scan('nav_inner').size # tag: emitted now, composed again
     assert_equal 1, ok.scan('nav_inner').size  # element: composed once
   end

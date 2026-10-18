@@ -1,6 +1,6 @@
 # Vocabulary
 
-Status: **implemented.** Sixty-four canonical words — 38 Ruby primitives and 26
+Status: **implemented.** Sixty-three canonical words — 37 Ruby primitives and 26
 `.sp` composed words — every one declared with an explicit contract and every
 one exercised by a sentence in the repository, held by `check_grammar.rb`.
 
@@ -1230,30 +1230,13 @@ disclosure using native HTML `<details>` and `<summary>` with zero JavaScript.
 
 ## Document
 
-### `page`
+The document is not a word. A route's filename is its word, and its leading line
+is its signature — subject, title, modifiers — with the `.frame` supplying the
+chrome and `contents` the hole (see CONVENTIONS §1). What remains here are the
+head resources and the splice point.
 
-- **name** — the subject this word presents; it must be there
-- **content** — text or data, when there is any
-- **modifiers** — `favicon:`
-- **children** — anything
-- **subject** — the named thing
-- **conventions** — `document` — the doctype, html/head/body, the charset and the viewport; `title` — the `<title>` and the top heading, humanised from the name (override: `page portfolio, "Your retirement"`); `frame` — the chrome every page wears, with `contents` marking the hole (override: delete the frame, or move the page)
-- **infers** — the HTML5 doctype, `<head>`, charset, viewport, base stylesheet, `<title>`, `<h1>`, and automatic wrapping in the application's `.frame` chrome and `.layout` stylesheet
-- **renders** — the complete HTML document
-
-```text
-page portfolio
-  section accounts
-    list
-      each account
-        card
-```
-
-A Ruby primitive, the legacy route word: it opens a route with a subject and a
-title, establishes the document envelope, and wraps the route's body in the
-frame. Superseded by the route signature — the filename is the word, the leading
-line the arguments (see CONVENTIONS §1) — but still spoken by the eight example
-apps until they migrate.
+Retired `page` — the word that fused the document envelope with the route's
+subject/title declaration, now dissolved into the route signature.
 
 ## Resources
 

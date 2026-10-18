@@ -29,7 +29,6 @@ class VocabularyTest < Minitest::Test
   def test_every_entry_in_the_document_is_found
     words = SlimPickins::Vocabulary.entries(DOCUMENT).map(&:first)
     assert_equal words, words.uniq, 'an entry appears twice'
-    assert_includes words, 'page'
     assert_equal SlimPickins::Census.words[:total].size, words.size,
                  'every word in the vocabulary has an entry, and nothing else does'
   end
@@ -47,8 +46,8 @@ class VocabularyTest < Minitest::Test
   # The three shapes drift takes, because the generator does something different
   # with each and the gate words each differently.
   def test_a_hand_edited_bullet_is_drift_that_names_both_sides
-    body = entry_for('page').sub(/^- \*\*children\*\* —.*$/, '- **children** — a hand-edited lie')
-    drift = SlimPickins::Vocabulary.drift('page', contract_for('page'), body)
+    body = entry_for('section').sub(/^- \*\*children\*\* —.*$/, '- **children** — a hand-edited lie')
+    drift = SlimPickins::Vocabulary.drift('section', contract_for('section'), body)
 
     assert_equal ['children'], drift.map(&:slot)
     refute drift.first.missing?
@@ -58,8 +57,8 @@ class VocabularyTest < Minitest::Test
   end
 
   def test_a_bullet_that_is_gone_is_drift_the_generator_can_insert
-    body = entry_for('page').sub(/^- \*\*conventions\*\* —.*$\n/, '')
-    drift = SlimPickins::Vocabulary.drift('page', contract_for('page'), body).first
+    body = entry_for('section').sub(/^- \*\*conventions\*\* —.*$\n/, '')
+    drift = SlimPickins::Vocabulary.drift('section', contract_for('section'), body).first
 
     assert_equal 'conventions', drift.slot
     assert drift.missing?, 'the generator inserts this one after the subject bullet'
@@ -84,7 +83,7 @@ class VocabularyTest < Minitest::Test
   # The bug this regex was fixed for once already: with `/m`, `.*$` swallows the
   # rest of the entry and the comparison is against half the document.
   def test_a_bullet_is_one_line
-    bullet = SlimPickins::Vocabulary.bullet_in(entry_for('page'), 'name')
+    bullet = SlimPickins::Vocabulary.bullet_in(entry_for('section'), 'name')
 
     refute_nil bullet
     refute_includes bullet, "\n"
@@ -97,11 +96,11 @@ class VocabularyTest < Minitest::Test
 
   def test_a_walk_replaces_only_the_body_it_was_given
     rebuilt = SlimPickins::Vocabulary.with_entries(DOCUMENT) do |word, body|
-      word == 'page' ? body.sub(/^- \*\*children\*\* —.*$/, '- **children** — changed') : body
+      word == 'section' ? body.sub(/^- \*\*children\*\* —.*$/, '- **children** — changed') : body
     end
 
     assert_includes rebuilt, '- **children** — changed'
-    assert_includes rebuilt, '### `page`'
+    assert_includes rebuilt, '### `section`'
     assert_equal DOCUMENT.lines.size, rebuilt.lines.size
   end
 end

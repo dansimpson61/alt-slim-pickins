@@ -17,7 +17,7 @@ require_relative '../lib/slim_pickins'
 # HTML, and each group in a page is its own.
 class TabsTest < Minitest::Test
   PAGE = <<~SP
-    page "P"
+    "P"
       tabs
         tab "A", active: true
           text "a"
@@ -54,13 +54,13 @@ class TabsTest < Minitest::Test
   end
 
   def test_the_first_tab_is_checked_when_none_says_it_is
-    html = render("page \"P\"\n  tabs\n    tab \"A\"\n      text \"a\"\n    tab \"B\"\n      text \"b\"\n")
+    html = render("\"P\"\n  tabs\n    tab \"A\"\n      text \"a\"\n    tab \"B\"\n      text \"b\"\n")
 
     assert_match(/id="tab-1-0"[^>]*checked/, html)
   end
 
   def test_each_group_in_a_page_is_its_own
-    html = render("page \"P\"\n  tabs\n    tab \"A\"\n      text \"a\"\n  tabs\n    tab \"B\"\n      text \"b\"\n")
+    html = render("\"P\"\n  tabs\n    tab \"A\"\n      text \"a\"\n  tabs\n    tab \"B\"\n      text \"b\"\n")
 
     assert_includes html, 'name="tabs-1"'
     assert_includes html, 'name="tabs-2"'

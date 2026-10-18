@@ -16,7 +16,7 @@ class LinenoTest < Minitest::Test
 
   def test_a_missing_attribute_names_the_sentence_that_reads_it
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  section profile\n    title .nmae\n",
+      render("account\n  section profile\n    title .nmae\n",
              account: { profile: Account.new(name: 'Roth') })
     end
     assert_match(/\Athis profile has no nmae\n  form\.sp, line 3\n    title \.nmae\z/, error.message)
@@ -24,7 +24,7 @@ class LinenoTest < Minitest::Test
 
   def test_an_error_inside_a_loop_names_the_inner_sentence
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page accounts\n  each account\n    title .nmae\n",
+      render("accounts\n  each account\n    title .nmae\n",
              accounts: [Account.new(name: 'A'), Account.new(name: 'B')])
     end
     assert_match(/\Athis account has no nmae\n  form\.sp, line 3\n    title \.nmae\z/, error.message)
@@ -32,14 +32,14 @@ class LinenoTest < Minitest::Test
 
   def test_a_guard_names_the_line_of_the_misplaced_word
     error = assert_raises(SlimPickins::Error) do
-      render("page account\n  when .name\n    note \"x\"\n", account: Account.new(name: 'Roth'))
+      render("account\n  when .name\n    note \"x\"\n", account: Account.new(name: 'Roth'))
     end
     assert_match(/\A`when` belongs inside `choose`\n  form\.sp, line 2\n    when \.name\z/, error.message)
   end
 
   def test_an_error_in_the_chosen_branch_names_the_branch_not_the_choose
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  choose\n    when .name\n      title .nmae\n    otherwise\n      text \"x\"\n",
+      render("account\n  choose\n    when .name\n      title .nmae\n    otherwise\n      text \"x\"\n",
              account: Account.new(name: 'Roth'))
     end
     assert_match(/\Athis account has no nmae\n  form\.sp, line 4\n    title \.nmae\z/, error.message)
@@ -49,7 +49,7 @@ class LinenoTest < Minitest::Test
     library = SlimPickins::Library.new(tin: nil,
                                        partials: { test_account_card: "title .name\nmoney .nmae\n" })
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  test_account_card\n", library: library, account: Account.new(name: 'Roth'))
+      render("account\n  test_account_card\n", library: library, account: Account.new(name: 'Roth'))
     end
     assert_match(/\Athis account has no nmae\n  partials\/test_account_card\.sp, line 2\n    money \.nmae\z/,
                  error.message)
@@ -58,7 +58,7 @@ class LinenoTest < Minitest::Test
   def test_an_error_in_the_frame_names_the_frame_not_the_page
     layout = "nav\n  link home\ntitle .nmae\ncontents\n"
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(frame: layout),
+      render("account\n  text \"x\"\n", library: SlimPickins::Library.new(frame: layout),
              account: Account.new(name: 'Roth'))
     end
     assert_match(/\Athis account has no nmae\n  frame, line 3\n    title \.nmae\z/, error.message)

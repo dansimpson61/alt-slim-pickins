@@ -1,7 +1,7 @@
-page "Structural Shapes"
+"Structural Shapes"
   card
     title "Structural Shapes of alt-slim-pickins"
-    paragraph "The 64 words of alt-slim-pickins partition into exactly 7 structural shapes: encloses (20), presents (18), says (9), registers (7), document (5), gathers (4), and iterates (1)."
+    paragraph "The 63 words of alt-slim-pickins partition into exactly 7 structural shapes: encloses (20), presents (17), says (9), registers (8), document (3), gathers (5), and iterates (1)."
 
   section "Shape Distribution Chart"
     chart shapes, over: name

@@ -42,11 +42,11 @@ docs = ARGV.empty? ? DOCS.map { |f| File.join(here, f) } : ARGV
 vocab = File.read(File.join(here, 'docs', 'VOCABULARY.md'))
             .scan(/^### `([a-z_]+)`/).flatten.to_set
 
-# Words the language has renamed. The records in history/ speak the language
-# as it was when each phase closed, and a record that updates itself is not a
-# record — so a renamed word stays legal there, and only there.
+# Words the language has renamed or retired. The records in history/ speak the
+# language as it was when each phase closed, and a record that updates itself is
+# not a record — so such a word stays legal there, and only there.
 renamed = File.read(File.join(here, 'docs', 'VOCABULARY.md'))
-              .scan(/^Formerly `([a-z_]+)`/).flatten.to_set
+              .scan(/^Retired `([a-z_]+)`/).flatten.to_set
 
 app_words = Set.new
 pages_dir = File.join(here, 'pages')
@@ -140,7 +140,7 @@ docs.each do |doc|
   where = File.basename(doc)
   each_block(doc) do |source, first_line|
     begin
-      tree = SlimPickins::Transform.tree(source, path: doc)
+      tree = SlimPickins::Transform.tree(source, path: doc, route: true)
     rescue SlimPickins::SyntaxError => e
       puts "  BAD SENTENCE  #{where}:#{first_line + e.lineno - 1}: #{e.line.inspect} — #{e.message.lines.first.strip}"
       problems += 1
@@ -155,7 +155,7 @@ docs.each do |doc|
         # the filename — so it contributes nothing to the vocabulary and is
         # walked straight through to the substance beneath it.
         if node.word == :route
-          walk.call(node.children, ancestry, named)
+          walk.call(node.children, ancestry + [node.word], named || SlimPickins::Contracts.names_something?(node))
           next
         end
 

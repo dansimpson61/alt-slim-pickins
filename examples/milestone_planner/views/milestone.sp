@@ -1,4 +1,4 @@
-page "Milestone Detail"
+"Milestone Detail"
   actions
     link home, "← Back to Planner"
   card

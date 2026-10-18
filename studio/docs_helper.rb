@@ -259,7 +259,10 @@ module StudioDocs
             if node.word.to_sym == :def
               visit.call(node.children, ancestors) if file.include?('lib/vocabulary')
             elsif node.word == :route
-              visit.call(node.children, ancestors)
+              # The route's signature is the page line — the subject's home —
+              # so it joins the chain the way `page`'s node did, even though it
+              # is not itself a word to show an example of.
+              visit.call(node.children, ancestors + [node])
             else
               visit.call(node.children, ancestors + [node])
             end
@@ -281,9 +284,13 @@ module StudioDocs
   MAX_CONTEXT_DEPTH = 2
   MAX_CONTEXT_SIBLINGS = 3
 
+  # A node that owns the document's opening — the legacy `page` word or the
+  # route's signature, which is the same job in the new shape.
+  def self.page_root?(node) = %i[page route].include?(node.word.to_sym)
+
   def self.context_of(chain, siblings = nil)
-    page = chain.find { |node| node.word.to_sym == :page }
-    below = chain.reject { |node| node.word.to_sym == :page }
+    page = chain.find { |node| page_root?(node) }
+    below = chain.reject { |node| page_root?(node) }
     lines = []
     lines << page.body if page
     below.each_with_index { |node, i| lines << "#{'  ' * (i + 1)}#{node.body}" }
@@ -365,7 +372,7 @@ module StudioDocs
     examples[word.to_sym].each_with_index.map do |(file, line, body, chain, siblings), index|
       payload = data_for.call(file, chain)
       [file, line, body, chain, siblings, payload,
-       chain.first.word.to_sym == :page ? 0 : 1, payload.empty? ? 1 : 0, index]
+       page_root?(chain.first) ? 0 : 1, payload.empty? ? 1 : 0, index]
     end.sort_by { |row| [row[6], row[7], row[8]] }
   end
 
@@ -383,8 +390,8 @@ module StudioDocs
 
     chain = row[3]
     context = context_of(chain, row[4])
-    return context if chain.first.word.to_sym == :page
+    return context if page_root?(chain.first)
 
-    "page \"Try: #{word}\"\n#{context}\n"
+    "\"Try: #{word}\"\n#{context}\n"
   end
 end

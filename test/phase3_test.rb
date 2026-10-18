@@ -21,13 +21,13 @@ class Phase3Test < Minitest::Test
   end
 
   def render(source, library: nil, **locals)
-    SlimPickins.render(source, path: '(test)', locals: locals, library: library)
+    SlimPickins.render(source, path: 'test.sp', locals: locals, library: library)
   end
 
   # --- layout -----------------------------------------------------------
 
   def test_a_layout_wraps_the_page_and_contents_marks_the_hole
-    html = render("page account\n  title .name\n",
+    html = render("account\n  title .name\n",
                   library: library, account: Account.new(name: 'Roth', balance: 1))
     assert_includes html, '<nav class="nav" aria-label="Main">'
     assert_includes html, '<h2 class="title">Roth</h2>'
@@ -39,14 +39,14 @@ class Phase3Test < Minitest::Test
   # The layout renders inside the body, but a stylesheet belongs in the head.
   # Words say where they belong, not where they are written.
   def test_a_stylesheet_named_in_the_layout_still_lands_in_the_head
-    html = render("page account\n  title .name\n",
+    html = render("account\n  title .name\n",
                   library: library, account: Account.new(name: 'Roth', balance: 1))
     head = html[%r{<head>.*?</head>}m]
     assert_includes head, '<link rel="stylesheet" href="/css/base.css">'
   end
 
   def test_the_page_says_nothing_about_the_layout
-    page = "page account\n  title .name\n"
+    page = "account\n  title .name\n"
     refute_includes page, 'layout'
     assert_includes render(page, library: library, account: Account.new(name: 'x', balance: 1)),
                     '<footer class="footer">Made here.</footer>'
@@ -54,7 +54,7 @@ class Phase3Test < Minitest::Test
 
   def test_a_tin_that_never_says_contents_is_an_error
     error = assert_raises(SlimPickins::Error) do
-      render("page account\n  title .name\n",
+      render("account\n  title .name\n",
              library: library(tin: %(footer "Only chrome.")),
              account: Account.new(name: 'x', balance: 1))
     end
@@ -62,7 +62,7 @@ class Phase3Test < Minitest::Test
   end
 
   def test_contents_outside_a_layout_is_an_error
-    error = assert_raises(SlimPickins::Error) { render("page account\n  contents\n", account: {}) }
+    error = assert_raises(SlimPickins::Error) { render("account\n  contents\n", account: {}) }
     assert_match(/\A`contents` belongs in a frame\n/, error.message)
   end
 
@@ -71,7 +71,7 @@ class Phase3Test < Minitest::Test
   CARD = "title .name\nmoney .balance\n"
 
   def test_an_app_word_is_invoked_exactly_like_a_built_in
-    html = render("page account\n  test_account_card\n",
+    html = render("account\n  test_account_card\n",
                   library: library(tin: nil, partials: { test_account_card: CARD }),
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<h2 class="title">Roth</h2>'
@@ -80,7 +80,7 @@ class Phase3Test < Minitest::Test
 
   def test_an_app_word_takes_the_current_subject
     accounts = [Account.new(name: 'A', balance: 1), Account.new(name: 'B', balance: 2)]
-    html = render("page portfolio\n  each account\n    test_account_card\n",
+    html = render("portfolio\n  each account\n    test_account_card\n",
                   library: library(tin: nil, partials: { test_account_card: CARD }),
                   portfolio: { accounts: accounts })
     assert_includes html, '<h2 class="title">A</h2>'
@@ -89,7 +89,7 @@ class Phase3Test < Minitest::Test
 
   # Same rule as `section`: a name shifts the subject, and must be there.
   def test_an_app_word_may_name_a_subject
-    html = render("page portfolio\n  test_account_card best\n",
+    html = render("portfolio\n  test_account_card best\n",
                   library: library(tin: nil, partials: { test_account_card: CARD }),
                   portfolio: { best: Account.new(name: 'Roth', balance: 9) })
     assert_includes html, '<h2 class="title">Roth</h2>'
@@ -107,7 +107,7 @@ class Phase3Test < Minitest::Test
 
   def test_an_unknown_word_still_fails_with_its_own_name
     error = assert_raises(SlimPickins::Error) do
-      render(%(page account\n  sparkline "x"\n),
+      render(%(account\n  sparkline "x"\n),
              library: library(tin: nil, partials: { test_account_card: CARD }), account: {})
     end
     assert_match(/\Athere is no word `sparkline`\n/, error.message)

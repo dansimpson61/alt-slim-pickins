@@ -4,37 +4,6 @@ require_relative 'word'
 
 module SlimPickins
   module Words
-    class Page < Word
-      contract name: :subject, content: true, modifiers: [:favicon], children: :any, subject: :shift, shape: :document, lazy: [], infers: [:document, :title, :frame]
-
-      def evaluate
-        favicon = @kwargs.key?(:favicon) ? @kwargs[:favicon] : nil
-        name, title = arguments(@args)
-        heading = nil
-
-        # The stylesheets a page gets by convention go in first, so anything
-        # the page or its tin says is said later and lands later — a default
-        # that can be overruled by speaking, not a replacement for speaking.
-        # `unshift` on each in order leaves them in order.
-        inferred_stylesheets.each do |path|
-          in_head(Node[:stylesheet, { path: path }, []])
-        end
-
-        # The tin runs first, because it may contribute to the head — its
-        # stylesheet and its scripts. Reading `head_nodes` before it ran meant
-        # a tin's assets never reached the document, which is the one thing a
-        # tin exists to hold.
-        value, empty, body = about(name) do
-          heading = landed(title) || Inference.label(name)
-          wrapped_in_frame(&@block)
-        end
-        emit_node(Node[:page, { heading: heading, head: head_nodes,
-                            favicon: favicon },
-                   prune(body, empty)])
-        value
-      end
-    end
-
     class Stylesheet < Head
       contract content: true, shape: :document, lazy: []
       maps content: :path

@@ -89,7 +89,6 @@ class StudioDocsTest < Minitest::Test
     StudioPages.library # the merged library registers app words globally
     words = StudioDocs.words.map(&:name)
     assert_includes words, 'badge'
-    assert_includes words, 'page'
     refute_includes words, 'queue', 'an app partial is not a vocabulary word'
     refute_includes words, 'editor', 'studio furniture is not a vocabulary word'
   end
@@ -154,7 +153,7 @@ class StudioDocsTest < Minitest::Test
 
   def test_seed_for_wraps_the_example_in_a_page
     seed = StudioDocs.seed_for('money', 0)
-    assert_match(/\Apage specimen, "slim-pickins — every word"\n/, seed,
+    assert_match(/\Aspecimen, "slim-pickins — every word"\n/, seed,
                  'a page-rooted example seeds the real opening, subject included')
     assert_includes seed, 'section "Numbers"'
     assert_includes seed, 'money'
@@ -163,14 +162,14 @@ class StudioDocsTest < Minitest::Test
 
   def test_a_partial_internal_seed_gets_a_page_of_its_own
     seed = StudioDocs.seed_for('heading', 0)
-    assert_match(/\Apage "Try: heading"\n/, seed)
+    assert_match(/\A"Try: heading"\n/, seed)
     assert_includes seed, 'heading .title'
   end
 
   def test_examples_carry_context_and_the_pages_payload
     examples = StudioDocs.examples_of('money') { |path| StudioPages.data_json_for(path) }
     first = examples.first
-    assert_includes first.context, 'page specimen, "slim-pickins — every word"'
+    assert_includes first.context, 'specimen, "slim-pickins — every word"'
     assert_includes first.context, 'section "Numbers"'
     assert_includes first.context, 'money .total_value'
     assert_equal 'examples/pages/specimen.sp', first.path
@@ -195,7 +194,7 @@ class StudioDocsTest < Minitest::Test
     html = SlimPickins.render(File.read(File.join(ROOT, 'studio', 'uis', 'classic', 'views', 'docs.sp')),
                               path: 'docs.sp',
                               locals: { title: 'Docs: badge', contract: 'c', implementation: 'i',
-                                        examples: examples, source: "page \"Try: badge\"\n",
+                                        examples: examples, source: "\"Try: badge\"\n",
                                         editor_title: 'Try it: badge', data: '',
                                         data_note: StudioDocs::DATA_NOTE, words: [], vocabulary_tiers: [], guides: [],
                                         ui_names: [] },

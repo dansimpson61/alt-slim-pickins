@@ -1,4 +1,4 @@
-page "Triage"
+"Triage"
   text "One project at a time, hardest first."
   choose
     when .notice

@@ -108,14 +108,14 @@ class Phase6Test < Minitest::Test
     badge = lambda do |nodes|
       [SlimPickins::Node[:span, { class_base: :badge, variant: :ok, body: 'filtered' }, []]] + nodes
     end
-    html = SlimPickins.render("page p\n  text \"x\"\n", locals: { p: {} }, filter: badge)
+    html = SlimPickins.render("p\n  text \"x\"\n", locals: { p: {} }, filter: badge)
     assert_includes html, '<span class="badge badge--ok">filtered</span>'
   end
 
   # dan's word-not-power decision: the favicon is a page modifier, absorbed
   # like the doctype — written where the page begins, landed in the head.
   def test_a_page_modifier_favicon_lands_in_the_head
-    html = SlimPickins.render("page p, favicon: \"/x.ico\"\n  text \"hi\"\n", locals: { p: {} })
+    html = SlimPickins.render("p, favicon: \"/x.ico\"\n  text \"hi\"\n", locals: { p: {} })
     assert_includes html, '<link rel="icon" href="/x.ico">'
     refute_includes html[html.index('</head>')..], 'rel="icon"'
   end
@@ -125,7 +125,7 @@ class Phase6Test < Minitest::Test
   # writing tag(:img) used to emit a closing tag the built-in never would.
   # (video is NOT void — it keeps its closing tag, as it should.)
   def test_an_app_tag_knows_void_elements
-    html = SlimPickins.render("page p\n  photo .url\n", locals: { p: { url: '/t.png' } },
+    html = SlimPickins.render("p\n  photo .url\n", locals: { p: { url: '/t.png' } },
                               library: SlimPickins::Library.new(words: Module.new do
         def photo(*args)
           _, src = arguments(args)

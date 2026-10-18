@@ -1,4 +1,4 @@
-page .title
+.title
   nav
     link "← Back to Library", to: "/library"
     link "← Back to Studio", to: "/"

@@ -1,4 +1,4 @@
-page .word_name
+.word_name
   card
     title .word_name
     choose

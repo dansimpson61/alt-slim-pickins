@@ -6,7 +6,7 @@ require_relative '../lib/slim_pickins'
 class ListInferenceTest < Minitest::Test
   def test_list_infers_item_for_each_iterations
     source = <<~SP
-      page "Documents"
+      "Documents"
         list
           each doc
             link .name, .path
@@ -23,7 +23,7 @@ class ListInferenceTest < Minitest::Test
 
   def test_list_infers_item_for_direct_children
     source = <<~SP
-      page "Navigation"
+      "Navigation"
         list
           link "Home", to: "/"
           link "About", to: "/about"
@@ -37,7 +37,7 @@ class ListInferenceTest < Minitest::Test
 
   def test_list_preserves_explicit_item_nodes_without_double_wrapping
     source = <<~SP
-      page "Palette"
+      "Palette"
         list
           item
             link "A", to: "/a"

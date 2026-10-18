@@ -12,7 +12,7 @@ class Phase4Test < Minitest::Test
   end
 
   def render(source, **locals)
-    SlimPickins.render(source, path: '(test)', locals: locals)
+    SlimPickins.render(source, path: 'test.sp', locals: locals)
   end
 
   def test_every_documented_word_is_implemented
@@ -26,7 +26,7 @@ class Phase4Test < Minitest::Test
 
   def test_grid_list_item_card_aside_and_figure
     html = render(<<~PAGE, thing: { id: 7 })
-      page thing
+      thing
         grid cards, columns: 3
           card compact
             title "In a card"
@@ -55,7 +55,7 @@ class Phase4Test < Minitest::Test
   def test_the_id_a_page_says_wins_over_the_id_a_card_infers
     holding = Struct.new(:id, :symbol)
     html = render(<<~PAGE, book: { holdings: [holding.new(3, 'VTI')], top: holding.new(7, 'BND') })
-      page book
+      book
         each holding
           card
             text .symbol
@@ -77,7 +77,7 @@ class Phase4Test < Minitest::Test
 
   def test_note_badge_fact_and_snippet
     html = render(<<~PAGE, thing: { origin: 'dashboard', status: 'ok' })
-      page thing
+      thing
         note warning, "Careful."
         badge .status
         fact origin
@@ -92,12 +92,12 @@ class Phase4Test < Minitest::Test
 
 
   def test_time_renders_machine_readable_alongside_human
-    html = render("page thing\n  time .on\n", thing: { on: Date.new(2026, 8, 30) })
+    html = render("thing\n  time .on\n", thing: { on: Date.new(2026, 8, 30) })
     assert_includes html, '<time class="time" datetime="2026-08-30">30 August 2026</time>'
   end
 
   def test_metric_derives_label_and_value_from_one_word
-    html = render("page thing\n  metric total_value, \"Total value\"\n",
+    html = render("thing\n  metric total_value, \"Total value\"\n",
                   thing: { total_value: 1500 })
     assert_includes html, '<h3 class="metric-label">Total value</h3>'
     assert_includes html, '<div class="metric-value">1,500</div>'
@@ -106,21 +106,21 @@ class Phase4Test < Minitest::Test
   # --- prose is safe by construction ------------------------------------
 
   def test_prose_renders_markdown
-    html = render(%(page thing\n  prose .body\n), thing: { body: 'A **bold** claim.' })
+    html = render(%(thing\n  prose .body\n), thing: { body: 'A **bold** claim.' })
     assert_includes html, '<div class="prose"><p>A <strong>bold</strong> claim.</p></div>'
   end
 
   # There is no "trust me" spelling, so no input can produce a tag that
   # markdown does not define. This is why the language has no escaping sigil.
   def test_prose_cannot_be_made_to_emit_arbitrary_html
-    html = render(%(page thing\n  prose .body\n),
+    html = render(%(thing\n  prose .body\n),
                   thing: { body: '<script>alert(1)</script>' })
     refute_includes html, '<script>alert(1)</script>'
     assert_includes html, '&lt;script&gt;'
   end
 
   def test_prose_plain_takes_no_markup_at_all
-    html = render("page thing\n  prose plain, .body\n", thing: { body: '**not bold**' })
+    html = render("thing\n  prose plain, .body\n", thing: { body: '**not bold**' })
     assert_includes html, '<p>**not bold**</p>'
   end
 
@@ -128,7 +128,7 @@ class Phase4Test < Minitest::Test
 
   def test_choose_renders_the_first_true_branch
     html = render(<<~PAGE, thing: { drifted?: true })
-      page thing
+      thing
         choose
           when .drifted?
             note warning, "Drifted."
@@ -141,7 +141,7 @@ class Phase4Test < Minitest::Test
 
   def test_choose_falls_through_to_otherwise
     html = render(<<~PAGE, thing: { drifted?: false })
-      page thing
+      thing
         choose
           when .drifted?
             note warning, "Drifted."
@@ -154,7 +154,7 @@ class Phase4Test < Minitest::Test
 
   def test_when_outside_a_choose_says_where_it_belongs
     error = assert_raises(SlimPickins::Error) do
-      render("page thing\n  when .x\n    note \"y\"\n", thing: { x: true })
+      render("thing\n  when .x\n    note \"y\"\n", thing: { x: true })
     end
     assert_match(/\A`when` belongs inside `choose`\n/, error.message)
   end
@@ -174,7 +174,7 @@ class Phase4Test < Minitest::Test
   # arguments asks the *enclosing* subject, not the one it is about to
   # establish. The binding spelling is the one that works.
   def test_a_words_own_arguments_see_the_enclosing_subject
-    html = render(%(page pattern, pattern.title\n  title "x"\n),
+    html = render(%(pattern, pattern.title\n  title "x"\n),
                   pattern: { title: 'The Pattern' })
     assert_includes html, '<title>The Pattern</title>'
   end

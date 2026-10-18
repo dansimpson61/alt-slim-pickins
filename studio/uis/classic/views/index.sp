@@ -1,4 +1,4 @@
-page "Slim-Pickins Studio"
+"Slim-Pickins Studio"
   shell
     vocabulary
     panes

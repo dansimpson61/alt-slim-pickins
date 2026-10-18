@@ -7,12 +7,12 @@ class DefTest < Minitest::Test
   Doc = Struct.new(:name, :path, :content, keyword_init: true)
 
   def render(source, **options)
-    SlimPickins.render(source, path: '(test)', **options)
+    SlimPickins.render(source, path: 'test.sp', **options)
   end
 
   def test_zero_parameter_def
     source = <<~SP
-      page "App"
+      "App"
         banner
 
       def banner
@@ -24,7 +24,7 @@ class DefTest < Minitest::Test
 
   def test_single_parameter_def
     source = <<~SP
-      page "App"
+      "App"
         greeting "Dan"
 
       def greeting, name
@@ -36,7 +36,7 @@ class DefTest < Minitest::Test
 
   def test_multiple_parameters_positional_binding
     source = <<~SP
-      page "App"
+      "App"
         user_badge "Dan", "Admin"
 
       def user_badge, name, role
@@ -51,7 +51,7 @@ class DefTest < Minitest::Test
 
   def test_named_arguments_binding_order_independent
     source = <<~SP
-      page "App"
+      "App"
         user_badge role: "Admin", name: "Dan"
 
       def user_badge, name, role
@@ -66,7 +66,7 @@ class DefTest < Minitest::Test
 
   def test_mixed_positional_and_named_arguments
     source = <<~SP
-      page "App"
+      "App"
         user_badge "Dan", role: "Admin"
 
       def user_badge, name, role
@@ -81,7 +81,7 @@ class DefTest < Minitest::Test
 
   def test_omitted_declared_parameters_default_to_nil
     source = <<~SP
-      page "App"
+      "App"
         user_badge "Dan"
 
       def user_badge, name, role
@@ -100,7 +100,7 @@ class DefTest < Minitest::Test
 
   def test_undeclared_named_arguments_forward_into_chain_scope
     source = <<~SP
-      page "App"
+      "App"
         card_box "Title", theme: "dark"
 
       def card_box, title
@@ -118,11 +118,11 @@ class DefTest < Minitest::Test
       def banner
         note "Hello"
 
-      page "App"
+      "App"
         banner
     SP
     after_source = <<~SP
-      page "App"
+      "App"
         banner
 
       def banner
@@ -133,7 +133,7 @@ class DefTest < Minitest::Test
 
   def test_child_splicing_with_caller_block
     source = <<~SP
-      page "App"
+      "App"
         enclosure "Custom Box"
           note "Inside enclosure"
 
@@ -149,7 +149,7 @@ class DefTest < Minitest::Test
 
   def test_flexible_link_with_positional_arguments
     source = <<~SP
-      page "App"
+      "App"
         link "Docs", "/documentation"
         link .doc_name, .doc_path
     SP
@@ -160,7 +160,7 @@ class DefTest < Minitest::Test
 
   def test_doc_reader_specimen_populated_state
     source = <<~SP
-      page "Doc Reader"
+      "Doc Reader"
         sidebar docs, "Documents"
         reading_pane selected_doc
 
@@ -196,7 +196,7 @@ class DefTest < Minitest::Test
 
   def test_doc_reader_specimen_empty_doc_state
     source = <<~SP
-      page "Doc Reader"
+      "Doc Reader"
         sidebar docs, "Documents"
         reading_pane selected_doc
 
@@ -224,7 +224,7 @@ class DefTest < Minitest::Test
 
   def test_doc_reader_specimen_empty_all_state
     source = <<~SP
-      page "Doc Reader"
+      "Doc Reader"
         sidebar docs, "Documents"
         reading_pane selected_doc
 
@@ -252,7 +252,7 @@ class DefTest < Minitest::Test
 
   def test_doc_reader_specimen_unprovided_collection_refuses_in_language_voice
     source = <<~SP
-      page "Doc Reader"
+      "Doc Reader"
         sidebar docs, "Documents"
         reading_pane selected_doc
 
@@ -282,7 +282,7 @@ class DefTest < Minitest::Test
         box
           contents
 
-      page "Demo"
+      "Demo"
         each point
           framed
             paragraph .name

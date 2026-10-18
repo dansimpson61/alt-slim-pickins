@@ -56,8 +56,9 @@ walls, one already fixed, one framing decision:
    becomes the word (filename = word name, leading line = arguments), and the
    grammar never changes — a route is a `def` with its `def <name>` line elided.
    Built in [DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md), proven on the specimen
-   reader and certified by the byte-diff harness. The eight apps still write
-   Shape A; their migration is the daytrip that follows.
+   reader and certified by the byte-diff harness. `page` is now retired: the
+   eight apps and the studio have migrated onto the route signature, and the
+   word, its contract and its docs are gone.
 
 2. **Self-titling documents.** `page document` should take the document's first
    heading as its title, and `prose` should start where the title ends. Today

@@ -43,7 +43,7 @@ Before touching `lib/`, draft the target application's `.sp`, `.frame`, and `.la
 
 ### 2. The Wall Inventory (Measuring the Pinch)
 Attempt to boot, render, and visually inspect the paper application. Record every failure in a **Wall Ledger**, classified by where the language fell short:
-1. **Grammar or Scope Pinch:** A sentence that reads naturally to a human (`page document, .title` or `actions` nested inside `form`) but fails or misbehaves because of compiler evaluation order or scoping rules.
+1. **Grammar or Scope Pinch:** A sentence that reads naturally to a human (`document, .title` or `actions` nested inside `form`) but fails or misbehaves because of compiler evaluation order or scoping rules.
 2. **Vocabulary or Inference Gap:** A domain-agnostic presentation pattern or mechanical fact that the language forces the author to wire by hand.
 3. **Spatial or Micro-Layout Gap:** A visual arrangement (inline wrapping badge clusters, compact action bars, content-aware pane splits) that `.layout` cannot express without raw CSS rules.
 4. **Aesthetic or Theme Ceiling:** A typographic hierarchy, density posture, or atmospheric palette that `:root` tokens cannot currently articulate.
@@ -78,6 +78,6 @@ To be selected and confirmed by Dan at the opening of each odd roadmap:
 - **Horizon A — The Authentic CRUD & State-Mutation Benchmark:**
   A persistent, SQLite-backed application exercising full Create/Read/Update/Delete lifecycles, server-side validation failures, dirty form re-rendering, flash feedback, entity routing conventions (`/milestones/:id/tasks`), collection-scoped emptiness, and context-sensitive `actions` inside and outside `<form>`.
 - **Horizon B — The High-Craft Editorial & Micro-Layout Benchmark:**
-  A publication-grade reader and documentation studio demanding landing evaluation for sentence arguments (`page document, .title`), self-titling markdown documents, component-level micro-layout in `.layout` (`cluster`, `stack`), pluggable rendering adapters, and sayable theme roles (`measure: wide`, `gap: loose`).
+  A publication-grade reader and documentation studio demanding landing evaluation for sentence arguments (`document, .title`), self-titling markdown documents, component-level micro-layout in `.layout` (`cluster`, `stack`), pluggable rendering adapters, and sayable theme roles (`measure: wide`, `gap: loose`).
 - **Horizon C — The Self-Hosted Moldable Workbench ("Rubinius" Endgame):**
   The Studio Workbench itself held as the ultimate Stretch Exam: an interactive Bret Victor "Inference Inspector" tracing the live subject chain, line-numbered editor gutters with inline error diagnostics, and content-aware split panes—authored 100% in idiomatic `.sp`, `.frame`, and `.layout`.

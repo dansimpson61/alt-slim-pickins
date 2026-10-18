@@ -7,12 +7,12 @@ class DemandRound3Test < Minitest::Test
   # --- G7: search route override ---------------------------------------------
 
   def test_search_uses_default_search_route_when_to_omitted
-    html = SlimPickins.render("page \"P\"\n  search placeholder: \"Find...\"\n")
+    html = SlimPickins.render("\"P\"\n  search placeholder: \"Find...\"\n")
     assert_includes html, 'action="/search"'
   end
 
   def test_search_accepts_custom_destination_via_to_modifier
-    html = SlimPickins.render("page \"P\"\n  search to: \"/\", placeholder: \"Find...\"\n")
+    html = SlimPickins.render("\"P\"\n  search to: \"/\", placeholder: \"Find...\"\n")
     assert_includes html, 'action="/"'
   end
 
@@ -21,7 +21,7 @@ class DemandRound3Test < Minitest::Test
   def test_choice_radio_emits_fieldset_with_radio_inputs
     exam = Struct.new(:q1).new(:b)
     source = <<~SP
-      page exam
+      exam
         choice radio, q1, "Question 1"
           option a, "First"
           option b, "Second"
@@ -39,7 +39,7 @@ class DemandRound3Test < Minitest::Test
   def test_choice_radio_with_attribute_name
     exam = Struct.new(:q1).new('first')
     source = <<~SP
-      page exam
+      exam
         choice radio, q1
           option "first", "First Option"
           option "second", "Second Option"
@@ -57,7 +57,7 @@ class DemandRound3Test < Minitest::Test
       :q_dyn, 'opt_b', ['opt_a', 'opt_b', 'opt_c']
     )
     source = <<~SP
-      page question
+      question
         choice radio, .id
           each opt, from: .options
             option .to_s, .to_s
@@ -75,7 +75,7 @@ class DemandRound3Test < Minitest::Test
       :color, 'blue', ['red', 'green', 'blue']
     )
     source = <<~SP
-      page question
+      question
         choice .id, "Select Color"
           each c, from: .options
             option .to_s, .to_s
@@ -92,10 +92,10 @@ class DemandRound3Test < Minitest::Test
   def test_textarea_supports_readonly_modifier
     snippet = Struct.new(:lore_body).new("Council wisdom\nKeep it simple")
     source = <<~SP
-      page snippet
+      lore
         textarea lore_body, "Lore Snippet", readonly: true, rows: 6
     SP
-    html = SlimPickins.render(source, locals: { snippet: snippet })
+    html = SlimPickins.render(source, locals: { lore: snippet })
     assert_includes html, '<textarea id="lore_body" name="lore_body" rows="6" readonly="readonly">'
     assert_includes html, "Council wisdom\nKeep it simple"
   end

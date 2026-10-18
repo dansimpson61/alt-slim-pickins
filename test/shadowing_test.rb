@@ -15,7 +15,7 @@ class ShadowingTest < Minitest::Test
     })
 
     assert_includes lib.shadowed_words, :card
-    html = SlimPickins.render("page p\n  card\n", library: lib, locals: { p: { name: 'Dan' } })
+    html = SlimPickins.render("p\n  card\n", library: lib, locals: { p: { name: 'Dan' } })
     assert_includes html, 'Dan'
     refute_includes html, '<article class="card"'
   end
@@ -26,7 +26,7 @@ class ShadowingTest < Minitest::Test
     })
 
     assert_includes lib.shadowed_words, :heading
-    html = SlimPickins.render("page p\n  heading\n", library: lib, locals: { p: { title: 'Hello' } })
+    html = SlimPickins.render("p\n  heading\n", library: lib, locals: { p: { title: 'Hello' } })
     assert_includes html, 'Hello'
     refute_includes html, '<h2'
   end
@@ -40,7 +40,7 @@ class ShadowingTest < Minitest::Test
 
     lib = SlimPickins::Library.new(words: custom_words)
     assert_includes lib.shadowed_words, :heading
-    html = SlimPickins.render("page p\n  heading\n", library: lib, locals: { p: {} })
+    html = SlimPickins.render("p\n  heading\n", library: lib, locals: { p: {} })
     assert_includes html, 'ruby heading'
   end
 
@@ -51,10 +51,10 @@ class ShadowingTest < Minitest::Test
 
     builtin_lib = SlimPickins::Library.builtin
 
-    app_html = SlimPickins.render("page p\n  card\n", library: app_lib, locals: { p: {} })
+    app_html = SlimPickins.render("p\n  card\n", library: app_lib, locals: { p: {} })
     assert_includes app_html, 'app card'
 
-    builtin_html = SlimPickins.render("page p\n  card\n", library: builtin_lib, locals: { p: {} })
+    builtin_html = SlimPickins.render("p\n  card\n", library: builtin_lib, locals: { p: {} })
     assert_includes builtin_html, '<article class="card"'
   end
 

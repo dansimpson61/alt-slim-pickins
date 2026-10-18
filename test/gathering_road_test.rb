@@ -31,7 +31,7 @@ class GatheringRoadTest < Minitest::Test
   # The whole point: what registers is collected, then spliced where the
   # gatherer says `children` — not left where it was written.
   def test_a_partial_gatherer_collects_the_partials_that_register_into_it
-    html = render("page \"P\"\n  my_gatherer\n    my_row \"first\"\n    my_row \"second\"\n")
+    html = render("\"P\"\n  my_gatherer\n    my_row \"first\"\n    my_row \"second\"\n")
 
     assert_includes html,
                     '<div class="box my_gatherer"><p class="text my_row">first</p>' \
@@ -39,7 +39,7 @@ class GatheringRoadTest < Minitest::Test
   end
 
   def test_a_registrar_outside_its_gatherer_is_refused
-    error = assert_raises(SlimPickins::Error) { render("page \"P\"\n  my_row \"x\"\n") }
+    error = assert_raises(SlimPickins::Error) { render("\"P\"\n  my_row \"x\"\n") }
 
     assert_match(/belongs inside `my_gatherer`/, error.message)
   end
@@ -61,7 +61,7 @@ class GatheringRoadTest < Minitest::Test
   # And the Ruby road still runs, unchanged: a page word registering into a Ruby
   # gatherer by class.
   def test_the_built_in_gathering_is_untouched
-    html = SlimPickins.render("page \"P\"\n  table rows\n    column name\n",
+    html = SlimPickins.render("\"P\"\n  table rows\n    column name\n",
                               locals: { rows: [{ name: 'x' }] })
 
     assert_includes html, '<th>Name</th>'

@@ -1,4 +1,4 @@
-page .title
+.title
   shell
     vocabulary
     scroll

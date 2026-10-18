@@ -10,20 +10,20 @@ class Phase0Test < Minitest::Test
   Holding = Struct.new(:symbol, :shares, keyword_init: true)
 
   def render(source, **locals)
-    SlimPickins.render(source, path: '(test)', locals: locals)
+    SlimPickins.render(source, path: 'test.sp', locals: locals)
   end
 
   # --- the transform --------------------------------------------------
 
   def test_indentation_becomes_blocks
     ruby = SlimPickins.compile(<<~PAGE)
-      page account
+      account
         form to: save
           field name
     PAGE
     assert_equal <<~RUBY, ruby
       with_line(1) do
-        page(:account) do
+        route(:account) do
           with_line(2) do
             form(to: :save) do
               with_line(3) do
@@ -73,10 +73,10 @@ class Phase0Test < Minitest::Test
 
   def test_an_unknown_attribute_raises_naming_the_attribute_and_the_subject
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page account\n  form\n    field nmae\n",
+      render("account\n  form\n    field nmae\n",
              account: Account.new(name: 'Roth', balance: 1))
     end
-    assert_match(/\Athis account has no nmae\n  \(test\), line 3\n    field nmae\z/, error.message)
+    assert_match(/\Athis account has no nmae\n  test\.sp, line 3\n    field nmae\z/, error.message)
   end
 
   # --- the subject chain ----------------------------------------------
@@ -118,14 +118,14 @@ class Phase0Test < Minitest::Test
   end
 
   def test_every_shift_names_its_subject_for_everything_beneath
-    html = render("page portfolio\n  section account\n    each holding\n      text portfolio.owner\n" \
+    html = render("portfolio\n  section account\n    each holding\n      text portfolio.owner\n" \
                   "      text account.name\n", portfolio: portfolio)
     assert_includes html, '<p class="text">dan</p>'
     assert_includes html, '<p class="text">Roth</p>'
   end
 
   def test_the_nearest_name_wins_and_the_one_it_shadowed_returns
-    html = render("page portfolio\n  section account\n    each account, from: portfolio.accounts\n" \
+    html = render("portfolio\n  section account\n    each account, from: portfolio.accounts\n" \
                   "      note account.name\n    text account.name\n", portfolio: portfolio)
     assert_equal %w[IRA 401k], html.scan(%r{<p class="note">([^<]*)</p>}).flatten
     assert_includes html, '<p class="text">Roth</p>'
@@ -133,13 +133,13 @@ class Phase0Test < Minitest::Test
 
   def test_a_dot_never_borrows_from_further_out
     error = assert_raises(SlimPickins::UnknownAttribute) do
-      render("page portfolio\n  section account\n    text .owner\n", portfolio: portfolio)
+      render("portfolio\n  section account\n    text .owner\n", portfolio: portfolio)
     end
     assert_match(/\Athis account has no owner/, error.message)
   end
 
   def test_a_sentence_that_names_where_it_lands_reads_its_dots_there
-    html = render("page portfolio, .owner\n  section account, .name\n    text \"x\"\n", portfolio: portfolio)
+    html = render("portfolio, .owner\n  section account, .name\n    text \"x\"\n", portfolio: portfolio)
     assert_includes html, '<h1>dan</h1>'
     assert_includes html, '<h2 class="section-title">Roth</h2>'
   end
@@ -147,7 +147,7 @@ class Phase0Test < Minitest::Test
   # --- inference: the whole bet ---------------------------------------
 
   def test_one_word_derives_label_name_value_and_type
-    html = render("page account\n  form\n    field balance\n",
+    html = render("account\n  form\n    field balance\n",
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<label for="balance">Balance</label>'
     assert_includes html, 'name="balance"'
@@ -166,7 +166,7 @@ class Phase0Test < Minitest::Test
   # A field holding 2.5 once got no step, so the browser counted in whole
   # numbers and refused to submit the form with the value it was given.
   def test_a_decimal_field_accepts_the_decimal_it_holds
-    html = render("page account\n  form\n    field years\n    field years, step: 0.5\n",
+    html = render("account\n  form\n    field years\n    field years, step: 0.5\n",
                   account: { years: 2.5 })
     assert_includes html, 'name="years" type="number" value="2.5" step="any"'
     assert_includes html, 'name="years" type="number" value="2.5" step="0.5"'
@@ -177,7 +177,7 @@ class Phase0Test < Minitest::Test
   # line of text, and its field got no step, so the form would not submit.
   def test_a_big_decimal_is_written_plainly_and_its_field_takes_it
     require 'bigdecimal'
-    html = render("page account\n  form\n    field years\n  text .years\n",
+    html = render("account\n  form\n    field years\n  text .years\n",
                   account: { years: BigDecimal('2.5') })
     assert_includes html, 'name="years" type="number" value="2.5" step="any"'
     assert_includes html, '<p class="text">2.5</p>'
@@ -188,20 +188,20 @@ class Phase0Test < Minitest::Test
   # ruling, 2026-09-17). This is the reader `Inference.boolean?` was written
   # for and did not have until then.
   def test_a_boolean_value_derives_the_checkbox_shape
-    html = render("page account\n  form\n    field active\n",
+    html = render("account\n  form\n    field active\n",
                   account: Account.new(name: 'Roth', active: true))
     assert_includes html, '<div class="field field--checkbox">'
     assert_includes html, 'type="checkbox"'
     assert_includes html, 'checked="checked"'
     assert_includes html, '>Active</label>'
 
-    unchecked = render("page account\n  form\n    field active\n",
+    unchecked = render("account\n  form\n    field active\n",
                        account: Account.new(name: 'Roth', active: false))
     refute_includes unchecked, 'checked="checked"'
   end
 
   def test_the_page_may_override_the_checkbox_inference
-    html = render("page account\n  form\n    field active, type: text\n",
+    html = render("account\n  form\n    field active, type: text\n",
                   account: Account.new(name: 'Roth', active: true))
     assert_includes html, 'type="text"'
     assert_includes html, 'value="true"'
@@ -216,7 +216,7 @@ class Phase0Test < Minitest::Test
   # --- conventions are overridable ------------------------------------
 
   def test_every_inference_can_be_overridden_by_saying_the_thing
-    html = render(%(page account\n  form\n    field balance, "What you have", type: text\n),
+    html = render(%(account\n  form\n    field balance, "What you have", type: text\n),
                   account: Account.new(name: 'Roth', balance: 1500))
     assert_includes html, '<label for="balance">What you have</label>'
     assert_includes html, 'type="text"'

@@ -1,4 +1,4 @@
-page "The Lore Reader"
+"The Lore Reader"
   section stats, "Archive Overview"
     grid metrics, columns: 4
       metric total_entries, "Total Entries"

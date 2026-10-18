@@ -37,7 +37,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           banner
       SP
       assert_includes html, '<p class="note banner">Welcome to the studio</p>'
@@ -54,7 +54,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           greeting "Dan"
       SP
       assert_includes html, '<p class="note greeting">Dan</p>'
@@ -73,7 +73,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           user_badge "Dan", "Admin"
       SP
       assert_includes html, '<h2 class="heading">Dan</h2>'
@@ -93,7 +93,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           user_badge role: "Admin", name: "Dan"
       SP
       assert_includes html, '<h2 class="heading">Dan</h2>'
@@ -113,7 +113,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           user_badge "Dan", role: "Admin"
       SP
       assert_includes html, '<h2 class="heading">Dan</h2>'
@@ -137,7 +137,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           user_badge "Dan"
       SP
       assert_includes html, '<h2 class="heading">Dan</h2>'
@@ -159,7 +159,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           card_box "Security Alert", tone: "critical"
       SP
       assert_includes html, '<h2 class="heading">Security Alert</h2>'
@@ -179,7 +179,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           enclosure "Milestone Enclosure"
             note "Nested inside enclosure block"
       SP
@@ -201,7 +201,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           tagged_badge "Commented"
       SP
       assert_includes html, '<p class="note tagged_badge">Commented</p>'
@@ -221,7 +221,7 @@ class DiskDefPartialTest < Minitest::Test
 
     with_disk_partials(partials) do |lib|
       html = SlimPickins.render(<<~SP, library: lib)
-        page "App"
+        "App"
           widget_header "Header Title"
           widget_footer "Footer Text"
       SP

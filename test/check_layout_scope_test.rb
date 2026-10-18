@@ -130,7 +130,7 @@ class CheckSpiffScopeTest < Minitest::Test
              else
                "  heading \"Fixture\"\n"
              end
-      File.write(File.join(app, 'views', 'index.sp'), "page \"Fixture\"\n#{body}")
+      File.write(File.join(app, 'views', 'index.sp'), "\"Fixture\"\n#{body}")
       File.write(File.join(app, 'fixture.spiff'),
                  "surface fixture\n  stage\n    air generous\n\n  zone #{zone}\n    frame flat\n")
 

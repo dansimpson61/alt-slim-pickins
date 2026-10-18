@@ -1,4 +1,4 @@
-page "The Way Exam"
+"The Way Exam"
   card
     title "Examination of the Way"
     text "Answer the questions below to test your mastery of the Slim-Pickins Way as documented in PRIMER.md and the Ode to Joy."

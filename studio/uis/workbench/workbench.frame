@@ -8,12 +8,9 @@
 # workbench into a single column. The tin owns the frame; a page owns its
 # own work.
 #
-# `workbench.css` is said, not inferred, because it is not a file on disk: the
-# studio compiles it from `workbench.spiff` and serves it through its asset
-# whitelist. The convention (`public/css/[app].css`) cannot reach an artifact
-# that only exists at request time, and every one of the shell's zone
-# placements lives in it, so silence here is an unstyled workbench.
-stylesheet "/assets/workbench.css"
+# The route links the compiled `.layout` — `workbench.layout` — and the studio
+# compiles it to `workbench.css` on request through its asset whitelist, the
+# same way doc_reader serves its own. Saying it here again would link it twice.
 script "/assets/stimulus.umd.js"
 script "/assets/studio.js"
 main_menu

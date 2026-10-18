@@ -13,7 +13,7 @@ module SlimPickins
   #   2. The Refined Categories & Sub-Categories: Substance, Skeleton, Affordances,
   #      Flow & Logic, and Environment.
   #   3. Bandpass Filter Diagnostics: Passband width, boundary selectivity, and
-  #      polyhierarchical resonance across the 64 canonical words.
+  #      polyhierarchical resonance across the 63 canonical words.
   module Taxonomy
     # The Three Ontological Planes of alt-slim-pickins
     PLANES = {
@@ -111,7 +111,7 @@ module SlimPickins
         name: :primitive,
         plane: :linguistic,
         summary: 'Ruby-implemented leaf word',
-        definition: 'An atomic leaf word implemented directly in Ruby as a subclass of SlimPickins::Word (38 canonical primitives).'
+        definition: 'An atomic leaf word implemented directly in Ruby as a subclass of SlimPickins::Word (37 canonical primitives).'
       ),
       composed_word: SystemTerm.new(
         name: :composed_word,
@@ -165,7 +165,7 @@ module SlimPickins
         name: :promise,
         plane: :invariant,
         summary: 'Feature verification ledger',
-        definition: 'The feature verification ledger (33 promises) proving declared modifiers have active readers in code.'
+        definition: 'The feature verification ledger (32 promises) proving declared modifiers have active readers in code.'
       )
     }.freeze
 
@@ -790,16 +790,6 @@ module SlimPickins
       ),
 
       # --- Environment: Document, Resources, Splicing ---
-      page: Entry.new(
-        word: :page,
-        categories: %i[environment skeleton],
-        primary_category: :environment,
-        sub_category: :document,
-        role: 'Document root container and application context host',
-        diagnostic: :sits_well,
-        cohesion: :cohesive,
-        note: 'Root container bridging document chrome with application state.'
-      ),
       stylesheet: Entry.new(
         word: :stylesheet,
         categories: %i[environment],

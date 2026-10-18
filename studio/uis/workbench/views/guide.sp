@@ -1,4 +1,4 @@
-page .title
+.title
   panes
     scroll
       prose markdown, .content

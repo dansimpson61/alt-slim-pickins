@@ -19,7 +19,6 @@ class StudioTryTest < Minitest::Test
   # Words whose effect is not their own class — an element tag, a content
   # line, or a note beside a working link.
   NEEDLES = {
-    'page' => '<body',
     'stylesheet' => '<link',
     'script' => '<script',
     'hidden' => 'type="hidden"',
@@ -58,7 +57,7 @@ class StudioTryTest < Minitest::Test
     # makes the studio's words the studio's words (last compile wins).
     library = StudioPages.merge_libraries([*StudioPages.library_dirs, Uis['classic'].views],
                                           words: [AppWords, ClassicWords])
-    assert_equal 63, vocabulary.size - STRUCTURAL.size, 'the yield moved — re-measure'
+    assert_equal 62, vocabulary.size - STRUCTURAL.size, 'the yield moved — re-measure'
 
     vocabulary.each do |word|
       ex = StudioDocs.examples_of(word) { |p, c| StudioPages.data_json_for(p, c) }.first

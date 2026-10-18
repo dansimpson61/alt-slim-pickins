@@ -30,8 +30,8 @@ down. Older documents in `history/` may still say `tin` for `.frame` and
 Every number below is measured by `bin/census.rb` and held by `check_vitals.rb`,
 so this block cannot go stale without the gate saying so:
 
-- **Census**: 64 canonical words (38 Ruby primitives + 26 `.sp` composed words),
-  8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises,
+- **Census**: 63 canonical words (37 Ruby primitives + 26 `.sp` composed words),
+  8 apps, 29 app words, 35 verified pages, 38 conventions, 32 promises,
   113 style rules, 61 test files.
 - **Twelve gate legs** on `/status`, re-run live on every visit: Grammar, Shape,
   Styles, Layout, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby,
@@ -46,24 +46,21 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Wall 1 is settled and contracted.**
+**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Wall 1 is closed and `page` is retired.**
 
 - **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
   unified reader uncompromised and measures the Wall Ledger: three real walls
   (self-titling documents, `cluster` micro-layout, sayable theme roles) and one
   already fixed (subject/class collision).
-- **Daytrip 0.7.0b (Heal Wall 1) — contract confirmed, ready to build.**
-  `DAYTRIP-0.7.0b.md` holds the ruling: `page` dissolves. The `.frame` becomes the
-  shell (`<!DOCTYPE html>`…`<body>`, chrome, `contents`), and the route `.sp`
-  becomes a word — its filename is the word name, its leading line is the
-  arguments (`subject, title`). A route is a `def` with the `def <name>` line
-  elided, so the grammar never changes. The crux to build: the route's signature
-  runs first (binds subject, computes title), and the body splices **lazily** at
-  `contents` — `stow_contents` today stores pre-rendered nodes, which is the whole
-  bug.
-- **Next session:** implement the 0.7.0b contract on the specimen reader, then run
-  the full gate and the byte-diff harness before migrating the eight apps off the
-  old `page` shape.
+- **Daytrip 0.7.0b (Heal Wall 1) — built and retired.** `page` dissolved: the
+  `.frame` is the shell, the route `.sp` is a word named by its filename, and the
+  leading line is the signature. The eight apps, the studio, the in-memory seeds
+  and the test suite all migrated onto the route signature; the legacy word, its
+  contract, taxonomy entry and favicon promise are gone (canonical words 64→63).
+- **Next session:** Wall 2 — self-titling documents. A route that names a document
+  should take the document's first heading as its title, and `prose` should start
+  where the title ends, so `document, .title` does not render the title twice
+  (`DAYTRIP-0.7.0a.md`).
 
 ## Studio Process & Verification Protocol
 
@@ -112,12 +109,15 @@ Execute every step per round, not at the end of the session:
   adds vocabulary, never syntax. A dot means data; a bare word is language.
   There is no numeric literal. A name is a subject and must exist. Mechanical
   facts are free; judgements belong to the app. A line that states the
-  inferable should not exist. This is a noun language — 57 of 64.
+  inferable should not exist. This is a noun language — 56 of 63.
 - **Every truth has one home** (the grammar in Transform, the vocabulary in
   contracts, the checkers consuming, never mirroring).
 - **A rule must outlive its reason** — when a proscription blocks empowerment
   *and* better code, examine its foundation; it survives only if the
   foundation is worth more than what it blocks.
+- **No sacred cows.** When we decide to improve the language, the corpus
+  follows — apps, studio, tests, docs, and the census number all move together.
+  No legacy code has standing to impede a universal improvement.
 - **Word, or power?** — for every candidate surface, the language grows by
   words; the surface grows only when the answer is honestly "power."
 - **The dogfood is enforced**: built-ins and app words eat the same food, by

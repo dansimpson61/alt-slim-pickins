@@ -56,7 +56,7 @@ class NodeTest < Minitest::Test
   end
 
   def test_the_runtime_builds_nodes_and_nothing_else
-    tree = SlimPickins.evaluate("page \"x\"\n  heading \"Hello\"\n  list\n    item \"one\"\n",
+    tree = SlimPickins.evaluate("\"x\"\n  heading \"Hello\"\n  list\n    item \"one\"\n",
                                 path: 'p.sp', locals: {})
     seen = []
     walk = lambda do |nodes|

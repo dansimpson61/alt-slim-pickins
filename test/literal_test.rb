@@ -22,33 +22,33 @@ class LiteralTest < Minitest::Test
   # --- they are literals where it counts -------------------------------------
 
   def test_false_means_false
-    html = render("page \"P\"\n  field name, required: false\n", name: 'x')
+    html = render("\"P\"\n  field name, required: false\n", name: 'x')
 
     refute_includes html, 'required'
   end
 
   def test_true_means_true
-    html = render("page \"P\"\n  field name, required: true\n", name: 'x')
+    html = render("\"P\"\n  field name, required: true\n", name: 'x')
 
     assert_includes html, 'required="required"'
   end
 
   def test_nil_means_nothing
-    html = render("page \"P\"\n  box open: nil\n    note \"x\"\n")
+    html = render("\"P\"\n  box open: nil\n    note \"x\"\n")
 
     refute_includes html, 'open='
   end
 
   # The silent wrongness this closed: `open: false` rendered `open="open"`.
   def test_a_false_attribute_is_not_rendered
-    html = render("page \"P\"\n  box open: false\n    note \"x\"\n")
+    html = render("\"P\"\n  box open: false\n    note \"x\"\n")
 
     refute_includes html, 'open'
   end
 
   def test_the_guard_can_be_said_false
-    assert_includes render("page \"P\"\n  note \"KEEP\", if: true\n"), 'KEEP'
-    refute_includes render("page \"P\"\n  note \"KEEP\", if: false\n"), 'KEEP'
+    assert_includes render("\"P\"\n  note \"KEEP\", if: true\n"), 'KEEP'
+    refute_includes render("\"P\"\n  note \"KEEP\", if: false\n"), 'KEEP'
   end
 
   # --- and the name position is untouched ------------------------------------

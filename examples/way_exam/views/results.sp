@@ -1,4 +1,4 @@
-page "Exam Results"
+"Exam Results"
   section result, "Score & Verdict"
     card
       choose

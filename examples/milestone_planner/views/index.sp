@@ -1,4 +1,4 @@
-page "Milestone Planner"
+"Milestone Planner"
   card
     title "Roadmap & Project Horizon"
     text "Track development milestones, blocked issues, and task completions across phases."

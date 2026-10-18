@@ -16,14 +16,14 @@ class GateTest < Minitest::Test
 
   def test_a_name_a_word_cannot_take_is_refused_not_rendered_blank
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page p\n  money name\n", p: { name: 40 })
+      render("p\n  money name\n", p: { name: 40 })
     end
     assert_match(/\A`money` takes no name — name\n  form\.sp, line 2\n    money name\z/, error.message)
   end
 
   def test_children_a_word_cannot_hold_are_refused_not_dropped
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page p\n  title \"x\"\n    note \"y\"\n", p: {})
+      render("p\n  title \"x\"\n    note \"y\"\n", p: {})
     end
     assert_match(/\A`title` holds nothing — a `note` has nowhere to go\n  form\.sp, line 2\n    title "x"\z/,
                  error.message)
@@ -31,7 +31,7 @@ class GateTest < Minitest::Test
 
   def test_the_gate_names_the_guard_not_the_argument
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page p\n  when .x\n    note \"y\"\n", p: {})
+      render("p\n  when .x\n    note \"y\"\n", p: {})
     end
     assert_match(/\A`when` belongs inside `choose`\n  form\.sp, line 2\n    when \.x\z/, error.message)
   end
@@ -40,7 +40,7 @@ class GateTest < Minitest::Test
     library = SlimPickins::Library.new(tin: nil,
                                        partials: { test_account_card: "title .name\nmoney name\n" })
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page account\n  test_account_card\n", library: library, account: { name: 'Roth' })
+      render("account\n  test_account_card\n", library: library, account: { name: 'Roth' })
     end
     assert_match(/\A`money` takes no name — name\n  partials\/test_account_card\.sp, line 2\n    money name\z/,
                  error.message)
@@ -49,7 +49,7 @@ class GateTest < Minitest::Test
   def test_a_violating_frame_names_the_frame
     frame = "money name\ncontents\n"
     error = assert_raises(SlimPickins::SyntaxError) do
-      render("page account\n  text \"x\"\n", library: SlimPickins::Library.new(frame: frame),
+      render("account\n  text \"x\"\n", library: SlimPickins::Library.new(frame: frame),
              account: { name: 'Roth' })
     end
     assert_match(/\A`money` takes no name — name\n  frame, line 1\n    money name\z/, error.message)
@@ -57,7 +57,7 @@ class GateTest < Minitest::Test
 
   def test_evaluate_is_gated_too
     assert_raises(SlimPickins::SyntaxError) do
-      SlimPickins.evaluate("page p\n  money name\n", locals: { p: { name: 40 } })
+      SlimPickins.evaluate("p\n  money name\n", locals: { p: { name: 40 } })
     end
   end
 
@@ -69,7 +69,7 @@ class GateTest < Minitest::Test
                               value: subject.fetch(name), kind: nil }, []])
       end
     end
-    html = render("page p\n  stat total\n", library: SlimPickins::Library.new(words: words),
+    html = render("p\n  stat total\n", library: SlimPickins::Library.new(words: words),
                   p: { total: 3 })
     assert_includes html, 'Total'
   end

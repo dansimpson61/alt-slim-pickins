@@ -14,14 +14,14 @@ class CompilationTest < Minitest::Test
   end
 
   def test_a_source_compiles_once_whatever_path_asks
-    source = "page p\n  text \"x\"\n"
+    source = "p\n  text \"x\"\n"
     first = SlimPickins::Compilation.of(source, 'a.sp')
     second = SlimPickins::Compilation.of(source, 'b.sp')
     assert_same first, second
   end
 
   def test_a_violation_is_cached_and_refused_under_each_renders_own_path
-    source = "page p\n  money name\n"
+    source = "p\n  money name\n"
     first = assert_raises(SlimPickins::SyntaxError) do
       SlimPickins.render(source, path: 'a.sp', locals: { p: { name: 40 } })
     end
@@ -34,7 +34,7 @@ class CompilationTest < Minitest::Test
   end
 
   def test_a_sentence_that_will_not_parse_is_not_cached_and_names_each_path
-    source = "page p\n  field name, %bogus%\n"
+    source = "p\n  field name, %bogus%\n"
     first = assert_raises(SlimPickins::SyntaxError) do
       SlimPickins.render(source, path: 'a.sp', locals: { p: {} })
     end
@@ -47,7 +47,7 @@ class CompilationTest < Minitest::Test
   end
 
   def test_clear_empties_the_cache
-    source = "page p\n  text \"x\"\n"
+    source = "p\n  text \"x\"\n"
     first = SlimPickins::Compilation.of(source, 'a.sp')
     SlimPickins::Compilation.clear!
     refute_same first, SlimPickins::Compilation.of(source, 'a.sp')
@@ -59,7 +59,7 @@ class CompilationTest < Minitest::Test
   # byte-identical either way.
   def test_a_partial_renders_identically_whether_cached_or_recompiled
     partial = SlimPickins::Library.new(tin: nil, partials: { test_account_card: "title .name\nmoney .balance\n" })
-    source = "page p\n  each account\n    test_account_card\n"
+    source = "p\n  each account\n    test_account_card\n"
     locals = { p: { accounts: [{ name: 'A', balance: 10 }, { name: 'B', balance: 20 }] } }
 
     warm = SlimPickins.render(source, path: 'x.sp', locals: locals, library: partial)

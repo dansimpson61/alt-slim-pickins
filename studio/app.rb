@@ -101,7 +101,7 @@ end
 get '/' do
   loaded_id = params[:load]
   source = StudioPages.source_for(loaded_id, ui: ui) ||
-           "page \"Slim-Pickins Studio\"\n  heading \"Hello World\"\n"
+           "\"Slim-Pickins Studio\"\n  heading \"Hello World\"\n"
   design = loaded_id ? StudioPages.design_for(loaded_id) : ''
   # `palette` is in `commons`, already measured against this UI's own pages
   # and with `loaded` marked, so the route does not build a second census.
@@ -109,7 +109,7 @@ get '/' do
              editor_title: StudioPages.title_for(loaded_id),
              data: loaded_id ? StudioPages.data_json_for(StudioPages::PAGES[loaded_id]) : '',
              loaded: loaded_id, **commons(active_tab: :pages) }
-  SlimPickins.render(page_source('index.sp'), path: 'index.sp', locals: locals, library: library)
+  SlimPickins.render(page_source('index.sp'), path: File.join(ui.views, 'index.sp'), locals: locals, library: library)
 end
 
 # A word's documentation, served through the language rather than
@@ -134,7 +134,7 @@ get '/docs/:word' do
              editor_title: "Try it: #{params[:word]}",
              data: seedable ? example.data.to_s : '',
              data_note: StudioDocs::DATA_NOTE, **commons(current_word: params[:word], active_tab: :words) }
-  SlimPickins.render(page_source('docs.sp'), path: 'docs.sp', locals: locals, library: library)
+  SlimPickins.render(page_source('docs.sp'), path: File.join(ui.views, 'docs.sp'), locals: locals, library: library)
 end
 
 # A guide is one of this repo's own documents, served through the language
@@ -151,7 +151,7 @@ get '/guides/:name' do
   halt 404, "There is no guide called #{name}." unless document && File.file?(document)
 
   locals = { title: "Guide: #{name}", content: File.read(document), **commons(active_tab: :guides) }
-  SlimPickins.render(page_source('guide.sp'), path: 'guide.sp', locals: locals, library: library)
+  SlimPickins.render(page_source('guide.sp'), path: File.join(ui.views, 'guide.sp'), locals: locals, library: library)
 end
 
 # The checkers' output, served through the language rather than pasted into
@@ -162,7 +162,7 @@ end
 get '/status' do
   results = StudioStatus.run
   locals = { title: 'Status', overview: StudioStatus.overview(results), results: results, **commons }
-  SlimPickins.render(page_source('status.sp'), path: 'status.sp', locals: locals, library: library)
+  SlimPickins.render(page_source('status.sp'), path: File.join(ui.views, 'status.sp'), locals: locals, library: library)
 end
 
 post '/render' do

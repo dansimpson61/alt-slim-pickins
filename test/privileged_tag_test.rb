@@ -9,7 +9,7 @@ class PrivilegedTagTest < Minitest::Test
   end
 
   def test_app_page_using_tag_is_refused
-    source = "page \"Unprivileged\"\n  tag div, class: \"bad\"\n"
+    source = "\"Unprivileged\"\n  tag div, class: \"bad\"\n"
     error = assert_raises(SlimPickins::SyntaxError) do
       SlimPickins.render(source, path: 'test_app.sp')
     end

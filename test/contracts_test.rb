@@ -96,39 +96,39 @@ end
   # What the page alone shows can never work is refused, naming the fix, rather
   # than silently dropped (dan, 2026-10-10). What only the data can show is not.
   def test_a_box_with_written_words_and_children_is_refused
-    assert_complaint(%(page p\n  box "Said"\n    text "child"\n), 'never both, so these lines would never show')
-    assert_empty complaints(%(page p\n  box .notes\n    text "child"\n))
-    assert_empty complaints(%(page p\n  box\n    text "child"\n))
+    assert_complaint(%(p\n  box "Said"\n    text "child"\n), 'never both, so these lines would never show')
+    assert_empty complaints(%(p\n  box .notes\n    text "child"\n))
+    assert_empty complaints(%(p\n  box\n    text "child"\n))
   end
 
   def test_a_heading_that_would_be_a_second_title_is_refused
-    assert_complaint(%(page p\n  section accounts\n    heading "B"\n), '`section` already has a title')
-    assert_complaint(%(page p\n  card "Lit"\n    heading "B"\n), '`card` already has a title')
-    assert_empty complaints(%(page p\n  section\n    heading "B"\n))
-    assert_empty complaints(%(page p\n  card first\n    heading "B"\n))
-    assert_empty complaints(%(page p\n  section accounts\n    title "B"\n))
+    assert_complaint(%(p\n  section accounts\n    heading "B"\n), '`section` already has a title')
+    assert_complaint(%(p\n  card "Lit"\n    heading "B"\n), '`card` already has a title')
+    assert_empty complaints(%(p\n  section\n    heading "B"\n))
+    assert_empty complaints(%(p\n  card first\n    heading "B"\n))
+    assert_empty complaints(%(p\n  section accounts\n    title "B"\n))
   end
 
   # word_graph's "No words matched" sat under sections that named nothing,
   # so it could never show, and it never did, even for a search with no
   # matches. A partial or a `def` is exempt: its caller names the subject.
   def test_empty_with_nothing_named_above_it_is_refused
-    assert_complaint(%(page "Title"\n  section "Words"\n    empty "None"\n), '`empty` has nothing above it that could be empty')
-    assert_empty complaints(%(page "Title"\n  section words, "Words"\n    empty "None"\n))
-    assert_empty complaints(%(page p\n  empty "None"\n))
-    assert_empty complaints(%(page "Title"\n  section .items\n    empty "None"\n))
+    assert_complaint(%("Title"\n  section "Words"\n    empty "None"\n), '`empty` has nothing above it that could be empty')
+    assert_empty complaints(%("Title"\n  section words, "Words"\n    empty "None"\n))
+    assert_empty complaints(%(p\n  empty "None"\n))
+    assert_empty complaints(%("Title"\n  section .items\n    empty "None"\n))
     assert_empty complaints(%(empty "None"\nlist\n)) # a partial's top line
   end
 
   # A table holding `empty` was refused without saying what to do instead.
   def test_a_word_that_may_not_hold_empty_says_where_empty_goes
-    assert_complaint(%(page p\n  table holdings\n    column name\n    empty "None"\n),
+    assert_complaint(%(p\n  table holdings\n    column name\n    empty "None"\n),
                      'Put the `table` inside a `section` and give the section the `empty`')
   end
 
   def test_a_valid_page_has_no_complaints
     source = <<~PAGE
-      page portfolio
+      portfolio
         section holdings
           empty "No holdings yet."
           table holdings

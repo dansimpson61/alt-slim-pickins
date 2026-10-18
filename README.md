@@ -2,7 +2,7 @@
 
 A view language whose grammar stays describable all the way down. It began as
 paper — the first question was what we were building *on* — and it now runs:
-one sentence, sixty-four words, its own stylesheet, and a studio plus a
+one sentence, sixty-three words, its own stylesheet, and a studio plus a
 garden of demonstration apps that speak it (vitals reported live by `ruby bin/census.rb`).
 
 `slim-pickins` is a helper vocabulary layered on Slim. This is the other
@@ -106,7 +106,7 @@ the handoff — live at the root.
   universal slot model, composed words, and the five vocabulary categories.
 - **[CONVENTIONS.md](docs/CONVENTIONS.md)** — what the language decides when you say nothing:
   principles, defaults, and overrides.
-- **[VOCABULARY.md](docs/VOCABULARY.md)** — sixty-four words, seven slots each.
+- **[VOCABULARY.md](docs/VOCABULARY.md)** — sixty-three words, seven slots each.
   slim-pickins owns the vocabulary of web presentation; the app's domain model
   arrives through conventions.
 - **[DESIGN.md](docs/DESIGN.md)** — the grammar. One sentence, one resolution rule,
@@ -205,7 +205,7 @@ opens with the Stretch Exam: *the Editorial & Micro-Layout Publication* — unit
 `doc_reader` and `lore_reader` into one publication-grade reader. `PROJECT.md`'s
 `next_step` says where planning begins.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 64 canonical words (38 Ruby primitives + 26 `.sp` composed words), 8 apps, 29 app words, 35 verified pages, 38 conventions, 33 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 8 apps, 29 app words, 35 verified pages, 38 conventions, 32 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
 

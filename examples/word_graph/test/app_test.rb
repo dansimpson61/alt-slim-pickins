@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require 'rack/test'
 require_relative '../app'
+require_relative '../../../lib/slim_pickins/census'
 
 class WordGraphAppTest < Minitest::Test
   include Rack::Test::Methods
@@ -18,7 +19,7 @@ class WordGraphAppTest < Minitest::Test
     assert last_response.ok?
     assert_includes last_response.body, 'The Word Graph'
     assert_includes last_response.body, 'Total Words'
-    assert_includes last_response.body, '64'
+    assert_includes last_response.body, SlimPickins::Census.words[:total].size.to_s
     assert_includes last_response.body, 'table'
     assert_includes last_response.body, 'column'
     assert_includes last_response.body, 'chart'
