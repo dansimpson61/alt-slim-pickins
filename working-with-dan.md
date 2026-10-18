@@ -486,6 +486,8 @@ working manual that should be better after every session than it was before.
 
 - **A plan's own census parenthetical can be stale — measure the number, not the sentence it sits in.** (observed 2026-10-16). The confirmed Daytrip 0.6.0k plan said "61 `:root` theme roles"; the single `:root` block now holds 65 (four `--grade-*` roles and `--positive`/`--negative` arrived after the 2026-09-26 count of 61). The correction went into the code (`conventions.rb`), the guide (`docs/CONVENTIONS.md`) and the ledger (`WISHLIST.md`), while the dated 2026-09-26 lesson's historical "61" stayed put. The new wrinkle: here the stale number lived in the *plan* rather than a document, and no checker measures "theme roles" at all, so nothing would have caught it — the same bare-number liability, now that the number's home is a plan.
 
+- **"What would we like the code to look like?" is how he closes a design fork — write the target, then test it against a standing claim.** (observed 2026-10-16). On the Wall 1 fork (`page` in the frame vs. the route) he did not pick a mechanism; he asked for the target code and invoked "we claim our grammar does not change, so the opening line should be easy to infer." The design that fell out dissolved the fork rather than choosing a side: `page` vanishes, the frame is the shell, the route is a word named by its filename. The move to reuse: answer "what would we like" with the concrete target, then hold it against what the project already claims is true — the fork resolves itself.
+
 ## Proposed deletions — nothing here yet
 
 
