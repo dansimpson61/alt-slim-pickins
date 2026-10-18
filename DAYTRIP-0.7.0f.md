@@ -56,6 +56,23 @@ delete the standalone app.
    its `body` is the *rest*, so the title is spoken once — the same way a
    self-titling document drops its leading heading.
 
+## The sign-off caught what the gates could not
+
+The first screenshots showed the landing working and five routes broken. One
+app-wide `flank catalog, beside: reading_pane` was being applied to every
+route, and only the landing has those zones — so the document, entry, shelf,
+timeline and search pages auto-flowed their children into the narrow lead
+column and left the companion column empty, and the shelf scattered its three
+sections across both columns. The fix is per-view geometry:
+
+- The flank moved to a per-view `views/index.layout` for the landing.
+- `publication.layout` became a single editorial column bounding `.prose` and
+  `.section`, so a reading page is a bounded column, not a lopsided grid.
+- The flank now spans its `nav` and `footer` too (a small compiler fix), so
+  the chrome stops wrapping into the lead column.
+- The catalog shows relative paths, so the two `README.md` entries are
+  distinguishable.
+
 ## The census moves, all together
 
 | fact | was | is |
@@ -66,7 +83,7 @@ delete the standalone app.
 | canonical words | 63 | 63 |
 | app words | 29 | 29 |
 
-Twelve gate legs + pedagogy green; suite 658 runs / 7,061 assertions / 0
+Twelve gate legs + pedagogy green; suite 658 runs / 7,067 assertions / 0
 failures.
 
 ## Not in this movement
@@ -74,6 +91,6 @@ failures.
 - The visual sign-off: the reader is booted and screenshotted for dan's eye,
   but the Editorial Prose verdict — bounded measure, quiet margins, metadata
   beside prose — is his to render, not a checker's.
-- The two measured findings above (dotted-metric label, and the `measure wide`
+- The measured findings above (dotted-metric label, and the `measure wide`
   role's `--measure: 72ch` losing to `treatment editorial`'s hardcoded `65ch`)
   are recorded for the next roadmap's harvest, not healed here.
