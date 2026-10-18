@@ -207,6 +207,31 @@ module SlimPickins
     end
     singleton_class.alias_method :app_spiff, :app_layout
 
+    # The `.style` file a page is presented by, as a path — `[view].style`
+    # beside it, else the app's companion. The compiled stylesheet is named for
+    # the file's basename, exactly as the `.layout` one is.
+    def self.style_path(view = nil, path: nil)
+      view_style(view, path) || app_style(path)
+    end
+
+    def self.view_style(view, path)
+      dir = path ? File.dirname(path.to_s) : nil
+      return nil unless dir
+
+      names = [view, File.basename(dir)].compact.uniq.reject(&:empty?)
+      names.map { |name| File.join(dir, "#{name}.style") }.find { |file| File.file?(file) }
+    end
+
+    def self.app_style(path)
+      return nil unless path
+
+      dir = File.dirname(path.to_s)
+      inner = File.basename(dir)
+      outer = File.basename(File.dirname(dir))
+      [File.join(dir, "#{inner}.style"),
+       File.join(File.dirname(dir), "#{outer}.style")].find { |file| File.file?(file) }
+    end
+
     # An app's stylesheets live in its own public directory, named for what
     # they style: `public/css/[app].css`, or `public/css/[view].css` for one
     # view. The view's word wins, as it does for tins and Spiffs.

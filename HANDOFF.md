@@ -46,7 +46,7 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Walls 1–3 are closed (`page` retired, documents self-title, `cluster` lands in `.layout`).**
+**Roadmap 0.6 is closed. Roadmap 0.7 is framed; its Wall Ledger is empty (all four walls healed).**
 
 - **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
   unified reader uncompromised and measures the Wall Ledger: three real walls
@@ -68,9 +68,14 @@ so this block cannot go stale without the gate saying so:
   `.sp`-vs-`.layout` question settled on `.layout` per dan's "geometry belongs
   outside substance" ruling; `doc_reader`'s `grid metrics` became a `meta`
   cluster. The census stays at 63 words.
-- **Next session:** Wall 4 — sayable editorial theme roles: `measure: wide`,
-  `gap: loose` exist only as CSS custom properties; the reserved `.style` layer
-  is their home (`DAYTRIP-0.7.0a.md`).
+- **Daytrip 0.7.0e (Heal Wall 4) — built and verified.** The `.style` companion —
+  the fourth canvas — makes theme roles sayable (`measure wide`, `gap loose`,
+  `density airy`), compiled to `:root` custom properties. The register's
+  axiomatic `theme_roles` entry moved from recording an absence to naming the
+  home.
+- **Next session:** assemble the unified publication reader from the paper's
+  files (`.frame`, `.sp`, `.layout`, `.style` in `DAYTRIP-0.7.0a.md`), rendered
+  live against the Editorial Prose archetype — then retire `lore_reader`.
 
 ## Studio Process & Verification Protocol
 

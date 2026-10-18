@@ -14,6 +14,7 @@ require_relative 'slim_pickins/builder'
 require_relative 'slim_pickins/partial_word'
 require_relative 'slim_pickins/taxonomy'
 require_relative 'slim_pickins/compiler/layout'
+require_relative 'slim_pickins/compiler/style'
 
 module SlimPickins
   module_function

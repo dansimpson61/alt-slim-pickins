@@ -20,9 +20,9 @@ module SlimPickins
   # Grades are BLUESKY's four: :structural (the tree decides), :shape (the
   # value's class decides), :domain (the app must be asked) and :axiomatic (the
   # design's own standing decisions). The fourth grade has **one entry, and it
-  # records an absence** — the theme owns 65 roles and no page can say one.
-  # That absence is the reason a style language is the next thing this project
-  # needs, and it is registered here so it cannot be forgotten.
+  # names the theme** — the `.style` companion is where the theme's roles become
+  # sayable (`measure wide`, `gap loose`), and this entry records that home so
+  # the boundary cannot be forgotten.
   #
   # Every entry also names its **principle** (2026-10-04, on a sandbox branch).
   # The register grew one word at a time, so it was filed by what triggers a
@@ -314,12 +314,12 @@ module SlimPickins
 
       # --- axiomatic: the design's own standing decisions --------------------
       Convention.new(name: :theme_roles,
-                     when_silent: 'a page wants a different measure, density or emphasis',
-                     decides: 'NOTHING — the theme owns 65 roles and no page can say one. ' \
-                              'This is the absent grade, registered so it cannot be forgotten',
-                     file: 'lib/slim_pickins/assets/slim-pickins.css', marker: '--measure',
+                     when_silent: 'a surface says `measure wide`, `gap loose` or `density airy`',
+                     decides: 'the theme role, from the `.style` companion\'s token scale, ' \
+                              'compiled to a `:root` custom property',
+                     file: 'lib/slim_pickins/compiler/style.rb', marker: 'MEASURE_TOKENS',
                      inference: nil,
-                     override: 'none exists — a word must carry it, or an app word through the hatch',
+                     override: 'say a different token, or say none — the theme\'s defaults stand',
                      principle: :theme_owns_look,
                      grade: :axiomatic, owned_by: :page)
     ].freeze

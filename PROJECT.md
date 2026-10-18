@@ -3,15 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 Walls 1–3 closed: `page` is retired, documents title themselves,
-  and `cluster` lays out a wrapping inline row of metadata. The cluster settled
-  on `.layout` (a zone posture, not a word) per dan's "geometry belongs outside
-  substance" ruling — the census stays at 63 words. `doc_reader`'s `grid
-  metrics` became a `meta` cluster, certified by byte-diff as the one changed
-  page. Twelve gate legs + pedagogy green, 665 runs / 7,118 assertions / 0
-  failures.
+  Roadmap 0.7's Wall Ledger is empty: all four walls healed — `page` dissolved,
+  documents title themselves, `cluster` lands in `.layout`, and theme roles are
+  sayable in the `.style` companion. The exam's next movement is assembly: the
+  unified reader built from the paper's files, then the visual sign-off and
+  `lore_reader`'s retirement. Twelve gate legs + pedagogy green, 667 runs /
+  7,130 assertions / 0 failures.
 last_touched: 2026-10-18
-next_step: 'Wall 4 — sayable editorial theme roles: `measure: wide`, `gap: loose` exist only as CSS custom properties; the reserved `.style` layer is their home (DAYTRIP-0.7.0a).'
+next_step: 'Assemble the unified publication reader from the paper''s files (DAYTRIP-0.7.0a): the `.frame`, `.sp`, `.layout` and `.style` drafted there rendered live, unmodified, against the Editorial Prose archetype — then retire `lore_reader` (Roadmap 0.7, definition of success).'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

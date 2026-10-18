@@ -76,12 +76,19 @@ walls, one already fixed, one framing decision:
    per dan's "geometry belongs outside substance" ruling. The census stays at
    63 words.
 
-4. **Sayable editorial theme roles.** `measure: wide`, `gap: loose` — the theme
-   roles exist only as CSS custom properties; no sentence can speak them. The
-   reserved `.style` layer is this wall's home.
+4. **Sayable editorial theme roles — healed.** The `.style` companion — the
+   fourth canvas — makes theme roles sayable: `measure wide`, `gap loose`,
+   `density airy` compile to the `:root` custom properties the base theme
+   owns. Built in [DAYTRIP-0.7.0e.md](DAYTRIP-0.7.0e.md); the register's
+   axiomatic `theme_roles` entry moved from recording an absence to naming the
+   home.
 
 *(Subject/class collision was named in the 0.7.0a brief and is **not** a wall —
 measured already fixed.)*
+
+**The Wall Ledger is empty.** All four walls are healed at the structural layer;
+what remains for the exam is the assembly of the unified reader from the paper's
+files, and the visual sign-off.
 
 ## How 0.7 arrived at this question
 

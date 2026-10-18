@@ -698,6 +698,7 @@ module SlimPickins
 
       inferred_stylesheets.each { |path| in_head(Node[:stylesheet, { path: path }, []]) }
       layout_stylesheet_url.each { |url| in_head(Node[:stylesheet, { path: url }, []]) }
+      style_stylesheet_url.each { |url| in_head(Node[:stylesheet, { path: url }, []]) }
 
       value, empty, body = about(name) do
         heading = (title.is_a?(Proc) ? title.call : title)
@@ -725,6 +726,15 @@ module SlimPickins
       return [] unless path
 
       ["/assets/#{File.basename(path, File.extname(path))}.css"]
+    end
+
+    # The compiled `.style` beside this route, linked after the base theme and
+    # the `.layout` so its `:root` roles override the theme's defaults.
+    def style_stylesheet_url
+      path = @library && Library.style_path(view_name, path: @path)
+      return [] unless path
+
+      ["/assets/#{File.basename(path, File.extname(path))}.style.css"]
     end
 
     private

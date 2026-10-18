@@ -751,9 +751,11 @@ back to `nil`.
 
 A template cannot specify ad-hoc pixel widths, font sizes, or colors. The base
 stylesheet owns 65 `:root` theme roles (`--measure`, `--gap`, `--ink`,
-`--surface`, and status tokens) across 113 style rules, and spatial composition
-lives in `.layout` files. When a concept requires distinct visual treatment, a
-word or variant carries it.
+`--surface`, and status tokens) across 113 style rules, spatial composition
+lives in `.layout` files, and theme roles become sayable in the `.style`
+companion — `measure wide`, `gap loose`, `density airy` — compiled to `:root`
+custom properties that override the theme's defaults. When a concept requires
+distinct visual treatment, a word, a variant, or a `.style` role carries it.
 
 ---
 

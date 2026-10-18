@@ -110,6 +110,29 @@ class SpiffTest < Minitest::Test
     assert_includes css, 'align-items: center;'
   end
 
+  def test_style_compiles_theme_roles_to_root_custom_properties
+    source = <<~STYLE
+      publication editorial
+        measure wide
+        gap loose
+        density airy
+    STYLE
+
+    css = SlimPickins::Style.compile(source)
+
+    assert_includes css, ':root {'
+    assert_includes css, '--measure: 72ch;'
+    assert_includes css, '--gap: 1.5rem;'
+    assert_includes css, '--lead: 1.7;'
+  end
+
+  def test_an_unknown_style_token_is_refused
+    error = assert_raises(ArgumentError) do
+      SlimPickins::Style.compile("publication editorial\n  measure enormous\n")
+    end
+    assert_match(/Unknown measure token/, error.message)
+  end
+
   def test_theme_custom_token_injection
     custom_air = { custom_wide: '5rem' }
     source = <<~DESIGN

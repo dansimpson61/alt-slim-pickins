@@ -25,16 +25,17 @@ sixty-three canonical words (37 Ruby primitives and 26 `.sp` composed words),
 with every subject resolvable. What a template means is checkable before it
 renders.
 
-## The three canvases: `.frame`, `.sp`, and `.layout`
+## The four canvases: `.frame`, `.sp`, `.layout`, and `.style`
 
-An application separates its views across three canvases, each with a single
+An application separates its views across four canvases, each with a single
 job and all speaking the same indentation grammar:
 
 | Canvas | File | Role |
 |---|---|---|
 | **Frame** | `views/<app>.frame` | The outer document chrome: navigation, shell landmarks, footer, and `contents` marking where each route's body goes. |
 | **Substance** | `views/<route>.sp` | The route-level template expressing domain content as a clean outline, plus composed words authored with `def`. |
-| **Layout** | `<app>.layout` | The spatial companion stylesheet declaring how zones sit in space (`horizon`, `flank`, `stack`, `grid`), compiled to fluid CSS Grid and container queries. |
+| **Layout** | `<app>.layout` | The spatial companion stylesheet declaring how zones sit in space (`horizon`, `flank`, `stack`, `cluster`), compiled to fluid CSS Grid and container queries. |
+| **Style** | `<app>.style` | The theme-role companion declaring sayable theme roles (`measure wide`, `gap loose`, `density airy`), compiled to `:root` custom properties. |
 
 ### 1. The frame (`views/doc_reader.frame`)
 
@@ -490,8 +491,9 @@ grammar, in four shapes:
 Every presentational token lives in `:root` across 113 style rules in the base
 stylesheet (`lib/slim_pickins/assets/slim-pickins.css`). Visual presentation
 belongs to the theme's semantic roles, to a word's declared variants (`note
-quiet`, `badge ok`), and to `.layout` spatial declarations — never to inline
-`style:` attributes or utility classes.
+quiet`, `badge ok`), to `.layout` spatial declarations, and to sayable `.style`
+roles (`measure wide`, `gap loose`) — never to inline `style:` attributes or
+utility classes.
 
 ## The five vocabulary categories
 
@@ -569,9 +571,9 @@ template.**
 
 - **The word carries the presentation; the argument carries the domain.**
   `money .market_value` means *present this value as money*.
-- **Three canvases, three jobs.** Document chrome lives in `.frame`, domain
-  substance and composed words live in `.sp`, and spatial posture lives in
-  `.layout`.
+- **Four canvases, four jobs.** Document chrome lives in `.frame`, domain
+  substance and composed words live in `.sp`, spatial posture lives in
+  `.layout`, and sayable theme roles live in `.style`.
 - **A line that states the inferable should not exist.** That which can be
   inferred from the subject, the tree depth, or the value's class is inferred
   by convention.

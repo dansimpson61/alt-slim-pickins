@@ -106,7 +106,7 @@ class InstrumentsTest < Minitest::Test
     assert_equal claimed.sort, claimed.uniq.sort, 'an Inference function is claimed by two entries'
   end
 
-  def test_every_grade_is_represented_and_the_axiomatic_one_records_its_absence
+  def test_every_grade_is_represented_and_the_axiomatic_one_names_the_theme
     %i[structural shape domain axiomatic].each do |grade|
       refute_empty SlimPickins::Conventions.by_grade(grade),
                    "nothing registers the `#{grade}` grade"
@@ -114,8 +114,9 @@ class InstrumentsTest < Minitest::Test
 
     axiomatic = SlimPickins::Conventions.by_grade(:axiomatic)
 
-    assert_equal 1, axiomatic.size, 'the axiomatic grade should hold exactly one entry — the absence itself'
-    assert_match(/NOTHING/, axiomatic.first.decides)
+    assert_equal 1, axiomatic.size, 'the axiomatic grade should hold exactly one entry — the theme itself'
+    assert_equal :theme_roles, axiomatic.first.name
+    assert_match(/`.style`/, axiomatic.first.decides)
   end
 
   def test_a_word_that_declares_an_inference_is_registered

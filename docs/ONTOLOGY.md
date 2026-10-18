@@ -28,7 +28,7 @@ three orthogonal planes:
 | 2. COMPOSITION & SPATIAL PLANE (The Canvases)                                     |
 |    - frame         : Document envelope chrome (.frame, formerly .tin)             |
 |    - layout        : Spatial companion stylesheet (.layout, formerly .spiff)      |
-|    - style         : [Reserved Future Layer] Micro-layout & theme roles           |
+|    - style         : Theme-role companion (.style) — sayable theme roles     |
 |    - substance     : Route-level body template (.sp) answering routes             |
 +-----------------------------------------------------------------------------------+
 | 3. MECHANICAL INVARIANT PLANE (The Instruments of Truth)                          |
@@ -79,9 +79,11 @@ domain substance:
    The spatial companion stylesheet language. A `.layout` file declares how elements sit in
    space (`horizon`, `flank`, `stack`, `grid`) using the language's own indentation grammar,
    compiling down to container queries and fluid CSS grid without runtime footprint.
-3. **`style` (Reserved Future Layer)**:
-   A future layer reserved for micro-layout, component-level aesthetic tokens, and theme roles,
-   maintaining the separation between macro-layout and visual styling.
+3. **`style` (`.style`)**:
+   The theme-role companion. A surface declares its theme roles — `measure wide`,
+   `gap loose`, `density airy` — and the compiler maps them to the `:root` custom
+   properties the base theme already owns. It separates *macro-layout* (`.layout`)
+   from *sayable theme roles* (`.style`).
 4. **`substance` (`.sp`)**:
    The route-level template that answers an HTTP request. Substance templates express domain
    knowledge and data without document boilerplate or layout scaffolding.

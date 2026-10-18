@@ -54,6 +54,10 @@ module DocReader
         SlimPickins::Layout.compiled_stylesheet(
           File.read(File.expand_path('doc_reader.layout', __dir__)),
           provenance: 'automatically from examples/doc_reader/doc_reader.layout')
+      elsif params[:file] == 'doc_reader.style.css'
+        SlimPickins::Style.compiled_stylesheet(
+          File.read(File.expand_path('doc_reader.style', __dir__)),
+          provenance: 'automatically from examples/doc_reader/doc_reader.style')
       else
         halt 404, "There is no asset called #{params[:file]}."
       end

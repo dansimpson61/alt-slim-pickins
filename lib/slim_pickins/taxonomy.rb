@@ -140,8 +140,8 @@ module SlimPickins
       style: SystemTerm.new(
         name: :style,
         plane: :spatial,
-        summary: 'Reserved styling layer',
-        definition: 'The reserved future layer for micro-layout, component styling, and theme roles.'
+        summary: 'Theme-role companion',
+        definition: 'The theme-role companion (.style), compiling sayable theme roles (measure, gap, density) to :root custom properties.'
       ),
       substance: SystemTerm.new(
         name: :substance,
