@@ -13,11 +13,11 @@ require_relative 'uis/words'
 require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
-require_relative '../examples/lore_reader/lib/lore'
+require_relative '../examples/publication/lib/lore'
 require_relative '../examples/way_exam/lib/exam'
 require_relative '../examples/milestone_planner/lib/planner'
 require_relative '../examples/word_graph/lib/graph'
-require_relative '../examples/doc_reader/lib/shelf'
+require_relative '../examples/publication/lib/shelf'
 
 
 # The palette: the repo's own real pages, offered to the playground as
@@ -66,9 +66,6 @@ module StudioPages
     'dashboard/partials/unreviewed_card' => 'examples/dashboard/views/partials/unreviewed_card.sp',
     'roth/controls' => 'examples/roth/views/controls.sp',
     'roth/partials/report' => 'examples/roth/views/partials/report.sp',
-    'lore_reader/index' => 'examples/lore_reader/views/index.sp',
-    'lore_reader/entry' => 'examples/lore_reader/views/entry.sp',
-    'lore_reader/partials/lore_card' => 'examples/lore_reader/views/partials/lore_card.sp',
     'way_exam/index' => 'examples/way_exam/views/index.sp',
     'way_exam/results' => 'examples/way_exam/views/results.sp',
     'way_exam/partials/question_card' => 'examples/way_exam/views/partials/question_card.sp',
@@ -81,13 +78,15 @@ module StudioPages
     'word_graph/shapes' => 'examples/word_graph/views/shapes.sp',
     'word_graph/matrix' => 'examples/word_graph/views/matrix.sp',
     'word_graph/partials/word_card' => 'examples/word_graph/views/partials/word_card.sp',
-    'doc_reader/index' => 'examples/doc_reader/views/index.sp',
-    'doc_reader/shelf' => 'examples/doc_reader/views/shelf.sp',
-    'doc_reader/audiences' => 'examples/doc_reader/views/audiences.sp',
-    'doc_reader/document' => 'examples/doc_reader/views/document.sp',
-    'doc_reader/search' => 'examples/doc_reader/views/search.sp',
-    'doc_reader/partials/document_card' => 'examples/doc_reader/views/partials/document_card.sp',
-    'doc_reader/partials/documents_list' => 'examples/doc_reader/views/partials/documents_list.sp'
+    'publication/index' => 'examples/publication/views/index.sp',
+    'publication/shelf' => 'examples/publication/views/shelf.sp',
+    'publication/document' => 'examples/publication/views/document.sp',
+    'publication/search' => 'examples/publication/views/search.sp',
+    'publication/timeline' => 'examples/publication/views/timeline.sp',
+    'publication/entry' => 'examples/publication/views/entry.sp',
+    'publication/partials/document_card' => 'examples/publication/views/partials/document_card.sp',
+    'publication/partials/documents_list' => 'examples/publication/views/partials/documents_list.sp',
+    'publication/partials/entry_card' => 'examples/publication/views/partials/entry_card.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
 
@@ -212,11 +211,10 @@ module StudioPages
     File.join(ROOT, 'examples', 'portfolio', 'views'),
     File.join(ROOT, 'examples', 'dashboard', 'views'),
     File.join(ROOT, 'examples', 'roth', 'views'),
-    File.join(ROOT, 'examples', 'lore_reader', 'views'),
     File.join(ROOT, 'examples', 'way_exam', 'views'),
     File.join(ROOT, 'examples', 'milestone_planner', 'views'),
     File.join(ROOT, 'examples', 'word_graph', 'views'),
-    File.join(ROOT, 'examples', 'doc_reader', 'views')
+    File.join(ROOT, 'examples', 'publication', 'views')
   ].freeze
 
 
@@ -441,16 +439,6 @@ module StudioPages
                            has_projects: true,
                            projects: [{ 'path' => 'alt-slim-pickins', 'purpose' => 'Exploring a view DSL' }],
                            lore: 'Be clear and kind.')
-    when 'examples/lore_reader/views/index.sp'
-      lore = LoreReader::Lore.load
-      { 'stats' => lore.stats, 'entries' => lore.all.first(5).map(&:to_h), 'q' => '' }
-    when 'examples/lore_reader/views/entry.sp'
-      lore = LoreReader::Lore.load
-      { 'entry' => lore.all.first.to_h }
-    when 'examples/lore_reader/views/partials/lore_card.sp'
-      lore = LoreReader::Lore.load
-      entry = lore.all.first.to_h
-      entry.merge('entry' => entry)
     when 'examples/way_exam/views/index.sp'
       questions = WayExam::Exam.questions.map do |q|
         {
@@ -514,8 +502,8 @@ module StudioPages
       graph = WordGraph::Graph.instance
       w = graph.find('table')
       w.to_h.merge('word' => w.to_h)
-    when %r{\Aexamples/doc_reader/views/}
-      doc_reader_locals(File.basename(rel, '.sp'))
+    when %r{\Aexamples/publication/views/}
+      publication_locals(File.basename(rel, '.sp'))
     else
       {}
     end
@@ -523,25 +511,31 @@ module StudioPages
 
   end
 
-  # doc_reader's payload, from the shelf its routes serve. Neither a document
-  # nor a shelf is a Struct, so each is named field by field; a document's
-  # content rides only where a page reads it, or every list would carry the
-  # whole repository.
-  def self.doc_reader_locals(page)
-    shelf = DocReader::Shelf.of
+  # publication's payload, from the shelf and lore its routes serve. Neither a
+  # document nor a shelf is a Struct, so each is named field by field; a
+  # document's content rides only where a page reads it, or every list would
+  # carry the whole repository. An entry is a Struct, so it serialises as-is.
+  def self.publication_locals(page)
+    shelf = Publication::Shelf.of
     primer = shelf.find('primer')
+    lore = Publication::Lore.load
     case page
     when 'index'
       { 'docs' => shelf.without_history.map { |doc| plain_document(doc) },
         'selected_doc' => plain_document(primer, content: true) }
-    when 'shelf', 'audiences' then { 'shelf' => plain_shelf(shelf) }
+    when 'shelf' then { 'shelf' => plain_shelf(shelf) }
     when 'document' then { 'document' => plain_document(primer, content: true) }
     when 'search'
       results = shelf.without_history.matching('scope')
       { 'query' => { 'q' => 'scope', 'include_history' => false,
                      'results' => results.map { |doc| plain_document(doc) } } }
+    when 'timeline' then { 'entries' => lore.all.map(&:to_h), 'q' => '' }
+    when 'entry' then { 'entry' => lore.all.first.to_h }
     when 'document_card' then plain_document(primer)
     when 'documents_list' then { 'documents' => shelf.users.map { |doc| plain_document(doc) } }
+    when 'entry_card'
+      entry = lore.all.first.to_h
+      entry.merge('entry' => entry)
     else {}
     end
   end

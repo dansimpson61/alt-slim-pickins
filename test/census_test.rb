@@ -19,7 +19,7 @@ class CensusTest < Minitest::Test
 
     assert_includes apps, :portfolio
     assert_includes apps, :roth
-    assert_includes apps, :lore_reader
+    assert_includes apps, :publication
     assert_includes apps, :way_exam
     assert_includes apps, :milestone_planner
     assert_includes apps, :word_graph

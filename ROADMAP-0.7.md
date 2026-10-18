@@ -86,9 +86,13 @@ walls, one already fixed, one framing decision:
 *(Subject/class collision was named in the 0.7.0a brief and is **not** a wall —
 measured already fixed.)*
 
-**The Wall Ledger is empty.** All four walls are healed at the structural layer;
-what remains for the exam is the assembly of the unified reader from the paper's
-files, and the visual sign-off.
+**The Wall Ledger is empty, and the paper is now live.** All four walls are
+healed at the structural layer, and the unified reader is assembled from the
+paper's files in [DAYTRIP-0.7.0f.md](DAYTRIP-0.7.0f.md): `examples/publication`
+serves the paper's `.frame`/`.sp`/`.layout`/`.style` unmodified, reads both
+documents and entries, and the standalone `lore_reader` is retired (8→7 apps).
+What remains for the exam is one condition: the visual sign-off — the booted
+reader inspected against the Editorial Prose archetype.
 
 ## How 0.7 arrived at this question
 

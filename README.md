@@ -205,9 +205,9 @@ opens with the Stretch Exam: *the Editorial & Micro-Layout Publication* — unit
 `doc_reader` and `lore_reader` into one publication-grade reader. `PROJECT.md`'s
 `next_step` says where planning begins.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 8 apps, 29 app words, 35 verified pages, 38 conventions, 32 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 7 apps, 29 app words, 34 verified pages, 38 conventions, 32 promises, and 113 style rules.
 
-Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/lore_reader/app.rb`.
+Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/publication/app.rb`.
 
 The gate — twelve legs and the suite, run in the order `StudioStatus::LEGS`
 names them, which is the one home for that list:

@@ -1,4 +1,4 @@
-query, "Search the documents"
+query, "Search the publication"
   form to: "/search", method: get
     group "Look for"
       field q

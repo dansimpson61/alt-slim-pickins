@@ -37,7 +37,7 @@ job and all speaking the same indentation grammar:
 | **Layout** | `<app>.layout` | The spatial companion stylesheet declaring how zones sit in space (`horizon`, `flank`, `stack`, `cluster`), compiled to fluid CSS Grid and container queries. |
 | **Style** | `<app>.style` | The theme-role companion declaring sayable theme roles (`measure wide`, `gap loose`, `density airy`), compiled to `:root` custom properties. |
 
-### 1. The frame (`views/doc_reader.frame`)
+### 1. The frame (`views/publication.frame`)
 
 Written once per application (or overridden per page as `views/<route>.frame`),
 the frame is the shell every route wears — chrome and the `contents` slot, no
@@ -45,12 +45,12 @@ envelope word — and the route never names it:
 
 ```frame
 nav
-  link home, "Doc Reader"
+  link home, "Reading"
   link shelf
-  link audiences
+  link timeline
   link search
 contents
-footer "Every document this repository is explained in, read as a reader meets it."
+footer "Every document and every lesson, read as a reader meets them."
 ```
 
 ### 2. The route word (`views/index.sp`)
@@ -60,7 +60,7 @@ A route is a word named by its filename: its leading line is the signature
 regions to short, focused composed words defined with `def`:
 
 ```sp
-"Doc Reader"
+"The Publication"
   catalog docs, "Documents"
   reading_pane selected_doc
 
@@ -77,13 +77,13 @@ def reading_pane document
     prose markdown, .content
 ```
 
-### 3. The spatial layout (`doc_reader.layout`)
+### 3. The spatial layout (`publication.layout`)
 
 Instead of scattering grid classes into `.sp` templates, a `.layout` file
 declares the spatial posture of the zones named in the template:
 
 ```text
-surface doc_reader
+surface publication
   stage
     air generous
     flank catalog, beside: reading_pane, balance: subordinate, collapse: tight
@@ -93,7 +93,7 @@ surface doc_reader
     cadence compact
 
   zone reading_pane
-    frame lifted
+    frame flat
     treatment editorial
 ```
 
@@ -537,7 +537,7 @@ The language ships with its own live authoring environment on port `4580`
 (`classic` and `workbench` UIs):
 
 - **The Shelf:** Organizes the 63 canonical words across the five vocabulary
-  categories, alongside the 8 example applications (35 verified pages) and the
+  categories, alongside the 7 example applications (34 verified pages) and the
   project guides.
 - **The Work Area:** Evaluates `.sp` source and JSON data payloads live as you
   type, displaying Visual and HTML outputs side by side.

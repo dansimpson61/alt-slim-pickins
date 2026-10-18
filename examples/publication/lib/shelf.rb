@@ -10,7 +10,7 @@ require_relative '../../../lib/slim_pickins/markdown'
 # every page in this app says as little as it can and lets the domain answer.
 # So the domain is where the care goes — what each object is called, how each
 # value is presented, and what a collection of them is.
-module DocReader
+module Publication
   # The app contract, said once per class. A page asks an object `label_for`
   # and `format_for`; the fixtures answer by hanging a method on each object,
   # and this answers by declaring it on the class the objects share.

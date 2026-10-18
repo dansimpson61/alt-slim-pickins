@@ -7,11 +7,11 @@ class DemandRound2Test < Minitest::Test
   # --- G1: Library#render ----------------------------------------------------
 
   def test_library_render_renders_view_directly
-    lib = SlimPickins::Library.from('examples/lore_reader/views')
-    lore = Struct.new(:id, :date, :author, :title, :body, :words, :tags).new(
-      '2026-08-29-1', '2026-08-29', 'Claude', 'Test Entry', 'Body prose', ['page'], ['tag']
+    lib = SlimPickins::Library.from('examples/publication/views')
+    entry = Struct.new(:id, :date, :author, :title, :body, :words, :tags, :reading_minutes).new(
+      '2026-08-29-1', '2026-08-29', 'Claude', 'Test Entry', 'Body prose', ['page'], ['tag'], 1
     )
-    html = lib.render(:entry, locals: { entry: lore })
+    html = lib.render(:entry, locals: { entry: entry })
     assert_includes html, 'Test Entry'
     assert_includes html, 'Body prose'
   end

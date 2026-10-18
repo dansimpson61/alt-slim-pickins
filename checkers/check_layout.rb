@@ -153,9 +153,9 @@ module SpiffCheck
   end
 
   EXAMPLES = {
-    'surface' => Source.new(spiff: "surface doc_reader\n  stage\n    flank catalog, beside: reading_pane\n",
-                            fragment: "surface doc_reader\n  stage\n    flank catalog, beside: reading_pane"),
-    'stage' => Source.new(spiff: "surface doc_reader\n  stage\n    air generous\n" \
+    'surface' => Source.new(spiff: "surface publication\n  stage\n    flank catalog, beside: reading_pane\n",
+                            fragment: "surface publication\n  stage\n    flank catalog, beside: reading_pane"),
+    'stage' => Source.new(spiff: "surface publication\n  stage\n    air generous\n" \
                                   "    flank catalog, beside: reading_pane, balance: subordinate\n",
                           fragment: "stage\n    air generous\n    flank catalog, beside: reading_pane, balance: subordinate"),
     'horizon' => Source.new(spiff: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
@@ -167,23 +167,23 @@ module SpiffCheck
     'collapse' => Source.new(spiff: "surface workbench, kind: shell\n  horizon library, editor, output\n" \
                                      "    posture shelf, workspace, mirror\n    collapse roomy\n",
                              fragment: "collapse roomy"),
-    'flank' => Source.new(spiff: "surface doc_reader\n  stage\n" \
+    'flank' => Source.new(spiff: "surface publication\n  stage\n" \
                                   "    flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy\n",
                           fragment: "flank catalog, beside: reading_pane, balance: subordinate, collapse: cozy"),
-    'stack' => Source.new(spiff: "surface doc_reader\n  stage\n    stack overview, details, air: generous\n",
+    'stack' => Source.new(spiff: "surface publication\n  stage\n    stack overview, details, air: generous\n",
                           fragment: "stack overview, details, air: generous"),
-    'zone' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n    cadence compact\n",
+    'zone' => Source.new(spiff: "surface publication\n  stage\n  zone catalog\n    frame quiet\n    cadence compact\n",
                          fragment: "zone catalog\n    frame quiet\n    cadence compact"),
-    'air' => Source.new(spiff: "surface doc_reader\n  stage\n    air generous\n", fragment: 'air generous'),
-    'balance' => Source.new(spiff: "surface doc_reader\n  stage\n" \
+    'air' => Source.new(spiff: "surface publication\n  stage\n    air generous\n", fragment: 'air generous'),
+    'balance' => Source.new(spiff: "surface publication\n  stage\n" \
                                     "    flank catalog, beside: reading_pane, balance: subordinate\n",
                             fragment: "flank catalog, beside: reading_pane, balance: subordinate"),
-    'frame' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n", fragment: 'frame quiet'),
-    'cadence' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    cadence compact\n",
+    'frame' => Source.new(spiff: "surface publication\n  stage\n  zone catalog\n    frame quiet\n", fragment: 'frame quiet'),
+    'cadence' => Source.new(spiff: "surface publication\n  stage\n  zone catalog\n    cadence compact\n",
                             fragment: 'cadence compact'),
-    'cluster' => Source.new(spiff: "surface doc_reader\n  stage\n  zone meta\n    cluster\n",
+    'cluster' => Source.new(spiff: "surface publication\n  stage\n  zone meta\n    cluster\n",
                             fragment: 'cluster'),
-    'treatment' => Source.new(spiff: "surface doc_reader\n  stage\n  zone reading_pane\n    treatment editorial\n",
+    'treatment' => Source.new(spiff: "surface publication\n  stage\n  zone reading_pane\n    treatment editorial\n",
                               fragment: 'treatment editorial'),
     'scroll' => Source.new(spiff: "surface workbench, kind: shell\n  zone library\n    scroll internal\n",
                            fragment: 'scroll internal'),

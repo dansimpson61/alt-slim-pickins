@@ -3,16 +3,16 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7's Wall Ledger is empty: all four walls healed — `page` dissolved,
-  documents title themselves, `cluster` lands in `.layout`, and theme roles are
-  sayable in the `.style` companion. The exam's next movement is assembly: the
-  unified reader built from the paper's files, then the visual sign-off and
-  `lore_reader`'s retirement. Twelve gate legs + pedagogy green, 667 runs /
-  7,130 assertions / 0 failures.
+  Roadmap 0.7's Wall Ledger is empty, and the paper is now live: the unified
+  publication reader (`examples/publication`) reads both documents and entries,
+  serves the paper's `.frame`/`.sp`/`.layout`/`.style` unmodified, and the
+  standalone `lore_reader` is retired (8→7 apps). What remains is the visual
+  sign-off: the booted reader inspected against the Editorial Prose archetype.
+  Twelve gate legs + pedagogy green, 658 runs / 7,061 assertions / 0 failures.
 last_touched: 2026-10-18
-next_step: 'Assemble the unified publication reader from the paper''s files (DAYTRIP-0.7.0a): the `.frame`, `.sp`, `.layout` and `.style` drafted there rendered live, unmodified, against the Editorial Prose archetype — then retire `lore_reader` (Roadmap 0.7, definition of success).'
+next_step: 'Visual sign-off: boot the publication reader (`ruby examples/publication/app.rb`, port 4590) and hold it against the Editorial Prose archetype — a bounded measure, quiet margins, metadata clustered beside prose — then close Roadmap 0.7 (DAYTRIP-0.7.0f, definition of success).'
 kind: project
-run: ruby examples/roth/app.rb
+run: ruby examples/publication/app.rb
 docs: README.md
 related:
 - slim-pickins

@@ -5,4 +5,4 @@ card
   each word, from: .words
     badge .to_s
   actions
-    link entry, "Read entry", to: "/entries/#{entry.id}"
+    link entry, "Read", to: "/entries/#{entry.id}"

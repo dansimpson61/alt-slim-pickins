@@ -1,4 +1,4 @@
-surface doc_reader
+surface publication
   stage
     air generous
     flank catalog, beside: reading_pane, balance: subordinate, collapse: tight
@@ -8,8 +8,11 @@ surface doc_reader
     cadence compact
 
   zone reading_pane
-    frame lifted
+    frame flat
     treatment editorial
 
   zone meta
+    cluster
+
+  zone chips
     cluster

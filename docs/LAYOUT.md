@@ -27,7 +27,7 @@ Layout uses `SlimPickins::Transform` directly:
 ```text
 Substance (.sp)                      Layout (.layout)
 ──────────────────────────────       ──────────────────────────────────────────
-catalog docs, "Documents"            surface doc_reader
+catalog docs, "Documents"            surface publication
 reading_pane selected_doc              stage
                                          air generous
                                          flank catalog, beside: reading_pane, balance: subordinate
@@ -68,11 +68,11 @@ Every word in Layout models exemplary lexical practice:
   ```
 - **Example**:
   ```
-  surface doc_reader
+  surface publication
     stage
       flank catalog, beside: reading_pane, balance: subordinate
   ```
-  (No `kind:` — `doc_reader` is a document surface; its zones flow directly
+  (No `kind:` — `publication` is a document surface; its zones flow directly
   under `body`, which is also why the compiled rule below targets `body`
   rather than a wrapper element that doesn't exist in this page's markup.)
 
@@ -98,7 +98,7 @@ Every word in Layout models exemplary lexical practice:
 ```css
 html {
   container-type: inline-size;
-  container-name: doc_reader;
+  container-name: publication;
 }
 
 body {
@@ -249,7 +249,7 @@ grid-template-columns: minmax(14rem, 19rem) minmax(0, 3fr) minmax(0, 2fr);
 ```css
 html {
   container-type: inline-size;
-  container-name: doc_reader;
+  container-name: publication;
 }
 
 body {
@@ -268,7 +268,7 @@ body .reading_pane {
   grid-column: 2;
 }
 
-@container doc_reader (inline-size < 48rem) {
+@container publication (inline-size < 48rem) {
   body {
     grid-template-columns: 100%;
   }

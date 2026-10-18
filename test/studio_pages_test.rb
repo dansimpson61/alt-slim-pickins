@@ -168,9 +168,6 @@ class StudioPagesTest < Minitest::Test
     'examples/dashboard/views/confirm_archive.sp' => 'Moves the project into archive',
     'examples/dashboard/views/partials/queue.sp' => 'needs attention',
     'examples/dashboard/views/partials/unreviewed_card.sp' => 'awaiting judgment',
-    'examples/lore_reader/views/index.sp' => 'The Lore Reader',
-    'examples/lore_reader/views/entry.sp' => 'Back to Timeline',
-    'examples/lore_reader/views/partials/lore_card.sp' => 'Read entry',
     'examples/way_exam/views/index.sp' => 'The Way Exam',
     'examples/way_exam/views/results.sp' => 'Exam Results',
     'examples/way_exam/views/partials/question_card.sp' => 'Correct',
@@ -183,13 +180,15 @@ class StudioPagesTest < Minitest::Test
     'examples/word_graph/views/shapes.sp' => 'Structural Shapes of alt-slim-pickins',
     'examples/word_graph/views/matrix.sp' => 'Vocabulary Connection Matrix',
     'examples/word_graph/views/partials/word_card.sp' => 'table',
-    'examples/doc_reader/views/index.sp' => 'Doc Reader',
-    'examples/doc_reader/views/shelf.sp' => 'The shelf',
-    'examples/doc_reader/views/audiences.sp' => 'Who each document is for',
-    'examples/doc_reader/views/document.sp' => 'The Way',
-    'examples/doc_reader/views/search.sp' => 'Search the documents',
-    'examples/doc_reader/views/partials/document_card.sp' => 'PRIMER.md',
-    'examples/doc_reader/views/partials/documents_list.sp' => 'README.md'
+    'examples/publication/views/index.sp' => 'The Publication',
+    'examples/publication/views/shelf.sp' => 'Who each document is for',
+    'examples/publication/views/document.sp' => 'The Way',
+    'examples/publication/views/search.sp' => 'Search the publication',
+    'examples/publication/views/timeline.sp' => 'The Timeline',
+    'examples/publication/views/entry.sp' => 'Words mentioned',
+    'examples/publication/views/partials/document_card.sp' => 'PRIMER.md',
+    'examples/publication/views/partials/documents_list.sp' => 'README.md',
+    'examples/publication/views/partials/entry_card.sp' => 'Read'
   }.freeze
 
 

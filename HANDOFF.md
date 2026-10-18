@@ -31,8 +31,8 @@ Every number below is measured by `bin/census.rb` and held by `check_vitals.rb`,
 so this block cannot go stale without the gate saying so:
 
 - **Census**: 63 canonical words (37 Ruby primitives + 26 `.sp` composed words),
-  8 apps, 29 app words, 35 verified pages, 38 conventions, 32 promises,
-  113 style rules, 61 test files.
+  7 apps, 29 app words, 34 verified pages, 38 conventions, 32 promises,
+  113 style rules, 59 test files.
 - **Twelve gate legs** on `/status`, re-run live on every visit: Grammar, Shape,
   Styles, Layout, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby,
   Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are
@@ -46,7 +46,7 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7 is framed; its Wall Ledger is empty (all four walls healed).**
+**Roadmap 0.6 is closed. Roadmap 0.7's Wall Ledger is empty and the unified reader is assembled; only the visual sign-off remains.**
 
 - **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
   unified reader uncompromised and measures the Wall Ledger: three real walls
@@ -73,9 +73,16 @@ so this block cannot go stale without the gate saying so:
   `density airy`), compiled to `:root` custom properties. The register's
   axiomatic `theme_roles` entry moved from recording an absence to naming the
   home.
-- **Next session:** assemble the unified publication reader from the paper's
-  files (`.frame`, `.sp`, `.layout`, `.style` in `DAYTRIP-0.7.0a.md`), rendered
-  live against the Editorial Prose archetype — then retire `lore_reader`.
+- **Daytrip 0.7.0f (Assemble) — built and verified.** `examples/doc_reader`
+  became `examples/publication`, reading both documents and entries; the paper's
+  `publication.frame`/`.layout`/`.style` plus `document`/`entry`/`shelf`/
+  `timeline`/`search`/`index` render live; `lore_reader` retired (8→7 apps,
+  35→34 verified pages, 61→59 test files).
+- **Next session:** the visual sign-off — boot `ruby examples/publication/app.rb`
+  (port 4590) and hold it against the Editorial Prose archetype, then close
+  Roadmap 0.7. Two measured findings for the 0.8 harvest: a dotted metric
+  (`metric .reading_minutes`) loses its domain label, and `measure wide`'s
+  `--measure: 72ch` loses to `treatment editorial`'s hardcoded `65ch`.
 
 ## Studio Process & Verification Protocol
 

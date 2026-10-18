@@ -1,0 +1,7 @@
+nav
+  link home, "Reading"
+  link shelf
+  link timeline
+  link search
+contents
+footer "Every document and every lesson, read as a reader meets them."

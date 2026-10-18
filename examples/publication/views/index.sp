@@ -1,4 +1,4 @@
-"Doc Reader"
+"The Publication"
   catalog docs, "Documents"
   reading_pane selected_doc
 
