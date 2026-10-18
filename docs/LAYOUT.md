@@ -412,6 +412,34 @@ gap: 0.35rem;
 
 ---
 
+### `cluster`
+- **What it is**: The wrapping inline row — a component's small facts laid out
+  side by side, wrapping onto the next line when the measure runs out.
+- **What it is for**: The posture `grid metrics` cannot give metadata: a uniform
+  row of `time`, `metric` and `badge` facts beside prose, not responsive tiles
+  above it. The author's `.sp` only names the group (a `def` whose box carries
+  the name); this posture is the geometry, and geometry lives here in `.layout`,
+  never as a substance word.
+- **How to use it**: `cluster` (the gap is the theme's uniform `--gap`; saying a
+  different gap is a sayable theme role, Wall 4's home).
+- **Example**:
+  ```
+  zone meta
+    cluster
+  ```
+**Compiled CSS**
+
+```css
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap, 0.75rem);
+  align-items: center;
+}
+```
+
+---
+
 ### `treatment`
 - **What it is**: Typographic temperament and optical measure.
 - **What it is for**: Applying optical measure (reading line length), line-height, and typographic rhythm.

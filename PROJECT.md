@@ -3,15 +3,15 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 Walls 1 and 2 closed: `page` is retired and documents title
-  themselves. A route that names a document without a title takes the
-  document's first heading as its `<title>` and `<h1>`, and `prose markdown`
-  begins where that heading ends — `document, .title` is now just `document`,
-  and the byte-diff certified the one changed page as exactly the removal of
-  the demoted duplicate heading. Twelve gate legs + pedagogy green, 664 runs /
-  7,108 assertions / 0 failures.
+  Roadmap 0.7 Walls 1–3 closed: `page` is retired, documents title themselves,
+  and `cluster` lays out a wrapping inline row of metadata. The cluster settled
+  on `.layout` (a zone posture, not a word) per dan's "geometry belongs outside
+  substance" ruling — the census stays at 63 words. `doc_reader`'s `grid
+  metrics` became a `meta` cluster, certified by byte-diff as the one changed
+  page. Twelve gate legs + pedagogy green, 665 runs / 7,118 assertions / 0
+  failures.
 last_touched: 2026-10-18
-next_step: 'Wall 3 — inline metadata cluster micro-layout: a wrapping inline row of small facts (`time`, `metric`, `badge`) with a uniform gap, settling whether `cluster` lives in `.sp` or `.layout` (DAYTRIP-0.7.0a).'
+next_step: 'Wall 4 — sayable editorial theme roles: `measure: wide`, `gap: loose` exist only as CSS custom properties; the reserved `.style` layer is their home (DAYTRIP-0.7.0a).'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

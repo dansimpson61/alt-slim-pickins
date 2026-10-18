@@ -851,12 +851,6 @@ module SlimPickins
         rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for .layout or styling layer.'
       },
       {
-        name: :cluster,
-        category: :skeleton,
-        role: 'Horizontal wrapping flex layout capability with uniform gap',
-        rationale: 'Geometry/scaffolding belongs outside substance templates; consideration for .layout or styling layer.'
-      },
-      {
         name: :sidebar,
         category: :skeleton,
         role: 'Two-element arrangement where one element has intrinsic width and the other fills remaining space',

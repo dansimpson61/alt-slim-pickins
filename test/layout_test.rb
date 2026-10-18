@@ -94,6 +94,22 @@ class SpiffTest < Minitest::Test
     assert_equal '', SlimPickins::Spiff.compile("   \n\n  ")
   end
 
+  def test_zone_cluster_compiles_a_wrapping_inline_row
+    source = <<~DESIGN
+      surface doc_reader
+        zone meta
+          cluster
+    DESIGN
+
+    css = SlimPickins::Spiff.compile(source)
+
+    assert_includes css, '.meta {'
+    assert_includes css, 'display: flex;'
+    assert_includes css, 'flex-wrap: wrap;'
+    assert_includes css, 'gap: var(--gap, 0.75rem);'
+    assert_includes css, 'align-items: center;'
+  end
+
   def test_theme_custom_token_injection
     custom_air = { custom_wide: '5rem' }
     source = <<~DESIGN

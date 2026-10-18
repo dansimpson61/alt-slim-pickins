@@ -495,6 +495,7 @@ module SlimPickins
           @zone_name = zone_name
           @properties = {}
           @child_gap = nil
+          @clustered = false
           @scroll_kind = nil
           @presence_kind = nil
           @focus_kind = nil
@@ -523,6 +524,15 @@ module SlimPickins
             raise ArgumentError, "Unknown cadence token: `#{kind}`"
           end
           @child_gap = gap
+        end
+
+        # `cluster` is the wrapping inline row — the component-level sibling of
+        # `grid`'s column tracks, but declared here in `.layout` because it is
+        # pure geometry (the author's `.sp` only names the group of facts). The
+        # gap is the theme's uniform `--gap`; saying `gap tight`/`loose` is a
+        # sayable theme role, which is Wall 4's home.
+        def cluster
+          @clustered = true
         end
 
         def treatment(kind)
@@ -587,6 +597,17 @@ module SlimPickins
                 display: flex;
                 flex-direction: column;
                 gap: #{@child_gap};
+              }
+            CSS
+          end
+
+          if @clustered
+            rules << <<~CSS.strip
+              #{target} {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--gap, 0.75rem);
+                align-items: center;
               }
             CSS
           end

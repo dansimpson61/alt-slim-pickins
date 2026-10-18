@@ -46,7 +46,7 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Walls 1 and 2 are closed (`page` retired, documents self-title).**
+**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Walls 1–3 are closed (`page` retired, documents self-title, `cluster` lands in `.layout`).**
 
 - **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
   unified reader uncompromised and measures the Wall Ledger: three real walls
@@ -62,9 +62,15 @@ so this block cannot go stale without the gate saying so:
   `prose markdown, .content` begins after it — `document, .title` is now
   `document`. The byte-diff certified the one changed page as exactly the
   removal of the demoted duplicate `<h2>`.
-- **Next session:** Wall 3 — inline metadata cluster micro-layout: a wrapping
-  inline row of small facts (`time`, `metric`, `badge`) with a uniform gap,
-  settling whether `cluster` lives in `.sp` or `.layout` (`DAYTRIP-0.7.0a.md`).
+- **Daytrip 0.7.0d (Heal Wall 3) — built and verified.** `cluster` is a
+  `.layout` zone posture — a wrapping inline row of small facts with the theme's
+  uniform gap — and the author names the group in `.sp` with a `def`. The
+  `.sp`-vs-`.layout` question settled on `.layout` per dan's "geometry belongs
+  outside substance" ruling; `doc_reader`'s `grid metrics` became a `meta`
+  cluster. The census stays at 63 words.
+- **Next session:** Wall 4 — sayable editorial theme roles: `measure: wide`,
+  `gap: loose` exist only as CSS custom properties; the reserved `.style` layer
+  is their home (`DAYTRIP-0.7.0a.md`).
 
 ## Studio Process & Verification Protocol
 

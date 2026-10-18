@@ -1,6 +1,6 @@
 document
   card
-    grid metrics, columns: 3
+    meta
       metric word_count
       metric reading_minutes
       metric changed_on
@@ -17,3 +17,7 @@ document
       each chapter
         item .text
   prose markdown, .content
+
+def meta
+  box
+    contents

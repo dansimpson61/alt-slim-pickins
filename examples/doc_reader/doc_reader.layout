@@ -10,3 +10,6 @@ surface doc_reader
   zone reading_pane
     frame lifted
     treatment editorial
+
+  zone meta
+    cluster

@@ -181,6 +181,8 @@ module SpiffCheck
     'frame' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    frame quiet\n", fragment: 'frame quiet'),
     'cadence' => Source.new(spiff: "surface doc_reader\n  stage\n  zone catalog\n    cadence compact\n",
                             fragment: 'cadence compact'),
+    'cluster' => Source.new(spiff: "surface doc_reader\n  stage\n  zone meta\n    cluster\n",
+                            fragment: 'cluster'),
     'treatment' => Source.new(spiff: "surface doc_reader\n  stage\n  zone reading_pane\n    treatment editorial\n",
                               fragment: 'treatment editorial'),
     'scroll' => Source.new(spiff: "surface workbench, kind: shell\n  zone library\n    scroll internal\n",

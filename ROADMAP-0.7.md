@@ -68,11 +68,13 @@ walls, one already fixed, one framing decision:
    the one changed page as exactly the removal of the demoted duplicate
    `<h2>`.
 
-3. **Inline metadata cluster micro-layout.** There is no `cluster` — a wrapping
-   inline row of small facts — in `.sp` or `.layout`. The author's only posture
-   for metadata today is `grid metrics` (responsive tiles), the wrong shape for
-   facts beside prose. The daytrip also settles whether `cluster` lives in
-   `.sp` or `.layout`.
+3. **Inline metadata cluster micro-layout — healed.** `cluster` is a `.layout`
+   zone posture — a wrapping inline row of small facts with the theme's uniform
+   gap — and the `.sp` author names the group with a `def`. Built in
+   [DAYTRIP-0.7.0d.md](DAYTRIP-0.7.0d.md): `doc_reader`'s `grid metrics` became
+   a `meta` cluster, and the `.sp`-vs-`.layout` question settled on `.layout`
+   per dan's "geometry belongs outside substance" ruling. The census stays at
+   63 words.
 
 4. **Sayable editorial theme roles.** `measure: wide`, `gap: loose` — the theme
    roles exist only as CSS custom properties; no sentence can speak them. The
