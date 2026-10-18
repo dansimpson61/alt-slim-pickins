@@ -2,10 +2,10 @@
 
 **An odd-numbered roadmap. It leads with the forward eye.**
 
-Status: **drafted 2026-10-16, awaiting dan's confirmation.** Written by the
-steward from the Wall Ledger in [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md). It is a
-roadmap and not a plan: it names the question and what success looks like,
-leaving the step-by-step work to daytrips, the way 0.4, 0.5, and 0.6 did.
+Status: **confirmed by dan 2026-10-16.** Written by the steward from the Wall
+Ledger in [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md). It is a roadmap and not a
+plan: it names the question and what success looks like, leaving the
+step-by-step work to daytrips, the way 0.4, 0.5, and 0.6 did.
 
 > **Ataovy dian-tana: jerena ny aloha, todihana ny afara.**
 >
@@ -50,12 +50,13 @@ four conditions (STRETCH_PROTOCOL, *Visual Sign-Off & Gate Lock*):
 Measured in [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md), not assumed. Three real
 walls, one already fixed, one framing decision:
 
-1. **Landing evaluation vs. the page-in-frame ontology (the framing decision).**
-   `page document, .title` works today *in the route*; the 0.6 ontology moved
-   `page` *into the frame*; and the frame shape cannot shift the subject for the
-   substance it splices. Either the frame learns to shift the subject, or the
-   ontology admits `page` in the route. **dan's call**, and the first daytrip,
-   because every other wall's sentences are written on top of it.
+1. **Landing evaluation vs. the page-in-frame ontology — ruled.** `page`
+   dissolves: it was one word fusing the document envelope with the route's
+   subject/title declaration. The `.frame` takes the envelope, the route `.sp`
+   becomes the word (filename = word name, leading line = arguments), and the
+   grammar never changes — a route is a `def` with its `def <name>` line elided.
+   The confirmed contract is [DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md), the first
+   daytrip to build, because every other wall's sentences are written on top of it.
 
 2. **Self-titling documents.** `page document` should take the document's first
    heading as its title, and `prose` should start where the title ends. Today

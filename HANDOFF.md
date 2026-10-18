@@ -46,22 +46,24 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7 is framed and awaiting dan's confirmation.**
-It is an odd roadmap, so it opens with a paper **Stretch Exam** (see
-`docs/STRETCH_PROTOCOL.md`).
+**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Wall 1 is settled and contracted.**
 
 - **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
   unified reader uncompromised and measures the Wall Ledger: three real walls
-  (self-titling documents, `cluster` micro-layout, sayable theme roles), one
-  already fixed (subject/class collision), and one framing decision — **Wall 1:
-  landing evaluation vs. the page-in-frame ontology.** `page document, .title`
-  works today only in the route (Shape A); the 0.6 ontology moved `page` into the
-  frame (Shape B), and Shape B cannot shift the subject for the substance it
-  splices. The guides teach Shape B; every app still writes Shape A;
-  `check_pedagogy.rb` checks only the guides, so the drift is invisible to the gate.
-- **Next:** dan rules on Wall 1 (does `page` live in the frame or the route?),
-  which opens Daytrip 0.7.0b to heal it. `ROADMAP-0.7.md` holds the question and
-  the success conditions.
+  (self-titling documents, `cluster` micro-layout, sayable theme roles) and one
+  already fixed (subject/class collision).
+- **Daytrip 0.7.0b (Heal Wall 1) — contract confirmed, ready to build.**
+  `DAYTRIP-0.7.0b.md` holds the ruling: `page` dissolves. The `.frame` becomes the
+  shell (`<!DOCTYPE html>`…`<body>`, chrome, `contents`), and the route `.sp`
+  becomes a word — its filename is the word name, its leading line is the
+  arguments (`subject, title`). A route is a `def` with the `def <name>` line
+  elided, so the grammar never changes. The crux to build: the route's signature
+  runs first (binds subject, computes title), and the body splices **lazily** at
+  `contents` — `stow_contents` today stores pre-rendered nodes, which is the whole
+  bug.
+- **Next session:** implement the 0.7.0b contract on the specimen reader, then run
+  the full gate and the byte-diff harness before migrating the eight apps off the
+  old `page` shape.
 
 ## Studio Process & Verification Protocol
 

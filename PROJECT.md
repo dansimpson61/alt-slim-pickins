@@ -3,15 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 opened with the Stretch Exam paper: the unified doc_reader+lore_reader
-  publication reader drafted uncompromised in DAYTRIP-0.7.0a.md, the Wall Ledger
-  measured — three real walls (self-titling documents, cluster micro-layout, sayable
-  theme roles), one already fixed (subject/class collision), and one framing decision
-  (landing evaluation vs. the page-in-frame ontology) — and ROADMAP-0.7.md framed,
-  awaiting dan's confirmation. Twelve gate legs green, 656 runs / 7,156 assertions /
-  0 failures, 35 pages verified.
+  Roadmap 0.7 opened with the Stretch Exam paper (DAYTRIP-0.7.0a.md, the Wall
+  Ledger) and ROADMAP-0.7.md framed. Wall 1 is settled: `page` dissolves — the
+  .frame becomes the shell, the route .sp becomes the word (filename = word name,
+  leading line = arguments), a grammar-preserving convention. DAYTRIP-0.7.0b.md
+  holds the confirmed contract, ready to build. Twelve gate legs green, 656 runs /
+  7,156 assertions / 0 failures, 35 pages verified.
 last_touched: 2026-10-16
-next_step: 'dan reviews DAYTRIP-0.7.0a.md and ROADMAP-0.7.md; his ruling on Wall 1 (does `page` live in the frame or the route?) opens Daytrip 0.7.0b to heal it.'
+next_step: 'Build Daytrip 0.7.0b: heal Wall 1 per the DAYTRIP-0.7.0b.md contract — the frame becomes the shell, the route .sp becomes the word (filename = word name, leading line = arguments), and the title crosses via a lazy splice at `contents`.'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md
@@ -47,6 +46,7 @@ A working view language: one-sentence grammar, 64 words, its own stylesheet,
 and eight example apps plus the studio that speak it. See [README.md](README.md)
 — its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md)
 closed on 2026-10-16, unifying the language's taxonomy and teaching. Roadmap 0.7
-is now framed in [ROADMAP-0.7.md](ROADMAP-0.7.md) — the Editorial & Micro-Layout
-Publication Stretch Exam — and its opening paper is [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md);
-`next_step` above is the live resume point.
+is framed in [ROADMAP-0.7.md](ROADMAP-0.7.md) — the Editorial & Micro-Layout
+Publication Stretch Exam. Its opening paper is [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md)
+(the Wall Ledger), and Wall 1's confirmed contract is
+[DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md); `next_step` above is the live resume point.
