@@ -137,6 +137,26 @@ class MarkdownTest < Minitest::Test
     assert_equal '<p>First paragraph</p><p>Second paragraph</p>', SlimPickins::Markdown.plain(source)
   end
 
+  # --- self-titling: drop the leading heading ------------------------------
+
+  def test_drop_leading_heading_removes_the_first_heading
+    assert_equal '<p>Body</p>', SlimPickins::Markdown.render("# Title\n\nBody", drop_leading_heading: true)
+  end
+
+  def test_drop_leading_heading_keeps_what_comes_before_the_heading
+    assert_equal '<p>Intro</p><p>Body</p>',
+                 SlimPickins::Markdown.render("Intro\n\n# Title\nBody", drop_leading_heading: true)
+  end
+
+  def test_drop_leading_heading_drops_only_the_first_heading
+    assert_equal '<h2>Second</h2>',
+                 SlimPickins::Markdown.render("# First\n# Second", drop_leading_heading: true)
+  end
+
+  def test_without_the_flag_the_leading_heading_renders
+    assert_equal '<h2>Title</h2><p>Body</p>', SlimPickins::Markdown.render("# Title\nBody")
+  end
+
   def test_images_render_as_img_tags
     assert_equal '<p><img src="pic.png" alt="A photo"></p>', render('![A photo](pic.png)')
   end

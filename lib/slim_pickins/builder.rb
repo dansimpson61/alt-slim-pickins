@@ -26,6 +26,7 @@ module SlimPickins
       @contents = nil       # the page's own nodes, while a tin renders
       @head_nodes = []      # words that belong in <head>, wherever they are said
       @nodes = []
+      @self_titled = false  # the route took its title from the subject's own `title`
       @family_definitions = {}
       define_app_words
     end
@@ -597,6 +598,10 @@ module SlimPickins
     # --- the context accessors the words read ------------------------------
 
     def empty_active? = @empty_active
+    # Whether the route took its title from the subject's own `title` rather
+    # than being told one — the self-titling rule `prose` reads, so markdown
+    # prose begins after the heading that is already spoken as the page title.
+    def self_titled? = @self_titled
     def head_nodes = @head_nodes
 
     def in_head(node) = @head_nodes << node
@@ -695,7 +700,17 @@ module SlimPickins
       layout_stylesheet_url.each { |url| in_head(Node[:stylesheet, { path: url }, []]) }
 
       value, empty, body = about(name) do
-        heading = (title.is_a?(Proc) ? title.call : title) || Inference.label(name)
+        heading = (title.is_a?(Proc) ? title.call : title)
+        # Self-titling: a route that names a subject and says no title takes
+        # the subject's own `title` — a document's first heading — and marks
+        # itself, so markdown prose begins after that heading rather than
+        # repeating it. A subject that answers no `title` falls through to the
+        # humanised name.
+        if heading.nil? && name && subject.has?(:title)
+          heading = subject.fetch(:title)
+          @self_titled = true unless heading.nil?
+        end
+        heading ||= Inference.label(name)
         wrapped_in_frame(&block)
       end
 

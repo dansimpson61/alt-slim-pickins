@@ -46,7 +46,7 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Wall 1 is closed and `page` is retired.**
+**Roadmap 0.6 is closed. Roadmap 0.7 is framed; Walls 1 and 2 are closed (`page` retired, documents self-title).**
 
 - **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
   unified reader uncompromised and measures the Wall Ledger: three real walls
@@ -57,10 +57,14 @@ so this block cannot go stale without the gate saying so:
   leading line is the signature. The eight apps, the studio, the in-memory seeds
   and the test suite all migrated onto the route signature; the legacy word, its
   contract, taxonomy entry and favicon promise are gone (canonical words 64→63).
-- **Next session:** Wall 2 — self-titling documents. A route that names a document
-  should take the document's first heading as its title, and `prose` should start
-  where the title ends, so `document, .title` does not render the title twice
-  (`DAYTRIP-0.7.0a.md`).
+- **Daytrip 0.7.0c (Heal Wall 2) — built and verified.** Self-titling documents:
+  a route that names a document without a title takes its first heading, and
+  `prose markdown, .content` begins after it — `document, .title` is now
+  `document`. The byte-diff certified the one changed page as exactly the
+  removal of the demoted duplicate `<h2>`.
+- **Next session:** Wall 3 — inline metadata cluster micro-layout: a wrapping
+  inline row of small facts (`time`, `metric`, `badge`) with a uniform gap,
+  settling whether `cluster` lives in `.sp` or `.layout` (`DAYTRIP-0.7.0a.md`).
 
 ## Studio Process & Verification Protocol
 

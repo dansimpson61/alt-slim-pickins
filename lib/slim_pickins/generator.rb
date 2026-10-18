@@ -336,7 +336,13 @@ module SlimPickins
     # --- Content ----------------------------------------------------------
 
     def prose(attrs, _children)
-      html = attrs[:notation] == :plain ? Markdown.plain(attrs[:body]) : Markdown.render(attrs[:body])
+      html = if attrs[:notation] == :plain
+               Markdown.plain(attrs[:body])
+             elsif attrs[:drop_leading_heading]
+               Markdown.render(attrs[:body], drop_leading_heading: true)
+             else
+               Markdown.render(attrs[:body])
+             end
       @out << %(<div class="#{token(:prose)}">#{html}</div>)
     end
 

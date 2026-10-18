@@ -34,22 +34,33 @@ module SlimPickins
     INDENTED = %r{\A\s+\S}
     NESTED_ITEM = %r{\A\s+[-*]\s+}
 
-    def render(source)
+    # `drop_leading_heading` serves self-titling documents: a page that has
+    # taken a document's first heading as its title renders the rest, so the
+    # heading is not spoken twice. The first heading *block* is dropped
+    # wherever it sits — the domain's `title` is the first heading in the
+    # content, not only one that happens to open it.
+    def render(source, drop_leading_heading: false)
       stripped = source.to_s.sub(/\A---\s*\n.*?\n---\s*(\n|\z)/m, '')
-      blocks(CGI.escapeHTML(stripped)).join
+      blocks(CGI.escapeHTML(stripped), drop_leading_heading: drop_leading_heading).join
     end
 
-    def blocks(escaped)
+    def blocks(escaped, drop_leading_heading: false)
       lines = escaped.lines
       out = []
       i = 0
+      dropping = drop_leading_heading
       while i < lines.size
         if FENCE.match?(lines[i].chomp)
           body, i = fence_body(lines, i)
           out << fenced(body)
         else
           block, i = gather_block(lines, i)
-          out << block_of(block) unless block.empty?
+          next if block.empty?
+          if dropping && block.match?(HEADING)
+            dropping = false
+            next
+          end
+          out << block_of(block)
         end
       end
       out

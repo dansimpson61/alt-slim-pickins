@@ -276,6 +276,48 @@ class DefTest < Minitest::Test
     refute_match(/NoMethodError/, error.message)
   end
 
+  # --- self-titling documents (Roadmap 0.7, Wall 2) -------------------------
+
+  def test_a_route_that_names_a_subject_alone_takes_the_subjects_title
+    source = <<~SP
+      document
+        prose markdown, .content
+    SP
+    html = render(source, locals: { document: { title: 'The Way', content: "# The Way\nA primer." } })
+
+    assert_includes html, '<title>The Way</title>'
+    assert_includes html, '<h1>The Way</h1>'
+    assert_includes html, '<div class="prose"><p>A primer.</p></div>'
+    refute_includes html, '<h2>The Way</h2>'
+  end
+
+  def test_a_route_that_titles_itself_reads_a_plain_subjects_title
+    source = <<~SP
+      document
+        prose markdown, .content
+    SP
+    paper = Object.new
+    paper.define_singleton_method(:title) { 'The Way' }
+    paper.define_singleton_method(:content) { "# The Way\nA primer." }
+    html = render(source, locals: { document: paper })
+
+    assert_includes html, '<title>The Way</title>'
+    assert_includes html, '<div class="prose"><p>A primer.</p></div>'
+    refute_includes html, '<h2>The Way</h2>'
+  end
+
+  def test_an_explicit_title_still_renders_the_leading_heading_in_prose
+    source = <<~SP
+      document, "A document"
+        prose markdown, .content
+    SP
+    html = render(source, locals: { document: { title: 'The Way', content: "# The Way\nA primer." } })
+
+    assert_includes html, '<title>A document</title>'
+    assert_includes html, '<h1>A document</h1>'
+    assert_includes html, '<div class="prose"><h2>The Way</h2><p>A primer.</p></div>'
+  end
+
   def test_def_parameters_do_not_leak_into_caller_blocks
     source = <<~SP
       def framed, name

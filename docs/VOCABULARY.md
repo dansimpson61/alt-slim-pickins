@@ -188,7 +188,9 @@ prose plain, .raw_notes
 A Ruby primitive. The single word in the language that renders formatted prose
 markup (`markdown` or `plain`). Because `prose` escapes raw HTML first and only
 emits tags from known markdown patterns, templates never need an unescaped
-output sigil.
+output sigil. On a page that titles itself — a route that names a subject and
+took its `title` without being told — `prose markdown` begins after that leading
+heading, so the title is spoken once, not twice.
 
 ### `snippet`
 

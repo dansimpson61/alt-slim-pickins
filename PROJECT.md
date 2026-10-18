@@ -3,15 +3,15 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 Wall 1 fully closed: `page` is retired. The eight apps and the
-  studio moved onto the route signature, and the transform reads every signature
-  shape (a quoted title, a subject, a subject-and-title, a lone dotted title).
-  The legacy word, its contract, taxonomy entry and favicon promise are gone —
-  canonical words 64→63, primitives 38→37, promises 33→32, document shape 4→3.
-  The byte-diff certified the shape migration byte-identical before the word came
-  out. Twelve gate legs + pedagogy green, 657 runs / 7,084 assertions / 0 failures.
+  Roadmap 0.7 Walls 1 and 2 closed: `page` is retired and documents title
+  themselves. A route that names a document without a title takes the
+  document's first heading as its `<title>` and `<h1>`, and `prose markdown`
+  begins where that heading ends — `document, .title` is now just `document`,
+  and the byte-diff certified the one changed page as exactly the removal of
+  the demoted duplicate heading. Twelve gate legs + pedagogy green, 664 runs /
+  7,108 assertions / 0 failures.
 last_touched: 2026-10-18
-next_step: 'Wall 2 — self-titling documents: a route that names a document should take the document''s first heading as its title, and `prose` should start where the title ends, so `document, .title` does not render the title twice (DAYTRIP-0.7.0a).'
+next_step: 'Wall 3 — inline metadata cluster micro-layout: a wrapping inline row of small facts (`time`, `metric`, `badge`) with a uniform gap, settling whether `cluster` lives in `.sp` or `.layout` (DAYTRIP-0.7.0a).'
 kind: project
 run: ruby examples/roth/app.rb
 docs: README.md

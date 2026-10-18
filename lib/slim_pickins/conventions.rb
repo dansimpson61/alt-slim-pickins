@@ -83,8 +83,10 @@ module SlimPickins
                      principle: :page_frame, owned_by: :runtime,
                      grade: :structural),
       Convention.new(name: :title, when_silent: 'a route names a subject alone',
-                     decides: 'the `<title>` and the top heading, humanised from the name',
-                     file: 'lib/slim_pickins/builder.rb', marker: 'heading = (title.is_a?(Proc) ? title.call : title) || Inference.label(name)',
+                     decides: 'the `<title>` and the top heading — the subject\'s own title when it has one, ' \
+                              'else the name humanised; and when the subject titles itself, markdown prose ' \
+                              'begins after that heading',
+                     file: 'lib/slim_pickins/builder.rb', marker: 'subject.has?(:title)',
                      inference: nil, override: '`portfolio, "Your retirement"`',
                      principle: :name_as_text, owned_by: :runtime,
                      grade: :structural),

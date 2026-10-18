@@ -160,14 +160,20 @@ which takes precedence over `views/<app>.frame` for that page, or omit the
 A bare name is turned into human words automatically: underscores become spaces
 and the first letter is capitalised (`base_income` reads `"Base income"`).
 
-### `title` — the page's heading comes from its name
+### `title` — the page's heading comes from its subject
 
 **You write** `portfolio.sp`, whose leading line is the bare name `portfolio`
 
 **You get** `<title>Portfolio</title>` and `<h1>Portfolio</h1>`.
 
+When the subject titles itself — it answers `title` — the page takes that
+instead of the humanised name. `document.sp` whose leading line is `document`
+gets `<title>The Way</title>` and `<h1>The Way</h1>` from the document's first
+heading, and `prose markdown, .content` begins after that heading rather than
+repeating it: the title is spoken once.
+
 **To override** — pass the title as the second positional: `portfolio, "Your retirement"`
-renders `"Your retirement"`, and `account, .name` reads the account's own `name`.
+renders `"Your retirement"`, and `document, .title` names the title explicitly.
 
 ### `link_href` — a link's name is its address
 

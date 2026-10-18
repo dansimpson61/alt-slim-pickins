@@ -1,4 +1,4 @@
-document, .title
+document
   card
     grid metrics, columns: 3
       metric word_count

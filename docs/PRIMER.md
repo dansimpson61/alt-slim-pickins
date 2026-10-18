@@ -250,6 +250,7 @@ being asked:
 | Sentence | What it infers | How to override |
 |---|---|---|
 | `portfolio` | Full HTML5 document, `<title>Portfolio</title>`, `<h1>Portfolio</h1>`, outer `.frame` chrome, and base stylesheet | `portfolio, "Your retirement"` |
+| `document` | Full HTML5 document; `<title>` and `<h1>` are the document's first heading, and `prose markdown, .content` begins after it | `document, .title` |
 | `section accounts` | Shifts subject to `accounts`, wraps in `<section class="section section--accounts">`, renders `<h2>Accounts</h2>` | `section accounts, "Linked accounts"` |
 | `each holding` | Reads plural `holdings` (or current collection subject), binds singular `holding`, shifts subject per item | `each holding, from: .taxable_holdings` |
 | `card` (inside `each holding`) | Renders `<article class="card" id="holding-3">`, sets heading depth to `<h3>` | `card id: "featured"` |

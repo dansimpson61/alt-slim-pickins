@@ -253,6 +253,15 @@ emit_node(Node[:each, { name: name }, collected])
     class Prose < Encloses
       contract name: :notation, content: true, shape: :presents, lazy: []
       maps content: :body
+
+      # A self-titled page (its title taken from the subject's first heading)
+      # renders the subject's content without repeating that heading, so
+      # `prose markdown, .content` begins where the title ended.
+      def evaluate
+        attrs = unpack_arguments
+        attrs[:drop_leading_heading] = true if attrs[:notation] == :markdown && @builder.self_titled?
+        emit_node(Node[:prose, attrs, []])
+      end
     end
 
     class Iframe < Says

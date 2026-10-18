@@ -60,9 +60,13 @@ walls, one already fixed, one framing decision:
    eight apps and the studio have migrated onto the route signature, and the
    word, its contract and its docs are gone.
 
-2. **Self-titling documents.** `page document` should take the document's first
-   heading as its title, and `prose` should start where the title ends. Today
-   the author writes `page document, .title` and the title renders twice.
+2. **Self-titling documents — healed.** A route that names a document without
+   a title takes the document's first heading as its `<title>` and `<h1>`, and
+   `prose` starts where that heading ends. Built in
+   [DAYTRIP-0.7.0c.md](DAYTRIP-0.7.0c.md): `document` titles itself, `prose
+   markdown, .content` drops the leading heading, and the byte-diff certified
+   the one changed page as exactly the removal of the demoted duplicate
+   `<h2>`.
 
 3. **Inline metadata cluster micro-layout.** There is no `cluster` — a wrapping
    inline row of small facts — in `.sp` or `.layout`. The author's only posture
