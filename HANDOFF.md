@@ -46,7 +46,7 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.7 is closed and signed off (2026-10-18). The next move is Roadmap 0.8, the backward eye.** The 0.7 rounds are kept in `history/daytrips/` and the closed roadmap in `history/planning/ROADMAP-0.7.md`.
+**Roadmap 0.7 is closed and signed off (2026-10-19). The next move is Roadmap 0.8, the backward eye.** The 0.7 rounds are kept in `history/daytrips/` and the closed roadmap in `history/planning/ROADMAP-0.7.md`.
 
 - **Daytrip 0.7.0a (Paper First) — complete.** Drafts the unified reader
   uncompromised and measures the Wall Ledger: three real walls (self-titling
@@ -74,7 +74,7 @@ so this block cannot go stale without the gate saying so:
   not see — the app-wide flank squeezed every non-landing route into its narrow
   column — and the fix moved the flank to a per-view `index.layout` and made the
   reading routes a bounded column. Dan's Editorial Prose sign-off passed
-  2026-10-18.
+  2026-10-19.
 - **Next session:** frame Roadmap 0.8 (the backward eye / harvest): audit the
   garden and retire what the publication superseded, promote the generalizable
   words and postures 0.7 earned, and heal the two measured findings — a dotted

@@ -122,7 +122,7 @@ organizes into five intuitive categories:
 2. **Skeleton (Structure & Framing)**
    - **Landmarks**: `section`, `aside`, `nav`, `footer`
    - **Containers**: `box`, `card`, `figure`, `group`, `scroll`
-   - **Collections**: `list`, `item`, `table`, `column`, `row`, `grid`, `chart`, `band`, `line`, `level`
+   - **Collections**: `list`, `item`, `table`, `column`, `grid`, `chart`, `band`, `line`, `level`
 3. **Affordances (Controls & Interactions)**
    - **Actions**: `link`, `button`, `actions`, `action`, `tabs`, `tab`
    - **Inputs**: `form`, `field`, `input`, `choice`, `option`, `search`, `checkbox`, `hidden`, `textarea`, `on`
@@ -131,8 +131,7 @@ organizes into five intuitive categories:
    - **Branching**: `choose`, `when`, `otherwise`
    - **Disclosure**: `disclosure`
 5. **Environment (Document & Splicing)**
-   - **Document**: `page`
-   - **Resources**: `stylesheet`, `script`, `iframe`, `tag`
+   - **Resources**: `stylesheet`, `script`, `iframe`
    - **Splicing**: `contents`, `map`
 
 ### Bandpass Filter Diagnostic Model

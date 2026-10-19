@@ -86,11 +86,16 @@ sections across both columns. The fix is per-view geometry:
 Twelve gate legs + pedagogy green; suite 658 runs / 7,067 assertions / 0
 failures.
 
+## The sign-off
+
+Dan gave the Editorial Prose verdict on 2026-10-19: the reader passes, and
+Roadmap 0.7 closes on all four conditions. The verdict came after the
+page-geometry fix above — the app-wide flank had squeezed every non-landing
+route into its narrow column — so the landing's two-pane reader and the
+bounded reading routes were judged together.
+
 ## Not in this movement
 
-- The visual sign-off: the reader is booted and screenshotted for dan's eye,
-  but the Editorial Prose verdict — bounded measure, quiet margins, metadata
-  beside prose — is his to render, not a checker's.
 - The measured findings above (dotted-metric label, and the `measure wide`
   role's `--measure: 72ch` losing to `treatment editorial`'s hardcoded `65ch`)
   are recorded for the next roadmap's harvest, not healed here.

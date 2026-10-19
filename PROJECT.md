@@ -3,13 +3,13 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7 is closed and signed off (2026-10-18): the Stretch Exam passed on
+  Roadmap 0.7 is closed and signed off (2026-10-19): the Stretch Exam passed on
   all four conditions. The unified publication reader (`examples/publication`)
   serves the paper's `.frame`/`.sp`/`.layout`/`.style`, reads both documents and
   entries, and the standalone `lore_reader` is retired (8→7 apps). Twelve gate
   legs + pedagogy green, 658 runs / 7,067 assertions / 0 failures. The next
   roadmap is 0.8, the backward eye.
-last_touched: 2026-10-18
+last_touched: 2026-10-19
 next_step: 'Open Roadmap 0.8 (the backward eye): frame the harvest — audit the garden and retire what the publication superseded, promote the generalizable words and postures 0.7 earned, and heal the two measured findings (a dotted metric loses its domain label; `measure wide` loses to `treatment editorial` hardcoded 65ch).'
 kind: project
 run: ruby examples/publication/app.rb
@@ -46,7 +46,7 @@ A working view language: one-sentence grammar, 63 words, its own stylesheet,
 and seven example apps plus the studio that speak it. See [README.md](README.md)
 — its *How roadmaps go* section governs how roadmaps work. Roadmap 0.6 closed
 on 2026-10-16, unifying the language's taxonomy and teaching. Roadmap 0.7
-closed on 2026-10-18 — the Editorial & Micro-Layout Publication Stretch Exam,
+closed on 2026-10-19 — the Editorial & Micro-Layout Publication Stretch Exam,
 passed — and is kept in [ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md). Its
 rounds are the daytrips in `history/daytrips/`; the closing assembly is
 [DAYTRIP-0.7.0f.md](history/daytrips/DAYTRIP-0.7.0f.md). `next_step` above is

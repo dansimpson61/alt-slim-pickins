@@ -57,7 +57,7 @@ module SlimPickins
         sub_categories: {
           landmarks: 'Document landmark regions (section, aside, nav, footer)',
           containers: 'Surface boundaries, entity wrappers, and viewports (box, card, figure, group, scroll)',
-          collections: 'Sequential collections, tables, and relational grids (list, item, table, column, row, grid, chart, band, line, level)'
+          collections: 'Sequential collections, tables, and relational grids (list, item, table, column, grid, chart, band, line, level)'
         }
       },
       affordances: {
@@ -87,8 +87,7 @@ module SlimPickins
         question: 'How is the document framed, resourced, and spliced into the outer context?',
         summary: 'Document root, outer chrome, resource links, raw elements, and slot splicing.',
         sub_categories: {
-          document: 'Document root container and application context host (page)',
-          resources: 'Document assets, external scripts, styles, and tags (stylesheet, script, iframe, tag)',
+          resources: 'Document assets, external scripts, and styles (stylesheet, script, iframe)',
           splicing: 'Slot splicing and collection mapping (contents, map)'
         }
       }
@@ -105,7 +104,7 @@ module SlimPickins
         name: :word,
         plane: :linguistic,
         summary: 'Fundamental syntax token',
-        definition: 'The fundamental syntax unit of slim-pickins (word arguments, indentation nests). Everything on a page is a word (64 canonical + app words).'
+        definition: 'The fundamental syntax unit of slim-pickins (word arguments, indentation nests). Everything on a page is a word (63 canonical + app words).'
       ),
       primitive: SystemTerm.new(
         name: :primitive,

@@ -2,7 +2,7 @@
 
 **An odd-numbered roadmap. It leads with the forward eye.**
 
-Status: **confirmed by dan 2026-10-16; closed and signed off 2026-10-18.**
+Status: **confirmed by dan 2026-10-16; closed and signed off 2026-10-19.**
 Written by the steward from the Wall Ledger in
 [DAYTRIP-0.7.0a.md](../daytrips/DAYTRIP-0.7.0a.md). It is a roadmap and not a plan: it
 names the question and what success looks like, leaving the step-by-step work
@@ -87,7 +87,7 @@ walls, one already fixed, one framing decision:
 *(Subject/class collision was named in the 0.7.0a brief and is **not** a wall —
 measured already fixed.)*
 
-**Closed — signed off by dan 2026-10-18.** The Wall Ledger emptied, and the
+**Closed — signed off by dan 2026-10-19.** The Wall Ledger emptied, and the
 paper is now live: `examples/publication` serves the paper's
 `.frame`/`.sp`/`.layout`/`.style` unmodified, reads both documents and entries,
 and the standalone `lore_reader` is retired (8→7 apps). The visual sign-off was
