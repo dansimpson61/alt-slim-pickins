@@ -46,12 +46,12 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.6 is closed. Roadmap 0.7's Wall Ledger is empty and the unified reader is assembled; only the visual sign-off remains.**
+**Roadmap 0.7 is closed and signed off (2026-10-18). The next move is Roadmap 0.8, the backward eye.** The 0.7 rounds are kept in `history/daytrips/` and the closed roadmap in `history/planning/ROADMAP-0.7.md`.
 
-- **Daytrip 0.7.0a (Paper First) — complete.** `DAYTRIP-0.7.0a.md` drafts the
-  unified reader uncompromised and measures the Wall Ledger: three real walls
-  (self-titling documents, `cluster` micro-layout, sayable theme roles) and one
-  already fixed (subject/class collision).
+- **Daytrip 0.7.0a (Paper First) — complete.** Drafts the unified reader
+  uncompromised and measures the Wall Ledger: three real walls (self-titling
+  documents, `cluster` micro-layout, sayable theme roles) and one already fixed
+  (subject/class collision).
 - **Daytrip 0.7.0b (Heal Wall 1) — built and retired.** `page` dissolved: the
   `.frame` is the shell, the route `.sp` is a word named by its filename, and the
   leading line is the signature. The eight apps, the studio, the in-memory seeds
@@ -59,29 +59,26 @@ so this block cannot go stale without the gate saying so:
   contract, taxonomy entry and favicon promise are gone (canonical words 64→63).
 - **Daytrip 0.7.0c (Heal Wall 2) — built and verified.** Self-titling documents:
   a route that names a document without a title takes its first heading, and
-  `prose markdown, .content` begins after it — `document, .title` is now
-  `document`. The byte-diff certified the one changed page as exactly the
-  removal of the demoted duplicate `<h2>`.
+  `prose markdown, .content` begins after it.
 - **Daytrip 0.7.0d (Heal Wall 3) — built and verified.** `cluster` is a
-  `.layout` zone posture — a wrapping inline row of small facts with the theme's
-  uniform gap — and the author names the group in `.sp` with a `def`. The
-  `.sp`-vs-`.layout` question settled on `.layout` per dan's "geometry belongs
-  outside substance" ruling; `doc_reader`'s `grid metrics` became a `meta`
-  cluster. The census stays at 63 words.
-- **Daytrip 0.7.0e (Heal Wall 4) — built and verified.** The `.style` companion —
-  the fourth canvas — makes theme roles sayable (`measure wide`, `gap loose`,
-  `density airy`), compiled to `:root` custom properties. The register's
-  axiomatic `theme_roles` entry moved from recording an absence to naming the
-  home.
-- **Daytrip 0.7.0f (Assemble) — built and verified.** `examples/doc_reader`
+  `.layout` zone posture — a wrapping inline row of small facts — and the author
+  names the group in `.sp` with a `def`.
+- **Daytrip 0.7.0e (Heal Wall 4) — built and verified.** The `.style` companion
+  makes theme roles sayable (`measure wide`, `gap loose`, `density airy`),
+  compiled to `:root` custom properties.
+- **Daytrip 0.7.0f (Assemble) — built and signed off.** `examples/doc_reader`
   became `examples/publication`, reading both documents and entries; the paper's
-  `publication.frame`/`.layout`/`.style` plus `document`/`entry`/`shelf`/
-  `timeline`/`search`/`index` render live; `lore_reader` retired (8→7 apps,
-  35→34 verified pages, 61→59 test files).
-- **Next session:** the visual sign-off — boot `ruby examples/publication/app.rb`
-  (port 4590) and hold it against the Editorial Prose archetype, then close
-  Roadmap 0.7. Two measured findings for the 0.8 harvest: a dotted metric
-  (`metric .reading_minutes`) loses its domain label, and `measure wide`'s
+  frame/layout/style plus `document`/`entry`/`shelf`/`timeline`/`search`/`index`
+  render live; `lore_reader` retired (8→7 apps, 35→34 verified pages, 61→59 test
+  files). The first screenshots caught a page-geometry defect the gates could
+  not see — the app-wide flank squeezed every non-landing route into its narrow
+  column — and the fix moved the flank to a per-view `index.layout` and made the
+  reading routes a bounded column. Dan's Editorial Prose sign-off passed
+  2026-10-18.
+- **Next session:** frame Roadmap 0.8 (the backward eye / harvest): audit the
+  garden and retire what the publication superseded, promote the generalizable
+  words and postures 0.7 earned, and heal the two measured findings — a dotted
+  metric (`metric .reading_minutes`) loses its domain label, and `measure wide`'s
   `--measure: 72ch` loses to `treatment editorial`'s hardcoded `65ch`.
 
 ## Studio Process & Verification Protocol

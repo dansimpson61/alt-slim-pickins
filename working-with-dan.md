@@ -490,6 +490,8 @@ working manual that should be better after every session than it was before.
 
 - **"We have no sacred cows": when the language improves, the corpus follows, and no legacy code has standing to impede a universal improvement.** (observed 2026-10-18). Retiring `page` meant revising the eight apps, the studio, the test suite, the guides and the headline census number (64→63) in one movement, and Dan named it a principle rather than a cost. The corollary for a round: migrate the corpus to the improvement — do not special-case the legacy — and let the byte-diff certify the mechanical half before the semantic change lands.
 
+- **The render is the evidence; a green gate is not a good page, and "look" means look.** (observed 2026-10-18). When the unified reader assembled with all twelve legs and the suite green, the first screenshots still showed five broken routes — the app-wide flank squeezed every non-landing page into its narrow column, and no gate could see it, because none of them renders geometry. Two expectations follow. First, when a round claims a page is finished, inspect the render (a screenshot or the live URL) before saying so; the markup being well-formed is not the page looking right. Second, when he asks you to look at an image and the model cannot take image input, say that plainly and stop — do not describe what you cannot see. His answer to an honest "I cannot see these" was to switch the model and say "try again", not to doubt the report; a fabricated description would have cost far more than the admission.
+
 ## Proposed deletions — nothing here yet
 
 

@@ -3,14 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.7's Wall Ledger is empty, and the paper is now live: the unified
-  publication reader (`examples/publication`) reads both documents and entries,
-  serves the paper's `.frame`/`.sp`/`.layout`/`.style` unmodified, and the
-  standalone `lore_reader` is retired (8→7 apps). What remains is the visual
-  sign-off: the booted reader inspected against the Editorial Prose archetype.
-  Twelve gate legs + pedagogy green, 658 runs / 7,061 assertions / 0 failures.
+  Roadmap 0.7 is closed and signed off (2026-10-18): the Stretch Exam passed on
+  all four conditions. The unified publication reader (`examples/publication`)
+  serves the paper's `.frame`/`.sp`/`.layout`/`.style`, reads both documents and
+  entries, and the standalone `lore_reader` is retired (8→7 apps). Twelve gate
+  legs + pedagogy green, 658 runs / 7,067 assertions / 0 failures. The next
+  roadmap is 0.8, the backward eye.
 last_touched: 2026-10-18
-next_step: 'Visual sign-off: boot the publication reader (`ruby examples/publication/app.rb`, port 4590) and hold it against the Editorial Prose archetype — a bounded measure, quiet margins, metadata clustered beside prose — then close Roadmap 0.7 (DAYTRIP-0.7.0f, definition of success).'
+next_step: 'Open Roadmap 0.8 (the backward eye): frame the harvest — audit the garden and retire what the publication superseded, promote the generalizable words and postures 0.7 earned, and heal the two measured findings (a dotted metric loses its domain label; `measure wide` loses to `treatment editorial` hardcoded 65ch).'
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md
@@ -43,10 +43,11 @@ conventions: >-
 # alt-slim-pickins
 
 A working view language: one-sentence grammar, 63 words, its own stylesheet,
-and eight example apps plus the studio that speak it. See [README.md](README.md)
-— its *How roadmaps go* section governs how roadmaps work. [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md)
-closed on 2026-10-16, unifying the language's taxonomy and teaching. Roadmap 0.7
-is framed in [ROADMAP-0.7.md](ROADMAP-0.7.md) — the Editorial & Micro-Layout
-Publication Stretch Exam. Its opening paper is [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md)
-(the Wall Ledger), and Wall 1's confirmed contract is
-[DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md); `next_step` above is the live resume point.
+and seven example apps plus the studio that speak it. See [README.md](README.md)
+— its *How roadmaps go* section governs how roadmaps work. Roadmap 0.6 closed
+on 2026-10-16, unifying the language's taxonomy and teaching. Roadmap 0.7
+closed on 2026-10-18 — the Editorial & Micro-Layout Publication Stretch Exam,
+passed — and is kept in [ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md). Its
+rounds are the daytrips in `history/daytrips/`; the closing assembly is
+[DAYTRIP-0.7.0f.md](history/daytrips/DAYTRIP-0.7.0f.md). `next_step` above is
+the live resume point.

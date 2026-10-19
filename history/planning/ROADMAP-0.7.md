@@ -2,10 +2,11 @@
 
 **An odd-numbered roadmap. It leads with the forward eye.**
 
-Status: **confirmed by dan 2026-10-16.** Written by the steward from the Wall
-Ledger in [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md). It is a roadmap and not a
-plan: it names the question and what success looks like, leaving the
-step-by-step work to daytrips, the way 0.4, 0.5, and 0.6 did.
+Status: **confirmed by dan 2026-10-16; closed and signed off 2026-10-18.**
+Written by the steward from the Wall Ledger in
+[DAYTRIP-0.7.0a.md](../daytrips/DAYTRIP-0.7.0a.md). It is a roadmap and not a plan: it
+names the question and what success looks like, leaving the step-by-step work
+to daytrips, the way 0.4, 0.5, and 0.6 did.
 
 > **Ataovy dian-tana: jerena ny aloha, todihana ny afara.**
 >
@@ -29,7 +30,7 @@ new reader lands.
 ## The definition of success
 
 The exam is passed when the paper from
-[DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md) renders live, unmodified, and meets the
+[DAYTRIP-0.7.0a.md](../daytrips/DAYTRIP-0.7.0a.md) renders live, unmodified, and meets the
 Editorial Prose benchmark — not when a checker exits 0. A Stretch Exam passes on
 four conditions (STRETCH_PROTOCOL, *Visual Sign-Off & Gate Lock*):
 
@@ -47,7 +48,7 @@ four conditions (STRETCH_PROTOCOL, *Visual Sign-Off & Gate Lock*):
 
 ## The Wall Ledger — the daytrips
 
-Measured in [DAYTRIP-0.7.0a.md](DAYTRIP-0.7.0a.md), not assumed. Three real
+Measured in [DAYTRIP-0.7.0a.md](../daytrips/DAYTRIP-0.7.0a.md), not assumed. Three real
 walls, one already fixed, one framing decision:
 
 1. **Landing evaluation vs. the page-in-frame ontology — healed.** `page`
@@ -55,7 +56,7 @@ walls, one already fixed, one framing decision:
    subject/title declaration. The `.frame` takes the envelope, the route `.sp`
    becomes the word (filename = word name, leading line = arguments), and the
    grammar never changes — a route is a `def` with its `def <name>` line elided.
-   Built in [DAYTRIP-0.7.0b.md](DAYTRIP-0.7.0b.md), proven on the specimen
+   Built in [DAYTRIP-0.7.0b.md](../daytrips/DAYTRIP-0.7.0b.md), proven on the specimen
    reader and certified by the byte-diff harness. `page` is now retired: the
    eight apps and the studio have migrated onto the route signature, and the
    word, its contract and its docs are gone.
@@ -63,7 +64,7 @@ walls, one already fixed, one framing decision:
 2. **Self-titling documents — healed.** A route that names a document without
    a title takes the document's first heading as its `<title>` and `<h1>`, and
    `prose` starts where that heading ends. Built in
-   [DAYTRIP-0.7.0c.md](DAYTRIP-0.7.0c.md): `document` titles itself, `prose
+   [DAYTRIP-0.7.0c.md](../daytrips/DAYTRIP-0.7.0c.md): `document` titles itself, `prose
    markdown, .content` drops the leading heading, and the byte-diff certified
    the one changed page as exactly the removal of the demoted duplicate
    `<h2>`.
@@ -71,7 +72,7 @@ walls, one already fixed, one framing decision:
 3. **Inline metadata cluster micro-layout — healed.** `cluster` is a `.layout`
    zone posture — a wrapping inline row of small facts with the theme's uniform
    gap — and the `.sp` author names the group with a `def`. Built in
-   [DAYTRIP-0.7.0d.md](DAYTRIP-0.7.0d.md): `doc_reader`'s `grid metrics` became
+   [DAYTRIP-0.7.0d.md](../daytrips/DAYTRIP-0.7.0d.md): `doc_reader`'s `grid metrics` became
    a `meta` cluster, and the `.sp`-vs-`.layout` question settled on `.layout`
    per dan's "geometry belongs outside substance" ruling. The census stays at
    63 words.
@@ -79,20 +80,22 @@ walls, one already fixed, one framing decision:
 4. **Sayable editorial theme roles — healed.** The `.style` companion — the
    fourth canvas — makes theme roles sayable: `measure wide`, `gap loose`,
    `density airy` compile to the `:root` custom properties the base theme
-   owns. Built in [DAYTRIP-0.7.0e.md](DAYTRIP-0.7.0e.md); the register's
+   owns. Built in [DAYTRIP-0.7.0e.md](../daytrips/DAYTRIP-0.7.0e.md); the register's
    axiomatic `theme_roles` entry moved from recording an absence to naming the
    home.
 
 *(Subject/class collision was named in the 0.7.0a brief and is **not** a wall —
 measured already fixed.)*
 
-**The Wall Ledger is empty, and the paper is now live.** All four walls are
-healed at the structural layer, and the unified reader is assembled from the
-paper's files in [DAYTRIP-0.7.0f.md](DAYTRIP-0.7.0f.md): `examples/publication`
-serves the paper's `.frame`/`.sp`/`.layout`/`.style` unmodified, reads both
-documents and entries, and the standalone `lore_reader` is retired (8→7 apps).
-What remains for the exam is one condition: the visual sign-off — the booted
-reader inspected against the Editorial Prose archetype.
+**Closed — signed off by dan 2026-10-18.** The Wall Ledger emptied, and the
+paper is now live: `examples/publication` serves the paper's
+`.frame`/`.sp`/`.layout`/`.style` unmodified, reads both documents and entries,
+and the standalone `lore_reader` is retired (8→7 apps). The visual sign-off was
+given after the page-geometry defect the first screenshots caught — the
+app-wide flank was re-scoped to the landing and the reading routes became a
+bounded column ([DAYTRIP-0.7.0f.md](../daytrips/DAYTRIP-0.7.0f.md)) — against the Editorial
+Prose benchmark: a bounded measure, quiet margins, metadata clustered beside
+prose. All four conditions of the definition of success are met.
 
 ## How 0.7 arrived at this question
 

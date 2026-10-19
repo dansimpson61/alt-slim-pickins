@@ -241,7 +241,7 @@ apps and the checker together, or the drift returns.
 
 ## Movement 3 — Framing ROADMAP-0.7.md
 
-The roadmap is framed in [`ROADMAP-0.7.md`](ROADMAP-0.7.md): the question is
+The roadmap is framed in [`ROADMAP-0.7.md`](../planning/ROADMAP-0.7.md): the question is
 whether the language can carry a publication-grade reader with zero author
 workarounds, success is the paper rendered live without one compromise plus one
 superseded app retired, and the daytrips are the Wall Ledger above, one wall per

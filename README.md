@@ -119,7 +119,7 @@ the handoff — live at the root.
   linguistic, spatial, and mechanical planes.
 - **[STRETCH_PROTOCOL.md](docs/STRETCH_PROTOCOL.md)** — the Stretch Exam: how an odd
   roadmap opens on paper, and what closes it.
-- **[ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md)** — the just-closed even-numbered
+- **[ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md)** — the just-closed odd-numbered
   roadmap (closed roadmaps are preserved in `history/planning/`).
 - **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
   conversation.
@@ -192,18 +192,19 @@ is a beautifully organised runtime for the wrong language.
 
 ## Status
 
-**Roadmaps 0.1 to 0.6 are completed.**
+**Roadmaps 0.1 to 0.7 are completed.**
 - [ROADMAP-0.1.md](history/ROADMAP-0.1.md) proved the one-sentence grammar.
 - [ROADMAP-0.2.md](history/planning/ROADMAP-0.2.md) reshaped the Builder into semantic nodes and public words.
 - [ROADMAP-0.3.md](history/planning/ROADMAP-0.3.md) proved the vocabulary across a garden of four applications (`lore_reader`, `way_exam`, `milestone_planner`, `word_graph`), resolving the 26 demand gaps with 0 missing affordances.
 - [ROADMAP-0.4.md](history/planning/ROADMAP-0.4.md) asked whether the conventions keep their promises, so that an author only has to name things. Every documented override is proved by a test, and the weak-spots table in [CONVENTIONS.md](docs/CONVENTIONS.md) is empty. It ran first as seventeen daytrips (`DAYTRIP-0.4.0a` to `0.4.0q`), and the roadmap tells how its question emerged from them. It closed on 2026-10-11.
 - [ROADMAP-0.5.md](history/planning/ROADMAP-0.5.md) answered whether words can nest in namespaces and files rather than a single global registry: nearest-first compiler walk, editor collision eliminated, the eleven contained words scoped lexically in Ruby and `list.sp`, the legacy declaration line retired across all composed words, and language words open to app shadowing. It ran as seven daytrips (`DAYTRIP-0.5.0a` to `0.5.0g`) and closed on 2026-10-12.
 - [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md) asked whether the language says what it means and means what it says: the polysemy audit, pedagogy from first principles, clean gemification, and repository hygiene. It ran as eleven daytrips (`DAYTRIP-0.6.0a` to `0.6.0k`) and closed on 2026-10-16.
+- [ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md) asked whether the language can carry a publication-grade reader with zero `tag` escapes, bespoke CSS, or domain contortions. It healed four walls (`page` dissolved, self-titling documents, `cluster`, sayable theme roles), assembled the unified `publication` reader, and retired `lore_reader`. It ran as six daytrips (`DAYTRIP-0.7.0a` to `0.7.0f`), passed the Editorial Prose sign-off, and closed on 2026-10-18.
 
-**Roadmap 0.7 is next.** It is an odd roadmap, so it leads with the forward eye, and it
-opens with the Stretch Exam: *the Editorial & Micro-Layout Publication* — uniting
-`doc_reader` and `lore_reader` into one publication-grade reader. `PROJECT.md`'s
-`next_step` says where planning begins.
+**Roadmap 0.8 is next.** It is an even roadmap, so it leads with the backward eye:
+the harvest. It studies what 0.7 built, promotes the generalizable words and
+postures, retires what the publication superseded, and heals the findings 0.7
+recorded but did not fix. `PROJECT.md`'s `next_step` says where planning begins.
 
 Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 7 apps, 29 app words, 34 verified pages, 38 conventions, 32 promises, and 113 style rules.
 
