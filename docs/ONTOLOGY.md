@@ -15,28 +15,19 @@ adds vocabulary, never syntax.
 To understand how its components compose without friction, the architecture partitions across
 three orthogonal planes:
 
-```
-+-----------------------------------------------------------------------------------+
-|                           THE THREE ONTOLOGICAL PLANES                            |
-+-----------------------------------------------------------------------------------+
-| 1. LINGUISTIC & EXECUTION PLANE (The Lexicon & Grammar)                           |
-|    - word          : Atomic syntactic token and invocation unit (word arguments)  |
-|    - primitive     : Atomic leaf word implemented directly in Ruby (Words::*)     |
-|    - composed_word : First-class word defined in .sp syntax (def word args)       |
-|    - def           : Definition keyword: def word_name subject, kwargs            |
-+-----------------------------------------------------------------------------------+
-| 2. COMPOSITION & SPATIAL PLANE (The Canvases)                                     |
-|    - frame         : Document envelope chrome (.frame, formerly .tin)             |
-|    - layout        : Spatial companion stylesheet (.layout, formerly .spiff)      |
-|    - style         : Theme-role companion (.style) — sayable theme roles     |
-|    - substance     : Route-level body template (.sp) answering routes             |
-+-----------------------------------------------------------------------------------+
-| 3. MECHANICAL INVARIANT PLANE (The Instruments of Truth)                          |
-|    - contract      : Compile-time syntactic grammar (takes, holds, modifiers)     |
-|    - convention    : Inference engine when syntax remains silent (38 conventions) |
-|    - promise       : Ledger proving declared modifiers have active readers (33)   |
-+-----------------------------------------------------------------------------------+
-```
+| Plane | Term | Meaning |
+|---|---|---|
+| **Linguistic & Execution** (The Lexicon & Grammar) | `word` | Atomic syntactic token and invocation unit (`word arguments`) |
+| | `primitive` | Atomic leaf word implemented directly in Ruby (`Words::*`) |
+| | `composed_word` | First-class word defined in `.sp` syntax (`def word args`) |
+| | `def` | Definition keyword: `def word_name subject, kwargs` |
+| **Composition & Spatial** (The Canvases) | `frame` | Document envelope chrome (`.frame`, formerly `.tin`) |
+| | `layout` | Spatial companion stylesheet (`.layout`, formerly `.spiff`) |
+| | `style` | Theme-role companion (`.style`) — sayable theme roles |
+| | `substance` | Route-level body template (`.sp`) answering routes |
+| **Mechanical Invariant** (The Instruments of Truth) | `contract` | Compile-time syntactic grammar (takes, holds, modifiers) |
+| | `convention` | Inference engine when syntax remains silent (38 conventions) |
+| | `promise` | Ledger proving declared modifiers have active readers (32 promises) |
 
 ---
 
@@ -125,30 +116,24 @@ lifecycle stage:
 Moving beyond a broad `semantic` bucket and an apologetic `visual` bucket, the vocabulary
 organizes into five intuitive categories:
 
-```
-1. Substance (Domain Content & Phrasing)
-   ├── Typography & Phrasing: heading, paragraph, text, note, flash, prose, snippet, title, span
-   └── Data & Metrics: metric, fact, number, money, percent, time, badge, dictionary, total
-
-2. Skeleton (Structure & Framing)
-   ├── Landmarks: section, aside, nav, footer
-   ├── Containers: box, card, figure, group, scroll
-   └── Collections: list, item, table, column, row, grid, chart, band, line, level
-
-3. Affordances (Controls & Interactions)
-   ├── Actions: link, button, actions, action, tabs, tab
-   └── Inputs: form, field, input, choice, option, search, checkbox, hidden, textarea, on
-
-4. Flow & Logic (State & Behavior)
-   ├── Iteration: each, empty
-   ├── Branching: choose, when, otherwise
-   └── Disclosure: disclosure
-
-5. Environment (Document & Splicing)
-   ├── Document: page
-   ├── Resources: stylesheet, script, iframe, tag
-   └── Splicing: contents, map
-```
+1. **Substance (Domain Content & Phrasing)**
+   - **Typography & Phrasing**: `heading`, `paragraph`, `text`, `note`, `flash`, `prose`, `snippet`, `title`, `span`
+   - **Data & Metrics**: `metric`, `fact`, `number`, `money`, `percent`, `time`, `badge`, `dictionary`, `total`
+2. **Skeleton (Structure & Framing)**
+   - **Landmarks**: `section`, `aside`, `nav`, `footer`
+   - **Containers**: `box`, `card`, `figure`, `group`, `scroll`
+   - **Collections**: `list`, `item`, `table`, `column`, `row`, `grid`, `chart`, `band`, `line`, `level`
+3. **Affordances (Controls & Interactions)**
+   - **Actions**: `link`, `button`, `actions`, `action`, `tabs`, `tab`
+   - **Inputs**: `form`, `field`, `input`, `choice`, `option`, `search`, `checkbox`, `hidden`, `textarea`, `on`
+4. **Flow & Logic (State & Behavior)**
+   - **Iteration**: `each`, `empty`
+   - **Branching**: `choose`, `when`, `otherwise`
+   - **Disclosure**: `disclosure`
+5. **Environment (Document & Splicing)**
+   - **Document**: `page`
+   - **Resources**: `stylesheet`, `script`, `iframe`, `tag`
+   - **Splicing**: `contents`, `map`
 
 ### Bandpass Filter Diagnostic Model
 
