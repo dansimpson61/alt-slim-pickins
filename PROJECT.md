@@ -5,14 +5,15 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).
   Daytrips 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)), 0.8.0b
-  ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)), and 0.8.0c
-  ([DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)) are complete (2026-10-20):
-  blockless `box` inside a `def` splices `contents` by default, redundant `contents`
-  under `box` in `def`s across the corpus are dropped, `.style` `--measure` and `--lead`
-  tokens hand off to `.layout` `TREATMENT_TOKENS`, and the axiomatic grade records the
-  theme-role decision. Twelve gate legs + pedagogy green, 662 runs / 7,108 assertions / 0 failures.
+  ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)), 0.8.0c
+  ([DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)), and 0.8.0d
+  ([DAYTRIP-0.8.0d.md](history/daytrips/DAYTRIP-0.8.0d.md)) are complete (2026-10-20):
+  card/section/title harmonized to subject/attribute signatures (eliminating word-name
+  exceptions in contracts.rb), dead variant declarations retired on aside, scroll, item,
+  and tabs, and all studio UI partials brought onto explicit def headers. Twelve gate legs +
+  pedagogy green, 662 runs / 7,108 assertions / 0 failures.
 last_touched: 2026-10-20
-next_step: 'Run Daytrip 0.8.0d: systematic audit of all 63 canonical words and kept app words against SOTA sp rubric (retire dead variant slots, harmonize card/section/title/action/search, remove word-name exceptions in contracts.rb, add explicit def headers to kept partials).'
+next_step: 'Write a detailed plan for Daytrip 0.8.0e for Dan''s approval before proceeding: Garden triage & SOTA app modernization (retire milestone_planner and way_exam, stow dated docs in history/, modernize publication, portfolio, roth, dashboard, and word_graph to use dictionary/on/map, KeyValue, and SOTA sp).'
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

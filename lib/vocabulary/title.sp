@@ -1,2 +1,2 @@
-def title target, text
+def title attribute, text
   heading .text

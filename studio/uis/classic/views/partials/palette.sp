@@ -10,11 +10,12 @@
 # The load path is minted by the UI's own `paths`, never written here: the
 # whole point of several UIs is that a click in one cannot land in another.
 
-box
-  section "Start from a real page"
-    list
-      each entry, from: .palette
-        item
-          link_to .name, path: .load_path, id: .id, active: .here
-          badge .status
-          prose plain, .refusal, if: .refusal
+def palette
+  box
+    section "Start from a real page"
+      list
+        each entry, from: .palette
+          item
+            link_to .name, path: .load_path, id: .id, active: .here
+            badge .status
+            prose plain, .refusal, if: .refusal

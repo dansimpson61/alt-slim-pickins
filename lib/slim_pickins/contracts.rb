@@ -188,9 +188,9 @@ module VocabularyShapes
     has_content = false
 
     params.each_with_index do |param, idx|
-      if param == :subject || (param == :target && %i[card section].include?(word_sym))
+      if param == :subject
         name_slot = :subject
-      elsif param == :attribute || (param == :target && word_sym == :title)
+      elsif param == :attribute
         name_slot = :attribute
       elsif param == :variant || param == :status || param == :tone
         name_slot = :variant
@@ -222,7 +222,7 @@ module VocabularyShapes
 
     resolved_modifiers = modifiers
 
-    subject_action = if params.include?(:subject) || (params.include?(:target) && %i[card section].include?(word_sym)) || word_sym == :card || word_sym == :section
+    subject_action = if params.include?(:subject)
                        :shift
                      else
                        :keep

@@ -400,7 +400,7 @@ view library (nearest scope wins).
    indented child block is spliced:
 
 ```
-def card target, title
+def card subject, title
   box .variant, id: .id
     choose
       when .title

@@ -257,7 +257,7 @@ module StudioDocs
               end
             end
             if node.word.to_sym == :def
-              visit.call(node.children, ancestors) if file.include?('lib/vocabulary')
+              visit.call(node.children, ancestors)
             elsif node.word == :route
               # The route's signature is the page line — the subject's home —
               # so it joins the chain the way `page`'s node did, even though it

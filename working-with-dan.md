@@ -20,37 +20,41 @@ working manual that should be better after every session than it was before.
 
 1. **Read this before you plan anything.** It is two minutes and it changes
    decisions. Then read `HANDOFF.md`'s list.
-2. **Record, don't characterise.** One dated, specific observation beats a
+2. **Plan first, always: proceed only on the basis of a detailed, written plan approved by dan.**
+   If a plan does not exist, your first task is to write one for his approval. Never begin
+   implementation without this sign-off (mandated 2026-10-20).
+3. **Record, don't characterise.** One dated, specific observation beats a
    paragraph of personality. Say what happened and what he did.
-3. **Evidence, or a marked guess.** Cite the source (a `LORE.md` entry, a
+4. **Evidence, or a marked guess.** Cite the source (a `LORE.md` entry, a
    commit, `observed 2026-09-10`) or write `guess:` in front of it. His own
    rule applies here first: verify before asserting.
-4. **Candid means useful, and never flattering.** He asked for this doc to
+5. **Candid means useful, and never flattering.** He asked for this doc to
    include what pisses him off; it starts with the fact that flattery does —
    his words (2026-09-10): *"flattery fucking pisses me off."* He is not the
    audience, so a compliment here is dead weight; delete it on sight. Write
    what you would tell the next agent in the doorway, not what reads well.
-5. **Keep it true, in the right order of force.** A note dan contradicts is
+6. **Keep it true, in the right order of force.** A note dan contradicts is
    fixed in that session — his word is the evidence. A note you *judge* stale
    is not deleted by you; see the next instruction.
-6. **Deletions take two sessions.** Deleting an entry is a judgement that a
+7. **Deletions take two sessions.** Deleting an entry is a judgement that a
    lesson no longer carries, and the worst judge of that is the agent who
    wrote it. Process: strike the entry and move it to *Proposed deletions*
    with a date and one-line reason; a **later session's agent** deletes it
    only after checking that reason, citing both dates in the commit. An entry
    that earns a second "no, this still carries" returns to the body. Merging
    duplicates is always allowed — that is not deletion.
-7. **These instructions are draft material.** If a different shape gets more
+8. **These instructions are draft material.** If a different shape gets more
    out of this doc — fewer sections, a checklist, half the length — rewrite
    them and say why in the commit. Maximising this doc's efficacy is the
    standing instruction; nothing here is sacred.
-8. **Update it in the housekeeping pass of every round**, beside `PROJECT.md`
+9. **Update it in the housekeeping pass of every round**, beside `PROJECT.md`
    and lore. An observation that stays in your head is lost.
-9. **Maintain and consult `WISHLIST.md`.** Consult it whenever planning a roadmap
-   or daytrip for relevant loose ends, wishlist items, or flights of imagination.
-   Record ideas or design frictions there during sessions whenever they fall out
-   of immediate scope. At the close of each roadmap, systematically ask whether
-   there is anything to add to the wishlist before opening the next phase.
+10. **Maintain and consult `WISHLIST.md`.** Consult it whenever planning a roadmap
+    or daytrip for relevant loose ends, wishlist items, or flights of imagination.
+    Record ideas or design frictions there during sessions whenever they fall out
+    of immediate scope. **In the housekeeping pass of every daytrip/session, propose
+    and/or ask for new wishlist items.** At the close of each roadmap, systematically
+    ask whether there is anything to add to the wishlist before opening the next phase.
 
 ## What he is actually doing when he asks
 
@@ -425,7 +429,8 @@ working manual that should be better after every session than it was before.
   8. Living Census SSOT (`bin/census.rb`) matched and checked.
   9. `working-with-dan.md` updated with operational observations.
   10. Context window status reported: (instructed 2026-09-23) Whenever doing housekeeping, report the state of the context window (truncation/compaction status, step count, transcript volume, headroom).
-  11. Named git state, finished work distinguished from in-flight work, commit and push executed or offered.
+  11. Wishlist pass executed: (mandated 2026-10-20) Check off or graduate completed items; propose and/or ask for new wishlist items arising from the round.
+  12. Named git state, finished work distinguished from in-flight work, commit and push executed or offered.
 
 - **Combined inspection surface over modal tab proliferation**: (observed 2026-09-22).
   When considering inspecting the evaluated semantic AST alongside inference provenance, dan preferred a single unified 'Inspect' surface over proliferating disconnected tabs (Visual | HTML | Tree | Why). Uniting the Tree (the physical scaffolding of What) and the Why Pane (the provenance of Why) into a master-detail inspection surface eliminates mode-switching, aligns with Raskin's modelessness, and lets the structure and its causal receipts explain each other.
@@ -495,6 +500,10 @@ working manual that should be better after every session than it was before.
 - **He catches proposals that quietly reintroduce variants or carve out generator exceptions.** (observed 2026-10-19). When he asked *"I wonder if we just add 'contents' to our box def?"*, he meant letting a `box` inside a `def` (`def meta / box`) include `contents` without a third line — *not* turning `def meta` into `box meta` in the page. When I proposed having `box meta` emit `<div class="box meta">`, he immediately asked: *(a) "Tell me how your box proposal does not alter the grammar/carve out an exception in the generator?"* and *(b) "We really wanted to get rid of variants to the extent practical... the sp way was simply to create a new word."* Before proposing any shortcut on a primitive, check two invariants: (1) does it require a special-case exception in `Generator` or the checkers, and (2) does it slide back into `word <variant>` where the `sp` way is to mint a word with `def` or map with `dictionary`/`on`/`map`?
 
 - **Kept example apps are held to SOTA `sp`, not byte-identical legacy HTML.** (observed 2026-10-19). Scoping Roadmap 0.8, he ruled explicitly: *"We should update all of the apps that we keep (not to be byte-identical but rather to be excellent examples)"*, and chose `portfolio` as the Roadmap 0.9 CRUD target so `milestone_planner` and `way_exam` can retire in 0.8. Use the byte-diff harness to detect unintended regressions during mechanical refactors, not as a freeze on improving the markup of kept example apps.
+
+- **Plan first, always: proceed only on the basis of a detailed, written plan approved by dan.** (observed 2026-10-20).
+  Prompt: *"1. In the future, please ensure that you only proceed on the basis of a detailed, written plan. If a plan does not exist, your ifirst task is to write one for my approval. 2. Please revise housekeeping protocols to include proposing and/or asking for new wishlist items. 3. Please do the housekeeping to transition to a new session, then commit and push."*
+  Never jump into coding or implementation based on general momentum or an outline. If a detailed, written plan does not exist, authoring one and presenting it for Dan's explicit approval is the mandatory first task before touching code.
 
 ## Proposed deletions — nothing here yet
 

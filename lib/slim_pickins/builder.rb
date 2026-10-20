@@ -247,7 +247,7 @@ module SlimPickins
         end
 
         if contract && (contract.modifiers.include?(:variant) || contract.name == :variant)
-          bound[:variant] ||= kwargs[:variant] || (name_val && !subject.has?(name_val) ? name_val : nil)
+          bound[:variant] ||= kwargs[:variant] || (name_val.is_a?(Symbol) && !subject.has?(name_val) ? name_val : nil)
         end
 
         if contract&.name == :attribute && content_param == :value

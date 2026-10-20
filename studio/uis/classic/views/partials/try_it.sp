@@ -8,10 +8,11 @@
 # when the burr was resolved and this copy was not, which is what a second home
 # for a decision costs.
 
-box
-  section .editor_title
-    editor_form
-    note quiet, .data_note
-    grid columns: 2
-      preview
-      html_preview
+def try_it
+  box
+    section .editor_title
+      editor_form
+      note quiet, .data_note
+      grid columns: 2
+        preview
+        html_preview

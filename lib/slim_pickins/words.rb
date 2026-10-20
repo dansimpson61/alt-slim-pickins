@@ -357,7 +357,7 @@ module SlimPickins
     end
 
     class Tabs < Encloses
-      contract name: :variant, children: :any, shape: :encloses
+      contract children: :any, shape: :encloses
 
       # `parents:` since 2026-10-03, which makes `tab` the tenth structural child
       # held to its gatherer rather than the one exception. A stray `tab` used to

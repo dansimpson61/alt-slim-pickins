@@ -6,6 +6,7 @@
 # change makes redundant gets cut. Rendering now requires JavaScript,
 # which the studio says rather than hides.
 
-wired_form
-  textarea source, rows: 4, required: true
-  textarea data, "Data (JSON)", rows: 2
+def editor_form
+  wired_form
+    textarea source, rows: 4, required: true
+    textarea data, "Data (JSON)", rows: 2

@@ -19,11 +19,13 @@
    Before locking the scope of a daytrip, review Section I (Loose Ends) and
    Section IV (Aesthetics & Workbench) to check whether the files or subsystems
    being touched harbor an adjacent pinch that can be cleanly resolved in stride.
-3. **During Active Sessions (Continuous Intake):**
+3. **During Active Sessions & Housekeeping Passes (Continuous Intake):**
    When an experiment, refactor, or user interaction reveals a design friction,
    an unanswered question, or an inspired "what if" that is out of immediate scope:
    do not leave it trapped in an ephemeral chat or buried in a closed log.
-   Record it here under the appropriate section with date, origin, and concrete shape.
+   In the housekeeping pass of every daytrip/session, review and propose/ask for new
+   wishlist items, recording them here under the appropriate section with date,
+   origin, and concrete shape.
 4. **At Roadmap Close (Retrospective Intake):**
    At the close of each roadmap, systematically ask whether we have anything to
    add to the wishlist. Review deferred ideas, compromises made during execution,
@@ -45,24 +47,15 @@
 Unsettled details, known edge-case collisions, and mechanical seams identified
 during prior roadmaps and daytrips.
 
-- [ ] **`metric` and `fact` Signature & Runtime Discrepancy (Targeted in Roadmap 0.8):**
-  - *Origin:* `DAYTRIP-0.7.0f.md` & Roadmap 0.8 audit, 2026-10-19.
-  - *Symptom:* `metric.sp` (`def metric attribute, label`) and `fact.sp` (`def fact attribute, value`)
-    disagree on their second parameter and rely on bespoke `if word_name == :fact / :metric / :snippet`
-    branches in `Builder#define_single_local_word`. Bare `metric reading_minutes` renders `9` as both
-    the `<h3>` label and the value; two-argument `fact origin, .origin` overwrites `<dt>` with the
-    `<dd>` value across 7 files; dotted `metric .reading_minutes` loses the attribute name.
-  - *Desired shape:* Harmonize `metric.sp` and `fact.sp` on `attribute, value` (with `label:` and `as:`
-    modifiers), use `heading` inside `metric.sp`, remove the hardcoded `word_name` branches in `Builder`,
-    and retire the dead duplicates in `Generator` and `PartialWord`.
+- [ ] **First-Class Studio Previewing for Composed-Word Definitions (`def` files):**
+  - *Origin:* Daytrip 0.8.0d (2026-10-20).
+  - *Symptom:* When a `.sp` template file consists solely of a `def <word>` block (such as vocabulary definitions or extracted modular partials), previewing it in Studio or testing it via `studio_pages_test.rb` renders an empty `<div class="sp-canvas"></div>` because executing the template merely registers the word in the local compiler rather than invoking it.
+  - *Desired shape:* Studio playground and inspector should recognize when a file's top-level body is an uncalled `def`, automatically rendering an interactive preview by instantiating the defined word with sample/default context.
 
-- [ ] **`.style` vs. `.layout` Measure & Lead Token Handoff (Targeted in Roadmap 0.8):**
-  - *Origin:* `DAYTRIP-0.7.0f.md`, 2026-10-18.
-  - *Symptom:* `Compiler::Layout::TREATMENT_TOKENS` hardcodes `'max-width' => '65ch'` and
-    `'line-height' => '1.7'` on `:editorial` (and `'70ch'` / `'1.6'` on `:prose`), overriding
-    `:root { --measure: 72ch; --lead: 1.7; }` emitted by a surface's `.style` companion.
-  - *Desired shape:* `TREATMENT_TOKENS` reads `var(--measure, 65ch)` and `var(--lead, 1.7)` so
-    `.style` and `.layout` compose without `.layout` clobbering `.style`.
+- [ ] **Contract Inference for Composed App Words with Flexible Arguments:**
+  - *Origin:* Daytrip 0.8.0d (2026-10-20).
+  - *Symptom:* App-defined words (`examples/*/views/partials/*.sp`) currently rely on looser positional/keyword bindings without rigid shape enforcement in `infer_from_def`. Attempting to enforce canonical vocabulary contracts across app partials broke argument flexibility in `disk_def_partial_test.rb`.
+  - *Desired shape:* Generalize `VocabularyShapes#infer_from_def` to provide rich contract checking and provenance inspection for app-level words without constraining author flexibility in argument passing.
 
 - [ ] **`link` Syntax Duality (Roadmap 0.5 Criterion 7, Item 1):**
   - *Origin:* `ROADMAP-0.5.md` (Criterion 7, open question 1); `examples/portfolio/`.
@@ -345,6 +338,20 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 
 ## VI. Retired or Graduated Items
 
+- [x] **Composed-Word Parameter Harmonization & Dead Variant Retirement:**
+  - *Graduated in:* `DAYTRIP-0.8.0d.md` (Roadmap 0.8).
+  - *Resolution:* Harmonized `card.sp` (`subject`), `section.sp` (`subject`), and `title.sp` (`attribute`),
+    eliminating all hardcoded word-name exceptions in `contracts.rb`; retired dead `variant` slots on
+    `aside`, `scroll`, `item`, and `tabs`; brought all studio UI partials onto explicit `def` headers.
+- [x] **`.style` vs. `.layout` Measure & Lead Token Handoff:**
+  - *Graduated in:* `DAYTRIP-0.8.0c.md` (Roadmap 0.8).
+  - *Resolution:* `Compiler::Layout::TREATMENT_TOKENS` reads `var(--measure, ...)` and `var(--lead, ...)`,
+    allowing `.style` companion files to control typographic rhythm without `.layout` clobbering `:root` tokens.
+- [x] **`metric` and `fact` Signature & Runtime Discrepancy:**
+  - *Graduated in:* `DAYTRIP-0.8.0a.md` (Roadmap 0.8).
+  - *Resolution:* Harmonized `metric.sp` and `fact.sp` on `attribute, value` (with `label:` and `as:` modifiers),
+    nested `heading` inside `metric.sp`, eliminated hardcoded word exceptions in `Builder#define_single_local_word`,
+    and unified `.sp` word compilation.
 - [x] **Making the Theme Sayable (A Style DSL Without Machine Bloat):**
   - *Graduated in:* `DAYTRIP-0.7.0e.md` (Roadmap 0.7).
   - *Resolution:* Shipped `.style` companion files and `Compiler::Style`, mapping three

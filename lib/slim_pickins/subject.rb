@@ -74,6 +74,8 @@ module SlimPickins
     # disagreed once — fetch understood hash keys and respond_to? did not — and
     # a hash-backed subject behaved differently from a struct-backed one.
     def has?(attribute)
+      return false unless attribute.is_a?(Symbol) || attribute.is_a?(String)
+
       if @object.is_a?(Subject)
         return @object.has?(attribute)
       elsif @object.is_a?(Hash)

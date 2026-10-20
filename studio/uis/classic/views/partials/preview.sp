@@ -1,2 +1,3 @@
-section "Output"
-  iframe preview
+def preview
+  section "Output"
+    iframe preview

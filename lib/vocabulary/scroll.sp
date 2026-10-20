@@ -1,3 +1,2 @@
-def scroll variant
-  box .variant
-    contents
+def scroll
+  box

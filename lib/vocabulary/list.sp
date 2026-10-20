@@ -2,6 +2,6 @@ def list variant
   box .variant
     contents
 
-def item variant, content
-  box .variant, .content
+def item content
+  box .content
     contents

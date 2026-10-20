@@ -192,15 +192,13 @@ eight example apps:
    exceptions and zero variants); connected `.style`'s `--measure` and `--lead` to
    `.layout`'s `TREATMENT_TOKENS`; updated `conventions.rb` and
    `check_conventions.rb`.
-4. **0.8.0d — Systematic audit of all 63 canonical words & all kept app words:**
-   Audit every primitive in `words.rb`, every composed word in
-   `lib/vocabulary/*.sp`, and every kept app word against a shared SOTA rubric:
-   retire `variant` wherever practical (removing dead `variant` slots on
-   `aside`, `box`, `item`, `paragraph`, `scroll`, `tabs`, `nav`, `card`, and
-   replacing `span <variant>` in `studio` with minted words); harmonize
-   `card.sp`, `section.sp`, `title.sp`, `action.sp`, and `search.sp`; remove
-   word-name exceptions from `contracts.rb`; add explicit `def` headers to all
-   kept partials.
+4. **0.8.0d — Systematic audit of all 63 canonical words & all kept app words (complete 2026-10-20, [DAYTRIP-0.8.0d.md](history/daytrips/DAYTRIP-0.8.0d.md)):**
+   Harmonized `card.sp` (`subject`), `section.sp` (`subject`), and `title.sp` (`attribute`),
+   eliminating all hardcoded word-name branches from `VocabularyShapes#infer_from_def`
+   in `lib/slim_pickins/contracts.rb`; retired dead `variant` slots on `aside`, `scroll`,
+   `item`, and `tabs`; brought all studio UI partials onto explicit `def` headers; added
+   guards in `Subject#has?` and `Builder#evaluate_word_definition`. All 12 gate legs +
+   pedagogy green, 662 runs / 7,108 assertions / 0 failures.
 5. **0.8.0e — Garden triage & SOTA app modernization:**
    Retire `milestone_planner` and `way_exam` (plus root `word_graph.html` and
    stale links); stow dated planning/study docs in `history/`; modernize

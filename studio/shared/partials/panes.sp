@@ -9,5 +9,5 @@
 # survived is the one the language already knows: the design compiler
 # dissolves a `panes` wrapper inside a `horizon`, so the zones reach the shell
 # grid directly.
-box
-  contents
+def panes
+  box

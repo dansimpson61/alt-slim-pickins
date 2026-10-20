@@ -50,26 +50,13 @@ so this block cannot go stale without the gate saying so:
 
 - **Daytrip 0.8.0a (`metric`, `fact`, `snippet`, and single word-compilation path) — complete ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)).**
 - **Daytrip 0.8.0b (`KeyValue` spine, `Hash` iteration in `each`, & native `kwargs` in `.sp` `def` headers and `Words`) — complete ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)).**
-  `SlimPickins::KeyValue` (`key`, `label`, `value`, `format`) unifies
-  `metric`/`fact`, `table` (`column`/`total`), `chart` (`band`/`line`), and
-  `form` controls (`field`, `input`, `textarea`, `checkbox`, `choice`, `option`,
-  `hidden`); `Builder#label_of` and `Builder#alignment_of` are retired; `each`
-  iterates a `Hash` as `KeyValue` items and `Subject` and `Dictionary` share
-  indifferent key lookup; `.sp` `def` headers declare keyword modifiers natively
-  (retiring `CANONICAL_MODIFIERS` in `contracts.rb`); and `@kwargs.key?(:x)`
-  ternary lines in `words.rb` are replaced with direct `@kwargs[:x]`.
+- **Daytrip 0.8.0c (Blockless `box` default `contents` splice & `.style`/`.layout` handoff) — complete ([DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)).**
+- **Daytrip 0.8.0d (Harmonize composed words, retire dead variants, explicit `def` headers) — complete ([DAYTRIP-0.8.0d.md](history/daytrips/DAYTRIP-0.8.0d.md)).**
+  Harmonized `card.sp` (`subject`), `section.sp` (`subject`), and `title.sp` (`attribute`),
+  eliminating all word-name exceptions in `contracts.rb`; retired dead `variant` slots on
+  `aside`, `scroll`, `item`, and `tabs`; brought all studio UI partials onto explicit `def`
+  headers; and added guards in `Subject#has?` and `Builder#evaluate_word_definition`.
 - **Remaining 0.8 daytrips (`ROADMAP-0.8.md`):**
-  - **0.8.0c (`box` default `contents` splice & `.style`/`.layout` handoff):**
-    Keep the `sp` way (minting a word with `def` rather than passing variants to
-    `box`) and let a blockless `box` inside a `def` splice `contents` by default
-    (`def meta / box`); connect `.style`'s `--measure` and `--lead` to
-    `.layout`'s `TREATMENT_TOKENS`; update `conventions.rb` and
-    `bin/check_conventions.rb`.
-  - **0.8.0d (Systematic audit of all 63 canonical words & kept app words):**
-    Audit every primitive and composed word; retire `variant` wherever practical
-    across the contracts and `def`s that still declare it; harmonize `card.sp`,
-    `section.sp`, `title.sp`, `action.sp`, and `search.sp`; remove word-name
-    exceptions in `contracts.rb`; add `def` headers to all kept partials.
   - **0.8.0e (Garden triage & SOTA app modernization):** Retire
     `milestone_planner` and `way_exam`; stow dated planning/study docs in
     `history/`; modernize `publication`, `portfolio`, `roth`, `dashboard`, and
@@ -77,7 +64,7 @@ so this block cannot go stale without the gate saying so:
   - **0.8.0f (Leveling the path for 0.9 CRUD in `portfolio` & close):**
     Harmonize `form`/`field`/`input` contracts and collection-scoped `empty`
     pruning for Roadmap 0.9's SQLite CRUD stretch exam in `examples/portfolio`.
-- **Next step:** run **Daytrip 0.8.0c** (`DAYTRIP-0.8.0c.md`).
+- **Next step:** write a detailed plan for **Daytrip 0.8.0e** for Dan's approval before proceeding.
 
 ## Studio Process & Verification Protocol
 
@@ -98,6 +85,7 @@ The studio (`studio/`, port 4580, `STUDIO_PORT` to override) is agent-managed.
 
 Execute every step per round, not at the end of the session:
 
+0. **Plan First**: Proceed ONLY on the basis of a detailed, written plan approved by Dan. If no plan exists, the first task is to write one for Dan's approval.
 1. **Implement & Verify**: suite 100% green. The gate has **twelve legs** (the
    same ones `/status` runs live), in the order `StudioStatus::LEGS` names them:
 
@@ -115,9 +103,11 @@ Execute every step per round, not at the end of the session:
    `ruby -ryaml -e 'YAML.safe_load(File.read("PROJECT.md")[/\A---\n(.*?)\n---/m, 1], permitted_classes: [Date])'`
 5. **Update the Roadmap**: record findings, decisions, and phase completions in the active `ROADMAP-*.md`.
 6. **Update `working-with-dan.md`**: record durable lessons about working with dan.
-7. **Record Lore**:
-   `curl -X POST http://127.0.0.1:4000/api/lore/alt-slim-pickins -H 'Content-Type: application/json' -d '{"message":"...", "who":"<your-name>"}'`
-8. **Report to Journal**:
+7. **Propose and/or ask for new wishlist items**: review and update `WISHLIST.md` (graduate completed items, record new pinches/ideas).
+8. **Report Context Window Status**: state truncation status, step count, transcript volume, and remaining headroom.
+9. **Record Lore**:
+   `curl -X POST http://127.0.0.1:4000/api/lore/alt-slim-pickins -H 'Content-Type: application/json' -d '{"message":"...", "who":"<your-name>"}'` (or append to `LORE.md` when dashboard is down).
+10. **Report to Journal**:
    `curl -X POST http://127.0.0.1:4000/api/journal -H 'Content-Type: application/json' -d '{"message":"..."}'`
 
 ## Standing principles — do not break without saying so

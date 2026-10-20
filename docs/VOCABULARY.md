@@ -96,7 +96,7 @@ title .name
 title "Lifetime taxes"
 ```
 
-A `.sp` composed word (`def title target, text`) wrapping `heading`. Presents a
+A `.sp` composed word (`def title attribute, text`) wrapping `heading`. Presents a
 child heading inside a container without claiming the container's own box title
 slot.
 
@@ -433,13 +433,13 @@ section holdings, "What you own"
 section "Where you stand"
 ```
 
-A `.sp` composed word (`def section target, heading`). Establishes a titled
+A `.sp` composed word (`def section subject, heading`). Establishes a titled
 document landmark region and optionally shifts the subject to a domain
 collection or entity.
 
 ### `aside`
 
-- **name** — the variant
+- **name** — none
 - **content** — none
 - **modifiers** — none
 - **children** — anything
@@ -453,7 +453,7 @@ aside
   note "Supplementary context."
 ```
 
-A `.sp` composed word (`def aside variant`) over `box`. Marks a complementary
+A `.sp` composed word (`def aside`) over `box`. Marks a complementary
 sidebar region.
 
 ### `nav`
@@ -533,7 +533,7 @@ card compact
 card account, .name
 ```
 
-A `.sp` composed word (`def card target, title`) over `box`. Wraps a self-contained
+A `.sp` composed word (`def card subject, title`) over `box`. Wraps a self-contained
 domain entity in an `<article class="card">` with automatic DOM identity and
 heading depth.
 
@@ -577,7 +577,7 @@ heading without shifting the active subject.
 
 ### `scroll`
 
-- **name** — the variant
+- **name** — none
 - **content** — none
 - **modifiers** — none
 - **children** — anything
@@ -591,7 +591,7 @@ scroll
     column symbol
 ```
 
-A `.sp` composed word (`def scroll variant`) over `box`. Provides an isolated
+A `.sp` composed word (`def scroll`) over `box`. Provides an isolated
 scrolling viewport around dense content.
 
 ## Collections
@@ -617,7 +617,7 @@ A `.sp` composed word (`def list variant`) over `box`. Encloses `item` children
 
 ### `item`
 
-- **name** — the variant
+- **name** — none
 - **content** — text or data, when there is any
 - **modifiers** — none
 - **children** — anything
@@ -632,7 +632,7 @@ list plain
   item "Ruby logic before CSS before Stimulus."
 ```
 
-A `.sp` composed word (`def item variant, content`) defined alongside `list` in
+A `.sp` composed word (`def item content`) defined alongside `list` in
 `lib/vocabulary/list.sp`. Renders an `<li>` holding either inline text or nested
 children.
 
@@ -859,7 +859,7 @@ and optional `status:` payload values.
 
 ### `tabs`
 
-- **name** — the variant
+- **name** — none
 - **content** — none
 - **modifiers** — none
 - **children** — anything
@@ -1305,7 +1305,7 @@ target:` for zero-JavaScript live previews.
 - **renders** — the route template's sentences (inside a `.frame` file) or the caller's indented child block (inside a `def` composed word)
 
 ```sp
-def card target, title
+def card subject, title
   box .variant, id: .id
     choose
       when .title
