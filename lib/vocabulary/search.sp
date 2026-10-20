@@ -1,4 +1,4 @@
-def search
+def search q:, placeholder:, to:
   choose
     when .to
       form method: get, to: .to

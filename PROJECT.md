@@ -4,16 +4,17 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).
-  Daytrip 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)) is complete
-  (2026-10-20): `metric` and `fact` are harmonized on `def <word> attribute, value`
-  (`label:` and `as:` modifiers, `heading .label` inside `metric.sp`), bare
-  `metric <attr>`, dotted `metric .attr` / `fact .attr`, and 2-arg `fact <name>, <value>`
-  are healed, all hardcoded `word_name` branches in `Builder` and dead
-  `Generator#fact`/`#metric`/`#snippet` are removed, and `PartialWord` is collapsed
-  onto `Builder#evaluate_word_definition`. Twelve gate legs + pedagogy green,
-  658 runs / 7,087 assertions / 0 failures.
+  Daytrips 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)) and 0.8.0b
+  ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)) are complete (2026-10-20):
+  `metric` and `fact` are harmonized, `SlimPickins::KeyValue` (`key`, `label`,
+  `value`, `format`) unifies `metric`/`fact`, `table`, `chart`, and `form` controls,
+  `each` iterates a `Hash` as `KeyValue` items, `Subject` and `Dictionary` share
+  indifferent key lookup, `.sp` `def` headers declare keyword modifiers natively
+  (retiring `CANONICAL_MODIFIERS`), and `@kwargs.key?(:x)` ternary lines in
+  `words.rb` are gone. Twelve gate legs + pedagogy green, 661 runs / 7,102
+  assertions / 0 failures.
 last_touched: 2026-10-20
-next_step: 'Run Daytrip 0.8.0b (`DAYTRIP-0.8.0b.md`): introduce `SlimPickins::KeyValue` (`key`, `label`, `value`, `format`) to unify `metric`/`fact`, `table` (`column`/`total`), `chart` (`band`/`line`), and `form` controls (`field`, `input`, `textarea`, `checkbox`, `choice`, `option`, `hidden`), allow `each` to iterate a `Hash` as `KeyValue` items, share indifferent key lookup between `Subject` and `Dictionary`, let `.sp` `def` headers declare keyword modifiers natively (retiring `CANONICAL_MODIFIERS`), and replace `@kwargs.key?(:x)` ternary lines in `words.rb`.'
+next_step: 'Run Daytrip 0.8.0c (`DAYTRIP-0.8.0c.md`): let a blockless `box` inside a `def` splice `contents` by default (`def meta / box`), drop redundant `contents` lines under `box` in `def`s across the corpus, connect `.style` `--measure` and `--lead` to `.layout` `TREATMENT_TOKENS`, and update `conventions.rb` and `bin/check_conventions.rb`.'
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

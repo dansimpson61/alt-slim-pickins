@@ -161,10 +161,9 @@ module SlimPickins
 
     def subject = @builder.subject
     def chain = @builder.chain
+    def key_value(...) = @builder.key_value(...)
     def label_for(...) = @builder.label_for(...)
-    def label_of(...) = @builder.label_of(...)
     def format_of(...) = @builder.format_of(...)
-    def alignment_of(...) = @builder.alignment_of(...)
     def capture(&block) = @builder.capture(&block)
     def emit_node(node) = @builder.emit_node(node)
     def register!(...) = @builder.register!(...)

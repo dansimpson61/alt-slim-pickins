@@ -334,4 +334,20 @@ class DefTest < Minitest::Test
     html = render(source, locals: { points: [point_class.new('encloses')] })
     assert_includes html, '<div class="box framed"><p class="paragraph">encloses</p></div>'
   end
+
+  def test_def_declares_keyword_modifiers_with_optional_defaults
+    source = <<~SP
+      def callout, title, tone: quiet
+        box .tone
+          heading .title
+
+      "Demo"
+        callout "Default Tone"
+        callout "Alert Tone", tone: warning
+    SP
+
+    html = render(source)
+    assert_includes html, '<div class="box box--quiet callout"><h2 class="heading">Default Tone</h2></div>'
+    assert_includes html, '<div class="box box--warning callout"><h2 class="heading">Alert Tone</h2></div>'
+  end
 end

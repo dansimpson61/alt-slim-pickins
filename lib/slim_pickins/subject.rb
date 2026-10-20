@@ -77,11 +77,7 @@ module SlimPickins
       if @object.is_a?(Subject)
         return @object.has?(attribute)
       elsif @object.is_a?(Hash)
-        return true if @object.key?(attribute) || @object.key?(attribute.to_s)
-        if attribute.to_s.end_with?('?')
-          base = attribute.to_s.chomp('?')
-          return true if @object.key?(base.to_sym) || @object.key?(base)
-        end
+        return true if KeyValue.hash_has?(@object, attribute, predicate: true)
       elsif !@object.nil? && @object.respond_to?(attribute)
         return true
       end
@@ -94,21 +90,9 @@ module SlimPickins
       if @object.is_a?(Subject)
         return @object.fetch(attribute)
       elsif @object.is_a?(Hash)
-        if @object.key?(attribute)
-          result = @object[attribute]
+        if KeyValue.hash_has?(@object, attribute, predicate: true)
+          result = KeyValue.hash_fetch(@object, attribute, predicate: true)
           found = true
-        elsif @object.key?(attribute.to_s)
-          result = @object[attribute.to_s]
-          found = true
-        elsif attribute.to_s.end_with?('?')
-          base = attribute.to_s.chomp('?')
-          if @object.key?(base.to_sym)
-            result = @object[base.to_sym]
-            found = true
-          elsif @object.key?(base)
-            result = @object[base]
-            found = true
-          end
         end
       elsif !@object.nil? && @object.respond_to?(attribute)
         result = @object.public_send(attribute)

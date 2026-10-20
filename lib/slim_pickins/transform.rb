@@ -118,10 +118,8 @@ module SlimPickins
         pad = '  ' * depth
 
         if n.word == 'def'
-          word_name = n.compiled.first
-          params = "[#{n.compiled.drop(1).join(', ')}]"
           [
-            "#{pad}define_local_word(#{word_name}, #{params}) do",
+            "#{pad}define_local_word(#{n.compiled.join(', ')}) do",
             *emit(n.children, depth + 1),
             "#{pad}end"
           ]
@@ -185,7 +183,20 @@ module SlimPickins
                                  end
         params = split_args(params_str)
         raw = [def_target, *params]
-        compiled = raw.map { |a| ":#{a}" }
+        pos_params = []
+        kw_defaults = []
+        params.each do |p|
+          if p =~ /\A([a-z0-9_-]+):\s*(.*)\z/m
+            key = Regexp.last_match(1)
+            val_str = Regexp.last_match(2).strip
+            default_expr = val_str.empty? ? 'nil' : argument(val_str, sentence, as_modifier: true)
+            kw_key = key.include?('-') ? "'#{key}'" : key
+            kw_defaults << "#{kw_key}: #{default_expr}"
+          else
+            pos_params << ":#{p}"
+          end
+        end
+        compiled = [":#{def_target}", "[#{pos_params.join(', ')}]", *kw_defaults]
         ranks = [0] * raw.size
         return Node.new(indent: sentence.indent, body: sentence.body, lineno: sentence.lineno,
                         word: word, raw_args: raw, ranks: ranks, compiled: compiled, guard: nil,

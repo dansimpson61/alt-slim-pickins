@@ -176,16 +176,16 @@ eight example apps:
    `fact <name>, <value>`, removed all hardcoded `word_name` branches in `Builder`,
    retired dead `Generator#fact` / `#metric` / `#snippet`, collapsed `PartialWord`
    onto `Builder#evaluate_word_definition`, and repaired callers.
-2. **0.8.0b — `KeyValue` spine (`key`, `label`, `value`, `format`), `Hash` iteration in `each`, and native `kwargs` in `.sp` `def` headers & `Words`:**
-   Introduce `SlimPickins::KeyValue` to unify `(key, label, value, format)`
-   resolution across `metric`/`fact`, `table` (`column`/`total`), `chart`
-   (`band`/`line`), and `form` controls (`field`, `input`, `textarea`, `checkbox`,
-   `choice`, `option`, `hidden`); retire `Builder#label_of`, `Builder#format_of`,
-   and `Builder#alignment_of`; allow `each` to iterate a `Hash` as `KeyValue`
-   items and share indifferent key lookup between `Subject` and `Dictionary`; let
-   `.sp` `def` headers declare keyword modifiers natively (retiring
-   `CANONICAL_MODIFIERS` in `contracts.rb`) and replace the 24 `@kwargs.key?(:x)`
-   ternary lines in `words.rb`.
+2. **0.8.0b — `KeyValue` spine (`key`, `label`, `value`, `format`), `Hash` iteration in `each`, and native `kwargs` in `.sp` `def` headers & `Words` (complete, [DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)):**
+   Introduced `SlimPickins::KeyValue` (`lib/slim_pickins/key_value.rb`) to unify
+   `(key, label, value, format)` resolution across `metric`/`fact`, `table`
+   (`column`/`total`), `chart` (`band`/`line`), and `form` controls (`field`,
+   `input`, `textarea`, `checkbox`, `choice`, `option`, `hidden`); retired
+   `Builder#label_of` and `Builder#alignment_of`; allowed `each` to iterate a
+   `Hash` as `KeyValue` items and unified indifferent key lookup between
+   `Subject` and `Dictionary`; enabled keyword modifiers in `.sp` `def` headers
+   (retiring `CANONICAL_MODIFIERS` in `contracts.rb`); and replaced the
+   `@kwargs.key?(:x)` ternary lines in `words.rb`.
 3. **0.8.0c — `box` default `contents` splice & the `.style` / `.layout` handoff:**
    Let a blockless `box` inside a `def` splice `contents` automatically (so
    minting a container word is simply `def <word> / box` with zero generator

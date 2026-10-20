@@ -44,8 +44,8 @@ module SlimPickins
       contract name: :variant, content: true, modifiers: [:open, :id], children: :any, shape: :encloses, lazy: [:content], infers: [:box_body_over_children]
 
       def evaluate
-        open = @kwargs.key?(:open) ? @kwargs[:open] : nil
-        id = @kwargs.key?(:id) ? @kwargs[:id] : nil
+        open = @kwargs[:open]
+        id = @kwargs[:id]
 
         first = @args[0]
         second = @args[1]
@@ -135,32 +135,37 @@ module SlimPickins
       contract name: :binding, modifiers: [:from], children: :any, subject: :each, speech: :determiner, shape: :iterates, lazy: [], infers: [:plural_collection, :singular_binding, :subject_or_collection]
 
       def evaluate
-from = @kwargs.key?(:from) ? @kwargs[:from] : nil
-name, = arguments(@args)
-if Word.registry.key?(name) || Library.builtin.word?(name)
-  raise Error, "`each #{name}` cannot bind `#{name}` — it is a word of " \
-               "the language. Name the binding something else and say " \
-               "`from:` — `each row, from: .#{Inference.plural(name)}`."
-end
-
-# `from:` said is `from:` meant, even when what it reads is nil.
-items = if !@kwargs.key?(:from)
-          collection_for(name)
-        elsif from.is_a?(Symbol)
-          subject.fetch(from)
-        else
-          from
+        from = @kwargs[:from]
+        name, = arguments(@args)
+        if Word.registry.key?(name) || Library.builtin.word?(name)
+          raise Error, "`each #{name}` cannot bind `#{name}` — it is a word of " \
+                       "the language. Name the binding something else and say " \
+                       "`from:` — `each row, from: .#{Inference.plural(name)}`."
         end
 
-unless items.nil? || Inference.collection?(items)
-  raise Error, "`each #{name}` expects a collection to go through, got #{items.class.name.split('::').last.downcase}"
-end
+        # `from:` said is `from:` meant, even when what it reads is nil.
+        items = if !@kwargs.key?(:from)
+                  collection_for(name)
+                elsif from.is_a?(Symbol)
+                  subject.fetch(from)
+                else
+                  from
+                end
 
-collected = (items || []).to_a.map do |item|
-  naming(name, item) { chain.with(item, described_as: "this #{name}") { capture(&@block) } }
-end
-emit_node(Node[:each, { name: name }, collected])
+        unless items.nil? || Inference.collection?(items) || items.is_a?(Hash)
+          raise Error, "`each #{name}` expects a collection to go through, got #{items.class.name.split('::').last.downcase}"
+        end
 
+        iterable = if items.is_a?(Hash)
+                     items.map { |k, v| KeyValue.new(k, v, subject: subject, formatted: true) }
+                   else
+                     (items || []).to_a
+                   end
+
+        collected = iterable.map do |item|
+          naming(name, item) { chain.with(item, described_as: "this #{name}") { capture(&@block) } }
+        end
+        emit_node(Node[:each, { name: name }, collected])
       end
     end
 
@@ -177,15 +182,21 @@ emit_node(Node[:each, { name: name }, collected])
         columns = @collected
         sample = @rows.first
         columns.each do |c|
-          c[:sample] = sample && Subject.new(sample).fetch(c[:name])
-          c[:header] = label_of(c, sample)
-          c[:alignment] = alignment_of(c, sample)
+          sample_val = sample && Subject.new(sample).fetch(c[:name])
+          kv = key_value(c[:name], sample_val, row: sample, label: c[:header], format: c[:as])
+          c[:sample] = sample_val
+          c[:header] = kv.label
+          c[:alignment] = kv.alignment
         end
 
+        outer_subject = subject
         rows = @rows.map do |row|
           chain.with(row) do
             cells = columns.reject { |c| c[:total] }.map do |c|
-              { name: c[:name], value: subject.fetch(c[:name]), kind: format_of(c),
+              val = subject.fetch(c[:name])
+              kv = KeyValue.new(c[:name], val, subject: outer_subject, row: subject,
+                                label: c[:header], format: c[:as])
+              { name: c[:name], value: val, kind: kv.explicit_or_domain_format,
                 alignment: c[:alignment] }
             end
             # A row is a node too, though it is carried in the table's attributes
@@ -210,7 +221,8 @@ emit_node(Node[:each, { name: name }, collected])
           t = totals.find { |x| x[:name] == c[:name] }
           if t
             sum = rows.sum { |row| Subject.new(row).fetch(c[:name]) }
-            { value: sum, kind: format_of(c, rows.first), alignment: c[:alignment] }
+            kv = key_value(c[:name], sum, row: sample, label: c[:header], format: c[:as])
+            { value: sum, kind: kv.explicit_or_domain_format, alignment: c[:alignment] }
           elsif i.zero?
             { label: totals.first[:header] || 'Total' }
           else
@@ -223,9 +235,8 @@ emit_node(Node[:each, { name: name }, collected])
         contract name: :attribute, content: true, modifiers: [:as], subject: :row, shape: :registers, lazy: [], infers: [:column_registration, :table_header, :numeric_alignment, :format]
 
         def evaluate
-          as = @kwargs.key?(:as) ? @kwargs[:as] : nil
           name, header = arguments(@args)
-          register!(SlimPickins::Words::Table, { name: name, header: header, as: as }, 'column')
+          register!(SlimPickins::Words::Table, { name: name, header: header, as: @kwargs[:as] }, 'column')
         end
       end
 
@@ -243,10 +254,8 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :variant, content: true, modifiers: [:columns], children: :any, shape: :encloses, lazy: []
 
       def evaluate
-        columns = @kwargs.key?(:columns) ? @kwargs[:columns] : nil
-      variant, = arguments(@args)
-      emit_node(Node[:grid, { variant: variant, columns: columns }, capture(&@block)])
-
+        variant, = arguments(@args)
+        emit_node(Node[:grid, { variant: variant, columns: @kwargs[:columns] }, capture(&@block)])
       end
     end
 
@@ -272,7 +281,7 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :subject, content: true, modifiers: [:over], children: [:band, :line, :level, :each, :choose], subject: :shift, shape: :gathers, lazy: [], infers: [:chart_axis, :format_family, :table_header]
 
       def evaluate
-        over = @kwargs.key?(:over) ? @kwargs[:over] : nil
+        over = @kwargs[:over]
         name, caption = arguments(@args)
         @name = name
         @caption = caption
@@ -296,11 +305,12 @@ emit_node(Node[:each, { name: name }, collected])
       def resolve(series, rows)
         source = series[:from] ? series[:from].to_a : rows
         sample = source.first
-        kind = Subject.new(sample).format_for(series[:name])
+        kv = key_value(series[:name], nil, row: sample, label: series[:label])
+        kind = kv.explicit_or_domain_format
         values = source.map { |row| Subject.new(row).fetch(series[:name]) }
 
         { kind: series[:kind],
-          label: label_of({ name: series[:name], header: series[:label] }, sample),
+          label: kv.label,
           points: values.map(&:to_f),
           shown: values.map { |v| Generator.format(kind, v) } }
       end
@@ -325,9 +335,8 @@ emit_node(Node[:each, { name: name }, collected])
         contract name: :attribute, content: true, modifiers: [:from], shape: :registers, lazy: [], infers: [:column_registration]
 
         def evaluate
-          from = @kwargs.key?(:from) ? @kwargs[:from] : nil
           name, label = arguments(@args)
-          register!(SlimPickins::Words::Chart, { kind: :line, name: name, label: label, from: from }, 'line')
+          register!(SlimPickins::Words::Chart, { kind: :line, name: name, label: label, from: @kwargs[:from] }, 'line')
         end
       end
 
@@ -366,19 +375,16 @@ emit_node(Node[:each, { name: name }, collected])
         contract name: :name, content: true, shape: :says, lazy: []
 
         def evaluate
-          name, value = arguments(@args)
-          shown = value.nil? ? subject.fetch(name) : value
-          emit_node(Node[:hidden, { name: name, value: shown }, []])
+          kv = KeyValue.for_control(subject, @args, @kwargs, second_is: :value)
+          emit_node(Node[:hidden, { name: kv.key, value: kv.raw_value }, []])
         end
       end
 
       def evaluate
-        to = @kwargs.key?(:to) ? @kwargs[:to] : nil
-        method = @kwargs.key?(:method) ? @kwargs[:method] : nil
-        target = @kwargs.key?(:target) ? @kwargs[:target] : nil
         name, = arguments(@args)
         value, empty, children = about(name) { @builder.with_family(:form) { capture(&@block) } }
-        emit_node(Node[:form, { name: name, to: to, method: method, target: target }, prune(children, empty)])
+        emit_node(Node[:form, { name: name, to: @kwargs[:to], method: @kwargs[:method], target: @kwargs[:target] },
+                       prune(children, empty)])
         value
       end
     end
@@ -392,21 +398,12 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :attribute, content: true, modifiers: [:type, :step, :required], shape: :says, lazy: [], infers: [:label, :input_type, :input_step, :boolean_field]
 
       def evaluate
-        type = @kwargs.key?(:type) ? @kwargs[:type] : nil
-        step = @kwargs.key?(:step) ? @kwargs[:step] : nil
-        required = @kwargs.key?(:required) ? @kwargs[:required] : nil
-      name, label = arguments(@args)
-      value = subject.fetch(name)
-      # A value that is already true or false knows what shape it wants; the
-      # page says `field done` and gets a checkbox (dan's ruling, 2026-09-17).
-      # `type:` overrides, as every inference is overridable by saying the thing.
-      kind = type || (Inference.boolean?(value) ? :checkbox : Inference.input_type(value))
-      emit_node(Node[:field, { name: name, label: label_for(name, label),
-                           value: value,
-                           kind: kind,
-                           step: (step || Inference.step_for(value))&.to_s,
-                           required: required }, []])
-
+        kv = KeyValue.for_control(subject, @args, @kwargs)
+        emit_node(Node[:field, { name: kv.key, label: kv.label,
+                                 value: kv.raw_value,
+                                 kind: kv.input_type(@kwargs[:type]),
+                                 step: kv.step(@kwargs[:step]),
+                                 required: @kwargs[:required] }, []])
       end
     end
 
@@ -414,14 +411,10 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :attribute, content: true, modifiers: [:type, :placeholder], shape: :says, lazy: [], infers: [:input_type]
 
       def evaluate
-        type = @kwargs.key?(:type) ? @kwargs[:type] : nil
-        placeholder = @kwargs.key?(:placeholder) ? @kwargs[:placeholder] : nil
-      name, value = arguments(@args)
-      shown = value.nil? ? subject.fetch(name) : value
-      emit_node(Node[:input, { name: name, value: shown,
-                           kind: type || Inference.input_type(shown),
-                           placeholder: placeholder }, []])
-
+        kv = KeyValue.for_control(subject, @args, @kwargs, second_is: :value)
+        emit_node(Node[:input, { name: kv.key, value: kv.raw_value,
+                                 kind: @kwargs[:type] || Inference.input_type(kv.raw_value),
+                                 placeholder: @kwargs[:placeholder] }, []])
       end
     end
 
@@ -429,19 +422,10 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :attribute, content: true, modifiers: [:rows, :required, :readonly], shape: :says, lazy: [], infers: [:label]
 
       def evaluate
-        rows = @kwargs.key?(:rows) ? @kwargs[:rows] : nil
-        required = @kwargs.key?(:required) ? @kwargs[:required] : nil
-        readonly = @kwargs.key?(:readonly) ? @kwargs[:readonly] : nil
-        name, label = arguments(@args)
-        if name
-          value = subject.has?(name) ? subject.fetch(name) : nil
-        else
-          value = @args[0]
-          label = @args[1]
-        end
-        emit_node(Node[:textarea, { name: name, label: label_for(name, label),
-                                value: value, rows: (rows || 4).to_s,
-                                required: required, readonly: readonly }, []])
+        kv = KeyValue.for_control(subject, @args, @kwargs, require_attribute: false)
+        emit_node(Node[:textarea, { name: kv.key, label: kv.label,
+                                    value: kv.raw_value, rows: (@kwargs[:rows] || 4).to_s,
+                                    required: @kwargs[:required], readonly: @kwargs[:readonly] }, []])
       end
     end
 
@@ -449,10 +433,8 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :attribute, content: true, shape: :says, lazy: [], infers: [:label]
 
       def evaluate
-      name, label = arguments(@args)
-      value = subject.fetch(name)
-      emit_node(Node[:checkbox, { name: name, label: label_for(name, label), value: value }, []])
-
+        kv = KeyValue.for_control(subject, @args, @kwargs)
+        emit_node(Node[:checkbox, { name: kv.key, label: kv.label, value: kv.raw_value }, []])
       end
     end
 
@@ -467,23 +449,16 @@ emit_node(Node[:each, { name: name }, collected])
           remaining.shift
         end
 
-        name, label = arguments(remaining)
-        if name.nil? && remaining.first
-          val = remaining.first
-          name = val.is_a?(Symbol) ? val : nil
-          label = remaining[1] || (name ? label_for(name, nil) : nil)
-          selected = val.is_a?(Symbol) ? (subject.has?(val) ? subject.fetch(val) : nil) : val
-        else
-          @name = name
-          @label = label
-          selected = name && subject.has?(name) ? subject.fetch(name) : nil
-        end
+        kv = KeyValue.for_control(subject, remaining, @kwargs, require_attribute: false)
+        @name = kv.key
+        @label = kv.label
+        selected = kv.raw_value
 
         with_open
         options = @collected.map do |o|
           Node[:option, { value: o[:value], label: o[:label], selected: selected }, []]
         end
-        emit_node(Node[:choice, { name: name, label: label_for(name, label), selected: selected, variant: variant },
+        emit_node(Node[:choice, { name: kv.key, label: kv.label, selected: selected, variant: variant },
                    options])
       end
 
@@ -502,18 +477,12 @@ emit_node(Node[:each, { name: name }, collected])
       contract name: :variant, content: true, modifiers: [:to, :target, :type, :size, :name, :value], shape: :says, lazy: [], infers: [:button_type]
 
       def evaluate
-        to = @kwargs.key?(:to) ? @kwargs[:to] : nil
-        target = @kwargs.key?(:target) ? @kwargs[:target] : nil
-        type = @kwargs.key?(:type) ? @kwargs[:type] : nil
-        size = @kwargs.key?(:size) ? @kwargs[:size] : nil
-        name = @kwargs.key?(:name) ? @kwargs[:name] : nil
-        value = @kwargs.key?(:value) ? @kwargs[:value] : nil
         variant, label = arguments(@args)
         emit_node(Node[:button, { variant: variant,
-                              label: label || (variant && Inference.label(variant)),
-                              to: to, target: target, type: type, size: size,
-                              name: name, value: value }, []])
-
+                                  label: label || (variant && Inference.label(variant)),
+                                  to: @kwargs[:to], target: @kwargs[:target],
+                                  type: @kwargs[:type], size: @kwargs[:size],
+                                  name: @kwargs[:name], value: @kwargs[:value] }, []])
       end
     end
 
@@ -608,22 +577,8 @@ emit_node(Node[:each, { name: name }, collected])
       def self.find_entry(table, key)
         return nil unless table.is_a?(Hash)
 
-        candidates = [key]
-        if key == true || key == :true || key == 'true'
-          candidates = [true, :true, 'true']
-        elsif key == false || key == :false || key == 'false'
-          candidates = [false, :false, 'false']
-        elsif key.nil? || key == :nil || key == 'nil'
-          candidates = [nil, :nil, 'nil']
-        else
-          candidates << key.to_sym if key.respond_to?(:to_sym)
-          candidates << key.to_s if key.respond_to?(:to_s)
-        end
-
-        candidates.uniq.each do |k|
-          return table[k] if table.key?(k)
-        end
-        nil
+        key = key.raw_value if key.is_a?(KeyValue)
+        KeyValue.hash_fetch(table, key)
       end
 
       def self.resolve(builder, key, table, fallback: nil, forward_args: [], &block)

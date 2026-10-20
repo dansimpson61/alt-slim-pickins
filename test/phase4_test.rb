@@ -183,4 +183,34 @@ class Phase4Test < Minitest::Test
 
   # `chart` was redrafted in Phase 8 against roth's two real charts, and its
   # tests moved with it — see test/phase8_test.rb.
+
+  # --- KeyValue and Hash iteration (Daytrip 0.8.0b) ----------------------
+
+  def test_key_value_answers_key_label_value_and_format
+    described = Struct.new(:reading_minutes, keyword_init: true) do
+      def label_for(attr) = attr == :reading_minutes ? 'Minutes' : nil
+      def format_for(attr) = attr == :reading_minutes ? :number : nil
+    end.new(reading_minutes: 1420)
+
+    subj = SlimPickins::Subject.new(described)
+    kv = SlimPickins::KeyValue.new(:reading_minutes, 1420, subject: subj, formatted: true)
+
+    assert_equal :reading_minutes, kv.key
+    assert_equal 'Minutes', kv.label
+    assert_equal :number, kv.format
+    assert_equal '1,420', kv.value
+    assert_equal 1420, kv.raw_value
+  end
+
+  def test_each_iterates_a_hash_as_key_value_items
+    html = render(<<~PAGE, summary: { top_words: { box: 1420, section: 9 } })
+      summary
+        each top_word
+          metric
+    PAGE
+    assert_includes html, '<h2 class="metric-title">Box</h2>'
+    assert_includes html, '<div class="metric-value">1,420</div>'
+    assert_includes html, '<h2 class="metric-title">Section</h2>'
+    assert_includes html, '<div class="metric-value">9</div>'
+  end
 end

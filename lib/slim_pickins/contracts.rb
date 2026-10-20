@@ -104,21 +104,6 @@ module VocabularyShapes
     metric: { label: true }
   }.freeze
 
-  CANONICAL_MODIFIERS = {
-    action: %i[to variant status],
-    actions: [],
-    card: [:variant],
-    disclosure: [:open],
-    fact: %i[as label],
-    metric: %i[as label],
-    money: [:precision],
-    number: [:precision],
-    percent: [:precision],
-    search: %i[q placeholder to],
-    section: [],
-    snippet: []
-  }.freeze
-
   CANONICAL_SHAPES = {
     action: :encloses,
     actions: :encloses,
@@ -167,7 +152,10 @@ module VocabularyShapes
 
   def infer_from_def(word_name, def_node)
     word_sym = word_name.to_sym
-    params = def_node.raw_args.drop(1).map(&:to_sym)
+    raw_params = def_node.raw_args.drop(1)
+    mod_params, pos_params = raw_params.partition { |p| p.include?(':') }
+    params = pos_params.map(&:to_sym)
+    modifiers = mod_params.map { |m| m[/\A([a-z0-9_-]+):/, 1].to_sym }
 
     has_children = false
     walk = lambda do |nodes|
@@ -198,7 +186,6 @@ module VocabularyShapes
 
     name_slot = :none
     has_content = false
-    modifiers = []
 
     params.each_with_index do |param, idx|
       if param == :subject || (param == :target && %i[card section].include?(word_sym))
@@ -233,7 +220,7 @@ module VocabularyShapes
       end
     end
 
-    resolved_modifiers = CANONICAL_MODIFIERS[word_sym] || modifiers.sort
+    resolved_modifiers = modifiers
 
     subject_action = if params.include?(:subject) || (params.include?(:target) && %i[card section].include?(word_sym)) || word_sym == :card || word_sym == :section
                        :shift

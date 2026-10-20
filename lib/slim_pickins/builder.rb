@@ -136,7 +136,7 @@ module SlimPickins
       bound
     end
 
-    def define_local_word(word_name, param_names = [], &definition_block)
+    def define_local_word(word_name, param_names = [], **defaults, &definition_block)
       word_name = word_name.to_sym
       param_names = Array(param_names).map(&:to_sym)
 
@@ -148,22 +148,22 @@ module SlimPickins
         return
       end
 
-      define_single_local_word(word_name, param_names, &definition_block)
+      define_single_local_word(word_name, param_names, **defaults, &definition_block)
     end
 
-    def define_single_local_word(word_name, param_names, &definition_block)
+    def define_single_local_word(word_name, param_names, **defaults, &definition_block)
       word_name = word_name.to_sym
       param_names = Array(param_names).map(&:to_sym)
       contract = @library&.compiled_partial(word_name)&.instance_variable_get(:@contract) || CONTRACTS[word_name]
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
         evaluate_word_definition(word_name, param_names, args, kwargs, caller_block,
-                                 contract: contract, &definition_block)
+                                 contract: contract, defaults: defaults, &definition_block)
       end
     end
 
     def evaluate_word_definition(word_name, param_names, args, kwargs, caller_block,
-                                 contract: nil, gatherer: nil, &definition_block)
+                                 contract: nil, gatherer: nil, defaults: {}, &definition_block)
       word_name = word_name.to_sym
       param_names = Array(param_names).map(&:to_sym)
 
@@ -251,47 +251,11 @@ module SlimPickins
         end
 
         if contract&.name == :attribute && content_param == :value
-          fetched_attr, fetched_subj, fetched_val = @last_fetch
+          kv = KeyValue.resolve(subject, args, kwargs,
+                                last_fetch: @last_fetch,
+                                formatted: contract.infers.include?(:format))
           @last_fetch = nil
-          if args.first.is_a?(Symbol)
-            attr_name = args.first
-            second = args[1]
-            second = second.call if second.is_a?(Proc)
-            from_fetch = fetched_attr && args.size >= 2 && args[1].equal?(fetched_val)
-            if args.size < 2
-              raw_val = subject.has?(attr_name) ? subject.fetch(attr_name) : nil
-              raw_val = raw_val.call if raw_val.is_a?(Proc)
-              label_override = kwargs[:label]
-            elsif !from_fetch && second.is_a?(String) && subject.has?(attr_name)
-              raw_val = subject.fetch(attr_name)
-              raw_val = raw_val.call if raw_val.is_a?(Proc)
-              label_override = kwargs[:label] || second
-            else
-              raw_val = second
-              label_override = kwargs[:label]
-            end
-            bound[:attribute] = attr_name
-            bound[:name] = attr_name
-            bound[:label] = label_for(attr_name, label_override)
-            kind = kwargs[:as] ||
-                   (subject.has?(attr_name) ? subject.format_for(attr_name) : nil) ||
-                   (from_fetch && fetched_subj ? fetched_subj.format_for(fetched_attr) : nil)
-          else
-            attr_name = (fetched_attr if args.any? && args[0].equal?(fetched_val))
-            raw_val = args[0].is_a?(Proc) ? args[0].call : args[0]
-            label_override = kwargs[:label] || args[1]
-            bound[:attribute] = attr_name
-            bound[:name] = attr_name
-            bound[:label] = if label_override
-                              label_override
-                            elsif attr_name
-                              fetched_subj&.label_for(attr_name) || label_for(attr_name, nil)
-                            end
-            kind = kwargs[:as] ||
-                   (attr_name && (fetched_subj&.format_for(attr_name) || (subject.has?(attr_name) ? subject.format_for(attr_name) : nil)))
-          end
-          bound[:value] = contract.infers.include?(:format) ? Generator.format(kind, raw_val) : raw_val
-          @last_fetch = nil
+          bound.merge!(kv.to_h)
         else
           raw_content = content_val.is_a?(Proc) ? nil : content_val
           if contract&.label
@@ -314,8 +278,11 @@ module SlimPickins
         contract&.modifiers&.each do |modifier|
           unless bound.key?(modifier)
             found, val = chain.container_value(modifier)
-            bound[modifier] = found ? val : nil
+            bound[modifier] = found ? val : (defaults.key?(modifier) ? defaults[modifier] : nil)
           end
+        end
+        defaults.each do |k, v|
+          bound[k.to_sym] = v unless bound.key?(k.to_sym)
         end
 
         push = true
@@ -565,28 +532,13 @@ module SlimPickins
 
     # --- presentation helpers ---------------------------------------------
 
-    # `as:` said in the page, else the app's own answer, else what the value's
-    # shape can tell us — the same three levels as labels, owned by the same
-    # three people.
+    def key_value(key, raw_value = nil, row: nil, label: nil, format: nil, formatted: false)
+      row_subj = row.is_a?(Subject) || row.nil? ? row : Subject.new(row, builder: self)
+      KeyValue.new(key, raw_value, subject: subject, row: row_subj, label: label, format: format, formatted: formatted)
+    end
+
     def format_of(column, row = nil)
-      column[:as] || Subject.new(row || subject.object).format_for(column[:name])
-    end
-
-    # The same three levels as everywhere else — the page said it, or the app
-    # said it, or English — except that here "the app" is the row rather than
-    # whatever holds the collection. `format_of` had always asked the row;
-    # labels asked the enclosing subject, and a table of Years read its headers
-    # off the Projection that merely held them: "Irmaa applied cost".
-    def label_of(column, row = nil)
-      column[:header] ||
-        (row && Subject.new(row).label_for(column[:name])) ||
-        subject.label_for(column[:name]) ||
-        Inference.label(column[:name])
-    end
-
-    def alignment_of(column, sample)
-      kind = format_of(column, sample) || Inference.presentation(column[:sample])
-      %i[money percent number].include?(kind) ? 'column--numeric' : nil
+      key_value(column[:name], nil, row: row || subject.object, format: column[:as]).explicit_or_domain_format
     end
 
     # `each holding` looks for `holdings` on the subject. When the subject is
@@ -596,11 +548,12 @@ module SlimPickins
       plural = Inference.plural(name).to_sym
       if subject.has?(plural)
         val = subject.fetch(plural)
-        return val if Inference.collection?(val) || val.nil?
+        return val if Inference.collection?(val) || val.is_a?(Hash) || val.nil?
 
         raise Error, "#{subject.describe}'s #{plural} is not a collection to go through"
       end
-      return subject.object if Inference.collection?(subject.object)
+      return subject.object if Inference.collection?(subject.object) ||
+                               (subject.object.is_a?(Hash) && subject.describe == "this #{plural}")
       return nil if subject.object.nil? # nothing has nothing to go through
 
       raise Error, "#{subject.describe} has no #{plural} to go through"
@@ -701,8 +654,8 @@ module SlimPickins
 
     # Precedence, each level owned by whoever knows most: the page knows this
     # instance, the app knows its domain, the language knows only English.
-    def label_for(name, given)
-      given || subject.label_for(name) || Inference.label(name)
+    def label_for(name, given = nil, row = nil)
+      key_value(name, nil, row: row, label: given).label
     end
 
     # --- the context accessors the words read ------------------------------
