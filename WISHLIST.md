@@ -121,6 +121,11 @@ during prior roadmaps and daytrips.
 Structural definitions, engine boundaries, and library interfaces that establish
 what slim-pickins is as a coherent software system.
 
+- [ ] **First-Class Comments in `.sp`, `.layout`, and `.frame` DSLs:**
+  - *Origin:* Dan (Wishlist Intake, 2026-10-20).
+  - *Concept:* Currently, `.sp`, `.layout`, and `.frame` files do not have a uniform, dedicated comment syntax. Template and layout authors cannot leave explanatory notes, temporarily disable lines during debugging, or document structural design choices directly within source files without risking transformation syntax errors or leaking unexpected tokens into compiler pipelines.
+  - *Wish:* Support comments across all three domain files (e.g., `# ...` leading comment lines or inline comment syntax in `Transform` and companion parsers) that are cleanly stripped or ignored during lexical transformation and compilation while preserving line numbering for accurate diagnostics.
+
 - [ ] **The Role of Verbs in `sp` (Domain Actions, Mutations & State Transitions):**
   - *Origin:* Dan (Roadmap 0.8 framing, 2026-10-19).
   - *Concept:* Today, the language's vocabulary is overwhelmingly nominal (`speech: :noun`).
@@ -239,6 +244,17 @@ authors to think in slim-pickins.
     still sit in the working directories.
   - *Wish:* Stow historical study/planning docs into `history/` and keep only live reference
     and pedagogical documents in `docs/` and `examples/`.
+
+- [ ] **Retire Stale Artifacts, Legacy Directories (`views/partials`), and Obsolete Nomenclature:**
+  - *Origin:* Dan (Wishlist Intake, 2026-10-20).
+  - *Concept:* Over successive roadmaps, core concepts evolved and terminology was systematized
+    (`partial` → `composed word`, `tin` → `.frame`, `spiff` → `.layout`, `expects` retired,
+    `page` retired, etc.). However, legacy directory structures like `views/partials/` still
+    linger across `examples/` and `studio/`, and comments, test titles, or helper names across
+    the codebase still reference retired nomenclature.
+  - *Wish:* Conduct a thorough audit and sweep to retire stale directories (retiring or
+    renaming `views/partials/` to align with modern composed-word architecture) and cleanse
+    documentation, code comments, and test files of obsolete terminology.
 
 ---
 
