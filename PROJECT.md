@@ -13,7 +13,7 @@ status: >-
   onto `Builder#evaluate_word_definition`. Twelve gate legs + pedagogy green,
   658 runs / 7,087 assertions / 0 failures.
 last_touched: 2026-10-20
-next_step: 'Run Daytrip 0.8.0b (`DAYTRIP-0.8.0b.md`): let a blockless `box` inside a `def` splice `contents` by default (`def meta / box`), drop redundant `contents` lines under `box` in `def`s across the corpus, connect `.style` `--measure` and `--lead` to `.layout` `TREATMENT_TOKENS`, and update `conventions.rb` and `bin/check_conventions.rb`.'
+next_step: 'Run Daytrip 0.8.0b (`DAYTRIP-0.8.0b.md`): introduce `SlimPickins::KeyValue` (`key`, `label`, `value`, `format`) to unify `metric`/`fact`, `table` (`column`/`total`), `chart` (`band`/`line`), and `form` controls (`field`, `input`, `textarea`, `checkbox`, `choice`, `option`, `hidden`), allow `each` to iterate a `Hash` as `KeyValue` items, share indifferent key lookup between `Subject` and `Dictionary`, let `.sp` `def` headers declare keyword modifiers natively (retiring `CANONICAL_MODIFIERS`), and replace `@kwargs.key?(:x)` ternary lines in `words.rb`.'
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

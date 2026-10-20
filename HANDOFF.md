@@ -55,23 +55,32 @@ so this block cannot go stale without the gate saying so:
   all `word_name ==` branches in `Builder` and dead `Generator#fact`/`#metric`/`#snippet`
   are gone; `PartialWord` is collapsed onto `Builder#evaluate_word_definition`.
 - **Remaining 0.8 daytrips (`ROADMAP-0.8.md`):**
-  - **0.8.0b (`box` default `contents` splice & `.style`/`.layout` handoff):**
+  - **0.8.0b (`KeyValue` spine, `Hash` iteration in `each`, & native `kwargs` in `.sp` `def` headers and `Words`):**
+    Introduce `SlimPickins::KeyValue` (`key`, `label`, `value`, `format`) to
+    unify `metric`/`fact`, `table` (`column`/`total`), `chart` (`band`/`line`),
+    and `form` controls (`field`, `input`, `textarea`, `checkbox`, `choice`,
+    `option`, `hidden`); retire `Builder#label_of`, `Builder#format_of`, and
+    `Builder#alignment_of`; allow `each` to iterate a `Hash` as `KeyValue` items
+    and share indifferent key lookup between `Subject` and `Dictionary`; let
+    `.sp` `def` headers declare keyword modifiers natively (retiring
+    `CANONICAL_MODIFIERS` in `contracts.rb`) and replace the 24 `@kwargs.key?(:x)`
+    ternary lines in `words.rb`.
+  - **0.8.0c (`box` default `contents` splice & `.style`/`.layout` handoff):**
     Keep the `sp` way (minting a word with `def` rather than passing variants to
     `box`) and let a blockless `box` inside a `def` splice `contents` by default
     (`def meta / box`); connect `.style`'s `--measure` and `--lead` to
     `.layout`'s `TREATMENT_TOKENS`; update `conventions.rb` and
     `bin/check_conventions.rb`.
-  - **0.8.0c (Systematic audit of all 63 canonical words & kept app words):**
+  - **0.8.0d (Systematic audit of all 63 canonical words & kept app words):**
     Audit every primitive and composed word; retire `variant` wherever practical
     across the contracts and `def`s that still declare it; harmonize `card.sp`,
     `section.sp`, `title.sp`, `action.sp`, and `search.sp`; remove word-name
-    exceptions in `contracts.rb`; promote `SlimPickins::Described` to
-    `lib/slim_pickins/`; add `def` headers to all kept partials.
-  - **0.8.0d (Garden triage & SOTA app modernization):** Retire
+    exceptions in `contracts.rb`; add `def` headers to all kept partials.
+  - **0.8.0e (Garden triage & SOTA app modernization):** Retire
     `milestone_planner` and `way_exam`; stow dated planning/study docs in
     `history/`; modernize `publication`, `portfolio`, `roth`, `dashboard`, and
     `word_graph` to SOTA `.sp`.
-  - **0.8.0e (Leveling the path for 0.9 CRUD in `portfolio` & close):**
+  - **0.8.0f (Leveling the path for 0.9 CRUD in `portfolio` & close):**
     Harmonize `form`/`field`/`input` contracts and collection-scoped `empty`
     pruning for Roadmap 0.9's SQLite CRUD stretch exam in `examples/portfolio`.
 - **Next step:** run **Daytrip 0.8.0b** (`DAYTRIP-0.8.0b.md`).

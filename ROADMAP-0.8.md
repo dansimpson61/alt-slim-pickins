@@ -62,7 +62,28 @@ Roadmap 0.9's full CRUD stretch exam in `examples/portfolio`.
        `partials/*.sp` file in `examples/` and `studio/` onto explicit `def`
        headers.
 
-2. **`box` in `def`s, domain idioms, and the `.style` / `.layout` handoff.**
+2. **`KeyValue` spine, native `kwargs`, `box` in `def`s, and the `.style` / `.layout` handoff.**
+   - **`SlimPickins::KeyValue` as the single runtime spine for `(key, label, value, format)`:**
+     Every attribute-bearing word in the language asks the same four questions
+     (`key`, `label`, `value`, `format`). Introduce `SlimPickins::KeyValue` to
+     own those four questions and their three-tier precedence rules in one place,
+     routing `metric`, `fact`, `table` (`column` / `total`), `chart` (`band` /
+     `line`), and `form` controls (`field`, `input`, `textarea`, `checkbox`,
+     `choice`, `option`, `hidden`) through `KeyValue`, and retiring
+     `Builder#label_of`, `Builder#format_of`, `Builder#alignment_of`, and the
+     ad-hoc hash surgery in `Builder#evaluate_word_definition`.
+   - **Native `Hash` iteration as `KeyValue`s in `each` & shared indifferent key lookup:**
+     Allow `each` to iterate a native Ruby `Hash` by yielding each `[k, v]` pair
+     as a `KeyValue` (while keeping `Hash` a keyed subject when shifted into),
+     and unify the duplicated `Symbol`/`String`/`boolean`/`nil` key-matching
+     loops in `Subject` and `Dictionary`.
+   - **Native `kwargs` in `.sp` `def` headers and `Words`:**
+     Let `def` headers in `.sp` declare keyword modifiers natively (`def metric
+     attribute, value, as: nil, label: nil`, `def action label, to: nil, ...`) so
+     `VocabularyShapes#infer_from_def` reads modifiers directly from the `def`
+     header and `CANONICAL_MODIFIERS` in `contracts.rb` vanishes; replace the 24
+     `@kwargs.key?(:x) ? @kwargs[:x] : nil` ternary lines in `words.rb` with
+     direct `@kwargs[:x]`.
    - **Minting words is the `sp` way — and `box` in a `def` splices `contents`:**
      In `sp`, we do not pass arbitrary variants to `box` (`box meta` would carve
      out a generator exception and retreat into variants); we mint a word
@@ -72,10 +93,6 @@ Roadmap 0.9's full CRUD stretch exam in `examples/portfolio`.
      text body (`def meta / box`, `def actions / box`), let `Box#evaluate`
      splice `contents` by default so minting a container word does not require
      repeating `contents` underneath `box`.
-   - **`SlimPickins::Described` promoted to `lib/`:** Promote the `labels` and
-     `formats` class-level model macro from `examples/publication/lib/shelf.rb`
-     into `lib/slim_pickins/` as the house standard for domain models, retiring
-     the per-instance `Fixtures.labelled` singleton-method monkeypatch.
    - **`.style` and `.layout` token handoff:** Update `Compiler::Layout::TREATMENT_TOKENS`
      to reference `var(--measure, 65ch)` and `var(--lead, 1.7)` so a surface's
      `.style` companion (`measure`, `lead`) governs `:editorial` and `:prose`
@@ -95,10 +112,10 @@ Roadmap 0.9's full CRUD stretch exam in `examples/portfolio`.
      - *Keep and modernize* `publication`, `portfolio`, `roth`, `dashboard`, and
        `word_graph` to state-of-the-art `sp`: replace multi-branch `choose/when`
        status-badge ladders with `dictionary`/`on`/`map`, replace variant hacks
-       with minted words or `dictionary`/`map`, use `SlimPickins::Described`,
-       and fix live two-argument `fact` calls across `examples/` and `studio/`.
-       Kept apps are updated to be exemplary `.sp`, not constrained to
-       byte-identical legacy HTML.
+       with minted words or `dictionary`/`map`, retire `Fixtures.labelled`
+       singleton monkeypatching, and fix live two-argument `fact` calls across
+       `examples/` and `studio/`. Kept apps are updated to be exemplary `.sp`,
+       not constrained to byte-identical legacy HTML.
 
 4. **Preparing the path for Roadmap 0.9 (`portfolio` as the full CRUD app).**
    - **`portfolio` chosen as the 0.9 target:** `examples/portfolio` will carry
@@ -137,7 +154,9 @@ eight example apps:
 
 - `metric` and `fact` were found to rely on bespoke `if word_name ==` branches
   in `Builder#define_single_local_word` that actively corrupt labels on bare
-  `metric <attr>` and two-argument `fact <name>, <value>` calls across 8 files.
+  `metric <attr>` and two-argument `fact <name>, <value>` calls across 8 files,
+  while seven different word classes in `Words` and `Builder` re-derived
+  `(key, label, value, format)` by hand instead of asking one `KeyValue` object.
 - Fourteen canonical words still carry `variant` in their contracts or `def`
   signatures (six with zero CSS rules or callers, others where minting a word
   with `def` or using `dictionary`/`on`/`map` is the `sp` way), and a blockless
@@ -157,27 +176,37 @@ eight example apps:
    `fact <name>, <value>`, removed all hardcoded `word_name` branches in `Builder`,
    retired dead `Generator#fact` / `#metric` / `#snippet`, collapsed `PartialWord`
    onto `Builder#evaluate_word_definition`, and repaired callers.
-2. **0.8.0b — `box` default `contents` splice & the `.style` / `.layout` handoff:**
+2. **0.8.0b — `KeyValue` spine (`key`, `label`, `value`, `format`), `Hash` iteration in `each`, and native `kwargs` in `.sp` `def` headers & `Words`:**
+   Introduce `SlimPickins::KeyValue` to unify `(key, label, value, format)`
+   resolution across `metric`/`fact`, `table` (`column`/`total`), `chart`
+   (`band`/`line`), and `form` controls (`field`, `input`, `textarea`, `checkbox`,
+   `choice`, `option`, `hidden`); retire `Builder#label_of`, `Builder#format_of`,
+   and `Builder#alignment_of`; allow `each` to iterate a `Hash` as `KeyValue`
+   items and share indifferent key lookup between `Subject` and `Dictionary`; let
+   `.sp` `def` headers declare keyword modifiers natively (retiring
+   `CANONICAL_MODIFIERS` in `contracts.rb`) and replace the 24 `@kwargs.key?(:x)`
+   ternary lines in `words.rb`.
+3. **0.8.0c — `box` default `contents` splice & the `.style` / `.layout` handoff:**
    Let a blockless `box` inside a `def` splice `contents` automatically (so
    minting a container word is simply `def <word> / box` with zero generator
    exceptions and zero variants); connect `.style`'s `--measure` and `--lead` to
    `.layout`'s `TREATMENT_TOKENS`; update `conventions.rb` and
    `check_conventions.rb`.
-3. **0.8.0c — Systematic audit of all 63 canonical words & all kept app words:**
+4. **0.8.0d — Systematic audit of all 63 canonical words & all kept app words:**
    Audit every primitive in `words.rb`, every composed word in
    `lib/vocabulary/*.sp`, and every kept app word against a shared SOTA rubric:
    retire `variant` wherever practical (removing dead `variant` slots on
    `aside`, `box`, `item`, `paragraph`, `scroll`, `tabs`, `nav`, `card`, and
    replacing `span <variant>` in `studio` with minted words); harmonize
    `card.sp`, `section.sp`, `title.sp`, `action.sp`, and `search.sp`; remove
-   word-name exceptions from `contracts.rb`; promote `SlimPickins::Described` to
-   `lib/slim_pickins/`; add explicit `def` headers to all kept partials.
-4. **0.8.0d — Garden triage & SOTA app modernization:**
+   word-name exceptions from `contracts.rb`; add explicit `def` headers to all
+   kept partials.
+5. **0.8.0e — Garden triage & SOTA app modernization:**
    Retire `milestone_planner` and `way_exam` (plus root `word_graph.html` and
    stale links); stow dated planning/study docs in `history/`; modernize
    `publication`, `portfolio`, `roth`, `dashboard`, and `word_graph` to use
-   `dictionary`/`on`/`map`, `SlimPickins::Described`, and SOTA `.sp`.
-5. **0.8.0e — Leveling the path for 0.9 CRUD & roadmap close:**
+   `dictionary`/`on`/`map`, `KeyValue`, and SOTA `.sp`.
+6. **0.8.0f — Leveling the path for 0.9 CRUD & roadmap close:**
    Harmonize `form` / `field` / `input` contracts and collection-scoped `empty`
    pruning; run the full visual and gate verification across the five kept apps
    and Studio; close Roadmap 0.8.
