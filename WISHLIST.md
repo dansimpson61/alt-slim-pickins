@@ -37,6 +37,7 @@
 6. **At Roadmap Conception (Framing the Stretch Exam):**
    - For **odd-numbered (forward-eye) roadmaps**, select the next **Stretch Exam** (`docs/STRETCH_PROTOCOL.md`) by pulling mature pinches from Section I, architectural goals from Section II, and aesthetic targets from Section IV into a single authentic reference application drafted on paper first.
    - For **even-numbered (backward-eye) roadmaps**, review Section III (Pedagogy & Repo) and audit the `examples/` garden to harvest generalizable words from the last Stretch Exam and retire dated prototype apps that no longer carry their weight.
+
 ---
 
 ## I. Loose Ends & Technical Pinches (The Pinch Ledger)
@@ -44,15 +45,24 @@
 Unsettled details, known edge-case collisions, and mechanical seams identified
 during prior roadmaps and daytrips.
 
-- [ ] **Context-Sensitive `actions` ("Where a word sits chooses its form"):**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (Pinch & What-if 1), 2026-10-04.
-  - *Symptom:* `actions` (`lib/vocabulary/actions.sp`) unconditionally opens its own
-    `<form method="post">`. When placed inside a `<form>`, it emits an invalid nested
-    `<form>` in the DOM (`milestone_planner`'s "Add Task" button posts to `/milestones/m1`
-    instead of `/milestones/m1/tasks`).
-  - *Desired shape:* Inside an enclosing form, `actions` renders a container for buttons
-    (`<div class="actions">`); outside an enclosing form, it renders its own posting form.
-    Matches the existing precedent of `button` and `group`.
+- [ ] **`metric` and `fact` Signature & Runtime Discrepancy (Targeted in Roadmap 0.8):**
+  - *Origin:* `DAYTRIP-0.7.0f.md` & Roadmap 0.8 audit, 2026-10-19.
+  - *Symptom:* `metric.sp` (`def metric attribute, label`) and `fact.sp` (`def fact attribute, value`)
+    disagree on their second parameter and rely on bespoke `if word_name == :fact / :metric / :snippet`
+    branches in `Builder#define_single_local_word`. Bare `metric reading_minutes` renders `9` as both
+    the `<h3>` label and the value; two-argument `fact origin, .origin` overwrites `<dt>` with the
+    `<dd>` value across 7 files; dotted `metric .reading_minutes` loses the attribute name.
+  - *Desired shape:* Harmonize `metric.sp` and `fact.sp` on `attribute, value` (with `label:` and `as:`
+    modifiers), use `heading` inside `metric.sp`, remove the hardcoded `word_name` branches in `Builder`,
+    and retire the dead duplicates in `Generator` and `PartialWord`.
+
+- [ ] **`.style` vs. `.layout` Measure & Lead Token Handoff (Targeted in Roadmap 0.8):**
+  - *Origin:* `DAYTRIP-0.7.0f.md`, 2026-10-18.
+  - *Symptom:* `Compiler::Layout::TREATMENT_TOKENS` hardcodes `'max-width' => '65ch'` and
+    `'line-height' => '1.7'` on `:editorial` (and `'70ch'` / `'1.6'` on `:prose`), overriding
+    `:root { --measure: 72ch; --lead: 1.7; }` emitted by a surface's `.style` companion.
+  - *Desired shape:* `TREATMENT_TOKENS` reads `var(--measure, 65ch)` and `var(--lead, 1.7)` so
+    `.style` and `.layout` compose without `.layout` clobbering `.style`.
 
 - [ ] **`link` Syntax Duality (Roadmap 0.5 Criterion 7, Item 1):**
   - *Origin:* `ROADMAP-0.5.md` (Criterion 7, open question 1); `examples/portfolio/`.
@@ -73,17 +83,8 @@ during prior roadmaps and daytrips.
   - *Desired shape:* Re-evaluate each parser fix individually under the Ode's simplicity test,
     ensuring authors don't mind the compiler while sentence parsing remains robust.
 
-- [ ] **Landing Evaluation for Sentence Arguments (`page document, .title`):**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (Pinch & What-if 2); `lore_reader`.
-  - *Symptom:* `page document, .title` raises `this page has no title` because dotted
-    arguments (`.title`) evaluate against the *enclosing* subject before the sentence
-    shifts to its new subject target (`document`). Authors currently resort to Ruby
-    escapes (`page document, document.title`).
-  - *Desired shape:* A sentence's arguments evaluate where the sentence lands, allowing
-    `page document, .title` and `section accounts, .name` to resolve naturally.
-
 - [ ] **Class Derivation Decoupled from Subject Attribute Collision:**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (Pinch & What-if 3); Lore entry 8.
+  - *Origin:* `examples/publication/WHAT_IF.md` (Pinch & What-if 3); Lore entry 8.
   - *Symptom:* In `section users`, the element loses its `section--users` CSS modifier class
     whenever the active subject also happens to answer `#users`. This occurs because
     name parameters currently double as attribute lookups.
@@ -91,27 +92,27 @@ during prior roadmaps and daytrips.
     from what the underlying model happens to respond to.
 
 - [ ] **Object Identity for DOM IDs:**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (What-if 4).
+  - *Origin:* `examples/publication/WHAT_IF.md` (What-if 4).
   - *Symptom:* Generated element IDs currently follow the local variable binding name
     (e.g. `document-primer` on `document.sp` becomes `result-primer` on `search.sp`),
     causing the same entity to wear different DOM IDs across pages.
   - *Desired shape:* Element IDs derive from the domain object's intrinsic model identity
     or class, remaining stable across views.
 
-- [ ] **Heading Depth Level Gaps:**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (Pinch & What-if 6).
-  - *Symptom:* Metric labels render as `<h3>` with no preceding `<h2>` on several pages.
-    While heading depth is calculated from nesting depth, nothing prevents skipping levels
-    in the semantic outline.
+- [ ] **Heading Depth Level Gaps (Targeted in Roadmap 0.8):**
+  - *Origin:* `examples/publication/WHAT_IF.md` (Pinch & What-if 6).
+  - *Symptom:* Metric labels render as `<h3>` with no preceding `<h2>` on several pages because
+    `metric.sp` hardcodes `tag h3, .label, class: "metric-label"` instead of participating in
+    `Generator#heading`'s `@box_level` depth convention.
   - *Desired shape:* Heading level calculation ensures semantic hierarchy without skipping.
 
-- [ ] **Collection-Scoped Emptiness:**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (Pinch & What-if 7).
-  - *Symptom:* When a page's root subject is an empty collection, the current pruning
-    mechanism blanks the entire page, including sibling sections that discuss other
-    attributes.
-  - *Desired shape:* Emptiness prunes content scoped to the empty collection, not the
-    entire page frame.
+- [ ] **Collection-Scoped Emptiness (Targeted in Roadmap 0.8 for 0.9 CRUD):**
+  - *Origin:* `examples/publication/WHAT_IF.md` (Pinch & What-if 7).
+  - *Symptom:* When a page's or section's subject is an empty collection, `Builder#prune`
+    removes all non-`empty` children, which blanks sibling creation forms or toolbars on an
+    empty CRUD index.
+  - *Desired shape:* Emptiness prunes content scoped to the empty collection's iteration
+    container, not sibling forms or sections.
 
 - [ ] **Entity Routing Helper Primitive:**
   - *Origin:* `history/CHRONICLE.md`, Phase 6.
@@ -120,19 +121,59 @@ during prior roadmaps and daytrips.
   - *Desired shape:* A humane routing convention or entity path resolution helper that
     avoids hardcoded string templates in template links.
 
-- [ ] **Date Formatting Register Discrepancy:**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (Register pinch).
-  - *Symptom:* Dates in table cells are formatted automatically via `Inference.moment`,
-    but `CONVENTIONS.md` registered only "number, percent or money". The documentation
-    register understates runtime behavior.
-  - *Desired shape:* Formalize and register date/moment formatting in conventions.
-
 ---
 
 ## II. Architecture, Library & Language Horizons
 
 Structural definitions, engine boundaries, and library interfaces that establish
 what slim-pickins is as a coherent software system.
+
+- [ ] **The Role of Verbs in `sp` (Domain Actions, Mutations & State Transitions):**
+  - *Origin:* Dan (Roadmap 0.8 framing, 2026-10-19).
+  - *Concept:* Today, the language's vocabulary is overwhelmingly nominal (`speech: :noun`).
+    Only four words are classified as verbs (`choose`, `map`, `submit`, `reset`) — two
+    control-flow directives and two HTML `<button type>` words — while `action` and `button`
+    are classified as nouns. Yet in interactive applications and state machines, a domain
+    subject is defined not only by the attributes it *has* (nouns), but by the operations
+    and state transitions it *permits* (`archive`, `rebalance`, `transfer`, `close`, `approve`).
+  - *Wish:* Explore a first-class place for **verbs** in `sp` — keeping the ontological
+    boundary crisp (**nouns declare substance on the page; verbs declare transitions or
+    intentions on the subject**). Consider how a verb sentence against the active subject
+    can infer its target route, HTTP method, confirmation prompt, or availability from the
+    domain object's contract without forcing authors to hand-wire forms and URLs.
+
+- [ ] **Seamless, Joyfully JS-Free Interactivity (Declarative Client Behavior Under the Hood):**
+  - *Origin:* Dan (Roadmap 0.8 framing, 2026-10-19).
+  - *Concept:* House rule: *"The best JavaScript is the least JavaScript. Ruby > CSS >
+    Stimulus > custom JS, in that order of reach."* Native HTML and CSS carry remarkable
+    weight on their own (`<details>` for `disclosure`, radio inputs for `tabs`, container
+    queries for `.layout`), and when an interaction finally reaches the limits of plain
+    HTML/CSS (live recalculation in `roth`, auto-submitting workbench editors in `studio`,
+    partial zone refreshes, debounced search, inline confirmation), apps currently fall
+    back to bespoke per-app `public/js/app.js` scripts with hardcoded DOM selectors.
+  - *Wish:* Abstract client-side interactivity (such as a compact set of Stimulus controllers
+    shipped with the engine) seamlessly behind `sp` words and modifiers. The generator
+    emits the `data-controller` / `data-action` / `data-target` attributes automatically,
+    so `.sp` views remain 100% joyfully JS-free while gaining live partial updates,
+    debounced inputs, and declarative transitions without custom JavaScript.
+
+- [ ] **Database Frontend & Authentic CRUD Example Application (`examples/portfolio` in Roadmap 0.9):**
+  - *Origin:* Dan (Wishlist Intake, 2026-10-12; target selected 2026-10-19).
+  - *Concept:* Existing example apps primarily display in-memory fixtures or read-only models.
+    Upgrading `examples/portfolio` into a SQLite-backed CRUD application tests relational
+    mutations (`Account` → `Holding` / `Contribution`) alongside quantitative tables, totals,
+    metrics, and formatting.
+  - *Wish:* Build Roadmap 0.9's authentic CRUD Stretch Exam in `examples/portfolio` (backed by
+    SQLite and a lightweight Ruby persistence layer) demonstrating create, read, update, delete,
+    form submissions, validation error feedback (`422`), empty states, and flash messages in
+    idiomatic `.sp`.
+
+- [ ] **Standardizing Domain Contract Declarations (`SlimPickins::Described`, Targeted in Roadmap 0.8):**
+  - *Origin:* `examples/publication/WHAT_IF.md` (DRY & OOP shape); `examples/publication/lib/shelf.rb`.
+  - *Concept:* `publication` declares display contracts on domain classes (`labels`, `formats`)
+    via `SlimPickins::Described` rather than per-instance `Fixtures.labelled` singleton methods.
+  - *Wish:* Promote `SlimPickins::Described` to `lib/slim_pickins/` in Roadmap 0.8 and adopt
+    it as the shared house standard across all kept example apps.
 
 - [ ] **Defining the Slim-Pickins MVP (Core Language Specification):**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
@@ -145,64 +186,29 @@ what slim-pickins is as a coherent software system.
     4. Essential layout primitives.
     Differentiate what is core language versus what belongs in app-space or domain extensions.
 
-- [ ] **Library vs. Development Project Structure (Clean, Lean Gemification):**
-  - *Origin:* Dan (Wishlist Intake, 2026-10-12).
-  - *Concept:* The repository currently mixes the engine (`lib/slim_pickins`), the canonical
-    vocabulary (`lib/vocabulary`), the test/gate harnesses (`check_*.rb`), the development
-    studio (`studio/`), and eight example applications (`examples/`).
-  - *Wish:* Clearly delineate `slim_pickins` as a standalone, distributable library/gem
-    versus the surrounding development project. Ensure the core library is clean, lean,
-    strictly scoped, and readily gemifiable without coupling to dev harnesses.
-
 - [ ] **Adapter Pattern for Pluggable Backends (Library-Agnostic Extensions):**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
   - *Concept:* Certain features currently rely on bespoke implementations or hardcoded
-    helpers (e.g. chart rendering, markdown parsing via Redcarpet/Kramdown, syntax highlighting).
+    helpers (e.g. chart rendering, markdown parsing, syntax highlighting).
   - *Wish:* Establish an adapter pattern that preserves a consistent, declarative `.sp`
-    vocabulary interface (e.g. `chart`, `markdown`, `code`) while making the underlying
+    vocabulary interface (e.g. `chart`, `prose`, `snippet`) while making the underlying
     engine swappable and impartial. An author writes pure `.sp`; the host application
     supplies or configures the rendering adapter.
-
-- [ ] **Database Frontend & Authentic CRUD Example Application:**
-  - *Origin:* Dan (Wishlist Intake, 2026-10-12).
-  - *Concept:* Existing example apps primarily display in-memory fixtures or read-only models.
-    Is a database frontend already fully consistent with what we have built, or does it
-    introduce unconsidered seams in form handling, validation states, and data mutations?
-  - *Wish:* Build at least one authentic CRUD application in our examples (backed by SQLite
-    and a lightweight Ruby persistence layer) demonstrating create, read, update, delete,
-    form submissions, mutation handling, validation error feedback, and flash messages in
-    idiomatic `.sp`.
 
 - [ ] **The "Rubinius" Vision — Writing `sp` in `sp` to the Practical Limit:**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
   - *Concept:* Rubinius proved the elegance of self-hosting by implementing Ruby in Ruby.
-    Slim-pickins proved the first stage of this by migrating 26 canonical vocabulary words
+    Slim-pickins proved the first stage of this by migrating 24 canonical vocabulary words
     from Ruby primitives into `.sp` composed words with `def`.
   - *Wish:* Continually investigate and push the boundary of self-hosting:
     How much of the studio (inspect views, error reporting, docs renderer), the debug
     tooling, and even internal AST/representation inspectors can be authored purely as `.sp`?
-
-- [ ] **Untangling the Dual Nature of "Variant" (Roadmap 0.5 Criterion 7, Item 2):**
-  - *Origin:* `ROADMAP-0.5.md` (Criterion 7, open question 2).
-  - *Concept:* "Variant" currently conflates two distinct concerns:
-    1. Author-chosen stylistic weight (e.g. `button primary`, `note quiet`).
-    2. Data-driven status derived automatically from models (e.g. `badge status`
-       rendering red for `blocker` or green for `canonical`).
-  - *Wish:* Distinct semantic models so presentational options and data-derived states
-    do not collide in the modifier slot.
 
 - [ ] **Systematic Audit of Container Value Inheritance (Roadmap 0.5 Criterion 7, Item 4):**
   - *Origin:* `ROADMAP-0.5.md` (Criterion 7, open question 4).
   - *Concept:* Words missing values look up to enclosing words via `chain.container_value`.
   - *Wish:* Review how container inheritance interacts with nearest-first lexical scoping
     now that Option A/B1 and family scoping have landed.
-
-- [ ] **Standardizing Domain Contract Declarations (`labels`, `formats`):**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (DRY & OOP shape).
-  - *Concept:* `doc_reader` declares display contracts on domain classes (`labels`,
-    `formats`) rather than per-instance fixtures.
-  - *Wish:* Establish a clean, shared house standard for domain model presentation
-    contracts across all example apps.
 
 - [ ] **App-Specific Ruby Words (`app-words.rb` / Authoring Words in Ruby):**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
@@ -221,8 +227,8 @@ what slim-pickins is as a coherent software system.
 How the project presents itself, names its concepts, organizes its artifacts, and teaches
 authors to think in slim-pickins.
 
-> **Graduated:** the terminology audit and the polysemy audit, once listed here,
-> closed with Roadmap 0.6 — see Section VI.
+> **Graduated:** the terminology audit, polysemy audit, and first-principles pedagogy
+> rewrite closed with Roadmap 0.6 — see Section VI.
 
 - [ ] **Project Identity: Dropping `alt-` and Consolidating `slim-pickins`:**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
@@ -232,27 +238,14 @@ authors to think in slim-pickins.
   - *Wish:* Drop the `alt-` prefix from the project; archive or delete the obsolete earlier
     versions of `slim-pickins` across `~/dev`, leaving one clean, authoritative repository.
 
-- [ ] **Repository Cleanup & Historical Artifact Stowing:**
-  - *Origin:* Dan (Wishlist Intake, 2026-10-12).
-  - *Concept:* The root directory is crowded with dozens of historical planning files,
-    past daytrips (`DAYTRIP-*.md`), audit notes, and scratch artifacts.
-  - *Wish:* Stow historical daytrips and planning artifacts into clean archive directories
-    (e.g. `history/daytrips/`, `history/planning/`). Cleanly organize `examples/` and
-    `studio/` (classic vs workbench). A tidy repository layout makes it much easier to
-    see what is current, what needs modernizing, and what should be retired.
-
-- [ ] **Pedagogy from First Principles (Teaching the Way of Slim-Pickins):**
-  - *Origin:* Dan (Wishlist Intake, 2026-10-12).
-  - *Concept:* Our documentation currently suffers from being written by compiler developers
-    for compiler developers—dense with historical development context, shorthand, and
-    internal mechanisms.
-  - *Wish:* Greatly improve pedagogy:
-    1. Define what *good pedagogy* is for slim-pickins.
-    2. Show significantly more actual written `.sp`.
-    3. Demonstrate idiomatic structure: short, outline-like pages calling short, focused
-       word `def`s.
-    4. Rewrite pedagogical materials from the author's viewpoint, stripping away historical
-       justifications, compiler mechanics, and obsolete jargon.
+- [ ] **Stowing Remaining Planning & Study Artifacts (Targeted in Roadmap 0.8):**
+  - *Origin:* Dan (Roadmap 0.8 framing, 2026-10-19).
+  - *Concept:* While past daytrips and roadmaps were stowed in `history/` during 0.6.0g and
+    0.7 close, several dated planning/study documents (`KERNEL.md`, `ON_PAPER.md`, `WHAT_IF.md`,
+    `INVENTORY.md`, `ROTH_DOMAIN_BACKLOG.md`, `ROTH_STUDY.md`) and a stray `word_graph.html`
+    still sit in the working directories.
+  - *Wish:* Stow historical study/planning docs into `history/` and keep only live reference
+    and pedagogical documents in `docs/` and `examples/`.
 
 ---
 
@@ -266,17 +259,19 @@ Visual quality, diversity of design, and the developer environment.
     that slim-pickins only produces one visual flavor.
   - *Wish:* Create example apps that look genuinely exceptional, and look exceptional in
     *different* ways:
-    - Editorial prose and reading interfaces (refined typography, generous measure).
-    - Dense analytical dashboards (metrics, tables, compact data grids).
-    - Focused transactional tools (clean form ergonomics, crisp feedback).
-    Demonstrate that the theme engine and CSS architecture support diverse, beautiful designs.
+    - Editorial prose and reading interfaces (`examples/publication` — shipped in 0.7).
+    - Quantitative & relational CRUD (`examples/portfolio` — targeted in 0.8 / 0.9).
+    - Interactive domain simulation (`examples/roth`).
+    - Operational triage (`examples/dashboard`).
+    Demonstrate that `.style`, `.layout`, and the theme engine support diverse, beautiful designs.
 
-- [ ] **Retiring or Modernizing Dated Example Apps:**
-  - *Origin:* `ROADMAP-0.5.md` (Criterion 4, bullet 2); Dan (2026-10-12).
-  - *Concept:* Eight example apps exist, several written when slim-pickins was much less
-    evolved (`way_exam`, `word_graph`, `milestone_planner`).
-  - *Wish:* Audit the example apps in tandem with the repo cleanup; retire or modernize
-    those that no longer carry their weight or fail to showcase current conventions cleanly.
+- [ ] **Retiring `milestone_planner` & `way_exam` and Modernizing Kept Apps (Targeted in Roadmap 0.8):**
+  - *Origin:* `ROADMAP-0.5.md` (Criterion 4, bullet 2); Dan's 2026-10-19 ruling.
+  - *Concept:* With `portfolio` selected as the 0.9 CRUD app, `milestone_planner` and `way_exam`
+    have served their historical purpose.
+  - *Wish:* Retire `milestone_planner` and `way_exam` in Roadmap 0.8, and modernize the five
+    kept apps (`publication`, `portfolio`, `roth`, `dashboard`, `word_graph`) to exemplify
+    state-of-the-art `.sp`.
 
 - [ ] **The Classic UI Has No `.layout` (Awaiting Dan's Call):**
   - *Origin:* HANDOFF.md "Candidates still standing" (carried from 0.4.0h).
@@ -299,23 +294,6 @@ Visual quality, diversity of design, and the developer environment.
     narrow letterbox previews while leaving other areas awkward.
   - *Wish:* Content-aware sizing or flexible split thresholds so large source templates,
     diffs, and rendered documents receive space appropriate to their content.
-
-- [ ] **Capabilities for Micro-Layout and Component-Level Styling:**
-  - *Origin:* Dan (Session 2026-10-14, evaluating `actions`, `cluster`, and taxonomy `MISSING_PRIMITIVES`).
-  - *Concept:* Today, macro-layout across major application zones is cleanly governed by
-    `.layout` (`horizon`, `flank`, `stack`), while micro-layout within components (inline horizontal
-    wrapping flex flows, tags, badge clusters, button bars, compact rhythm) lacks a declarative
-    vocabulary. Authors currently rely on hardcoded CSS classes (`.actions`, `.card`, custom rules)
-    or unopinionated `.box`. The taxonomy previously diagnosed `stack`, `cluster`, and `sidebar`
-    as missing template primitives; however, geometry and scaffolding belong outside the substance
-    template language.
-  - *Wish:* Develop first-class capabilities for micro-layout and component styling—whether as an
-    extension of `.layout` (enabling `.layout` to reach inside components/zones or govern micro-rhythm)
-    or another intermediation/abstraction of CSS that preserves the core principle ("templates declare
-    substance; styling remains an unpolluted abstraction"). Consider the patterns diagnosed by
-    `MISSING_PRIMITIVES` (`stack` vertical flow, `cluster` inline flex wrapping, `sidebar` intrinsic
-    two-element flow) when designing layout and styling abstractions rather than littering `.sp`
-    templates with geometric scaffolding like `<div class="sp-cluster">`.
 
 - [ ] **Bandpass Filter Analysis of Vocabulary Taxonomy:**
   - *Origin:* Dan (Session 2026-10-14, revisiting taxonomy).
@@ -340,15 +318,6 @@ Visual quality, diversity of design, and the developer environment.
 
 Expansive architectural visions, speculative designs, and paradigm shifts.
 
-- [ ] **Making the Theme Sayable (A Style DSL Without Machine Bloat):**
-  - *Origin:* `BLUESKY.md` (Part 3).
-  - *Vision:* Slim-pickins has 64 canonical words for *what* and 65 `:root` theme roles
-    for *how it looks*, but the two cannot speak to each other.
-  - *Flight:* Allow templates to express high-level design intents that map directly
-    to semantic theme roles (`measure: wide`, `gap: loose`, `emphasis: quiet`), verified
-    by `check_styles.rb` so every page role exists in `:root` and every `:root` role is
-    reachable—without descending into utility-class noise (`text-sm`, `p-4`).
-
 - [ ] **Seeing the State: Visualizing the Inference Engine (Bret Victor / Moldable Development):**
   - *Origin:* `BLUESKY.md` (Part 2, Bret Victor / Tudor Gîrba).
   - *Vision:* The language performs sophisticated inference (data flow, subject shifts,
@@ -366,14 +335,6 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
     automatically flips between row and column based on container measure threshold),
     freeing template authors from writing bespoke viewport media queries.
 
-- [ ] **Self-Titling & Content-Aware Documents:**
-  - *Origin:* `examples/doc_reader/WHAT_IF.md` (What-if 5).
-  - *Vision:* In prose-heavy documents, the template author often writes `page document, "Title"`
-    and then immediately includes markdown whose first line is `# Title`, resulting in
-    redundant declarations or double headings.
-  - *Flight:* When a document's body begins with a heading, `page` automatically adopts
-    that heading as its title and suppresses the duplicate prose heading.
-
 - [ ] **Modular Component Frames (Localized Framing):**
   - *Origin:* Discussion in Daytrip 0.4.0q / 0.5.0a.
   - *Vision:* Currently `[app].frame` provides chrome for whole pages. What if complex
@@ -384,16 +345,39 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 
 ## VI. Retired or Graduated Items
 
-- [x] **Shadowing Built-in Language Words (Dan's 2026-10-05 Ruling):**
-  - *Graduated in:* `DAYTRIP-0.5.0e.md` (Commit `536684e`).
-  - *Resolution:* App composed words and Ruby words may shadow language built-in words within
-    their owning library family. The gate reports shadowed words under vitals; Studio
-    isolates multi-app playground libraries. Portfolio's `account_card` successfully
-    became plain `card`.
-- [x] **Retire Legacy `expects` Declaration Line:**
-  - *Graduated in:* `DAYTRIP-0.5.0d.md` (Commit `81b2a9d`).
-  - *Resolution:* All 28 `.sp` composed words across the repository migrated to `def <word>, *params`
-    with Option B1 Data-Flow Inference and Option A Lexical Scope.
+- [x] **Making the Theme Sayable (A Style DSL Without Machine Bloat):**
+  - *Graduated in:* `DAYTRIP-0.7.0e.md` (Roadmap 0.7).
+  - *Resolution:* Shipped `.style` companion files and `Compiler::Style`, mapping three
+    high-level semantic declarations (`palette`, `measure`, `lead`) to `:root` theme custom
+    properties and healing the axiomatic `theme` absence in `CONVENTIONS.md`.
+- [x] **Capabilities for Micro-Layout and Component-Level Styling (`cluster`):**
+  - *Graduated in:* `DAYTRIP-0.7.0d.md` (Roadmap 0.7).
+  - *Resolution:* Added `cluster` to `.layout` zones (`display: flex; flex-wrap: wrap;
+    gap: var(--gap, 0.75rem); align-items: center;`), keeping geometry in `.layout` while
+    `.sp` names the substance.
+- [x] **Date Formatting Register Discrepancy:**
+  - *Graduated in:* `DAYTRIP-0.7.0c.md` (Roadmap 0.7).
+  - *Resolution:* Registered `date_or_moment_cell` in `CONVENTIONS.md` and `conventions.rb`,
+    and generalized `Generator.format` so `table`, `fact`, and `metric` format `Date`/`Time`
+    values uniformly via `Inference.moment`.
+- [x] **Landing Evaluation for Sentence Arguments (`page document, .title`) & Self-Titling Documents:**
+  - *Graduated in:* `DAYTRIP-0.7.0b.md` (Roadmap 0.7).
+  - *Resolution:*Retired the `page` word in favor of the route's leading signature sentence;
+    `Transform#lands?` evaluates arguments inside the shifted subject; self-titling routes
+    adopt `subject.title` and `prose markdown` drops the duplicate leading heading.
+- [x] **First-Principles Pedagogy & Historical Artifact Stowing:**
+  - *Graduated in:* `DAYTRIP-0.6.0e.md`, `0.6.0g.md`, and `0.6.0k.md` (Roadmap 0.6).
+  - *Resolution:* Rewrote `docs/PRIMER.md`, `CONVENTIONS.md`, `VOCABULARY.md`, and `LAYOUT.md`
+    from the author's perspective; stowed historical notes in `history/CHRONICLE.md`,
+    `history/daytrips/`, and `history/planning/`.
+- [x] **Context-Sensitive `actions` ("Where a word sits chooses its form"):**
+  - *Graduated in:* `DAYTRIP-0.6.0h.md` (Roadmap 0.6).
+  - *Resolution:* Decoupled `actions` from form transport (`def actions / box / contents`);
+    `action` emits its own `<button formaction="...">` or standalone form control.
+- [x] **Library vs. Development Project Structure (Clean, Lean Gemification):**
+  - *Graduated in:* `DAYTRIP-0.6.0f.md` (Roadmap 0.6).
+  - *Resolution:* Extracted `checkers/` out of `lib/`, created `slim_pickins.gemspec` with
+    zero runtime dependencies, and isolated `studio/` and `examples/`.
 - [x] **Terminology Audit & Systematization:**
   - *Graduated in:* Roadmap 0.6 (`DAYTRIP-0.6.0j.md`).
   - *Resolution:* `partial` → `composed word`, `tin` → `.frame`, `spiff` → `.layout`;
@@ -404,3 +388,13 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
   - *Resolution:* `variant` split into author-chosen presentational weight and
     data-driven status (`dictionary`/`on`/`map`); `children` the template word retired
     for `contents`; `content`/`subject`/`name` delineated by the universal slot model.
+- [x] **Shadowing Built-in Language Words (Dan's 2026-10-05 Ruling):**
+  - *Graduated in:* `DAYTRIP-0.5.0e.md` (Commit `536684e`).
+  - *Resolution:* App composed words and Ruby words may shadow language built-in words within
+    their owning library family. The gate reports shadowed words under vitals; Studio
+    isolates multi-app playground libraries. Portfolio's `account_card` successfully
+    became plain `card`.
+- [x] **Retire Legacy `expects` Declaration Line:**
+  - *Graduated in:* `DAYTRIP-0.5.0d.md` (Commit `81b2a9d`).
+  - *Resolution:* All 28 `.sp` composed words across the repository migrated to `def <word>, *params`
+    with Option B1 Data-Flow Inference and Option A Lexical Scope.

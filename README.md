@@ -119,8 +119,8 @@ the handoff — live at the root.
   linguistic, spatial, and mechanical planes.
 - **[STRETCH_PROTOCOL.md](docs/STRETCH_PROTOCOL.md)** — the Stretch Exam: how an odd
   roadmap opens on paper, and what closes it.
-- **[ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md)** — the just-closed odd-numbered
-  roadmap (closed roadmaps are preserved in `history/planning/`).
+- **[ROADMAP-0.8.md](ROADMAP-0.8.md)** — the active even-numbered roadmap (closed
+  roadmaps are preserved in `history/planning/`).
 - **[HANDOFF.md](HANDOFF.md)** — the prompt that resumes this work in a fresh
   conversation.
 - **`checkers/check_grammar.rb`**, **`checkers/check_styles.rb`** — keep every document
@@ -201,10 +201,13 @@ is a beautifully organised runtime for the wrong language.
 - [ROADMAP-0.6.md](history/planning/ROADMAP-0.6.md) asked whether the language says what it means and means what it says: the polysemy audit, pedagogy from first principles, clean gemification, and repository hygiene. It ran as eleven daytrips (`DAYTRIP-0.6.0a` to `0.6.0k`) and closed on 2026-10-16.
 - [ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md) asked whether the language can carry a publication-grade reader with zero `tag` escapes, bespoke CSS, or domain contortions. It healed four walls (`page` dissolved, self-titling documents, `cluster`, sayable theme roles), assembled the unified `publication` reader, and retired `lore_reader`. It ran as six daytrips (`DAYTRIP-0.7.0a` to `0.7.0f`), passed the Editorial Prose sign-off, and closed on 2026-10-19.
 
-**Roadmap 0.8 is next.** It is an even roadmap, so it leads with the backward eye:
-the harvest. It studies what 0.7 built, promotes the generalizable words and
-postures, retires what the publication superseded, and heals the findings 0.7
-recorded but did not fix. `PROJECT.md`'s `next_step` says where planning begins.
+**Roadmap 0.8 is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).** It is an even
+roadmap, so it leads with the backward eye: the harvest. It audits every word
+in the vocabulary (`metric`, `fact`, `box`, composed words), retires redundant
+prototypes (`milestone_planner`, `way_exam`), modernizes the kept apps to
+state-of-the-art `.sp`, and levels the path for Roadmap 0.9's CRUD stretch exam
+in `examples/portfolio`. `PROJECT.md`'s `next_step` says where the current
+daytrip stands.
 
 Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 7 apps, 29 app words, 34 verified pages, 38 conventions, 32 promises, and 113 style rules.
 

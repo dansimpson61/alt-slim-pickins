@@ -46,40 +46,36 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.7 is closed and signed off (2026-10-19). The next move is Roadmap 0.8, the backward eye.** The 0.7 rounds are kept in `history/daytrips/` and the closed roadmap in `history/planning/ROADMAP-0.7.md`.
+**Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).** Roadmap 0.7 closed on 2026-10-19 (`history/planning/ROADMAP-0.7.md`).
 
-- **Daytrip 0.7.0a (Paper First) — complete.** Drafts the unified reader
-  uncompromised and measures the Wall Ledger: three real walls (self-titling
-  documents, `cluster` micro-layout, sayable theme roles) and one already fixed
-  (subject/class collision).
-- **Daytrip 0.7.0b (Heal Wall 1) — built and retired.** `page` dissolved: the
-  `.frame` is the shell, the route `.sp` is a word named by its filename, and the
-  leading line is the signature. The eight apps, the studio, the in-memory seeds
-  and the test suite all migrated onto the route signature; the legacy word, its
-  contract, taxonomy entry and favicon promise are gone (canonical words 64→63).
-- **Daytrip 0.7.0c (Heal Wall 2) — built and verified.** Self-titling documents:
-  a route that names a document without a title takes its first heading, and
-  `prose markdown, .content` begins after it.
-- **Daytrip 0.7.0d (Heal Wall 3) — built and verified.** `cluster` is a
-  `.layout` zone posture — a wrapping inline row of small facts — and the author
-  names the group in `.sp` with a `def`.
-- **Daytrip 0.7.0e (Heal Wall 4) — built and verified.** The `.style` companion
-  makes theme roles sayable (`measure wide`, `gap loose`, `density airy`),
-  compiled to `:root` custom properties.
-- **Daytrip 0.7.0f (Assemble) — built and signed off.** `examples/doc_reader`
-  became `examples/publication`, reading both documents and entries; the paper's
-  frame/layout/style plus `document`/`entry`/`shelf`/`timeline`/`search`/`index`
-  render live; `lore_reader` retired (8→7 apps, 35→34 verified pages, 61→59 test
-  files). The first screenshots caught a page-geometry defect the gates could
-  not see — the app-wide flank squeezed every non-landing route into its narrow
-  column — and the fix moved the flank to a per-view `index.layout` and made the
-  reading routes a bounded column. Dan's Editorial Prose sign-off passed
-  2026-10-19.
-- **Next session:** frame Roadmap 0.8 (the backward eye / harvest): audit the
-  garden and retire what the publication superseded, promote the generalizable
-  words and postures 0.7 earned, and heal the two measured findings — a dotted
-  metric (`metric .reading_minutes`) loses its domain label, and `measure wide`'s
-  `--measure: 72ch` loses to `treatment editorial`'s hardcoded `65ch`.
+- **Scoping & empirical audit (2026-10-19) — complete.** Framed with dan in
+  `ROADMAP-0.8.md` and `WISHLIST.md`:
+  - **0.8.0a (`metric`, `fact`, `snippet`, and single word-compilation path):**
+    Heal `metric` and `fact` on a unified `attribute, value` signature (`label:`
+    and `as:` modifiers, `heading` inside `metric.sp`), fix bare `metric <attr>`,
+    dotted `metric .attr`, and two-argument `fact <name>, <value>`, remove the
+    hardcoded `word_name` branches in `Builder#define_single_local_word`, and
+    retire dead `Generator#fact`/`#metric`/`#snippet` and `PartialWord` duplication.
+  - **0.8.0b (`box` default `contents` splice & `.style`/`.layout` handoff):**
+    Keep the `sp` way (minting a word with `def` rather than passing variants to
+    `box`) and let a blockless `box` inside a `def` splice `contents` by default
+    (`def meta / box`); connect `.style`'s `--measure` and `--lead` to
+    `.layout`'s `TREATMENT_TOKENS`; update `conventions.rb` and
+    `bin/check_conventions.rb`.
+  - **0.8.0c (Systematic audit of all 63 canonical words & kept app words):**
+    Audit every primitive and composed word; retire `variant` wherever practical
+    across the contracts and `def`s that still declare it; harmonize `card.sp`,
+    `section.sp`, `title.sp`, `action.sp`, and `search.sp`; remove word-name
+    exceptions in `contracts.rb`; promote `SlimPickins::Described` to
+    `lib/slim_pickins/`; add `def` headers to all kept partials.
+  - **0.8.0d (Garden triage & SOTA app modernization):** Retire
+    `milestone_planner` and `way_exam`; stow dated planning/study docs in
+    `history/`; modernize `publication`, `portfolio`, `roth`, `dashboard`, and
+    `word_graph` to SOTA `.sp`.
+  - **0.8.0e (Leveling the path for 0.9 CRUD in `portfolio` & close):**
+    Harmonize `form`/`field`/`input` contracts and collection-scoped `empty`
+    pruning for Roadmap 0.9's SQLite CRUD stretch exam in `examples/portfolio`.
+- **Next step:** run **Daytrip 0.8.0a** (`DAYTRIP-0.8.0a.md`).
 
 ## Studio Process & Verification Protocol
 
