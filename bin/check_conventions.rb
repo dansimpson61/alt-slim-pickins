@@ -163,7 +163,7 @@ SlimPickins::Conventions::PRINCIPLES.each do |principle|
   puts "  #{principle.name.to_s.ljust(18)} #{members.size.to_s.rjust(2)}  #{principle.rule}"
 end
 axiomatic = SlimPickins::Conventions.by_grade(:axiomatic)
-puts "  the axiomatic grade holds #{axiomatic.size} entry, and it records an absence: " \
+puts "  the axiomatic grade holds #{axiomatic.size} entry, and it records a theme-role decision: " \
      "#{axiomatic.first.decides}"
 
 puts

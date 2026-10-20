@@ -88,8 +88,8 @@ class SpiffTest < Minitest::Test
 
     # Reading pane zone assertions
     assert_includes css, '.reading_pane {'
-    assert_includes css, 'max-width: 65ch;'
-    assert_includes css, 'line-height: 1.7;'
+    assert_includes css, 'max-width: var(--measure, 65ch);'
+    assert_includes css, 'line-height: var(--lead, 1.7);'
     assert_includes css, 'font-size: 1.05rem;'
   end
 

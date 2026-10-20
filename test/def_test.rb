@@ -318,6 +318,26 @@ class DefTest < Minitest::Test
     assert_includes html, '<div class="prose"><h2>The Way</h2><p>A primer.</p></div>'
   end
 
+  def test_blockless_box_inside_def_splices_contents_by_default
+    source = <<~SP
+      "Demo"
+        meta
+          text "Inside meta"
+        toolbar
+          button "Save"
+
+      def meta
+        box
+
+      def toolbar
+        box
+    SP
+
+    html = render(source)
+    assert_includes html, '<div class="box meta"><p class="text">Inside meta</p></div>'
+    assert_includes html, '<div class="box toolbar"><button type="button" class="button">Save</button></div>'
+  end
+
   def test_def_parameters_do_not_leak_into_caller_blocks
     source = <<~SP
       def framed, name

@@ -316,7 +316,7 @@ module SlimPickins
       Convention.new(name: :theme_roles,
                      when_silent: 'a surface says `measure wide`, `gap loose` or `density airy`',
                      decides: 'the theme role, from the `.style` companion\'s token scale, ' \
-                              'compiled to a `:root` custom property',
+                              'compiled to a `:root` custom property that governs `.layout` zones and base styles',
                      file: 'lib/slim_pickins/compiler/style.rb', marker: 'MEASURE_TOKENS',
                      inference: nil,
                      override: 'say a different token, or say none — the theme\'s defaults stand',

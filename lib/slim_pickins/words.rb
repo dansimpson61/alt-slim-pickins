@@ -53,6 +53,10 @@ module SlimPickins
         first = first.call if first.is_a?(Proc)
 
         unless @block
+          if spliced && first.nil?
+            return emit_node(Node[:box, { variant: nil, body: nil, open: open, id: id }, spliced])
+          end
+
           body_text = first.is_a?(Proc) ? first.call : first
           return emit_node(Node[:box, { variant: nil, body: body_text, open: open, id: id }, []])
         end

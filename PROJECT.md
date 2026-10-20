@@ -4,17 +4,15 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).
-  Daytrips 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)) and 0.8.0b
-  ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)) are complete (2026-10-20):
-  `metric` and `fact` are harmonized, `SlimPickins::KeyValue` (`key`, `label`,
-  `value`, `format`) unifies `metric`/`fact`, `table`, `chart`, and `form` controls,
-  `each` iterates a `Hash` as `KeyValue` items, `Subject` and `Dictionary` share
-  indifferent key lookup, `.sp` `def` headers declare keyword modifiers natively
-  (retiring `CANONICAL_MODIFIERS`), and `@kwargs.key?(:x)` ternary lines in
-  `words.rb` are gone. Twelve gate legs + pedagogy green, 661 runs / 7,102
-  assertions / 0 failures.
+  Daytrips 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)), 0.8.0b
+  ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)), and 0.8.0c
+  ([DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)) are complete (2026-10-20):
+  blockless `box` inside a `def` splices `contents` by default, redundant `contents`
+  under `box` in `def`s across the corpus are dropped, `.style` `--measure` and `--lead`
+  tokens hand off to `.layout` `TREATMENT_TOKENS`, and the axiomatic grade records the
+  theme-role decision. Twelve gate legs + pedagogy green, 662 runs / 7,108 assertions / 0 failures.
 last_touched: 2026-10-20
-next_step: 'Run Daytrip 0.8.0c (`DAYTRIP-0.8.0c.md`): let a blockless `box` inside a `def` splice `contents` by default (`def meta / box`), drop redundant `contents` lines under `box` in `def`s across the corpus, connect `.style` `--measure` and `--lead` to `.layout` `TREATMENT_TOKENS`, and update `conventions.rb` and `bin/check_conventions.rb`.'
+next_step: 'Run Daytrip 0.8.0d: systematic audit of all 63 canonical words and kept app words against SOTA sp rubric (retire dead variant slots, harmonize card/section/title/action/search, remove word-name exceptions in contracts.rb, add explicit def headers to kept partials).'
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

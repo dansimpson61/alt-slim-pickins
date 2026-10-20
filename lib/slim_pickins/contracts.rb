@@ -160,7 +160,7 @@ module VocabularyShapes
     has_children = false
     walk = lambda do |nodes|
       nodes.each do |n|
-        has_children = true if n.word == 'contents'
+        has_children = true if n.word == 'contents' || (n.word == 'box' && n.children.empty? && n.raw_args.empty?)
         walk.call(n.children)
       end
     end

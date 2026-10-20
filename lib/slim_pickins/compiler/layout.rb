@@ -57,13 +57,13 @@ module SlimPickins
 
       TREATMENT_TOKENS = {
         editorial: {
-          'max-width' => '65ch',
-          'line-height' => '1.7',
+          'max-width' => 'var(--measure, 65ch)',
+          'line-height' => 'var(--lead, 1.7)',
           'font-size' => '1.05rem'
         },
         prose: {
-          'max-width' => '70ch',
-          'line-height' => '1.6'
+          'max-width' => 'var(--measure, 70ch)',
+          'line-height' => 'var(--lead, 1.6)'
         },
         code: {
           'font-family' => 'var(--font-mono, monospace)',

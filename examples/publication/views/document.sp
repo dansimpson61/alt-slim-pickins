@@ -7,4 +7,3 @@ document
 
 def meta
   box
-    contents

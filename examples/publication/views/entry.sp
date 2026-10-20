@@ -12,8 +12,6 @@ entry
 
 def meta
   box
-    contents
 
 def chips
   box
-    contents

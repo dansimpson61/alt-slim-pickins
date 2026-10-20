@@ -1,3 +1,2 @@
 def actions
   box
-    contents

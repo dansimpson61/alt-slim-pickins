@@ -186,11 +186,11 @@ eight example apps:
    `Subject` and `Dictionary`; enabled keyword modifiers in `.sp` `def` headers
    (retiring `CANONICAL_MODIFIERS` in `contracts.rb`); and replaced the
    `@kwargs.key?(:x)` ternary lines in `words.rb`.
-3. **0.8.0c — `box` default `contents` splice & the `.style` / `.layout` handoff:**
+3. **0.8.0c — `box` default `contents` splice & the `.style` / `.layout` handoff (complete, [DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)):**
    Let a blockless `box` inside a `def` splice `contents` automatically (so
    minting a container word is simply `def <word> / box` with zero generator
-   exceptions and zero variants); connect `.style`'s `--measure` and `--lead` to
-   `.layout`'s `TREATMENT_TOKENS`; update `conventions.rb` and
+   exceptions and zero variants); connected `.style`'s `--measure` and `--lead` to
+   `.layout`'s `TREATMENT_TOKENS`; updated `conventions.rb` and
    `check_conventions.rb`.
 4. **0.8.0d — Systematic audit of all 63 canonical words & all kept app words:**
    Audit every primitive in `words.rb`, every composed word in

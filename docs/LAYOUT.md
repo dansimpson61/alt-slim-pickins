@@ -450,8 +450,8 @@ gap: 0.35rem;
 **Compiled CSS**
 
 ```css
-max-width: 65ch;
-line-height: 1.7;
+max-width: var(--measure, 65ch);
+line-height: var(--lead, 1.7);
 font-size: 1.05rem;
 ```
 
