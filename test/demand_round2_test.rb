@@ -99,14 +99,29 @@ class DemandRound2Test < Minitest::Test
     html_dotted = SlimPickins.render("stats\n  metric .total_entries, \"Total\"\n",
                                      locals: { stats: stats })
     assert_includes html_dotted, '42'
-    assert_includes html_dotted, 'Total'
+    assert_includes html_dotted, '<h2 class="metric-title">Total</h2>'
+
+    html_dotted_bare = SlimPickins.render("stats\n  metric .total_entries\n",
+                                          locals: { stats: stats })
+    assert_includes html_dotted_bare, '<h2 class="metric-title">Total entries</h2>'
+    assert_includes html_dotted_bare, '<div class="metric-value">42</div>'
+
+    html_section = SlimPickins.render("stats\n  section \"Overview\"\n    metric total_entries, label: \"Entries\"\n",
+                                      locals: { stats: stats })
+    assert_includes html_section, '<h3 class="metric-title">Entries</h3>'
+    assert_includes html_section, '<div class="metric-value">42</div>'
   end
 
   def test_fact_with_evaluated_expression_and_dotted_data
-    word = Struct.new(:speech_name).new('noun')
-    html = SlimPickins.render("word\n  fact .speech_name\n",
+    word = Struct.new(:speech_name, :word_count).new('noun', 1200)
+    html = SlimPickins.render("word\n  fact .speech_name\n  fact words, .word_count\n  fact precedence, \"four tiers\"\n",
                               locals: { word: word })
-    assert_includes html, 'noun'
+    assert_includes html, '<dt>Speech name</dt>'
+    assert_includes html, '<dd>noun</dd>'
+    assert_includes html, '<dt>Words</dt>'
+    assert_includes html, '<dd>1,200</dd>'
+    assert_includes html, '<dt>Precedence</dt>'
+    assert_includes html, '<dd>four tiers</dd>'
   end
 
   # --- G17: title accepts bare identifier attribute --------------------------

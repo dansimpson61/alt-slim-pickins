@@ -89,23 +89,41 @@ module SlimPickins
     end
 
     def fetch(attribute)
+      found = false
+      result = nil
       if @object.is_a?(Subject)
         return @object.fetch(attribute)
       elsif @object.is_a?(Hash)
         if @object.key?(attribute)
-          return @object[attribute]
+          result = @object[attribute]
+          found = true
         elsif @object.key?(attribute.to_s)
-          return @object[attribute.to_s]
+          result = @object[attribute.to_s]
+          found = true
         elsif attribute.to_s.end_with?('?')
           base = attribute.to_s.chomp('?')
-          return @object[base.to_sym] if @object.key?(base.to_sym)
-          return @object[base] if @object.key?(base)
+          if @object.key?(base.to_sym)
+            result = @object[base.to_sym]
+            found = true
+          elsif @object.key?(base)
+            result = @object[base]
+            found = true
+          end
         end
       elsif !@object.nil? && @object.respond_to?(attribute)
-        return @object.public_send(attribute)
+        result = @object.public_send(attribute)
+        found = true
       end
 
-      return nil if @object.nil? && @builder&.empty_active?
+      if found
+        @builder&.note_fetch(attribute.to_sym, self, result)
+        return result
+      end
+
+      if @object.nil? && @builder&.empty_active?
+        @builder&.note_fetch(attribute.to_sym, self, nil)
+        return nil
+      end
 
       return @fallback.fetch(attribute) if @fallback
 

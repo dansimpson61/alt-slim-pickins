@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'date'
+require_relative 'shelf'
 
 module Publication
   # One dated log record — a lesson, not a document. Its body is markdown; its
@@ -8,6 +9,11 @@ module Publication
   # meets a document: a title (the entry's first sentence), a small cluster of
   # facts, and the prose.
   Entry = Struct.new(:id, :date, :author, :title, :body, :words, :tags, keyword_init: true) do
+    include Described
+
+    labels reading_minutes: 'Minutes'
+    formats reading_minutes: :number
+
     WORDS_A_MINUTE = 230
 
     def reading_minutes = body.to_s.split.size.fdiv(WORDS_A_MINUTE).ceil

@@ -9,7 +9,7 @@ specimen, "slim-pickins — every word"
     prose .markdown
 
   section "Facts, badges, moments"
-    fact origin, .origin
+    fact origin
     fact reviewed_on
     badge ok, "canonical"
     badge warning, "emerging"
@@ -19,10 +19,10 @@ specimen, "slim-pickins — every word"
 
   section "Numbers"
     grid metrics, columns: 4
-      metric total_value, "Total value"
+      metric total_value
       metric ytd_return, "YTD return"
       metric holdings_count, "Holdings"
-      metric worst_day, "Worst day"
+      metric worst_day
     text "The same values as bare words rather than tiles:"
     list plain
       item

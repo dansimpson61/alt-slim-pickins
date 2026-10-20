@@ -31,7 +31,7 @@ Every number below is measured by `bin/census.rb` and held by `check_vitals.rb`,
 so this block cannot go stale without the gate saying so:
 
 - **Census**: 63 canonical words (37 Ruby primitives + 26 `.sp` composed words),
-  7 apps, 29 app words, 34 verified pages, 38 conventions, 32 promises,
+  7 apps, 29 app words, 34 verified pages, 38 conventions, 33 promises,
   113 style rules, 59 test files.
 - **Twelve gate legs** on `/status`, re-run live on every visit: Grammar, Shape,
   Styles, Layout, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby,
@@ -48,14 +48,13 @@ so this block cannot go stale without the gate saying so:
 
 **Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).** Roadmap 0.7 closed on 2026-10-19 (`history/planning/ROADMAP-0.7.md`).
 
-- **Scoping & empirical audit (2026-10-19) — complete.** Framed with dan in
-  `ROADMAP-0.8.md` and `WISHLIST.md`:
-  - **0.8.0a (`metric`, `fact`, `snippet`, and single word-compilation path):**
-    Heal `metric` and `fact` on a unified `attribute, value` signature (`label:`
-    and `as:` modifiers, `heading` inside `metric.sp`), fix bare `metric <attr>`,
-    dotted `metric .attr`, and two-argument `fact <name>, <value>`, remove the
-    hardcoded `word_name` branches in `Builder#define_single_local_word`, and
-    retire dead `Generator#fact`/`#metric`/`#snippet` and `PartialWord` duplication.
+- **Daytrip 0.8.0a (`metric`, `fact`, `snippet`, and single word-compilation path) — complete ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)).**
+  `metric` and `fact` share `def <word> attribute, value` (`label:` and `as:`
+  modifiers, `heading .label` inside `metric.sp`); bare `metric <attr>`, dotted
+  `metric .attr` / `fact .attr`, and 2-arg `fact <name>, <value>` are healed;
+  all `word_name ==` branches in `Builder` and dead `Generator#fact`/`#metric`/`#snippet`
+  are gone; `PartialWord` is collapsed onto `Builder#evaluate_word_definition`.
+- **Remaining 0.8 daytrips (`ROADMAP-0.8.md`):**
   - **0.8.0b (`box` default `contents` splice & `.style`/`.layout` handoff):**
     Keep the `sp` way (minting a word with `def` rather than passing variants to
     `box`) and let a blockless `box` inside a `def` splice `contents` by default
@@ -75,7 +74,7 @@ so this block cannot go stale without the gate saying so:
   - **0.8.0e (Leveling the path for 0.9 CRUD in `portfolio` & close):**
     Harmonize `form`/`field`/`input` contracts and collection-scoped `empty`
     pruning for Roadmap 0.9's SQLite CRUD stretch exam in `examples/portfolio`.
-- **Next step:** run **Daytrip 0.8.0a** (`DAYTRIP-0.8.0a.md`).
+- **Next step:** run **Daytrip 0.8.0b** (`DAYTRIP-0.8.0b.md`).
 
 ## Studio Process & Verification Protocol
 

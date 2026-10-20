@@ -1,7 +1,7 @@
 portfolio, "Your retirement"
   section "Where you stand"
     grid metrics, columns: 3
-      metric total_value, "Total value"
+      metric total_value
       metric ytd_return, "YTD return"
       metric annual_income, "Projected income"
   section accounts, "Your accounts"

@@ -346,19 +346,6 @@ module SlimPickins
       @out << %(<div class="#{token(:prose)}">#{html}</div>)
     end
 
-    def fact(attrs, _children)
-      open_tag('dl', class: token(:fact))
-      full_tag('dt', attrs[:label])
-      full_tag('dd', Generator.format(attrs[:kind], attrs[:value]))
-      @out << '</dl>'
-    end
-
-    def snippet(attrs, _children)
-      open_tag('pre', class: token(:snippet, attrs[:language]))
-      full_tag('code', attrs[:body])
-      @out << '</pre>'
-    end
-
     def iframe(attrs, _children)
       open_tag('iframe',
                class: token(:iframe, attrs[:name]),
@@ -368,16 +355,6 @@ module SlimPickins
                width: attrs[:width],
                height: attrs[:height])
       @out << "</iframe>"
-    end
-
-
-
-
-    def metric(attrs, _children)
-      open_tag('div', class: token(:metric))
-      full_tag('h3', attrs[:label], class: 'metric-label')
-      full_tag('div', Generator.format(attrs[:kind], attrs[:value]), class: 'metric-value')
-      @out << '</div>'
     end
 
     def chart(attrs, _children)

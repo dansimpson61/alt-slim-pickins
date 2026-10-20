@@ -109,7 +109,7 @@ word, its arguments, and the lines indented beneath it:
 ```sp
 section "Where you stand"
   grid metrics, columns: 3
-    metric total_value, "Total value"
+    metric total_value
     metric ytd_return, "YTD return"
     metric annual_income, "Projected income"
 section accounts, "Your accounts"
@@ -485,7 +485,7 @@ grammar, in four shapes:
 |---|---|
 | `.word` | `.card` |
 | `.word--variant` | `.note--warning` |
-| `.word-part` | `.metric-label` |
+| `.word-part` | `.metric-title` |
 | `.word-part--n` | `.chart-band--0` |
 
 Every presentational token lives in `:root` across 113 style rules in the base

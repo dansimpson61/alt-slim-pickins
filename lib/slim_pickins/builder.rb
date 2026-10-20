@@ -27,8 +27,13 @@ module SlimPickins
       @head_nodes = []      # words that belong in <head>, wherever they are said
       @nodes = []
       @self_titled = false  # the route took its title from the subject's own `title`
+      @last_fetch = nil
       @family_definitions = {}
       define_app_words
+    end
+
+    def note_fetch(attribute, subj, value)
+      @last_fetch = [attribute, subj, value]
     end
 
     # An app's words become real singleton methods, for the same reason the
@@ -152,6 +157,49 @@ module SlimPickins
       contract = @library&.compiled_partial(word_name)&.instance_variable_get(:@contract) || CONTRACTS[word_name]
 
       define_singleton_method(word_name) do |*args, **kwargs, &caller_block|
+        evaluate_word_definition(word_name, param_names, args, kwargs, caller_block,
+                                 contract: contract, &definition_block)
+      end
+    end
+
+    def evaluate_word_definition(word_name, param_names, args, kwargs, caller_block,
+                                 contract: nil, gatherer: nil, &definition_block)
+      word_name = word_name.to_sym
+      param_names = Array(param_names).map(&:to_sym)
+
+      if contract && param_names.empty?
+        name_arg, content_arg = arguments(args)
+        complaint = Contracts.call_complaint(contract, word_name,
+                                             name_arg.nil? ? [] : [name_arg],
+                                             content_arg.nil? ? [] : [content_arg],
+                                             kwargs.keys)
+        raise Error, complaint if complaint
+
+        param_names = if contract.name != :none && contract.content
+                        %i[name content]
+                      elsif contract.name != :none
+                        [:name]
+                      elsif contract.content
+                        [:content]
+                      else
+                        []
+                      end
+      end
+
+      if gatherer && contract.nil? && param_names.empty?
+        name_arg, content_arg = arguments(args)
+        shifts = true
+        shift_target = if name_arg
+                         name_arg
+                       elsif !content_arg.nil? && !content_arg.is_a?(String) && !content_arg.is_a?(Numeric) &&
+                             !content_arg.is_a?(TrueClass) && !content_arg.is_a?(FalseClass)
+                         content_arg
+                       end
+        bound = { content: content_arg, name: name_arg }.merge(kwargs)
+        content_param = :content
+        push = kwargs.any? || !content_arg.nil?
+        overlay = false
+      else
         bound = Builder.bind_parameters(param_names, args, kwargs, subject, contract: contract)
 
         target_param = if contract
@@ -173,17 +221,22 @@ module SlimPickins
         name_val = target_val || bound[:variant] || bound[:name] || (args.first if args.first.is_a?(Symbol))
 
         shifts = contract&.subject == :shift || contract&.name == :subject
-        shift_target = if shifts && name_val
-                         if contract&.modifiers&.include?(:variant)
-                           subject.has?(name_val) ? name_val : nil
-                         else
-                           name_val
+        shift_target = if shifts
+                         if name_val
+                           if contract&.modifiers&.include?(:variant)
+                             subject.has?(name_val) ? name_val : nil
+                           else
+                             name_val
+                           end
+                         elsif gatherer && !content_val.nil? && !content_val.is_a?(String) && !content_val.is_a?(Numeric) &&
+                               !content_val.is_a?(TrueClass) && !content_val.is_a?(FalseClass) && !content_val.is_a?(Proc)
+                           content_val
                          end
                        end
 
         if shift_target && subject.has?(shift_target)
           target_obj = subject.fetch(shift_target)
-          tgt = target_obj.is_a?(Subject) ? target_obj : Subject.new(target_obj, described_as: "this #{shift_target}")
+          tgt = target_obj.is_a?(Subject) ? target_obj : Subject.new(target_obj, described_as: "this #{shift_target}", builder: self)
           bound[:target] ||= target_obj
           bound[:noun] ||= tgt.noun
           if contract&.id
@@ -193,23 +246,69 @@ module SlimPickins
           bound[:id] ||= kwargs.fetch(:id) { card_id }
         end
 
-        raw_content = content_val.is_a?(Proc) ? nil : content_val
-        if contract&.label
-          bound[:label] ||= kwargs.fetch(:label) { label_for(name_val, raw_content) }
-          bound[content_param] ||= bound[:label] if content_param && bound[content_param].nil?
-        elsif name_val || content_val
-          inferred_label = kwargs[:label] || raw_content || (name_val ? label_for(name_val, nil) : nil)
-          bound[:label] ||= inferred_label if inferred_label
-        end
-
         if contract && (contract.modifiers.include?(:variant) || contract.name == :variant)
           bound[:variant] ||= kwargs[:variant] || (name_val && !subject.has?(name_val) ? name_val : nil)
         end
 
-        if contract&.name == :attribute && content_val.nil? && name_val && subject.has?(name_val)
-          content_val = subject.fetch(name_val)
-          bound[content_param] = content_val if content_param
-          bound[:content] = content_val if bound.key?(:content)
+        if contract&.name == :attribute && content_param == :value
+          fetched_attr, fetched_subj, fetched_val = @last_fetch
+          @last_fetch = nil
+          if args.first.is_a?(Symbol)
+            attr_name = args.first
+            second = args[1]
+            second = second.call if second.is_a?(Proc)
+            from_fetch = fetched_attr && args.size >= 2 && args[1].equal?(fetched_val)
+            if args.size < 2
+              raw_val = subject.has?(attr_name) ? subject.fetch(attr_name) : nil
+              raw_val = raw_val.call if raw_val.is_a?(Proc)
+              label_override = kwargs[:label]
+            elsif !from_fetch && second.is_a?(String) && subject.has?(attr_name)
+              raw_val = subject.fetch(attr_name)
+              raw_val = raw_val.call if raw_val.is_a?(Proc)
+              label_override = kwargs[:label] || second
+            else
+              raw_val = second
+              label_override = kwargs[:label]
+            end
+            bound[:attribute] = attr_name
+            bound[:name] = attr_name
+            bound[:label] = label_for(attr_name, label_override)
+            kind = kwargs[:as] ||
+                   (subject.has?(attr_name) ? subject.format_for(attr_name) : nil) ||
+                   (from_fetch && fetched_subj ? fetched_subj.format_for(fetched_attr) : nil)
+          else
+            attr_name = (fetched_attr if args.any? && args[0].equal?(fetched_val))
+            raw_val = args[0].is_a?(Proc) ? args[0].call : args[0]
+            label_override = kwargs[:label] || args[1]
+            bound[:attribute] = attr_name
+            bound[:name] = attr_name
+            bound[:label] = if label_override
+                              label_override
+                            elsif attr_name
+                              fetched_subj&.label_for(attr_name) || label_for(attr_name, nil)
+                            end
+            kind = kwargs[:as] ||
+                   (attr_name && (fetched_subj&.format_for(attr_name) || (subject.has?(attr_name) ? subject.format_for(attr_name) : nil)))
+          end
+          bound[:value] = contract.infers.include?(:format) ? Generator.format(kind, raw_val) : raw_val
+          @last_fetch = nil
+        else
+          raw_content = content_val.is_a?(Proc) ? nil : content_val
+          if contract&.label
+            bound[:label] ||= kwargs.fetch(:label) { label_for(name_val, raw_content) }
+            bound[content_param] ||= bound[:label] if content_param && bound[content_param].nil?
+          elsif !gatherer && (name_val || content_val)
+            inferred_label = kwargs[:label] || raw_content || (name_val ? label_for(name_val, nil) : nil)
+            bound[:label] ||= inferred_label if inferred_label
+          end
+
+          if contract&.name == :attribute && content_val.nil? && name_val && subject.has?(name_val)
+            content_val = subject.fetch(name_val)
+            bound[content_param] = content_val if content_param
+            bound[:content] = content_val if bound.key?(:content)
+          end
+
+          bound[:name] = name_val if contract&.name != :none || bound.key?(:name)
         end
 
         contract&.modifiers&.each do |modifier|
@@ -219,90 +318,101 @@ module SlimPickins
           end
         end
 
-        bound[:name] = name_val if contract&.name != :none || bound.key?(:name)
+        push = true
+        overlay = true
+      end
 
-        if word_name == :fact
-          fn_val = bound[:attribute] || (args.first if args.first.is_a?(Symbol))
-          if fn_val
-            f_val = content_val.nil? ? (subject.has?(fn_val) ? subject.fetch(fn_val) : nil) : content_val
-            f_val = f_val.call if f_val.is_a?(Proc)
-            f_kind = format_of({ name: fn_val, as: nil })
-            bound[:label] ||= label_for(fn_val, nil)
-          else
-            f_val = args[0].is_a?(Proc) ? args[0].call : args[0]
-            f_kind = nil
-            bound[:label] ||= args[1]
-          end
-          bound[:value] = Generator.format(f_kind, f_val)
-        elsif word_name == :metric
-          mn_val = bound[:attribute] || (args.first if args.first.is_a?(Symbol))
-          if mn_val
-            m_val = subject.has?(mn_val) ? subject.fetch(mn_val) : nil
-            m_val = m_val.call if m_val.is_a?(Proc)
-            m_lbl = label_for(mn_val, content_val.is_a?(Proc) ? content_val.call : content_val)
-            m_kind = kwargs[:as] || (subject.has?(mn_val) ? subject.format_for(mn_val) : nil)
-            bound[:label] ||= m_lbl
-          else
-            m_val = args[0].is_a?(Proc) ? args[0].call : args[0]
-            m_lbl = args[1] || 'Metric'
-            m_kind = kwargs[:as]
-            bound[:label] = m_lbl
-          end
-          bound[:value] = Generator.format(m_kind, m_val)
-        elsif word_name == :snippet
-          s_lang = bound[:notation] || (args.first if args.first.is_a?(Symbol))
-          s_body = bound[:body] || (content_val.nil? ? args.find { |a| !a.nil? && !a.is_a?(Symbol) } : content_val)
-          s_body = s_body.call if s_body.is_a?(Proc)
-          bound[:notation] = s_lang
-          bound[:body] = s_body
+      body_block = lambda do
+        if content_param && bound[content_param].is_a?(Proc)
+          said = bound[content_param].call
+          bound[content_param] = said
+          bound[:label] = said if (contract&.label || bound.key?(:label)) && content_param != :value && !said.nil?
+        elsif bound[:content].is_a?(Proc)
+          said = bound[:content].call
+          bound[:content] = said
+          bound[:label] = said if (contract&.label || bound.key?(:label)) && content_param != :value && !said.nil?
         end
 
-        body_block = lambda do
-          if content_param && bound[content_param].is_a?(Proc)
-            said = bound[content_param].call
-            bound[content_param] = said
-            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil? && !%i[fact metric].include?(word_name)
-          elsif bound[:content].is_a?(Proc)
-            said = bound[:content].call
-            bound[:content] = said
-            bound[:label] = said if (contract&.label || bound.key?(:label)) && !said.nil? && !%i[fact metric].include?(word_name)
+        if contract&.gathers && gatherer
+          gatherer.send(:with_open)
+          collected = gatherer.instance_variable_get(:@collected).flatten(1)
+          if push
+            chain.with(bound, described_as: "this #{word_name}", overlay: overlay) do
+              with_splice(collected) { definition_block.call }
+            end
+          else
+            with_splice(collected) { definition_block.call }
           end
+        elsif contract&.inside && contract&.inside != :any
+          target = open_gatherer_named(contract.inside)
+          raise Error, "#{word_name} belongs inside a #{contract.inside}" unless target
 
-          captured = caller_block ? with_family(word_name) { capture(&caller_block) } : []
+          if push
+            chain.with(bound, described_as: "this #{word_name}", overlay: overlay) { definition_block.call }
+          else
+            definition_block.call
+          end
+        else
+          captured = if caller_block
+                       if gatherer && kwargs.any?
+                         chain.with(kwargs, described_as: "this #{word_name}", overlay: true) do
+                           with_family(word_name) { prune(capture(&caller_block), empty_active?) }
+                         end
+                       elsif gatherer
+                         with_family(word_name) { prune(capture(&caller_block), empty_active?) }
+                       else
+                         with_family(word_name) { capture(&caller_block) }
+                       end
+                     else
+                       []
+                     end
 
-          chain.with(bound, described_as: "this #{word_name}", overlay: true) do
+          if push
+            chain.with(bound, described_as: "this #{word_name}", overlay: overlay) do
+              with_splice(captured) { definition_block.call }
+            end
+          else
             with_splice(captured) { definition_block.call }
           end
         end
+      end
 
-        body = if contract&.empty && !empty_active?
-                 []
-               else
-                 capture do
-                   if shifts && shift_target
-                     about(shift_target) { body_block.call }
-                   else
-                     body_block.call
-                   end
+      value = nil
+      body = if contract&.empty && !empty_active?
+               []
+             else
+               capture do
+                 if shifts && (shift_target || gatherer)
+                   value, = about(shift_target) { body_block.call }
+                 else
+                   body_block.call
                  end
                end
+             end
 
-        if body.size == 1 && body.first.is_a?(Node)
-          root = Builder.box_root(body)
-          if root && root.attributes.is_a?(Hash)
-            # The one mutation in the runtime, and it writes to the hash the node
-            # holds rather than to the node, which is why a frozen `Data` is fine.
-            if Library.builtin_partial_paths.key?(word_name)
-              root.attributes[:class_base] = word_name
-            else
-              was = root.attributes[:app_class]
-              root.attributes[:app_class] = was ? "#{was} #{word_name}" : word_name
-            end
+      if body.size == 1 && body.first.is_a?(Node)
+        root = Builder.box_root(body)
+        if root && root.attributes.is_a?(Hash)
+          # The one mutation in the runtime, and it writes to the hash the node
+          # holds rather than to the node, which is why a frozen `Data` is fine.
+          if Library.builtin_partial_paths.key?(word_name) || gatherer&.class&.is_builtin
+            root.attributes[:class_base] = word_name
+          elsif gatherer
+            root.attributes[:app_class] = word_name
+          else
+            was = root.attributes[:app_class]
+            root.attributes[:app_class] = was ? "#{was} #{word_name}" : word_name
           end
         end
-
-        body.each { |n| emit_node(n) }
       end
+
+      if contract&.inside && contract&.inside != :any
+        open_gatherer_named(contract.inside)&.collect(body)
+        return body
+      end
+
+      body.each { |n| emit_node(n) }
+      value
     end
 
     def with_family(family_parent)
@@ -364,8 +474,8 @@ module SlimPickins
       if args.empty?
         # Wrapped, so `order.number` and `pattern.title` read the same whether
         # the thing behind them is a struct, a hash or a plain object.
-        return Subject.new(@bindings[name], described_as: "this #{name}") if @bindings.key?(name)
-        return Subject.new(subject.fetch(name), described_as: "this #{name}") if subject.has?(name)
+        return Subject.new(@bindings[name], described_as: "this #{name}", builder: self) if @bindings.key?(name)
+        return Subject.new(subject.fetch(name), described_as: "this #{name}", builder: self) if subject.has?(name)
       end
 
       raise Error, "there is no word `#{name}`"
@@ -758,6 +868,7 @@ module SlimPickins
     # line the way a syntax error names it.
     def with_line(lineno)
       @lines.push(lineno)
+      @last_fetch = nil
       yield
     rescue Error => e
       raise locate(e)

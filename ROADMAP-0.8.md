@@ -150,10 +150,13 @@ eight example apps:
 
 ## Proposed daytrip sequence
 
-1. **0.8.0a — `metric`, `fact`, `snippet`, and the single word-compilation path:**
-   Fix `metric` and `fact` signatures and label/value resolution, remove the
-   hardcoded `word_name` branches in `Builder`, retire dead `Generator#fact` /
-   `#metric` / `#snippet` and `PartialWord` duplication, and repair all callers.
+1. **0.8.0a — `metric`, `fact`, `snippet`, and the single word-compilation path (complete, [DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)):**
+   Fixed `metric` and `fact` signatures (`def <word> attribute, value`, `label:`
+   and `as:` modifiers, `heading .label` inside `metric.sp`), healed bare
+   `metric <attr>`, dotted `metric .attr` / `fact .attr`, and 2-arg
+   `fact <name>, <value>`, removed all hardcoded `word_name` branches in `Builder`,
+   retired dead `Generator#fact` / `#metric` / `#snippet`, collapsed `PartialWord`
+   onto `Builder#evaluate_word_definition`, and repaired callers.
 2. **0.8.0b — `box` default `contents` splice & the `.style` / `.layout` handoff:**
    Let a blockless `box` inside a `def` splice `contents` automatically (so
    minting a container word is simply `def <word> / box` with zero generator

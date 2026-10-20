@@ -1,7 +1,7 @@
 document
   meta
     time .changed_on
-    metric reading_minutes, "Minutes"
+    metric reading_minutes
     badge .audience
   prose markdown, .content
 

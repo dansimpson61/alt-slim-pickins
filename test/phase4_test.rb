@@ -97,9 +97,9 @@ class Phase4Test < Minitest::Test
   end
 
   def test_metric_derives_label_and_value_from_one_word
-    html = render("thing\n  metric total_value, \"Total value\"\n",
+    html = render("thing\n  metric total_value\n",
                   thing: { total_value: 1500 })
-    assert_includes html, '<h3 class="metric-label">Total value</h3>'
+    assert_includes html, '<h2 class="metric-title">Total value</h2>'
     assert_includes html, '<div class="metric-value">1,500</div>'
   end
 

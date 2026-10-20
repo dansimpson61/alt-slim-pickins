@@ -64,9 +64,7 @@ class GateTest < Minitest::Test
   def test_an_app_word_without_a_contract_passes_the_gate
     words = Module.new do
       def stat(*args)
-        name, label = arguments(args)
-        emit_node(SlimPickins::Node[:metric, { name: name, label: label_for(name, label),
-                              value: subject.fetch(name), kind: nil }, []])
+        metric(*args)
       end
     end
     html = render("p\n  stat total\n", library: SlimPickins::Library.new(words: words),

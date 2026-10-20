@@ -1,4 +1,4 @@
-def metric attribute, label
+def metric attribute, value
   box
-    tag h3, .label, class: "metric-label"
+    heading .label
     tag div, .value, class: "metric-value"

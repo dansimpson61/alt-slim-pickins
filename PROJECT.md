@@ -3,17 +3,17 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.8 (the backward eye — the harvest) is active, framed with dan on
-  2026-10-20 (see `ROADMAP-0.8.md` and `WISHLIST.md`). The audit measured live
-  label-corruption bugs in `metric` and `fact`, confirmed that minting words
-  with `def` is the `sp` way (letting a blockless `box` inside a `def` splice
-  `contents` by default), scheduled a systematic 0.8.0c audit of all 63
-  canonical words to retire remaining `variant` declarations wherever practical,
-  and selected `portfolio` as the Roadmap 0.9 CRUD target (retiring
-  `milestone_planner` and `way_exam` in 0.8). Twelve gate legs + pedagogy green,
-  658 runs / 7,067 assertions / 0 failures.
+  Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).
+  Daytrip 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)) is complete
+  (2026-10-20): `metric` and `fact` are harmonized on `def <word> attribute, value`
+  (`label:` and `as:` modifiers, `heading .label` inside `metric.sp`), bare
+  `metric <attr>`, dotted `metric .attr` / `fact .attr`, and 2-arg `fact <name>, <value>`
+  are healed, all hardcoded `word_name` branches in `Builder` and dead
+  `Generator#fact`/`#metric`/`#snippet` are removed, and `PartialWord` is collapsed
+  onto `Builder#evaluate_word_definition`. Twelve gate legs + pedagogy green,
+  658 runs / 7,087 assertions / 0 failures.
 last_touched: 2026-10-20
-next_step: 'Run Daytrip 0.8.0a (`DAYTRIP-0.8.0a.md`): heal `metric` and `fact` (harmonize on `attribute, value` + `label:`/`as:`, use `heading` inside `metric.sp`, fix bare `metric <attr>`, dotted `metric .attr`, and 2-arg `fact <name>, <value>`), remove the hardcoded `word_name` branches in `Builder#define_single_local_word`, retire dead `Generator#fact`/`#metric`/`#snippet` and `PartialWord` duplication, and repair all callers.'
+next_step: 'Run Daytrip 0.8.0b (`DAYTRIP-0.8.0b.md`): let a blockless `box` inside a `def` splice `contents` by default (`def meta / box`), drop redundant `contents` lines under `box` in `def`s across the corpus, connect `.style` `--measure` and `--lead` to `.layout` `TREATMENT_TOKENS`, and update `conventions.rb` and `bin/check_conventions.rb`.'
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

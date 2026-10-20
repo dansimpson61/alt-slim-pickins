@@ -9,7 +9,7 @@ card
       badge warning, "At Risk"
     otherwise
       badge pending, "Pending"
-  fact owner, .owner
+  fact owner
   form to: "/tasks/#{task.id}/toggle", method: post
     choose
       when .done?

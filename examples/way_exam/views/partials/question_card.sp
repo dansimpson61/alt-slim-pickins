@@ -5,6 +5,6 @@ card
       badge ok, "Correct"
     otherwise
       badge error, "Incorrect"
-  fact user_answer, .user_answer
-  fact correct_answer, .correct_answer
+  fact user_answer
+  fact correct_answer
   note .explanation

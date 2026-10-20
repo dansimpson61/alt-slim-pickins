@@ -164,7 +164,7 @@ module SlimPickins
         name: :promise,
         plane: :invariant,
         summary: 'Feature verification ledger',
-        definition: 'The feature verification ledger (32 promises) proving declared modifiers have active readers in code.'
+        definition: 'The feature verification ledger (33 promises) proving declared modifiers have active readers in code.'
       )
     }.freeze
 

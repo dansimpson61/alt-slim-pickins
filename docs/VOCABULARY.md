@@ -234,27 +234,27 @@ A Ruby primitive. The inline leaf phrasing atom beneath `badge`, `money`,
 
 - **name** — the attribute
 - **content** — text or data, when there is any
-- **modifiers** — `as:`
+- **modifiers** — `as:`, `label:`
 - **children** — none
 - **subject** — unchanged
 - **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)
 - **infers** — the value from the named attribute on the current subject, its human label, and its domain format
-- **renders** — `<div class="metric"><h3 class="metric-label">…</h3><div class="metric-value">…</div></div>`
+- **renders** — `<div class="metric"><h2 class="metric-title">…</h2><div class="metric-value">…</div></div>`
 
 ```
-metric lifetime_taxes, "Lifetime taxes"
+metric lifetime_taxes
 metric roth_share, as: percent
 ```
 
-A `.sp` composed word (`def metric attribute, label`). Presents a key-value
+A `.sp` composed word (`def metric attribute, value`). Presents a key-value
 figure as a prominent stat tile, deriving both its heading label and formatted
-value from a single attribute name.
+value from a single attribute name (or an explicit value).
 
 ### `fact`
 
 - **name** — the attribute
 - **content** — text or data, when there is any
-- **modifiers** — none
+- **modifiers** — `as:`, `label:`
 - **children** — none
 - **subject** — unchanged
 - **conventions** — `box_tag` — the `<dl>` element; `label` — the human label — the page, then the app, then English (override: say the label in the page); `format` — the presentation — `as:`, then the app, then the value's shape (override: `as:`)

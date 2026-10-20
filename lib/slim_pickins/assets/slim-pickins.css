@@ -7,7 +7,7 @@
  *
  *   .word              the word            .card
  *   .word--variant     its variant         .note--warning
- *   .word-part         an internal part    .metric-label
+ *   .word-part         an internal part    .metric-title
  *   .word-part--n      a numbered part     .chart-band--0
  *
  * So a reader who knows the language already knows the stylesheet, and
@@ -336,7 +336,7 @@ summary { cursor: pointer; color: var(--accent); }
 .fact dd { margin: 0; }
 
 .metric { padding: var(--gap); background: var(--surface); border-radius: var(--radius); }
-.metric-label { margin: 0; color: var(--ink-faint); font-size: var(--size-small); font-weight: var(--weight-plain); }
+.metric-title { margin: 0; color: var(--ink-faint); font-size: var(--size-small); font-weight: var(--weight-plain); }
 .metric-value { font-size: var(--size-large); font-variant-numeric: tabular-nums; }
 
 .snippet, .prose pre {

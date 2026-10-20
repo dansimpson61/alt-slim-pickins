@@ -209,7 +209,7 @@ state-of-the-art `.sp`, and levels the path for Roadmap 0.9's CRUD stretch exam
 in `examples/portfolio`. `PROJECT.md`'s `next_step` says where the current
 daytrip stands.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 7 apps, 29 app words, 34 verified pages, 38 conventions, 32 promises, and 113 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 7 apps, 29 app words, 34 verified pages, 38 conventions, 33 promises, and 113 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/publication/app.rb`.
 
