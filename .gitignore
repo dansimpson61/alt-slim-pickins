@@ -2,3 +2,10 @@
 .ruby-lsp/
 word_graph.html
 shots/
+
+# Local personal data and databases (never committed or pushed)
+*.csv
+*.sqlite3
+*.db
+.~lock.*
+examples/portfolio/data/

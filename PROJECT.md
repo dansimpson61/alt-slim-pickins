@@ -3,16 +3,14 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.8 (the backward eye — the harvest) is closed (2026-10-21; see
-  [ROADMAP-0.8.md](ROADMAP-0.8.md) and [DAYTRIP-0.8.0f.md](history/daytrips/DAYTRIP-0.8.0f.md)):
-  all 6 daytrips complete. Metric/fact healed, KeyValue spine introduced, box default contents
-  spliced, 63 words and apps audited, redundant prototypes retired, and form/empty seams leveled
-  for CRUD. Twelve gate legs green, 30 verified pages, 644 runs / 6,922 assertions / 0 failures.
+  Roadmap 0.9 (the forward eye — authentic CRUD & state mutation) is active
+  (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Daytrips 0.9.0a (Paper First & Wall
+  Ledger) and 0.9.0b (SQLite domain & CRUD persistence) complete. Local financial data
+  safely shielded from git. Twelve gate legs green, 30 verified pages, 650 runs / 6,955 assertions / 0 failures.
 last_touched: 2026-10-21
 next_step: >-
-  Draft Roadmap 0.9 with Dan: the full CRUD & state-mutation stretch exam in examples/portfolio
-  (SQLite-backed persistence, account/holding mutation, live metric/total recalculation,
-  validation failure handling, and flash lifecycle).
+  Execute Daytrip 0.9.0c: Heal Wall 1 and Wall 4 — implement Form method override for
+  PATCH/DELETE (`_method`) and pure-HTML safe destructive workflows in examples/portfolio.
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

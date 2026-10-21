@@ -32,7 +32,7 @@ so this block cannot go stale without the gate saying so:
 
 - **Census**: 63 canonical words (37 Ruby primitives + 26 `.sp` composed words),
   5 apps, 26 app words, 30 verified pages, 38 conventions, 33 promises,
-  113 style rules, 55 test files.
+  113 style rules, 56 test files.
 - **Twelve gate legs** on `/status`, re-run live on every visit: Grammar, Shape,
   Styles, Layout, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby,
   Suite. The Suite leg asks `Census.test_files`, so the example apps' suites are
