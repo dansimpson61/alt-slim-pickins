@@ -93,4 +93,56 @@ class ContractTest < Minitest::Test
     page = SlimPickins::Page.new(locals: {}, helpers: helpers)
     assert_equal 'Ledger', SlimPickins::Chain.new(page).current.fetch(:house_style)
   end
+
+  # --- Daytrip 0.8.0f: Leveling the path for 0.9 CRUD -------------------
+
+  def test_form_encloses_feedback_structure_and_composed_words
+    source = <<~SP
+      form account
+        flash "Success"
+        note "Please verify your email"
+        section details, "Account Details"
+          box
+            field name
+    SP
+    html = SlimPickins.render(source, locals: { account: { details: { name: 'Roth' } } })
+    assert_includes html, '<p class="flash">Success</p>'
+    assert_includes html, '<p class="note">Please verify your email</p>'
+    assert_includes html, '<section class="section section--details">'
+    assert_includes html, '<input id="name" name="name" type="text" value="Roth">'
+  end
+
+  def test_field_and_input_modifier_harmonization
+    source = <<~SP
+      form account
+        field email, placeholder: "you@example.com", required: true
+        input token, placeholder: "xyz-123", required: true
+    SP
+    html = SlimPickins.render(source, locals: { account: { email: 'dan@example.com', token: 'secret' } })
+    assert_includes html, '<input id="email" name="email" type="text" value="dan@example.com" placeholder="you@example.com" required="required">'
+    assert_includes html, '<input id="token" name="token" type="text" value="secret" placeholder="xyz-123" required="required">'
+  end
+
+  def test_empty_pruning_scoped_to_collection_container_leaves_siblings_intact
+    source = <<~SP
+      portfolio
+        actions
+          button "Add Holding", to: "/holdings/new"
+        section holdings, "Holdings"
+          empty "No holdings yet."
+          table
+            column symbol
+        form new_holding
+          field symbol
+          actions
+            button "Create"
+    SP
+    html = SlimPickins.render(source, locals: { portfolio: { holdings: [], new_holding: { symbol: '' } } })
+    assert_includes html, 'Add Holding'
+    assert_includes html, '<p class="empty">No holdings yet.</p>'
+    refute_includes html, '<table'
+    assert_includes html, '<form class="form"'
+    assert_includes html, '<input id="symbol" name="symbol" type="text"'
+    assert_includes html, '<button type="submit" class="button">Create</button>'
+  end
 end

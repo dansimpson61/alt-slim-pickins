@@ -2,7 +2,7 @@
 
 **An even-numbered roadmap. It leads with the backward eye.**
 
-Status: **active.** Written 2026-10-19, drafted by the steward and confirmed by
+Status: **closed 2026-10-21.** Written 2026-10-19, drafted by the steward and confirmed by
 dan. It is a roadmap and not a plan: it names the question and what success looks
 like, leaving the step-by-step work to daytrips, the same way 0.4, 0.5, 0.6 and
 0.7 did.
@@ -206,10 +206,12 @@ eight example apps:
    `roth`, `dashboard`, and `word_graph` to SOTA `.sp` powered by `KeyValue`
    and `dictionary`/`on`/`map`. All 12 gate legs + pedagogy green, 640 runs /
    6,896 assertions / 0 failures.
-6. **0.8.0f — Leveling the path for 0.9 CRUD & roadmap close:**
-   Harmonize `form` / `field` / `input` contracts and collection-scoped `empty`
-   pruning; run the full visual and gate verification across the five kept apps
-   and Studio; close Roadmap 0.8.
+6. **0.8.0f — Leveling the path for 0.9 CRUD & roadmap close (complete 2026-10-21, [DAYTRIP-0.8.0f.md](history/daytrips/DAYTRIP-0.8.0f.md)):**
+   Widened `Form` child contract (`children: :any`) and retired input field pruning;
+   harmonized `field` and `input` modifiers (`placeholder:`, `required:`, `step:`);
+   scoped collection `empty` pruning to enclosing containers (`section` / `box`),
+   preserving sibling creation forms and toolbars. All 12 gate legs + pedagogy green,
+   30 verified pages, 644 runs / 6,922 assertions / 0 failures. Roadmap 0.8 closed.
 
 ## What this document is not
 

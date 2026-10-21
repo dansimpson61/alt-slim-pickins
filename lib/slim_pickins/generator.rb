@@ -500,6 +500,7 @@ module SlimPickins
                name: attrs[:name].to_s,
                type: attrs[:kind].to_s,
                value: plain(attrs[:value]),
+               placeholder: attrs[:placeholder]&.to_s,
                step: attrs[:step],
                required: attrs[:required] ? 'required' : nil)
       @out << '</div>'
@@ -511,7 +512,9 @@ module SlimPickins
                name: attrs[:name].to_s,
                type: attrs[:kind].to_s,
                value: plain(attrs[:value]),
-               placeholder: attrs[:placeholder]&.to_s)
+               placeholder: attrs[:placeholder]&.to_s,
+               step: attrs[:step],
+               required: attrs[:required] ? 'required' : nil)
     end
 
     def textarea(attrs, _children)

@@ -97,7 +97,7 @@ module SlimPickins
                   read_by: ['lib/slim_pickins/words.rb'], verdict: :read,
                   note: 'names the axis when the plural is not the row\'s name'),
       Promise.new(name: :placeholder, kind: :modifier,
-                  declared_by: %i[input search],
+                  declared_by: %i[field input search],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/vocabulary/search.sp'], verdict: :read, note: nil),
       Promise.new(name: :precision, kind: :modifier,
@@ -109,7 +109,7 @@ module SlimPickins
       Promise.new(name: :readonly, kind: :modifier, declared_by: [:textarea],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/slim_pickins/words.rb'], verdict: :read, note: nil),
-      Promise.new(name: :required, kind: :modifier, declared_by: %i[field textarea],
+      Promise.new(name: :required, kind: :modifier, declared_by: %i[field input textarea],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/slim_pickins/words.rb'], verdict: :read,
                   note: 'read where it is said; until 2026-09-17 the trap was that ' \
@@ -130,7 +130,7 @@ module SlimPickins
                   read_by: ['lib/vocabulary/action.sp'], verdict: :read,
                   note: 'read by its own partial; the studio page says ' \
                         '`badge .state`, which is a different word'),
-      Promise.new(name: :step, kind: :modifier, declared_by: [:field],
+      Promise.new(name: :step, kind: :modifier, declared_by: %i[field input],
                   read_by: ['lib/slim_pickins/generator.rb',
                             'lib/slim_pickins/words.rb'], verdict: :read, note: nil),
       Promise.new(name: :target, kind: :modifier, declared_by: %i[form button],

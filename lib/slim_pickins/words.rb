@@ -373,7 +373,7 @@ module SlimPickins
     end
 
     class Form < Word
-      contract name: :subject, modifiers: [:to, :method, :target], children: [:group, :field, :checkbox, :choice, :actions, :disclosure, :button, :hidden, :input, :textarea, :choose, :contents, :box, :each], subject: :shift, shape: :encloses, lazy: []
+      contract name: :subject, modifiers: [:to, :method, :target], children: :any, subject: :shift, shape: :encloses, lazy: []
 
       class Hidden < Word
         contract name: :name, content: true, shape: :says, lazy: []
@@ -386,9 +386,9 @@ module SlimPickins
 
       def evaluate
         name, = arguments(@args)
-        value, empty, children = about(name) { @builder.with_family(:form) { capture(&@block) } }
+        value, _empty, children = about(name) { @builder.with_family(:form) { capture(&@block) } }
         emit_node(Node[:form, { name: name, to: @kwargs[:to], method: @kwargs[:method], target: @kwargs[:target] },
-                       prune(children, empty)])
+                       children])
         value
       end
     end
@@ -399,7 +399,7 @@ module SlimPickins
     end
 
     class Field < Word
-      contract name: :attribute, content: true, modifiers: [:type, :step, :required], shape: :says, lazy: [], infers: [:label, :input_type, :input_step, :boolean_field]
+      contract name: :attribute, content: true, modifiers: [:type, :step, :placeholder, :required], shape: :says, lazy: [], infers: [:label, :input_type, :input_step, :boolean_field]
 
       def evaluate
         kv = KeyValue.for_control(subject, @args, @kwargs)
@@ -407,18 +407,21 @@ module SlimPickins
                                  value: kv.raw_value,
                                  kind: kv.input_type(@kwargs[:type]),
                                  step: kv.step(@kwargs[:step]),
+                                 placeholder: @kwargs[:placeholder],
                                  required: @kwargs[:required] }, []])
       end
     end
 
     class Input < Word
-      contract name: :attribute, content: true, modifiers: [:type, :placeholder], shape: :says, lazy: [], infers: [:input_type]
+      contract name: :attribute, content: true, modifiers: [:type, :step, :placeholder, :required], shape: :says, lazy: [], infers: [:input_type, :input_step]
 
       def evaluate
         kv = KeyValue.for_control(subject, @args, @kwargs, second_is: :value)
         emit_node(Node[:input, { name: kv.key, value: kv.raw_value,
                                  kind: @kwargs[:type] || Inference.input_type(kv.raw_value),
-                                 placeholder: @kwargs[:placeholder] }, []])
+                                 step: kv.step(@kwargs[:step]),
+                                 placeholder: @kwargs[:placeholder],
+                                 required: @kwargs[:required] }, []])
       end
     end
 

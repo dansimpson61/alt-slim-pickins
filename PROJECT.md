@@ -3,19 +3,16 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).
-  Daytrips 0.8.0a through 0.8.0e are complete (2026-10-20; see
-  [DAYTRIP-0.8.0e.md](history/daytrips/DAYTRIP-0.8.0e.md)): retired milestone_planner and
-  way_exam, stowed dated study/planning docs in history/, migrated views/partials/ to
-  views/words/ across all kept apps and studio, and modernized publication, portfolio, roth,
-  dashboard, and word_graph to SOTA .sp powered by KeyValue and dictionary/on/map.
-  Twelve gate legs green, 30 verified pages, 640 runs / 6,896 assertions / 0 failures.
-last_touched: 2026-10-20
+  Roadmap 0.8 (the backward eye — the harvest) is closed (2026-10-21; see
+  [ROADMAP-0.8.md](ROADMAP-0.8.md) and [DAYTRIP-0.8.0f.md](history/daytrips/DAYTRIP-0.8.0f.md)):
+  all 6 daytrips complete. Metric/fact healed, KeyValue spine introduced, box default contents
+  spliced, 63 words and apps audited, redundant prototypes retired, and form/empty seams leveled
+  for CRUD. Twelve gate legs green, 30 verified pages, 644 runs / 6,922 assertions / 0 failures.
+last_touched: 2026-10-21
 next_step: >-
-  Write a detailed plan for Dan's approval before proceeding with Daytrip 0.8.0f: Leveling the
-  path for 0.9 CRUD & roadmap close — harmonize form, field, and input contracts and modifiers
-  (placeholder:, required:), scope empty pruning to the collection's container, run full visual
-  and gate verification across kept apps and studio, and close Roadmap 0.8.
+  Draft Roadmap 0.9 with Dan: the full CRUD & state-mutation stretch exam in examples/portfolio
+  (SQLite-backed persistence, account/holding mutation, live metric/total recalculation,
+  validation failure handling, and flash lifecycle).
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

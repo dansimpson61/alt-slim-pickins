@@ -27,7 +27,7 @@ module Publication
       when 'document' then { document: shelf.find(id) }
       when 'search' then { query: Query.new(shelf, q: q, include_history: include_history) }
       when 'timeline' then { entries: entries_for(lore, q, author), q: q }
-      when 'entry' then { entry: entry || lore.all.first }
+      when 'entry' then { entry: entry || lore.all.find { |e| e.words.any? } || lore.all.first }
       end
     end
 

@@ -328,7 +328,7 @@ module SlimPickins
                        elsif gatherer
                          with_family(word_name) { prune(capture(&caller_block), empty_active?) }
                        else
-                         with_family(word_name) { capture(&caller_block) }
+                         with_family(word_name) { prune(capture(&caller_block), empty_active?) }
                        end
                      else
                        []
@@ -764,6 +764,7 @@ module SlimPickins
       style_stylesheet_url.each { |url| in_head(Node[:stylesheet, { path: url }, []]) }
 
       value, empty, body = about(name) do
+        @empty_active = false if Inference.collection?(value)
         heading = (title.is_a?(Proc) ? title.call : title)
         # Self-titling: a route that names a subject and says no title takes
         # the subject's own `title` — a document's first heading — and marks
@@ -778,7 +779,13 @@ module SlimPickins
         wrapped_in_frame(&block)
       end
 
-      emit_node(Node[:page, { heading: heading, head: head_nodes, favicon: favicon }, prune(body, empty)])
+      pruned_body = if empty && !Inference.collection?(value) && body.any? { |n| empty_node?(n) }
+                      prune(body, true)
+                    else
+                      body.reject { |n| empty_node?(n) }
+                    end
+
+      emit_node(Node[:page, { heading: heading, head: head_nodes, favicon: favicon }, pruned_body])
       value
     end
 

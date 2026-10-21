@@ -170,6 +170,18 @@ end
     assert_complaint("table holdings\n  column name\n  link show\n", '`table` may not hold `link`')
   end
 
+  def test_form_may_hold_feedback_and_structure_words
+    source = <<~SP
+      form account
+        note "Hello"
+        flash "Done"
+        section details, "Details"
+          box
+            field name
+    SP
+    assert_empty complaints(source)
+  end
+
   def test_a_word_with_no_children_slot_holds_nothing
     assert_complaint("title \"x\"\n  text \"y\"\n", '`title` holds nothing')
   end
