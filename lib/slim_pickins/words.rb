@@ -399,7 +399,7 @@ module SlimPickins
     end
 
     class Field < Word
-      contract name: :attribute, content: true, modifiers: [:type, :step, :placeholder, :required], shape: :says, lazy: [], infers: [:label, :input_type, :input_step, :boolean_field]
+      contract name: :attribute, content: true, modifiers: [:type, :step, :placeholder, :required, :error], shape: :says, lazy: [], infers: [:label, :input_type, :input_step, :boolean_field, :field_error]
 
       def evaluate
         kv = KeyValue.for_control(subject, @args, @kwargs)
@@ -408,12 +408,13 @@ module SlimPickins
                                  kind: kv.input_type(@kwargs[:type]),
                                  step: kv.step(@kwargs[:step]),
                                  placeholder: @kwargs[:placeholder],
-                                 required: @kwargs[:required] }, []])
+                                 required: @kwargs[:required],
+                                 error: kv.error }, []])
       end
     end
 
     class Input < Word
-      contract name: :attribute, content: true, modifiers: [:type, :step, :placeholder, :required], shape: :says, lazy: [], infers: [:input_type, :input_step]
+      contract name: :attribute, content: true, modifiers: [:type, :step, :placeholder, :required, :error], shape: :says, lazy: [], infers: [:input_type, :input_step, :field_error]
 
       def evaluate
         kv = KeyValue.for_control(subject, @args, @kwargs, second_is: :value)
@@ -421,7 +422,8 @@ module SlimPickins
                                  kind: @kwargs[:type] || Inference.input_type(kv.raw_value),
                                  step: kv.step(@kwargs[:step]),
                                  placeholder: @kwargs[:placeholder],
-                                 required: @kwargs[:required] }, []])
+                                 required: @kwargs[:required],
+                                 error: kv.error }, []])
       end
     end
 

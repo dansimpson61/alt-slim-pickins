@@ -4,13 +4,12 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   Roadmap 0.9 (the forward eye — authentic CRUD & state mutation) is active
-  (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Daytrips 0.9.0a (Paper First & Wall
-  Ledger), 0.9.0b (SQLite domain & CRUD persistence), and 0.9.0c (Form method override & safe
-  confirmations) complete. Twelve gate legs green, 31 verified pages, 651 runs / 6,974 assertions / 0 failures.
+  (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Daytrips 0.9.0a, 0.9.0b, 0.9.0c, and 0.9.0d
+  (Field validation diagnostics & 422 dirty form re-rendering) complete. Twelve gate legs green, 33 verified pages.
 last_touched: 2026-10-21
 next_step: >-
-  Execute Daytrip 0.9.0d: Heal Wall 2 — Field validation diagnostics (`error:` modifier,
-  `subject.errors` inference, `aria-invalid`, `.field--invalid`), and 422 dirty form re-rendering.
+  Execute Daytrip 0.9.0e: Heal Wall 3 — Flash message lifecycle (session flash storage,
+  `flash.sp` auto-render in frame, redirect notices), and empty state healing.
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

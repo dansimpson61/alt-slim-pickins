@@ -12,7 +12,9 @@ module Fixtures
 
   Holding = Struct.new(:symbol, :shares, :market_value, :gain, :weight, keyword_init: true)
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
-                       :tour_url, keyword_init: true)
+                       :tour_url, :institution, :account_type, :errors, keyword_init: true) do
+    def errors? = errors && !errors.empty?
+  end
   Target = Struct.new(:asset_class, :target, :actual, :drift, keyword_init: true)
   Balance = Struct.new(:year, :total, keyword_init: true)
   Contribution = Struct.new(:amount, :account_id, :frequency, :auto_invest, keyword_init: true)

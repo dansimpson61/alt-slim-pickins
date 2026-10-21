@@ -213,4 +213,53 @@ class Phase4Test < Minitest::Test
     assert_includes html, '<h2 class="metric-title">Section</h2>'
     assert_includes html, '<div class="metric-value">9</div>'
   end
+
+  # --- Field Validation Diagnostics (Daytrip 0.9.0d) ---------------------
+
+  def test_key_value_resolves_error_from_error_for_and_errors_hash
+    with_error_for = Struct.new(:name, keyword_init: true) do
+      def error_for(attr) = attr == :name ? 'Name is taken' : nil
+    end.new(name: 'Checking')
+
+    subj1 = SlimPickins::Subject.new(with_error_for)
+    kv1 = SlimPickins::KeyValue.new(:name, 'Checking', subject: subj1)
+    assert_equal 'Name is taken', kv1.error
+
+    with_errors_hash = Struct.new(:name, :errors, keyword_init: true).new(
+      name: '', errors: { name: ["can't be blank"] }
+    )
+    subj2 = SlimPickins::Subject.new(with_errors_hash)
+    kv2 = SlimPickins::KeyValue.new(:name, '', subject: subj2)
+    assert_equal "can't be blank", kv2.error
+  end
+
+  def test_field_renders_validation_diagnostics_when_invalid
+    account = Struct.new(:name, keyword_init: true) do
+      def error_for(attr) = attr == :name ? 'Name cannot be empty' : nil
+    end.new(name: '')
+
+    html = render(<<~PAGE, account: account)
+      account
+        field name
+    PAGE
+
+    assert_includes html, '<div class="field field--invalid">'
+    assert_includes html, 'aria-invalid="true"'
+    assert_includes html, 'aria-describedby="name-error"'
+    assert_includes html, '<span class="field-error" id="name-error">Name cannot be empty</span>'
+  end
+
+  def test_field_supports_explicit_error_modifier_override
+    account = Struct.new(:name, keyword_init: true).new(name: 'Savings')
+
+    html = render(<<~PAGE, account: account)
+      account
+        field name, error: "Must be unique"
+    PAGE
+
+    assert_includes html, '<div class="field field--invalid">'
+    assert_includes html, 'aria-invalid="true"'
+    assert_includes html, 'aria-describedby="name-error"'
+    assert_includes html, '<span class="field-error" id="name-error">Must be unique</span>'
+  end
 end

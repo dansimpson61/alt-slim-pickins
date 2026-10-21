@@ -45,7 +45,7 @@ class Portfolio < Sinatra::Base
     account = repo.all_accounts.first || Fixtures.portfolio.accounts.last
     case name
     when 'index' then { portfolio: repo.portfolio_summary }
-    when 'account', 'confirm_close' then { account: account }
+    when 'account', 'confirm_close', 'new_account', 'edit_account' then { account: account }
     end
   end
 
@@ -67,9 +67,30 @@ class Portfolio < Sinatra::Base
     sp :index, locals: { portfolio: portfolio }
   end
 
+  get '/accounts/new' do
+    account = Portfolio::Account.new(account_type: 'brokerage')
+    sp :new_account, locals: { account: account }
+  end
+
+  post '/accounts' do
+    attrs = {
+      name: params[:name] || params['name'],
+      institution: params[:institution] || params['institution'],
+      account_type: params[:account_type] || params['account_type'],
+      balance: params[:balance] || params['balance']
+    }
+    account, errors = repo.create_account(attrs)
+    if errors.empty?
+      redirect "/accounts/#{account.id}"
+    else
+      status 422
+      sp :new_account, locals: { account: account }
+    end
+  end
+
   get '/accounts/:id' do
     account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
-                portfolio.accounts.find { |a| a.id.to_s == params[:id] }
+                portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
               else
                 repo.find_account(params[:id])
               end
@@ -77,8 +98,39 @@ class Portfolio < Sinatra::Base
     sp :account, locals: { account: account }
   end
 
+  get '/accounts/:id/edit' do
+    account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+                portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
+              else
+                repo.find_account(params[:id])
+              end
+    halt 404 unless account
+    sp :edit_account, locals: { account: account }
+  end
+
+  patch '/accounts/:id' do
+    attrs = {
+      name: params[:name] || params['name'],
+      institution: params[:institution] || params['institution'],
+      account_type: params[:account_type] || params['account_type']
+    }
+    account, errors = repo.update_account(params[:id], attrs)
+    halt 404 unless account
+    if errors.empty?
+      redirect "/accounts/#{account.id}"
+    else
+      status 422
+      sp :edit_account, locals: { account: account }
+    end
+  end
+
   get '/accounts/:id/close' do
-    account = repo.find_account(params[:id]) or halt 404
+    account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+                portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
+              else
+                repo.find_account(params[:id])
+              end
+    halt 404 unless account
     sp :confirm_close, locals: { account: account }
   end
 

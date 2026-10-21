@@ -922,10 +922,10 @@ A Ruby primitive. Encloses form controls (`field`, `input`, `textarea`,
 
 - **name** — the attribute
 - **content** — text or data, when there is any
-- **modifiers** — `type:`, `step:`, `placeholder:`, `required:`
+- **modifiers** — `type:`, `step:`, `placeholder:`, `required:`, `error:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `input_type` — the input type, from the value's class (override: `type:`); `input_step` — `step="0.01"` below one, `step="any"` above (override: `step:`); `boolean_field` — that the field is a checkbox, because a value that is already true or false knows the shape it wants (override: `type: text`)
+- **conventions** — `label` — the human label — the page, then the app, then English (override: say the label in the page); `input_type` — the input type, from the value's class (override: `type:`); `input_step` — `step="0.01"` below one, `step="any"` above (override: `step:`); `boolean_field` — that the field is a checkbox, because a value that is already true or false knows the shape it wants (override: `type: text`); `field_error` — the validation error message — `error:`, then the app, then nothing (override: `error:`)
 - **infers** — the `<label>`, the input `name` and `id`, the current value from the subject, the HTML input `type` (`number`, `date`, `checkbox`, `text`), and numeric `step`
 - **renders** — `<div class="field"><label for="…">…</label><input …></div>`
 
@@ -943,10 +943,10 @@ the current subject.
 
 - **name** — the attribute
 - **content** — text or data, when there is any
-- **modifiers** — `type:`, `step:`, `placeholder:`, `required:`
+- **modifiers** — `type:`, `step:`, `placeholder:`, `required:`, `error:`
 - **children** — none
 - **subject** — unchanged
-- **conventions** — `input_type` — the input type, from the value's class (override: `type:`); `input_step` — `step="0.01"` below one, `step="any"` above (override: `step:`)
+- **conventions** — `input_type` — the input type, from the value's class (override: `type:`); `input_step` — `step="0.01"` below one, `step="any"` above (override: `step:`); `field_error` — the validation error message — `error:`, then the app, then nothing (override: `error:`)
 - **infers** — the current value and input `type` from the named attribute on the subject, without rendering a `<label>` wrapper
 - **renders** — a bare `<input class="input">`
 

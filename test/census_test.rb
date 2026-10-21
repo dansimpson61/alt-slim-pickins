@@ -39,15 +39,15 @@ class CensusTest < Minitest::Test
   end
 
   def test_conventions_and_promises_match_registers
-    assert_equal 38, SlimPickins::Census.conventions_count
-    assert_equal 33, SlimPickins::Census.promises_count
+    assert_equal 39, SlimPickins::Census.conventions_count
+    assert_equal 34, SlimPickins::Census.promises_count
   end
 
   def test_styles_census_matches_stylesheet_rules
     # A pinned number is a canary: it fails when the stylesheet gains or
     # loses a class, which is how `.split_pane` folding into `.panes` was
     # noticed rather than absorbed silently.
-    assert_equal 113, SlimPickins::Census.styles[:rules_defined]
+    assert_equal 115, SlimPickins::Census.styles[:rules_defined]
   end
 
   def test_report_formats_all_metrics
@@ -57,6 +57,6 @@ class CensusTest < Minitest::Test
     # The report test is about the formatting, not the count — the count has its
     # own test, and pinning it twice is how one copy goes stale.
     assert_match(/#{SlimPickins::Census.verified_pages_count} checked by verify_pages/, report)
-    assert_match(/38 registered in SlimPickins::Conventions::ALL/, report)
+    assert_match(/39 registered in SlimPickins::Conventions::ALL/, report)
   end
 end

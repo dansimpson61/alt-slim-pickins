@@ -11,15 +11,16 @@ module SlimPickins
   #   - label:  what the sentence said -> what the row/subject's `label_for` said -> English
   #   - format: what `as:` said -> what the row/subject's `format_for` said -> the value's shape
   class KeyValue
-    attr_reader :key, :raw_value, :subject, :row, :given_label, :given_format
+    attr_reader :key, :raw_value, :subject, :row, :given_label, :given_format, :given_error
 
-    def initialize(key, raw_value, subject: nil, row: nil, label: nil, format: nil, formatted: false)
+    def initialize(key, raw_value, subject: nil, row: nil, label: nil, format: nil, error: nil, formatted: false)
       @key = key.respond_to?(:to_sym) ? key.to_sym : nil
       @raw_value = raw_value
       @subject = subject
       @row = row
       @given_label = label
       @given_format = format
+      @given_error = error
       @formatted = formatted
     end
 
@@ -72,6 +73,25 @@ module SlimPickins
       (step_override || Inference.step_for(@raw_value))&.to_s
     end
 
+    # The validation message — `error:`, then the app, then nothing.
+    def error
+      return @given_error if @given_error
+      return nil unless @key && @subject
+
+      subj = @subject.respond_to?(:object) ? @subject.object : @subject
+      raw_err = if subj.respond_to?(:error_for)
+                  subj.error_for(@key)
+                elsif subj.respond_to?(:errors)
+                  errs = subj.errors
+                  if errs.is_a?(Hash)
+                    errs[@key] || errs[@key.to_s]
+                  elsif errs.respond_to?(:[])
+                    errs[@key] || errs[@key.to_s]
+                  end
+                end
+      raw_err.is_a?(Array) ? raw_err.first : raw_err
+    end
+
     def to_h
       {
         key: @key,
@@ -80,7 +100,8 @@ module SlimPickins
         label: label,
         value: value,
         raw_value: @raw_value,
-        format: format
+        format: format,
+        error: error
       }
     end
 
@@ -161,16 +182,16 @@ module SlimPickins
 
       if second_is == :value
         raw_val = non_sym.nil? ? (sym ? subject.fetch(sym) : nil) : non_sym
-        new(sym, raw_val, subject: subject, label: kwargs[:label])
+        new(sym, raw_val, subject: subject, label: kwargs[:label], error: kwargs[:error])
       elsif sym
         raw_val = if require_attribute
                     subject.fetch(sym)
                   else
                     subject.has?(sym) ? subject.fetch(sym) : nil
                   end
-        new(sym, raw_val, subject: subject, label: kwargs[:label] || non_sym)
+        new(sym, raw_val, subject: subject, label: kwargs[:label] || non_sym, error: kwargs[:error])
       else
-        new(nil, args[0], subject: subject, label: kwargs[:label] || args[1])
+        new(nil, args[0], subject: subject, label: kwargs[:label] || args[1], error: kwargs[:error])
       end
     end
 

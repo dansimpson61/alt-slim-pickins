@@ -109,6 +109,8 @@ PAGES = [
   ['examples/portfolio/views/index.sp', portfolio, { portfolio: Fixtures.portfolio }],
   ['examples/portfolio/views/account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
   ['examples/portfolio/views/confirm_close.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
+  ['examples/portfolio/views/new_account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
+  ['examples/portfolio/views/edit_account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
   ['examples/roth/views/controls.sp', roth, { scenario: scenario, projection: projection }],
   ['examples/roth/views/words/report.sp', roth, { scenario: scenario, projection: projection }],
   ['examples/dashboard/views/triage.sp', dashboard,

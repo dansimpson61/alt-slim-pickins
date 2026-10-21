@@ -244,7 +244,7 @@ Every sentence follows a universal positional and keyword structure:
 
 ### What sentences infer automatically
 
-Conventions are predictable and inspectable (`CONVENTIONS.md` documents all 38
+Conventions are predictable and inspectable (`CONVENTIONS.md` documents all 39
 conventions and their overrides). Here is what common sentences infer without
 being asked:
 
@@ -488,7 +488,7 @@ grammar, in four shapes:
 | `.word-part` | `.metric-title` |
 | `.word-part--n` | `.chart-band--0` |
 
-Every presentational token lives in `:root` across 113 style rules in the base
+Every presentational token lives in `:root` across 115 style rules in the base
 stylesheet (`lib/slim_pickins/assets/slim-pickins.css`). Visual presentation
 belongs to the theme's semantic roles, to a word's declared variants (`note
 quiet`, `badge ok`), to `.layout` spatial declarations, and to sayable `.style`
@@ -537,7 +537,7 @@ The language ships with its own live authoring environment on port `4580`
 (`classic` and `workbench` UIs):
 
 - **The Shelf:** Organizes the 63 canonical words across the five vocabulary
-  categories, alongside the 5 example applications (31 verified pages) and the
+  categories, alongside the 5 example applications (33 verified pages) and the
   project guides.
 - **The Work Area:** Evaluates `.sp` source and JSON data payloads live as you
   type, displaying Visual and HTML outputs side by side.

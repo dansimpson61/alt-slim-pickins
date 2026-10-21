@@ -26,8 +26,8 @@ three orthogonal planes:
 | | `style` | Theme-role companion (`.style`) — sayable theme roles |
 | | `substance` | Route-level body template (`.sp`) answering routes |
 | **Mechanical Invariant** (The Instruments of Truth) | `contract` | Compile-time syntactic grammar (takes, holds, modifiers) |
-| | `convention` | Inference engine when syntax remains silent (38 conventions) |
-| | `promise` | Ledger proving declared modifiers have active readers (33 promises) |
+| | `convention` | Inference engine when syntax remains silent (39 conventions) |
+| | `promise` | Ledger proving declared modifiers have active readers (34 promises) |
 
 ---
 
@@ -100,8 +100,8 @@ lifecycle stage:
 | Instrument | Role | Stage | Responsibility |
 |---|---|---|---|
 | **`contract`** | Grammar | Compile-time | Enforces syntactic bounds: what a word takes, holds, allows as children, and modifies. Checked by `check_grammar.rb` and `check_shape.rb`. |
-| **`convention`** | Inference Engine | Runtime | Governs what the engine infers when an author stays silent (thirty-eight conventions across structure, shape, domain, and theme). |
-| **`promise`** | Feature Ledger | Verification | Proves that every declared modifier keyword has a live, active reader in Ruby or `.sp` code (thirty-three promises). |
+| **`convention`** | Inference Engine | Runtime | Governs what the engine infers when an author stays silent (thirty-nine conventions across structure, shape, domain, and theme). |
+| **`promise`** | Feature Ledger | Verification | Proves that every declared modifier keyword has a live, active reader in Ruby or `.sp` code (thirty-four promises). |
 
 ### The Boundary Between the Instruments
 

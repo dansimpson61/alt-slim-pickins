@@ -136,4 +136,59 @@ class Phase6Test < Minitest::Test
     refute_includes html, '</img>'
     assert_includes html, '<img class="photo" src="/t.png">'
   end
+
+  # --- Wall 2 & CRUD Validation (Daytrip 0.9.0d) -------------------------
+
+  def test_new_account_form_renders_cleanly
+    get '/accounts/new'
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Open New Account'
+    assert_includes last_response.body, '<form class="form" action="/accounts" method="post">'
+    assert_includes last_response.body, '<input id="name" name="name" type="text"'
+  end
+
+  def test_create_account_re_renders_422_with_validation_diagnostics
+    post '/accounts', { name: '', institution: '', account_type: 'brokerage' }
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, 'Please correct the errors below.'
+    assert_includes last_response.body, '<div class="field field--invalid">'
+    assert_includes last_response.body, 'aria-invalid="true"'
+    assert_includes last_response.body, 'aria-describedby="name-error"'
+    assert_includes last_response.body, '<span class="field-error" id="name-error">Name can&#39;t be blank</span>'
+  end
+
+  def test_create_account_succeeds_and_redirects
+    post '/accounts', { name: 'Emergency Fund', institution: 'Ally', account_type: 'savings', balance: '15000' }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Emergency Fund'
+  end
+
+  def test_edit_account_form_renders_with_existing_values
+    account = Portfolio::Repository.new.all_accounts.first
+    get "/accounts/#{account.id}/edit"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Edit Account'
+    assert_includes last_response.body, '<input type="hidden" name="_method" value="patch">'
+    assert_includes last_response.body, %(value="#{account.name}")
+  end
+
+  def test_update_account_re_renders_422_on_invalid_patch
+    account = Portfolio::Repository.new.all_accounts.first
+    patch "/accounts/#{account.id}", { name: '', institution: '' }
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, 'Please correct the errors below.'
+    assert_includes last_response.body, '<div class="field field--invalid">'
+    assert_includes last_response.body, 'aria-invalid="true"'
+  end
+
+  def test_update_account_succeeds_and_redirects_on_valid_patch
+    account = Portfolio::Repository.new.all_accounts.first
+    patch "/accounts/#{account.id}", { name: 'Renamed Account', institution: account.institution, account_type: account.account_type }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Renamed Account'
+  end
 end

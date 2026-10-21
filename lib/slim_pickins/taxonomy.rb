@@ -158,13 +158,13 @@ module SlimPickins
         name: :convention,
         plane: :invariant,
         summary: 'Runtime inference engine',
-        definition: 'The runtime inference engine (38 conventions) governing defaults when an author stays silent.'
+        definition: 'The runtime inference engine (39 conventions) governing defaults when an author stays silent.'
       ),
       promise: SystemTerm.new(
         name: :promise,
         plane: :invariant,
         summary: 'Feature verification ledger',
-        definition: 'The feature verification ledger (33 promises) proving declared modifiers have active readers in code.'
+        definition: 'The feature verification ledger (34 promises) proving declared modifiers have active readers in code.'
       )
     }.freeze
 

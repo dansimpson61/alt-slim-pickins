@@ -502,8 +502,10 @@ module SlimPickins
       # word to use for a value that already knows. `type:` still overrides.
       return checkbox_field(attrs) if attrs[:kind] == :checkbox
 
-      open_tag('div', class: token(:field))
+      error = attrs[:error]
+      open_tag('div', class: error ? token(:field, :invalid) : token(:field))
       full_tag('label', attrs[:label], for: attrs[:name].to_s)
+      described_by = error && attrs[:name] ? "#{attrs[:name]}-error" : nil
       void_tag('input',
                id: attrs[:name].to_s,
                name: attrs[:name].to_s,
@@ -511,11 +513,16 @@ module SlimPickins
                value: plain(attrs[:value]),
                placeholder: attrs[:placeholder]&.to_s,
                step: attrs[:step],
-               required: attrs[:required] ? 'required' : nil)
+               required: attrs[:required] ? 'required' : nil,
+               'aria-invalid': error ? 'true' : nil,
+               'aria-describedby': described_by)
+      full_tag('span', error, class: 'field-error', id: described_by) if error && attrs[:name]
       @out << '</div>'
     end
 
     def input(attrs, _children)
+      error = attrs[:error]
+      described_by = error && attrs[:name] ? "#{attrs[:name]}-error" : nil
       void_tag('input',
                id: attrs[:name].to_s,
                name: attrs[:name].to_s,
@@ -523,7 +530,9 @@ module SlimPickins
                value: plain(attrs[:value]),
                placeholder: attrs[:placeholder]&.to_s,
                step: attrs[:step],
-               required: attrs[:required] ? 'required' : nil)
+               required: attrs[:required] ? 'required' : nil,
+               'aria-invalid': error ? 'true' : nil,
+               'aria-describedby': described_by)
     end
 
     def textarea(attrs, _children)

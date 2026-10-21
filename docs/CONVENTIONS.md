@@ -9,7 +9,7 @@ You never asked for any of it. That is the inference engine working for you.
 
 Every convention makes three promises:
 
-1. **You can look it up.** Each of the 38 conventions has a name — written here
+1. **You can look it up.** Each of the 39 conventions has a name — written here
    in `code` — and a single entry in the convention register.
 2. **You can override it by saying it.** What you write in a template wins over
    what the language would have inferred. Where a convention defines what a word
@@ -24,7 +24,7 @@ Each entry below follows the same four-part structure:
 - **To override** — what to write when you want something else.
 - **Watch for** — its boundaries and stated limits.
 
-The 38 conventions are grouped by the **eleven principles** they serve — one
+The 39 conventions are grouped by the **eleven principles** they serve — one
 sentence each that you can hold in your head. Learn the principles and the
 individual conventions follow naturally.
 
@@ -235,6 +235,31 @@ label across all templates.
 `ira_balance` reads `"Ira balance"`) and strips a trailing `_on` or `_at`
 (`born_on` reads `"Born"`). Acronyms and domain-specific phrasing belong in
 `label_for`.
+
+### `field_error` — a field carries its validation diagnostics
+
+The validation error message comes from whoever knows best:
+**the template's explicit `error:` override, then the subject's `error_for(attribute)` or `errors[attribute]`, then nothing.**
+
+**You write**
+
+```sp
+field name
+```
+
+When `account.error_for(:name)` or `account.errors[:name]` returns `"Name is required"`,
+
+**You get**
+
+```html
+<div class="field field--invalid">
+  <label for="name">Name</label>
+  <input id="name" name="name" type="text" value="" aria-invalid="true" aria-describedby="name-error">
+  <span class="field-error" id="name-error">Name is required</span>
+</div>
+```
+
+**To override** — pass `error:` explicitly: `field name, error: "Must be unique"`. Pass `error: nil` to suppress an inferred error.
 
 ### `table_header` — a column's header or chart series label
 
@@ -751,7 +776,7 @@ back to `nil`.
 
 A template cannot specify ad-hoc pixel widths, font sizes, or colors. The base
 stylesheet owns 65 `:root` theme roles (`--measure`, `--gap`, `--ink`,
-`--surface`, and status tokens) across 113 style rules, spatial composition
+`--surface`, and status tokens) across 115 style rules, spatial composition
 lives in `.layout` files, and theme roles become sayable in the `.style`
 companion — `measure wide`, `gap loose`, `density airy` — compiled to `:root`
 custom properties that override the theme's defaults. When a concept requires
