@@ -2,7 +2,7 @@
 
 **An odd-numbered roadmap. It leads with the forward eye.**
 
-Status: **draft 2026-10-21, drafted by the steward for dan.**
+Status: **closed 2026-10-21.** Drafted 2026-10-21 by the steward for dan; passed Stretch Exam with 6 daytrips (0.9.0a to 0.9.0f).
 It is a roadmap and not a plan: it names the question and what success looks
 like, leaving the step-by-step work to daytrips, the way 0.4, 0.5, 0.6, 0.7,
 and 0.8 did.

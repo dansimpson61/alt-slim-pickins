@@ -46,25 +46,16 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).** Roadmap 0.7 closed on 2026-10-19 (`history/planning/ROADMAP-0.7.md`).
+**Roadmap 0.9 (the forward eye — authentic CRUD & state mutation stretch exam) is complete ([ROADMAP-0.9.md](ROADMAP-0.9.md)).**
+All six daytrips (0.9.0a through 0.9.0f) have passed and closed on 2026-10-21:
+- **Daytrip 0.9.0a**: Draft uncompromised paper views and inventory Wall Ledger ([DAYTRIP-0.9.0a.md](history/daytrips/DAYTRIP-0.9.0a.md)).
+- **Daytrip 0.9.0b**: SQLite domain repository, schema, transactional persistence & unit tests ([DAYTRIP-0.9.0b.md](history/daytrips/DAYTRIP-0.9.0b.md)).
+- **Daytrip 0.9.0c**: Heal Wall 1 (method override for RESTful PUT/PATCH/DELETE in pure HTML) & Wall 4 (safe deletions via confirmation route `confirm_close.sp`) ([DAYTRIP-0.9.0c.md](history/daytrips/DAYTRIP-0.9.0c.md)).
+- **Daytrip 0.9.0d**: Heal Wall 2 (field validation diagnostics & 422 re-rendering with `KeyValue#error`) ([DAYTRIP-0.9.0d.md](history/daytrips/DAYTRIP-0.9.0d.md)).
+- **Daytrip 0.9.0e**: Heal Wall 3 (flash notice lifecycle across redirect cycles & empty state sibling healing) ([DAYTRIP-0.9.0e.md](history/daytrips/DAYTRIP-0.9.0e.md)).
+- **Daytrip 0.9.0f**: Heal Wall 5 (spatial posture via companion `portfolio.layout` and `portfolio.style`) & close Roadmap 0.9 ([DAYTRIP-0.9.0f.md](history/daytrips/DAYTRIP-0.9.0f.md)).
 
-- **Daytrip 0.8.0a (`metric`, `fact`, `snippet`, and single word-compilation path) — complete ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)).**
-- **Daytrip 0.8.0b (`KeyValue` spine, `Hash` iteration in `each`, & native `kwargs` in `.sp` `def` headers and `Words`) — complete ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)).**
-- **Daytrip 0.8.0c (Blockless `box` default `contents` splice & `.style`/`.layout` handoff) — complete ([DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)).**
-- **Daytrip 0.8.0d (Harmonize composed words, retire dead variants, explicit `def` headers) — complete ([DAYTRIP-0.8.0d.md](history/daytrips/DAYTRIP-0.8.0d.md)).**
-  Harmonized `card.sp` (`subject`), `section.sp` (`subject`), and `title.sp` (`attribute`),
-  eliminating all word-name exceptions in `contracts.rb`; retired dead `variant` slots on
-  `aside`, `scroll`, `item`, and `tabs`; brought all studio UI partials onto explicit `def`
-  headers; and added guards in `Subject#has?` and `Builder#evaluate_word_definition`.
-- **Remaining 0.8 daytrips (`ROADMAP-0.8.md`):**
-  - **0.8.0e (Garden triage & SOTA app modernization):** Retire
-    `milestone_planner` and `way_exam`; stow dated planning/study docs in
-    `history/`; modernize `publication`, `portfolio`, `roth`, `dashboard`, and
-    `word_graph` to SOTA `.sp`.
-  - **0.8.0f (Leveling the path for 0.9 CRUD in `portfolio` & close):**
-    Harmonize `form`/`field`/`input` contracts and collection-scoped `empty`
-    pruning for Roadmap 0.9's SQLite CRUD stretch exam in `examples/portfolio`.
-- **Next step:** write a detailed plan for **Daytrip 0.8.0e** for Dan's approval before proceeding.
+**Next step:** Convene with dan to draft and open **Roadmap 0.10** (the backward eye — harvest and consolidation).
 
 ## Studio Process & Verification Protocol
 

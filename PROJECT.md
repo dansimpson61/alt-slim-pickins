@@ -3,13 +3,12 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.9 (the forward eye — authentic CRUD & state mutation) is active
-  (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Daytrips 0.9.0a, 0.9.0b, 0.9.0c, 0.9.0d, and 0.9.0e
-  (Flash message lifecycle & empty state healing) complete. Twelve gate legs green, 33 verified pages, 663 runs / 7,076 assertions / 0 failures.
+  Roadmap 0.9 (authentic CRUD & state mutation stretch exam) is complete
+  (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Passed with 6 daytrips (0.9.0a to 0.9.0f).
+  All 5 walls healed, twelve gate legs green, 33 verified pages, 664 runs / 7,088 assertions / 0 failures.
 last_touched: 2026-10-21
 next_step: >-
-  Execute Daytrip 0.9.0f: Heal Wall 5 — Spatial posture (.layout and .style companions for portfolio),
-  conduct visual verification across the dense analytical workbench archetype, and close Roadmap 0.9.
+  Convene with dan to review Roadmap 0.9 Stretch Exam closure and open Roadmap 0.10 (backward eye).
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md
@@ -47,5 +46,8 @@ and seven example apps plus the studio that speak it. See [README.md](README.md)
 on 2026-10-16, unifying the language's taxonomy and teaching. Roadmap 0.7
 closed on 2026-10-19 — the Editorial & Micro-Layout Publication Stretch Exam,
 passed — and is kept in [ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md).
-Roadmap 0.8 is active in [ROADMAP-0.8.md](ROADMAP-0.8.md); `next_step` above is
-the live resume point.
+Roadmap 0.8 closed on 2026-10-21 (harvest, KeyValue spine, form containment)
+and is kept in [ROADMAP-0.8.md](history/planning/ROADMAP-0.8.md).
+Roadmap 0.9 closed on 2026-10-21 — the Authentic CRUD & State-Mutation
+Stretch Exam, passed — and is kept in [ROADMAP-0.9.md](ROADMAP-0.9.md).
+`next_step` above is the live resume point for Roadmap 0.10.

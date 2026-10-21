@@ -1,0 +1,12 @@
+surface portfolio
+  stage
+    air tight
+
+  zone table
+    treatment tabular
+
+  zone section
+    frame quiet
+
+  zone actions
+    cluster

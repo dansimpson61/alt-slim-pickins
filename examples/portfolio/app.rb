@@ -155,9 +155,28 @@ class Portfolio < Sinatra::Base
     redirect '/'
   end
 
-  get '/assets/slim-pickins.css' do
+  get '/assets/:file' do
     content_type 'text/css'
-    send_file File.expand_path('../../lib/slim_pickins/assets/slim-pickins.css', __dir__)
+    case params[:file]
+    when 'slim-pickins.css'
+      send_file File.expand_path('../../lib/slim_pickins/assets/slim-pickins.css', __dir__)
+    when 'portfolio.css'
+      layout_file = File.expand_path('portfolio.layout', __dir__)
+      halt 404 unless File.file?(layout_file)
+      SlimPickins::Layout.compiled_stylesheet(
+        File.read(layout_file),
+        provenance: 'automatically from examples/portfolio/portfolio.layout'
+      )
+    when 'portfolio.style.css'
+      style_file = File.expand_path('portfolio.style', __dir__)
+      halt 404 unless File.file?(style_file)
+      SlimPickins::Style.compiled_stylesheet(
+        File.read(style_file),
+        provenance: 'automatically from examples/portfolio/portfolio.style'
+      )
+    else
+      halt 404
+    end
   end
 
   run! if app_file == $PROGRAM_NAME

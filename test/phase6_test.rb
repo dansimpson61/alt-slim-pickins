@@ -232,4 +232,26 @@ class Phase6Test < Minitest::Test
     assert_includes html, '<p class="empty">No accounts linked yet.</p>'
     assert_includes html, '<div class="actions"><a href="/accounts/new" class="link">Open new account</a></div>'
   end
+
+  # --- Wall 5: Spatial Posture & Workbench Companions (Daytrip 0.9.0f) ---
+
+  def test_portfolio_links_and_serves_spatial_and_style_companions
+    get '/'
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, '<link rel="stylesheet" href="/assets/portfolio.css">'
+    assert_includes last_response.body, '<link rel="stylesheet" href="/assets/portfolio.style.css">'
+
+    get '/assets/portfolio.css'
+    assert_equal 200, last_response.status
+    assert_includes last_response.content_type, 'text/css'
+    assert_includes last_response.body, 'container-name: portfolio;'
+    assert_includes last_response.body, 'font-variant-numeric: tabular-nums;'
+
+    get '/assets/portfolio.style.css'
+    assert_equal 200, last_response.status
+    assert_includes last_response.content_type, 'text/css'
+    assert_includes last_response.body, '--measure: 72ch;'
+    assert_includes last_response.body, '--gap: 0.5rem;'
+    assert_includes last_response.body, '--lead: 1.35;'
+  end
 end

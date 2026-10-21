@@ -203,7 +203,7 @@ is a beautifully organised runtime for the wrong language.
 
 **Roadmap 0.8 is completed ([ROADMAP-0.8.md](history/planning/ROADMAP-0.8.md)).** It led with the backward eye: the harvest. It healed metric and fact, introduced the KeyValue runtime spine, audited all 63 words and kept apps, retired redundant prototypes, and leveled form containment for CRUD.
 
-**Roadmap 0.9 is active ([ROADMAP-0.9.md](ROADMAP-0.9.md)).** It is an odd roadmap, leading with the forward eye: the Authentic CRUD & State-Mutation Stretch Exam in `examples/portfolio`. It elevates portfolio into a living SQLite-backed Wealth Management & Asset Allocation workbench exercising full relational CRUD, server validation diagnostics, flash lifecycle, and dynamic metric/total recalculation. `PROJECT.md`'s `next_step` says where the current daytrip stands.
+**Roadmap 0.9 is completed ([ROADMAP-0.9.md](ROADMAP-0.9.md)).** It led with the forward eye: the Authentic CRUD & State-Mutation Stretch Exam in `examples/portfolio`. It elevated portfolio into a living SQLite-backed Wealth Management & Asset Allocation workbench exercising full relational CRUD, method override, server validation diagnostics with 422 re-rendering, flash lifecycle, and spatial `.layout` & `.style` companions. It ran as six daytrips (`DAYTRIP-0.9.0a` to `0.9.0f`) and closed on 2026-10-21.
 
 Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 5 apps, 26 app words, 33 verified pages, 39 conventions, 34 promises, and 115 style rules.
 
