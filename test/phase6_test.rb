@@ -11,6 +11,7 @@ require_relative '../examples/portfolio/app'
 class Phase6Test < Minitest::Test
   include Rack::Test::Methods
 
+  Portfolio.set :environment, :test
   Portfolio.set :host_authorization, { permitted_hosts: [] }
 
   def app = Portfolio

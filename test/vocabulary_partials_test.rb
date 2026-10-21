@@ -85,6 +85,20 @@ class VocabularyPartialsTest < Minitest::Test
     end
   end
 
+  def test_form_method_override_injects_hidden_method_field
+    html_patch = SlimPickins.render('form to: "/accounts/1", method: patch')
+    assert_includes html_patch, '<form class="form" action="/accounts/1" method="post">'
+    assert_includes html_patch, '<input type="hidden" name="_method" value="patch">'
+
+    html_delete = SlimPickins.render('form to: "/accounts/1", method: delete')
+    assert_includes html_delete, '<form class="form" action="/accounts/1" method="post">'
+    assert_includes html_delete, '<input type="hidden" name="_method" value="delete">'
+
+    html_get = SlimPickins.render('form to: "/search", method: get')
+    assert_includes html_get, '<form class="form" action="/search" method="get">'
+    refute_includes html_get, '_method'
+  end
+
   def test_an_app_may_shadow_a_vocabulary_partial
     Dir.mktmpdir do |dir|
       FileUtils.mkdir_p(File.join(dir, 'partials'))

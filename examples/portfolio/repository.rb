@@ -3,8 +3,9 @@
 require 'sqlite3'
 require 'csv'
 require 'date'
+require 'sinatra/base'
 
-class Portfolio
+class Portfolio < Sinatra::Base
   Account = Struct.new(:id, :name, :institution, :account_type, :balance, :created_at,
                        :holdings, :transactions, :errors, keyword_init: true) do
     def total_value
@@ -23,6 +24,10 @@ class Portfolio
     def cash_balance
       return balance if holdings.nil? || holdings.empty?
       [balance.to_f - holdings.sum(&:market_value), 0.0].max
+    end
+
+    def tour_url
+      "/tours/#{id}.mp4"
     end
 
     def errors?

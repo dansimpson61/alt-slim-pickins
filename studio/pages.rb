@@ -54,6 +54,7 @@ module StudioPages
     'pages/specimen' => 'examples/pages/specimen.sp',
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
+    'portfolio/confirm_close' => 'examples/portfolio/views/confirm_close.sp',
     'portfolio/partials/card' => 'examples/portfolio/views/words/card.sp',
     'dashboard/triage' => 'examples/dashboard/views/triage.sp',
     'dashboard/confirm_archive' => 'examples/dashboard/views/confirm_archive.sp',
@@ -372,7 +373,7 @@ module StudioPages
       Fixtures.for('specimen')
     when 'examples/portfolio/views/index.sp'
       { portfolio: Fixtures.portfolio }
-    when 'examples/portfolio/views/account.sp'
+    when 'examples/portfolio/views/account.sp', 'examples/portfolio/views/confirm_close.sp'
       { account: Fixtures.portfolio.accounts.last }
     when 'examples/portfolio/views/words/card.sp'
       # Rendered standalone, the card's subject is the page — so the

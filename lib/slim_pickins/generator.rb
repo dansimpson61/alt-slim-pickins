@@ -467,9 +467,18 @@ module SlimPickins
     # --- Interaction ------------------------------------------------------
 
     def form(attrs, children)
+      raw_method = (attrs[:method] || :post).to_s.downcase
+      override = %w[patch put delete].include?(raw_method)
+      http_method = override ? 'post' : raw_method
+
       open_tag('form', class: token(:form), id: attrs[:name]&.to_s, action: attrs[:to]&.to_s,
-               method: (attrs[:method] || :post).to_s, target: attrs[:target]&.to_s)
-      with_form(true) { children.each { |c| emit(c) } }
+               method: http_method, target: attrs[:target]&.to_s)
+      with_form(true) do
+        if override && !children.any? { |c| c.is_a?(Node) && c.word == :hidden && c.attributes[:name].to_s == '_method' }
+          void_tag('input', type: 'hidden', name: '_method', value: raw_method)
+        end
+        children.each { |c| emit(c) }
+      end
       @out << '</form>'
     end
 

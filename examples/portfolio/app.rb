@@ -5,6 +5,7 @@
 
 require 'sinatra/base'
 require_relative '../../lib/slim_pickins/template'
+require_relative 'repository'
 require_relative '../../test/fixtures'
 
 # The escape hatch. The vocabulary has no word for an embedded video, and the
@@ -30,6 +31,7 @@ class Portfolio < Sinatra::Base
   # A `Sinatra::Base` subclass does not parse ARGV, so `-p` is silently
   # ignored and `run!` takes 4567 — which roth is usually holding.
   set :port, ENV.fetch('PORT', 4576).to_i
+  enable :method_override
 
   # One place says what this app's vocabulary is — its own words ride the
   # same Library as the built-ins.
@@ -39,14 +41,26 @@ class Portfolio < Sinatra::Base
   # Boot proves the pages: a view the app cannot answer fails here, naming
   # the line — before any request can render it blank.
   SlimPickins.prove!(settings.views, words: AppWords) do |name|
+    repo = Portfolio::Repository.new
+    account = repo.all_accounts.first || Fixtures.portfolio.accounts.last
     case name
-    when 'index' then { portfolio: Fixtures.portfolio }
-    when 'account' then { account: Fixtures.portfolio.accounts.last }
+    when 'index' then { portfolio: repo.portfolio_summary }
+    when 'account', 'confirm_close' then { account: account }
     end
   end
 
   helpers do
-    def portfolio = Fixtures.portfolio
+    def repo
+      @repo ||= Portfolio::Repository.new
+    end
+
+    def portfolio
+      if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+        Fixtures.portfolio
+      else
+        repo.portfolio_summary
+      end
+    end
   end
 
   get '/' do
@@ -54,8 +68,23 @@ class Portfolio < Sinatra::Base
   end
 
   get '/accounts/:id' do
-    account = portfolio.accounts.find { |a| a.id.to_s == params[:id] } or halt 404
+    account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+                portfolio.accounts.find { |a| a.id.to_s == params[:id] }
+              else
+                repo.find_account(params[:id])
+              end
+    halt 404 unless account
     sp :account, locals: { account: account }
+  end
+
+  get '/accounts/:id/close' do
+    account = repo.find_account(params[:id]) or halt 404
+    sp :confirm_close, locals: { account: account }
+  end
+
+  delete '/accounts/:id' do
+    repo.delete_account(params[:id])
+    redirect '/'
   end
 
   get '/assets/slim-pickins.css' do

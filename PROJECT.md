@@ -5,12 +5,12 @@ purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   Roadmap 0.9 (the forward eye — authentic CRUD & state mutation) is active
   (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Daytrips 0.9.0a (Paper First & Wall
-  Ledger) and 0.9.0b (SQLite domain & CRUD persistence) complete. Local financial data
-  safely shielded from git. Twelve gate legs green, 30 verified pages, 650 runs / 6,955 assertions / 0 failures.
+  Ledger), 0.9.0b (SQLite domain & CRUD persistence), and 0.9.0c (Form method override & safe
+  confirmations) complete. Twelve gate legs green, 31 verified pages, 651 runs / 6,974 assertions / 0 failures.
 last_touched: 2026-10-21
 next_step: >-
-  Execute Daytrip 0.9.0c: Heal Wall 1 and Wall 4 — implement Form method override for
-  PATCH/DELETE (`_method`) and pure-HTML safe destructive workflows in examples/portfolio.
+  Execute Daytrip 0.9.0d: Heal Wall 2 — Field validation diagnostics (`error:` modifier,
+  `subject.errors` inference, `aria-invalid`, `.field--invalid`), and 422 dirty form re-rendering.
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md
