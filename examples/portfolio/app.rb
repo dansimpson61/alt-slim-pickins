@@ -32,6 +32,8 @@ class Portfolio < Sinatra::Base
   # ignored and `run!` takes 4567 — which roth is usually holding.
   set :port, ENV.fetch('PORT', 4576).to_i
   enable :method_override
+  enable :sessions
+  set :session_secret, ENV.fetch('SESSION_SECRET', 'portfolio_workbench_session_secret_fixed_for_demo_and_test_32chars')
 
   # One place says what this app's vocabulary is — its own words ride the
   # same Library as the built-ins.
@@ -54,12 +56,18 @@ class Portfolio < Sinatra::Base
       @repo ||= Portfolio::Repository.new
     end
 
+    def flash_notice
+      session[:notice] ? session.delete(:notice) : nil
+    end
+
     def portfolio
-      if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
-        Fixtures.portfolio
-      else
-        repo.portfolio_summary
-      end
+      p = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+            Fixtures.portfolio
+          else
+            repo.portfolio_summary
+          end
+      p.notice = flash_notice
+      p
     end
   end
 
@@ -68,7 +76,7 @@ class Portfolio < Sinatra::Base
   end
 
   get '/accounts/new' do
-    account = Portfolio::Account.new(account_type: 'brokerage')
+    account = Portfolio::Account.new(account_type: 'brokerage', notice: flash_notice)
     sp :new_account, locals: { account: account }
   end
 
@@ -81,6 +89,7 @@ class Portfolio < Sinatra::Base
     }
     account, errors = repo.create_account(attrs)
     if errors.empty?
+      session[:notice] = "Account \"#{account.name}\" was successfully opened."
       redirect "/accounts/#{account.id}"
     else
       status 422
@@ -90,21 +99,23 @@ class Portfolio < Sinatra::Base
 
   get '/accounts/:id' do
     account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
-                portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
+                Fixtures.portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
               else
                 repo.find_account(params[:id])
               end
     halt 404 unless account
+    account.notice = flash_notice
     sp :account, locals: { account: account }
   end
 
   get '/accounts/:id/edit' do
     account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
-                portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
+                Fixtures.portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
               else
                 repo.find_account(params[:id])
               end
     halt 404 unless account
+    account.notice = flash_notice
     sp :edit_account, locals: { account: account }
   end
 
@@ -117,6 +128,7 @@ class Portfolio < Sinatra::Base
     account, errors = repo.update_account(params[:id], attrs)
     halt 404 unless account
     if errors.empty?
+      session[:notice] = "Account \"#{account.name}\" was successfully updated."
       redirect "/accounts/#{account.id}"
     else
       status 422
@@ -126,16 +138,20 @@ class Portfolio < Sinatra::Base
 
   get '/accounts/:id/close' do
     account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
-                portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
+                Fixtures.portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
               else
                 repo.find_account(params[:id])
               end
     halt 404 unless account
+    account.notice = flash_notice
     sp :confirm_close, locals: { account: account }
   end
 
   delete '/accounts/:id' do
+    account = repo.find_account(params[:id])
+    name = account ? account.name : 'Account'
     repo.delete_account(params[:id])
+    session[:notice] = "#{name} was successfully closed."
     redirect '/'
   end
 

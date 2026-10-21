@@ -443,7 +443,12 @@ time { color: var(--ink-soft); }
 .heading { margin: 0 0 var(--step); }
 
 .action { display: inline; }
-.flash { margin: 0 0 var(--step); }
+.flash {
+  margin: 0 0 var(--gap);
+  padding: var(--step) calc(var(--step) * 2);
+  background: var(--wash);
+  border-left: var(--focus-width) solid var(--accent);
+}
 .search { display: block; }
 
 /* Layout Primitives */

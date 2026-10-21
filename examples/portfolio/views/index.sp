@@ -6,9 +6,9 @@ portfolio, "Your retirement"
       metric annual_income, "Projected income", as: money
   section accounts, "Your accounts"
     empty "No accounts linked yet."
-    actions
-      link open, "Open new account", to: "/accounts/new"
     each account
       card
         actions
           link show, "Details", to: "/accounts/#{account.id}"
+  actions
+    link open, "Open new account", to: "/accounts/new"

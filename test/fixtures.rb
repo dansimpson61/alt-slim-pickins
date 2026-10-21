@@ -12,7 +12,7 @@ module Fixtures
 
   Holding = Struct.new(:symbol, :shares, :market_value, :gain, :weight, keyword_init: true)
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
-                       :tour_url, :institution, :account_type, :errors, keyword_init: true) do
+                       :tour_url, :institution, :account_type, :errors, :notice, keyword_init: true) do
     def errors? = errors && !errors.empty?
   end
   Target = Struct.new(:asset_class, :target, :actual, :drift, keyword_init: true)
@@ -21,7 +21,7 @@ module Fixtures
   Portfolio = Struct.new(:as_of, :total_value, :ytd_return, :annual_income, :years_to_rmd,
                          :balances, :drifted?, :targets, :growth_rate,
                          :inflation_rate, :horizon_years, :contribution, :accounts,
-                         keyword_init: true)
+                         :notice, keyword_init: true)
 
   Project = Struct.new(:path, :purpose, keyword_init: true)
   Pattern = Struct.new(:title, :category, :status, :origin_project, :origin_file, :content,

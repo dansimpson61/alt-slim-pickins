@@ -191,4 +191,45 @@ class Phase6Test < Minitest::Test
     assert_equal 200, last_response.status
     assert_includes last_response.body, 'Renamed Account'
   end
+
+  # --- Wall 3: Flash Lifecycle & Empty State Healing (Daytrip 0.9.0e) ---
+
+  def test_flash_lifecycle_displays_notice_after_creation_and_clears_on_subsequent_request
+    post '/accounts', { name: 'Growth Brokerage', institution: 'Schwab', account_type: 'brokerage' }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, '<p class="flash">Account &quot;Growth Brokerage&quot; was successfully opened.</p>'
+
+    # Subsequent request on the same account should not show the flash message
+    get last_request.path
+    assert_equal 200, last_response.status
+    refute_includes last_response.body, 'was successfully opened'
+  end
+
+  def test_flash_lifecycle_displays_notice_after_deletion
+    account = Portfolio::Repository.new.all_accounts.first
+    delete "/accounts/#{account.id}"
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'was successfully closed.'
+
+    # Subsequent request on overview should clear the notice
+    get '/'
+    refute_includes last_response.body, 'was successfully closed.'
+  end
+
+  def test_empty_accounts_state_renders_message_and_actions
+    empty_portfolio = Portfolio::PortfolioSummary.new(
+      accounts: [], total_value: 0.0, gain: 0.0, ytd_return: 0.0, annual_income: 0.0, cash_balance: 0.0
+    )
+    views_dir = File.expand_path('../examples/portfolio/views', __dir__)
+    html = SlimPickins.render(File.read(File.join(views_dir, 'index.sp')),
+                              path: File.join(views_dir, 'index.sp'),
+                              locals: { portfolio: empty_portfolio },
+                              library: SlimPickins::Library.from(views_dir, words: AppWords))
+    assert_includes html, '<p class="empty">No accounts linked yet.</p>'
+    assert_includes html, '<div class="actions"><a href="/accounts/new" class="link">Open new account</a></div>'
+  end
 end

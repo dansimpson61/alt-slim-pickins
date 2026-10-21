@@ -7,7 +7,7 @@ require 'sinatra/base'
 
 class Portfolio < Sinatra::Base
   Account = Struct.new(:id, :name, :institution, :account_type, :balance, :created_at,
-                       :holdings, :transactions, :errors, keyword_init: true) do
+                       :holdings, :transactions, :errors, :notice, keyword_init: true) do
     def total_value
       if holdings && !holdings.empty?
         holdings.sum(&:market_value)
@@ -69,7 +69,7 @@ class Portfolio < Sinatra::Base
                         keyword_init: true)
 
   PortfolioSummary = Struct.new(:accounts, :total_value, :gain, :ytd_return, :annual_income,
-                                :cash_balance, keyword_init: true)
+                                :cash_balance, :notice, keyword_init: true)
 
   class Repository
     DEFAULT_DB_PATH = File.expand_path('data/portfolio.sqlite3', __dir__)

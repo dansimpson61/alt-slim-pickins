@@ -1,4 +1,8 @@
 nav
   link home, "Overview"
+  link new_account, "Open Account", to: "/accounts/new"
+choose
+  when .notice
+    flash .notice
 contents
 footer "Approximate directional estimates. Not tax advice."
