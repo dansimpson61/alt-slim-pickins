@@ -1,4 +1,4 @@
 card
   link .title, to: .href
   text .name
-  metric reading_minutes
+  metric reading_minutes, label: "Minutes"

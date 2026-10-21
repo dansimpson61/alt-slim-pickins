@@ -108,21 +108,22 @@ puts "  words used in real pages: #{used.size - app_used.size} of #{vocabulary.s
 
 # An app may shadow a language word (ruled 2026-10-05) — the gate reports every
 # shadowed language word so the override is visible rather than silent.
-shadowed = Dir[File.join(__dir__, '{examples,pages,studio}', '**', 'partials', '*.sp')].filter_map do |path|
+root = File.expand_path('..', __dir__)
+shadowed = Dir[File.join(root, '{examples,pages,studio}', '**', '{words,partials}', '*.sp')].filter_map do |path|
   word = File.basename(path, '.sp').to_sym
   next unless vocabulary.key?(word)
 
-  parts = path.sub("#{__dir__}/", '').split('/')
+  parts = path.sub("#{root}/", '').split('/')
   app = parts.first == 'examples' ? parts[1] : parts.first
   "#{word} (#{app})"
 end
 
-Dir[File.join(__dir__, '{examples,studio}', '**', '*.rb')].each do |f|
+Dir[File.join(root, '{examples,studio}', '**', '*.rb')].each do |f|
   File.read(f).scan(/^([ \t]*)module (\w*Words|StudioUI)\b(.*?)^\1end/m).each do |_indent, _name, body|
     body.scan(/^\s*def ([a-z_]+)/).flatten.each do |w|
       sym = w.to_sym
       if vocabulary.key?(sym)
-        parts = f.sub("#{__dir__}/", '').split('/')
+        parts = f.sub("#{root}/", '').split('/')
         app = parts.first == 'examples' ? parts[1] : parts.first
         shadowed << "#{sym} (#{app})"
       end

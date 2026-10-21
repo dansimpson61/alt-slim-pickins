@@ -10,11 +10,6 @@ require 'date'
 module Fixtures
   module_function
 
-  def labelled(struct, formats: {})
-    struct.singleton_class.define_method(:format_for) { |a| formats[a] }
-    struct
-  end
-
   Holding = Struct.new(:symbol, :shares, :market_value, :gain, :weight, keyword_init: true)
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
                        :tour_url, keyword_init: true)
@@ -35,40 +30,32 @@ module Fixtures
   Review = Struct.new(:reviewed_on, :reviewer, :introduction, :surfaces_reviewed,
                       :findings_open, :worst_severity, :surfaces, keyword_init: true)
 
-  HOLDING_FORMATS = { shares: :number, market_value: :money, gain: :money,
-                      weight: :percent }.freeze
-
   def holding(symbol, shares, value, gain, weight)
-    labelled(Holding.new(symbol: symbol, shares: shares, market_value: value,
-                         gain: gain, weight: weight), formats: HOLDING_FORMATS)
+    Holding.new(symbol: symbol, shares: shares, market_value: value,
+                gain: gain, weight: weight)
   end
 
   def account(name, id, balance, room, treatment, holdings)
-    labelled(Account.new(name: name, id: id, balance: balance, contribution_room: room,
-                         tax_treatment: treatment, holdings: holdings,
-                         tour_url: "/tours/#{id}.mp4"),
-             formats: { balance: :money, contribution_room: :money })
+    Account.new(name: name, id: id, balance: balance, contribution_room: room,
+                tax_treatment: treatment, holdings: holdings,
+                tour_url: "/tours/#{id}.mp4")
   end
 
   def portfolio
-    labelled(
-      Portfolio.new(
-        as_of: Date.new(2026, 8, 30), total_value: 1_284_506, ytd_return: 0.0742,
-        annual_income: 48_200, years_to_rmd: 13,
-        balances: balances, drifted?: true,
-        targets: targets, growth_rate: 0.05, inflation_rate: 0.02, horizon_years: 30,
-        contribution: Contribution.new(amount: 500, account_id: 'roth',
-                                       frequency: 'monthly', auto_invest: true),
-        accounts: [
-          account('Traditional IRA', 1, 417_530, 7_000, 'Pre-tax',
-                  [holding('VTI', 1240, 356_120, 48_900, 0.42),
-                   holding('VXUS', 890, 61_410, -3_180, 0.07)]),
-          account('Roth IRA', 2, 117_760, 7_000, 'Tax-free',
-                  [holding('VTI', 410, 117_760, 21_050, 0.14)])
-        ]
-      ),
-      formats: { total_value: :money, ytd_return: :percent,
-                 annual_income: :money, years_to_rmd: :number }
+    Portfolio.new(
+      as_of: Date.new(2026, 8, 30), total_value: 1_284_506, ytd_return: 0.0742,
+      annual_income: 48_200, years_to_rmd: 13,
+      balances: balances, drifted?: true,
+      targets: targets, growth_rate: 0.05, inflation_rate: 0.02, horizon_years: 30,
+      contribution: Contribution.new(amount: 500, account_id: 'roth',
+                                     frequency: 'monthly', auto_invest: true),
+      accounts: [
+        account('Traditional IRA', 1, 417_530, 7_000, 'Pre-tax',
+                [holding('VTI', 1240, 356_120, 48_900, 0.42),
+                 holding('VXUS', 890, 61_410, -3_180, 0.07)]),
+        account('Roth IRA', 2, 117_760, 7_000, 'Tax-free',
+                [holding('VTI', 410, 117_760, 21_050, 0.14)])
+      ]
     )
   end
 
@@ -77,15 +64,14 @@ module Fixtures
   # `years` — which is the one data shape nothing else in the language uses.
   def balances
     [[2024, 900_000], [2025, 1_020_000], [2026, 1_284_506]].map do |year, total|
-      labelled(Balance.new(year: year, total: total), formats: { total: :money })
+      Balance.new(year: year, total: total)
     end
   end
 
   def targets
     [['US equity', 0.60, 0.63, 0.03], ['International', 0.25, 0.21, -0.04],
      ['Bonds', 0.15, 0.16, 0.01]].map do |name, target, actual, drift|
-      labelled(Target.new(asset_class: name, target: target, actual: actual, drift: drift),
-               formats: { target: :percent, actual: :percent, drift: :percent })
+      Target.new(asset_class: name, target: target, actual: actual, drift: drift)
     end
   end
 
@@ -144,27 +130,23 @@ module Fixtures
                         keyword_init: true)
 
   def specimen
-    labelled(
-      Specimen.new(
-        blurb: 'Every word in the vocabulary, on one page, so the design system can be looked at.',
-        markdown: "Prose is **markdown**, rendered *safely* — there is no trust-me spelling.\n\n" \
-                  "- escaped first\n- then a fixed set of patterns\n\nSee [the design](/design).",
-        origin: 'dashboard', reviewed_on: Date.new(2026, 8, 30),
-        total_value: 1_284_506, ytd_return: 0.0742, holdings_count: 3, worst_day: -3_180,
-        holdings: [holding('VTI', 1240, 356_120, 48_900, 0.42),
-                   holding('VXUS', 890, 61_410, -3_180, 0.07),
-                   holding('BND', 410, 117_760, 21_050, 0.14)],
-        drifted?: true, nothing: [],
-        balances: [[2022, 900_000], [2023, 980_000], [2024, 1_020_000],
-                   [2025, 1_180_000], [2026, 1_284_506]].map do |year, total|
-                     labelled(Balance.new(year: year, total: total), formats: { total: :money })
-                   end,
-        example: "section holdings\n  each holding\n    money .market_value",
-        amount: 500, rate: 0.05, frequency: 'monthly', auto_invest: true,
-        growth_rate: 0.05, horizon_years: 30
-      ),
-      formats: { total_value: :money, ytd_return: :percent, holdings_count: :number,
-                 worst_day: :money }
+    Specimen.new(
+      blurb: 'Every word in the vocabulary, on one page, so the design system can be looked at.',
+      markdown: "Prose is **markdown**, rendered *safely* — there is no trust-me spelling.\n\n" \
+                "- escaped first\n- then a fixed set of patterns\n\nSee [the design](/design).",
+      origin: 'dashboard', reviewed_on: Date.new(2026, 8, 30),
+      total_value: 1_284_506, ytd_return: 0.0742, holdings_count: 3, worst_day: -3_180,
+      holdings: [holding('VTI', 1240, 356_120, 48_900, 0.42),
+                 holding('VXUS', 890, 61_410, -3_180, 0.07),
+                 holding('BND', 410, 117_760, 21_050, 0.14)],
+      drifted?: true, nothing: [],
+      balances: [[2022, 900_000], [2023, 980_000], [2024, 1_020_000],
+                 [2025, 1_180_000], [2026, 1_284_506]].map do |year, total|
+                   Balance.new(year: year, total: total)
+                 end,
+      example: "section holdings\n  each holding\n    money .market_value",
+      amount: 500, rate: 0.05, frequency: 'monthly', auto_invest: true,
+      growth_rate: 0.05, horizon_years: 30
     )
   end
 

@@ -15,7 +15,7 @@ class Phase7Test < Minitest::Test
 
   VIEWS = File.expand_path('../examples/roth/views', __dir__)
   PAGE = File.join(VIEWS, 'controls.sp')
-  REPORT = File.join(VIEWS, 'partials', 'report.sp')
+  REPORT = File.join(VIEWS, 'words', 'report.sp')
   SCRIPT = File.expand_path('../examples/roth/public/js/app.js', __dir__)
   SLIM = File.expand_path('~/dev/roth/views/controls.slim')
 

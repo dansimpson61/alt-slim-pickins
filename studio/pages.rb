@@ -14,8 +14,6 @@ require_relative '../test/fixtures'
 require_relative '../examples/portfolio/app'
 require_relative '../examples/roth/app'
 require_relative '../examples/publication/lib/lore'
-require_relative '../examples/way_exam/lib/exam'
-require_relative '../examples/milestone_planner/lib/planner'
 require_relative '../examples/word_graph/lib/graph'
 require_relative '../examples/publication/lib/shelf'
 
@@ -56,37 +54,30 @@ module StudioPages
     'pages/specimen' => 'examples/pages/specimen.sp',
     'portfolio/index' => 'examples/portfolio/views/index.sp',
     'portfolio/account' => 'examples/portfolio/views/account.sp',
-    'portfolio/partials/card' => 'examples/portfolio/views/partials/card.sp',
+    'portfolio/partials/card' => 'examples/portfolio/views/words/card.sp',
     'dashboard/triage' => 'examples/dashboard/views/triage.sp',
     'dashboard/confirm_archive' => 'examples/dashboard/views/confirm_archive.sp',
     'dashboard/brief' => 'examples/dashboard/views/brief.sp',
     'dashboard/doc' => 'examples/dashboard/views/doc.sp',
     'dashboard/pattern' => 'examples/dashboard/views/pattern.sp',
-    'dashboard/partials/queue' => 'examples/dashboard/views/partials/queue.sp',
-    'dashboard/partials/unreviewed_card' => 'examples/dashboard/views/partials/unreviewed_card.sp',
+    'dashboard/partials/queue' => 'examples/dashboard/views/words/queue.sp',
+    'dashboard/partials/unreviewed_card' => 'examples/dashboard/views/words/unreviewed_card.sp',
     'roth/controls' => 'examples/roth/views/controls.sp',
-    'roth/partials/report' => 'examples/roth/views/partials/report.sp',
-    'way_exam/index' => 'examples/way_exam/views/index.sp',
-    'way_exam/results' => 'examples/way_exam/views/results.sp',
-    'way_exam/partials/question_card' => 'examples/way_exam/views/partials/question_card.sp',
-    'milestone_planner/index' => 'examples/milestone_planner/views/index.sp',
-    'milestone_planner/milestone' => 'examples/milestone_planner/views/milestone.sp',
-    'milestone_planner/partials/milestone_card' => 'examples/milestone_planner/views/partials/milestone_card.sp',
-    'milestone_planner/partials/task_card' => 'examples/milestone_planner/views/partials/task_card.sp',
+    'roth/partials/report' => 'examples/roth/views/words/report.sp',
     'word_graph/index' => 'examples/word_graph/views/index.sp',
     'word_graph/word' => 'examples/word_graph/views/word.sp',
     'word_graph/shapes' => 'examples/word_graph/views/shapes.sp',
     'word_graph/matrix' => 'examples/word_graph/views/matrix.sp',
-    'word_graph/partials/word_card' => 'examples/word_graph/views/partials/word_card.sp',
+    'word_graph/partials/word_card' => 'examples/word_graph/views/words/word_card.sp',
     'publication/index' => 'examples/publication/views/index.sp',
     'publication/shelf' => 'examples/publication/views/shelf.sp',
     'publication/document' => 'examples/publication/views/document.sp',
     'publication/search' => 'examples/publication/views/search.sp',
     'publication/timeline' => 'examples/publication/views/timeline.sp',
     'publication/entry' => 'examples/publication/views/entry.sp',
-    'publication/partials/document_card' => 'examples/publication/views/partials/document_card.sp',
-    'publication/partials/documents_list' => 'examples/publication/views/partials/documents_list.sp',
-    'publication/partials/entry_card' => 'examples/publication/views/partials/entry_card.sp'
+    'publication/partials/document_card' => 'examples/publication/views/words/document_card.sp',
+    'publication/partials/documents_list' => 'examples/publication/views/words/documents_list.sp',
+    'publication/partials/entry_card' => 'examples/publication/views/words/entry_card.sp'
   }.merge(ui_pages.to_h.transform_values(&:freeze)).freeze
 
 
@@ -211,8 +202,6 @@ module StudioPages
     File.join(ROOT, 'examples', 'portfolio', 'views'),
     File.join(ROOT, 'examples', 'dashboard', 'views'),
     File.join(ROOT, 'examples', 'roth', 'views'),
-    File.join(ROOT, 'examples', 'way_exam', 'views'),
-    File.join(ROOT, 'examples', 'milestone_planner', 'views'),
     File.join(ROOT, 'examples', 'word_graph', 'views'),
     File.join(ROOT, 'examples', 'publication', 'views')
   ].freeze
@@ -247,7 +236,9 @@ module StudioPages
     partial_paths = {}
     builtins = SlimPickins::Library.builtin_partials.keys | SlimPickins::Library.primitive_keys
     dirs.each do |dir|
-      Dir[File.join(dir, 'partials', '*.sp')].each do |path|
+      files = Dir[File.join(dir, 'words', '*.sp')]
+      files += Dir[File.join(dir, 'partials', '*.sp')] if files.empty?
+      files.each do |path|
         name = File.basename(path, '.sp').to_sym
         if partials.key?(name)
           raise SlimPickins::Error,
@@ -383,7 +374,7 @@ module StudioPages
       { portfolio: Fixtures.portfolio }
     when 'examples/portfolio/views/account.sp'
       { account: Fixtures.portfolio.accounts.last }
-    when 'examples/portfolio/views/partials/card.sp'
+    when 'examples/portfolio/views/words/card.sp'
       # Rendered standalone, the card's subject is the page — so the
       # account's own fields are the locals, not a wrapper around them.
       Fixtures.portfolio.accounts.last.to_h
@@ -403,16 +394,16 @@ module StudioPages
     # second copy is where the two would drift.
     when %r{\Astudio/uis/(?<ui>[a-z]+)/views/(?<page>[a-z_]+)\.sp\z}
       ui_locals(Regexp.last_match(:page))
-    when 'examples/roth/views/controls.sp', 'examples/roth/views/partials/report.sp'
+    when 'examples/roth/views/controls.sp', 'examples/roth/views/words/report.sp'
       roth_locals
     when 'examples/dashboard/views/triage.sp'
       DASHBOARD_BASE.merge(notice: 'A page waiting for its ruling.', unreviewed: nil,
                            first_item: SAMPLE_FIRST_ITEM,
                            queue_intro: 'One item needs attention — this is the first:')
-    when 'examples/dashboard/views/partials/queue.sp'
+    when 'examples/dashboard/views/words/queue.sp'
       DASHBOARD_BASE.merge(first_item: SAMPLE_FIRST_ITEM,
                            queue_intro: 'One item needs attention — this is the first:')
-    when 'examples/dashboard/views/partials/unreviewed_card.sp'
+    when 'examples/dashboard/views/words/unreviewed_card.sp'
       DASHBOARD_BASE.merge(unreviewed: '1 instruction file awaiting judgment — hand-kept rules ' \
                                        'nobody has ruled canonical or legacy.')
     when 'examples/dashboard/views/confirm_archive.sp'
@@ -439,44 +430,6 @@ module StudioPages
                            has_projects: true,
                            projects: [{ 'path' => 'alt-slim-pickins', 'purpose' => 'Exploring a view DSL' }],
                            lore: 'Be clear and kind.')
-    when 'examples/way_exam/views/index.sp'
-      questions = WayExam::Exam.questions.map do |q|
-        {
-          'id' => q.id.to_s,
-          'number' => q.number,
-          'topic' => q.topic,
-          'title' => q.title,
-          'prompt' => q.prompt,
-          'option_a' => q.option_a,
-          'option_b' => q.option_b,
-          'option_c' => q.option_c
-        }
-      end
-      {
-        'overview' => { 'questions_count' => WayExam::Exam.questions.size, 'passing_score' => '80%' },
-        'questions' => questions
-      }
-    when 'examples/way_exam/views/results.sp'
-      result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
-      { 'result' => result.to_h, 'reviews' => result.reviews.map(&:to_h) }
-    when 'examples/way_exam/views/partials/question_card.sp'
-      result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
-      result.reviews.first.to_h
-    when 'examples/milestone_planner/views/index.sp'
-      planner = MilestonePlanner::Planner.new
-      { 'stats' => planner.stats, 'milestones' => planner.all.map(&:to_h) }
-    when 'examples/milestone_planner/views/milestone.sp'
-      planner = MilestonePlanner::Planner.new
-      m = planner.find('m1')
-      m.to_h.merge('milestone' => m.to_h, 'title' => '', 'owner' => 'dan', 'tasks' => m.tasks.map(&:to_h))
-    when 'examples/milestone_planner/views/partials/milestone_card.sp'
-      planner = MilestonePlanner::Planner.new
-      m = planner.find('m1').to_h
-      m.merge('milestone' => m)
-    when 'examples/milestone_planner/views/partials/task_card.sp'
-      planner = MilestonePlanner::Planner.new
-      t = planner.find('m1').tasks.first.to_h
-      t.merge('task' => t)
     when 'examples/word_graph/views/index.sp'
       graph = WordGraph::Graph.instance
       { 'q' => '', 'words' => graph.all.map(&:to_h) }.merge(graph.stats)
@@ -498,7 +451,7 @@ module StudioPages
     when 'examples/word_graph/views/matrix.sp'
       graph = WordGraph::Graph.instance
       { 'words' => graph.all.map(&:to_h) }
-    when 'examples/word_graph/views/partials/word_card.sp'
+    when 'examples/word_graph/views/words/word_card.sp'
       graph = WordGraph::Graph.instance
       w = graph.find('table')
       w.to_h.merge('word' => w.to_h)
@@ -797,16 +750,20 @@ module StudioPages
     defs
   end
 
-  # Promotes a local in-buffer word definition into a standalone app partial.
+  # Promotes a local in-buffer word definition into a standalone app word.
   def self.mint_partial!(app_dir, word_name, param_names, body)
     target_dir = if app_dir.nil? || app_dir.to_s.empty?
-                   File.join(ROOT, 'pages', 'partials')
+                   File.join(ROOT, 'pages', 'words')
+                 elsif File.directory?(File.join(app_dir, 'views', 'words'))
+                   File.join(app_dir, 'views', 'words')
+                 elsif File.directory?(File.join(app_dir, 'words'))
+                   File.join(app_dir, 'words')
                  elsif File.directory?(File.join(app_dir, 'views', 'partials'))
                    File.join(app_dir, 'views', 'partials')
                  elsif File.directory?(File.join(app_dir, 'partials'))
                    File.join(app_dir, 'partials')
                  else
-                   File.join(app_dir, 'partials')
+                   File.join(app_dir, 'words')
                  end
     FileUtils.mkdir_p(target_dir)
     file_path = File.join(target_dir, "#{word_name}.sp")

@@ -47,6 +47,16 @@
 Unsettled details, known edge-case collisions, and mechanical seams identified
 during prior roadmaps and daytrips.
 
+- [ ] **Allow Comments in `.sp`, `.layout`, and `.frame` Files:**
+  - *Origin:* Dan (Wishlist Intake, 2026-10-20).
+  - *Concept:* Templates currently lack a formal comment syntax; non-grammatical text lines either cause syntax refusals or interfere with indentation/nesting.
+  - *Wish:* Support comments (e.g. leading `#` or `//`) in `.sp`, `.layout`, and `.frame` files that are ignored by `Transform` and compilers without disrupting source line mapping in error traces.
+
+- [ ] **Frontmatter and Leading Comments in Prose Markdown / Route Documents:**
+  - *Origin:* Daytrip 0.8.0e intake (2026-10-20).
+  - *Concept:* Documents in content-oriented apps (like `publication`) may begin with YAML frontmatter, metadata blocks, or HTML comments before the first Markdown heading.
+  - *Wish:* Ensure `drop_leading_heading` and self-titling logic gracefully skip over leading comments or frontmatter blocks when discovering and stripping the document title.
+
 - [ ] **First-Class Studio Previewing for Composed-Word Definitions (`def` files):**
   - *Origin:* Daytrip 0.8.0d (2026-10-20).
   - *Symptom:* When a `.sp` template file consists solely of a `def <word>` block (such as vocabulary definitions or extracted modular partials), previewing it in Studio or testing it via `studio_pages_test.rb` renders an empty `<div class="sp-canvas"></div>` because executing the template merely registers the word in the local compiler rather than invoking it.
@@ -166,13 +176,6 @@ what slim-pickins is as a coherent software system.
     form submissions, validation error feedback (`422`), empty states, and flash messages in
     idiomatic `.sp`.
 
-- [ ] **Standardizing Domain Contract Declarations (`SlimPickins::Described`, Targeted in Roadmap 0.8):**
-  - *Origin:* `examples/publication/WHAT_IF.md` (DRY & OOP shape); `examples/publication/lib/shelf.rb`.
-  - *Concept:* `publication` declares display contracts on domain classes (`labels`, `formats`)
-    via `SlimPickins::Described` rather than per-instance `Fixtures.labelled` singleton methods.
-  - *Wish:* Promote `SlimPickins::Described` to `lib/slim_pickins/` in Roadmap 0.8 and adopt
-    it as the shared house standard across all kept example apps.
-
 - [ ] **Defining the Slim-Pickins MVP (Core Language Specification):**
   - *Origin:* Dan (Wishlist Intake, 2026-10-12).
   - *Concept:* Slim-pickins has grown organically through phases and daytrips, but lacks
@@ -236,26 +239,6 @@ authors to think in slim-pickins.
   - *Wish:* Drop the `alt-` prefix from the project; archive or delete the obsolete earlier
     versions of `slim-pickins` across `~/dev`, leaving one clean, authoritative repository.
 
-- [ ] **Stowing Remaining Planning & Study Artifacts (Targeted in Roadmap 0.8):**
-  - *Origin:* Dan (Roadmap 0.8 framing, 2026-10-19).
-  - *Concept:* While past daytrips and roadmaps were stowed in `history/` during 0.6.0g and
-    0.7 close, several dated planning/study documents (`KERNEL.md`, `ON_PAPER.md`, `WHAT_IF.md`,
-    `INVENTORY.md`, `ROTH_DOMAIN_BACKLOG.md`, `ROTH_STUDY.md`) and a stray `word_graph.html`
-    still sit in the working directories.
-  - *Wish:* Stow historical study/planning docs into `history/` and keep only live reference
-    and pedagogical documents in `docs/` and `examples/`.
-
-- [ ] **Retire Stale Artifacts, Legacy Directories (`views/partials`), and Obsolete Nomenclature:**
-  - *Origin:* Dan (Wishlist Intake, 2026-10-20).
-  - *Concept:* Over successive roadmaps, core concepts evolved and terminology was systematized
-    (`partial` → `composed word`, `tin` → `.frame`, `spiff` → `.layout`, `expects` retired,
-    `page` retired, etc.). However, legacy directory structures like `views/partials/` still
-    linger across `examples/` and `studio/`, and comments, test titles, or helper names across
-    the codebase still reference retired nomenclature.
-  - *Wish:* Conduct a thorough audit and sweep to retire stale directories (retiring or
-    renaming `views/partials/` to align with modern composed-word architecture) and cleanse
-    documentation, code comments, and test files of obsolete terminology.
-
 ---
 
 ## IV. Aesthetics, Examples & Workbench
@@ -273,14 +256,6 @@ Visual quality, diversity of design, and the developer environment.
     - Interactive domain simulation (`examples/roth`).
     - Operational triage (`examples/dashboard`).
     Demonstrate that `.style`, `.layout`, and the theme engine support diverse, beautiful designs.
-
-- [ ] **Retiring `milestone_planner` & `way_exam` and Modernizing Kept Apps (Targeted in Roadmap 0.8):**
-  - *Origin:* `ROADMAP-0.5.md` (Criterion 4, bullet 2); Dan's 2026-10-19 ruling.
-  - *Concept:* With `portfolio` selected as the 0.9 CRUD app, `milestone_planner` and `way_exam`
-    have served their historical purpose.
-  - *Wish:* Retire `milestone_planner` and `way_exam` in Roadmap 0.8, and modernize the five
-    kept apps (`publication`, `portfolio`, `roth`, `dashboard`, `word_graph`) to exemplify
-    state-of-the-art `.sp`.
 
 - [ ] **The Classic UI Has No `.layout` (Awaiting Dan's Call):**
   - *Origin:* HANDOFF.md "Candidates still standing" (carried from 0.4.0h).
@@ -354,6 +329,25 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 
 ## VI. Retired or Graduated Items
 
+- [x] **Garden Triage & SOTA App Modernization (`milestone_planner`, `way_exam`, `word_graph.html`):**
+  - *Graduated in:* `DAYTRIP-0.8.0e.md` (Roadmap 0.8).
+  - *Resolution:* Retired `examples/milestone_planner` and `examples/way_exam` (along with their test suites);
+    stowed dated planning and study docs into `history/`; modernized `publication`, `portfolio`, `roth`,
+    `dashboard`, and `word_graph` to SOTA `.sp` with `dictionary`/`on`/`map` and `KeyValue`.
+- [x] **Retire Stale Artifacts, Legacy Directories (`views/partials`), and Obsolete Nomenclature:**
+  - *Graduated in:* `DAYTRIP-0.8.0e.md` (Roadmap 0.8).
+  - *Resolution:* Migrated all filesystem `partials/` directories across the repository to `words/`,
+    updating `Library.from`, `Census.app_words`, `Transform.route?`, and `Builder#render` with
+    backwards-compatible dual discovery.
+- [x] **Stowing Remaining Planning & Study Artifacts:**
+  - *Graduated in:* `DAYTRIP-0.8.0e.md` (Roadmap 0.8).
+  - *Resolution:* Moved `KERNEL.md`, `ON_PAPER.md`, `WHAT_IF.md`, `INVENTORY.md`, `ROTH_DOMAIN_BACKLOG.md`,
+    and `ROTH_STUDY.md` into `history/planning/` and `history/studies/`.
+- [x] **Standardizing Domain Contract Declarations (`SlimPickins::Described`):**
+  - *Retired in:* `DAYTRIP-0.8.0e.md` (Roadmap 0.8).
+  - *Ruling:* Dan ruled on 2026-10-20 that `KeyValue` supersedes `Described`. Instead of introducing
+    domain mixins or class macros, views state presentation explicitly via `KeyValue` (`as: money`,
+    `label: "..."`), leaving models as pure Ruby Structs.
 - [x] **Composed-Word Parameter Harmonization & Dead Variant Retirement:**
   - *Graduated in:* `DAYTRIP-0.8.0d.md` (Roadmap 0.8).
   - *Resolution:* Harmonized `card.sp` (`subject`), `section.sp` (`subject`), and `title.sp` (`attribute`),

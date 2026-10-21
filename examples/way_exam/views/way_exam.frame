@@ -1,5 +1,0 @@
-nav
-  link home, "The Way Exam"
-  link examine, "Take Exam", to: "/"
-contents
-footer "The Way Exam · An authentic examination of the Slim-Pickins Way"

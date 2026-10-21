@@ -44,7 +44,7 @@ class IsolationTest < Minitest::Test
 
       # Verify boundary isolation: no studio, app, census, or test leak
       forbidden = %w[Studio StudioDocs StudioPages StudioStatus StudioInspector
-                     Publication Portfolio Roth WayExam MilestonePlanner
+                     Publication Portfolio Roth
                      WordGraph Vitals]
       leaked = forbidden.select { |name| Object.const_defined?(name) }
       raise "Leaked modules: \#{leaked.join(', ')}" unless leaked.empty?

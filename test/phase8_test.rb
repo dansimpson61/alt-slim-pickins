@@ -186,7 +186,7 @@ class Phase8Test < Minitest::Test
   # 130 lines of Ruby became eleven sentences, and roth's last app word went
   # with them.
   def test_roths_two_charts_are_now_sentences
-    report = File.read(File.expand_path('../examples/roth/views/partials/report.sp', __dir__))
+    report = File.read(File.expand_path('../examples/roth/views/words/report.sp', __dir__))
     assert_includes report, 'chart years'
     assert_includes report, 'band base_income'
     assert_includes report, 'line federal_tax'

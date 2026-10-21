@@ -25,7 +25,8 @@ module SlimPickins
       klass.is_builtin = is_builtin
       klass.source_path = path
       klass.source_lines = source.lines
-      klass.compilation = of(source, "partials/#{word}.sp", privileged: is_builtin)
+      rel_path = path ? path.sub(%r{^.*?/(words|partials|vocabulary)/}, '\1/') : "words/#{word}.sp"
+      klass.compilation = of(source, rel_path, privileged: is_builtin)
       
       # Now parse the contract from the AST
       contract = VocabularyShapes.parse(source, word: word) if is_builtin || source.match?(/\A(?:\s*|#.*?\n)*expects\b/)

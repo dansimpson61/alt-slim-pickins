@@ -33,11 +33,6 @@ portfolio = SlimPickins::Library.from(File.expand_path('../examples/portfolio/vi
                                       words: AppWords)
 roth = SlimPickins::Library.from(File.expand_path('../examples/roth/views', __dir__))
 dashboard = SlimPickins::Library.from(File.expand_path('../examples/dashboard/views', __dir__))
-way_exam = SlimPickins::Library.from(File.expand_path('../examples/way_exam/views', __dir__))
-way_result = WayExam::Exam.grade(WayExam::Exam.sample_answers)
-milestone_planner = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
-planner = MilestonePlanner::Planner.new
-m1_sample = planner.find('m1')
 # publication, the unified reader. Its pages are proved against the locals its
 # routes serve, asked of the app itself, so the gate and the browser cannot
 # disagree about them.
@@ -114,7 +109,7 @@ PAGES = [
   ['examples/portfolio/views/index.sp', portfolio, { portfolio: Fixtures.portfolio }],
   ['examples/portfolio/views/account.sp', portfolio, { account: Fixtures.portfolio.accounts.last }],
   ['examples/roth/views/controls.sp', roth, { scenario: scenario, projection: projection }],
-  ['examples/roth/views/partials/report.sp', roth, { scenario: scenario, projection: projection }],
+  ['examples/roth/views/words/report.sp', roth, { scenario: scenario, projection: projection }],
   ['examples/dashboard/views/triage.sp', dashboard,
    dashboard_base.merge(first_item: nil, queue_intro: '', unreviewed: nil)],
   ['examples/dashboard/views/confirm_archive.sp', dashboard,
@@ -130,15 +125,6 @@ PAGES = [
    dashboard_base.merge(title: 'Example Pattern', category_name: 'architecture',
                         emerging: false, origin_line: 'Origin: example / SPEC.md',
                         content: '# Pattern', has_projects: false, projects: [], lore: 'Lore')],
-  ['examples/way_exam/views/index.sp', way_exam,
-   { overview: { questions_count: WayExam::Exam.questions.size, passing_score: '80%' },
-     questions: WayExam::Exam.questions }],
-  ['examples/way_exam/views/results.sp', way_exam,
-   { result: way_result, reviews: way_result.reviews }],
-  ['examples/milestone_planner/views/index.sp', milestone_planner,
-   { stats: planner.stats, milestones: planner.all }],
-  ['examples/milestone_planner/views/milestone.sp', milestone_planner,
-   { milestone: m1_sample, tasks: m1_sample.tasks, title: nil, owner: :dan }.merge(m1_sample.to_h)],
   ['examples/word_graph/views/index.sp', word_graph,
    { words: graph.all, q: '' }.merge(graph.stats)],
   ['examples/word_graph/views/word.sp', word_graph,

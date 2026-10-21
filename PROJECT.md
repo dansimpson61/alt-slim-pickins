@@ -4,16 +4,18 @@ id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
   Roadmap 0.8 (the backward eye — the harvest) is active ([ROADMAP-0.8.md](ROADMAP-0.8.md)).
-  Daytrips 0.8.0a ([DAYTRIP-0.8.0a.md](history/daytrips/DAYTRIP-0.8.0a.md)), 0.8.0b
-  ([DAYTRIP-0.8.0b.md](history/daytrips/DAYTRIP-0.8.0b.md)), 0.8.0c
-  ([DAYTRIP-0.8.0c.md](history/daytrips/DAYTRIP-0.8.0c.md)), and 0.8.0d
-  ([DAYTRIP-0.8.0d.md](history/daytrips/DAYTRIP-0.8.0d.md)) are complete (2026-10-20):
-  card/section/title harmonized to subject/attribute signatures (eliminating word-name
-  exceptions in contracts.rb), dead variant declarations retired on aside, scroll, item,
-  and tabs, and all studio UI partials brought onto explicit def headers. Twelve gate legs +
-  pedagogy green, 662 runs / 7,108 assertions / 0 failures.
+  Daytrips 0.8.0a through 0.8.0e are complete (2026-10-20; see
+  [DAYTRIP-0.8.0e.md](history/daytrips/DAYTRIP-0.8.0e.md)): retired milestone_planner and
+  way_exam, stowed dated study/planning docs in history/, migrated views/partials/ to
+  views/words/ across all kept apps and studio, and modernized publication, portfolio, roth,
+  dashboard, and word_graph to SOTA .sp powered by KeyValue and dictionary/on/map.
+  Twelve gate legs green, 30 verified pages, 640 runs / 6,896 assertions / 0 failures.
 last_touched: 2026-10-20
-next_step: 'Write a detailed plan for Daytrip 0.8.0e for Dan''s approval before proceeding: Garden triage & SOTA app modernization (retire milestone_planner and way_exam, stow dated docs in history/, modernize publication, portfolio, roth, dashboard, and word_graph to use dictionary/on/map, KeyValue, and SOTA sp).'
+next_step: >-
+  Write a detailed plan for Dan's approval before proceeding with Daytrip 0.8.0f: Leveling the
+  path for 0.9 CRUD & roadmap close — harmonize form, field, and input contracts and modifiers
+  (placeholder:, required:), scope empty pruning to the collection's container, run full visual
+  and gate verification across kept apps and studio, and close Roadmap 0.8.
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

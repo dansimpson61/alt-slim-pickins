@@ -37,10 +37,10 @@ specimen, "slim-pickins — every word"
   section "A table that writes no loop"
     table holdings
       column symbol
-      column shares
-      column market_value, "Value"
-      column gain
-      column weight
+      column shares, as: number
+      column market_value, "Value", as: money
+      column gain, as: money
+      column weight, as: percent
       total market_value, "Total"
 
   section "Situations"

@@ -454,10 +454,10 @@ module SlimPickins
 
     def render(ruby, path, source: nil)
       @nodes = []
-      @spliced = [] if path.to_s.include?('partials/')
+      @spliced = [] if path.to_s.include?('partials/') || path.to_s.include?('words/')
       view = path && File.basename(path.to_s, '.sp')
       frame = @library&.frame_for(view)
-      is_substance = path && !path.to_s.include?('partials/') && !path.to_s.end_with?('.frame') && !path.to_s.end_with?('.tin')
+      is_substance = path && !path.to_s.include?('partials/') && !path.to_s.include?('words/') && !path.to_s.include?('vocabulary/') && !path.to_s.end_with?('.frame') && !path.to_s.end_with?('.tin')
 
       if is_substance && frame
         substance_nodes = capture { eval_with(ruby, path, source&.lines) }

@@ -66,7 +66,7 @@ module Roth
       { scenario: scenario, projection: Projection.of(scenario) }
     end
 
-    REPORT = File.join(settings.views, 'partials', 'report.sp')
+    REPORT = File.join(settings.views, 'words', 'report.sp')
 
     helpers do
       def project(params)

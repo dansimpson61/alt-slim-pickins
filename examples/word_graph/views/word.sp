@@ -1,19 +1,21 @@
 .word_name
   card
     title .word_name
-    choose
-      when .is_gatherer
-        badge ok, "Gatherer"
-      when .is_register
-        badge neutral, "Register"
-      when .is_control
+    dictionary .speech
+      on verb
         badge warning, "Control Flow"
       otherwise
-        badge neutral, .shape_name
+        dictionary .shape
+          on gathers
+            badge ok, "Gatherer"
+          on registers
+            badge neutral, "Register"
+          otherwise
+            badge neutral, .shape_name
     grid metrics, columns: 3
-      metric connections_count, "Connections"
-      metric in_degree, "Parents"
-      metric out_degree, "Children"
+      metric connections_count, "Connections", as: number
+      metric in_degree, "Parents", as: number
+      metric out_degree, "Children", as: number
 
   section "Contract Specifications"
     fact speech_name

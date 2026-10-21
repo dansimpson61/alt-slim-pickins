@@ -51,7 +51,8 @@ words = (SlimPickins::Word.registry.keys + SlimPickins::Library.builtin.compiled
 # as much as the pages'. Reading every `partials/` there is stops this list
 # needing an edit each time an app arrives, which is how the studio's own
 # words came to look like orphans.
-app_words = Dir[File.join(ROOT, '**', 'partials', '*.sp')]
+app_words = (Dir[File.join(ROOT, '**', 'words', '*.sp')] + Dir[File.join(ROOT, '**', 'partials', '*.sp')])
+            .reject { |f| f.include?('/lib/vocabulary/') || f.include?('/history/') }
             .map { |f| File.basename(f, '.sp') }.to_set
 
 # --- what the stylesheet defines -------------------------------------------

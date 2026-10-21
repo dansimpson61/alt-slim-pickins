@@ -108,14 +108,12 @@ portfolio_lib = SlimPickins::Library.from(File.expand_path('../examples/portfoli
 roth_lib = SlimPickins::Library.from(File.expand_path('../examples/roth/views', __dir__))
 dash_lib = SlimPickins::Library.from(File.expand_path('../examples/dashboard/views', __dir__))
 publication_lib = SlimPickins::Library.from(File.expand_path('../examples/publication/views', __dir__))
-exam_lib = SlimPickins::Library.from(File.expand_path('../examples/way_exam/views', __dir__))
-mstone_lib = SlimPickins::Library.from(File.expand_path('../examples/milestone_planner/views', __dir__))
 graph_lib = SlimPickins::Library.from(File.expand_path('../examples/word_graph/views', __dir__))
 
 libs = {
   portfolio: portfolio_lib, roth: roth_lib, dash: dash_lib,
   publication: publication_lib,
-  exam: exam_lib, mstone: mstone_lib, graph: graph_lib,
+  graph: graph_lib,
   classic: classic_lib, workbench: workbench_lib, inspector: inspector_lib,
   builtin: builtin_lib
 }
@@ -126,8 +124,6 @@ def library_for(file, libs)
   when %r{^examples/roth/} then libs[:roth]
   when %r{^examples/dashboard/} then libs[:dash]
   when %r{^examples/publication/} then libs[:publication]
-  when %r{^examples/way_exam/} then libs[:exam]
-  when %r{^examples/milestone_planner/} then libs[:mstone]
   when %r{^examples/word_graph/} then libs[:graph]
   when %r{^studio/uis/classic/} then libs[:classic]
   when %r{^studio/uis/workbench/} then libs[:workbench]
@@ -168,7 +164,7 @@ end
 
 # List 1: Resolves differently than today (colliding names across scopes)
 # Under today's global registry, any colliding partial name is overwritten by the last write.
-partial_files = Dir.glob('{examples,studio}/**/partials/*.sp')
+partial_files = Dir.glob('{examples,studio}/**/{words,partials}/*.sp')
 colliding_names = partial_files.group_by { |p| File.basename(p, '.sp') }.select { |_, paths| paths.size > 1 }
 
 puts "\n1. Resolves differently than today's global registry:"

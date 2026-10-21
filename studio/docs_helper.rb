@@ -41,7 +41,8 @@ module StudioDocs
                              'DAYTRIP' => 'history/daytrips/DAYTRIP.md',
                              'ROADMAP-0.2' => 'history/planning/ROADMAP-0.2.md',
                              'ROADMAP-0.3' => 'history/planning/ROADMAP-0.3.md',
-                             'BLUESKY' => 'history/planning/BLUESKY.md').freeze
+                             'BLUESKY' => 'history/planning/BLUESKY.md',
+                             'KERNEL' => 'history/studies/KERNEL.md').freeze
 
   # The absolute path of a guide's document, or nil when the name names no
   # guide. `nil` is the honest answer to "is this a guide?": it keeps a

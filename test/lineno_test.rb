@@ -51,7 +51,7 @@ class LinenoTest < Minitest::Test
     error = assert_raises(SlimPickins::UnknownAttribute) do
       render("account\n  test_account_card\n", library: library, account: Account.new(name: 'Roth'))
     end
-    assert_match(/\Athis account has no nmae\n  partials\/test_account_card\.sp, line 2\n    money \.nmae\z/,
+    assert_match(/\Athis account has no nmae\n  (?:words|partials)\/test_account_card\.sp, line 2\n    money \.nmae\z/,
                  error.message)
   end
 

@@ -20,10 +20,9 @@ class CensusTest < Minitest::Test
     assert_includes apps, :portfolio
     assert_includes apps, :roth
     assert_includes apps, :publication
-    assert_includes apps, :way_exam
-    assert_includes apps, :milestone_planner
     assert_includes apps, :word_graph
     assert_includes apps, :dashboard
+    assert_equal 5, apps.size
   end
 
   # The census counts pages by reading the gate's source, because requiring the

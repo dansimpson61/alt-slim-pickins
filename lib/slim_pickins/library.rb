@@ -71,10 +71,17 @@ module SlimPickins
       file = frame_path(dir)
       partials = {}
       partial_paths = {}
-      Dir[File.join(dir, 'partials', '*.sp')].each do |path|
-        name = File.basename(path, '.sp').to_sym
-        partials[name] = File.read(path)
-        partial_paths[name] = path
+      [dir, File.join(dir, 'views')].each do |d|
+        Dir[File.join(d, 'words', '*.sp')].each do |path|
+          name = File.basename(path, '.sp').to_sym
+          partials[name] ||= File.read(path)
+          partial_paths[name] ||= path
+        end
+        Dir[File.join(d, 'partials', '*.sp')].each do |path|
+          name = File.basename(path, '.sp').to_sym
+          partials[name] ||= File.read(path)
+          partial_paths[name] ||= path
+        end
       end
       new(frame: (File.read(file) if file),
           frames: view_frames(dir),

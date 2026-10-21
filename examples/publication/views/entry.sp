@@ -2,7 +2,7 @@ entry
   meta
     time .date
     badge .author
-    metric reading_minutes
+    metric reading_minutes, label: "Minutes"
   prose markdown, .body
   section words, "Words mentioned"
     empty "No words indexed in this entry."

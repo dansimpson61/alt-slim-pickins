@@ -1,8 +1,8 @@
 query, "Search the publication"
   form to: "/search", method: get
     group "Look for"
-      field q
-      field include_history
+      field q, "Words to find"
+      field include_history, "Include the history"
     actions
       button "Search"
   section results

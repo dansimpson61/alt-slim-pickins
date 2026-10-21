@@ -1,9 +1,9 @@
 portfolio, "Your retirement"
   section "Where you stand"
     grid metrics, columns: 3
-      metric total_value
-      metric ytd_return, "YTD return"
-      metric annual_income, "Projected income"
+      metric total_value, as: money
+      metric ytd_return, "YTD return", as: percent
+      metric annual_income, "Projected income", as: money
   section accounts, "Your accounts"
     empty "No accounts linked yet."
     each account

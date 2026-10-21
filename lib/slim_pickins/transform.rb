@@ -68,7 +68,7 @@ module SlimPickins
     # sentence as arguments rather than as `word arguments`.
     def self.route?(path)
       p = path.to_s
-      p.end_with?('.sp') && !p.include?('partials/') && !p.include?('vocabulary/')
+      p.end_with?('.sp') && !p.include?('partials/') && !p.include?('words/') && !p.include?('vocabulary/')
     end
 
     def self.call(source, path: 'page.sp', route: nil)

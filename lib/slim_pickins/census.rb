@@ -33,8 +33,9 @@ module SlimPickins
     end
 
     def app_words
-      Dir[File.join(ROOT, '**', 'partials', '*.sp')]
-        .reject { |f| f.include?('/lib/vocabulary/') }
+      files = Dir[File.join(ROOT, '**', 'words', '*.sp')] + Dir[File.join(ROOT, '**', 'partials', '*.sp')]
+      files
+        .reject { |f| f.include?('/lib/vocabulary/') || f.include?('/history/') }
         .map { |f| File.basename(f, '.sp').to_sym }
         .uniq
         .sort

@@ -9,14 +9,10 @@ module Publication
   # meets a document: a title (the entry's first sentence), a small cluster of
   # facts, and the prose.
   Entry = Struct.new(:id, :date, :author, :title, :body, :words, :tags, keyword_init: true) do
-    include Described
-
-    labels reading_minutes: 'Minutes'
-    formats reading_minutes: :number
-
     WORDS_A_MINUTE = 230
 
     def reading_minutes = body.to_s.split.size.fdiv(WORDS_A_MINUTE).ceil
+    def to_h = super.merge(reading_minutes: reading_minutes)
   end
 
   class Lore

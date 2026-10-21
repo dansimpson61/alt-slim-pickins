@@ -199,11 +199,13 @@ eight example apps:
    `item`, and `tabs`; brought all studio UI partials onto explicit `def` headers; added
    guards in `Subject#has?` and `Builder#evaluate_word_definition`. All 12 gate legs +
    pedagogy green, 662 runs / 7,108 assertions / 0 failures.
-5. **0.8.0e — Garden triage & SOTA app modernization:**
-   Retire `milestone_planner` and `way_exam` (plus root `word_graph.html` and
-   stale links); stow dated planning/study docs in `history/`; modernize
-   `publication`, `portfolio`, `roth`, `dashboard`, and `word_graph` to use
-   `dictionary`/`on`/`map`, `KeyValue`, and SOTA `.sp`.
+5. **0.8.0e — Garden triage & SOTA app modernization (complete 2026-10-20, [DAYTRIP-0.8.0e.md](history/daytrips/DAYTRIP-0.8.0e.md)):**
+   Retired `milestone_planner` and `way_exam` (plus root `word_graph.html` and
+   stale links); stowed dated planning/study docs in `history/`; modernized
+   all filesystem `partials/` to `words/`; modernized `publication`, `portfolio`,
+   `roth`, `dashboard`, and `word_graph` to SOTA `.sp` powered by `KeyValue`
+   and `dictionary`/`on`/`map`. All 12 gate legs + pedagogy green, 640 runs /
+   6,896 assertions / 0 failures.
 6. **0.8.0f — Leveling the path for 0.9 CRUD & roadmap close:**
    Harmonize `form` / `field` / `input` contracts and collection-scoped `empty`
    pruning; run the full visual and gate verification across the five kept apps
