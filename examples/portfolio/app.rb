@@ -47,10 +47,13 @@ class Portfolio < Sinatra::Base
     repo = Portfolio::Repository.new
     account = repo.all_accounts.first || Fixtures.portfolio.accounts.last
     holding = account.holdings&.first || Fixtures.portfolio_holding
+    activity = account.transactions&.first || Fixtures.portfolio_activity
     case name
     when 'index' then { portfolio: repo.portfolio_summary }
+    when 'transactions' then { ledger: Fixtures.portfolio_ledger }
     when 'account', 'confirm_close', 'new_account', 'edit_account' then { account: account }
     when 'new_holding', 'edit_holding', 'confirm_sell' then { holding: holding, account: account }
+    when 'new_transaction', 'edit_transaction', 'confirm_delete_transaction' then { activity: activity, account: account }
     end
   end
 
@@ -76,6 +79,14 @@ class Portfolio < Sinatra::Base
         Fixtures.portfolio.accounts.flat_map(&:holdings).find { |h| h.id.to_s == id.to_s } || repo.find_holding(id)
       else
         repo.find_holding(id)
+      end
+    end
+
+    def find_transaction_or_fixture(id)
+      if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+        Fixtures.portfolio_ledger.transactions.find { |t| t.id.to_s == id.to_s } || repo.find_transaction(id)
+      else
+        repo.find_transaction(id)
       end
     end
 
@@ -244,6 +255,98 @@ class Portfolio < Sinatra::Base
     val = holding.market_value
     repo.delete_holding(params[:id])
     session[:notice] = "Liquidated #{shares} shares of #{symbol} for #{SlimPickins::Generator.format(:money, val)}."
+    redirect "/accounts/#{acc_id}"
+  end
+
+  # --- Transactions CRUD & Global Ledger ---
+
+  get '/transactions' do
+    ledger = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+               Fixtures.portfolio_ledger
+             else
+               repo.transaction_ledger(limit: 100, category: params[:category])
+             end
+    ledger.notice = flash_notice
+    sp :transactions, locals: { ledger: ledger }
+  end
+
+  get '/accounts/:id/transactions/new' do
+    account = find_account_or_fixture(params[:id])
+    halt 404 unless account
+    activity = Portfolio::Activity.new(
+      account_id: account.id,
+      date: Date.today.to_s,
+      notice: flash_notice
+    )
+    sp :new_transaction, locals: { activity: activity, account: account }
+  end
+
+  post '/accounts/:id/transactions' do
+    account = find_account_or_fixture(params[:id])
+    halt 404 unless account
+    attrs = {
+      date: params[:date] || params['date'],
+      merchant: params[:merchant] || params['merchant'],
+      category: params[:category] || params['category'],
+      amount: params[:amount] || params['amount'],
+      description: params[:description] || params['description']
+    }
+    tx, errors = repo.create_transaction(account.id, attrs)
+    if errors.empty?
+      session[:notice] = "Recorded transaction for #{tx.merchant} (#{SlimPickins::Generator.format(:money, tx.amount)})."
+      redirect "/accounts/#{account.id}"
+    else
+      status 422
+      tx.notice = flash_notice
+      sp :new_transaction, locals: { activity: tx, account: account }
+    end
+  end
+
+  get '/transactions/:id/edit' do
+    tx = find_transaction_or_fixture(params[:id])
+    halt 404 unless tx
+    account = find_account_or_fixture(tx.account_id)
+    tx.notice = flash_notice
+    sp :edit_transaction, locals: { activity: tx, account: account }
+  end
+
+  put '/transactions/:id' do
+    attrs = {
+      date: params[:date] || params['date'],
+      merchant: params[:merchant] || params['merchant'],
+      category: params[:category] || params['category'],
+      amount: params[:amount] || params['amount'],
+      description: params[:description] || params['description']
+    }
+    tx, errors = repo.update_transaction(params[:id], attrs)
+    halt 404 unless tx
+    if errors.empty?
+      session[:notice] = "Updated transaction for #{tx.merchant}."
+      redirect "/accounts/#{tx.account_id}"
+    else
+      status 422
+      account = find_account_or_fixture(tx.account_id)
+      tx.notice = flash_notice
+      sp :edit_transaction, locals: { activity: tx, account: account }
+    end
+  end
+
+  get '/transactions/:id/delete' do
+    tx = find_transaction_or_fixture(params[:id])
+    halt 404 unless tx
+    account = find_account_or_fixture(tx.account_id)
+    tx.notice = flash_notice
+    sp :confirm_delete_transaction, locals: { activity: tx, account: account }
+  end
+
+  delete '/transactions/:id' do
+    tx = repo.find_transaction(params[:id])
+    halt 404 unless tx
+    acc_id = tx.account_id
+    merch = tx.merchant
+    amt = tx.amount
+    repo.delete_transaction(params[:id])
+    session[:notice] = "Deleted transaction for #{merch} (#{SlimPickins::Generator.format(:money, amt)})."
     redirect "/accounts/#{acc_id}"
   end
 

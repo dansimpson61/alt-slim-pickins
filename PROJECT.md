@@ -3,11 +3,11 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Executing Portfolio Workbench RIFs: RIF 1 (Holdings CRUD & Account Detail Elevation) complete.
-  All 12 gate legs green, 36 verified pages, 665 runs / 7,166 assertions / 0 failures.
+  Executing Portfolio Workbench RIFs: RIF 1 (Holdings CRUD) and RIF 2 (Transaction Ledger & CRUD) complete.
+  All 12 gate legs green, 40 verified pages, 666 runs / 7,247 assertions / 0 failures.
 last_touched: 2026-10-22
 next_step: >-
-  Execute RIF 2: Transaction Ledger & Transaction CRUD across the ~4,000 transaction dataset.
+  Execute RIF 3: Executive Net Worth & Multi-Tier Portfolio Overview (Assets, Liabilities & Net Worth).
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

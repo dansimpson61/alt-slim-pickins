@@ -205,7 +205,7 @@ is a beautifully organised runtime for the wrong language.
 
 **Roadmap 0.9 is completed ([ROADMAP-0.9.md](ROADMAP-0.9.md)).** It led with the forward eye: the Authentic CRUD & State-Mutation Stretch Exam in `examples/portfolio`. It elevated portfolio into a living SQLite-backed Wealth Management & Asset Allocation workbench exercising full relational CRUD, method override, server validation diagnostics with 422 re-rendering, flash lifecycle, and spatial `.layout` & `.style` companions. It ran as six daytrips (`DAYTRIP-0.9.0a` to `0.9.0f`) and closed on 2026-10-21.
 
-Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 5 apps, 26 app words, 36 verified pages, 39 conventions, 34 promises, and 115 style rules.
+Living vitals are computed directly from the repository tree by `SlimPickins::Census` (`ruby bin/census.rb`): 63 canonical words (37 Ruby primitives + 26 `.sp` composed words), 5 apps, 26 app words, 40 verified pages, 39 conventions, 34 promises, and 115 style rules.
 
 Run an app: `ruby examples/roth/app.rb` or `ruby examples/portfolio/app.rb` or `ruby examples/publication/app.rb`.
 

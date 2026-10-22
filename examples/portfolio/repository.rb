@@ -73,8 +73,31 @@ class Portfolio < Sinatra::Base
     end
   end
 
-  Activity = Struct.new(:id, :account_id, :date, :merchant, :category, :description, :amount,
-                        keyword_init: true)
+  Activity = Struct.new(:id, :account_id, :account_name, :date, :merchant, :category, :description, :amount,
+                        :errors, :notice, keyword_init: true) do
+    def errors?
+      errors && !errors.empty?
+    end
+
+    def inflow?
+      amount.to_f.positive?
+    end
+
+    def outflow?
+      amount.to_f.negative?
+    end
+
+    def validate
+      errs = {}
+      errs[:merchant] = "Merchant/Payee can't be blank" if merchant.nil? || merchant.to_s.strip.empty?
+      errs[:amount] = "Amount can't be zero" if amount.nil? || amount.to_f.zero?
+      errs[:date] = "Date can't be blank" if date.nil? || date.to_s.strip.empty?
+      errs
+    end
+  end
+
+  CategorySpend = Struct.new(:category, :total_spend, :transaction_count, keyword_init: true)
+  TransactionLedger = Struct.new(:transactions, :categories, :total_outflow, :total_inflow, :net_cash_flow, :notice, keyword_init: true)
 
   PortfolioSummary = Struct.new(:accounts, :total_value, :gain, :ytd_return, :annual_income,
                                 :cash_balance, :notice, keyword_init: true)
@@ -272,12 +295,134 @@ class Portfolio < Sinatra::Base
 
     # --- Transactions ---
 
+    def find_transaction(id)
+      row = db.get_first_row(
+        'SELECT t.*, a.name AS account_name FROM transactions t JOIN accounts a ON t.account_id = a.id WHERE t.id = ?',
+        id.to_i
+      )
+      return nil unless row
+      build_activity(row)
+    end
+
     def transactions_for_account(account_id, limit: 50)
       rows = db.execute(
         'SELECT * FROM transactions WHERE account_id = ? ORDER BY date DESC, id DESC LIMIT ?',
         [account_id.to_i, limit]
       )
       rows.map { |r| build_activity(r) }
+    end
+
+    def recent_transactions(limit: 50, category: nil, account_id: nil)
+      query = 'SELECT t.*, a.name AS account_name FROM transactions t JOIN accounts a ON t.account_id = a.id'
+      conditions = []
+      params = []
+      if category && !category.to_s.strip.empty?
+        conditions << 't.category = ?'
+        params << category.to_s.strip
+      end
+      if account_id
+        conditions << 't.account_id = ?'
+        params << account_id.to_i
+      end
+      query += " WHERE #{conditions.join(' AND ')}" unless conditions.empty?
+      query += ' ORDER BY t.date DESC, t.id DESC LIMIT ?'
+      params << limit
+      db.execute(query, params).map { |r| build_activity(r) }
+    end
+
+    def create_transaction(account_id, attrs)
+      tx = Activity.new(
+        account_id: account_id.to_i,
+        date: attrs[:date]&.to_s&.strip.then { |d| d.nil? || d.empty? ? Date.today.to_s : d },
+        merchant: attrs[:merchant]&.to_s&.strip,
+        category: attrs[:category]&.to_s&.strip.then { |c| c.nil? || c.empty? ? 'General' : c },
+        description: attrs[:description]&.to_s&.strip,
+        amount: attrs[:amount].to_f
+      )
+      errors = tx.validate
+      if errors.empty?
+        db.transaction do
+          db.execute(
+            'INSERT INTO transactions (account_id, date, merchant, category, description, amount) VALUES (?, ?, ?, ?, ?, ?)',
+            [tx.account_id, tx.date, tx.merchant, tx.category, tx.description, tx.amount]
+          )
+          tx.id = db.last_insert_row_id
+          db.execute('UPDATE accounts SET balance = balance + ? WHERE id = ?', [tx.amount, tx.account_id])
+        end
+        [tx, {}]
+      else
+        tx.errors = errors
+        [tx, errors]
+      end
+    end
+
+    def update_transaction(id, attrs)
+      tx = find_transaction(id)
+      return [nil, { general: 'Transaction not found' }] unless tx
+
+      old_amount = tx.amount.to_f
+      tx.date = attrs[:date]&.to_s&.strip || tx.date
+      tx.merchant = attrs[:merchant]&.to_s&.strip || tx.merchant
+      tx.category = attrs[:category]&.to_s&.strip || tx.category
+      tx.description = attrs[:description]&.to_s&.strip || tx.description
+      tx.amount = attrs[:amount] ? attrs[:amount].to_f : tx.amount
+
+      errors = tx.validate
+      if errors.empty?
+        diff = tx.amount.to_f - old_amount
+        db.transaction do
+          db.execute(
+            'UPDATE transactions SET date = ?, merchant = ?, category = ?, description = ?, amount = ? WHERE id = ?',
+            [tx.date, tx.merchant, tx.category, tx.description, tx.amount, id.to_i]
+          )
+          db.execute('UPDATE accounts SET balance = balance + ? WHERE id = ?', [diff, tx.account_id]) if diff != 0
+        end
+        [tx, {}]
+      else
+        tx.errors = errors
+        [tx, errors]
+      end
+    end
+
+    def delete_transaction(id)
+      tx = find_transaction(id)
+      return false unless tx
+
+      db.transaction do
+        db.execute('DELETE FROM transactions WHERE id = ?', id.to_i)
+        db.execute('UPDATE accounts SET balance = balance - ? WHERE id = ?', [tx.amount.to_f, tx.account_id])
+      end
+      true
+    end
+
+    def transaction_ledger(limit: 50, category: nil)
+      txs = recent_transactions(limit: limit, category: category)
+      outflow = txs.select { |t| t.amount.negative? }.sum { |t| t.amount.abs }
+      inflow = txs.select { |t| t.amount.positive? }.sum(&:amount)
+
+      cat_rows = db.execute <<-SQL
+        SELECT category, ABS(SUM(amount)) AS total_spend, COUNT(*) AS tx_count
+        FROM transactions
+        WHERE amount < 0 AND category IS NOT NULL AND category != ''
+        GROUP BY category
+        ORDER BY total_spend DESC
+        LIMIT 6
+      SQL
+      categories = cat_rows.map do |r|
+        CategorySpend.new(
+          category: r['category'],
+          total_spend: r['total_spend'].to_f,
+          transaction_count: r['tx_count'].to_i
+        )
+      end
+
+      TransactionLedger.new(
+        transactions: txs,
+        categories: categories,
+        total_outflow: outflow,
+        total_inflow: inflow,
+        net_cash_flow: inflow - outflow
+      )
     end
 
     # --- Portfolio Aggregate Summary ---
@@ -525,6 +670,7 @@ class Portfolio < Sinatra::Base
       Activity.new(
         id: r['id'].to_i,
         account_id: r['account_id'].to_i,
+        account_name: r['account_name'],
         date: r['date'],
         merchant: r['merchant'],
         category: r['category'],

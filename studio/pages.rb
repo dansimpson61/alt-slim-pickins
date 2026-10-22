@@ -60,6 +60,10 @@ module StudioPages
     'portfolio/new_holding' => 'examples/portfolio/views/new_holding.sp',
     'portfolio/edit_holding' => 'examples/portfolio/views/edit_holding.sp',
     'portfolio/confirm_sell' => 'examples/portfolio/views/confirm_sell.sp',
+    'portfolio/transactions' => 'examples/portfolio/views/transactions.sp',
+    'portfolio/new_transaction' => 'examples/portfolio/views/new_transaction.sp',
+    'portfolio/edit_transaction' => 'examples/portfolio/views/edit_transaction.sp',
+    'portfolio/confirm_delete_transaction' => 'examples/portfolio/views/confirm_delete_transaction.sp',
     'portfolio/partials/card' => 'examples/portfolio/views/words/card.sp',
     'dashboard/triage' => 'examples/dashboard/views/triage.sp',
     'dashboard/confirm_archive' => 'examples/dashboard/views/confirm_archive.sp',
@@ -384,6 +388,11 @@ module StudioPages
     when 'examples/portfolio/views/new_holding.sp', 'examples/portfolio/views/edit_holding.sp',
          'examples/portfolio/views/confirm_sell.sp'
       { holding: Fixtures.portfolio_holding, account: Fixtures.portfolio.accounts.last }
+    when 'examples/portfolio/views/transactions.sp'
+      { ledger: Fixtures.portfolio_ledger }
+    when 'examples/portfolio/views/new_transaction.sp', 'examples/portfolio/views/edit_transaction.sp',
+         'examples/portfolio/views/confirm_delete_transaction.sp'
+      { activity: Fixtures.portfolio_activity, account: Fixtures.portfolio.accounts.last }
     when 'examples/portfolio/views/words/card.sp'
       # Rendered standalone, the card's subject is the page — so the
       # account's own fields are the locals, not a wrapper around them.

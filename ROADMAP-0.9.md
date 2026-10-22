@@ -101,3 +101,18 @@ watched closely:
 
 6. **Transactional Spatial Postures in `.layout`:**
    - Analytical workbench micro-layouts: split panes (master/detail, account list beside account holdings), action bars, responsive financial tables with sticky totals.
+
+## The Daytrip Log
+
+- **[Daytrip 0.9.0a](history/daytrips/DAYTRIP-0.9.0a.md)**: Draft uncompromised paper views and inventory Wall Ledger.
+- **[Daytrip 0.9.0b](history/daytrips/DAYTRIP-0.9.0b.md)**: SQLite domain repository, schema, transactional persistence & unit tests.
+- **[Daytrip 0.9.0c](history/daytrips/DAYTRIP-0.9.0c.md)**: Heal Wall 1 (method override) & Wall 4 (safe destructive deletion confirmation).
+- **[Daytrip 0.9.0d](history/daytrips/DAYTRIP-0.9.0d.md)**: Heal Wall 2 (field validation diagnostics & 422 re-rendering with `KeyValue#error`).
+- **[Daytrip 0.9.0e](history/daytrips/DAYTRIP-0.9.0e.md)**: Heal Wall 3 (flash notice lifecycle across redirect cycles & empty state healing).
+- **[Daytrip 0.9.0f](history/daytrips/DAYTRIP-0.9.0f.md)**: Heal Wall 5 (spatial posture via `portfolio.layout` & `portfolio.style`) & close initial Stretch Exam.
+
+### Portfolio Workbench Expansion (Rapid Iterative Feedback Loops)
+
+- **[Daytrip 0.9.0g](history/daytrips/DAYTRIP-0.9.0g.md)**: RIF 1 — Holdings CRUD & Account Detail Console Elevation (Complete).
+- **[Daytrip 0.9.0h](history/daytrips/DAYTRIP-0.9.0h.md)**: RIF 2 — Transaction Ledger & Transaction CRUD (Complete).
+- **[Daytrip 0.9.0i](history/daytrips/DAYTRIP-0.9.0i.md)**: RIF 3 — Executive Net Worth & Multi-Tier Portfolio Overview (Active).

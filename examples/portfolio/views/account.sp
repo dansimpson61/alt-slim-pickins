@@ -33,11 +33,14 @@ account, "Account detail"
           link edit, "Edit position", to: "/holdings/#{holding.id}/edit"
           link sell, "Liquidate", to: "/holdings/#{holding.id}/sell"
   section "Recent activity"
+    empty "No transactions recorded for this account yet."
     table transactions
       column date, "Date"
       column merchant, "Merchant / Payee"
       column category, "Category"
       column description, "Description"
       column amount, "Amount", as: money
+  actions
+    link add_tx, "+ Record transaction", to: "/accounts/#{account.id}/transactions/new"
   section "Account tour"
     video .tour_url

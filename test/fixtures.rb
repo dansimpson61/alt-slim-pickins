@@ -16,8 +16,15 @@ module Fixtures
     def errors? = errors && !errors.empty?
   end
 
-  Activity = Struct.new(:id, :account_id, :date, :merchant, :category, :description, :amount,
-                        keyword_init: true)
+  Activity = Struct.new(:id, :account_id, :account_name, :date, :merchant, :category, :description, :amount,
+                        :errors, :notice, keyword_init: true) do
+    def errors? = errors && !errors.empty?
+    def inflow? = amount.to_f.positive?
+    def outflow? = amount.to_f.negative?
+  end
+
+  CategorySpend = Struct.new(:category, :total_spend, :transaction_count, keyword_init: true)
+  TransactionLedger = Struct.new(:transactions, :categories, :total_outflow, :total_inflow, :net_cash_flow, :notice, keyword_init: true)
 
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
                        :tour_url, :institution, :account_type, :errors, :notice,
@@ -54,6 +61,37 @@ module Fixtures
 
   def portfolio_holding
     holding('VTI', 1240, 356_120, 48_900, 0.42, id: 1, account_id: 1, cost_basis: 247.75, current_price: 287.19)
+  end
+
+  def portfolio_activity
+    Activity.new(
+      id: 1, account_id: 2, account_name: 'Roth IRA',
+      date: '2026-10-15', merchant: 'Vanguard', category: 'Dividend',
+      description: 'Reinvested quarterly dividend', amount: 142.50
+    )
+  end
+
+  def portfolio_ledger
+    TransactionLedger.new(
+      transactions: [
+        portfolio_activity,
+        Activity.new(id: 2, account_id: 1, account_name: 'Traditional IRA',
+                     date: '2026-10-10', merchant: 'Trader Joe\'s', category: 'Groceries',
+                     description: 'Weekly grocery run', amount: -112.40),
+        Activity.new(id: 3, account_id: 1, account_name: 'Traditional IRA',
+                     date: '2026-10-08', merchant: 'Shell', category: 'Gas',
+                     description: 'Gas station', amount: -45.20)
+      ],
+      categories: [
+        CategorySpend.new(category: 'Groceries', total_spend: 1850.50, transaction_count: 24),
+        CategorySpend.new(category: 'Restaurants', total_spend: 920.00, transaction_count: 18),
+        CategorySpend.new(category: 'Travel', total_spend: 640.25, transaction_count: 6),
+        CategorySpend.new(category: 'Gas', total_spend: 310.80, transaction_count: 8)
+      ],
+      total_outflow: 3721.55,
+      total_inflow: 5000.00,
+      net_cash_flow: 1278.45
+    )
   end
 
   def account(name, id, balance, room, treatment, holdings, transactions: nil)

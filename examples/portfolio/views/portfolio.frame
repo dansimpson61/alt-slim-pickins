@@ -1,5 +1,6 @@
 nav
   link home, "Overview"
+  link transactions, "Activity Ledger", to: "/transactions"
   link new_account, "Open Account", to: "/accounts/new"
 choose
   when .notice

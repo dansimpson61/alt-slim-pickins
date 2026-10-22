@@ -319,4 +319,92 @@ class Phase6Test < Minitest::Test
     # Cleanup
     repo.delete_account(acc.id)
   end
+
+  # --- Transactions CRUD & Activity Ledger (RIF 2) ---
+
+  def test_transaction_ledger_and_crud_lifecycle
+    repo = Portfolio::Repository.new
+    acc, = repo.create_account(name: 'Checking Account', institution: 'LedgerBank', balance: 2500.0)
+    assert acc.id
+
+    # 1. View activity ledger (fixture in test env)
+    get '/transactions'
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Activity Ledger'
+    assert_includes last_response.body, 'Cash flow summary'
+    assert_includes last_response.body, 'Top spending categories'
+    assert_includes last_response.body, 'Trader Joe&#39;s'
+    assert_includes last_response.body, 'Groceries'
+    assert_includes last_response.body, '/transactions/1/edit'
+    assert_includes last_response.body, '/transactions/1/delete'
+
+    # 2. View new transaction form
+    get "/accounts/#{acc.id}/transactions/new"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Record Transaction'
+    assert_includes last_response.body, 'Merchant / Payee'
+
+    # 3. Validation failure (422)
+    post "/accounts/#{acc.id}/transactions", { merchant: '', amount: '0' }
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, 'Please correct the errors below.'
+
+    # 4. Create valid transaction
+    post "/accounts/#{acc.id}/transactions", {
+      date: '2026-10-20',
+      merchant: 'Whole Foods Market',
+      category: 'Groceries',
+      amount: '-85.50',
+      description: 'Weekly grocery run'
+    }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Recorded transaction for Whole Foods Market'
+    assert_includes last_response.body, 'Whole Foods Market'
+
+    tx = repo.transactions_for_account(acc.id, limit: 10).find { |t| t.merchant == 'Whole Foods Market' }
+    assert tx
+    assert_equal(-85.50, tx.amount)
+
+    # 5. Edit transaction form
+    get "/transactions/#{tx.id}/edit"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Edit Transaction'
+    assert_includes last_response.body, 'Whole Foods Market'
+
+    # 6. Update transaction via PUT
+    put "/transactions/#{tx.id}", {
+      date: '2026-10-20',
+      merchant: 'Whole Foods Flagship',
+      category: 'Groceries',
+      amount: '-95.00',
+      description: 'Weekly organic groceries'
+    }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_includes last_response.body, 'Updated transaction for Whole Foods Flagship.'
+
+    updated_tx = repo.find_transaction(tx.id)
+    assert_equal(-95.00, updated_tx.amount)
+    assert_equal 'Whole Foods Flagship', updated_tx.merchant
+
+    # 7. Safe delete confirmation
+    get "/transactions/#{tx.id}/delete"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Delete Transaction'
+    assert_includes last_response.body, 'Whole Foods Flagship'
+    assert_includes last_response.body, 'Are you sure you want to delete this transaction?'
+
+    # 8. Delete transaction via DELETE
+    delete "/transactions/#{tx.id}"
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_includes last_response.body, 'Deleted transaction for Whole Foods Flagship'
+
+    assert_nil repo.find_transaction(tx.id)
+
+    # Cleanup
+    repo.delete_account(acc.id)
+  end
 end
