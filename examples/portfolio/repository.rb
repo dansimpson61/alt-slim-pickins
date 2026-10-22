@@ -8,6 +8,14 @@ require 'sinatra/base'
 class Portfolio < Sinatra::Base
   Account = Struct.new(:id, :name, :institution, :account_type, :balance, :created_at,
                        :holdings, :transactions, :errors, :notice, keyword_init: true) do
+    def holdings
+      self[:holdings] || []
+    end
+
+    def transactions
+      self[:transactions] || []
+    end
+
     def total_value
       if holdings && !holdings.empty?
         holdings.sum(&:market_value)
@@ -43,7 +51,7 @@ class Portfolio < Sinatra::Base
   end
 
   Holding = Struct.new(:id, :account_id, :symbol, :shares, :cost_basis, :current_price,
-                       :weight, :updated_at, :errors, keyword_init: true) do
+                       :weight, :updated_at, :errors, :notice, keyword_init: true) do
     def market_value
       (shares || 0.0) * (current_price || 0.0)
     end

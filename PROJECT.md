@@ -3,12 +3,11 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Roadmap 0.9 (authentic CRUD & state mutation stretch exam) is complete
-  (2026-10-21; see [ROADMAP-0.9.md](ROADMAP-0.9.md)): Passed with 6 daytrips (0.9.0a to 0.9.0f).
-  All 5 walls healed, twelve gate legs green, 33 verified pages, 664 runs / 7,088 assertions / 0 failures.
-last_touched: 2026-10-21
+  Executing Portfolio Workbench RIFs: RIF 1 (Holdings CRUD & Account Detail Elevation) complete.
+  All 12 gate legs green, 36 verified pages, 665 runs / 7,166 assertions / 0 failures.
+last_touched: 2026-10-22
 next_step: >-
-  Convene with dan to review Roadmap 0.9 Stretch Exam closure and open Roadmap 0.10 (backward eye).
+  Execute RIF 2: Transaction Ledger & Transaction CRUD across the ~4,000 transaction dataset.
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md

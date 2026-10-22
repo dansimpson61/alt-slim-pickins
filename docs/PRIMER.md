@@ -537,7 +537,7 @@ The language ships with its own live authoring environment on port `4580`
 (`classic` and `workbench` UIs):
 
 - **The Shelf:** Organizes the 63 canonical words across the five vocabulary
-  categories, alongside the 5 example applications (33 verified pages) and the
+  categories, alongside the 5 example applications (36 verified pages) and the
   project guides.
 - **The Work Area:** Evaluates `.sp` source and JSON data payloads live as you
   type, displaying Visual and HTML outputs side by side.

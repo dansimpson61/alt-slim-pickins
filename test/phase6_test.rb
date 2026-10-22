@@ -254,4 +254,69 @@ class Phase6Test < Minitest::Test
     assert_includes last_response.body, '--gap: 0.5rem;'
     assert_includes last_response.body, '--lead: 1.35;'
   end
+
+  # --- Holdings CRUD & Account Detail Elevation (RIF 1) ---
+
+  def test_holdings_crud_lifecycle_and_account_elevation
+    repo = Portfolio::Repository.new
+    acc, = repo.create_account(name: 'Integration Brokerage', institution: 'TestBank', balance: 5000.0)
+    assert acc.id
+
+    # 1. View account detail
+    get "/accounts/#{acc.id}"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Portfolio holdings'
+    assert_includes last_response.body, '+ Add holding'
+    assert_includes last_response.body, 'Recent activity'
+
+    # 2. View new holding form
+    get "/accounts/#{acc.id}/holdings/new"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Add position'
+    assert_includes last_response.body, 'Ticker Symbol'
+
+    # 3. Validation failure (422)
+    post "/accounts/#{acc.id}/holdings", { symbol: '', shares: '0', cost_basis: '0' }
+    assert_equal 422, last_response.status
+    assert_includes last_response.body, 'Please correct the errors below.'
+
+    # 4. Create valid holding
+    post "/accounts/#{acc.id}/holdings", { symbol: 'SCHD', shares: '50', cost_basis: '28.50', current_price: '30.00' }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'SCHD'
+    assert_includes last_response.body, 'Added 50.0 shares of SCHD.'
+
+    holding = repo.holdings_for_account(acc.id).find { |h| h.symbol == 'SCHD' }
+    assert holding
+
+    # 5. Edit holding form
+    get "/holdings/#{holding.id}/edit"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Edit position'
+    assert_includes last_response.body, 'value="SCHD"'
+
+    # 6. Update holding via PUT
+    put "/holdings/#{holding.id}", { shares: '60', cost_basis: '28.50', current_price: '32.00' }
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_includes last_response.body, 'Updated position for SCHD.'
+
+    # 7. Safe sell confirmation
+    get "/holdings/#{holding.id}/sell"
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Liquidate holding'
+    assert_includes last_response.body, 'Shares to sell'
+    assert_includes last_response.body, 'Liquidate position'
+
+    # 8. Delete holding via DELETE
+    delete "/holdings/#{holding.id}"
+    assert_equal 302, last_response.status
+    follow_redirect!
+    assert_includes last_response.body, 'Liquidated 60.0 shares of SCHD'
+
+    # Cleanup
+    repo.delete_account(acc.id)
+  end
 end

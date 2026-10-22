@@ -31,7 +31,7 @@ Every number below is measured by `bin/census.rb` and held by `check_vitals.rb`,
 so this block cannot go stale without the gate saying so:
 
 - **Census**: 63 canonical words (37 Ruby primitives + 26 `.sp` composed words),
-  5 apps, 26 app words, 33 verified pages, 39 conventions, 34 promises,
+  5 apps, 26 app words, 36 verified pages, 39 conventions, 34 promises,
   115 style rules, 56 test files.
 - **Twelve gate legs** on `/status`, re-run live on every visit: Grammar, Shape,
   Styles, Layout, Scope, Promises, Conventions, Card, Pages, Vitals, Ruby,
@@ -55,7 +55,11 @@ All six daytrips (0.9.0a through 0.9.0f) have passed and closed on 2026-10-21:
 - **Daytrip 0.9.0e**: Heal Wall 3 (flash notice lifecycle across redirect cycles & empty state sibling healing) ([DAYTRIP-0.9.0e.md](history/daytrips/DAYTRIP-0.9.0e.md)).
 - **Daytrip 0.9.0f**: Heal Wall 5 (spatial posture via companion `portfolio.layout` and `portfolio.style`) & close Roadmap 0.9 ([DAYTRIP-0.9.0f.md](history/daytrips/DAYTRIP-0.9.0f.md)).
 
-**Next step:** Convene with dan to draft and open **Roadmap 0.10** (the backward eye — harvest and consolidation).
+### Portfolio Workbench Expansion (Active RIFs)
+- **RIF 1 (Holdings CRUD & Account Detail Elevation) — complete**:
+  Enabled full CRUD on holdings (`/accounts/:id/holdings/new`, `/holdings/:id/edit`, `/holdings/:id/sell`, PUT/DELETE method overrides), auto-rebalancing cash balances and portfolio weights, and elevated `account.sp` with overview metrics grid, full holdings table, position cards, and recent transactions table.
+- **RIF 2 (Transaction Ledger & Transaction CRUD) — next**:
+  Exercise transaction creation, editing, deletion, and global ledger navigation across the ~4,000 transaction dataset.
 
 ## Studio Process & Verification Protocol
 

@@ -10,10 +10,24 @@ require 'date'
 module Fixtures
   module_function
 
-  Holding = Struct.new(:symbol, :shares, :market_value, :gain, :weight, keyword_init: true)
-  Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
-                       :tour_url, :institution, :account_type, :errors, :notice, keyword_init: true) do
+  Holding = Struct.new(:symbol, :shares, :market_value, :gain, :weight,
+                       :id, :account_id, :cost_basis, :current_price, :errors, :notice,
+                       keyword_init: true) do
     def errors? = errors && !errors.empty?
+  end
+
+  Activity = Struct.new(:id, :account_id, :date, :merchant, :category, :description, :amount,
+                        keyword_init: true)
+
+  Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
+                       :tour_url, :institution, :account_type, :errors, :notice,
+                       :transactions, :total_value, :cash_balance, :gain, keyword_init: true) do
+    def holdings = self[:holdings] || []
+    def transactions = self[:transactions] || []
+    def errors? = errors && !errors.empty?
+    def total_value = self[:total_value] || (holdings && !holdings.empty? ? holdings.sum { |h| h.market_value || 0 } : (balance || 0.0))
+    def gain = self[:gain] || (holdings && !holdings.empty? ? holdings.sum { |h| h.gain || 0 } : 0.0)
+    def cash_balance = self[:cash_balance] || [balance.to_f - (holdings && !holdings.empty? ? holdings.sum { |h| h.market_value || 0 } : 0.0), 0.0].max
   end
   Target = Struct.new(:asset_class, :target, :actual, :drift, keyword_init: true)
   Balance = Struct.new(:year, :total, keyword_init: true)
@@ -32,15 +46,30 @@ module Fixtures
   Review = Struct.new(:reviewed_on, :reviewer, :introduction, :surfaces_reviewed,
                       :findings_open, :worst_severity, :surfaces, keyword_init: true)
 
-  def holding(symbol, shares, value, gain, weight)
+  def holding(symbol, shares, value, gain, weight, id: 1, account_id: 1, cost_basis: 150.0, current_price: 200.0)
     Holding.new(symbol: symbol, shares: shares, market_value: value,
-                gain: gain, weight: weight)
+                gain: gain, weight: weight, id: id, account_id: account_id,
+                cost_basis: cost_basis, current_price: current_price)
   end
 
-  def account(name, id, balance, room, treatment, holdings)
+  def portfolio_holding
+    holding('VTI', 1240, 356_120, 48_900, 0.42, id: 1, account_id: 1, cost_basis: 247.75, current_price: 287.19)
+  end
+
+  def account(name, id, balance, room, treatment, holdings, transactions: nil)
+    tot = holdings && !holdings.empty? ? holdings.sum { |h| h.market_value || 0 } : balance.to_f
+    g = holdings && !holdings.empty? ? holdings.sum { |h| h.gain || 0 } : 0.0
+    cash = [balance.to_f - (holdings && !holdings.empty? ? holdings.sum { |h| h.market_value || 0 } : 0.0), 0.0].max
     Account.new(name: name, id: id, balance: balance, contribution_room: room,
                 tax_treatment: treatment, holdings: holdings,
-                tour_url: "/tours/#{id}.mp4")
+                tour_url: "/tours/#{id}.mp4",
+                transactions: transactions || [
+                  Activity.new(id: 1, account_id: id, date: '2026-10-15', merchant: 'Vanguard',
+                               category: 'Dividend', description: 'Reinvested dividend', amount: 142.50),
+                  Activity.new(id: 2, account_id: id, date: '2026-10-01', merchant: 'Deposit',
+                               category: 'Contribution', description: 'Monthly contribution', amount: 500.00)
+                ],
+                total_value: tot, cash_balance: cash, gain: g)
   end
 
   def portfolio

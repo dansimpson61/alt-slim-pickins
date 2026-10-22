@@ -46,9 +46,11 @@ class Portfolio < Sinatra::Base
   SlimPickins.prove!(settings.views, words: AppWords) do |name|
     repo = Portfolio::Repository.new
     account = repo.all_accounts.first || Fixtures.portfolio.accounts.last
+    holding = account.holdings&.first || Fixtures.portfolio_holding
     case name
     when 'index' then { portfolio: repo.portfolio_summary }
     when 'account', 'confirm_close', 'new_account', 'edit_account' then { account: account }
+    when 'new_holding', 'edit_holding', 'confirm_sell' then { holding: holding, account: account }
     end
   end
 
@@ -59,6 +61,22 @@ class Portfolio < Sinatra::Base
 
     def flash_notice
       session[:notice] ? session.delete(:notice) : nil
+    end
+
+    def find_account_or_fixture(id)
+      if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+        Fixtures.portfolio.accounts.find { |a| a.id.to_s == id.to_s } || repo.find_account(id)
+      else
+        repo.find_account(id)
+      end
+    end
+
+    def find_holding_or_fixture(id)
+      if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
+        Fixtures.portfolio.accounts.flat_map(&:holdings).find { |h| h.id.to_s == id.to_s } || repo.find_holding(id)
+      else
+        repo.find_holding(id)
+      end
     end
 
     def portfolio
@@ -138,11 +156,7 @@ class Portfolio < Sinatra::Base
   end
 
   get '/accounts/:id/close' do
-    account = if settings.environment == :test && !ENV['PORTFOLIO_SQLITE']
-                Fixtures.portfolio.accounts.find { |a| a.id.to_s == params[:id] } || repo.find_account(params[:id])
-              else
-                repo.find_account(params[:id])
-              end
+    account = find_account_or_fixture(params[:id])
     halt 404 unless account
     account.notice = flash_notice
     sp :confirm_close, locals: { account: account }
@@ -154,6 +168,83 @@ class Portfolio < Sinatra::Base
     repo.delete_account(params[:id])
     session[:notice] = "#{name} was successfully closed."
     redirect '/'
+  end
+
+  # --- Holdings CRUD ---
+
+  get '/accounts/:id/holdings/new' do
+    account = find_account_or_fixture(params[:id])
+    halt 404 unless account
+    holding = Portfolio::Holding.new(account_id: account.id, notice: flash_notice)
+    sp :new_holding, locals: { holding: holding, account: account }
+  end
+
+  post '/accounts/:id/holdings' do
+    account = find_account_or_fixture(params[:id])
+    halt 404 unless account
+    attrs = {
+      symbol: params[:symbol] || params['symbol'],
+      shares: params[:shares] || params['shares'],
+      cost_basis: params[:cost_basis] || params['cost_basis'],
+      current_price: params[:current_price] || params['current_price']
+    }
+    holding, errors = repo.create_holding(account.id, attrs)
+    if errors.empty?
+      session[:notice] = "Added #{holding.shares} shares of #{holding.symbol}."
+      redirect "/accounts/#{account.id}"
+    else
+      status 422
+      holding.notice = flash_notice
+      sp :new_holding, locals: { holding: holding, account: account }
+    end
+  end
+
+  get '/holdings/:id/edit' do
+    holding = find_holding_or_fixture(params[:id])
+    halt 404 unless holding
+    account = find_account_or_fixture(holding.account_id)
+    holding.notice = flash_notice
+    sp :edit_holding, locals: { holding: holding, account: account }
+  end
+
+  put '/holdings/:id' do
+    attrs = {
+      symbol: params[:symbol] || params['symbol'],
+      shares: params[:shares] || params['shares'],
+      cost_basis: params[:cost_basis] || params['cost_basis'],
+      current_price: params[:current_price] || params['current_price']
+    }
+    holding, errors = repo.update_holding(params[:id], attrs)
+    halt 404 unless holding
+    if errors.empty?
+      session[:notice] = "Updated position for #{holding.symbol}."
+      redirect "/accounts/#{holding.account_id}"
+    else
+      status 422
+      account = find_account_or_fixture(holding.account_id)
+      holding.notice = flash_notice
+      sp :edit_holding, locals: { holding: holding, account: account }
+    end
+  end
+
+  get '/holdings/:id/sell' do
+    holding = find_holding_or_fixture(params[:id])
+    halt 404 unless holding
+    account = find_account_or_fixture(holding.account_id)
+    holding.notice = flash_notice
+    sp :confirm_sell, locals: { holding: holding, account: account }
+  end
+
+  delete '/holdings/:id' do
+    holding = repo.find_holding(params[:id])
+    halt 404 unless holding
+    acc_id = holding.account_id
+    symbol = holding.symbol
+    shares = holding.shares
+    val = holding.market_value
+    repo.delete_holding(params[:id])
+    session[:notice] = "Liquidated #{shares} shares of #{symbol} for #{SlimPickins::Generator.format(:money, val)}."
+    redirect "/accounts/#{acc_id}"
   end
 
   get '/assets/:file' do

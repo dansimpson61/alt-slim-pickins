@@ -8,5 +8,8 @@ surface portfolio
   zone section
     frame quiet
 
+  zone box
+    frame quiet
+
   zone actions
     cluster
