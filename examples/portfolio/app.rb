@@ -23,6 +23,7 @@ end
 class Portfolio < Sinatra::Base
   helpers SlimPickins::Helpers
 
+  set :app_file, __FILE__
   set :views, File.join(__dir__, 'views')
   # The tin asks for /assets/slim-pickins.css, so the repo root is the
   # public folder — not the assets directory, which would serve it at /.
@@ -179,5 +180,5 @@ class Portfolio < Sinatra::Base
     end
   end
 
-  run! if app_file == $PROGRAM_NAME
+  run! if $PROGRAM_NAME == __FILE__
 end
