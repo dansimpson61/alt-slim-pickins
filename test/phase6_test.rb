@@ -229,8 +229,11 @@ class Phase6Test < Minitest::Test
                               path: File.join(views_dir, 'index.sp'),
                               locals: { portfolio: empty_portfolio },
                               library: SlimPickins::Library.from(views_dir, words: AppWords))
-    assert_includes html, '<p class="empty">No accounts linked yet.</p>'
-    assert_includes html, '<div class="actions"><a href="/accounts/new" class="link">Open new account</a></div>'
+    assert_includes html, '<p class="empty">No cash or banking accounts linked.</p>'
+    assert_includes html, '<p class="empty">No investment accounts linked.</p>'
+    assert_includes html, '<p class="empty">No debt or liability accounts linked.</p>'
+    assert_includes html, '<a href="/accounts/new" class="link">Open new account</a>'
+    assert_includes html, '<a href="/transactions" class="link">Activity Ledger</a>'
   end
 
   # --- Wall 5: Spatial Posture & Workbench Companions (Daytrip 0.9.0f) ---
@@ -406,5 +409,26 @@ class Phase6Test < Minitest::Test
 
     # Cleanup
     repo.delete_account(acc.id)
+  end
+
+  # --- Executive Net Worth & Multi-Tier Portfolio Overview (RIF 3) ---
+
+  def test_executive_net_worth_and_multi_tier_portfolio_overview
+    get '/'
+    assert_equal 200, last_response.status
+    assert_includes last_response.body, 'Executive Balance Sheet'
+    assert_includes last_response.body, 'Net worth'
+    assert_includes last_response.body, 'Total assets'
+    assert_includes last_response.body, 'Total liabilities'
+    assert_includes last_response.body, 'Liquid reserves'
+    assert_includes last_response.body, 'Performance &amp; Projected Yield'
+    assert_includes last_response.body, 'Cash &amp; Liquid Reserves'
+    assert_includes last_response.body, 'Investments &amp; Retirement'
+    assert_includes last_response.body, 'Debts &amp; Liabilities'
+    assert_includes last_response.body, 'Activity Ledger'
+    assert_includes last_response.body, 'Open new account'
+    assert_includes last_response.body, 'High Yield Savings'
+    assert_includes last_response.body, 'Traditional IRA'
+    assert_includes last_response.body, 'Platinum Card'
   end
 end

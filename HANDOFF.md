@@ -46,20 +46,21 @@ so this block cannot go stale without the gate saying so:
 
 ## The active next step
 
-**Roadmap 0.9 (the forward eye — authentic CRUD & state mutation stretch exam) is complete ([ROADMAP-0.9.md](ROADMAP-0.9.md)).**
-All six daytrips (0.9.0a through 0.9.0f) have passed and closed on 2026-10-21:
+**Roadmap 0.9 (the forward eye — authentic CRUD & state mutation stretch exam) is complete and closed ([ROADMAP-0.9.md](ROADMAP-0.9.md)).**
+All six initial daytrips (0.9.0a through 0.9.0f) and all three Portfolio Workbench Expansion RIFs (0.9.0g, 0.9.0h, 0.9.0i) have passed and closed on 2026-10-23:
 - **Daytrip 0.9.0a**: Draft uncompromised paper views and inventory Wall Ledger ([DAYTRIP-0.9.0a.md](history/daytrips/DAYTRIP-0.9.0a.md)).
 - **Daytrip 0.9.0b**: SQLite domain repository, schema, transactional persistence & unit tests ([DAYTRIP-0.9.0b.md](history/daytrips/DAYTRIP-0.9.0b.md)).
 - **Daytrip 0.9.0c**: Heal Wall 1 (method override for RESTful PUT/PATCH/DELETE in pure HTML) & Wall 4 (safe deletions via confirmation route `confirm_close.sp`) ([DAYTRIP-0.9.0c.md](history/daytrips/DAYTRIP-0.9.0c.md)).
 - **Daytrip 0.9.0d**: Heal Wall 2 (field validation diagnostics & 422 re-rendering with `KeyValue#error`) ([DAYTRIP-0.9.0d.md](history/daytrips/DAYTRIP-0.9.0d.md)).
 - **Daytrip 0.9.0e**: Heal Wall 3 (flash notice lifecycle across redirect cycles & empty state sibling healing) ([DAYTRIP-0.9.0e.md](history/daytrips/DAYTRIP-0.9.0e.md)).
-- **Daytrip 0.9.0f**: Heal Wall 5 (spatial posture via companion `portfolio.layout` and `portfolio.style`) & close Roadmap 0.9 ([DAYTRIP-0.9.0f.md](history/daytrips/DAYTRIP-0.9.0f.md)).
+- **Daytrip 0.9.0f**: Heal Wall 5 (spatial posture via companion `portfolio.layout` and `portfolio.style`) & close initial Stretch Exam ([DAYTRIP-0.9.0f.md](history/daytrips/DAYTRIP-0.9.0f.md)).
+- **Daytrip 0.9.0g (RIF 1)**: Holdings CRUD & Account Detail Console Elevation ([DAYTRIP-0.9.0g.md](history/daytrips/DAYTRIP-0.9.0g.md)).
+- **Daytrip 0.9.0h (RIF 2)**: Transaction Ledger & Transaction CRUD across 4,000-record dataset ([DAYTRIP-0.9.0h.md](history/daytrips/DAYTRIP-0.9.0h.md)).
+- **Daytrip 0.9.0i (RIF 3)**: Executive Net Worth & Multi-Tier Portfolio Overview (Assets, Liabilities & Net Worth) ([DAYTRIP-0.9.0i.md](history/daytrips/DAYTRIP-0.9.0i.md)).
 
-### Portfolio Workbench Expansion (Active RIFs)
-- **RIF 1 (Holdings CRUD & Account Detail Elevation) — complete**:
-  Enabled full CRUD on holdings (`/accounts/:id/holdings/new`, `/holdings/:id/edit`, `/holdings/:id/sell`, PUT/DELETE method overrides), auto-rebalancing cash balances and portfolio weights, and elevated `account.sp` with overview metrics grid, full holdings table, position cards, and recent transactions table.
-- **RIF 2 (Transaction Ledger & Transaction CRUD) — next**:
-  Exercise transaction creation, editing, deletion, and global ledger navigation across the ~4,000 transaction dataset.
+**The next session begins with: Planning Roadmap 0.10.0.**
+Roadmap 0.10.0 is an even-numbered roadmap leading with the backward eye (README, *How roadmaps go*).
+Focus: harvest what 0.9 taught (form handling, 422 state retention, method overrides, collection scoping, and layout postures), audit the words and apps for simplicity and elegance, and retire any residual scaffolds.
 
 ## Studio Process & Verification Protocol
 

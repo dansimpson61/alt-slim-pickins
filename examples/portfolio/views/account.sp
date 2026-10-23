@@ -24,11 +24,11 @@ account, "Account detail"
   section "Manage positions"
     each holding
       box
-        title holding.symbol
+        title .symbol
         grid metrics, columns: 3
-          metric shares, "Shares", as: number
-          metric market_value, "Value", as: money
-          metric gain, "Gain", as: money
+          metric .shares, "Shares", as: number
+          metric .market_value, "Value", as: money
+          metric .gain, "Gain", as: money
         actions
           link edit, "Edit position", to: "/holdings/#{holding.id}/edit"
           link sell, "Liquidate", to: "/holdings/#{holding.id}/sell"

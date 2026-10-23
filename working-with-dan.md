@@ -505,6 +505,14 @@ working manual that should be better after every session than it was before.
   Prompt: *"1. In the future, please ensure that you only proceed on the basis of a detailed, written plan. If a plan does not exist, your ifirst task is to write one for my approval. 2. Please revise housekeeping protocols to include proposing and/or asking for new wishlist items. 3. Please do the housekeeping to transition to a new session, then commit and push."*
   Never jump into coding or implementation based on general momentum or an outline. If a detailed, written plan does not exist, authoring one and presenting it for Dan's explicit approval is the mandatory first task before touching code.
 
+- **Each RIF begins with a detailed written plan saved as a daytrip in the current roadmap, and ends with verified visual polish.** (observed 2026-10-22).
+  Prompts: *"ensure each RIF (Rapid Iterative Feedback loop) begins with a detailed written plan... save each written RIF plan as a daytrip in the current roadmap (0.9)... each step should leave the app easier on the eyes, better looking, more gracefully presenting information such that the user can more easily see and synthesize what they want to see."*
+  Treat visual grace, cognitive synthesis, and information hierarchy as primary requirements, not afterthoughts.
+
+- **Conclude roadmaps cleanly when objectives are reached; do not over-extend into planned extras.** (observed 2026-10-23).
+  Prompt: *"Let's not proceed with RIF 4. Please do the housekeeping to close roadmap 0.9.0 and transition to a new session to plan roadmap 0.10.0"*.
+  When Dan decides the stretch exam and feedback loops have achieved their goal, immediately drop unstarted speculative daytrips, perform thorough housekeeping, and transition smoothly to planning the next roadmap.
+
 ## Proposed deletions — nothing here yet
 
 

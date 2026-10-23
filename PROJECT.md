@@ -3,11 +3,11 @@ schema_version: 1
 id: alt-slim-pickins
 purpose: Exploring a view DSL whose grammar stays describable all the way down
 status: >-
-  Executing Portfolio Workbench RIFs: RIF 1 (Holdings CRUD) and RIF 2 (Transaction Ledger & CRUD) complete.
-  All 12 gate legs green, 40 verified pages, 666 runs / 7,247 assertions / 0 failures.
-last_touched: 2026-10-22
+  Roadmap 0.9 closed: Authentic CRUD Stretch Exam and Portfolio Workbench RIFs complete.
+  All 12 gate legs green, 40 verified pages, 667 runs / 7,282 assertions / 0 failures.
+last_touched: 2026-10-23
 next_step: >-
-  Execute RIF 3: Executive Net Worth & Multi-Tier Portfolio Overview (Assets, Liabilities & Net Worth).
+  Plan Roadmap 0.10.0: backward-eye harvest, language simplification, and ecosystem audit.
 kind: project
 run: ruby examples/publication/app.rb
 docs: README.md
@@ -47,6 +47,6 @@ closed on 2026-10-19 — the Editorial & Micro-Layout Publication Stretch Exam,
 passed — and is kept in [ROADMAP-0.7.md](history/planning/ROADMAP-0.7.md).
 Roadmap 0.8 closed on 2026-10-21 (harvest, KeyValue spine, form containment)
 and is kept in [ROADMAP-0.8.md](history/planning/ROADMAP-0.8.md).
-Roadmap 0.9 closed on 2026-10-21 — the Authentic CRUD & State-Mutation
+Roadmap 0.9 closed on 2026-10-23 — the Authentic CRUD & State-Mutation
 Stretch Exam, passed — and is kept in [ROADMAP-0.9.md](ROADMAP-0.9.md).
 `next_step` above is the live resume point for Roadmap 0.10.

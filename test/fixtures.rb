@@ -28,13 +28,15 @@ module Fixtures
 
   Account = Struct.new(:name, :id, :balance, :contribution_room, :tax_treatment, :holdings,
                        :tour_url, :institution, :account_type, :errors, :notice,
-                       :transactions, :total_value, :cash_balance, :gain, keyword_init: true) do
+                       :transactions, :total_value, :cash_balance, :gain, :display_balance, keyword_init: true) do
     def holdings = self[:holdings] || []
     def transactions = self[:transactions] || []
     def errors? = errors && !errors.empty?
     def total_value = self[:total_value] || (holdings && !holdings.empty? ? holdings.sum { |h| h.market_value || 0 } : (balance || 0.0))
     def gain = self[:gain] || (holdings && !holdings.empty? ? holdings.sum { |h| h.gain || 0 } : 0.0)
     def cash_balance = self[:cash_balance] || [balance.to_f - (holdings && !holdings.empty? ? holdings.sum { |h| h.market_value || 0 } : 0.0), 0.0].max
+    def display_balance = self[:display_balance] || (balance || 0.0).abs
+    def holdings? = !holdings.nil? && !holdings.empty?
   end
   Target = Struct.new(:asset_class, :target, :actual, :drift, keyword_init: true)
   Balance = Struct.new(:year, :total, keyword_init: true)
@@ -42,7 +44,10 @@ module Fixtures
   Portfolio = Struct.new(:as_of, :total_value, :ytd_return, :annual_income, :years_to_rmd,
                          :balances, :drifted?, :targets, :growth_rate,
                          :inflation_rate, :horizon_years, :contribution, :accounts,
-                         :notice, keyword_init: true)
+                         :notice, :net_worth, :total_assets, :total_debt, :liquid_cash,
+                         :total_investments, :banking_accounts, :investment_accounts,
+                         :liability_accounts, :banking_total, :investment_total, :liability_total,
+                         keyword_init: true)
 
   Project = Struct.new(:path, :purpose, keyword_init: true)
   Pattern = Struct.new(:title, :category, :status, :origin_project, :origin_file, :content,
@@ -107,10 +112,32 @@ module Fixtures
                   Activity.new(id: 2, account_id: id, date: '2026-10-01', merchant: 'Deposit',
                                category: 'Contribution', description: 'Monthly contribution', amount: 500.00)
                 ],
-                total_value: tot, cash_balance: cash, gain: g)
+                total_value: tot, cash_balance: cash, gain: g,
+                display_balance: balance.to_f.abs)
   end
 
   def portfolio
+    inv_accs = [
+      account('Traditional IRA', 1, 417_530, 7_000, 'Pre-tax',
+              [holding('VTI', 1240, 356_120, 48_900, 0.42),
+               holding('VXUS', 890, 61_410, -3_180, 0.07)]),
+      account('Roth IRA', 2, 117_760, 7_000, 'Tax-free',
+              [holding('VTI', 410, 117_760, 21_050, 0.14)])
+    ]
+    bank_accs = [
+      account('High Yield Savings', 3, 15_000.0, 0, 'Taxable', [])
+    ]
+    liab_accs = [
+      account('Platinum Card', 4, -5_250.0, 0, 'Revolving', [])
+    ]
+    bank_accs.each { |a| a.institution = 'Ally'; a.account_type = 'savings' }
+    liab_accs.each { |a| a.institution = 'American Express'; a.account_type = 'credit' }
+    inv_accs.each { |a| a.institution = 'Vanguard'; a.account_type = 'traditional_ira' }
+
+    b_total = 15_000.0
+    inv_total = 535_290.0
+    liab_total = 5_250.0
+
     Portfolio.new(
       as_of: Date.new(2026, 8, 30), total_value: 1_284_506, ytd_return: 0.0742,
       annual_income: 48_200, years_to_rmd: 13,
@@ -118,13 +145,18 @@ module Fixtures
       targets: targets, growth_rate: 0.05, inflation_rate: 0.02, horizon_years: 30,
       contribution: Contribution.new(amount: 500, account_id: 'roth',
                                      frequency: 'monthly', auto_invest: true),
-      accounts: [
-        account('Traditional IRA', 1, 417_530, 7_000, 'Pre-tax',
-                [holding('VTI', 1240, 356_120, 48_900, 0.42),
-                 holding('VXUS', 890, 61_410, -3_180, 0.07)]),
-        account('Roth IRA', 2, 117_760, 7_000, 'Tax-free',
-                [holding('VTI', 410, 117_760, 21_050, 0.14)])
-      ]
+      accounts: bank_accs + liab_accs + inv_accs,
+      net_worth: 1_279_256.0,
+      total_assets: 1_284_506.0,
+      total_debt: liab_total,
+      liquid_cash: b_total,
+      total_investments: inv_total,
+      banking_accounts: bank_accs,
+      investment_accounts: inv_accs,
+      liability_accounts: liab_accs,
+      banking_total: b_total,
+      investment_total: inv_total,
+      liability_total: liab_total
     )
   end
 

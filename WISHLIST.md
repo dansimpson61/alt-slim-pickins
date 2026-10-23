@@ -47,6 +47,11 @@
 Unsettled details, known edge-case collisions, and mechanical seams identified
 during prior roadmaps and daytrips.
 
+- [ ] **Uniform Attribute Lookup for Bare vs. Dotted Symbols across Structs and Deserialized Hashes:**
+  - *Origin:* Roadmap 0.9 RIF loops (2026-10-22).
+  - *Concept:* In `.sp` templates, iterating collections (`each item`) with dotted syntax (`metric .shares`) resolves both methods on Ruby Structs and keys on Hashes (e.g. from JSON deserialization in Studio). Bare symbols (`metric shares`), however, only work on objects responding to that method and fail when the subject is a plain Hash.
+  - *Wish:* Allow bare attribute symbols in `KeyValue` or `Builder#about` to fall back to hash key lookups when the subject is a `Hash`, removing this subtle syntactic pitfall.
+
 - [ ] **Allow Comments in `.sp`, `.layout`, and `.frame` Files:**
   - *Origin:* Dan (Wishlist Intake, 2026-10-20).
   - *Concept:* Templates currently lack a formal comment syntax; non-grammatical text lines either cause syntax refusals or interfere with indentation/nesting.
@@ -328,6 +333,10 @@ Expansive architectural visions, speculative designs, and paradigm shifts.
 ---
 
 ## VI. Retired or Graduated Items
+
+- [x] **Authentic CRUD & State Mutations in Pure HTML (Roadmap 0.9):**
+  - *Graduated in:* Roadmap 0.9 (`DAYTRIP-0.9.0a.md` through `DAYTRIP-0.9.0i.md`).
+  - *Resolution:* Supported Rack method overrides (`PUT`, `PATCH`, `DELETE`) via `<form>` generation; field-level validation error diagnostics and dirty-state preservation on 422 (`KeyValue#error`); safe two-step destructive deletion confirmations; flash message lifecycle across redirects; collection-scoped empty state pruning; and multi-tier executive balance sheet consoles across a 4,000-record dataset with zero client JavaScript and zero custom CSS.
 
 - [x] **Garden Triage & SOTA App Modernization (`milestone_planner`, `way_exam`, `word_graph.html`):**
   - *Graduated in:* `DAYTRIP-0.8.0e.md` (Roadmap 0.8).

@@ -7,7 +7,7 @@ require 'sinatra/base'
 
 class Portfolio < Sinatra::Base
   Account = Struct.new(:id, :name, :institution, :account_type, :balance, :created_at,
-                       :holdings, :transactions, :errors, :notice, keyword_init: true) do
+                       :holdings, :transactions, :errors, :notice, :display_balance, keyword_init: true) do
     def holdings
       self[:holdings] || []
     end
@@ -32,6 +32,18 @@ class Portfolio < Sinatra::Base
     def cash_balance
       return balance if holdings.nil? || holdings.empty?
       [balance.to_f - holdings.sum(&:market_value), 0.0].max
+    end
+
+    def liability?
+      %w[credit mortgage loan].include?(account_type)
+    end
+
+    def display_balance
+      self[:display_balance] || (liability? ? (balance || 0.0).abs : total_value)
+    end
+
+    def holdings?
+      !holdings.nil? && !holdings.empty?
     end
 
     def tour_url
@@ -99,8 +111,27 @@ class Portfolio < Sinatra::Base
   CategorySpend = Struct.new(:category, :total_spend, :transaction_count, keyword_init: true)
   TransactionLedger = Struct.new(:transactions, :categories, :total_outflow, :total_inflow, :net_cash_flow, :notice, keyword_init: true)
 
-  PortfolioSummary = Struct.new(:accounts, :total_value, :gain, :ytd_return, :annual_income,
-                                :cash_balance, :notice, keyword_init: true)
+  PortfolioSummary = Struct.new(
+    :accounts, :total_value, :gain, :ytd_return, :annual_income,
+    :cash_balance, :notice,
+    :net_worth, :total_assets, :total_debt, :liquid_cash, :total_investments,
+    :banking_accounts, :investment_accounts, :liability_accounts,
+    :banking_total, :investment_total, :liability_total,
+    keyword_init: true
+  ) do
+    def accounts = self[:accounts] || []
+    def net_worth = self[:net_worth] || 0.0
+    def total_assets = self[:total_assets] || 0.0
+    def total_debt = self[:total_debt] || 0.0
+    def liquid_cash = self[:liquid_cash] || 0.0
+    def total_investments = self[:total_investments] || 0.0
+    def banking_total = self[:banking_total] || 0.0
+    def investment_total = self[:investment_total] || 0.0
+    def liability_total = self[:liability_total] || 0.0
+    def banking_accounts = self[:banking_accounts] || []
+    def investment_accounts = self[:investment_accounts] || []
+    def liability_accounts = self[:liability_accounts] || []
+  end
 
   class Repository
     DEFAULT_DB_PATH = File.expand_path('data/portfolio.sqlite3', __dir__)
@@ -428,22 +459,52 @@ class Portfolio < Sinatra::Base
     # --- Portfolio Aggregate Summary ---
 
     def portfolio_summary
-      accounts = all_accounts
-      total_val = accounts.sum(&:total_value)
-      total_gain = accounts.sum(&:gain)
+      accounts = all_accounts(include_zero: true)
+
+      banking_types = %w[checking savings cash]
+      investment_types = %w[brokerage traditional_ira roth_ira]
+      liability_types = %w[credit mortgage loan]
+
+      banking = accounts.select { |a| banking_types.include?(a.account_type) }
+      investments = accounts.select { |a| investment_types.include?(a.account_type) }
+      liabilities = accounts.select { |a| liability_types.include?(a.account_type) }
+
+      unclassified = accounts - banking - investments - liabilities
+      investments += unclassified
+
+      b_total = banking.sum { |a| a.total_value || 0.0 }
+      inv_total = investments.sum { |a| a.total_value || 0.0 }
+      liab_total = liabilities.sum { |a| (a.balance || 0.0).abs }
+
+      tot_assets = b_total + inv_total
+      tot_debt = liab_total
+      net_w = tot_assets - tot_debt
+
+      total_gain = accounts.sum { |a| a.gain || 0.0 }
       # YTD return estimated from overall gains vs cost basis
-      total_cost = accounts.flat_map { |a| a.holdings || [] }.sum { |h| h.shares * h.cost_basis }
+      total_cost = investments.flat_map { |a| a.holdings || [] }.sum { |h| (h.shares || 0.0) * (h.cost_basis || 0.0) }
       ytd_ret = total_cost.positive? ? (total_gain / total_cost) : 0.084
       # Projected annual income estimated at ~2.1% yield on investments
-      projected_income = total_val * 0.021
+      projected_income = [tot_assets * 0.021, 0.0].max
 
       PortfolioSummary.new(
         accounts: accounts,
-        total_value: total_val,
+        total_value: tot_assets,
         gain: total_gain,
         ytd_return: ytd_ret,
         annual_income: projected_income,
-        cash_balance: accounts.sum(&:cash_balance)
+        cash_balance: b_total,
+        net_worth: net_w,
+        total_assets: tot_assets,
+        total_debt: tot_debt,
+        liquid_cash: b_total,
+        total_investments: inv_total,
+        banking_accounts: banking,
+        investment_accounts: investments,
+        liability_accounts: liabilities,
+        banking_total: b_total,
+        investment_total: inv_total,
+        liability_total: liab_total
       )
     end
 
@@ -644,13 +705,17 @@ class Portfolio < Sinatra::Base
     end
 
     def build_account(r)
+      bal = r['balance'].to_f
+      atype = r['account_type']
+      is_liab = %w[credit mortgage loan].include?(atype)
       Account.new(
         id: r['id'].to_i,
         name: r['name'],
         institution: r['institution'],
-        account_type: r['account_type'],
-        balance: r['balance'].to_f,
-        created_at: r['created_at']
+        account_type: atype,
+        balance: bal,
+        created_at: r['created_at'],
+        display_balance: is_liab ? bal.abs : bal
       )
     end
 
